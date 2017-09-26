@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { HttpModule }    from '@angular/http';
 
 import { AppComponent } from './app.component';
 import { TradeHistoryComponent } from './trade-history.component';
@@ -11,14 +12,15 @@ import { DepthChartComponent } from './depth-chart.component';
 @NgModule({
   declarations: [
     AppComponent,
-    TradeHistoryComponent,
-    PriceChartComponent,
+    DepthChartComponent,
     OpenOrdersComponent,
     OrderBookComponent,
-    DepthChartComponent
+    PriceChartComponent,
+    TradeHistoryComponent,
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    HttpModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

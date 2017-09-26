@@ -23,6 +23,8 @@
       ],
       "scripts": [
         "../node_modules/jquery/dist/jquery.min.js",
+        "assets/charting_library/charting_library.min.js",
+        "assets/charting_library/datafeed/udf/datafeed.js",
         "scripts/main.js"
       ],
       "environmentSource": "environments/environment.ts",
