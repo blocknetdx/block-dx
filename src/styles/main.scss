@@ -1,1 +1,6 @@
-/* You can add global styles to this file, and also import other style files */
+
+@import "vendor/bootstrap";
+@import "utils/variables";
+@import "utils/mixins";
+
+@import "base/global";

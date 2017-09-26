@@ -1,0 +1,125 @@
+@mixin clearfix() {
+  &:after {
+    content:'';
+    display:table;
+    clear:both;
+  }
+}
+
+@mixin print() {
+    @media print { @content; }
+}
+
+/*
+  MEDIA QUERY mixin
+  default is for smallscreen-up using breakpoint shortcuts,
+  but mixin also accepts $size and $direction params, e.g.,
+  `@include screen(800px, max) {}` returns `@media screen and (max-width: 800px) {}` for custom tweaking
+*/
+@mixin screen($size, $direction: min) {
+  @if map-has-key($breakpoints, $size) {
+    @media screen and (#{$direction}-width: map-get($breakpoints, $size)) {
+        @content;
+    }
+  } @else {
+    @media screen and (#{$direction}-width: $size) {
+        @content;
+    }
+  }
+}
+
+//$type: fine (mouse, trackpad) || none (touch device)
+@mixin pointer($type: fine) {
+  @media (pointer: #{$type}) {
+    @content;
+  }
+}
+
+@mixin hover_local($type: hover) {
+  @media (hover: #{$type}) {
+    @content;
+  }
+}
+
+
+
+@mixin weight($weight: reg) {
+  @if $weight == med {
+    font-weight: 400;
+  } @else if $weight == bold {
+    font-weight: 700;
+  } @else {
+    font-weight: 400;
+  }
+}
+
+@mixin type($size: reg, $style: text) {
+  $list: map-get($type, reg);
+  @if map-has-key($type, $size) {
+    $list: map-get($type, $size);
+  } @else {
+    @warn "Unknown `#{$size}` in $type map";
+  }
+  font-size: nth($list, 1);
+  line-height: nth($list, 2);
+  @if $style != text {
+    @if map-has-key($fonts, $style) {
+      font-family: map-get($fonts, $style);
+    }
+  }
+  @if $style == text {
+    //do nothing
+  } @elseif $style == header {
+    @include weight(med);
+  } @else {
+    @include weight($style);
+  }
+}
+
+
+@mixin box-shadow($top, $left, $blur, $color, $inset: false) {
+  @if $inset {
+    -webkit-box-shadow:inset $top $left $blur $color;
+    -moz-box-shadow:inset $top $left $blur $color;
+    box-shadow:inset $top $left $blur $color;
+  } @else {
+    -webkit-box-shadow: $top $left $blur $color;
+    -moz-box-shadow: $top $left $blur $color;
+    box-shadow: $top $left $blur $color;
+  }
+}
+
+
+
+@mixin type1() {
+    font: 4.25rem/1 $font-roboto; // 68px/68px
+    font-weight: 300;
+}
+
+@mixin type2() {
+    font: 3rem/1.083333333 $font-roboto; // 48px/52px
+}
+
+@mixin type3() {
+    font: 1.875rem/1.2 $font-roboto; // 30px/36px
+}
+
+@mixin type4() {
+    font: 1.1875rem/1.368421053 $font-roboto; // 19px/26px
+}
+
+@mixin type5() {
+    font: 0.875rem/1.285714286 $font-roboto; // 14px/18px
+}
+
+@mixin type6() {
+  font: 1.3125rem/1.333333333 $font-roboto; // 21px/28px
+}
+
+@mixin type0() {
+    font: 1.0625rem/1.235294118 $font-roboto; // 17px/21px
+}
+
+@mixin typeBold() {
+  font-weight: 700;
+}
