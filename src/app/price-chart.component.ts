@@ -24,7 +24,8 @@ export class PriceChartComponent {
           debug: false,
           fullscreen: false,
           symbol: 'AAPL',
-          interval: 'D',
+          interval: '60',
+          timeframe: '1D',
           container_id: "tv_chart_container",
           //	BEWARE: no trailing slash is expected in feed URL
           datafeed: new Datafeeds.UDFCompatibleDatafeed("https://demo_feed.tradingview.com"),
@@ -34,25 +35,43 @@ export class PriceChartComponent {
           drawings_access: { type: 'black', tools: [{ name: "Regression Trend" }, { name: "" }] },
           enabled_features: ["chart_property_page_trading"],
           disabled_features: ["use_localstorage_for_settings", "left_toolbar", "header_saveload", "chart_property_page_scales",
-            "header_settings", "header_indicators", "header_compare", "header_undo_redo", "chart_property_page_style"],
+            "header_settings", "header_indicators", "header_compare", "header_undo_redo", "chart_property_page_style", "header_screenshot",
+            "header_symbol_search", "header_interval_dialog_button"],
           charts_storage_url: 'http://saveload.tradingview.com',
           charts_storage_api_version: "1.1",
           client_id: 'tradingview.com',
           user_id: 'public_user_id',
+          toolbar_bg: '#092644',
+
           favorites: {
-            intervals: ["1D", "3D", "3W", "W", "M"],
-            chartTypes: ["Area", "Line"]
+            // intervals: ["1D", "3D", "3W", "W"],
+            // chartTypes: ["Area", "Line"]
           },
           overrides: {
-            "paneProperties.background": "#222222",
-            "paneProperties.vertGridProperties.color": "#454545",
-            "paneProperties.horzGridProperties.color": "#454545",
+            "paneProperties.background": "#203855",
+            "paneProperties.vertGridProperties.color": "#203855",
+            "paneProperties.horzGridProperties.color": "#203855",
             "symbolWatermarkProperties.transparency": 90,
-            "scalesProperties.textColor": "#AAA"
+            "scalesProperties.textColor": "#AAA",
+            "mainSeriesProperties.candleStyle.upColor": "#4BF5C6",
+            "mainSeriesProperties.candleStyle.downColor": "#FF7362",
+            "mainSeriesProperties.candleStyle.drawWick": true,
+            "mainSeriesProperties.candleStyle.drawBorder": true,
+            "mainSeriesProperties.candleStyle.borderColor": "#454545",
+            "mainSeriesProperties.candleStyle.borderUpColor": "#4BF5C6",
+            "mainSeriesProperties.candleStyle.borderDownColor": "#FF7362",
+            "mainSeriesProperties.candleStyle.wickUpColor": 'rgba( 115, 115, 117, 1)',
+            "mainSeriesProperties.candleStyle.wickDownColor": 'rgba( 115, 115, 117, 1)',
+            "mainSeriesProperties.candleStyle.barColorsOnPrevClose": false,
           },
-          width: '50%',
-          height: '500'
-
+          width: '100%',
+          height: '500',
+          time_frames: [
+              { text: "1y", resolution: "W",  title: "1yr" },
+              { text: "6m", resolution: "W" },
+              { text: "1m", resolution: "D" },
+              { text: "1000y", resolution: "W", description: "All", title: "All" },
+          ]
         });
 
         widget.onChartReady(function() {

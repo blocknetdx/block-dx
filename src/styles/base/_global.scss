@@ -1,0 +1,47 @@
+$bn-green: #4BF5C6;
+$bn-red: #FF7362;
+
+body {
+  background: #001C3D;
+  color: white;
+}
+
+.bn-card {
+  background: #092644;
+  width: 24%;
+  margin-right: 1%;
+  float: left;
+
+  &.bn-price-chart {
+    width: 49%;
+  }
+}
+
+
+.tradeTable {
+  font-family: roboto, monospace;
+  font-size: 12px;
+
+  tr {
+    &:hover {
+      background: rgba(0,0,0,0.2);
+    }
+  }
+
+  th {
+    background: gray;
+  }
+
+  td {
+    text-align: right;
+    padding: 5px 5px 5px 20px;
+
+    &.buy {
+      color: $bn-red;
+    }
+
+    &.sell {
+      color: $bn-green;
+    }
+  }
+}
