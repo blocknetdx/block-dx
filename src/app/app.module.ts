@@ -9,6 +9,8 @@ import { OpenOrdersComponent } from './open-orders.component';
 import { OrderBookComponent } from './order-book.component';
 import { DepthChartComponent } from './depth-chart.component';
 
+import { AppRoutingModule }     from './app-routing.module';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -21,6 +23,7 @@ import { DepthChartComponent } from './depth-chart.component';
   imports: [
     BrowserModule,
     HttpModule,
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]

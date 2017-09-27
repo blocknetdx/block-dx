@@ -9,4 +9,11 @@ export class TradehistoryService {
   getTradehistory(): Promise<Trade[]> {
     return Promise.resolve(TRADES);
   }
+
+  getTradehistorySlowly(): Promise<Trade[]> {
+    return new Promise(resolve => {
+      // Simulate server latency with 2 second delay
+      setTimeout(() => resolve(this.getTradehistory()), 2000);
+    });
+  }
 }
