@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { HttpModule }    from '@angular/http';
 
 import { AppComponent } from './app.component';
-import { TradeHistoryComponent } from './trade-history.component';
+import { TradehistoryComponent } from './tradehistory.component';
 import { PriceChartComponent } from './price-chart.component';
 import { OpenOrdersComponent } from './open-orders.component';
 import { OrderBookComponent } from './order-book.component';
@@ -16,7 +16,7 @@ import { DepthChartComponent } from './depth-chart.component';
     OpenOrdersComponent,
     OrderBookComponent,
     PriceChartComponent,
-    TradeHistoryComponent,
+    TradehistoryComponent,
   ],
   imports: [
     BrowserModule,

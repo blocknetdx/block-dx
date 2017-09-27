@@ -1,5 +1,5 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<div class="bn-card bn-trade-history">
+<div class="bn-card bn-tradehistory">
   <h2>
     {{title}}
   </h2>
@@ -9,7 +9,7 @@
       <th>Price</th>
       <th>Time</th>
     </tr>
-    <tr *ngFor="let trade of trades">
+    <tr *ngFor="let trade of tradehistory">
       <td>{{trade.size}}</td>
       <td class="{{trade.side}}">{{trade.price}}</td>
       <td>{{trade.time}}</td>
