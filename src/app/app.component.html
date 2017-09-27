@@ -1,18 +1,20 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
+<div style="margin-left: 15px;">
   <h1>
-    Welcome to {{title}}!
+    <img src="assets/icon_blk.png" height="40"> {{title}}
   </h1>
-  <img src="assets/icon_blk.png">
+
 </div>
 
-<order-book></order-book>
-
-<price-chart></price-chart>
-
-<trade-history></trade-history>
-
-
-
-
-<depth-chart></depth-chart>
+<div class="row">
+  <div class="left-col">
+    <order-book></order-book>
+  </div>
+  <div class="center-col">
+    <price-chart></price-chart>
+    <depth-chart></depth-chart>
+  </div>
+  <div class="right-col">
+    <trade-history></trade-history>
+  </div>
+</div>

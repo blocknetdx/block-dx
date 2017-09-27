@@ -6,15 +6,16 @@ body {
   color: white;
 }
 
+.left-col, .center-col, .right-col {
+  @include make-col-ready();
+  @include make-col(2.67);
+}
+.center-col {
+  @include make-col(6);
+}
+
 .bn-card {
   background: #092644;
-  width: 24%;
-  margin-right: 1%;
-  float: left;
-
-  &.bn-price-chart {
-    width: 49%;
-  }
 }
 
 
