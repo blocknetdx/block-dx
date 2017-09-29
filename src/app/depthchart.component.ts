@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+
+import { OrderbookService } from './orderbook.service';
 
 @Component({
   selector: 'depthchart',
@@ -7,4 +9,8 @@ import { Component } from '@angular/core';
 })
 export class DepthchartComponent {
   title = 'DepthChart';
+
+  ngOnInit(): void {
+
+  }
 }

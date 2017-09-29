@@ -1,3 +1,4 @@
+import 'rxjs/add/operator/map';
 import { Component, OnInit } from '@angular/core';
 
 // import { ORDERS } from './mock-orderbook';
@@ -18,7 +19,8 @@ export class OrderbookComponent {
   constructor(private orderbookService: OrderbookService) { }
 
   getOrderbook(): void {
-    this.orderbookService.getOrderbook().then(orderbook => this.orderbook = orderbook)
+    this.orderbookService.getData().subscribe(orderbook => this.orderbook = orderbook)
+    // this.orderbookService.getOrderbook().then(orderbook => this.orderbook = orderbook)
   }
 
   ngOnInit(): void {
