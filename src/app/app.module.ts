@@ -8,20 +8,20 @@ import { InMemoryDataService }  from './in-memory-data.service';
 
 import { AppComponent } from './app.component';
 import { TradehistoryComponent } from './tradehistory.component';
-import { PriceChartComponent } from './price-chart.component';
+import { PricechartComponent } from './pricechart.component';
 import { OpenOrdersComponent } from './open-orders.component';
-import { OrderBookComponent } from './order-book.component';
-import { DepthChartComponent } from './depth-chart.component';
+import { OrderbookComponent } from './orderbook.component';
+import { DepthchartComponent } from './depthchart.component';
 
 import { AppRoutingModule }     from './app-routing.module';
 
 @NgModule({
   declarations: [
     AppComponent,
-    DepthChartComponent,
+    DepthchartComponent,
     OpenOrdersComponent,
-    OrderBookComponent,
-    PriceChartComponent,
+    OrderbookComponent,
+    PricechartComponent,
     TradehistoryComponent,
   ],
   imports: [

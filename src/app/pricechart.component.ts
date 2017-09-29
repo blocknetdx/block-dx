@@ -6,11 +6,11 @@ declare var TradingView;
 declare var Datafeeds;
 
 @Component({
-  selector: 'price-chart',
-  templateUrl: './price-chart.component.html',
-  // styleUrls: ['./price-chart.component.scss']
+  selector: 'pricechart',
+  templateUrl: './pricechart.component.html',
+  // styleUrls: ['./pricechart.component.scss']
 })
-export class PriceChartComponent {
+export class PricechartComponent {
   title = 'Price Chart';
 
   constructor(

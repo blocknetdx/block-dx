@@ -4,22 +4,21 @@ import { Headers, Http } from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
 
-import { Trade } from './trade';
+import { Order } from './order';
 // import { TRADES } from './mock-tradehistory';
 
 
 @Injectable()
-export class TradehistoryService {
+export class OrderbookService {
 
-  private tradehistoryUrl = 'api/tradehistory';  // URL to web api
-  // private tradehistoryUrl = 'https://api-public.sandbox.gdax.com/products/BTC-USD/trades';
+  private orderbookUrl = 'api/orderbook';  // URL to web api
 
   constructor(private http: Http) { }
 
-  getTradehistory(): Promise<Trade[]> {
-    return this.http.get(this.tradehistoryUrl)
+  getOrderbook(): Promise<Order[]> {
+    return this.http.get(this.orderbookUrl)
                .toPromise()
-               .then(response => response.json().data as Trade[])
+               .then(response => response.json().data as Order[])
                .catch(this.handleError);
   }
 

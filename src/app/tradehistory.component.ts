@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { Trade } from './trade';
 import { TradehistoryService } from './tradehistory.service';
 
-
 @Component({
   selector: 'tradehistory',
   templateUrl: './tradehistory.component.html',

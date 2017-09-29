@@ -22,6 +22,7 @@ body {
 .tradeTable {
   font-family: roboto, monospace;
   font-size: 12px;
+  width: 100%;
 
   tr {
     &:hover {
@@ -36,12 +37,15 @@ body {
   td {
     text-align: right;
     padding: 5px 5px 5px 20px;
+    width: 33%;
+  }
 
-    &.buy {
+  td, tr {
+    &.buy, &.asks {
       color: $bn-red;
     }
 
-    &.sell {
+    &.sell, &.bids {
       color: $bn-green;
     }
   }
