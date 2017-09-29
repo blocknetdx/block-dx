@@ -11,8 +11,8 @@
     </tr>
     <tr *ngFor="let trade of tradehistory">
       <td>{{trade.size}}</td>
-      <td class="{{trade.side}}">{{trade.price}}</td>
-      <td>{{trade.time}}</td>
+      <td class="{{trade.side}}">{{trade.price | number : '1.2-2'}}</td>
+      <td>{{trade.time | date:'HH:mm:ss' }}</td>
     </tr>
   </table>
 </div>

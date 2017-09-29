@@ -4,15 +4,15 @@
     {{title}}
   </h2>
 
-    <table *ngFor="let order of orders" class="tradeTable">
+    <table *ngFor="let order of orderbook" class="tradeTable">
       <tr>
         <th>Price</th>
         <th>Size</th>
         <th>Num Orders</th>
       </tr>
       <tr *ngFor="let asks of order.asks" class="asks">
-        <td>{{asks[0]}}</td>
-        <td>{{asks[1]}}</td>
+        <td>{{asks[0] | number : "1.2-2"}}</td>
+        <td>{{asks[1] | number : "1.8-8"}}</td>
         <td>{{asks[2]}}</td>
       </tr>
       <tr>
@@ -21,8 +21,8 @@
         <th>Num Orders</th>
       </tr>
       <tr *ngFor="let bids of order.bids" class="bids">
-        <td>{{bids[0]}}</td>
-        <td>{{bids[1]}}</td>
+        <td>{{bids[0] | number : "1.2-2"}}</td>
+        <td>{{bids[1] | number : "1.8-8"}}</td>
         <td>{{bids[2]}}</td>
       </tr>
 

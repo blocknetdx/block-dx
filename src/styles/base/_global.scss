@@ -22,7 +22,9 @@ body {
 .tradeTable {
   font-family: roboto, monospace;
   font-size: 12px;
+  cursor: pointer;
   width: 100%;
+  line-height: .75;
 
   tr {
     &:hover {
@@ -32,6 +34,7 @@ body {
 
   th {
     background: gray;
+    line-height: 2;
   }
 
   td {

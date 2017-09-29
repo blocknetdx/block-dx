@@ -5,7 +5,7 @@ import { Headers, Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 
 import { Order } from './order';
-// import { TRADES } from './mock-tradehistory';
+// import { ORDERS } from './mock-orderbook';
 
 
 @Injectable()
@@ -21,6 +21,10 @@ export class OrderbookService {
                .then(response => response.json().data as Order[])
                .catch(this.handleError);
   }
+
+  // getOrderbook() {
+  //   return ORDERS;
+  // }
 
   private handleError(error: any): Promise<any> {
     console.error('An error occurred', error); // for demo purposes only

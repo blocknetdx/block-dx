@@ -1,5 +1,5 @@
 export class Order {
   sequence: number;
-  bids: string;
-  asks: string;
+  bids: (string | number)[][];
+  asks: (string | number)[][];
 };
