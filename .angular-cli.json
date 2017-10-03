@@ -19,12 +19,18 @@
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "app",
       "styles": [
-        "styles/main.scss"
+        "styles/main.scss",
+        "assets/amcharts/plugins/export/export.css"
       ],
       "scripts": [
         "../node_modules/jquery/dist/jquery.min.js",
         "assets/charting_library/charting_library.min.js",
         "assets/charting_library/datafeed/udf/datafeed.js",
+        "assets/amcharts/amcharts.js",
+        "assets/amcharts/serial.js",
+        "assets/amcharts/plugins/dataloader/dataloader.min.js",
+        "assets/amcharts/plugins/export/export.min.js",
+        "assets/amcharts/themes/dark.js",
         "scripts/main.js"
       ],
       "environmentSource": "environments/environment.ts",

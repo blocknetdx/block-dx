@@ -9,6 +9,8 @@ body {
 .left-col, .center-col, .right-col {
   @include make-col-ready();
   @include make-col(2.67);
+  height: 75vh;
+  overflow: scroll;
 }
 .center-col {
   @include make-col(6);

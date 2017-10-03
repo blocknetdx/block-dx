@@ -24,8 +24,14 @@ export class OrderbookService {
   //              .catch(this.handleError);
   // }
 
-  getData(): Observable<Order[]> {
-    return this.http.get(this.orderbookUrl).map((response) => response.json().data as Order[]);
+  // getData(): Observable<Order[]> {
+  //   return this.http.get(this.orderbookUrl).map((response) => response.json().data as Order[]);
+  // }
+
+  getOrderbook(): Observable<Order[]> {
+    return this.http
+      .get(this.orderbookUrl)
+      .map((response) => response.json().data as Order[]);
   }
 
   private handleError(error: any): Promise<any> {

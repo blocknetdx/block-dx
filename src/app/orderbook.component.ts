@@ -19,7 +19,7 @@ export class OrderbookComponent {
   constructor(private orderbookService: OrderbookService) { }
 
   getOrderbook(): void {
-    this.orderbookService.getData().subscribe(orderbook => this.orderbook = orderbook)
+    this.orderbookService.getOrderbook().subscribe(orderbook => this.orderbook = orderbook)
     // this.orderbookService.getOrderbook().then(orderbook => this.orderbook = orderbook)
   }
 
