@@ -73,7 +73,7 @@ export class PricechartComponent {
             "volume.show ma": false,
           },
           width: '100%',
-          height: '500',
+          height: '350',
           time_frames: [
               { text: "1y", resolution: "W",  title: "1yr" },
               { text: "6m", resolution: "W" },

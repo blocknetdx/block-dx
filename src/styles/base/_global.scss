@@ -1,23 +1,27 @@
 $bn-green: #4BF5C6;
 $bn-red: #FF7362;
+$bn-blue1: #001C3D;
+$bn-blue2: #092644;
+
 
 body {
-  background: #001C3D;
+  background: $bn-blue1;
   color: white;
 }
 
 .left-col, .center-col, .right-col {
   @include make-col-ready();
   @include make-col(2.67);
-  height: 75vh;
+  // height: 800px;
   overflow: scroll;
 }
 .center-col {
   @include make-col(6);
+  height: auto;
 }
 
 .bn-card {
-  background: #092644;
+  background: $bn-blue2;
 }
 
 

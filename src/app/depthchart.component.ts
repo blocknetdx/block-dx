@@ -10,7 +10,7 @@ declare var AmCharts;
   styles: [`
     #chartdiv {
       width: 100%;
-      height: 500px;
+      height: 300px;
     }
   `]
   // styleUrls: ['./depthchart.component.scss']
