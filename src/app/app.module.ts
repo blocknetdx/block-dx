@@ -2,9 +2,11 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpModule }    from '@angular/http';
 
+import { RouterModule }   from '@angular/router';
+
+
 // Import HttpClientModule from @angular/common/http
 import {HttpClientModule} from '@angular/common/http';
-
 
 // Imports for loading & configuring the in-memory web api
 import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
@@ -16,8 +18,10 @@ import { PricechartComponent } from './pricechart.component';
 import { OpenOrdersComponent } from './open-orders.component';
 import { OrderbookComponent } from './orderbook.component';
 import { DepthchartComponent } from './depthchart.component';
+import { SwitcherComponent } from './switcher.component';
 
 import { AppRoutingModule }     from './app-routing.module';
+
 
 @NgModule({
   declarations: [
@@ -26,14 +30,15 @@ import { AppRoutingModule }     from './app-routing.module';
     OpenOrdersComponent,
     OrderbookComponent,
     PricechartComponent,
-    TradehistoryComponent,
+    SwitcherComponent,
+    TradehistoryComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     HttpModule,
     InMemoryWebApiModule.forRoot(InMemoryDataService),
-    AppRoutingModule,
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]

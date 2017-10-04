@@ -1,8 +1,11 @@
 import { NgModule }             from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-const routes: Routes = [
+import { PricechartComponent } from './pricechart.component';
 
+const routes: Routes = [
+  // { path: '', redirectTo: '/BTC-USD', pathMatch: 'full' },
+  // { path: 'BTC-USD',  component: PricechartComponent }
 ];
 
 @NgModule({
