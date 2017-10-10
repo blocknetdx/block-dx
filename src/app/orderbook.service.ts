@@ -11,8 +11,9 @@ import { Order } from './order';
 
 @Injectable()
 export class OrderbookService {
+  private currency = 'LTC';
 
-  private orderbookUrl = 'api/orderbook';  // URL to web api
+  private orderbookUrl = 'api/orderbook' + this.currency;  // URL to web api
   // private orderbookUrl = 'https://api-public.sandbox.gdax.com/products/BTC-USD/book?level=2';
 
   constructor(private http: Http) { }
@@ -22,10 +23,6 @@ export class OrderbookService {
   //              .toPromise()
   //              .then(response => response.json().data as Order[])
   //              .catch(this.handleError);
-  // }
-
-  // getData(): Observable<Order[]> {
-  //   return this.http.get(this.orderbookUrl).map((response) => response.json().data as Order[]);
   // }
 
   getOrderbook(): Observable<Order[]> {

@@ -33,10 +33,10 @@ export class PricechartComponent {
           locale: "en",
           //	Regression Trend-related functionality is not implemented yet, so it's hidden for a while
           drawings_access: { type: 'black', tools: [{ name: "Regression Trend" }, { name: "" }] },
-          enabled_features: ["chart_property_page_trading"],
+          enabled_features: ["chart_property_page_trading", "move_logo_to_main_pane"],
           disabled_features: ["use_localstorage_for_settings", "left_toolbar", "header_saveload", "chart_property_page_scales",
             "header_settings", "header_compare", "header_undo_redo", "chart_property_page_style", "header_screenshot",
-            "header_symbol_search", "header_interval_dialog_button"], // "header_indicators",
+            "header_symbol_search", "header_interval_dialog_button", "volume_force_overlay"], // "header_indicators",
           charts_storage_url: 'http://saveload.tradingview.com',
           charts_storage_api_version: "1.1",
           client_id: 'tradingview.com',
@@ -63,6 +63,7 @@ export class PricechartComponent {
             "mainSeriesProperties.candleStyle.wickUpColor": 'rgba( 115, 115, 117, 1)',
             "mainSeriesProperties.candleStyle.wickDownColor": 'rgba( 115, 115, 117, 1)',
             "mainSeriesProperties.candleStyle.barColorsOnPrevClose": false,
+            "volumePaneSize": "medium"
           },
           // Indicator overrides
           studies_overrides: {

@@ -19,6 +19,7 @@ import { OpenOrdersComponent } from './open-orders.component';
 import { OrderbookComponent } from './orderbook.component';
 import { DepthchartComponent } from './depthchart.component';
 import { SwitcherComponent } from './switcher.component';
+import { MainviewComponent } from './mainview.component';
 
 import { AppRoutingModule }     from './app-routing.module';
 
@@ -27,6 +28,7 @@ import { AppRoutingModule }     from './app-routing.module';
   declarations: [
     AppComponent,
     DepthchartComponent,
+    MainviewComponent,
     OpenOrdersComponent,
     OrderbookComponent,
     PricechartComponent,
