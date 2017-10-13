@@ -18,9 +18,27 @@ export class TradehistoryService {
 
   getTradehistory(): Promise<Trade[]> {
     return this.http.get(this.tradehistoryUrl)
-               .toPromise()
-               .then(response => response.json().data as Trade[])
-               .catch(this.handleError);
+              .map((res) => {
+                let p = res.json().data;
+                let totalTradeSize = 0;
+
+                for(var i = 0; i < p.length; i++) {
+                  var currSize = parseFloat(p[i].size);
+                  totalTradeSize += currSize;
+                }
+                  console.log(totalTradeSize);
+
+                for(var i = 0; i < p.length; i++) {
+                  var currSize = parseFloat(p[i].size);
+                  var percentTradeSize = (currSize/totalTradeSize)*100;
+                  p[i].percent = percentTradeSize;
+                }
+
+                return res;
+              })
+              .toPromise()
+              .then(response => response.json().data as Trade[])
+              .catch(this.handleError);
   }
 
   private handleError(error: any): Promise<any> {

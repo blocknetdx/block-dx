@@ -5,11 +5,13 @@
   </h2>
   <table class="tradeTable">
     <tr>
+      <th></th>
       <th>Trade Size</th>
       <th>Price</th>
       <th>Time</th>
     </tr>
     <tr *ngFor="let trade of tradehistory">
+      <td><div class="percentBar {{trade.side}}" [ngStyle]="{'width.%': trade.percent}"></div></td>
       <td>{{trade.size}}</td>
       <td class="{{trade.side}}">{{trade.price | number : '1.2-2'}}</td>
       <td>{{trade.time | date:'HH:mm:ss' }}</td>

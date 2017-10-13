@@ -6,23 +6,26 @@
 
     <table *ngFor="let order of orderbook" class="tradeTable">
       <tr>
-        <th>Price</th>
+        <th></th>
         <th>Size</th>
+        <th>Price</th>
         <!-- <th>Num Orders</th> -->
       </tr>
       <tr *ngFor="let asks of order.asks" class="asks">
-        <td>{{asks[0] | number : "1.2-2"}}</td>
+        <td><div class="percentBar asks" [ngStyle]="{'width.%': asks[4]}"></div></td>
         <td>{{asks[1] | number : "1.8-8"}}</td>
+        <td>{{asks[0] | number : "1.2-2"}}</td>
         <!-- <td>{{asks[2]}}</td> -->
       </tr>
       <tr>
-        <th>Price</th>
         <th>Size</th>
+        <th>Price</th>
         <!-- <th>Num Orders</th> -->
       </tr>
       <tr *ngFor="let bids of order.bids" class="bids">
-        <td>{{bids[0] | number : "1.2-2"}}</td>
+        <td><div class="percentBar bids" [ngStyle]="{'width.%': bids[4]}"></div></td>
         <td>{{bids[1] | number : "1.8-8"}}</td>
+        <td>{{bids[0] | number : "1.2-2"}}</td>
         <!-- <td>{{bids[2]}}</td> -->
       </tr>
 

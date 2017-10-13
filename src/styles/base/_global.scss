@@ -3,18 +3,20 @@ $bn-red: #FF7362;
 $bn-blue1: #001C3D;
 $bn-blue2: #092644;
 
-
 body {
   background: $bn-blue1;
   color: white;
 }
 
-.left-col, .center-col, .right-col {
+.center-col,
+.left-col,
+.right-col {
   @include make-col-ready();
   @include make-col(2.67);
   // height: 800px;
   overflow: scroll;
 }
+
 .center-col {
   @include make-col(6);
   height: auto;
@@ -24,13 +26,12 @@ body {
   background: $bn-blue2;
 }
 
-
 .tradeTable {
   font-family: roboto, monospace;
   font-size: 12px;
   cursor: pointer;
   width: 100%;
-  line-height: .75;
+  line-height: 0.75;
 
   tr {
     &:hover {
@@ -47,15 +48,38 @@ body {
     text-align: right;
     padding: 5px 5px 5px 20px;
     width: 33%;
+    position: relative;
   }
 
-  td, tr {
-    &.buy, &.asks {
+  td,
+  tr {
+    &.asks,
+    &.buy {
       color: $bn-red;
     }
 
-    &.sell, &.bids {
+    &.bids,
+    &.sell {
       color: $bn-green;
+    }
+  }
+
+  .percentBar {
+    display: block;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    min-width: 1px;
+
+    &.asks,
+    &.buy {
+      background: $bn-red;
+    }
+
+    &.bids,
+    &.sell {
+      background: $bn-green;
     }
   }
 }

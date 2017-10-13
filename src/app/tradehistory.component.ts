@@ -16,7 +16,11 @@ export class TradehistoryComponent {
   constructor(private tradeHistoryService: TradehistoryService) { }
 
   getTradehistory(): void {
-    this.tradeHistoryService.getTradehistory().then(tradehistory => this.tradehistory = tradehistory)
+    this.tradeHistoryService.getTradehistory().then(tradehistory => {
+
+      this.tradehistory = tradehistory
+
+    })
   }
 
   ngOnInit(): void {

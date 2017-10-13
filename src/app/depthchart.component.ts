@@ -25,6 +25,9 @@ export class DepthchartComponent {
   ngAfterViewInit() {
     this.zone.runOutsideAngular(() => {
       var chart = AmCharts.makeChart("chartdiv", {
+        "responsive": {
+          "enabled": true
+        },
         "type": "serial",
         "theme": "dark",
         "dataLoader": {
