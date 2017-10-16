@@ -26,7 +26,6 @@ export class TradehistoryService {
                   var currSize = parseFloat(p[i].size);
                   totalTradeSize += currSize;
                 }
-                  console.log(totalTradeSize);
 
                 for(var i = 0; i < p.length; i++) {
                   var currSize = parseFloat(p[i].size);

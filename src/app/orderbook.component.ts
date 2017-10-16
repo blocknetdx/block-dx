@@ -12,7 +12,7 @@ import { OrderbookService } from './orderbook.service';
   providers: [OrderbookService]
 })
 export class OrderbookComponent {
-  title = 'OrderBook';
+  title = 'Order Book';
   // orders = ORDERS;
   orderbook: Order[];
 

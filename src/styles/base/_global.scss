@@ -1,7 +1,14 @@
-$bn-green: #4BF5C6;
-$bn-red: #FF7362;
-$bn-blue1: #001C3D;
-$bn-blue2: #092644;
+html {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  -webkit-box-sizing: inherit;
+  -moz-box-sizing: inherit;
+  box-sizing: inherit;
+  }
+
 
 body {
   background: $bn-blue1;
@@ -18,37 +25,66 @@ body {
 }
 
 .center-col {
-  @include make-col(6);
+  @include make-col(5.34);
   height: auto;
 }
 
 .bn-card {
-  background: $bn-blue2;
+  background: $bn-blue3;
+
+  &__title {
+    @extend .type2;
+    text-transform: uppercase;
+    background:$bn-blue2;
+    padding: 11px 17px;
+  }
 }
 
 .tradeTable {
-  font-family: roboto, monospace;
   font-size: 12px;
   cursor: pointer;
   width: 100%;
-  line-height: 0.75;
+  line-height: 0.9;
+  border-collapse: collapse;
 
   tr {
     &:hover {
       background: rgba(0,0,0,0.2);
     }
+
+    &:nth-child(2) {
+      td {
+        padding-top: 5px;
+      }
+    }
+  }
+
+  th, td {
+    padding: 10px 5px;
+
+    &:last-child {
+      padding-right: 10px;
+    }
   }
 
   th {
-    background: gray;
-    line-height: 2;
+    font-family: $open-sans;
+    background:$bn-blue2;
+    margin-bottom: 100px;
+    -webkit-box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.2);
+    -moz-box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.2);
+    font-weight: 400;
+    text-align: right;
   }
 
   td {
+    font-family: $roboto-mono;
     text-align: right;
     padding: 5px 5px 5px 20px;
     width: 33%;
     position: relative;
+    height: 14px;
   }
 
   td,
@@ -71,6 +107,8 @@ body {
     top: 0;
     left: 0;
     min-width: 1px;
+    z-index: 0;
+
 
     &.asks,
     &.buy {
@@ -81,5 +119,32 @@ body {
     &.sell {
       background: $bn-green;
     }
+  }
+}
+
+
+.bn-header {
+  margin: 20px 8px;
+
+  &__cell {
+    display: inline-block;
+    padding: 6px 29px 8px 23px;
+    min-height: 40px;
+    box-sizing: border-box;
+
+    &.currency--, &.tradeprice-- {
+      border-left: 1px solid rgba(255,255,255,.24);
+    }
+
+    .price_up { color: $bn-green; }
+    .price_down { color: $bn-red; }
+  }
+
+  &__upper {
+    @extend .type1;
+  }
+
+  &__lower {
+    @extend .type3;
   }
 }

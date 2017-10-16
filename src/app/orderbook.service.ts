@@ -11,7 +11,7 @@ import { Order } from './order';
 
 @Injectable()
 export class OrderbookService {
-  private currency = 'BTC';
+  private currency = 'ETH';
 
   private orderbookUrl = 'api/orderbook' + this.currency;  // URL to web api
   // private orderbookUrl = 'https://api-public.sandbox.gdax.com/products/BTC-USD/book?level=2';

@@ -1,6 +1,23 @@
-
 @import "vendor/bootstrap";
 @import "utils/variables";
 @import "utils/mixins";
-
+@import "base/typography";
 @import "base/global";
+
+// Debug
+body.debug {
+  background: blue;
+
+  @include screen(sm) {
+    background: yellow;
+  }
+  @include screen(md) {
+    background: green;
+  }
+  @include screen(lg) {
+    background: red;
+  }
+  @include screen(xl) {
+    background: $bn-blue1;
+  }
+}

@@ -1,0 +1,22 @@
+body {
+  font-size: 16px;
+}
+
+.type1 {
+  font: 1.125em/1.333333333 $open-sans;  /* 18px/24px */
+  font-weight: 700;
+}
+
+.type2 { // TYPE 2 | OPEN SANS, 12/18, 0.5 Char spacing
+  font: .75em/1.5 $open-sans;
+  font-weight: 700;
+  letter-spacing: .5px;
+}
+
+.type3 { // Type 3  | Open Sans 12/18
+  font: .75em/1.5 $open-sans;
+}
+
+.type4 { // Type 4 | Roboto Mono 12/16, Paragraph 4
+  font: .75em/1.333333333 $roboto-mono;
+}
