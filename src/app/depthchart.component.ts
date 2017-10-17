@@ -16,7 +16,7 @@ declare var AmCharts;
   // styleUrls: ['./depthchart.component.scss']
 })
 export class DepthchartComponent {
-  title = 'DepthChart';
+  title = 'Depth Chart';
 
   constructor(
     private zone: NgZone
@@ -32,7 +32,7 @@ export class DepthchartComponent {
         "theme": "dark",
         "dataLoader": {
           // "url": "https://api-public.sandbox.gdax.com/products/BTC-USD/book?level=2",
-          "url": "https://api.gdax.com/products/BTC-USD/book?level=2",
+          "url": "https://api.gdax.com/products/ETH-BTC/book?level=2",
           "format": "json",
           "reload": 3000000000,
           "postProcess": function(data) {
@@ -148,7 +148,7 @@ export class DepthchartComponent {
           "title": "Volume"
         }],
         "categoryAxis": {
-          "title": "Price (BTC/USD)",
+          "title": "Price (ETH/BTC)",
           "minHorizontalGap": 100,
           "startOnAxis": true,
           "showFirstLabel": false,

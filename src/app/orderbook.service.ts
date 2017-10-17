@@ -14,7 +14,7 @@ export class OrderbookService {
   private currency = 'ETH';
 
   private orderbookUrl = 'api/orderbook' + this.currency;  // URL to web api
-  // private orderbookUrl = 'https://api-public.sandbox.gdax.com/products/BTC-USD/book?level=2';
+  // private orderbookUrl = 'https://api-public.sandbox.gdax.com/products/ETH-BTC/book?level=2';
 
   constructor(private http: Http) { }
 

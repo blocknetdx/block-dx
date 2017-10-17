@@ -15,28 +15,43 @@ body {
   color: white;
 }
 
-.center-col,
-.left-col,
-.right-col {
+.single-col,
+.double-col,
+.full-col {
   @include make-col-ready();
   @include make-col(2.67);
   // height: 800px;
   overflow: scroll;
 }
 
-.center-col {
+.double-col {
   @include make-col(5.34);
+  height: auto;
+}
+
+.full-col {
+  @include make-col(12);
   height: auto;
 }
 
 .bn-card {
   background: $bn-blue3;
+  overflow: scroll;
+  margin-bottom: 20px;
 
   &__title {
     @extend .type2;
     text-transform: uppercase;
     background:$bn-blue2;
     padding: 11px 17px;
+  }
+
+  &.bn-tradehistory, &.bn-depthchart {
+    height: calc(40vh - 70px);
+  }
+
+  &.bn-orderbook, &.bn-pricechart {
+    height: calc(60vh - 70px);
   }
 }
 
@@ -147,4 +162,10 @@ body {
   &__lower {
     @extend .type3;
   }
+}
+
+
+#tv_chart_container {
+  position: relative;
+  height: calc(100% - 40px);
 }
