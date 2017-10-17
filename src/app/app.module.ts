@@ -15,9 +15,10 @@ import { InMemoryDataService }  from './in-memory-data.service';
 import { AppComponent } from './app.component';
 import { TradehistoryComponent } from './tradehistory.component';
 import { PricechartComponent } from './pricechart.component';
-import { OpenOrdersComponent } from './open-orders.component';
+import { OpenordersComponent } from './openorders.component';
 import { OrderbookComponent } from './orderbook.component';
 import { DepthchartComponent } from './depthchart.component';
+import { DepthComponent } from './depth.component';
 import { SwitcherComponent } from './switcher.component';
 import { MainviewComponent } from './mainview.component';
 
@@ -28,8 +29,9 @@ import { AppRoutingModule }     from './app-routing.module';
   declarations: [
     AppComponent,
     DepthchartComponent,
+    DepthComponent,
     MainviewComponent,
-    OpenOrdersComponent,
+    OpenordersComponent,
     OrderbookComponent,
     PricechartComponent,
     SwitcherComponent,
