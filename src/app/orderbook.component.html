@@ -1,10 +1,8 @@
 <!--The content below is only a placeholder and can be replaced.-->
 <div class="bn-card bn-orderbook">
-  <div class="bn-card__title">
-    {{title}}
-  </div>
-
-    <table *ngFor="let order of orderbook" class="tradeTable" border="0">
+  <div class="bn-card__title"> {{title}} </div>
+  <table *ngFor="let order of orderbook" class="tradeTable" border="0">
+    <thead>
       <tr>
         <!-- <th></th> -->
         <th>Total</th>
@@ -12,18 +10,26 @@
         <th>Price (BTC)</th>
         <!-- <th>Num Orders</th> -->
       </tr>
+    </thead>
+    <tbody>
       <tr *ngFor="let asks of order.asks" class="asks">
-        <td><div class="percentBar asks" [ngStyle]="{'width.%': asks[4]}"></div> <span  style="color: white; z-index: 1; position:relative">{{asks[1]*asks[0] | number : "1.4-4"}}</span></td>
+        <td>
+          <div class="percentBar asks" [ngStyle]="{'width.%': asks[4]}"></div>
+          <span style="color: white; z-index: 1; position:relative">{{asks[1]*asks[0] | number : "1.4-4"}}</span>
+        </td>
         <td>{{asks[1] | number : "1.8-8"}}</td>
         <td>{{asks[0] | number : "1.8-8"}}</td>
         <!-- <td>{{asks[2]}}</td> -->
       </tr>
       <tr *ngFor="let bids of order.bids" class="bids">
-        <td><div class="percentBar bids" [ngStyle]="{'width.%': bids[4]}"></div> <span  style="color: white; z-index: 1; position:relative">{{bids[1]*bids[0] | number : "1.4-4"}}</span></td>
+        <td>
+          <div class="percentBar bids" [ngStyle]="{'width.%': bids[4]}"></div>
+          <span style="color: white; z-index: 1; position:relative">{{bids[1]*bids[0] | number : "1.4-4"}}</span>
+        </td>
         <td>{{bids[1] | number : "1.8-8"}}</td>
         <td>{{bids[0] | number : "1.8-8"}}</td>
         <!-- <td>{{bids[2]}}</td> -->
       </tr>
-
+    </tbody>
   </table>
 </div>

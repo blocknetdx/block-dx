@@ -4,15 +4,20 @@
     {{title}}
   </div>
   <table class="tradeTable">
-    <tr>
+    <thead>
+      <tr>
       <th>Amount (ETH)</th>
       <th>Price (BTC)</th>
       <th>Time</th>
     </tr>
+    </thead>
+    <tbody>
+
     <tr *ngFor="let trade of tradehistory">
       <td><div class="percentBar {{trade.side}}" [ngStyle]="{'width.%': trade.percent}"></div> {{trade.size}}</td>
       <td class="{{trade.side}}">{{trade.price | number : '1.8-8'}}</td>
       <td>{{trade.time | date:'HH:mm:ss' }}</td>
     </tr>
+  </tbody>
   </table>
 </div>

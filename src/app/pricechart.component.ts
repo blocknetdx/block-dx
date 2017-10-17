@@ -33,7 +33,7 @@ export class PricechartComponent {
           locale: "en",
           //	Regression Trend-related functionality is not implemented yet, so it's hidden for a while
           drawings_access: { type: 'black', tools: [{ name: "Regression Trend" }, { name: "" }] },
-          enabled_features: ["chart_property_page_trading", "move_logo_to_main_pane"],
+          enabled_features: ["chart_property_page_trading" ], // "move_logo_to_main_pane"
           disabled_features: ["use_localstorage_for_settings", "left_toolbar", "header_saveload", "chart_property_page_scales",
             "header_settings", "header_compare", "header_undo_redo", "chart_property_page_style", "header_screenshot",
             "header_symbol_search", "header_interval_dialog_button", "volume_force_overlay"], // "header_indicators",
