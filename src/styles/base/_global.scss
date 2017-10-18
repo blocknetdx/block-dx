@@ -13,6 +13,7 @@ html {
 body {
   background: $bn-blue1;
   color: white;
+  -webkit-font-smoothing: antialiased;
 }
 
 .single-col,
@@ -67,6 +68,7 @@ body {
   &.bn-tradehistory,  &.bn-openorders {
     height: calc(40vh - 70px);
   }
+
 }
 
 .tradeTable {
@@ -81,11 +83,17 @@ body {
     display: block;
   }
 
-  tbody
-  {
+
+  tbody {
     overflow: auto;
     height: calc(100% - 70px);
+
+    .bn-orderbook & {
+      height: calc(50% - 35px);
+    }
   }
+
+
 
 
   tr {
@@ -171,6 +179,8 @@ body {
     display: inline-block;
     padding: 6px 29px 8px 23px;
     min-height: 40px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
     box-sizing: border-box;
 
     &.currency--, &.tradeprice-- {

@@ -21,6 +21,7 @@ import { DepthchartComponent } from './depthchart.component';
 import { DepthComponent } from './depth.component';
 import { SwitcherComponent } from './switcher.component';
 import { MainviewComponent } from './mainview.component';
+import { CurrentpriceComponent } from './currentprice.component';
 
 import { AppRoutingModule }     from './app-routing.module';
 
@@ -28,6 +29,7 @@ import { AppRoutingModule }     from './app-routing.module';
 @NgModule({
   declarations: [
     AppComponent,
+    CurrentpriceComponent,
     DepthchartComponent,
     DepthComponent,
     MainviewComponent,

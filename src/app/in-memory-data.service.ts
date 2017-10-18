@@ -274,6 +274,17 @@ export class InMemoryDataService implements InMemoryDbService {
       }
     ]
 
-    return { tradehistory, orderbookBTC, orderbookETH, dxOrderbook, dxTradeHistory, priceChart };
+    const stats = [
+      {
+          "open": "0.05567000",
+          "high": "0.05778000",
+          "low": "0.05572000",
+          "volume": "15503.56433807",
+          "last": "0.05655000",
+          "volume_30day": "343295.83606666"
+      }
+    ]
+
+    return { tradehistory, orderbookBTC, orderbookETH, dxOrderbook, dxTradeHistory, priceChart, stats };
   }
 }

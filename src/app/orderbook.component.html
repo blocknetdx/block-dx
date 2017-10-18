@@ -21,6 +21,9 @@
         <td>{{asks[0] | number : "1.8-8"}}</td>
         <!-- <td>{{asks[2]}}</td> -->
       </tr>
+    </tbody>
+    <tbody>
+
       <tr *ngFor="let bids of order.bids" class="bids">
         <td>
           <div class="percentBar bids" [ngStyle]="{'width.%': bids[4]}"></div>
@@ -31,5 +34,6 @@
         <!-- <td>{{bids[2]}}</td> -->
       </tr>
     </tbody>
+
   </table>
 </div>
