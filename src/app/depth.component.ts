@@ -29,7 +29,7 @@ export class DepthComponent {
         "theme": "dark",
         "dataLoader": {
           // "url": "https://api-public.sandbox.gdax.com/products/BTC-USD/book?level=2",
-          "url": "http://localhost:4200/assets/api/orderbook" + this.currency + ".json",
+          "url": "/assets/api/orderbook" + this.currency + ".json",
           "format": "json",
           "reload": 3000000000,
           "postProcess": function(data) {
