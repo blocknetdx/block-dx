@@ -1,3 +1,5 @@
+html, body {height:100%;}
+
 html {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -85,7 +87,7 @@ body {
 
 
   tbody {
-    overflow: auto;
+    overflow: scroll;
     height: calc(100% - 70px);
 
     .bn-orderbook & {
@@ -173,7 +175,7 @@ body {
 
 
 .bn-header {
-  margin: 20px 8px;
+  padding: 20px 8px;
 
   &__cell {
     display: inline-block;
@@ -201,6 +203,17 @@ body {
 }
 
 
+.chart-holder {
+  width: 100%;
+  height: 100%;
+  // transform: rotate(-90deg);
+
+  #chartdiv {
+    width: 100%;
+    height: calc(100% - 40px);
+  }
+}
+
 #tv_chart_container {
   position: relative;
   height: calc(100% - 40px);
@@ -208,12 +221,16 @@ body {
 
 .bn-openorders {
   &__table {
-    td {
+    th, td {
       // width: calc(20% - 3px); // TODO: Fix this awful HACK
       line-height: 1.25;
 
+      &:nth-child(1) {
+        width: 100px;
+      }
+
       &:last-child {
-        width: 15px;
+        width: 30px;
       }
     }
   }

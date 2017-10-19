@@ -15,7 +15,11 @@
 
     <tr *ngFor="let trade of tradehistory">
       <td><div class="percentBar {{trade.side}}" [ngStyle]="{'width.%': trade.percent}"></div> {{trade.size}}</td>
-      <td class="{{trade.side}}">{{trade.price | number : '1.8-8'}}</td>
+      <td class="{{trade.side}}">
+        {{trade.price | number : '1.8-8'}}
+        <img *ngIf="trade.side === 'sell'" class="my-icon" aria-label="My icon" src="assets/icons/arrow-diagonal-up.svg">
+        <img *ngIf="trade.side === 'buy'" class="my-icon" aria-label="My icon" src="assets/icons/arrow-diagonal-down.svg">
+      </td>
       <td>{{trade.time | date:'HH:mm:ss' }}</td>
     </tr>
   </tbody>

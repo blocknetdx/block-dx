@@ -4,7 +4,6 @@ import { HttpModule }    from '@angular/http';
 
 import { RouterModule }   from '@angular/router';
 
-
 // Import HttpClientModule from @angular/common/http
 import {HttpClientModule} from '@angular/common/http';
 
@@ -22,6 +21,7 @@ import { DepthComponent } from './depth.component';
 import { SwitcherComponent } from './switcher.component';
 import { MainviewComponent } from './mainview.component';
 import { CurrentpriceComponent } from './currentprice.component';
+
 
 import { AppRoutingModule }     from './app-routing.module';
 

@@ -8,15 +8,12 @@ declare var AmCharts;
   selector: 'depth',
   templateUrl: './depth.component.html',
   styles: [`
-    #chartdiv {
-      width: 100%;
-      height: calc(100% - 40px);
-    }
   `]
   // styleUrls: ['./depth.component.scss']
 })
 export class DepthComponent {
   title = 'Depth Chart';
+  private currency = 'ETH';
 
   constructor(
     private zone: NgZone
@@ -32,7 +29,7 @@ export class DepthComponent {
         "theme": "dark",
         "dataLoader": {
           // "url": "https://api-public.sandbox.gdax.com/products/BTC-USD/book?level=2",
-          "url": "https://api.gdax.com/products/ETH-BTC/book?level=2",
+          "url": "http://localhost:4200/assets/api/orderbook" + this.currency + ".json",
           "format": "json",
           "reload": 3000000000,
           "postProcess": function(data) {

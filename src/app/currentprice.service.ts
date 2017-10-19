@@ -9,9 +9,8 @@ import { Currentprice } from './currentprice';
 
 @Injectable()
 export class CurrentpriceService {
-
-  private currentpriceUrl = 'api/stats';  // URL to web api
-  // private currentpriceUrl = "https://api.gdax.com/products/ETH-BTC/stats";
+  private currency = 'ETH';
+  private currentpriceUrl = 'api/stats' + this.currency;  // URL to web api
 
   constructor(private http: Http) { }
 
