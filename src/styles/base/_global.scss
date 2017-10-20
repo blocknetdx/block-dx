@@ -26,7 +26,7 @@ body {
   @include make-col-ready();
   @include make-col(2);
   // height: 800px;
-  overflow: scroll;
+  overflow: auto;
 }
 
 .double-col {
