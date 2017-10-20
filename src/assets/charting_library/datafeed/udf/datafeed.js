@@ -43,16 +43,16 @@ Datafeeds.UDFCompatibleDatafeed.prototype.defaultConfiguration = function() {
 	};
 };
 
-Datafeeds.UDFCompatibleDatafeed.prototype.getServerTime = function(callback) {
-	if (this._configuration.supports_time) {
-		this._send(this._datafeedURL + '/time', {})
-			.done(function(response) {
-				callback(+response);
-			})
-			.fail(function() {
-			});
-	}
-};
+// Datafeeds.UDFCompatibleDatafeed.prototype.getServerTime = function(callback) {
+// 	if (this._configuration.supports_time) {
+// 		this._send(this._datafeedURL + '/time', {})
+// 			.done(function(response) {
+// 				callback(+response);
+// 			})
+// 			.fail(function() {
+// 			});
+// 	}
+// };
 
 Datafeeds.UDFCompatibleDatafeed.prototype.on = function(event, callback) {
 	if (!this._callbacks.hasOwnProperty(event)) {
@@ -87,7 +87,7 @@ Datafeeds.UDFCompatibleDatafeed.prototype._logMessage = function(message) {
 };
 
 Datafeeds.UDFCompatibleDatafeed.prototype._send = function(url, params) {
-	var request = url;
+  var request = url;
 	if (params) {
 		for (var i = 0; i < Object.keys(params).length; ++i) {
 			var key = Object.keys(params)[i];
@@ -108,16 +108,10 @@ Datafeeds.UDFCompatibleDatafeed.prototype._send = function(url, params) {
 Datafeeds.UDFCompatibleDatafeed.prototype._initialize = function() {
 	var that = this;
 
-	this._send(this._datafeedURL + '/config')
-		.done(function(response) {
-			// var configurationData = parseJSONorNot(response);
-			var configurationData = {"supports_search":true,"supports_group_request":false,"supports_marks":false,"supports_timescale_marks":false,"supports_time":true,"exchanges":[{"value":"","name":"All Exchanges","desc":""},{"value":"NasdaqNM","name":"NasdaqNM","desc":"NasdaqNM"},{"value":"NYSE","name":"NYSE","desc":"NYSE"},{"value":"NCM","name":"NCM","desc":"NCM"},{"value":"NGM","name":"NGM","desc":"NGM"}],"symbols_types":[{"name":"All types","value":""},{"name":"Stock","value":"stock"},{"name":"Index","value":"index"}],"supported_resolutions":["D","2D","3D","W","3W","M","6M"]};
+	var configurationData = {"supports_search":true,"supports_group_request":false,"supports_marks":false,"supports_timescale_marks":false,"supports_time":false,"exchanges":[{"value":"","name":"All Exchanges","desc":""},{"value":"NasdaqNM","name":"NasdaqNM","desc":"NasdaqNM"},{"value":"NYSE","name":"NYSE","desc":"NYSE"},{"value":"NCM","name":"NCM","desc":"NCM"},{"value":"NGM","name":"NGM","desc":"NGM"}],"symbols_types":[{"name":"All types","value":""},{"name":"Stock","value":"stock"},{"name":"Index","value":"index"}],"supported_resolutions":["D","2D","3D","W","3W","M","6M"]};
 
-			that._setupWithConfiguration(configurationData);
-		})
-		.fail(function(reason) {
-			that._setupWithConfiguration(that.defaultConfiguration());
-		});
+	that._setupWithConfiguration(configurationData);
+
 };
 
 Datafeeds.UDFCompatibleDatafeed.prototype.onReady = function(callback) {
@@ -171,6 +165,7 @@ Datafeeds.UDFCompatibleDatafeed.prototype._setupWithConfiguration = function(con
 //	The functions set below is the implementation of JavaScript API.
 
 Datafeeds.UDFCompatibleDatafeed.prototype.getMarks = function(symbolInfo, rangeStart, rangeEnd, onDataCallback, resolution) {
+
 	if (this._configuration.supports_marks) {
 		this._send(this._datafeedURL + '/marks', {
 			symbol: symbolInfo.ticker.toUpperCase(),
@@ -188,6 +183,7 @@ Datafeeds.UDFCompatibleDatafeed.prototype.getMarks = function(symbolInfo, rangeS
 };
 
 Datafeeds.UDFCompatibleDatafeed.prototype.getTimescaleMarks = function(symbolInfo, rangeStart, rangeEnd, onDataCallback, resolution) {
+
 	if (this._configuration.supports_timescale_marks) {
 		this._send(this._datafeedURL + '/timescale_marks', {
 			symbol: symbolInfo.ticker.toUpperCase(),
@@ -205,6 +201,7 @@ Datafeeds.UDFCompatibleDatafeed.prototype.getTimescaleMarks = function(symbolInf
 };
 
 Datafeeds.UDFCompatibleDatafeed.prototype.searchSymbols = function(searchString, exchange, type, onResultReadyCallback) {
+
 	var MAX_SEARCH_RESULTS = 30;
 
 	if (!this._configuration) {
@@ -267,6 +264,7 @@ Datafeeds.UDFCompatibleDatafeed.prototype._symbolResolveURL = '/symbols';
 
 //	BEWARE: this function does not consider symbol's exchange
 Datafeeds.UDFCompatibleDatafeed.prototype.resolveSymbol = function(symbolName, onSymbolResolvedCallback, onResolveErrorCallback) {
+
 	var that = this;
 
 	if (!this._initializationFinished) {
@@ -333,8 +331,10 @@ Datafeeds.UDFCompatibleDatafeed.prototype.getBars = function(symbolInfo, resolut
 		from: rangeStartDate,
 		to: rangeEndDate
 	})
+  // this._send("http://localhost:4200/assets/api/pricechartBTC.json")
 	.done(function(response) {
-		var data = parseJSONorNot(response);
+    var data = parseJSONorNot(response);
+    // var data = response;
 
 		var nodata = data.s === 'no_data';
 
@@ -376,7 +376,7 @@ Datafeeds.UDFCompatibleDatafeed.prototype.getBars = function(symbolInfo, resolut
 			bars.push(barValue);
 		}
 
-		onDataCallback(bars, { noData: nodata, nextTime: data.nb || data.nextTime });
+      onDataCallback(bars, { noData: nodata, nextTime: data.nb || data.nextTime });
 	})
 	.fail(function(arg) {
 		console.warn(['getBars(): HTTP error', arg]);
