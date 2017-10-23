@@ -10,10 +10,10 @@ import { Trade } from './trade';
 
 @Injectable()
 export class TradehistoryService {
-  private currency = 'ETH';
-  private currentpriceUrl = 'api/stats' + this.currency;  // URL to web api
+  private currency1 = 'ETH';
+  private currentpriceUrl = 'api/stats_' + this.currency1;  // URL to web api
 
-  private tradehistoryUrl = 'api/tradehistory' + this.currency;  // URL to web api
+  private tradehistoryUrl = 'api/tradehistory_' + this.currency1;  // URL to web api
   // private tradehistoryUrl = 'https://api-public.sandbox.gdax.com/products/BTC-USD/trades';
 
   constructor(private http: Http) { }

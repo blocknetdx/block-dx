@@ -23,12 +23,14 @@ export class PricechartComponent {
         var widget = new TradingView.widget({
           debug: false,
           fullscreen: false,
-          symbol: 'AAPL',
-          interval: '60',
-          timeframe: '1D',
+          interval: 'W',
+          timeframe: '1M',
           container_id: "tv_chart_container",
           //	BEWARE: no trailing slash is expected in feed URL
+          symbol: 'AAPL',
           datafeed: new Datafeeds.UDFCompatibleDatafeed("https://demo_feed.tradingview.com"),
+          // symbol: 'BTC',
+          // datafeed: new Datafeeds.UDFCompatibleDatafeed("http://localhost:3000"),
           library_path: "assets/charting_library/",
           locale: "en",
           //	Regression Trend-related functionality is not implemented yet, so it's hidden for a while
@@ -65,9 +67,7 @@ export class PricechartComponent {
             "mainSeriesProperties.candleStyle.barColorsOnPrevClose": false,
             "volumePaneSize": "medium"
           },
-          // Indicator overrides
           studies_overrides: {
-            // Volume
             "volume.volume.color.0": "#4BF5C6",
             "volume.volume.color.1": "#FF7362",
             "volume.volume.transparency": 80,
