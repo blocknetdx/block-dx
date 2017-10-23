@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {Observable} from 'rxjs/Observable';
+import { Observable } from 'rxjs/Observable';
 import { Headers, Http } from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
@@ -11,14 +11,14 @@ import { Order } from './order';
 
 @Injectable()
 export class OrderbookService {
-  private currency1 = 'ETH';
-
-  private orderbookUrl = 'api/orderbook_' + this.currency1;  // URL to web api
+  private orderbookUrl = '';
   // private orderbookUrl = 'https://api-public.sandbox.gdax.com/products/ETH-BTC/book?level=2';
 
   constructor(private http: Http) { }
 
-  getOrderbook(): Promise<Order[]> {
+  getOrderbook(symbols:string[]): Promise<Order[]> {
+    this.orderbookUrl = 'api/orderbook_' + symbols.join("_");
+
     return this.http.get(this.orderbookUrl)
                 .map((res) => {
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, NgZone } from '@angular/core';
+import { Component, OnInit, NgZone, Input } from '@angular/core';
 
 import { OrderbookService } from './orderbook.service';
 
@@ -16,11 +16,21 @@ export class DepthComponent {
   private currency1 = 'ETH';
   private currency2 = 'BTC';
 
+  @Input() public symbols:string[];
+
   constructor(
     private zone: NgZone
   ) { }
 
   ngAfterViewInit() {
+    this.runDepthChart();
+  }
+
+  ngOnChanges() {
+    this.runDepthChart();
+  }
+
+  runDepthChart(): void {
     this.zone.runOutsideAngular(() => {
       var chart = AmCharts.makeChart("chartdiv", {
         "responsive": {
@@ -30,7 +40,7 @@ export class DepthComponent {
         "theme": "dark",
         "dataLoader": {
           // "url": "https://api-public.sandbox.gdax.com/products/BTC-USD/book?level=2",
-          "url": "/assets/api/orderbook" + this.currency1 + "_" + this.currency2 + ".json",
+          "url": "/assets/api/orderbook" + this.symbols.join("_") + ".json",
           "format": "json",
           "reload": 3000000000,
           "postProcess": function(data) {
@@ -183,6 +193,7 @@ export class DepthComponent {
         );
       }
     });
+
   }
 
 }

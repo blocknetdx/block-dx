@@ -26,7 +26,7 @@ Datafeeds.UDFCompatibleDatafeed = function(datafeedURL, updateFrequency) {
 	this._barsPulseUpdater = new Datafeeds.DataPulseUpdater(this, updateFrequency || 10 * 1000);
 	this._quotesPulseUpdater = new Datafeeds.QuotesPulseUpdater(this);
 
-	this._enableLogging = true;
+	this._enableLogging = false;
 	this._initializationFinished = false;
 	this._callbacks = {};
 
@@ -706,9 +706,6 @@ Datafeeds.SymbolSearchComponent.prototype.searchSymbols = function(searchArgumen
 */
 
 Datafeeds.DataPulseUpdater = function(datafeed, updateFrequency) {
-  console.log("---------------------------");
-  console.log('DataPulsUpdated');
-  console.log("---------------------------");
 	this._datafeed = datafeed;
 	this._subscribers = {};
 

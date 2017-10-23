@@ -6,8 +6,8 @@
       <tr>
         <!-- <th></th> -->
         <th>Total</th>
-        <th>Amount (ETH)</th>
-        <th>Price (BTC)</th>
+        <th>Amount ({{symbols[0]}})</th>
+        <th>Price ({{symbols[1]}})</th>
         <!-- <th>Num Orders</th> -->
       </tr>
     </thead>
@@ -17,8 +17,8 @@
           <div class="percentBar asks" [ngStyle]="{'width.%': asks[4]}"></div>
           <span style="color: white; z-index: 1; position:relative">{{asks[1]*asks[0] | number : "1.4-4"}}</span>
         </td>
-        <td>{{asks[1] | number : "1.8-8"}}</td>
-        <td>{{asks[0] | number : "1.8-8"}}</td>
+        <td>{{formatNumber(asks[1],symbols[0])}}</td>
+        <td>{{formatNumber(asks[0],symbols[1])}}</td>
         <!-- <td>{{asks[2]}}</td> -->
       </tr>
     </tbody>
@@ -29,8 +29,8 @@
           <div class="percentBar bids" [ngStyle]="{'width.%': bids[4]}"></div>
           <span style="color: white; z-index: 1; position:relative">{{bids[1]*bids[0] | number : "1.4-4"}}</span>
         </td>
-        <td>{{bids[1] | number : "1.8-8"}}</td>
-        <td>{{bids[0] | number : "1.8-8"}}</td>
+        <td>{{formatNumber(bids[1],symbols[0])}}</td>
+        <td>{{formatNumber(bids[0],symbols[1])}}</td>
         <!-- <td>{{bids[2]}}</td> -->
       </tr>
     </tbody>

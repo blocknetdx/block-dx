@@ -1,10 +1,10 @@
 <div class="bn-header__cell currency--">
-  <div class="bn-header__upper">ETH / BTC</div>
+  <div class="bn-header__upper">{{symbols[0]}} / {{symbols[1]}}</div>
   <div class="bn-header__lower">Market Table &gt;</div>
 </div>
 <div class="bn-header__cell tradeprice--">
 
-  <div class="bn-header__upper" *ngIf="currentprice">{{currentprice.last | number : "1.5-5"}} ETH</div>
+  <div class="bn-header__upper" *ngIf="currentprice">{{formatNumber(currentprice.last,symbols[1])}} {{symbols[1]}}</div>
   <div class="bn-header__lower">Last trade price</div>
 </div>
 <div class="bn-header__cell twentyfourprice--">
@@ -14,6 +14,6 @@
   <div class="bn-header__lower">24 hour price</div>
 </div>
 <div class="bn-header__cell twentyfourvol--">
-  <div class="bn-header__upper" *ngIf="currentprice">{{currentprice.volume | number : "1.0-0"}} BTC</div>
+  <div class="bn-header__upper" *ngIf="currentprice">{{currentprice.volume | number : "1.0-0"}} {{symbols[0]}}</div>
   <div class="bn-header__lower">24 hour volume</div>
 </div>

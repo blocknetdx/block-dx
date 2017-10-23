@@ -1,5 +1,6 @@
 import 'rxjs/add/operator/map';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { DecimalPipe } from '@angular/common';
 
 // import { ORDERS } from './mock-orderbook';
 import { Order } from './order';
@@ -13,17 +14,26 @@ import { OrderbookService } from './orderbook.service';
 })
 export class OrderbookComponent {
   title = 'Order Book';
-  // orders = ORDERS;
   orderbook: Order[];
 
-  constructor(private orderbookService: OrderbookService) { }
+  @Input() public symbols:string[];
+
+  constructor(private orderbookService: OrderbookService, private decimalPipe:DecimalPipe) { }
 
   getOrderbook(): void {
-    // this.orderbookService.getOrderbook().subscribe(orderbook => this.orderbook = orderbook)
-    this.orderbookService.getOrderbook().then(orderbook => this.orderbook = orderbook)
+    this.orderbookService.getOrderbook(this.symbols).then(orderbook => this.orderbook = orderbook)
+  }
+
+  formatNumber(num:string, symbol:string): string {
+    const format = symbol !== "USD" ? "1.8-8" : "1.2-2";
+    return this.decimalPipe.transform(num,format);
   }
 
   ngOnInit(): void {
+    this.getOrderbook();
+  }
+
+  ngOnChanges(): void {
     this.getOrderbook();
   }
 }

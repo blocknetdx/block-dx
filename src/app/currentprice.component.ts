@@ -1,4 +1,5 @@
-import { Component, OnInit, NgZone } from '@angular/core';
+import { Component, OnInit, NgZone, Input } from '@angular/core';
+import { DecimalPipe } from '@angular/common';
 
 import { Currentprice } from './currentprice';
 import { CurrentpriceService } from './currentprice.service';
@@ -13,15 +14,26 @@ import { CurrentpriceService } from './currentprice.service';
   title = 'Current Price';
   currentprice: Currentprice;
 
-  constructor(private currentpriceService: CurrentpriceService) { }
+  @Input() public symbols:string[];
+
+  constructor(private currentpriceService: CurrentpriceService, private decimalPipe:DecimalPipe) { }
 
   getCurrentprice(): void {
-    this.currentpriceService.getCurrentprice().then(currentprice => {
+    this.currentpriceService.getCurrentprice(this.symbols).then(currentprice => {
       this.currentprice = currentprice[0];
     })
   }
 
+  formatNumber(num:string, symbol:string): string {
+    const format = symbol !== "USD" ? "1.5-5" : "1.2-2";
+    return this.decimalPipe.transform(num,format);
+  }
+
   ngOnInit(): void {
+    this.getCurrentprice();
+  }
+
+  ngOnChanges(): void {
     this.getCurrentprice();
   }
 }

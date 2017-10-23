@@ -6,17 +6,17 @@
   <table class="tradeTable">
     <thead>
       <tr>
-      <th>Amount (ETH)</th>
-      <th>Price (BTC)</th>
+      <th>Amount ({{symbols[0]}})</th>
+      <th>Price ({{symbols[1]}})</th>
       <th>Time</th>
     </tr>
     </thead>
     <tbody>
 
     <tr *ngFor="let trade of tradehistory">
-      <td><div class="percentBar {{trade.side}}" [ngStyle]="{'width.%': trade.percent}"></div> {{trade.size}}</td>
+      <td><div class="percentBar {{trade.side}}" [ngStyle]="{'width.%': trade.percent}"></div> {{formatNumber(trade.size,symbols[0])}}</td>
       <td class="{{trade.side}}">
-        {{trade.price | number : '1.8-8'}}
+        {{formatNumber(trade.price,symbols[1])}}
         <img *ngIf="trade.side === 'sell'" class="my-icon" aria-label="My icon" src="assets/icons/arrow-diagonal-up.svg">
         <img *ngIf="trade.side === 'buy'" class="my-icon" aria-label="My icon" src="assets/icons/arrow-diagonal-down.svg">
       </td>

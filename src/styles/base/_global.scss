@@ -63,11 +63,11 @@ body {
   }
 
 
-  &.bn-orderbook, &.bn-pricechart, &.bn-depthchart {
+  &.bn-orderbook, &.bn-pricechart, &.bn-toprow {
     height: calc(60vh - 70px);
   }
 
-  &.bn-tradehistory,  &.bn-openorders {
+  &.bn-tradehistory,  &.bn-openorders, &.bn-bottomrow {
     height: calc(40vh - 70px);
   }
 

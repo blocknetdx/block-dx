@@ -9,12 +9,13 @@ import { Currentprice } from './currentprice';
 
 @Injectable()
 export class CurrentpriceService {
-  private currency1 = 'ETH';
-  private currentpriceUrl = 'api/stats_' + this.currency1;  // URL to web api
+  private currentpriceUrl = '';  // URL to web api
 
   constructor(private http: Http) { }
 
-  getCurrentprice(): Promise<Currentprice[]> {
+  getCurrentprice(symbols:string[]): Promise<Currentprice[]> {
+    this.currentpriceUrl = 'api/stats_' + symbols[0];
+
     return this.http.get(this.currentpriceUrl)
               // .map((res) => {
               //   console.log(res);

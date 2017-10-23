@@ -22,6 +22,7 @@ import { SwitcherComponent } from './switcher.component';
 import { MainviewComponent } from './mainview.component';
 import { CurrentpriceComponent } from './currentprice.component';
 
+import { DecimalPipe } from '@angular/common';
 
 import { AppRoutingModule }     from './app-routing.module';
 
@@ -46,7 +47,7 @@ import { AppRoutingModule }     from './app-routing.module';
     InMemoryWebApiModule.forRoot(InMemoryDataService),
     AppRoutingModule
   ],
-  providers: [],
+  providers: [DecimalPipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
