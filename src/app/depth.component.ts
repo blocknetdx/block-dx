@@ -130,23 +130,23 @@ export class DepthComponent {
           "valueField": "askstotalvolume",
           "balloonFunction": balloon
         },
-        //  {
-        //   "lineAlpha": 0,
-        //   "fillAlphas": 0.2,
-        //   "lineColor": "#FFF",
-        //   "type": "column",
-        //   "clustered": false,
-        //   "valueField": "bidsvolume",
-        //   "showBalloon": false
-        // }, {
-        //   "lineAlpha": 0,
-        //   "fillAlphas": 0.2,
-        //   "lineColor": "#FFF",
-        //   "type": "column",
-        //   "clustered": false,
-        //   "valueField": "asksvolume",
-        //   "showBalloon": false
-        // }
+         {
+          "lineAlpha": 0,
+          "fillAlphas": 0.2,
+          "lineColor": "#FFF",
+          "type": "column",
+          "clustered": false,
+          "valueField": "bidsvolume",
+          "showBalloon": false
+        }, {
+          "lineAlpha": 0,
+          "fillAlphas": 0.2,
+          "lineColor": "#FFF",
+          "type": "column",
+          "clustered": false,
+          "valueField": "asksvolume",
+          "showBalloon": false
+        }
       ],
         "categoryField": "value",
         "chartCursor": {},
