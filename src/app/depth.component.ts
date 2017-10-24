@@ -39,7 +39,6 @@ export class DepthComponent {
         "type": "serial",
         "theme": "dark",
         "dataLoader": {
-          // "url": "https://api-public.sandbox.gdax.com/products/BTC-USD/book?level=2",
           "url": "/assets/api/orderbook" + this.symbols.join("_") + ".json",
           "format": "json",
           "reload": 3000000000,
@@ -130,38 +129,46 @@ export class DepthComponent {
           "type": "step",
           "valueField": "askstotalvolume",
           "balloonFunction": balloon
-        }, {
-          "lineAlpha": 0,
-          "fillAlphas": 0.2,
-          "lineColor": "#FFF",
-          "type": "column",
-          "clustered": false,
-          "valueField": "bidsvolume",
-          "showBalloon": false
-        }, {
-          "lineAlpha": 0,
-          "fillAlphas": 0.2,
-          "lineColor": "#FFF",
-          "type": "column",
-          "clustered": false,
-          "valueField": "asksvolume",
-          "showBalloon": false
-        }],
+        },
+        //  {
+        //   "lineAlpha": 0,
+        //   "fillAlphas": 0.2,
+        //   "lineColor": "#FFF",
+        //   "type": "column",
+        //   "clustered": false,
+        //   "valueField": "bidsvolume",
+        //   "showBalloon": false
+        // }, {
+        //   "lineAlpha": 0,
+        //   "fillAlphas": 0.2,
+        //   "lineColor": "#FFF",
+        //   "type": "column",
+        //   "clustered": false,
+        //   "valueField": "asksvolume",
+        //   "showBalloon": false
+        // }
+      ],
         "categoryField": "value",
         "chartCursor": {},
         "balloon": {
-          "textAlign": "left"
+          "textAlign": "left",
+          "disableMouseEvents": true,
+          "enabled": false
         },
         "valueAxes": [{
-          // "title": "Volume"
+          "showFirstLabel": false,
+          "showLastLabel": false,
+          "inside": true
         }],
         "categoryAxis": {
-          // "title": "Price (ETH/BTC)",
-          "minHorizontalGap": 100,
+          "minVerticalGap": 100,
           "startOnAxis": true,
           "showFirstLabel": false,
-          "showLastLabel": false
+          "showLastLabel": false,
+          "inside": true
         },
+        "mouseWheelZoomEnabled": true,
+        "rotate": true,
         "export": {
           "enabled": false
         }

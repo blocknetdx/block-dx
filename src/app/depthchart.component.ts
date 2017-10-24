@@ -1,8 +1,5 @@
 import { Component, OnInit, NgZone } from '@angular/core';
-
 import { OrderbookService } from './orderbook.service';
-
-declare var AmCharts;
 
 @Component({
   selector: 'depthchart',

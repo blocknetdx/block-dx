@@ -31,6 +31,7 @@
         "assets/amcharts/plugins/dataloader/dataloader.min.js",
         "assets/amcharts/plugins/export/export.min.js",
         "assets/amcharts/themes/dark.js",
+        "assets/amcharts/plugins/responsive/responsive.min.js",
         "scripts/main.js"
       ],
       "environmentSource": "environments/environment.ts",
