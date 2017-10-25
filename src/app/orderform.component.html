@@ -1,0 +1,28 @@
+<div class="bn-card bn-orderform">
+  <!-- <div class="bn-card__FPO"></div> -->
+  <div class="bn-card__title"> {{ title }} </div>
+  <div class="bn-card__subhead">
+      <a href="#" [class.selected]="true">BUY</a>
+      <a href="#" [class.selected]="false">SELL</a>
+  </div>
+  <form class="order-form" id="market_order">
+    <div class="form-group row">
+      <label class="order-form__label col-form-label" for="type">Type</label>
+      <div class="order-form__field">
+        <select class="form-control" name="type" id="type">
+          <option value="market">Market Order</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="order-form__label col-form-label" for="amount">Amount ({{symbols[0]}})</label>
+      <div class="order-form__field">
+        <input class="form-control" name="amount" id="amount" type="text" placeholder="{{formatNumber(0.00000,symbols[0])}}" /><br /> </div>
+    </div>
+    <div class="form-group row">
+      <label class="order-form__label col-form-label" for="total">Total ({{symbols[1]}})</label>
+      <div class="order-form__field">
+        <input class="form-control" name="total" id="total_calc" type="text" placeholder="{{formatNumber(0.00000,symbols[1])}}" disabled /><br /> </div>
+    </div>
+    <input type="submit" value="Place Buy Order" /> </form>
+</div>

@@ -13,14 +13,17 @@ import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { InMemoryDataService }  from './in-memory-data.service';
 
 import { AppComponent } from './app.component';
+import { BalancesComponent } from './balances.component';
 import { TradehistoryComponent } from './tradehistory.component';
 import { PricechartComponent } from './pricechart.component';
 import { OpenordersComponent } from './openorders.component';
+import { OrderformComponent } from './orderform.component';
 import { OrderbookComponent } from './orderbook.component';
 import { DepthchartComponent } from './depthchart.component';
 import { DepthComponent } from './depth.component';
 import { SwitcherComponent } from './switcher.component';
 import { MainviewComponent } from './mainview.component';
+import { WatchlistComponent } from './watchlist.component';
 import { CurrentpriceComponent } from './currentprice.component';
 
 import { DecimalPipe } from '@angular/common';
@@ -31,15 +34,18 @@ import { AppRoutingModule }     from './app-routing.module';
 @NgModule({
   declarations: [
     AppComponent,
+    BalancesComponent,
     CurrentpriceComponent,
     DepthchartComponent,
     DepthComponent,
     MainviewComponent,
     OpenordersComponent,
     OrderbookComponent,
+    OrderformComponent,
     PricechartComponent,
     SwitcherComponent,
-    TradehistoryComponent
+    TradehistoryComponent,
+    WatchlistComponent
   ],
   imports: [
     BrowserModule,

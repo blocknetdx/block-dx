@@ -1,3 +1,32 @@
+.debug {
+
+ &:before {
+    position: fixed;
+    z-index: 20000;
+    background: rgba(black,0.2);
+    color: white;
+    bottom: 0;
+    right: 0;
+    padding: 5px;
+    content: 'default';
+    @include screen(s) {
+      content: 'small';
+    }
+    @include screen(m) {
+      content: 'medium';
+    }
+    @include screen(xm) {
+      content: 'extra-medium';
+    }
+    @include screen(l) {
+      content: 'large';
+    }
+    @include screen(xl) {
+      content: 'xlarge';
+    }
+  }
+}
+
 html, body {height:100%;}
 
 html {
@@ -16,6 +45,18 @@ body {
   background: $bn-blue1;
   color: white;
   -webkit-font-smoothing: antialiased;
+}
+
+.outer-column {
+  @include make-col-ready();
+
+  &.left-- {
+    @include make-col(3);
+  }
+
+  &.right-- {
+    @include make-col(9);
+  }
 }
 
 .single-col,
@@ -68,7 +109,6 @@ body {
     padding-top: 50px;
     text-align: center;
     font-size: 50px;
-    color: #ff00ff;
   }
 
   &__title {
@@ -78,14 +118,51 @@ body {
     padding: 11px 17px;
   }
 
+  &__subhead {
+    font-family: $open-sans;
+    background:$bn-blue2;
+    -webkit-box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.2);
+    -moz-box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.2);
+    font-weight: 400;
+    text-align: right;
+
+  }
+
 
   &.bn-orderbook, &.bn-pricechart, &.bn-toprow {
     height: calc(60vh - 70px);
   }
 
-  &.bn-tradehistory,  &.bn-openorders, &.bn-bottomrow {
+  &.bn-tradehistory,  &.bn-openorders, &.bn-bottomrow, &.bn-watchlist {
     height: calc(40vh - 70px);
   }
+
+  &.bn-balances {
+    height: calc(20vh - 70px);
+  }
+
+  &.bn-orderform {
+    height: calc(40vh - 8px);
+
+    .bn-card__subhead {
+      a {
+        display: inline-block;
+        width: 49%;
+        border-bottom: 2px solid $bn-blue2;
+        text-align: center;
+        color: white;
+        text-decoration: none;
+        font-size: 12px;
+        padding-bottom: 7px;
+
+        &:hover { border-color: $bn-blue-light1; }
+        &.selected { border-color: $bn-blue-light2; color: $bn-blue-light3; font-weight: 700; }
+      }
+    }
+  }
+
+
 
 }
 
@@ -192,6 +269,7 @@ body {
 
 .bn-header {
   padding: 20px 8px;
+  position: relative;
 
   &__cell {
     display: inline-block;
@@ -215,6 +293,44 @@ body {
 
   &__lower {
     @extend .type3;
+  }
+
+  &__menu {
+    position: absolute;
+    right: 0;
+    top: 25px;
+    list-style: none;
+
+    font-family: $open-sans;
+    font-size: 14px;
+    line-height: 19px;
+
+    a {
+      color: #FFFFFF;
+      font-weight: 400;
+      text-decoration: none;
+
+      &.current {
+        font-weight: 700;
+        color: $bn-blue-light3;
+
+        border-bottom: 2px solid;
+      }
+    }
+
+    li {
+      float: left;
+      margin-right: 32px;
+    }
+
+    .menu-button {
+      div {
+        width: 17px;
+        height: 1px;
+        background-color: #FFF;
+        margin: 5px 0;
+      }
+    }
   }
 }
 
@@ -247,6 +363,71 @@ body {
       &:last-child {
         width: 30px;
       }
+    }
+  }
+}
+
+
+.order-form {
+  font-family: $open-sans;
+  margin: 24px 16px;
+  width: calc(100% - 32px);
+
+  .form-group {
+    margin-bottom: 1em;
+  }
+
+  &__label {
+    background-color: #2d4058;
+    font-size: 12px;
+    padding: 0 0 0 10px !important;
+    line-height: 40px;
+    @include make-col-ready();
+    @include make-col(4);
+  }
+
+  &__field {
+    @include make-col-ready();
+    @include make-col(8);
+    background-color: #21364f;
+
+    &:focus {
+      background: #2d4058 !important;
+    }
+  }
+
+  input[type=text], select {
+    width: 100%;
+    height: 40px;
+    line-height: 40px;
+    background-color: #21364f;
+    border: none;
+    color: #FFFFFF;
+    font-family: $open-sans;
+    font-size: 12px;
+    padding-left: 10px;
+
+    &:disabled {
+      color: #46576c;
+    }
+  }
+
+  input[type=submit] {
+    background: $bn-blue-light1;
+    color: white;
+    width: calc(100% - 32px);
+    border: none;
+    font-family:$open-sans;
+    font-size: 12px;
+    font-weight: 700;
+    height: 40px;
+    text-transform: uppercase;
+    position: absolute;
+    bottom: 24px;
+    left: 16px;
+
+    &:hover {
+      background: $bn-blue-light1;
     }
   }
 }

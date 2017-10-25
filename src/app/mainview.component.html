@@ -4,25 +4,45 @@
     <div class="bn-header__cell icon--">
       <img src="assets/icon_blk.png" height="40"> </div>
     <currentprice [symbols]="symbols"></currentprice>
-
+    <ul class="bn-header__menu">
+      <li><a href="#" class="current">Exchange</a></li>
+      <li><a href="#">Markets</a></li>
+      <!-- <li><a href="#">Login</a></li> -->
+      <li><a href="#">Setup</a></li>
+      <li>
+        <a href="#" class="menu-button">
+          <div></div>
+          <div></div>
+          <div></div>
+        </a>
+      </li>
+    </ul>
   </div>
-
   <div class="row">
-    <div class="triple-col">
-      <pricechart></pricechart>
+    <div class="outer-column left--">
+      <balances></balances>
+      <orderform [symbols]="symbols"></orderform>
+      <watchlist></watchlist>
     </div>
-    <div class="single-col">
-      <depth [symbols]="symbols"></depth>
-    </div>
-    <div class="double-col">
-      <orderbook [symbols]="symbols"></orderbook>
-    </div>
-    <div class="full-col"></div>
-    <div class="quad-col">
-      <openorders></openorders>
-    </div>
-    <div class="double-col">
-      <tradehistory [symbols]="symbols"></tradehistory>
+    <div class="outer-column right--">
+      <div class="row">
+        <div class="triple-col">
+          <pricechart></pricechart>
+        </div>
+        <div class="single-col">
+          <depth [symbols]="symbols"></depth>
+        </div>
+        <div class="double-col">
+          <orderbook [symbols]="symbols"></orderbook>
+        </div>
+        <div class="full-col"></div>
+        <div class="quad-col">
+          <openorders></openorders>
+        </div>
+        <div class="double-col">
+          <tradehistory [symbols]="symbols"></tradehistory>
+        </div>
+      </div>
     </div>
   </div>
 </div>
