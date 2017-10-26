@@ -1,27 +1,22 @@
-
 <div class="bn-card bn-tradehistory">
-  <div class="bn-card__title">
-    {{title}}
-  </div>
-  <table class="tradeTable">
-    <thead>
-      <tr>
-      <th>Amount ({{symbols[0]}})</th>
-      <th>Price ({{symbols[1]}})</th>
-      <th>Time</th>
-    </tr>
-    </thead>
-    <tbody>
+  <div class="bn-card__title"> {{title}} </div>
+  <div class="bn-table">
+    <div class="row bn-table__header">
+      <div class="col-sm-4">Amount ({{symbols[0]}})</div>
+      <div class="col-sm-4">Price ({{symbols[1]}})</div>
+      <div class="col-sm-4">Time</div>
+    </div>
 
-    <tr *ngFor="let trade of tradehistory">
-      <td><div class="percentBar {{trade.side}}" [ngStyle]="{'width.%': trade.percent}"></div> {{formatNumber(trade.size,symbols[0])}}</td>
-      <td class="{{trade.side}}">
-        {{formatNumber(trade.price,symbols[1])}}
-        <img *ngIf="trade.side === 'sell'" class="my-icon" aria-label="My icon" src="assets/icons/arrow-diagonal-up.svg">
-        <img *ngIf="trade.side === 'buy'" class="my-icon" aria-label="My icon" src="assets/icons/arrow-diagonal-down.svg">
-      </td>
-      <td>{{trade.time | date:'HH:mm:ss' }}</td>
-    </tr>
-  </tbody>
-  </table>
+    <div class="bn-table__body">
+      <div class="row bn-table__row"  *ngFor="let trade of tradehistory">
+        <div class="col-sm-4"><div class="percentBar {{trade.side}}" [ngStyle]="{'width.%': trade.percent}"></div> {{formatNumber(trade.size,symbols[0])}}</div>
+        <div class="col-sm-4 {{trade.side}} bn-table__offset">
+          {{formatNumber(trade.price,symbols[1])}}
+            <img *ngIf="trade.side === 'sell'" class="my-icon" aria-label="My icon" src="assets/icons/arrow-diagonal-up.svg">
+            <img *ngIf="trade.side === 'buy'" class="my-icon" aria-label="My icon" src="assets/icons/arrow-diagonal-down.svg">
+        </div>
+        <div class="col-sm-4">{{trade.time | date:'HH:mm:ss' }}</div>
+      </div>
+    </div>
+  </div>
 </div>

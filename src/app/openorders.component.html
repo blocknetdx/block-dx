@@ -2,26 +2,27 @@
 <div class="bn-card bn-openorders">
   <!-- <div class="bn-card__FPO"></div> -->
   <div class="bn-card__title"> {{title}} </div>
-  <table class="tradeTable bn-openorders__table">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Price ({{symbols[1]}})</th>
-        <th>Amount ({{symbols[0]}})</th>
-        <th>Total ({{symbols[1]}})</th>
-        <th>Date</th>
-        <th>&nbsp;</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let openorder of openorders">
-        <td class="{{openorder.side}}" style="text-transform: capitalize;">{{openorder.side}}</td>
-        <td>{{formatNumber(openorder.price, symbols[1])}}</td>
-        <td>{{formatNumber(openorder.size, symbols[0])}}</td>
-        <td>{{formatNumber(openorder.price*openorder.size, symbols[1])}}</td>
-        <td>{{openorder.created_at | date:'y-MM-dd HH:mm:ss' }}</td>
-        <td>X</td>
-      </tr>
-    </tbody>
-  </table>
+
+
+  <div class="bn-table">
+    <div class="row bn-table__header">
+      <div class="col-sm-1">Type</div>
+      <div class="col-sm-2">Price ({{symbols[1]}})</div>
+      <div class="col-sm-2">Amount ({{symbols[0]}})</div>
+      <div class="col-sm-2">Total ({{symbols[1]}})</div>
+      <div class="col-sm-4">Date</div>
+      <div class="col-sm-1">&nbsp;</div>
+    </div>
+
+    <div class="bn-table__body">
+      <div class="row bn-table__row"  *ngFor="let openorder of openorders">
+        <div class="col-sm-1 {{openorder.side}}" style="text-transform: capitalize;">{{openorder.side}}</div>
+        <div class="col-sm-2">{{formatNumber(openorder.price, symbols[1])}}</div>
+        <div class="col-sm-2">{{formatNumber(openorder.size, symbols[0])}}</div>
+        <div class="col-sm-2">{{formatNumber(openorder.price*openorder.size, symbols[1])}}</div>
+        <div class="col-sm-4">{{openorder.created_at | date:'y-MM-dd HH:mm:ss' }}</div>
+        <div class="col-sm-1" style="text-align: center;">X</div>
+      </div>
+    </div>
+  </div>
 </div>

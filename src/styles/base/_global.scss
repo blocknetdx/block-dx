@@ -1,6 +1,5 @@
 .debug {
-
- &:before {
+  &:before {
     position: fixed;
     z-index: 20000;
     background: rgba(black,0.2);
@@ -27,19 +26,24 @@
   }
 }
 
-html, body {height:100%;}
+body,
+html {
+  height: 100%;
+}
 
 html {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
-*, *:before, *:after {
+
+*,
+*:after,
+*:before {
   -webkit-box-sizing: inherit;
   -moz-box-sizing: inherit;
   box-sizing: inherit;
-  }
-
+}
 
 body {
   background: $bn-blue1;
@@ -59,11 +63,11 @@ body {
   }
 }
 
-.single-col,
 .double-col,
-.triple-col,
+.full-col,
 .quad-col,
-.full-col {
+.single-col,
+.triple-col {
   @include make-col-ready();
   @include make-col(2);
   // height: 800px;
@@ -74,7 +78,6 @@ body {
   @include make-col(4);
   height: auto;
 }
-
 
 .triple-col {
   @include make-col(6);
@@ -99,8 +102,8 @@ body {
 
   &__FPO {
     // display: none;
-    position:absolute;
-    top:0;
+    position: absolute;
+    top: 0;
     left: 0;
     background: rgba(0,0,0,0.5);
     width: 100%;
@@ -114,27 +117,30 @@ body {
   &__title {
     @extend .type2;
     text-transform: uppercase;
-    background:$bn-blue2;
+    background: $bn-blue2;
     padding: 11px 17px;
   }
 
   &__subhead {
     font-family: $open-sans;
-    background:$bn-blue2;
-    -webkit-box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.2);
-    -moz-box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.2);
-    box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.2);
+    background: $bn-blue2;
+    -webkit-box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
+    -moz-box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
     font-weight: 400;
     text-align: right;
-
   }
 
-
-  &.bn-orderbook, &.bn-pricechart, &.bn-toprow {
+  &.bn-orderbook,
+  &.bn-pricechart,
+  &.bn-toprow {
     height: calc(60vh - 70px);
   }
 
-  &.bn-tradehistory,  &.bn-openorders, &.bn-bottomrow, &.bn-watchlist {
+  &.bn-bottomrow,
+  &.bn-openorders,
+  &.bn-tradehistory,
+  &.bn-watchlist {
     height: calc(40vh - 70px);
   }
 
@@ -156,30 +162,55 @@ body {
         font-size: 12px;
         padding-bottom: 7px;
 
-        &:hover { border-color: $bn-blue-light1; }
-        &.selected { border-color: $bn-blue-light2; color: $bn-blue-light3; font-weight: 700; }
+        &:hover {
+          border-color: $bn-blue-light1;
+        }
+
+        &.selected {
+          border-color: $bn-blue-light2;
+          color: $bn-blue-light3;
+          font-weight: 700;
+        }
       }
     }
   }
-
-
-
 }
 
-.tradeTable {
+.bn-table {
   font-size: 12px;
   cursor: pointer;
   width: 100%;
   height: 100%;
-  line-height: 0.9;
+  line-height: 1.4;
   border-collapse: collapse;
 
-  thead, tbody {
+  tbody,
+  thead {
     display: block;
   }
 
+  &__header {
+    div {
+      display: inline-block;
+      font-family: $open-sans;
+      background: $bn-blue2;
+      // margin-bottom: 100px;
+      -webkit-box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
+      -moz-box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
+      box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
+      font-weight: 400;
+      text-align: right;
+      padding: 10px 5px;
+      width: 100%;
+      box-sizing: border-box;
 
-  tbody {
+      &:last-child {
+        padding-right: 10px;
+      }
+    }
+  }
+
+  &__body {
     overflow: scroll;
     height: calc(100% - 70px);
 
@@ -188,84 +219,60 @@ body {
     }
   }
 
-
-
-
-  tr {
+  &__row {
     &:hover {
       background-color: rgba(255,255,255,0.04);
     }
 
-    &:nth-child(2) {
-      td {
-        padding-top: 5px;
+    div {
+      font-family: $roboto-mono;
+      text-align: right;
+      position: relative;
+      min-height: 20px;
+
+      &:last-child {
+        padding-right: 10px;
+      }
+
+      &.asks,
+      &.buy {
+        color: $bn-red;
+      }
+
+      &.bids,
+      &.sell {
+        color: $bn-green;
+      }
+
+      .percentBar {
+        display: block;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        min-width: 5px;
+        z-index: 0;
+        padding: 0;
+
+        &.asks,
+        &.buy {
+          background: $bn-red;
+        }
+
+        &.bids,
+        &.sell {
+          background: $bn-green;
+        }
       }
     }
   }
 
-  th, td {
-    padding: 10px 5px;
-    width: 999px; // TODO: Fix this awful HACK
-
-    &:last-child {
-      padding-right: 10px;
-    }
-  }
-
-  th {
-    font-family: $open-sans;
-    background:$bn-blue2;
-    margin-bottom: 100px;
-    -webkit-box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.2);
-    -moz-box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.2);
-    box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.2);
-    font-weight: 400;
-    text-align: right;
-  }
-
-  td {
-    font-family: $roboto-mono;
-    text-align: right;
-    padding: 5px 5px 5px 20px;
-    position: relative;
-    height: 14px;
-  }
-
-  td,
-  tr {
-    &.asks,
-    &.buy {
-      color: $bn-red;
-    }
-
-    &.bids,
-    &.sell {
-      color: $bn-green;
-    }
-  }
-
-  .percentBar {
-    display: block;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    min-width: 1px;
-    z-index: 0;
-
-
-    &.asks,
-    &.buy {
-      background: $bn-red;
-    }
-
-    &.bids,
-    &.sell {
-      background: $bn-green;
+  &__offset {
+    img {
+      margin-right: -17px;
     }
   }
 }
-
 
 .bn-header {
   padding: 20px 8px;
@@ -279,12 +286,18 @@ body {
     -moz-box-sizing: border-box;
     box-sizing: border-box;
 
-    &.currency--, &.tradeprice-- {
+    &.currency--,
+    &.tradeprice-- {
       border-left: 1px solid rgba(255,255,255,.24);
     }
 
-    .price_up { color: $bn-green; }
-    .price_down { color: $bn-red; }
+    .price_up {
+      color: $bn-green;
+    }
+
+    .price_down {
+      color: $bn-red;
+    }
   }
 
   &__upper {
@@ -300,7 +313,6 @@ body {
     right: 0;
     top: 25px;
     list-style: none;
-
     font-family: $open-sans;
     font-size: 14px;
     line-height: 19px;
@@ -313,7 +325,6 @@ body {
       &.current {
         font-weight: 700;
         color: $bn-blue-light3;
-
         border-bottom: 2px solid;
       }
     }
@@ -334,7 +345,6 @@ body {
   }
 }
 
-
 .chart-holder {
   width: 100%;
   height: 100%;
@@ -349,24 +359,6 @@ body {
   position: relative;
   height: calc(100% - 40px);
 }
-
-.bn-openorders {
-  &__table {
-    th, td {
-      // width: calc(20% - 3px); // TODO: Fix this awful HACK
-      line-height: 1.25;
-
-      &:nth-child(1) {
-        width: 100px;
-      }
-
-      &:last-child {
-        width: 30px;
-      }
-    }
-  }
-}
-
 
 .order-form {
   font-family: $open-sans;
@@ -396,7 +388,8 @@ body {
     }
   }
 
-  input[type=text], select {
+  input[type=text],
+  select {
     width: 100%;
     height: 40px;
     line-height: 40px;
@@ -417,7 +410,7 @@ body {
     color: white;
     width: calc(100% - 32px);
     border: none;
-    font-family:$open-sans;
+    font-family: $open-sans;
     font-size: 12px;
     font-weight: 700;
     height: 40px;
