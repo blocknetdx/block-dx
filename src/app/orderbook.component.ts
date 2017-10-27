@@ -36,4 +36,8 @@ export class OrderbookComponent {
   ngOnChanges(): void {
     this.getOrderbook();
   }
+
+  ngAfterViewInit(): void {
+
+  }
 }

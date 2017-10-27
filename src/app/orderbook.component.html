@@ -6,7 +6,7 @@
       <div class="col-sm-4">Amount ({{symbols[0]}})</div>
       <div class="col-sm-4">Price ({{symbols[1]}})</div>
     </div>
-    <div class="bn-table__body">
+    <div class="bn-table__body" id="bn-table__orderbook">
       <div class="row bn-table__row asks" *ngFor="let asks of order.asks">
         <div class="col-sm-4">
           <div class="percentBar asks" [ngStyle]="{'width.%': asks[4]}"></div>
@@ -15,8 +15,8 @@
         <div class="col-sm-4 asks"> {{formatNumber(asks[1],symbols[0])}} </div>
         <div class="col-sm-4">{{formatNumber(asks[0],symbols[1])}}</div>
       </div>
-    </div>
-    <div class="bn-table__body">
+    <!-- </div>
+    <div class="bn-table__body"> -->
       <div class="row bn-table__row bids" *ngFor="let bids of order.bids">
         <div class="col-sm-4">
           <div class="percentBar bids" [ngStyle]="{'width.%': bids[4]}"></div>
