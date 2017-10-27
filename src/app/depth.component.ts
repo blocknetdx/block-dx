@@ -153,7 +153,8 @@ export class DepthComponent {
         "balloon": {
           "textAlign": "left",
           "disableMouseEvents": true,
-          "fixedPosition": false
+          "fixedPosition": false,
+          "fillAlpha": 1
         },
         "valueAxes": [{
           "showFirstLabel": false,
@@ -167,13 +168,27 @@ export class DepthComponent {
           "startOnAxis": true,
           "showFirstLabel": false,
           "showLastLabel": false,
-          "inside": true
+          "inside": true,
+          "balloon": {
+            "fontSize": 0,
+            "color": "#FFFFFF"
+            // "enabled" : false  // TODO: This isn't working for some reason.
+          }
         },
         "mouseWheelZoomEnabled": true,
         "rotate": true,
         "export": {
           "enabled": false
-        }
+        },
+        "listeners": [{
+          "event": "rendered",
+          "method": function(event) {
+            // var chart = event.chart;
+            // var chartCursor = new AmCharts.ChartCursor();
+            // chart.addChartCursor(chartCursor);
+            // chartCursor.enabled=false;
+          }
+        }]
       });
 
       function balloon(item, graph) {
