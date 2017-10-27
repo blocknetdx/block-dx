@@ -17,4 +17,12 @@ export class OrderformComponent {
     const format = symbol !== "USD" ? "1.8-8" : "1.2-2";
     return this.decimalPipe.transform(num,format);
   }
+
+  totalPrice = 0;
+
+  calcPrice(event: any) { // without type info
+    var enteredValue = event.target.value;
+    var currPrice = 100;
+    this.totalPrice = enteredValue * currPrice;
+  }
 }
