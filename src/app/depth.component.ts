@@ -153,14 +153,16 @@ export class DepthComponent {
         "balloon": {
           "textAlign": "left",
           "disableMouseEvents": true,
-          "enabled": false
+          "fixedPosition": false
         },
         "valueAxes": [{
           "showFirstLabel": false,
           "showLastLabel": false,
-          "inside": true
+          "inside": true,
+          "gridAlpha": 0
         }],
         "categoryAxis": {
+          "gridAlpha": 0,
           "minVerticalGap": 100,
           "startOnAxis": true,
           "showFirstLabel": false,
