@@ -5,7 +5,7 @@ import { Location }                 from '@angular/common';
 @Component({
   selector: 'mainview',
   templateUrl: './mainview.component.html',
-  // styleUrls: ['./mainview.component.scss']
+  styleUrls: ['./mainview.component.scss']
 })
 export class MainviewComponent {
   public symbols:string[];
