@@ -1,23 +1,6 @@
 <switcher></switcher>
 <div class="container">
-  <div class="bn-header">
-    <div class="bn-header__cell icon--">
-      <img src="assets/icon_blk.png" height="40"> </div>
-    <currentprice [symbols]="symbols"></currentprice>
-    <ul class="bn-header__menu">
-      <li><a href="#" class="current">Exchange</a></li>
-      <li><a href="#">Markets</a></li>
-      <!-- <li><a href="#">Login</a></li> -->
-      <li><a href="#">Setup</a></li>
-      <li>
-        <a href="#" class="menu-button">
-          <div></div>
-          <div></div>
-          <div></div>
-        </a>
-      </li>
-    </ul>
-  </div>
+  <app-nav-bar [symbols]="symbols"></app-nav-bar>
   <div class="row">
     <div class="outer-column left--">
       <balances></balances>

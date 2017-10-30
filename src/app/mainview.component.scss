@@ -20,17 +20,6 @@
       min-height: 40px;
     }
 
-    &.icon-- {
-
-      img {
-        height: 25px;
-
-        @include screen(xl) {
-          height: 40px;
-        }
-      }
-    }
-
     &.currency--,
     &.tradeprice-- {
       border-left: 1px solid rgba(255,255,255,.24);
@@ -53,39 +42,5 @@
     @extend .type3;
   }
 
-  &__menu {
-    position: absolute;
-    right: 0;
-    top: 25px;
-    list-style: none;
-    font-family: $open-sans;
-    font-size: 14px;
-    line-height: 19px;
-
-    a {
-      color: #FFFFFF;
-      font-weight: 400;
-      text-decoration: none;
-
-      &.current {
-        font-weight: 700;
-        color: $bn-blue-light3;
-        border-bottom: 2px solid;
-      }
-    }
-
-    li {
-      float: left;
-      margin-right: 32px;
-    }
-
-    .menu-button {
-      div {
-        width: 17px;
-        height: 1px;
-        background-color: #FFF;
-        margin: 5px 0;
-      }
-    }
-  }
+  
 }

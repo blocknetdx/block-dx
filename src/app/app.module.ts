@@ -29,6 +29,7 @@ import { CurrentpriceComponent } from './currentprice.component';
 import { DecimalPipe } from '@angular/common';
 
 import { AppRoutingModule }     from './app-routing.module';
+import { NavBarComponent } from './nav-bar/nav-bar.component';
 
 
 @NgModule({
@@ -45,7 +46,8 @@ import { AppRoutingModule }     from './app-routing.module';
     PricechartComponent,
     SwitcherComponent,
     TradehistoryComponent,
-    WatchlistComponent
+    WatchlistComponent,
+    NavBarComponent
   ],
   imports: [
     BrowserModule,
