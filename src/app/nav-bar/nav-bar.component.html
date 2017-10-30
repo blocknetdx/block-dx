@@ -20,35 +20,70 @@
 </nav> -->
 
 <nav class="navbar">
-  <a class="navbar-brand">
-    <img src="assets/icon_blk.png" alt="Blocknet Logo">
-  </a>
-  <currentprice [symbols]="symbols"></currentprice>
-  <div class="collapse navbar-collapse" [class.active]="navCollapsed">
-    <ul>
-      <li>Account</li>
-      <li><a href="#">My Balances</a></li>
-      <li><a href="#">Setup Wallet</a></li>
-      <li><a href="#">Settings</a></li>
-    </ul>
-    <ul>
-      <li>Support</li>
-      <li><a href="#">Notices</a></li>
-      <li><a href="#">FAQ</a></li>
-      <li><a href="#">Fees</a></li>
-      <li><a href="#">Help articles</a></li>
-      <li><a href="#">Community Forum</a></li>
-    </ul>
-    <ul>
-      <li>Contact Us</li>
-      <li><a href="#">Email</a></li>
-      <li><a href="#">Reddit</a></li>
-      <li><a href="#">Twitter</a></li>
-    </ul>
+  <div class="navbar-bar">
+    <div>
+      <a class="navbar-brand">
+        <img src="assets/icon_blk.png" alt="Blocknet Logo">
+      </a>
+    </div>
+    <div class="">
+      <div class="bn-header__upper">{{symbols[0]}} / {{symbols[1]}}</div>
+      <!-- <div class="bn-header__lower">Market Table &gt;</div> -->
+    </div>
+    <div class="collapse navbar-collapse" [class.active]="navCollapsed">
+      <a (click)="toggleNav()" class="close"><i class="material-icons">close</i></a>
+      <ul>
+        <li>Account</li>
+        <li><a href="#">My Balances</a></li>
+        <li><a href="#">Setup Wallet</a></li>
+        <li><a href="#">Settings</a></li>
+      </ul>
+      <ul>
+        <li>Support</li>
+        <li><a href="#">Notices</a></li>
+        <li><a href="#">FAQ</a></li>
+        <li><a href="#">Fees</a></li>
+        <li><a href="#">Help articles</a></li>
+        <li><a href="#">Community Forum</a></li>
+      </ul>
+      <ul>
+        <li>Contact Us</li>
+        <li><a href="#">Email</a></li>
+        <li><a href="#">Reddit</a></li>
+        <li><a href="#">Twitter</a></li>
+      </ul>
+    </div>
+    <a (click)="toggleNav()" class="navbar-toggler">
+      <div></div>
+      <div></div>
+      <div></div>
+    </a>
   </div>
-  <a (click)="toggleNav()" class="navbar-toggler">
-    <div></div>
-    <div></div>
-    <div></div>
-  </a>
+  <!-- <currentprice [symbols]="symbols"></currentprice> -->
+
+
+  <!-- <div class="bn-header__cell currency--">
+    <div class="bn-header__upper">{{symbols[0]}} / {{symbols[1]}}</div>
+    <div class="bn-header__lower">Market Table &gt;</div>
+  </div> -->
+  <div class="navbar-pricing">
+    <div class="bn-header__cell tradeprice--">
+      <div class="bn-header__upper" *ngIf="currentprice">{{formatNumber(currentprice.last,symbols[1])}} {{symbols[1]}}</div>
+      <div class="bn-header__lower">Last trade price</div>
+    </div>
+
+    <div class="bn-header__cell twentyfourprice--">
+      <div class="bn-header__upper price_{{((((currentprice.last/currentprice.open) - 1) * 100) > 0) ? 'up' : 'down'}}" *ngIf="currentprice">
+        {{((currentprice.last/currentprice.open) - 1) * 100 | number: "1.2-2"}}%
+      </div>
+      <div class="bn-header__lower">24 hour price</div>
+    </div>
+
+    <div class="bn-header__cell twentyfourvol--">
+      <div class="bn-header__upper" *ngIf="currentprice">{{currentprice.volume | number : "1.0-0"}} {{symbols[0]}}</div>
+      <div class="bn-header__lower">24 hour volume</div>
+    </div>
+  </div>
+
+
 </nav>
