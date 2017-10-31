@@ -35,6 +35,7 @@
   padding: 8px;
   display: flex;
   justify-content: space-between;
+  min-height: 58px;
 }
 
 .navbar-toggler {
@@ -140,7 +141,7 @@
       color: $bn-green;
       &::before {
         content: "+";
-        margin-right: -0.1em;
+        margin-right: -0.2em;
       }
     }
 
@@ -148,7 +149,7 @@
       color: $bn-red;
       &::before {
         content: "-";
-        margin-right: -0.1em;
+        margin-right: -0.2em;
       }
     }
   }

@@ -40,11 +40,12 @@
   </div>
 
 
-  <!-- <div class="bn-header__cell currency--">
-    <div class="bn-header__upper">{{symbols[0]}} / {{symbols[1]}}</div>
-    <div class="bn-header__lower">Market Table &gt;</div>
-  </div> -->
   <div class="navbar-pricing" *ngIf="currentPrice">
+    <div class="bn-header__cell currency--">
+      <div class="bn-header__upper">{{symbols[0]}} / {{symbols[1]}}</div>
+      <div class="bn-header__lower">Market Table &gt;</div>
+    </div>
+    
     <div class="bn-header__cell tradeprice--">
       <div class="bn-header__upper">{{formatNumber(currentPrice.last,symbols[1])}} {{symbols[1]}}</div>
       <div class="bn-header__lower">Last trade price</div>

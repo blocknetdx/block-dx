@@ -11,7 +11,7 @@ import { CurrentpriceService } from '../currentprice.service';
 })
 export class NavBarComponent implements OnInit {
   @Input() public symbols: string[];
-  @Input() public currentPrice: Currentprice;
+  @Input() public currentPrice: Currentprice = new Currentprice();
 
   public navCollapsed: boolean;
 
