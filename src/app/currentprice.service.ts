@@ -14,7 +14,6 @@ export class CurrentpriceService {
   constructor(private http: Http) { }
 
   getCurrentprice(symbols:string[]): Promise<Currentprice[]> {
-    console.log('getCurrentprice');
     this.currentpriceUrl = 'api/stats_' + symbols[0];
 
     return this.http.get(this.currentpriceUrl)
@@ -25,7 +24,6 @@ export class CurrentpriceService {
         return data;
       })
       .toPromise()
-      // .then(response => response.json().data as Currentprice[])
       .catch(this.handleError);
   }
 
