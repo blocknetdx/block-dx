@@ -1,10 +1,12 @@
 <switcher></switcher>
 <div class="container">
-  <app-nav-bar [symbols]="symbols"></app-nav-bar>
+
+  <app-nav-bar [currentPrice]="currPrice" [symbols]="symbols"></app-nav-bar>
+
   <div class="row">
     <div class="outer-column left--">
       <balances></balances>
-      <orderform [symbols]="symbols"></orderform>
+      <orderform [currentPrice]="currPrice" [symbols]="symbols"></orderform>
       <watchlist></watchlist>
     </div>
     <div class="outer-column right--">
@@ -13,7 +15,7 @@
           <pricechart></pricechart>
         </div>
         <div class="single-col">
-          <depth [symbols]="symbols"></depth>
+          <depth [currentPrice]="currPrice" [symbols]="symbols"></depth>
         </div>
         <div class="double-col">
           <orderbook [symbols]="symbols"></orderbook>

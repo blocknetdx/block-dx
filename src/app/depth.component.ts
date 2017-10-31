@@ -22,26 +22,21 @@ declare var AmCharts;
     }
   `],
   // styleUrls: ['./depth.component.scss'],
-  providers: [CurrentpriceService]
 })
 export class DepthComponent {
-  title = 'Depth Chart';
+  @Input() public symbols:string[];
+  @Input() public currentPrice: Currentprice;
+
+  public title = 'Depth Chart';
   private currency1 = 'ETH';
   private currency2 = 'BTC';
-  currentprice: Currentprice;
-
-
-  @Input() public symbols:string[];
 
   constructor(
     private zone: NgZone,
-    private currentpriceService: CurrentpriceService,
     private decimalPipe:DecimalPipe
-  ) { }
+  ) {}
 
-  ngOnInit() {
-    this.getCurrentprice();
-  }
+  ngOnInit() {}
 
   ngAfterViewInit() {
     this.runDepthChart();
@@ -51,18 +46,10 @@ export class DepthComponent {
     this.runDepthChart();
   }
 
-  getCurrentprice(): void {
-    this.currentpriceService.getCurrentprice(this.symbols).then(currentprice => {
-      this.currentprice = currentprice[0];
-    })
-  }
-
   formatNumber(num:string, symbol:string): string {
     const format = symbol !== "USD" ? "1.5-5" : "1.2-2";
     return this.decimalPipe.transform(num,format);
   }
-
-
 
   runDepthChart(): void {
     this.zone.runOutsideAngular(() => {

@@ -6,44 +6,28 @@ import { CurrentpriceService } from './currentprice.service';
 
 @Component({
   selector: 'orderform',
-  templateUrl: './orderform.component.html',
-  providers: [CurrentpriceService]
+  templateUrl: './orderform.component.html'
   // styleUrls: ['./open-orders.component.scss']
 })
 export class OrderformComponent {
-  title = 'Order Form';
-  currentprice: Currentprice;
-
-
   @Input() public symbols:string[];
+  @Input() public currentPrice: Currentprice;
 
-  constructor(private currentpriceService: CurrentpriceService,private decimalPipe:DecimalPipe) { }
+  public title = 'Order Form';
+  public totalPrice = 0;
+
+  constructor(private decimalPipe: DecimalPipe) { }
+
+  ngOnInit() {}
 
   formatNumber(num:string, symbol:string): string {
     const format = symbol !== "USD" ? "1.8-8" : "1.2-2";
     return this.decimalPipe.transform(num,format);
   }
 
-
-  ngOnInit() {
-    this.getCurrentprice();
-  }
-
-  ngOnChanges() {
-    this.getCurrentprice();
-  }
-
-  getCurrentprice(): void {
-    this.currentpriceService.getCurrentprice(this.symbols).then(currentprice => {
-      this.currentprice = currentprice[0];
-    })
-  }
-
-  totalPrice = 0;
-
   calcPrice(event: any) { // without type info
     var enteredValue = event.target.value;
-    var currPrice = parseFloat(this.currentprice.last);
+    var currPrice = parseFloat(this.currentPrice.last);
     this.totalPrice = enteredValue * currPrice;
   }
 }

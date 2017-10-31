@@ -1,4 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { DecimalPipe } from '@angular/common';
+
+import { Currentprice } from '../currentprice';
+import { CurrentpriceService } from '../currentprice.service';
 
 @Component({
   selector: 'app-nav-bar',
@@ -7,12 +11,19 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class NavBarComponent implements OnInit {
   @Input() public symbols: string[];
+  @Input() public currentPrice: Currentprice;
 
   public navCollapsed: boolean;
 
-  constructor() { }
+  constructor(
+    private decimalPipe:DecimalPipe
+  ) { }
 
-  ngOnInit() {
+  ngOnInit() {}
+
+  formatNumber(num:string, symbol:string): string {
+    const format = symbol !== "USD" ? "1.5-5" : "1.2-2";
+    return this.decimalPipe.transform(num,format);
   }
 
   toggleNav() {
