@@ -8,16 +8,16 @@
     right: 0;
     padding: 5px;
     content: 'default';
-    @include screen(s) {
+    @include screen(sm) {
       content: 'small';
     }
-    @include screen(m) {
+    @include screen(md) {
       content: 'medium';
     }
     @include screen(xm) {
       content: 'extra-medium';
     }
-    @include screen(l) {
+    @include screen(lg) {
       content: 'large';
     }
     @include screen(xl) {
@@ -49,6 +49,11 @@ body {
   background: $bn-blue1;
   color: white;
   -webkit-font-smoothing: antialiased;
+}
+
+.container {
+  margin: 0;
+  width: auto;
 }
 
 .outer-column {

@@ -34,7 +34,7 @@ export class MainviewComponent {
   }
 
   getCurrentprice(): void {
-    this.currPrice = null;
+    this.currPrice = new Currentprice();
     this.priceService.getCurrentprice(this.symbols).then(cp => {
       this.currPrice = cp[0];
     })
