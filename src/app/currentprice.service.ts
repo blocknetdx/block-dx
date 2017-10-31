@@ -14,16 +14,19 @@ export class CurrentpriceService {
   constructor(private http: Http) { }
 
   getCurrentprice(symbols:string[]): Promise<Currentprice[]> {
+    console.log('getCurrentprice');
     this.currentpriceUrl = 'api/stats_' + symbols[0];
 
     return this.http.get(this.currentpriceUrl)
-              // .map((res) => {
-              //   console.log(res);
-              //   return res;
-              // })
-              .toPromise()
-              .then(response => response.json().data as Currentprice[])
-              .catch(this.handleError);
+      .map((res) => {
+        const data = res.json().data.map(d => {
+          return Currentprice.fromObject(d);
+        });
+        return data;
+      })
+      .toPromise()
+      // .then(response => response.json().data as Currentprice[])
+      .catch(this.handleError);
   }
 
   private handleError(error: any): Promise<any> {
