@@ -133,15 +133,23 @@
 
     &.currency--,
     &.tradeprice-- {
-      border-left: 1px solid rgba(255,255,255,.24);
+      // border-left: 1px solid rgba(255,255,255,.24);
     }
 
     .price_up {
       color: $bn-green;
+      &::before {
+        content: "+";
+        margin-right: -0.1em;
+      }
     }
 
     .price_down {
       color: $bn-red;
+      &::before {
+        content: "-";
+        margin-right: -0.1em;
+      }
     }
   }
 
