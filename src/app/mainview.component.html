@@ -7,7 +7,6 @@
     <div class="outer-column left--">
       <balances></balances>
       <orderform [currentPrice]="currPrice" [symbols]="symbols"></orderform>
-      <watchlist></watchlist>
     </div>
     <div class="outer-column right--">
       <div class="row">
@@ -30,4 +29,11 @@
       </div>
     </div>
   </div>
+  <app-bottom-nav>
+    <button class="active" app-nav-item>Trade</button>
+    <button app-nav-item>Book</button>
+    <button app-nav-item>Charts</button>
+    <button app-nav-item>Orders</button>
+    <button app-nav-item>History</button>
+  </app-bottom-nav>
 </div>

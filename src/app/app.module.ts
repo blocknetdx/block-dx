@@ -30,6 +30,7 @@ import { DecimalPipe } from '@angular/common';
 import { BreakpointService } from './breakpoint.service';
 import { AppRoutingModule }     from './app-routing.module';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
+import { BottomNavComponent } from './bottom-nav/bottom-nav.component';
 
 
 @NgModule({
@@ -47,7 +48,8 @@ import { NavBarComponent } from './nav-bar/nav-bar.component';
     SwitcherComponent,
     TradehistoryComponent,
     WatchlistComponent,
-    NavBarComponent
+    NavBarComponent,
+    BottomNavComponent
   ],
   imports: [
     BrowserModule,

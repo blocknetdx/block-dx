@@ -58,11 +58,15 @@ body {
   @include make-col-ready();
 
   &.left-- {
-    @include make-col(3);
+    @include screen(lg) {
+      @include make-col(3);
+    }
   }
 
   &.right-- {
-    @include make-col(9);
+    @include screen(lg) {
+      @include make-col(9);
+    }
   }
 }
 
