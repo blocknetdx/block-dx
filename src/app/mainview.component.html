@@ -4,36 +4,36 @@
   <app-nav-bar [currentPrice]="currPrice" [symbols]="symbols"></app-nav-bar>
 
   <div class="row">
-    <div class="outer-column left--">
+    <div *ngIf="bottomNavIndex == 0" class="outer-column left--">
       <balances></balances>
       <orderform [currentPrice]="currPrice" [symbols]="symbols"></orderform>
     </div>
     <div class="outer-column right--">
       <div class="row">
         <div class="triple-col">
-          <pricechart></pricechart>
+          <pricechart *ngIf="bottomNavIndex == 2"></pricechart>
         </div>
         <div class="single-col">
-          <depth [currentPrice]="currPrice" [symbols]="symbols"></depth>
+          <depth *ngIf="bottomNavIndex == 2" [currentPrice]="currPrice" [symbols]="symbols"></depth>
         </div>
         <div class="double-col">
-          <orderbook [symbols]="symbols"></orderbook>
+          <orderbook *ngIf="bottomNavIndex == 1" [symbols]="symbols"></orderbook>
         </div>
         <div class="full-col"></div>
         <div class="quad-col">
-          <openorders [symbols]="symbols"></openorders>
+          <openorders *ngIf="bottomNavIndex == 3" [symbols]="symbols"></openorders>
         </div>
         <div class="double-col">
-          <tradehistory [symbols]="symbols"></tradehistory>
+          <tradehistory *ngIf="bottomNavIndex == 4" [symbols]="symbols"></tradehistory>
         </div>
       </div>
     </div>
   </div>
   <app-bottom-nav>
-    <button class="active" app-nav-item>Trade</button>
-    <button app-nav-item>Book</button>
-    <button app-nav-item>Charts</button>
-    <button app-nav-item>Orders</button>
-    <button app-nav-item>History</button>
+    <button (click)="bottomNavIndex = 0" [class.active]="bottomNavIndex == 0" app-nav-item>Trade</button>
+    <button (click)="bottomNavIndex = 1" [class.active]="bottomNavIndex == 1" app-nav-item>Book</button>
+    <button (click)="bottomNavIndex = 2" [class.active]="bottomNavIndex == 2" app-nav-item>Charts</button>
+    <button (click)="bottomNavIndex = 3" [class.active]="bottomNavIndex == 3" app-nav-item>Orders</button>
+    <button (click)="bottomNavIndex = 4" [class.active]="bottomNavIndex == 4" app-nav-item>History</button>
   </app-bottom-nav>
 </div>

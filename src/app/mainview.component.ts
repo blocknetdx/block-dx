@@ -15,6 +15,8 @@ export class MainviewComponent {
   public symbols:string[];
   public currPrice: Currentprice;
 
+  public bottomNavIndex: number = 0;
+
   constructor(
     private route: ActivatedRoute,
     private location: Location,
