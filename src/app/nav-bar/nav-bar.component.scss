@@ -3,6 +3,7 @@
 @import '../../styles/base/typography';
 
 .navbar {
+  position: relative;
   margin-left: -4px;
   margin-right: -4px;
 }
@@ -12,10 +13,12 @@
   position: relative;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   border-bottom: 2px solid rgba(255, 255, 255, 0.24);
 
-  @include screen(xl) {
-    padding: 20px 8px;
+  @include screen(lg) {
+    padding: 25px 40px;
+    border-bottom: none;
   }
 }
 
@@ -25,17 +28,10 @@
     float: left;
     height: 25px;
 
-    @include screen(xl) {
+    @include screen(lg) {
       height: 40px;
     }
   }
-}
-
-.navbar-pricing {
-  padding: 8px;
-  display: flex;
-  justify-content: space-between;
-  min-height: 58px;
 }
 
 .navbar-toggler {
@@ -114,27 +110,34 @@
   }
 }
 
-.bn-header {
-  padding: 12px 16px;
-  margin-left: -4px;
-  margin-right: -4px;
-  position: relative;
+.navbar-pricing {
+  padding: 8px;
+  display: flex;
+  justify-content: space-between;
+  min-height: 58px;
 
-  @include screen(xl) {
-    padding: 20px 8px;
+  @include screen(lg) {
+    display: block;
+    min-height: unset;
+    padding: 0;
+    position: absolute;
+    top: 18px;
+    left: 120px;
   }
 
   &__cell {
     display: inline-block;
 
-    @include screen(xl) {
-      padding: 6px 29px 8px 23px;
-      min-height: 40px;
-    }
+    @include screen(lg) {
+      padding: 6px 0;
+      margin-left: 30px;
 
-    &.currency--,
-    &.tradeprice-- {
-      // border-left: 1px solid rgba(255,255,255,.24);
+      &:first-child {
+        padding: 6px 30px;
+        margin-left: 0;
+        border-left: 1px solid rgba(255, 255, 255, 0.24);
+        border-right: 1px solid rgba(255, 255, 255, 0.24);
+      }
     }
 
     .price_up {

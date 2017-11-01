@@ -51,20 +51,18 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-.container {
-  margin: 0;
-  width: auto;
-}
+.left { float: left; }
+.right { float: right; }
 
 .outer-column {
-  // @include make-col-ready();
+  @include make-col-ready();
 
   &.left-- {
-    // @include make-col(3);
+    @include make-col(3);
   }
 
   &.right-- {
-    // @include make-col(9);
+    @include make-col(9);
   }
 }
 
@@ -73,29 +71,29 @@ body {
 .quad-col,
 .single-col,
 .triple-col {
-  // @include make-col-ready();
-  // @include make-col(2);
+  @include make-col-ready();
+  @include make-col(2);
   // height: 800px;
   overflow: auto;
 }
 
 .double-col {
-  // @include make-col(4);
+  @include make-col(4);
   height: auto;
 }
 
 .triple-col {
-  // @include make-col(6);
+  @include make-col(6);
   height: auto;
 }
 
 .quad-col {
-  // @include make-col(8);
+  @include make-col(8);
   height: auto;
 }
 
 .full-col {
-  // @include make-col(12);
+  @include make-col(12);
   height: auto;
 }
 
@@ -309,13 +307,13 @@ body {
     font-size: 12px;
     padding: 0 0 0 10px !important;
     line-height: 40px;
-    // @include make-col-ready();
-    // @include make-col(4);
+    @include make-col-ready();
+    @include make-col(4);
   }
 
   &__field {
-    // @include make-col-ready();
-    // @include make-col(8);
+    @include make-col-ready();
+    @include make-col(8);
     background-color: #21364f;
 
     &:focus {

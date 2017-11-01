@@ -1,13 +1,10 @@
 <nav class="navbar">
   <div class="navbar-bar">
-    <div>
-      <a class="navbar-brand">
-        <img src="assets/icon_blk.png" alt="Blocknet Logo">
-      </a>
-    </div>
-    <div>
-      <div class="bn-header__upper">{{symbols[0]}} / {{symbols[1]}}</div>
-      <!-- <div class="bn-header__lower">Market Table &gt;</div> -->
+    <a class="navbar-brand">
+      <img src="assets/icon_blk.png" alt="Blocknet Logo">
+    </a>
+    <div *ngIf="showInBreakpoints('xs', 'sm', 'md')">
+      <div class="navbar-pricing__upper">{{symbols[0]}} / {{symbols[1]}}</div>
     </div>
     <div class="collapse navbar-collapse" [class.active]="navCollapsed">
       <a (click)="toggleNav()" class="close"><i class="material-icons">close</i></a>
@@ -33,33 +30,31 @@
       </ul>
     </div>
     <a (click)="toggleNav()" class="navbar-toggler">
-      <div></div>
-      <div></div>
-      <div></div>
+      <i class="left material-icons">menu</i>
     </a>
   </div>
 
   <div class="navbar-pricing" *ngIf="currentPrice">
-    <div class="bn-header__cell currency--" *ngIf="breakpoint != 'xs'">
-      <div class="bn-header__upper">{{symbols[0]}} / {{symbols[1]}}</div>
-      <div class="bn-header__lower">Market Table &gt;</div>
+    <div class="navbar-pricing__cell currency--" *ngIf="showInBreakpoints('lg', 'xl')">
+      <div class="navbar-pricing__upper">{{symbols[0]}} / {{symbols[1]}}</div>
+      <div class="navbar-pricing__lower">Market Table &gt;</div>
     </div>
 
-    <div class="bn-header__cell tradeprice--">
-      <div class="bn-header__upper">{{formatNumber(currentPrice.last,symbols[1])}} {{symbols[1]}}</div>
-      <div class="bn-header__lower">Last trade price</div>
+    <div class="navbar-pricing__cell tradeprice--">
+      <div class="navbar-pricing__upper">{{formatNumber(currentPrice.last,symbols[1])}} {{symbols[1]}}</div>
+      <div class="navbar-pricing__lower">Last trade price</div>
     </div>
 
-    <div class="bn-header__cell twentyfourprice--">
-      <div class="bn-header__upper price_{{currentPrice.priceStatus}}">
+    <div class="navbar-pricing__cell twentyfourprice--">
+      <div class="navbar-pricing__upper price_{{currentPrice.priceStatus}}">
         {{currentPrice.priceDiff | percent:'1.2-2'}}
       </div>
-      <div class="bn-header__lower">24 hour price</div>
+      <div class="navbar-pricing__lower">24 hour price</div>
     </div>
 
-    <div class="bn-header__cell twentyfourvol--">
-      <div class="bn-header__upper">{{currentPrice.volume | number : "1.0-0"}} {{symbols[0]}}</div>
-      <div class="bn-header__lower">24 hour volume</div>
+    <div class="navbar-pricing__cell twentyfourvol--">
+      <div class="navbar-pricing__upper">{{currentPrice.volume | number : "1.0-0"}} {{symbols[0]}}</div>
+      <div class="navbar-pricing__lower">24 hour volume</div>
     </div>
   </div>
 

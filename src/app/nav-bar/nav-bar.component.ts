@@ -28,6 +28,10 @@ export class NavBarComponent implements OnInit {
     });
   }
 
+  showInBreakpoints(...breakpoints): boolean {
+    return breakpoints.includes(this.breakpoint);
+  }
+
   formatNumber(num:string, symbol:string): string {
     const format = symbol !== "USD" ? "1.5-5" : "1.2-2";
     return this.decimalPipe.transform(num,format);
