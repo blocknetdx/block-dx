@@ -16,7 +16,7 @@ import { CurrentpriceService } from './currentprice.service';
 
   @Input() public symbols:string[];
 
-  constructor(private currentpriceService: CurrentpriceService, private decimalPipe:DecimalPipe) { }
+  constructor(private currentpriceService: CurrentpriceService, private decimalPipe: DecimalPipe) { }
 
   getCurrentprice(): void {
     this.currentpriceService.getCurrentprice(this.symbols).then(currentprice => {
