@@ -30,10 +30,10 @@
     </div>
   </div>
   <app-bottom-nav>
-    <button (click)="bottomNavIndex = 0" [class.active]="bottomNavIndex == 0" app-nav-item>Trade</button>
-    <button (click)="bottomNavIndex = 1" [class.active]="bottomNavIndex == 1" app-nav-item>Book</button>
-    <button (click)="bottomNavIndex = 2" [class.active]="bottomNavIndex == 2" app-nav-item>Charts</button>
-    <button (click)="bottomNavIndex = 3" [class.active]="bottomNavIndex == 3" app-nav-item>Orders</button>
-    <button (click)="bottomNavIndex = 4" [class.active]="bottomNavIndex == 4" app-nav-item>History</button>
+    <app-nav-button>Trade</app-nav-button>
+    <app-nav-button>Book</app-nav-button>
+    <app-nav-button>Charts</app-nav-button>
+    <app-nav-button>Orders</app-nav-button>
+    <app-nav-button>History</app-nav-button>
   </app-bottom-nav>
 </div>

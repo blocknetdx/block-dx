@@ -1,0 +1,28 @@
+@import "../../styles/utils/variables";
+@import "../../styles/base/typography";
+
+:host {
+  flex-grow: 1;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: white;
+  padding: 0;
+  @extend .type3;
+  line-height: 40px;
+  z-index: 1;
+  width: 100%;
+
+  &:focus {
+    outline: none;
+  }
+
+  &.active {
+    background-color: $bn-blue-light1;
+    box-shadow: 0 0 4px 2px rgba(0,0,0,0.2);
+    z-index: 10;
+  }
+}

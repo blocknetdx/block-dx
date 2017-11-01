@@ -31,6 +31,7 @@ import { BreakpointService } from './breakpoint.service';
 import { AppRoutingModule }     from './app-routing.module';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { BottomNavComponent } from './bottom-nav/bottom-nav.component';
+import { NavButtonComponent } from './nav-button/nav-button.component';
 
 
 @NgModule({
@@ -49,7 +50,8 @@ import { BottomNavComponent } from './bottom-nav/bottom-nav.component';
     TradehistoryComponent,
     WatchlistComponent,
     NavBarComponent,
-    BottomNavComponent
+    BottomNavComponent,
+    NavButtonComponent
   ],
   imports: [
     BrowserModule,
