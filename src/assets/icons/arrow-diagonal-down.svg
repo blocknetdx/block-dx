@@ -12,8 +12,8 @@
                 <mask id="mask-2" fill="white">
                     <use xlink:href="#path-1"></use>
                 </mask>
-                <use id="Combined-Shape" fill="#FF7362" fill-rule="nonzero" xlink:href="#path-1"></use>
-                <g id="color/red" mask="url(#mask-2)" fill-rule="evenodd" fill="#FF7362">
+                <use id="Combined-Shape" fill="#FF7E70" fill-rule="nonzero" xlink:href="#path-1"></use>
+                <g id="color/red" mask="url(#mask-2)" fill-rule="evenodd" fill="#FF7E70">
                     <g transform="translate(-4.000000, -3.000000)" id="Rectangle-3">
                         <rect x="0" y="0" width="16" height="16"></rect>
                     </g>
