@@ -146,7 +146,7 @@ export class DepthComponent {
           "fillAlphas": 0.1,
           "lineAlpha": 1,
           "lineThickness": 2,
-          "lineColor": "#FF7362",
+          "lineColor": "#FF7E70",
           "type": "step",
           "valueField": "askstotalvolume",
           "balloonFunction": balloon
