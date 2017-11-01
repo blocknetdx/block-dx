@@ -1,5 +1,8 @@
 @import "variables-bootstrap";
 
+@import "~bootstrap/scss/bootstrap-reboot";
+@import "~bootstrap/scss/bootstrap-grid";
+
 /*!
  * Bootstrap v4.0.0-alpha.6 (https://getbootstrap.com)
  * Copyright 2011-2017 The Bootstrap Authors
@@ -8,20 +11,21 @@
  */
 
 // Core variables and mixins
-@import "~bootstrap/scss/variables";
-@import "~bootstrap/scss/mixins";
-@import "~bootstrap/scss/custom";
+// @import "~bootstrap/scss/functions";
+// @import "~bootstrap/scss/variables";
+// @import "~bootstrap/scss/mixins";
+// @import "~bootstrap/scss/custom";
 
 // Reset and dependencies
-@import "~bootstrap/scss/normalize";
-@import "~bootstrap/scss/print";
+// @import "~bootstrap/scss/normalize";
+// @import "~bootstrap/scss/print";
 
 // Core CSS
 // @import "~bootstrap/scss/reboot";
 // @import "~bootstrap/scss/type";
 // @import "~bootstrap/scss/images";
 // @import "~bootstrap/scss/code";
-@import "~bootstrap/scss/grid";
+// @import "~bootstrap/scss/grid";
 // @import "~bootstrap/scss/tables";
 // @import "~bootstrap/scss/forms";
 // @import "~bootstrap/scss/buttons";
