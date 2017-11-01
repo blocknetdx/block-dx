@@ -4,9 +4,8 @@ import { HttpModule }    from '@angular/http';
 
 import { RouterModule }   from '@angular/router';
 
-// Import HttpClientModule from @angular/common/http
-import {HttpClientModule} from '@angular/common/http';
-
+import { HttpClientModule } from '@angular/common/http';
+import { LayoutModule } from '@angular/cdk/layout';
 
 // Imports for loading & configuring the in-memory web api
 import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
@@ -28,6 +27,7 @@ import { CurrentpriceComponent } from './currentprice.component';
 
 import { DecimalPipe } from '@angular/common';
 
+import { BreakpointService } from './breakpoint.service';
 import { AppRoutingModule }     from './app-routing.module';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 
@@ -53,10 +53,14 @@ import { NavBarComponent } from './nav-bar/nav-bar.component';
     BrowserModule,
     HttpClientModule,
     HttpModule,
+    LayoutModule,
     InMemoryWebApiModule.forRoot(InMemoryDataService),
     AppRoutingModule
   ],
-  providers: [DecimalPipe],
+  providers: [
+    DecimalPipe,
+    BreakpointService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
