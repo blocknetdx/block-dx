@@ -23,6 +23,7 @@ button {
   &.active {
     background-color: $bn-blue-light1;
     box-shadow: 0 0 4px 2px rgba(0,0,0,0.2);
+    font-weight: bold;
     z-index: 10;
   }
 }
