@@ -29,7 +29,7 @@
       </div>
     </div>
   </div>
-  <app-bottom-nav>
+  <app-bottom-nav (onNavIndexUpdate)="bottomNavIndex = $event">
     <app-nav-button>Trade</app-nav-button>
     <app-nav-button>Book</app-nav-button>
     <app-nav-button>Charts</app-nav-button>

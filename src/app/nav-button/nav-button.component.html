@@ -1,1 +1,3 @@
-<button><ng-content></ng-content></button>
+<button (click)="setActive()" [class.active]="active">
+  <ng-content></ng-content>
+</button>
