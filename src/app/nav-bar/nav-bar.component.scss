@@ -3,9 +3,14 @@
 @import '../../styles/base/typography';
 
 .navbar {
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
   margin-left: -4px;
   margin-right: -4px;
+  z-index: 9990;
+  background: $bn-blue1;
 }
 
 .navbar-bar {

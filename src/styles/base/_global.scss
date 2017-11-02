@@ -1,5 +1,5 @@
 .debug {
-  &:before {
+  &::after {
     position: fixed;
     z-index: 20000;
     background: rgba(black,0.2);
@@ -32,16 +32,12 @@ html {
 }
 
 html {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
 
 *,
 *:after,
 *:before {
-  -webkit-box-sizing: inherit;
-  -moz-box-sizing: inherit;
   box-sizing: inherit;
 }
 
@@ -49,6 +45,8 @@ body {
   background: $bn-blue1;
   color: white;
   -webkit-font-smoothing: antialiased;
+  padding-top: 109px;
+  padding-bottom: 40px;
 }
 
 .left { float: left; }
@@ -76,23 +74,34 @@ body {
 .single-col,
 .triple-col {
   @include make-col-ready();
-  @include make-col(2);
-  // height: 800px;
+  @include make-col(12);
+  @include screen(md) {
+    @include make-col(2);
+  }
   overflow: auto;
 }
 
 .double-col {
-  @include make-col(4);
+  @include make-col(12);
+  @include screen(md) {
+    @include make-col(4);
+  }
   height: auto;
 }
 
 .triple-col {
-  @include make-col(6);
+  @include make-col(12);
+  @include screen(md) {
+    @include make-col(6);
+  }
   height: auto;
 }
 
 .quad-col {
-  @include make-col(8);
+  @include make-col(12);
+  @include screen(md) {
+    @include make-col(8);
+  }
   height: auto;
 }
 
