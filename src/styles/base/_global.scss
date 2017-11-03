@@ -29,6 +29,7 @@
 body,
 html {
   height: 100%;
+  overflow: hidden;
 }
 
 html {
@@ -42,6 +43,7 @@ html {
 }
 
 body {
+  position: relative;
   background: $bn-blue1;
   color: white;
   -webkit-font-smoothing: antialiased;
