@@ -3,7 +3,7 @@
     <a class="navbar-brand">
       <img src="assets/icon_blk.png" alt="Blocknet Logo">
     </a>
-    <div *ngIf="showInBreakpoints('xs', 'sm', 'md')">
+    <div *isBp="['xs', 'sm', 'md']">
       <div class="navbar-pricing__upper">{{symbols[0]}} / {{symbols[1]}}</div>
     </div>
     <div class="collapse navbar-collapse" [class.active]="navCollapsed">
@@ -35,7 +35,7 @@
   </div>
 
   <div class="navbar-pricing" *ngIf="currentPrice">
-    <div class="navbar-pricing__cell currency--" *ngIf="showInBreakpoints('lg', 'xl')">
+    <div class="navbar-pricing__cell currency--" *isBp="['lg', 'xl']">
       <div class="navbar-pricing__upper">{{symbols[0]}} / {{symbols[1]}}</div>
       <div class="navbar-pricing__lower">Market Table &gt;</div>
     </div>

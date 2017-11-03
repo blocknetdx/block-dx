@@ -32,6 +32,7 @@ import { AppRoutingModule }     from './app-routing.module';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { BottomNavComponent } from './bottom-nav/bottom-nav.component';
 import { NavButtonComponent } from './nav-button/nav-button.component';
+import { IsBreakpointDirective } from './is-breakpoint.directive';
 
 
 @NgModule({
@@ -51,7 +52,8 @@ import { NavButtonComponent } from './nav-button/nav-button.component';
     WatchlistComponent,
     NavBarComponent,
     BottomNavComponent,
-    NavButtonComponent
+    NavButtonComponent,
+    IsBreakpointDirective
   ],
   imports: [
     BrowserModule,

@@ -31,7 +31,7 @@
   </div>
 
   <app-bottom-nav
-    *ngIf="true"
+    *isBp="['xs', 'sm', 'md']"
     [activeIndex]="2"
     (onNavIndexUpdate)="updateBottomNavIndex($event)"
   >
@@ -41,5 +41,5 @@
     <app-nav-button>Orders</app-nav-button>
     <app-nav-button>History</app-nav-button>
   </app-bottom-nav>
-  
+
 </div>
