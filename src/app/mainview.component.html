@@ -4,27 +4,27 @@
   <app-nav-bar [currentPrice]="currPrice" [symbols]="symbols"></app-nav-bar>
 
   <div class="row">
-    <div *ngIf="bottomNavIndex == 0" class="outer-column left--">
+    <div *ngIf="checkShowByIndex(0)" class="outer-column left--">
       <balances></balances>
       <orderform [currentPrice]="currPrice" [symbols]="symbols"></orderform>
     </div>
     <div class="outer-column right--">
       <div class="row">
         <div class="triple-col">
-          <pricechart *ngIf="bottomNavIndex == 2"></pricechart>
+          <pricechart *ngIf="checkShowByIndex(2)"></pricechart>
         </div>
         <div class="single-col">
-          <depth *ngIf="bottomNavIndex == 2" [currentPrice]="currPrice" [symbols]="symbols"></depth>
+          <depth *ngIf="checkShowByIndex(2)" [currentPrice]="currPrice" [symbols]="symbols"></depth>
         </div>
         <div class="double-col">
-          <orderbook *ngIf="bottomNavIndex == 1" [symbols]="symbols"></orderbook>
+          <orderbook *ngIf="checkShowByIndex(1)" [symbols]="symbols"></orderbook>
         </div>
         <div class="full-col"></div>
         <div class="quad-col">
-          <openorders *ngIf="bottomNavIndex == 3" [symbols]="symbols"></openorders>
+          <openorders *ngIf="checkShowByIndex(3)" [symbols]="symbols"></openorders>
         </div>
         <div class="double-col">
-          <tradehistory *ngIf="bottomNavIndex == 4" [symbols]="symbols"></tradehistory>
+          <tradehistory *ngIf="checkShowByIndex(4)" [symbols]="symbols"></tradehistory>
         </div>
       </div>
     </div>
