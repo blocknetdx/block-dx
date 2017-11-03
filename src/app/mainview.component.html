@@ -29,11 +29,17 @@
       </div>
     </div>
   </div>
-  <app-bottom-nav (onNavIndexUpdate)="bottomNavIndex = $event">
+
+  <app-bottom-nav
+    *ngIf="true"
+    [activeIndex]="2"
+    (onNavIndexUpdate)="updateBottomNavIndex($event)"
+  >
     <app-nav-button>Trade</app-nav-button>
     <app-nav-button>Book</app-nav-button>
     <app-nav-button>Charts</app-nav-button>
     <app-nav-button>Orders</app-nav-button>
     <app-nav-button>History</app-nav-button>
   </app-bottom-nav>
+  
 </div>

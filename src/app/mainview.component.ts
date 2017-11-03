@@ -35,6 +35,12 @@ export class MainviewComponent {
     });
   }
 
+  updateBottomNavIndex(idx) {
+    setTimeout(() => {
+      this.bottomNavIndex = idx;
+    });
+  }
+
   getCurrentprice(): void {
     this.currPrice = new Currentprice();
     this.priceService.getCurrentprice(this.symbols).then(cp => {
