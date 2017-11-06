@@ -24,7 +24,13 @@
     flex-wrap: wrap;
 
     &.content {
-      width: calc(100% - 320px);
+      width: 100%;
+      @include screen(lg) {
+        width: calc(100% - 280px);
+      }
+      @include screen(xl) {
+        width: calc(100% - 320px);
+      }
     }
   }
 
@@ -33,27 +39,42 @@
     overflow-x: hidden;
 
     &.sidebar {
-      width: 320px;
+      @include screen(lg) {
+        width: 280px;
+      }
+      @include screen(xl) {
+        width: 320px;
+      }
     }
 
     &.price {
-      @include make-col(6);
+      @include screen(lg) {
+        @include make-col(6);
+      }
     }
 
     &.depth {
-      @include make-col(2);
+      @include screen(lg) {
+        @include make-col(2);
+      }
     }
 
     &.book {
-      @include make-col(4);
+      @include screen(lg) {
+        @include make-col(4);
+      }
     }
 
     &.orders {
-      @include make-col(8);
+      @include screen(lg) {
+        @include make-col(8);
+      }
     }
 
     &.history {
-      @include make-col(4);
+      @include screen(lg) {
+        @include make-col(4);
+      }
     }
   }
 }
