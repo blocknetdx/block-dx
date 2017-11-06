@@ -16,7 +16,7 @@ export class OrderbookService {
 
   constructor(private http: Http) { }
 
-  getOrderbook(symbols:string[]): Observable<Order[]> {
+  getOrderbook(symbols:string[]): Observable<Order> {
     this.orderbookUrl = 'api/orderbook_' + symbols.join("_");
 
     return this.http.get(this.orderbookUrl)

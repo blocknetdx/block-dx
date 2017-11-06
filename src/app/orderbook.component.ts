@@ -13,8 +13,8 @@ import { OrderbookService } from './orderbook.service';
   providers: [OrderbookService]
 })
 export class OrderbookComponent {
-  title = 'Order Book';
-  order: Order[];
+  public title = 'Order Book';
+  public order: Order;
 
   @Input() public symbols:string[];
 
