@@ -1,3 +1,7 @@
+@import '../styles/utils/mixins';
+@import '../styles/utils/variables';
+@import '../styles/base/typography';
+
 .container-fluid {
   position: absolute;
   top: 109px;
@@ -5,4 +9,8 @@
   left: 0;
   right: 0;
   overflow: auto;
+  @include screen(lg) {
+    bottom: 0;
+    top: 90px;
+  }
 }
