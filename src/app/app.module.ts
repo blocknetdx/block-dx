@@ -27,8 +27,9 @@ import { CurrentpriceComponent } from './currentprice.component';
 
 import { DecimalPipe } from '@angular/common';
 
-import { BreakpointService } from './breakpoint.service';
 import { AppRoutingModule }     from './app-routing.module';
+import { BreakpointService } from './breakpoint.service';
+import { CurrentpriceService } from './currentprice.service';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { BottomNavComponent } from './bottom-nav/bottom-nav.component';
 import { NavButtonComponent } from './nav-button/nav-button.component';
@@ -65,7 +66,8 @@ import { IsBreakpointDirective } from './is-breakpoint.directive';
   ],
   providers: [
     DecimalPipe,
-    BreakpointService
+    BreakpointService,
+    CurrentpriceService
   ],
   bootstrap: [AppComponent]
 })

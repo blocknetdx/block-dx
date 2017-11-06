@@ -2,10 +2,7 @@ import {
   AfterContentInit,
   Component,
   ContentChildren,
-  Directive,
-  EventEmitter,
   Input,
-  Output,
   QueryList
 } from '@angular/core';
 
@@ -22,9 +19,6 @@ import { NavButtonComponent } from '../nav-button/nav-button.component';
 export class BottomNavComponent implements AfterContentInit {
   @ContentChildren(NavButtonComponent)
   public navItems: QueryList<NavButtonComponent>;
-
-  @Output('onNavIndexUpdate')
-  public navIndexUpdate: EventEmitter<number> = new EventEmitter();
 
   @Input()
   public activeIndex: number = 0;
@@ -45,6 +39,9 @@ export class BottomNavComponent implements AfterContentInit {
   }
 
   ngOnDestroy() {
+    this.navItems.forEach((item) => {
+      item.active = true;
+    });
     this.destroy$.next(true);
     this.destroy$.unsubscribe();
   }
@@ -52,9 +49,6 @@ export class BottomNavComponent implements AfterContentInit {
   setActiveNavItem(activeItem) {
     this.navItems.forEach((item, idx) => {
       item.active = item === activeItem;
-      if (item.active) {
-        this.navIndexUpdate.emit(idx);
-      }
     });
   }
 

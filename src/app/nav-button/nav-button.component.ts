@@ -1,20 +1,24 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-nav-button',
   templateUrl: './nav-button.component.html',
   styleUrls: ['./nav-button.component.scss']
 })
-export class NavButtonComponent implements OnInit {
+export class NavButtonComponent {
+  @Input() public view: HTMLDivElement;
+
   @Output('onActive')
   public activeEmitter: EventEmitter<NavButtonComponent> = new EventEmitter();
 
-  public active: boolean;
+  private _active: boolean;
+  public get active(): boolean { return this._active; }
+  public set active(val: boolean) {
+    this.view.style.display = val ? '' : 'none';
+    this._active = val;
+  }
 
   constructor() { }
-
-  ngOnInit() {
-  }
 
   setActive() {
     this.activeEmitter.emit(this);

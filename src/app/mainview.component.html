@@ -4,42 +4,46 @@
   <app-nav-bar [currentPrice]="currPrice" [symbols]="symbols"></app-nav-bar>
 
   <div class="row">
-    <div *ngIf="checkShowByIndex(0)" class="outer-column left--">
+    <div #trade class="outer-column left--">
       <balances></balances>
       <orderform [currentPrice]="currPrice" [symbols]="symbols"></orderform>
     </div>
+
     <div class="outer-column right--">
       <div class="row">
-        <div class="triple-col">
-          <pricechart *ngIf="checkShowByIndex(2)"></pricechart>
+
+        <div #charts>
+          <div class="triple-col">
+            <pricechart></pricechart>
+          </div>
+          <div class="single-col">
+            <depth [currentPrice]="currPrice" [symbols]="symbols"></depth>
+          </div>
         </div>
-        <div class="single-col">
-          <depth *ngIf="checkShowByIndex(2)" [currentPrice]="currPrice" [symbols]="symbols"></depth>
+
+        <div #book class="double-col">
+          <orderbook [symbols]="symbols"></orderbook>
         </div>
-        <div class="double-col">
-          <orderbook *ngIf="checkShowByIndex(1)" [symbols]="symbols"></orderbook>
-        </div>
+
         <div class="full-col"></div>
-        <div class="quad-col">
-          <openorders *ngIf="checkShowByIndex(3)" [symbols]="symbols"></openorders>
+
+        <div #orders class="quad-col">
+          <openorders [symbols]="symbols"></openorders>
         </div>
-        <div class="double-col">
-          <tradehistory *ngIf="checkShowByIndex(4)" [symbols]="symbols"></tradehistory>
+
+        <div #history class="double-col">
+          <tradehistory [symbols]="symbols"></tradehistory>
         </div>
       </div>
     </div>
   </div>
 
-  <app-bottom-nav
-    *isBp="['xs', 'sm', 'md']"
-    [activeIndex]="2"
-    (onNavIndexUpdate)="updateBottomNavIndex($event)"
-  >
-    <app-nav-button>Trade</app-nav-button>
-    <app-nav-button>Book</app-nav-button>
-    <app-nav-button>Charts</app-nav-button>
-    <app-nav-button>Orders</app-nav-button>
-    <app-nav-button>History</app-nav-button>
+  <app-bottom-nav *isBp="['xs', 'sm', 'md']">
+    <app-nav-button [view]="trade">Trade</app-nav-button>
+    <app-nav-button [view]="book">Book</app-nav-button>
+    <app-nav-button [view]="charts">Charts</app-nav-button>
+    <app-nav-button [view]="orders">Orders</app-nav-button>
+    <app-nav-button [view]="history">History</app-nav-button>
   </app-bottom-nav>
 
 </div>
