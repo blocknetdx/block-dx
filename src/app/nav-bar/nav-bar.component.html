@@ -6,6 +6,7 @@
     <div *isBp="['xs', 'sm', 'md']">
       <div class="navbar-pricing__upper">{{symbols[0]}} / {{symbols[1]}}</div>
     </div>
+    <div class="navbar-collapse__overlay" [class.active]="navCollapsed"></div>
     <div class="collapse navbar-collapse" [class.active]="navCollapsed">
       <a (click)="toggleNav()" class="close"><i class="material-icons">close</i></a>
       <ul>

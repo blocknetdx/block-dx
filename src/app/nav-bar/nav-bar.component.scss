@@ -49,6 +49,24 @@
   }
 }
 
+.navbar-collapse__overlay {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,26,55,0.8);
+  z-index: 9992;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+
+  &.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
 .navbar-collapse {
   position: fixed;
   right: 0;
@@ -58,19 +76,20 @@
   font-family: $open-sans;
   font-size: 14px;
   line-height: 19px;
-  background: $bn-blue1;
+  background-color: #133049;
+	box-shadow: -2px 0 4px 0 rgba(0,0,0,0.2);
   z-index: 9999;
   padding: 40px 34px;
   transform: translateX(100%);
   transition: transform 0.2s ease;
   will-change: transform;
 
-  &.active {
-    transform: translateX(0);
-  }
-
   @include screen(md) {
     width: 320px;
+  }
+
+  &.active {
+    transform: translateX(0);
   }
 
   .close {
