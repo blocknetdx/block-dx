@@ -1,3 +1,4 @@
+@import '../styles/vendor/bootstrap';
 @import '../styles/utils/mixins';
 @import '../styles/utils/variables';
 @import '../styles/base/typography';
@@ -16,8 +17,7 @@
 }
 
 .trade_table {
-  display: flex;
-  margin: 0 -4px;
+  @include make-row();
 
   &__group {
     display: flex;
@@ -29,7 +29,7 @@
   }
 
   &__cell {
-    padding: 0 4px;
+    @include make-col-ready();
     overflow-x: hidden;
 
     &.sidebar {
@@ -37,23 +37,23 @@
     }
 
     &.price {
-      width: 50%;
+      @include make-col(6);
     }
 
     &.depth {
-      width: 16.667%;
+      @include make-col(2);
     }
 
     &.book {
-      width: 33.333%;
+      @include make-col(4);
     }
 
     &.orders {
-      width: 66.667%;
+      @include make-col(8);
     }
 
     &.history {
-      width: 33.333%;
+      @include make-col(4);
     }
   }
 }
