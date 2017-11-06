@@ -1,6 +1,6 @@
 <div class="bn-card bn-orderbook">
   <div class="bn-card__title"> {{title}} </div>
-  <div class="bn-table" *ngFor="let order of orderbook" border="0">
+  <div class="bn-table" *ngIf="order" border="0">
     <div class="row bn-table__header">
       <div class="col-sm-4">Total</div>
       <div class="col-sm-4">Amount ({{symbols[0]}})</div>

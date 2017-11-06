@@ -16,56 +16,56 @@ export class OrderbookService {
 
   constructor(private http: Http) { }
 
-  getOrderbook(symbols:string[]): Promise<Order[]> {
+  getOrderbook(symbols:string[]): Observable<Order[]> {
     this.orderbookUrl = 'api/orderbook_' + symbols.join("_");
 
     return this.http.get(this.orderbookUrl)
-                .map((res) => {
+      .map((res) => {
 
-                  ////////////////////////////////////////////////////////////////////////
-                  // THIS IS NOT ELEGANT - FIX THIS!!! HAHA ~rsmith
-                  ////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
+        // THIS IS NOT ELEGANT - FIX THIS!!! HAHA ~rsmith
+        ////////////////////////////////////////////////////////////////////////
 
-                  let p = res.json().data;
-                  let totalAskSize = 0;
-                  var asks = p[0].asks;
+        let p = res.json().data[0];
+        let totalAskSize = 0;
+        var asks = p.asks;
 
-                  for(var i = 0; i < asks.length; i++) {
-                    var currSize = parseFloat(asks[i][1]);
-                    totalAskSize += currSize;
-                  }
+        for(var i = 0; i < asks.length; i++) {
+          var currSize = parseFloat(asks[i][1]);
+          totalAskSize += currSize;
+        }
 
-                  for(var i = 0; i < asks.length; i++) {
-                    var currSize = parseFloat(asks[i][1]);
-                    var percentTradeSize = (currSize/totalAskSize)*100;
-                    asks[i][4] = percentTradeSize;
-                  }
+        for(var i = 0; i < asks.length; i++) {
+          var currSize = parseFloat(asks[i][1]);
+          var percentTradeSize = (currSize/totalAskSize)*100;
+          asks[i][4] = percentTradeSize;
+        }
 
-                  ////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
 
-                  let totalBidSize = 0;
-                  var bids = p[0].bids;
+        let totalBidSize = 0;
+        var bids = p.bids;
 
-                  for(var i = 0; i < bids.length; i++) {
-                    var currSize = parseFloat(bids[i][1]);
-                    totalBidSize += currSize;
-                  }
+        for(var i = 0; i < bids.length; i++) {
+          var currSize = parseFloat(bids[i][1]);
+          totalBidSize += currSize;
+        }
 
-                  for(var i = 0; i < bids.length; i++) {
-                    var currSize = parseFloat(bids[i][1]);
-                    var percentTradeSize = (currSize/totalBidSize)*100;
-                    bids[i][4] = percentTradeSize;
-                  }
+        for(var i = 0; i < bids.length; i++) {
+          var currSize = parseFloat(bids[i][1]);
+          var percentTradeSize = (currSize/totalBidSize)*100;
+          bids[i][4] = percentTradeSize;
+        }
 
-                  ////////////////////////////////////////////////////////////////////////
-                  ////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
 
 
-                  return res;
-                })
-               .toPromise()
-               .then(response => response.json().data as Order[])
-               .catch(this.handleError);
+        return p;
+      });
+    //  .toPromise()
+    //  .then(response => response.json().data as Order[])
+    //  .catch(this.handleError);
   }
 
   // getOrderbook(): Observable<Order[]> {

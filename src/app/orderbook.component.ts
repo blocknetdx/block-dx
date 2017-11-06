@@ -14,14 +14,15 @@ import { OrderbookService } from './orderbook.service';
 })
 export class OrderbookComponent {
   title = 'Order Book';
-  orderbook: Order[];
+  order: Order[];
 
   @Input() public symbols:string[];
 
   constructor(private orderbookService: OrderbookService, private decimalPipe:DecimalPipe) { }
 
   getOrderbook(): void {
-    this.orderbookService.getOrderbook(this.symbols).then(orderbook => this.orderbook = orderbook)
+    this.orderbookService.getOrderbook(this.symbols)
+      .subscribe(orderbook => this.order = orderbook)
   }
 
   formatNumber(num:string, symbol:string): string {
