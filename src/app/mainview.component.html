@@ -3,7 +3,36 @@
 
   <app-nav-bar [currentPrice]="currPrice" [symbols]="symbols"></app-nav-bar>
 
-  <div class="row">
+  <div class="trade_table">
+    <div #trade class="trade_table__cell sidebar">
+      <balances></balances>
+      <orderform [currentPrice]="currPrice" [symbols]="symbols"></orderform>
+    </div>
+
+    <div class="trade_table__group content">
+      <div #price class="trade_table__cell price">
+        <pricechart></pricechart>
+      </div>
+
+      <div #depth class="trade_table__cell depth">
+        <depth [currentPrice]="currPrice" [symbols]="symbols"></depth>
+      </div>
+
+      <div #book class="trade_table__cell book">
+        <orderbook [symbols]="symbols"></orderbook>
+      </div>
+
+      <div #orders class="trade_table__cell orders">
+        <openorders [symbols]="symbols"></openorders>
+      </div>
+
+      <div #history class="trade_table__cell history">
+        <tradehistory [symbols]="symbols"></tradehistory>
+      </div>
+    </div>
+
+  </div>
+  <!-- <div class="row">
     <div #trade class="outer-column left--">
       <balances></balances>
       <orderform [currentPrice]="currPrice" [symbols]="symbols"></orderform>
@@ -36,14 +65,14 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 
   <app-bottom-nav *isBp="['xs', 'sm', 'md']">
-    <app-nav-button [view]="trade">Trade</app-nav-button>
-    <app-nav-button [view]="book">Book</app-nav-button>
-    <app-nav-button [view]="charts">Charts</app-nav-button>
-    <app-nav-button [view]="orders">Orders</app-nav-button>
-    <app-nav-button [view]="history">History</app-nav-button>
+    <app-nav-button [views]="[trade]">Trade</app-nav-button>
+    <app-nav-button [views]="[book]">Book</app-nav-button>
+    <app-nav-button [views]="[price, depth]">Charts</app-nav-button>
+    <app-nav-button [views]="[orders]">Orders</app-nav-button>
+    <app-nav-button [views]="[history]">History</app-nav-button>
   </app-bottom-nav>
 
 </div>

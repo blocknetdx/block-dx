@@ -229,7 +229,7 @@ body {
   }
 
   &__body {
-    overflow: scroll;
+    overflow-x: hidden;
     height: calc(100% - 70px);
 
     .bn-orderbook & {

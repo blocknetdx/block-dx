@@ -14,3 +14,46 @@
     top: 90px;
   }
 }
+
+.trade_table {
+  display: flex;
+  margin: 0 -4px;
+
+  &__group {
+    display: flex;
+    flex-wrap: wrap;
+
+    &.content {
+      width: calc(100% - 320px);
+    }
+  }
+
+  &__cell {
+    padding: 0 4px;
+    overflow-x: hidden;
+
+    &.sidebar {
+      width: 320px;
+    }
+
+    &.price {
+      width: 50%;
+    }
+
+    &.depth {
+      width: 16.667%;
+    }
+
+    &.book {
+      width: 33.333%;
+    }
+
+    &.orders {
+      width: 66.667%;
+    }
+
+    &.history {
+      width: 33.333%;
+    }
+  }
+}
