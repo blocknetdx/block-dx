@@ -1,0 +1,75 @@
+.bn-table {
+  position: relative;
+  font-size: 12px;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  line-height: 1.4;
+  border-collapse: collapse;
+
+  tbody,
+  thead {
+    display: block;
+  }
+
+  &__header {
+    div {
+      display: inline-block;
+      font-family: $open-sans;
+      background: $bn-blue2;
+      box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
+      font-weight: 400;
+      text-align: right;
+      padding: 10px 5px;
+      width: 100%;
+      box-sizing: border-box;
+
+      &:last-child {
+        padding-right: 10px;
+      }
+    }
+  }
+
+  &__body {
+    overflow-x: hidden;
+    position: absolute;
+    top: 36px;
+    left: 0;
+    bottom: 0;
+    right: 0;
+  }
+
+  &__row {
+    &:hover {
+      background-color: rgba(255,255,255,0.04);
+    }
+
+    div {
+      font-family: $roboto-mono;
+      text-align: right;
+      position: relative;
+      min-height: 20px;
+
+      &:last-child {
+        padding-right: 10px;
+      }
+
+      .percentBar {
+        display: block;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        min-width: 5px;
+        z-index: 0;
+        padding: 0;
+      }
+    }
+  }
+
+  &__offset {
+    img {
+      margin-right: -17px;
+    }
+  }
+}
