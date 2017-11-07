@@ -1,0 +1,19 @@
+.midmarket-price {
+  position: absolute;
+  top: 52%;
+  left: 0;
+  padding-left: 30px;
+  width: 80%;
+  border-bottom: 1px dashed white;
+  text-align: right;
+}
+
+.chart-holder {
+  width: 100%;
+  height: calc(100% - 40px);
+
+  #chartdiv {
+    width: 100%;
+    height: 100%;
+  }
+}

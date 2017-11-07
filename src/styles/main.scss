@@ -4,20 +4,30 @@
 @import "base/typography";
 @import "base/global";
 
-// Debug
-// body.debug {
-//   background: blue;
-//
-//   @include screen(sm) {
-//     background: yellow;
-//   }
-//   @include screen(md) {
-//     background: green;
-//   }
-//   @include screen(lg) {
-//     background: red;
-//   }
-//   @include screen(xl) {
-//     background: $bn-blue1;
-//   }
-// }
+.debug {
+  &::after {
+    position: fixed;
+    z-index: 20000;
+    background: rgba(black,0.2);
+    color: white;
+    bottom: 0;
+    right: 0;
+    padding: 5px;
+    content: 'default';
+    @include screen(sm) {
+      content: 'small';
+    }
+    @include screen(md) {
+      content: 'medium';
+    }
+    @include screen(xm) {
+      content: 'extra-medium';
+    }
+    @include screen(lg) {
+      content: 'large';
+    }
+    @include screen(xl) {
+      content: 'xlarge';
+    }
+  }
+}

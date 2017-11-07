@@ -1,31 +1,3 @@
-.debug {
-  &::after {
-    position: fixed;
-    z-index: 20000;
-    background: rgba(black,0.2);
-    color: white;
-    bottom: 0;
-    right: 0;
-    padding: 5px;
-    content: 'default';
-    @include screen(sm) {
-      content: 'small';
-    }
-    @include screen(md) {
-      content: 'medium';
-    }
-    @include screen(xm) {
-      content: 'extra-medium';
-    }
-    @include screen(lg) {
-      content: 'large';
-    }
-    @include screen(xl) {
-      content: 'xlarge';
-    }
-  }
-}
-
 body,
 html {
   height: 100%;
@@ -54,83 +26,31 @@ body {
 .left { float: left; }
 .right { float: right; }
 
-.outer-column {
-  @include make-col-ready();
+.color-red { color: $bn-red; }
+.color-green { color: $bn-green; }
 
-  &.left-- {
-    @include screen(lg) {
-      @include make-col(3);
-    }
-  }
-
-  &.right-- {
-    @include screen(lg) {
-      @include make-col(9);
-    }
-  }
-}
-
-.double-col,
-.full-col,
-.quad-col,
-.single-col,
-.triple-col {
-  @include make-col-ready();
-  @include make-col(12);
-  @include screen(md) {
-    @include make-col(2);
-  }
-  overflow: auto;
-}
-
-.double-col {
-  @include make-col(12);
-  @include screen(md) {
-    @include make-col(4);
-  }
-  height: auto;
-}
-
-.triple-col {
-  @include make-col(12);
-  @include screen(md) {
-    @include make-col(6);
-  }
-  height: auto;
-}
-
-.quad-col {
-  @include make-col(12);
-  @include screen(md) {
-    @include make-col(8);
-  }
-  height: auto;
-}
-
-.full-col {
-  @include make-col(12);
-  height: auto;
-}
+.bg-red { background-color: $bn-red; }
+.bg-green { background-color: $bn-green; }
 
 .bn-card {
   background: $bn-blue3;
   overflow: hidden;
-  margin-bottom: 8px;
   position: relative;
+  height: 100%;
 
-  &__FPO {
-    // display: none;
-    position: absolute;
-    top: 0;
-    left: 0;
-    background: rgba(0,0,0,0.5);
-    width: 100%;
-    height: 100%;
-    z-index: 100;
-    padding-top: 50px;
-    text-align: center;
-    font-size: 50px;
-  }
+  // &__FPO {
+  //   // display: none;
+  //   position: absolute;
+  //   top: 0;
+  //   left: 0;
+  //   background: rgba(0,0,0,0.5);
+  //   width: 100%;
+  //   height: 100%;
+  //   z-index: 100;
+  //   padding-top: 50px;
+  //   text-align: center;
+  //   font-size: 50px;
+  // }
 
   &__title {
     @extend .type2;
@@ -142,32 +62,37 @@ body {
   &__subhead {
     font-family: $open-sans;
     background: $bn-blue2;
-    -webkit-box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
-    -moz-box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
     box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
     font-weight: 400;
     text-align: right;
   }
 
-  &.bn-orderbook,
-  &.bn-pricechart,
-  &.bn-toprow {
-    height: calc(60vh - 70px);
+  &__body {
+    position: absolute;
+    top: 40px;
+    bottom: 0;
+    width: 100%;
   }
 
-  &.bn-bottomrow,
-  &.bn-openorders,
-  &.bn-tradehistory,
-  &.bn-watchlist {
-    height: calc(40vh - 70px);
-  }
+  // &.bn-orderbook,
+  // &.bn-pricechart,
+  // &.bn-toprow {
+  //   // height: calc(60vh - 70px);
+  // }
 
-  &.bn-balances {
-    height: calc(20vh - 70px);
-  }
+  // &.bn-bottomrow,
+  // &.bn-openorders,
+  // &.bn-tradehistory,
+  // &.bn-watchlist {
+  //   // height: calc(40vh - 70px);
+  // }
+
+  // &.bn-balances {
+  //   // height: calc(20vh - 70px);
+  // }
 
   &.bn-orderform {
-    height: calc(40vh - 8px);
+    // height: calc(40vh - 8px);
 
     .bn-card__subhead {
       a {
@@ -195,6 +120,7 @@ body {
 }
 
 .bn-table {
+  position: relative;
   font-size: 12px;
   cursor: pointer;
   width: 100%;
@@ -213,8 +139,6 @@ body {
       font-family: $open-sans;
       background: $bn-blue2;
       // margin-bottom: 100px;
-      -webkit-box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
-      -moz-box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
       box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
       font-weight: 400;
       text-align: right;
@@ -230,11 +154,11 @@ body {
 
   &__body {
     overflow-x: hidden;
-    height: calc(100% - 70px);
-
-    .bn-orderbook & {
-      // height: calc(50% - 35px);
-    }
+    position: absolute;
+    top: 36px;
+    left: 0;
+    bottom: 0;
+    right: 0;
   }
 
   &__row {
@@ -252,16 +176,6 @@ body {
         padding-right: 10px;
       }
 
-      &.asks,
-      &.buy {
-        color: $bn-red;
-      }
-
-      &.bids,
-      &.sell {
-        color: $bn-green;
-      }
-
       .percentBar {
         display: block;
         height: 100%;
@@ -274,12 +188,12 @@ body {
 
         &.asks,
         &.buy {
-          background: $bn-red;
+          // background: $bn-red;
         }
 
         &.bids,
         &.sell {
-          background: $bn-green;
+          // background: $bn-green;
         }
       }
     }
@@ -290,22 +204,6 @@ body {
       margin-right: -17px;
     }
   }
-}
-
-.chart-holder {
-  width: 100%;
-  height: 100%;
-
-  #chartdiv {
-    width: 100%;
-    height: calc(100% - 40px);
-  }
-}
-
-#tv_chart_container {
-  position: relative;
-  // height: calc(100% - 40px);
-  height: 100%;
 }
 
 .order-form {

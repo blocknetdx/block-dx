@@ -37,6 +37,8 @@
   &__cell {
     @include make-col-ready();
     overflow-x: hidden;
+    height: 60vh;
+    margin-bottom: 8px;
 
     &.sidebar {
       @include screen(lg) {
@@ -75,6 +77,11 @@
       @include screen(lg) {
         @include make-col(4);
       }
+    }
+
+    &.orders, &.history {
+      height: calc(40vh - 106px);
+      // margin-bottom: 0;
     }
   }
 }

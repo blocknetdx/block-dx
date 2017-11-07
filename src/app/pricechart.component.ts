@@ -8,7 +8,7 @@ declare var Datafeeds;
 @Component({
   selector: 'pricechart',
   templateUrl: './pricechart.component.html',
-  // styleUrls: ['./pricechart.component.scss']
+  styleUrls: ['./pricechart.component.scss']
 })
 export class PricechartComponent {
   title = 'Price Chart';

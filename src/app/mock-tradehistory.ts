@@ -1,6 +1,6 @@
 import { Trade } from './trade';
 
-export const TRADES: Trade[] = [
+const TRADE_DATA: any[] = [
   {
     "time": "2017-09-25T22:20:41.533Z",
     "trade_id": 21319748,
@@ -702,3 +702,7 @@ export const TRADES: Trade[] = [
     "side": "sell"
   }
 ];
+
+export const TRADES: Trade[] = TRADE_DATA.map(trade => {
+  return Trade.fromObject(trade);
+});

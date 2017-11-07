@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 
 import { Headers, Http } from '@angular/http';
 
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/toPromise';
 
 import { Trade } from './trade';
 // import { TRADES } from './mock-tradehistory';
-
 
 @Injectable()
 export class TradehistoryService {
@@ -15,30 +15,23 @@ export class TradehistoryService {
 
   constructor(private http: Http) { }
 
-  getTradehistory(symbols:string[]): Promise<Trade[]> {
+  getTradehistory(symbols:string[]): Observable<Trade[]> {
     this.tradehistoryUrl = 'api/tradehistory_' + symbols.join("_");
 
     return this.http.get(this.tradehistoryUrl)
-              .map((res) => {
-                let p = res.json().data;
-                let totalTradeSize = 0;
+      .map((res) => {
+        let p = res.json().data.map(data => Trade.fromObject(data));
 
-                for(var i = 0; i < p.length; i++) {
-                  var currSize = parseFloat(p[i].size);
-                  totalTradeSize += currSize;
-                }
+        const totalTradeSize = p.reduce((acc, curr) => {
+          return acc + parseFloat(curr.size);
+        }, 0);
 
-                for(var i = 0; i < p.length; i++) {
-                  var currSize = parseFloat(p[i].size);
-                  var percentTradeSize = (currSize/totalTradeSize)*100;
-                  p[i].percent = percentTradeSize;
-                }
+        p.forEach(trade => {
+          trade.percent = (parseFloat(trade.size)/totalTradeSize)*100;
+        });
 
-                return res;
-              })
-              .toPromise()
-              .then(response => response.json().data as Trade[])
-              .catch(this.handleError);
+        return p;
+      });
   }
 
   private handleError(error: any): Promise<any> {

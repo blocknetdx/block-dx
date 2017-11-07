@@ -1,29 +1,31 @@
 <div class="bn-card bn-orderbook">
   <div class="bn-card__title"> {{title}} </div>
-  <div class="bn-table" *ngIf="order" border="0">
-    <div class="row bn-table__header">
-      <div class="col-sm-4">Total</div>
-      <div class="col-sm-4">Amount ({{symbols[0]}})</div>
-      <div class="col-sm-4">Price ({{symbols[1]}})</div>
-    </div>
-    <div class="bn-table__body" id="bn-table__orderbook">
-      <div class="row bn-table__row asks" *ngFor="let asks of order.asks">
-        <div class="col-sm-4">
-          <div class="percentBar asks" [ngStyle]="{'width.%': asks[4]}"></div>
-          <span style="color: white; z-index: 1; position:relative">{{formatNumber(asks[1]*asks[0],symbols[1])}}</span>
-        </div>
-        <div class="col-sm-4 asks"> {{formatNumber(asks[1],symbols[0])}} </div>
-        <div class="col-sm-4">{{formatNumber(asks[0],symbols[1])}}</div>
+  <div class="bn-card__body">
+    <div class="bn-table" *ngIf="order" border="0">
+      <div class="row bn-table__header">
+        <div class="col-sm-4">Total</div>
+        <div class="col-sm-4">Amount ({{symbols[0]}})</div>
+        <div class="col-sm-4">Price ({{symbols[1]}})</div>
       </div>
-    <!-- </div>
-    <div class="bn-table__body"> -->
-      <div class="row bn-table__row bids" *ngFor="let bids of order.bids">
-        <div class="col-sm-4">
-          <div class="percentBar bids" [ngStyle]="{'width.%': bids[4]}"></div>
-          <span style="color: white; z-index: 1; position:relative">{{formatNumber(bids[1]*bids[0],symbols[1])}}</span>
+      <div class="bn-table__body" id="bn-table__orderbook">
+        <div class="row bn-table__row asks" *ngFor="let asks of order.asks">
+          <div class="col-sm-4">
+            <div class="percentBar asks bg-red" [ngStyle]="{'width.%': asks[4]}"></div>
+            <span style="color: white; z-index: 1; position:relative">{{formatNumber(asks[1]*asks[0],symbols[1])}}</span>
+          </div>
+          <div class="col-sm-4 asks color-red"> {{formatNumber(asks[1],symbols[0])}} </div>
+          <div class="col-sm-4">{{formatNumber(asks[0],symbols[1])}}</div>
         </div>
-        <div class="col-sm-4 bids"> {{formatNumber(bids[1],symbols[0])}} </div>
-        <div class="col-sm-4">{{formatNumber(bids[0],symbols[1])}}</div>
+        <!-- </div>
+        <div class="bn-table__body"> -->
+        <div class="row bn-table__row bids" *ngFor="let bids of order.bids">
+          <div class="col-sm-4">
+            <div class="percentBar bids bg-green" [ngStyle]="{'width.%': bids[4]}"></div>
+            <span style="color: white; z-index: 1; position:relative">{{formatNumber(bids[1]*bids[0],symbols[1])}}</span>
+          </div>
+          <div class="col-sm-4 bids color-green"> {{formatNumber(bids[1],symbols[0])}} </div>
+          <div class="col-sm-4">{{formatNumber(bids[0],symbols[1])}}</div>
+        </div>
       </div>
     </div>
   </div>

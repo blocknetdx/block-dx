@@ -10,18 +10,7 @@ declare var AmCharts;
 @Component({
   selector: 'depth',
   templateUrl: './depth.component.html',
-  styles: [`
-    .midmarket-price {
-      position: absolute;
-      top: 52%;
-      left: 0;
-      padding-left: 30px;
-      width: 80%;
-      border-bottom: 1px dashed white;
-      text-align: right;
-    }
-  `],
-  // styleUrls: ['./depth.component.scss'],
+  styleUrls: ['./depth.component.scss'],
 })
 export class DepthComponent {
   @Input() public symbols:string[];

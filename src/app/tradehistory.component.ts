@@ -7,7 +7,7 @@ import { TradehistoryService } from './tradehistory.service';
 @Component({
   selector: 'tradehistory',
   templateUrl: './tradehistory.component.html',
-  // styleUrls: ['./tradehistory.component.scss'],
+  styleUrls: ['./tradehistory.component.scss'],
   providers: [TradehistoryService]
 })
 export class TradehistoryComponent {
@@ -19,9 +19,10 @@ export class TradehistoryComponent {
   constructor(private tradeHistoryService: TradehistoryService, private decimalPipe:DecimalPipe) { }
 
   getTradehistory(): void {
-    this.tradeHistoryService.getTradehistory(this.symbols).then(tradehistory => {
-      this.tradehistory = tradehistory
-    })
+    this.tradeHistoryService.getTradehistory(this.symbols)
+      .subscribe(tradehistory => {
+        this.tradehistory = tradehistory;
+      });
   }
 
   formatNumber(num:string, symbol:string): string {
