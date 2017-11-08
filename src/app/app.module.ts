@@ -1,11 +1,10 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpModule }    from '@angular/http';
-
 import { RouterModule }   from '@angular/router';
-
 import { HttpClientModule } from '@angular/common/http';
 import { LayoutModule } from '@angular/cdk/layout';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 // Imports for loading & configuring the in-memory web api
 import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
@@ -61,6 +60,7 @@ import { IsBreakpointDirective } from './is-breakpoint.directive';
     HttpClientModule,
     HttpModule,
     LayoutModule,
+    NgxDatatableModule,
     InMemoryWebApiModule.forRoot(InMemoryDataService),
     AppRoutingModule
   ],

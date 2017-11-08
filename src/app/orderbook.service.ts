@@ -26,7 +26,7 @@ export class OrderbookService {
         // THIS IS NOT ELEGANT - FIX THIS!!! HAHA ~rsmith
         ////////////////////////////////////////////////////////////////////////
 
-        let p = res.json().data[0];
+        let p = res.json()[0];
         let totalAskSize = 0;
         var asks = p.asks;
 

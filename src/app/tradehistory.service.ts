@@ -20,7 +20,7 @@ export class TradehistoryService {
 
     return this.http.get(this.tradehistoryUrl)
       .map((res) => {
-        let p = res.json().data.map(data => Trade.fromObject(data));
+        let p = res.json().map(data => Trade.fromObject(data));
 
         const totalTradeSize = p.reduce((acc, curr) => {
           return acc + parseFloat(curr.size);

@@ -18,7 +18,7 @@ export class CurrentpriceService {
 
     return this.http.get(this.currentpriceUrl)
       .map((res) => {
-        const data = res.json().data.map(d => {
+        const data = res.json().map(d => {
           return Currentprice.fromObject(d);
         });
         return data;
