@@ -52,6 +52,9 @@
       @include screen(xl) {
         width: 320px;
       }
+      /deep/ .bn-card {
+        height: auto;
+      }
     }
 
     &.price {
