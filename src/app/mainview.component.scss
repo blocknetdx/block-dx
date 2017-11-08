@@ -18,6 +18,7 @@
 
 .trade_table {
   @include make-row();
+  height: 100%;
 
   &__group {
     display: flex;
@@ -37,8 +38,12 @@
   &__cell {
     @include make-col-ready();
     overflow-x: hidden;
-    height: 60vh;
-    margin-bottom: 8px;
+    height: 100%;
+
+    @include screen(lg) {
+      margin-bottom: 8px;
+      height: 60vh;
+    }
 
     &.sidebar {
       @include screen(lg) {
@@ -80,8 +85,9 @@
     }
 
     &.orders, &.history {
-      height: calc(40vh - 106px);
-      // margin-bottom: 0;
+      @include screen(lg) {
+        height: calc(40vh - 106px);
+      }
     }
   }
 }
