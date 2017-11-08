@@ -3,8 +3,63 @@
   <!-- <div class="bn-card__FPO"></div> -->
   <div class="bn-card__title"> {{title}} </div>
 
+  <div class="bn-card__body">
+    <ngx-datatable
+      #dataTable
+      [columnMode]="'flex'"
+      [headerHeight]="'auto'"
+      [rowHeight]="undefined"
+      [reorderable]="false"
+      [loadingIndicator]="true"
+      [rows]="openorders">
 
-  <div class="bn-table">
+      <ngx-datatable-column name="Type" [flexGrow]="0.75" [resizeable]="false" headerClass="align-left d-none d-sm-inherit" cellClass="align-left d-none d-sm-inherit">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          <span>{{row.type}}</span>
+        </ng-template>
+      </ngx-datatable-column>
+
+      <ngx-datatable-column name="Price" [flexGrow]="1" [resizeable]="false">
+        <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
+          <span class="datatable-header-cell-wrapper" (click)="sort()">{{column.name}} ({{symbols[1]}})</span>
+        </ng-template>
+        <ng-template let-value="value" ngx-datatable-cell-template>
+          {{value | blockCurrency:symbols[1]}}
+        </ng-template>
+      </ngx-datatable-column>
+
+      <ngx-datatable-column name="Amount" prop="size" [flexGrow]="1" [resizeable]="false">
+        <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
+          <span class="datatable-header-cell-wrapper" (click)="sort()">{{column.name}} ({{symbols[0]}})</span>
+        </ng-template>
+        <ng-template let-value="value" ngx-datatable-cell-template>
+          {{value | blockCurrency:symbols[0]}}
+        </ng-template>
+      </ngx-datatable-column>
+
+      <ngx-datatable-column name="Total" [flexGrow]="1" [resizeable]="false">
+        <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
+          <span class="datatable-header-cell-wrapper" (click)="sort()">{{column.name}} ({{symbols[1]}})</span>
+        </ng-template>
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          {{row.price*row.size | blockCurrency:symbols[1]}}
+        </ng-template>
+      </ngx-datatable-column>
+
+      <ngx-datatable-column name="Date" prop="created_at" [flexGrow]="1.75" [resizeable]="false">
+        <ng-template let-value="value" ngx-datatable-cell-template>
+          {{value | date:'y-MM-dd HH:mm:ss'}}
+        </ng-template>
+      </ngx-datatable-column>
+
+      <ngx-datatable-column [flexGrow]="0.5" [sortable]="false" [resizeable]="false" [cellClass]="'align-center'">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          <a><i class="material-icons">close</i></a>
+        </ng-template>
+      </ngx-datatable-column>
+    </ngx-datatable>
+  </div>
+  <!-- <div class="bn-table">
     <div class="row bn-table__header">
       <div class="col-1 d-none d-sm-inline-block">Type</div>
       <div class="col-4 col-sm-2">Price ({{symbols[1]}})</div>
@@ -24,5 +79,5 @@
         <div class="col-1 d-none d-sm-inline-block" style="text-align: center;">X</div>
       </div>
     </div>
-  </div>
+  </div> -->
 </div>

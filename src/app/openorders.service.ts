@@ -18,9 +18,9 @@ export class OpenordersService {
     this.openordersUrl = 'api/openorders_' + symbols.join("_");
 
     return this.http.get(this.openordersUrl)
-               .toPromise()
-               .then(response => response.json().data as Openorder[])
-               .catch(this.handleError);
+       .toPromise()
+       .then(response => response.json() as Openorder[])
+       .catch(this.handleError);
   }
 
   private handleError(error: any): Promise<any> {

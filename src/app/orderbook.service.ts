@@ -64,14 +64,14 @@ export class OrderbookService {
         return p;
       });
     //  .toPromise()
-    //  .then(response => response.json().data as Order[])
+    //  .then(response => response.json() as Order[])
     //  .catch(this.handleError);
   }
 
   // getOrderbook(): Observable<Order[]> {
   //   return this.http
   //     .get(this.orderbookUrl)
-  //     .map((response) => response.json().data as Order[]);
+  //     .map((response) => response.json() as Order[]);
   // }
 
   private handleError(error: any): Promise<any> {

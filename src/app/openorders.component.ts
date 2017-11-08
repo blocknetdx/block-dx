@@ -1,33 +1,44 @@
-import 'rxjs/add/operator/map';
-import { Component, Input } from '@angular/core';
+import { Component, Input, TemplateRef, ViewChild } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
+import { DatatableComponent } from '@swimlane/ngx-datatable';
+import 'rxjs/add/operator/map';
 
-// import { ORDERS } from './mock-orderbook';
 import { Openorder } from './openorder';
 import { OpenordersService } from './openorders.service';
+import { BlockCurrencyPipe } from './block-currency.pipe';
 
 @Component({
   selector: 'openorders',
   templateUrl: './openorders.component.html',
-  // styleUrls: ['./open-orders.component.scss']
+  styleUrls: ['./open-orders.component.scss'],
   providers: [OpenordersService]
 })
 export class OpenordersComponent {
-  title = 'Open Orders';
+  @ViewChild('dataTable') dataTable: DatatableComponent;
 
-  openorders: Openorder[];
+  public title = 'Open Orders';
+  public openorders: Openorder[];
 
-  @Input() public symbols:string[];
-
-  constructor(private openorderService: OpenordersService, private decimalPipe:DecimalPipe) { }
-
-  getOpenorders(): void {
-    this.openorderService.getOpenorders(this.symbols).then(openorders => this.openorders = openorders)
+  private _symbols: string[];
+  public get symbols(): string[] { return this._symbols; }
+  @Input() public set symbols(val:string[]) {
+    this._symbols = val;
   }
 
-  formatNumber(num:string, symbol:string): string {
-    const format = symbol !== "USD" ? "1.5-5" : "1.2-2";
-    return this.decimalPipe.transform(num,format);
+  constructor(
+    private openorderService: OpenordersService,
+    private blockCurrency: BlockCurrencyPipe,
+    private decimalPipe: DecimalPipe
+  ) { }
+
+  getOpenorders(): void {
+    this.openorderService.getOpenorders(this.symbols)
+      .then(openorders => {
+        this.openorders = openorders;
+        setTimeout(() => {
+          this.dataTable.recalculate();
+        });
+      });
   }
 
   ngOnInit(): void {
@@ -37,6 +48,4 @@ export class OpenordersComponent {
   ngOnChanges(): void {
     this.getOpenorders();
   }
-
-
 }

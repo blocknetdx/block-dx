@@ -5,6 +5,7 @@ import { RouterModule }   from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { LayoutModule } from '@angular/cdk/layout';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { DecimalPipe } from '@angular/common';
 
 // Imports for loading & configuring the in-memory web api
 import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
@@ -24,8 +25,6 @@ import { MainviewComponent } from './mainview.component';
 import { WatchlistComponent } from './watchlist.component';
 import { CurrentpriceComponent } from './currentprice.component';
 
-import { DecimalPipe } from '@angular/common';
-
 import { AppRoutingModule }     from './app-routing.module';
 import { BreakpointService } from './breakpoint.service';
 import { CurrentpriceService } from './currentprice.service';
@@ -33,6 +32,7 @@ import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { BottomNavComponent } from './bottom-nav/bottom-nav.component';
 import { NavButtonComponent } from './nav-button/nav-button.component';
 import { IsBreakpointDirective } from './is-breakpoint.directive';
+import { BlockCurrencyPipe } from './block-currency.pipe';
 
 
 @NgModule({
@@ -53,7 +53,8 @@ import { IsBreakpointDirective } from './is-breakpoint.directive';
     NavBarComponent,
     BottomNavComponent,
     NavButtonComponent,
-    IsBreakpointDirective
+    IsBreakpointDirective,
+    BlockCurrencyPipe
   ],
   imports: [
     BrowserModule,
@@ -67,7 +68,8 @@ import { IsBreakpointDirective } from './is-breakpoint.directive';
   providers: [
     DecimalPipe,
     BreakpointService,
-    CurrentpriceService
+    CurrentpriceService,
+    BlockCurrencyPipe
   ],
   bootstrap: [AppComponent]
 })

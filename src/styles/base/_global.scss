@@ -26,6 +26,10 @@ body {
 .left { float: left; }
 .right { float: right; }
 
+.align-right { text-align: right !important; }
+.align-left { text-align: left !important; }
+.align-center { text-align: center !important; }
+
 .color-red { color: $bn-red; }
 .color-green { color: $bn-green; }
 
