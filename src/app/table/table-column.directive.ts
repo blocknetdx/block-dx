@@ -8,6 +8,11 @@ import { TableColumnCellDirective } from './table-column-cell.directive';
 })
 export class TableColumnDirective {
   @Input() classList: string;
+  @Input() sortable: boolean = true;
+  @Input() prop: string;
+
+  active: boolean;
+  desc: boolean;
 
   @ContentChild(TableColumnHeaderDirective, {read: TemplateRef})
   headerTemplate: TemplateRef<any>

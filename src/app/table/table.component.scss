@@ -14,6 +14,35 @@
     background: $bn-blue2;
     box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
     padding: 10px 5px;
+
+    & > div {
+      white-space: nowrap;
+      cursor: default;
+      position: relative;
+      &::after {
+        position: absolute;
+        font-family: 'Material Icons';
+        font-weight: 400;
+        vertical-align: bottom;
+        margin-left: 2px;
+      }
+      &.sortable {
+        cursor: pointer;
+      }
+      &.active {
+        font-weight: bold;
+        &.sort-up {
+          &::after {
+            content: 'keyboard_arrow_up';
+          }
+        }
+        &.sort-down {
+          &::after {
+            content: 'keyboard_arrow_down';
+          }
+        }
+      }
+    }
   }
 
   &__body {
@@ -29,6 +58,7 @@
   }
 
   &__cell {
+    cursor: default;
     /deep/ .material-icons {
       font-size: 1.2em;
       vertical-align: text-bottom;

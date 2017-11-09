@@ -3,6 +3,7 @@ import {
   QueryList, Input
 } from '@angular/core';
 
+import { naturalSort } from '../util';
 import { TableColumnDirective } from './table-column.directive';
 
 @Component({
@@ -10,13 +11,19 @@ import { TableColumnDirective } from './table-column.directive';
   template: `
     <div class="bn-table">
       <div class="bn-table__header">
-        <div [class]="col.classList" *ngFor="let col of _internalColumns">
-          <ng-template [ngTemplateOutlet]="col.headerTemplate"></ng-template>
+        <div (click)="sort(col)"
+          [class]="col.classList"
+          [class.sortable]="col.sortable"
+          [class.active]="col.active"
+          [class.sort-up]="col.active && !col.desc"
+          [class.sort-down]="col.active && col.desc"
+          *ngFor="let col of columns">
+          <ng-template *ngTemplateOutlet="col.headerTemplate"></ng-template>
         </div>
       </div>
       <div class="bn-table__body">
         <div class="bn-table__row" *ngFor="let row of rows">
-          <div class="bn-table__cell {{col.classList}}" *ngFor="let col of _internalColumns">
+          <div class="bn-table__cell {{col.classList}}" *ngFor="let col of columns">
             <ng-template *ngTemplateOutlet="col.cellTemplate; context: {row: row}"></ng-template>
           </div>
         </div>
@@ -26,24 +33,11 @@ import { TableColumnDirective } from './table-column.directive';
   styleUrls: ['./table.component.scss']
 })
 export class TableComponent {
-  _columnTemplates: QueryList<TableColumnDirective>;
-  _internalColumns: any[];
+  public columns: any[];
 
   @ContentChildren(TableColumnDirective)
   set columnTemplates(val: QueryList<TableColumnDirective>) {
-    this._columnTemplates = val;
-
-    this._internalColumns = val.toArray().map((col) => {
-      return {
-        headerTemplate: col.headerTemplate,
-        cellTemplate: col.cellTemplate,
-        classList: col.classList
-      }
-    });
-  }
-
-  get columnTemplates(): QueryList<TableColumnDirective> {
-    return this._columnTemplates;
+    this.columns = val.toArray();
   }
 
   @Input() rows: any[];
@@ -51,6 +45,24 @@ export class TableComponent {
   constructor() { }
 
   ngOnInit() {
+  }
+
+  sort(column) {
+    if (column.sortable) {
+      if (!column.active) {
+        this.columns.forEach((col) => {
+          col.active = col === column;
+        });
+      } else {
+        column.desc = !column.desc;
+      }
+      let arr = [...this.rows];
+      naturalSort(arr, column.prop);
+      if (column.desc) {
+        arr.reverse();
+      }
+      this.rows = arr;
+    }
   }
 
 }
