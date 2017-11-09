@@ -1,64 +1,64 @@
-.ngx-datatable {
-  font-family: $open-sans;
-  font-size: 12px;
-}
-
-.ngx-datatable .datatable-body .datatable-scroll {
-  width: 100%;
-}
-
-.datatable-row-center {
-  width: 100%;
-}
-
-.datatable-header {
-  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
-}
-
-.datatable-header-cell {
-  padding: 10px 5px;
-  background: $bn-blue2;
-  text-align: right;
-  white-space: nowrap;
-
-  &.sort-active {
-    font-weight: bold;
-  }
-}
-
-span.sort-btn {
-  font-family: 'Material Icons';
-}
-
-.datatable-icon {
-  &-down::before {
-    content: "keyboard_arrow_down";
-  }
-  &-up::before {
-    content: "keyboard_arrow_up";
-  }
-}
-
-.datatable-body-row {
-  &:hover {
-    background-color: rgba(255, 255, 255, 0.04);
-  }
-}
-
-.datatable-body-cell {
-  font-family: $roboto-mono;
-  padding: 0 5px;
-  text-align: right;
-
-  &-label {
-    cursor: default;
-  }
-}
-
-.material-icons {
-  font-size: 1.2em;
-  vertical-align: text-bottom;
-}
+// .ngx-datatable {
+//   font-family: $open-sans;
+//   font-size: 12px;
+// }
+//
+// .ngx-datatable .datatable-body .datatable-scroll {
+//   width: 100%;
+// }
+//
+// .datatable-row-center {
+//   width: 100%;
+// }
+//
+// .datatable-header {
+//   box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
+// }
+//
+// .datatable-header-cell {
+//   padding: 10px 5px;
+//   background: $bn-blue2;
+//   text-align: right;
+//   white-space: nowrap;
+//
+//   &.sort-active {
+//     font-weight: bold;
+//   }
+// }
+//
+// span.sort-btn {
+//   font-family: 'Material Icons';
+// }
+//
+// .datatable-icon {
+//   &-down::before {
+//     content: "keyboard_arrow_down";
+//   }
+//   &-up::before {
+//     content: "keyboard_arrow_up";
+//   }
+// }
+//
+// .datatable-body-row {
+//   &:hover {
+//     background-color: rgba(255, 255, 255, 0.04);
+//   }
+// }
+//
+// .datatable-body-cell {
+//   font-family: $roboto-mono;
+//   padding: 0 5px;
+//   text-align: right;
+//
+//   &-label {
+//     cursor: default;
+//   }
+// }
+//
+// .material-icons {
+//   font-size: 1.2em;
+//   vertical-align: text-bottom;
+// }
 
 .bn-table {
   position: relative;

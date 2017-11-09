@@ -4,7 +4,6 @@ import { HttpModule }    from '@angular/http';
 import { RouterModule }   from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { LayoutModule } from '@angular/cdk/layout';
-import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { DecimalPipe } from '@angular/common';
 
 // Imports for loading & configuring the in-memory web api
@@ -61,7 +60,6 @@ import { BlockCurrencyPipe } from './block-currency.pipe';
     HttpClientModule,
     HttpModule,
     LayoutModule,
-    NgxDatatableModule,
     InMemoryWebApiModule.forRoot(InMemoryDataService),
     AppRoutingModule
   ],

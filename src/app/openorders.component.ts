@@ -1,6 +1,5 @@
 import { Component, Input, TemplateRef, ViewChild } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
-import { DatatableComponent } from '@swimlane/ngx-datatable';
 import 'rxjs/add/operator/map';
 
 import { Openorder } from './openorder';
@@ -14,8 +13,6 @@ import { BlockCurrencyPipe } from './block-currency.pipe';
   providers: [OpenordersService]
 })
 export class OpenordersComponent {
-  @ViewChild('dataTable') dataTable: DatatableComponent;
-
   public title = 'Open Orders';
   public openorders: Openorder[];
 
@@ -35,9 +32,6 @@ export class OpenordersComponent {
     this.openorderService.getOpenorders(this.symbols)
       .then(openorders => {
         this.openorders = openorders;
-        setTimeout(() => {
-          this.dataTable.recalculate();
-        });
       });
   }
 
