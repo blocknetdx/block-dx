@@ -13,7 +13,7 @@
     font-family: $open-sans;
     background: $bn-blue2;
     box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
-    padding: 10px 5px;
+    padding: 10px 13px;
 
     & > div {
       white-space: nowrap;
@@ -51,7 +51,7 @@
   }
 
   &__row {
-    padding: 0 5px;
+    padding: 0 13px;
     &:hover {
       background-color: rgba(255,255,255,0.04);
     }
