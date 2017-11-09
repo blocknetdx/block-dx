@@ -2,6 +2,7 @@
 
 .bn-table {
   font-size: 12px;
+  line-height: 16px;
   text-align: right;
   height: 100%;
 
@@ -49,7 +50,7 @@
   &__body {
     font-family: $roboto-mono;
     padding: 5px 0;
-    height: calc(100% - 38px);
+    height: calc(100% - 36px);
     overflow-y: auto;
   }
 

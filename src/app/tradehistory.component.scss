@@ -1,1 +1,26 @@
+app-table {
+  /deep/ .bn-table__row {
+    position: relative;
+  }
+  /deep/ .bn-table__cell {
+    position: static;
+    span {
+      position: relative;
+      z-index: 1;
+    }
+    img {
+      margin-right: -17px;
+    }
+  }
 
+  .percentBar {
+    display: block;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    min-width: 2px;
+    z-index: 0;
+    padding: 0;
+  }
+}
