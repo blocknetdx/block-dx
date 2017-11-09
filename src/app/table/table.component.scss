@@ -3,6 +3,7 @@
 .bn-table {
   font-size: 12px;
   text-align: right;
+  height: 100%;
 
   &__header, &__row {
     display: flex;
@@ -47,7 +48,9 @@
 
   &__body {
     font-family: $roboto-mono;
-    margin-top: 5px;
+    padding: 5px 0;
+    height: calc(100% - 38px);
+    overflow-y: auto;
   }
 
   &__row {

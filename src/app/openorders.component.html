@@ -46,25 +46,5 @@
       </ng-template>
     </app-table-column>
   </app-table>
-  <!-- <div class="bn-table">
-    <div class="row bn-table__header">
-      <div class="col-1 d-none d-sm-inline-block">Type</div>
-      <div class="col-4 col-sm-2">Price ({{symbols[1]}})</div>
-      <div class="col-4 col-sm-2">Amount ({{symbols[0]}})</div>
-      <div class="col-4 col-sm-2">Total ({{symbols[1]}})</div>
-      <div class="col-4 d-none d-sm-inline-block">Date</div>
-      <div class="col-1 d-none d-sm-inline-block">&nbsp;</div>
-    </div>
 
-    <div class="bn-table__body">
-      <div class="row bn-table__row"  *ngFor="let openorder of openorders">
-        <div class="col-1 d-none d-sm-inline-block {{openorder.side}}" style="text-transform: capitalize;">{{openorder.side}}</div>
-        <div class="col-4 col-sm-2">{{openorder.price | blockCurrency:symbols[1]}}</div>
-        <div class="col-4 col-sm-2">{{openorder.size | blockCurrency:symbols[0]}}</div>
-        <div class="col-4 col-sm-2">{{openorder.price*openorder.size | blockCurrency:symbols[1]}}</div>
-        <div class="col-4 d-none d-sm-inline-block">{{openorder.created_at | date:'y-MM-dd HH:mm:ss' }}</div>
-        <div class="col-1 d-none d-sm-inline-block" style="text-align: center;">X</div>
-      </div>
-    </div>
-  </div> -->
 </div>

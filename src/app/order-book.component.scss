@@ -1,0 +1,23 @@
+app-table {
+
+  /deep/ .bn-table__row {
+    position: relative;
+  }
+  /deep/ .bn-table__cell {
+    position: static;
+    span {
+      position: relative;
+      z-index: 1;
+    }
+  }
+  .percentBar {
+    display: block;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    min-width: 5px;
+    z-index: 0;
+    padding: 0;
+  }
+}

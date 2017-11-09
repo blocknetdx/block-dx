@@ -26,36 +26,30 @@ export class OrderbookService {
         // THIS IS NOT ELEGANT - FIX THIS!!! HAHA ~rsmith
         ////////////////////////////////////////////////////////////////////////
 
-        let p = res.json()[0];
-        let totalAskSize = 0;
-        var asks = p.asks;
+        const raw = res.json()[0];
+        const p = Order.fromObject(raw);
 
-        for(var i = 0; i < asks.length; i++) {
-          var currSize = parseFloat(asks[i][1]);
-          totalAskSize += currSize;
-        }
+        const asks = p.asks;
+        const totalAskSize = asks.reduce((acc, curr) => {
+          return acc + parseFloat(curr[1]);
+        }, 0);
 
-        for(var i = 0; i < asks.length; i++) {
-          var currSize = parseFloat(asks[i][1]);
-          var percentTradeSize = (currSize/totalAskSize)*100;
-          asks[i][4] = percentTradeSize;
-        }
+        asks.forEach((ask) => {
+          ask.push((parseFloat(ask[1])/totalAskSize)*100);
+          ask.push('ask');
+        });
 
         ////////////////////////////////////////////////////////////////////////
 
-        let totalBidSize = 0;
-        var bids = p.bids;
+        const bids = p.bids;
+        const totalBidSize = asks.reduce((acc, curr) => {
+          return acc + parseFloat(curr[1]);
+        }, 0);
 
-        for(var i = 0; i < bids.length; i++) {
-          var currSize = parseFloat(bids[i][1]);
-          totalBidSize += currSize;
-        }
-
-        for(var i = 0; i < bids.length; i++) {
-          var currSize = parseFloat(bids[i][1]);
-          var percentTradeSize = (currSize/totalBidSize)*100;
-          bids[i][4] = percentTradeSize;
-        }
+        bids.forEach((bid) => {
+          bid.push((parseFloat(bid[1])/totalBidSize)*100);
+          bid.push('bid');
+        });
 
         ////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////

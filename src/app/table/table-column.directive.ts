@@ -20,6 +20,4 @@ export class TableColumnDirective {
   @ContentChild(TableColumnCellDirective, {read: TemplateRef})
   cellTemplate: TemplateRef<any>
 
-  constructor() { }
-
 }
