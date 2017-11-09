@@ -32,6 +32,10 @@ import { BottomNavComponent } from './bottom-nav/bottom-nav.component';
 import { NavButtonComponent } from './nav-button/nav-button.component';
 import { IsBreakpointDirective } from './is-breakpoint.directive';
 import { BlockCurrencyPipe } from './block-currency.pipe';
+import { TableComponent } from './table/table.component';
+import { TableColumnDirective } from './table/table-column.directive';
+import { TableColumnHeaderDirective } from './table/table-column-header.directive';
+import { TableColumnCellDirective } from './table/table-column-cell.directive';
 
 
 @NgModule({
@@ -53,7 +57,11 @@ import { BlockCurrencyPipe } from './block-currency.pipe';
     BottomNavComponent,
     NavButtonComponent,
     IsBreakpointDirective,
-    BlockCurrencyPipe
+    BlockCurrencyPipe,
+    TableComponent,
+    TableColumnDirective,
+    TableColumnHeaderDirective,
+    TableColumnCellDirective
   ],
   imports: [
     BrowserModule,
