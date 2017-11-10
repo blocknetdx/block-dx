@@ -1,4 +1,4 @@
-<div [@fadeInOut] class="overlay" *ngIf="active"></div>
+<div [@fadeInOut] (click)="active = false" class="overlay" *ngIf="active"></div>
 
 <div (click)="active = !active" class="navbar-pricing__cell" [class.active]="active">
   <div class="navbar-pricing__cell_body">
@@ -8,5 +8,11 @@
 </div>
 
 <div [@fadeInOut] class="pair-container" *ngIf="active">
-  <header></header>
+  <header>
+    <form>
+      <div class="input-group">
+        <input type="text" placeholder="Select first coin">
+      </div>
+    </form>
+  </header>
 </div>

@@ -1,3 +1,19 @@
+input:focus {
+  outline: none;
+}
+
+input[type="text"] {
+  border: none;
+  padding: 13px 16px;
+  background-color: #133049;
+  font: 12px/14px $roboto-mono;
+  color: white;
+
+  &:focus {
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.24);
+  }
+}
+
 .order-form {
   font-family: $open-sans;
   margin: 24px 16px;

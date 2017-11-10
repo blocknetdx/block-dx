@@ -46,6 +46,7 @@
       box-shadow:
         inset 1px 0 0 #133049,
         inset -1px 0 0 #133049;
+      transition-duration: 0.1s;
       transition-delay: 0s;
     }
     .navbar-pricing__lower::after {
@@ -79,9 +80,10 @@
   width: 580px;
   height: 623px;
   background-color: #133049;
+	box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
 
   header {
-    padding: 20px;
+    padding: 20px 30px;
     background-color: rgba(255,255,255,0.05);
     box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
   }
