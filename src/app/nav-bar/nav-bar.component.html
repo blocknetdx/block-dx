@@ -36,12 +36,13 @@
   </div>
 
   <div class="navbar-pricing" *ngIf="currentPrice">
-    <div class="navbar-pricing__cell currency--" *isBp="['lg', 'xl']">
+    <app-pair-selector *isBp="['lg', 'xl']"></app-pair-selector>
+    <!-- <div class="navbar-pricing__cell" *isBp="['lg', 'xl']">
       <div class="navbar-pricing__upper">{{symbols[0]}} / {{symbols[1]}}</div>
-      <div class="navbar-pricing__lower">Market Table &gt;</div>
-    </div>
+      <div class="navbar-pricing__lower">Select Market Pair</div>
+    </div> -->
 
-    <div class="navbar-pricing__cell tradeprice--">
+    <div class="navbar-pricing__cell">
       <div class="navbar-pricing__upper">{{formatNumber(currentPrice.last,symbols[1])}} {{symbols[1]}}</div>
       <div class="navbar-pricing__lower">Last trade price</div>
     </div>

@@ -36,6 +36,7 @@ import { TableComponent } from './table/table.component';
 import { TableColumnDirective } from './table/table-column.directive';
 import { TableColumnHeaderDirective } from './table/table-column-header.directive';
 import { TableColumnCellDirective } from './table/table-column-cell.directive';
+import { PairSelectorComponent } from './pair-selector/pair-selector.component';
 
 
 @NgModule({
@@ -61,7 +62,8 @@ import { TableColumnCellDirective } from './table/table-column-cell.directive';
     TableComponent,
     TableColumnDirective,
     TableColumnHeaderDirective,
-    TableColumnCellDirective
+    TableColumnCellDirective,
+    PairSelectorComponent
   ],
   imports: [
     BrowserModule,

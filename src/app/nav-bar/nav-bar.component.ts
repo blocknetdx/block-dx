@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, NgZone } from '@angular/core';
+import { Component, Input, ViewEncapsulation } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 
 import { Currentprice } from '../currentprice';
@@ -7,9 +7,10 @@ import { CurrentpriceService } from '../currentprice.service';
 @Component({
   selector: 'app-nav-bar',
   templateUrl: './nav-bar.component.html',
-  styleUrls: ['./nav-bar.component.scss']
+  styleUrls: ['./nav-bar.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
-export class NavBarComponent implements OnInit {
+export class NavBarComponent {
   @Input() public symbols: string[];
   @Input() public currentPrice: Currentprice = new Currentprice();
 

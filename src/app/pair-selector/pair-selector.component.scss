@@ -1,0 +1,49 @@
+.navbar-pricing__cell {
+  position: relative;
+  margin-left: 0;
+  cursor: pointer;
+
+  &_body {
+    padding: 6px 30px;
+    border-left: 1px solid rgba(255, 255, 255, 0.24);
+    border-right: 1px solid rgba(255, 255, 255, 0.24);
+  }
+
+  &.active {
+    background-color: #133049;
+    .navbar-pricing__cell_body {
+      border-left: none;
+      border-right: none;
+    }
+    .navbar-pricing__lower::after {
+      content: 'keyboard_arrow_up';
+    }
+  }
+}
+
+.navbar-pricing__lower {
+  &::after {
+    content: 'keyboard_arrow_down';
+    font-family: 'Material Icons';
+    vertical-align: bottom;
+    margin-left: 3px;
+  }
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,26,55,0.8);
+}
+
+.pair-container {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 580px;
+  height: 623px;
+  background-color: #133049;
+}

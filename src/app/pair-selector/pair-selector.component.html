@@ -1,0 +1,12 @@
+<div class="overlay" *ngIf="active"></div>
+
+<div (click)="active = !active" class="navbar-pricing__cell" [class.active]="active">
+  <div class="navbar-pricing__cell_body">
+    <div class="navbar-pricing__upper">{{symbols[0]}} / {{symbols[1]}}</div>
+    <div class="navbar-pricing__lower">Select Market Pair</div>
+  </div>
+</div>
+
+<div class="pair-container" *ngIf="active">
+
+</div>
