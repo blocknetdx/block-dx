@@ -1,4 +1,4 @@
-<div class="overlay" *ngIf="active"></div>
+<div [@fadeInOut] class="overlay" *ngIf="active"></div>
 
 <div (click)="active = !active" class="navbar-pricing__cell" [class.active]="active">
   <div class="navbar-pricing__cell_body">
@@ -7,6 +7,6 @@
   </div>
 </div>
 
-<div class="pair-container" *ngIf="active">
-
+<div [@fadeInOut] class="pair-container" *ngIf="active">
+  <header></header>
 </div>
