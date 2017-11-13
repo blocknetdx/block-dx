@@ -14,12 +14,23 @@ export class PairSelectorComponent implements OnInit {
   active: boolean;
 
   rows: any[] = [
-    
-  ]
+
+  ];
 
   constructor() { }
 
   ngOnInit() {
+    this.rows = Array.from(Array(10)).map((obj) => {
+      return {
+        coin: 'ABC',
+        currency: 'Bitcoin',
+        last_price: 0.00020220,
+        volume: 30003,
+        change: 1.508,
+        section: 'My Wallet'
+      }
+    });
+    console.log(this.rows);
   }
 
 }
