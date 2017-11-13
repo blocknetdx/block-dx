@@ -54,6 +54,14 @@
     overflow-y: auto;
   }
 
+  &__section-title {
+    padding: 5px 13px;
+    text-align: left;
+    text-transform: uppercase;
+    font-weight: bold;
+    opacity: 0.4;
+  }
+
   &__row {
     padding: 0 13px;
     &:hover {
@@ -68,4 +76,8 @@
       vertical-align: text-bottom;
     }
   }
+}
+
+.bn-table__section + .bn-table__section {
+  margin-top: 10px;
 }

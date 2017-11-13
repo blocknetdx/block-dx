@@ -22,9 +22,12 @@ import { TableColumnDirective } from './table-column.directive';
         </div>
       </div>
       <div class="bn-table__body">
-        <div class="bn-table__row" *ngFor="let row of rows">
-          <div class="bn-table__cell {{col.classList}}" *ngFor="let col of columns">
-            <ng-template *ngTemplateOutlet="col.cellTemplate; context: {row: row}"></ng-template>
+        <div class="bn-table__section" *ngFor="let section of sections">
+          <div class="bn-table__section-title" *ngIf="section.title != 'undefined'">{{section.title}}</div>
+          <div class="bn-table__row" *ngFor="let row of section.rows">
+            <div class="bn-table__cell {{col.classList}}" *ngFor="let col of columns">
+              <ng-template *ngTemplateOutlet="col.cellTemplate; context: {row: row}"></ng-template>
+            </div>
           </div>
         </div>
       </div>
@@ -34,13 +37,32 @@ import { TableColumnDirective } from './table-column.directive';
 })
 export class TableComponent {
   public columns: any[];
+  public sections: any[];
 
   @ContentChildren(TableColumnDirective)
   set columnTemplates(val: QueryList<TableColumnDirective>) {
     this.columns = val.toArray();
   }
 
-  @Input() rows: any[];
+  private _rows: any[];
+  public get rows(): any[] { return this._rows; }
+  @Input() public set rows(val: any[]) {
+    this._rows = val;
+    if (val) {
+      const _groups = val.reduce((acc, row) => {
+        (acc[row.section] = acc[row.section] || []).push(row);
+        return acc;
+      }, {});
+      this.sections = Object.keys(_groups).map((s) => {
+        // if (s === 'undefined') return
+        return {
+          title: s,
+          rows: _groups[s]
+        };
+      });
+      console.log(this.sections);
+    }
+  }
 
   constructor() { }
 

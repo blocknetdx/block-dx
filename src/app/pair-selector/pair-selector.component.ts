@@ -10,27 +10,33 @@ import { fadeInOut } from '../animations';
 })
 export class PairSelectorComponent implements OnInit {
 
-  symbols: string[] = ['ETH', 'BTC'];
-  active: boolean;
-
-  rows: any[] = [
-
-  ];
+  public active: boolean;
+  public symbols: string[] = ['ETH', 'BTC'];
+  public rows: any[];
 
   constructor() { }
 
   ngOnInit() {
-    this.rows = Array.from(Array(10)).map((obj) => {
+    this.rows = Array.from(Array(50)).map((obj, idx) => {
       return {
-        coin: 'ABC',
+        coin: makeid(),
         currency: 'Bitcoin',
         last_price: 0.00020220,
         volume: 30003,
         change: 1.508,
-        section: 'My Wallet'
+        section: idx <= 8 ? 'My Wallet' : 'All Coins'
       }
     });
-    console.log(this.rows);
   }
 
+}
+
+function makeid() {
+  var text = "";
+  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+  for (var i = 0; i < 3; i++)
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+  return text;
 }
