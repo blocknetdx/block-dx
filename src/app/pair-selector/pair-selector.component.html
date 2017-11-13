@@ -27,4 +27,42 @@
       </div>
     </form>
   </header>
+
+  <app-table [rows]="rows">
+    <app-table-column [sortable]="false" [classList]="'col-2 align-left'">
+      <ng-template columnHeader>Coin</ng-template>
+      <ng-template let-row="row" columnCell>
+        <span>ABC</span>
+      </ng-template>
+    </app-table-column>
+
+    <app-table-column [sortable]="false" [classList]="'col-2 align-left'">
+      <ng-template columnHeader>Currency</ng-template>
+      <ng-template let-row="row" columnCell>
+        <span>ABC</span>
+      </ng-template>
+    </app-table-column>
+
+    <app-table-column [sortable]="false" [classList]="'col-3'">
+      <ng-template columnHeader>Last Price</ng-template>
+      <ng-template let-row="row" columnCell>
+        <span>ABC</span>
+      </ng-template>
+    </app-table-column>
+
+    <app-table-column [sortable]="false" [classList]="'col-3'">
+      <ng-template columnHeader>Volume</ng-template>
+      <ng-template let-row="row" columnCell>
+        <span>ABC</span>
+      </ng-template>
+    </app-table-column>
+
+    <app-table-column [sortable]="false" [classList]="'col-2'">
+      <ng-template columnHeader>% Change</ng-template>
+      <ng-template let-row="row" columnCell>
+        <span>ABC</span>
+      </ng-template>
+    </app-table-column>
+  </app-table>
+
 </div>

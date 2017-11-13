@@ -7,6 +7,7 @@ form {
 }
 
 .input-group {
+  position: relative;
   input {
     width: 100%;
   }
@@ -26,6 +27,10 @@ input[type="text"] {
   background-color: #133049;
   font: 12px/14px $roboto-mono;
   color: white;
+  &::placeholder {
+    color: white;
+    opacity: 0.6;
+  }
 
   &:focus {
     box-shadow: inset 0 0 0 1px rgba(255,255,255,0.24);

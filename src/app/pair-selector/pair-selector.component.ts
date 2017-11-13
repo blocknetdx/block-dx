@@ -13,6 +13,10 @@ export class PairSelectorComponent implements OnInit {
   symbols: string[] = ['ETH', 'BTC'];
   active: boolean;
 
+  rows: any[] = [
+    
+  ]
+
   constructor() { }
 
   ngOnInit() {

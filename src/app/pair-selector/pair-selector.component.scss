@@ -1,3 +1,5 @@
+@import '../../styles/utils/variables';
+
 .navbar-pricing__cell {
   position: relative;
   margin-left: 0;
@@ -78,13 +80,62 @@
   top: 100%;
   left: 0;
   width: 580px;
-  height: 623px;
+  height: 60vh;
   background-color: #133049;
 	box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
 
   header {
-    padding: 20px 30px;
+    padding: 20px 30px 10px;
     background-color: rgba(255,255,255,0.05);
-    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
   }
+}
+
+form {
+  .form-group {
+    & > div:nth-child(1) {
+      position: relative;
+      padding-right: 15px;
+      &::after {
+        content: "/";
+        transform: translateX(50%);
+        position: absolute;
+        line-height: 40px;
+        font-size: 22px;
+        right: 0;
+        top: 0;
+        opacity: 0.4;
+        font-family: $open-sans;
+      }
+    }
+    & > div:nth-child(2) {
+      padding-left: 15px;
+      padding-right: 10px;
+    }
+    & > div:nth-child(3) {
+      padding-left: 10px;
+    }
+  }
+}
+
+app-table {
+  /deep/ .bn-table__header {
+  	background-color: rgba(255,255,255,0.05);
+    padding: 10px 30px;
+  }
+}
+
+.input-group {
+  &::after {
+    content: "search";
+    font-family: "Material Icons";
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.4;
+  }
+}
+
+input[type="text"] {
+  font-family: $open-sans;
 }
