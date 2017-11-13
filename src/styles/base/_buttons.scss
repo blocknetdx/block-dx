@@ -1,0 +1,12 @@
+button, .btn, [class^="btn-"], [class*=" btn-"] {
+  border: none;
+	background-color: $bn-blue-light1;
+  font-family: $open-sans;
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 40px;
+  color: white;
+  text-transform: uppercase;
+  padding: 0 15px;
+  cursor: pointer;
+}
