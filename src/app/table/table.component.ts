@@ -23,7 +23,9 @@ import { TableColumnDirective } from './table-column.directive';
       </div>
       <div class="bn-table__body">
         <div class="bn-table__section" *ngFor="let section of sections">
-          <div class="bn-table__section-title" *ngIf="section.title != 'undefined'">{{section.title}}</div>
+          <div class="bn-table__section-title" *ngIf="section.title != 'undefined'">
+            <div class="col-12">{{section.title}}</div>
+          </div>
           <div class="bn-table__row" *ngFor="let row of section.rows">
             <div class="bn-table__cell {{col.classList}}" *ngFor="let col of columns">
               <ng-template *ngTemplateOutlet="col.cellTemplate; context: {row: row}"></ng-template>
@@ -54,13 +56,11 @@ export class TableComponent {
         return acc;
       }, {});
       this.sections = Object.keys(_groups).map((s) => {
-        // if (s === 'undefined') return
         return {
           title: s,
           rows: _groups[s]
         };
       });
-      console.log(this.sections);
     }
   }
 

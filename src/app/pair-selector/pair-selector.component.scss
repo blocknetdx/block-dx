@@ -125,8 +125,9 @@ app-table {
   	background-color: rgba(255,255,255,0.05);
     padding: 10px 30px;
   }
-  /deep/ .bn-table__row {
-    padding: 0 30px;
+  /deep/ .bn-table__row, /deep/ .bn-table__section-title {
+    padding-left: 30px;
+    padding-right: 30px;
   }
 }
 
