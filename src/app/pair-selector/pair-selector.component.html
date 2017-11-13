@@ -10,8 +10,20 @@
 <div [@fadeInOut] class="pair-container" *ngIf="active">
   <header>
     <form>
-      <div class="input-group">
-        <input type="text" placeholder="Select first coin">
+      <div class="form-group row">
+        <div class="col-4">
+          <div class="input-group">
+            <input type="text" placeholder="Select first coin">
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="input-group">
+            <input type="text" placeholder="second coin">
+          </div>
+        </div>
+        <div class="col-4">
+          <button type="submit">Select</button>
+        </div>
       </div>
     </form>
   </header>

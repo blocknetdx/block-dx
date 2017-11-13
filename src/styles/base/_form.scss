@@ -1,3 +1,21 @@
+form {
+  &.form-inline {
+    .input-group {
+      display: inline-block;
+    }
+  }
+}
+
+.input-group {
+  input {
+    width: 100%;
+  }
+}
+
+button[type="submit"] {
+  width: 100%;
+}
+
 input:focus {
   outline: none;
 }
