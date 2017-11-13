@@ -39,7 +39,7 @@ import { TableColumnDirective } from './table-column.directive';
 })
 export class TableComponent {
   public columns: any[];
-  public sections: any[];
+  private sections: any[];
 
   @ContentChildren(TableColumnDirective)
   set columnTemplates(val: QueryList<TableColumnDirective>) {
@@ -78,12 +78,24 @@ export class TableComponent {
       } else {
         column.desc = !column.desc;
       }
-      let arr = [...this.rows];
-      naturalSort(arr, column.prop);
-      if (column.desc) {
-        arr.reverse();
-      }
-      this.rows = arr;
+      console.log(column.prop);
+      this.sections = this.sections.map((sec) => {
+        let arr = [...sec.rows];
+        naturalSort(arr, column.prop);
+        if (column.desc) {
+          console.log('reverse!!!!!');
+          arr.reverse();
+        }
+        arr.forEach((a) => console.log(a[column.prop]));
+        sec.rows = arr;
+        return sec;
+      })
+      // let arr = [...this.rows];
+      // naturalSort(arr, column.prop);
+      // if (column.desc) {
+      //   arr.reverse();
+      // }
+      // this.rows = arr;
     }
   }
 

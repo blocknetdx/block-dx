@@ -29,35 +29,35 @@
   </header>
 
   <app-table [rows]="rows">
-    <app-table-column [classList]="'col-2 align-left'">
+    <app-table-column [prop]="'coin'" [classList]="'col-2 align-left'">
       <ng-template columnHeader>Coin</ng-template>
       <ng-template let-row="row" columnCell>
         <span>{{row.coin}}</span>
       </ng-template>
     </app-table-column>
 
-    <app-table-column [classList]="'col-2 align-left'">
+    <app-table-column [prop]="'currency'" [classList]="'col-2 align-left'">
       <ng-template columnHeader>Currency</ng-template>
       <ng-template let-row="row" columnCell>
         <span>{{row.currency}}</span>
       </ng-template>
     </app-table-column>
 
-    <app-table-column [classList]="'col-3'">
+    <app-table-column [prop]="'last_price'" [classList]="'col-3'">
       <ng-template columnHeader>Last Price</ng-template>
       <ng-template let-row="row" columnCell>
         <span>{{row.last_price}}</span>
       </ng-template>
     </app-table-column>
 
-    <app-table-column [classList]="'col-3'">
+    <app-table-column [prop]="'volume'" [classList]="'col-3'">
       <ng-template columnHeader>Volume</ng-template>
       <ng-template let-row="row" columnCell>
         <span>{{row.volume}}</span>
       </ng-template>
     </app-table-column>
 
-    <app-table-column [classList]="'col-2'">
+    <app-table-column [prop]="'change'" [classList]="'col-2'">
       <ng-template columnHeader>% Change</ng-template>
       <ng-template let-row="row" columnCell>
         <span>{{row.change}}</span>
