@@ -87,7 +87,11 @@ export class PairSelectorComponent {
   }
 
   formatRow(row) {
-    if (row) return `${row.currency.capitalize()} (${row.coin.toUpperCase()})`;
+    if (typeof row === 'object') {
+      return `${row.currency.capitalize()} (${row.coin.toUpperCase()})`
+    } else if(typeof row === 'string') {
+      return row;
+    }
     return null;
   }
 
