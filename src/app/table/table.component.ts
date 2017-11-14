@@ -26,7 +26,10 @@ import { TableColumnDirective } from './table-column.directive';
           <div class="bn-table__section-title" *ngIf="section.title != 'undefined'">
             <div class="col-12">{{section.title}}</div>
           </div>
-          <div class="bn-table__row" (click)="rowSelected(row)" *ngFor="let row of section.rows">
+          <div class="bn-table__row"
+            [class.selectable]="selectable"
+            (click)="rowSelected(row)"
+            *ngFor="let row of section.rows">
             <div class="bn-table__cell {{col.classList}}" *ngFor="let col of columns">
               <ng-template *ngTemplateOutlet="col.cellTemplate; context: {row: row}"></ng-template>
             </div>

@@ -1,4 +1,7 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import {
+  Component, OnInit, ViewEncapsulation,
+  ElementRef, ViewChildren, QueryList
+} from '@angular/core';
 
 import { fadeInOut } from '../animations';
 
@@ -9,16 +12,28 @@ import { fadeInOut } from '../animations';
   animations: [fadeInOut]
 })
 export class PairSelectorComponent implements OnInit {
+  @ViewChildren('input') public inputs: QueryList<ElementRef>;
 
-  public active: boolean;
   public symbols: string[] = ['ETH', 'BTC'];
   public rows: any[];
   public model: {coinA?: string, coinB?: string};
+  public activeInputKey: string;
+
+  private _active: boolean;
+  public get active(): boolean { return this._active; }
+  public set active(val: boolean) {
+    this._active = val;
+    this.model = {};
+    if (val) {
+      setTimeout(() => {
+        this.inputs.first.nativeElement.focus();
+      });
+    }
+  }
 
   constructor() { }
 
   ngOnInit() {
-    this.model = {};
     this.rows = Array.from(Array(50)).map((obj, idx) => {
       return {
         coin: makeid(),
@@ -32,7 +47,16 @@ export class PairSelectorComponent implements OnInit {
   }
 
   onRowSelect(row) {
-    console.log('Row selected', row.coin);
+    if (this.activeInputKey) {
+      this.model[this.activeInputKey] = row.coin;
+      if (this.activeInputKey === 'coinA') {
+        setTimeout(() => {
+          this.inputs.last.nativeElement.focus();
+        });
+      } else {
+        this.activeInputKey = null;
+      }
+    }
   }
 
   onSubmit() {

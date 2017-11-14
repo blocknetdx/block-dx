@@ -15,7 +15,9 @@
           <div class="input-group">
             <input name="coinA" type="text"
               required placeholder="Select first coin"
-              #coinA="ngModel"
+              tabindex="1"
+              (focus)="activeInputKey = 'coinA'"
+              #coinA="ngModel" #input
               [(ngModel)]="model.coinA">
           </div>
         </div>
@@ -23,12 +25,15 @@
           <div class="input-group">
             <input name="coinB" type="text"
               required placeholder="second coin"
+              tabindex="2"
+              (focus)="activeInputKey = 'coinB'"
               [disabled]="!coinA.valid"
+              #coinB="ngModel" #input
               [(ngModel)]="model.coinB">
           </div>
         </div>
         <div class="col-4">
-          <button type="submit" [disabled]="!pairForm.form.valid">Select</button>
+          <button tabindex="0" type="submit" [disabled]="!pairForm.form.valid">Select</button>
         </div>
       </div>
     </form>

@@ -64,13 +64,17 @@
 
   &__row {
     padding: 0 13px;
+    cursor: default;
+    &.selectable {
+      cursor: pointer;
+    }
     &:hover {
       background-color: rgba(255,255,255,0.04);
     }
   }
 
   &__cell {
-    cursor: default;
+    cursor: inherit;
     /deep/ .material-icons {
       font-size: 1.2em;
       vertical-align: text-bottom;
