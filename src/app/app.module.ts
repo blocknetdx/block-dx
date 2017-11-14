@@ -6,6 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { LayoutModule } from '@angular/cdk/layout';
 import { DecimalPipe } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormsModule } from '@angular/forms';
 
 
 // Imports for loading & configuring the in-memory web api
@@ -72,6 +73,7 @@ import { PairSelectorComponent } from './pair-selector/pair-selector.component';
     HttpClientModule,
     HttpModule,
     BrowserAnimationsModule,
+    FormsModule,
     LayoutModule,
     InMemoryWebApiModule.forRoot(InMemoryDataService),
     AppRoutingModule

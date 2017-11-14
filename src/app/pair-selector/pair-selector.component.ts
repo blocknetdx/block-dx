@@ -13,10 +13,12 @@ export class PairSelectorComponent implements OnInit {
   public active: boolean;
   public symbols: string[] = ['ETH', 'BTC'];
   public rows: any[];
+  public model: {coinA?: string, coinB?: string};
 
   constructor() { }
 
   ngOnInit() {
+    this.model = {};
     this.rows = Array.from(Array(50)).map((obj, idx) => {
       return {
         coin: makeid(),
@@ -31,6 +33,10 @@ export class PairSelectorComponent implements OnInit {
 
   onRowSelect(row) {
     console.log('Row selected', row.coin);
+  }
+
+  onSubmit() {
+    console.log('submit form', this.model);
   }
 
 }

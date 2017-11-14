@@ -17,8 +17,13 @@ button[type="submit"] {
   width: 100%;
 }
 
-input:focus {
-  outline: none;
+input {
+  &[disabled] {
+    opacity: 0.4;
+  }
+  &:focus {
+    outline: none;
+  }
 }
 
 input[type="text"] {

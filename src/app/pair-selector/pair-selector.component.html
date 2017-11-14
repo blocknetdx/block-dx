@@ -9,20 +9,26 @@
 
 <div [@fadeInOut] class="pair-container" *ngIf="active">
   <header>
-    <form>
+    <form (ngSubmit)="onSubmit()" #pairForm="ngForm">
       <div class="form-group row">
         <div class="col-4">
           <div class="input-group">
-            <input type="text" placeholder="Select first coin">
+            <input name="coinA" type="text"
+              required placeholder="Select first coin"
+              #coinA="ngModel"
+              [(ngModel)]="model.coinA">
           </div>
         </div>
         <div class="col-4">
           <div class="input-group">
-            <input type="text" placeholder="second coin">
+            <input name="coinB" type="text"
+              required placeholder="second coin"
+              [disabled]="!coinA.valid"
+              [(ngModel)]="model.coinB">
           </div>
         </div>
         <div class="col-4">
-          <button type="submit">Select</button>
+          <button type="submit" [disabled]="!pairForm.form.valid">Select</button>
         </div>
       </div>
     </form>
@@ -32,7 +38,7 @@
     [rows]="rows"
     [selectable]="true"
     (onRowSelect)="onRowSelect($event)">
-    
+
     <app-table-column [prop]="'coin'" [classList]="'col-2 align-left'">
       <ng-template columnHeader>Coin</ng-template>
       <ng-template let-row="row" columnCell>

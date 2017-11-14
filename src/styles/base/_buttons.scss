@@ -9,4 +9,13 @@ button, .btn, [class^="btn-"], [class*=" btn-"] {
   text-transform: uppercase;
   padding: 0 15px;
   cursor: pointer;
+
+  &[disabled] {
+    opacity: 0.4;
+    cursor: default;
+  }
+
+  &:focus {
+    outline: none;
+  }
 }
