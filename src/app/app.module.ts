@@ -40,6 +40,7 @@ import { TableColumnDirective } from './table/table-column.directive';
 import { TableColumnHeaderDirective } from './table/table-column-header.directive';
 import { TableColumnCellDirective } from './table/table-column-cell.directive';
 import { PairSelectorComponent } from './pair-selector/pair-selector.component';
+import { ValidCoinDirective } from './pair-selector/valid-coin.directive';
 
 
 @NgModule({
@@ -66,7 +67,8 @@ import { PairSelectorComponent } from './pair-selector/pair-selector.component';
     TableColumnDirective,
     TableColumnHeaderDirective,
     TableColumnCellDirective,
-    PairSelectorComponent
+    PairSelectorComponent,
+    ValidCoinDirective
   ],
   imports: [
     BrowserModule,

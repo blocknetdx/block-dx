@@ -9,13 +9,14 @@
 
 <div [@fadeInOut] class="pair-container" *ngIf="active">
   <header>
-    <form (ngSubmit)="onSubmit()" #pairForm="ngForm">
+    <form (ngSubmit)="onSubmit()" #pairForm="ngForm" novalidate>
       <div class="form-group row">
         <div class="col-4">
           <div class="input-group">
             <input name="coinA" type="text"
               required placeholder="Select first coin"
               tabindex="1" autocomplete="off"
+              validCoin="{{rows}}"
               (focus)="activeInputKey = 'coinA'"
               (keyup.ArrowDown)="onArrowDown($event)"
               #coinA="ngModel" #input
@@ -52,7 +53,9 @@
     <app-table-column [prop]="'coin'" [classList]="'col-2 align-left'">
       <ng-template columnHeader>Coin</ng-template>
       <ng-template let-row="row" columnCell>
-        <span>{{row.coin}}</span>
+        <span class="coin-cell">
+          <span *ngIf="coinA.valid">{{model.coinA.coin}}/</span>{{row.coin}}
+        </span>
       </ng-template>
     </app-table-column>
 
