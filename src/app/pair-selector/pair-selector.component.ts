@@ -48,10 +48,12 @@ export class PairSelectorComponent implements OnInit {
     this.filteredRows = this.rows;
   }
 
-  filterCoins() {
+  filterCoins(key, val) {
+    this.model[key] = val;
+
     this.filteredRows = this.rows.filter((row) => {
-      if (this.model.coinA.length <= 0) return true;
-      return row.coin.indexOf(this.model.coinA) >= 0;
+      if (this.model[key].length <= 0) return true;
+      return row.coin.indexOf(this.model[key]) >= 0;
     });
   }
 

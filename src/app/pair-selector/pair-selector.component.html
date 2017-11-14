@@ -16,10 +16,11 @@
             <input name="coinA" type="text"
               required placeholder="Select first coin"
               tabindex="1" autocomplete="off"
-              (keyup)="filterCoins()"
               (focus)="activeInputKey = 'coinA'"
               #coinA="ngModel" #input
-              [(ngModel)]="model.coinA">
+              [ngModel]="model.coinA"
+              (ngModelChange)="filterCoins('coinA', $event)">
+            <span class="suggest">{{coinASuggest}}</span>
           </div>
         </div>
         <div class="col-4">
@@ -30,7 +31,9 @@
               (focus)="activeInputKey = 'coinB'"
               [disabled]="!coinA.valid"
               #coinB="ngModel" #input
-              [(ngModel)]="model.coinB">
+              [ngModel]="model.coinB"
+              (ngModelChange)="filterCoins('coinB', $event)">
+            <span class="suggest">{{coinASuggest}}</span>
           </div>
         </div>
         <div class="col-4">
