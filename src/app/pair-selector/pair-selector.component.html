@@ -17,10 +17,10 @@
               required placeholder="Select first coin"
               tabindex="1" autocomplete="off"
               (focus)="activeInputKey = 'coinA'"
+              (keyup.ArrowDown)="onArrowDown($event)"
               #coinA="ngModel" #input
               [ngModel]="model.coinA"
               (ngModelChange)="filterCoins('coinA', $event)">
-            <span class="suggest">{{coinASuggest}}</span>
           </div>
         </div>
         <div class="col-4">
@@ -29,21 +29,22 @@
               required placeholder="second coin"
               tabindex="2" autocomplete="off"
               (focus)="activeInputKey = 'coinB'"
+              (keyup.ArrowDown)="onArrowDown($event)"
               [disabled]="!coinA.valid"
               #coinB="ngModel" #input
               [ngModel]="model.coinB"
               (ngModelChange)="filterCoins('coinB', $event)">
-            <span class="suggest">{{coinBSuggest}}</span>
           </div>
         </div>
         <div class="col-4">
-          <button tabindex="0" type="submit" [disabled]="!pairForm.form.valid">Select</button>
+          <button #submit tabindex="0" type="submit" [disabled]="!pairForm.form.valid">Select</button>
         </div>
       </div>
     </form>
   </header>
 
   <app-table
+    #pairTable
     [rows]="filteredRows"
     [selectable]="true"
     (onRowSelect)="onRowSelect($event)">

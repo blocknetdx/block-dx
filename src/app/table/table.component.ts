@@ -1,6 +1,6 @@
 import {
-  Component, ContentChild, ContentChildren,
-  QueryList, Input, Output, EventEmitter
+  Component, ContentChild, ContentChildren, ViewChildren,
+  QueryList, Input, Output, EventEmitter, ElementRef
 } from '@angular/core';
 
 import { naturalSort } from '../util';
@@ -9,7 +9,9 @@ import { TableColumnDirective } from './table-column.directive';
 @Component({
   selector: 'app-table',
   template: `
-    <div class="bn-table">
+    <div class="bn-table"
+      (keydown.ArrowUp)="focusNextRow($event)"
+      (keydown.ArrowDown)="focusNextRow($event)">
       <div class="bn-table__header">
         <div (click)="sort(col)"
           [class]="col.classList"
@@ -26,8 +28,10 @@ import { TableColumnDirective } from './table-column.directive';
           <div class="bn-table__section-title" *ngIf="section.title != 'undefined'">
             <div class="col-12">{{section.title}}</div>
           </div>
-          <div class="bn-table__row"
+          <div class="bn-table__row" #rowRef
+            tabindex="-1"
             [class.selectable]="selectable"
+            (keyup.enter)="rowSelected(row)"
             (click)="rowSelected(row)"
             *ngFor="let row of section.rows">
             <div class="bn-table__cell {{col.classList}}" *ngFor="let col of columns">
@@ -41,6 +45,9 @@ import { TableColumnDirective } from './table-column.directive';
   styleUrls: ['./table.component.scss']
 })
 export class TableComponent {
+  @ViewChildren('rowRef')
+  private rowRefs: QueryList<ElementRef>
+
   @Output('onRowSelect')
   public onRowSelect: EventEmitter<any> = new EventEmitter();
 
@@ -48,6 +55,7 @@ export class TableComponent {
 
   public columns: any[];
   private sections: any[];
+  private rowFocusIndex: number = 0;
 
   @ContentChildren(TableColumnDirective)
   set columnTemplates(val: QueryList<TableColumnDirective>) {
@@ -75,6 +83,22 @@ export class TableComponent {
   constructor() { }
 
   ngOnInit() {
+  }
+
+  focusNextRow(e?: any) {
+    if (e) {
+      e.preventDefault();
+      if (e.code === 'ArrowDown') {
+        this.rowFocusIndex += 1;
+        if (this.rowFocusIndex > this.rows.length-1) this.rowFocusIndex = 0;
+      } else if (e.code === 'ArrowUp') {
+        this.rowFocusIndex -= 1;
+        if (this.rowFocusIndex < 0) this.rowFocusIndex = this.rows.length-1;
+      }
+    } else {
+      this.rowFocusIndex = 0;
+    }
+    this.rowRefs.find((r, i) => i === this.rowFocusIndex).nativeElement.focus();
   }
 
   sort(column) {

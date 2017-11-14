@@ -1,9 +1,10 @@
 import {
-  Component, OnInit, ViewEncapsulation,
+  Component, ViewChild,
   ElementRef, ViewChildren, QueryList
 } from '@angular/core';
 
 import { fadeInOut } from '../animations';
+import { TableComponent } from '../table/table.component';
 
 @Component({
   selector: 'app-pair-selector',
@@ -11,7 +12,9 @@ import { fadeInOut } from '../animations';
   styleUrls: ['./pair-selector.component.scss'],
   animations: [fadeInOut]
 })
-export class PairSelectorComponent implements OnInit {
+export class PairSelectorComponent {
+  @ViewChild('pairTable') public pairTable: TableComponent;
+  @ViewChild('submit') public submit: ElementRef;
   @ViewChildren('input') public inputs: QueryList<ElementRef>;
 
   public symbols: string[] = ['ETH', 'BTC'];
@@ -59,19 +62,23 @@ export class PairSelectorComponent implements OnInit {
       const currencyIdx = row.currency.toLowerCase().indexOf(val.toLowerCase());
       return coinIdx >= 0 || currencyIdx >= 0;
     });
-    if (this.filteredRows.length > 0 && val.length >= 2) {
-      this[key+'Suggest'] = this.filteredRows[0].coin;
-    } else {
-      this[key+'Suggest'] = '';
-    }
+  }
+
+  onArrowDown(e) {
+    if (e) e.preventDefault();
+    this.pairTable.focusNextRow();
   }
 
   onRowSelect(row) {
     if (this.activeInputKey) {
-      this.model[this.activeInputKey] = row.coin;
+      this.model[this.activeInputKey] = row;
       if (this.activeInputKey === 'coinA') {
         setTimeout(() => {
           this.inputs.last.nativeElement.focus();
+        });
+      } else if (this.activeInputKey === 'coinB') {
+        setTimeout(() => {
+          this.submit.nativeElement.focus();
         });
       } else {
         this.activeInputKey = null;
