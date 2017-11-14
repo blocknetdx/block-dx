@@ -29,6 +29,10 @@ export class PairSelectorComponent implements OnInit {
     });
   }
 
+  onRowSelect(row) {
+    console.log('Row selected', row.coin);
+  }
+
 }
 
 function makeid() {
