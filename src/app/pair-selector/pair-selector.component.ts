@@ -19,6 +19,8 @@ export class PairSelectorComponent implements OnInit {
   public filteredRows: any[];
   public model: {coinA?: string, coinB?: string};
   public activeInputKey: string;
+  public coinASuggest: string;
+  public coinBSuggest: string;
 
   private _active: boolean;
   public get active(): boolean { return this._active; }
@@ -38,7 +40,7 @@ export class PairSelectorComponent implements OnInit {
     this.rows = Array.from(Array(50)).map((obj, idx) => {
       return {
         coin: makeid(),
-        currency: 'Bitcoin',
+        currency: nameGenerator(),
         last_price: 0.00020220,
         volume: 30003,
         change: 1.508,
@@ -48,13 +50,20 @@ export class PairSelectorComponent implements OnInit {
     this.filteredRows = this.rows;
   }
 
-  filterCoins(key, val) {
+  filterCoins(key: string, val: string) {
     this.model[key] = val;
 
     this.filteredRows = this.rows.filter((row) => {
-      if (this.model[key].length <= 0) return true;
-      return row.coin.indexOf(this.model[key]) >= 0;
+      if (val.length <= 0) return true;
+      const coinIdx = row.coin.toLowerCase().indexOf(val.toLowerCase());
+      const currencyIdx = row.currency.toLowerCase().indexOf(val.toLowerCase());
+      return coinIdx >= 0 || currencyIdx >= 0;
     });
+    if (this.filteredRows.length > 0 && val.length >= 2) {
+      this[key+'Suggest'] = this.filteredRows[0].coin;
+    } else {
+      this[key+'Suggest'] = '';
+    }
   }
 
   onRowSelect(row) {
@@ -84,4 +93,10 @@ function makeid() {
     text += possible.charAt(Math.floor(Math.random() * possible.length));
 
   return text;
+}
+
+function nameGenerator() {
+  var things = ['basin','minute','certain','callous','judicious','deranged','worm','enchanting','gabby','skinny','iron','motion','ahead','excited','medical','leather','mist','secretive','ripe','terrify','supreme','plough','mellow','inquisitive','quill'];
+  var thing = things[Math.floor(Math.random()*things.length)];
+  return thing;
 }

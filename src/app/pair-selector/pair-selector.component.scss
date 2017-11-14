@@ -146,3 +146,12 @@ app-table {
 input {
   font-family: $open-sans;
 }
+
+.suggest {
+  font: 12px/1em $open-sans;
+  position: absolute;
+  top: 50%;
+  left: 16px;
+  opacity: 0.4;
+  transform: translateY(-50%);
+}
