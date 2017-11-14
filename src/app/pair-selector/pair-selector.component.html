@@ -15,7 +15,8 @@
           <div class="input-group">
             <input name="coinA" type="text"
               required placeholder="Select first coin"
-              tabindex="1"
+              tabindex="1" autocomplete="off"
+              (keyup)="filterCoins()"
               (focus)="activeInputKey = 'coinA'"
               #coinA="ngModel" #input
               [(ngModel)]="model.coinA">
@@ -25,7 +26,7 @@
           <div class="input-group">
             <input name="coinB" type="text"
               required placeholder="second coin"
-              tabindex="2"
+              tabindex="2" autocomplete="off"
               (focus)="activeInputKey = 'coinB'"
               [disabled]="!coinA.valid"
               #coinB="ngModel" #input
@@ -40,7 +41,7 @@
   </header>
 
   <app-table
-    [rows]="rows"
+    [rows]="filteredRows"
     [selectable]="true"
     (onRowSelect)="onRowSelect($event)">
 

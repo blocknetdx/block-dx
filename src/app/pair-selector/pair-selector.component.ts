@@ -16,6 +16,7 @@ export class PairSelectorComponent implements OnInit {
 
   public symbols: string[] = ['ETH', 'BTC'];
   public rows: any[];
+  public filteredRows: any[];
   public model: {coinA?: string, coinB?: string};
   public activeInputKey: string;
 
@@ -43,6 +44,14 @@ export class PairSelectorComponent implements OnInit {
         change: 1.508,
         section: idx <= 8 ? 'My Wallet' : 'All Coins'
       }
+    });
+    this.filteredRows = this.rows;
+  }
+
+  filterCoins() {
+    this.filteredRows = this.rows.filter((row) => {
+      if (this.model.coinA.length <= 0) return true;
+      return row.coin.indexOf(this.model.coinA) >= 0;
     });
   }
 
