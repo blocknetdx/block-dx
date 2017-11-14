@@ -19,7 +19,7 @@
               (focus)="activeInputKey = 'coinA'"
               (keyup.ArrowDown)="onArrowDown($event)"
               #coinA="ngModel" #input
-              [ngModel]="model.coinA"
+              [ngModel]="formatRow(model.coinA)"
               (ngModelChange)="filterCoins('coinA', $event)">
           </div>
         </div>
@@ -32,7 +32,7 @@
               (keyup.ArrowDown)="onArrowDown($event)"
               [disabled]="!coinA.valid"
               #coinB="ngModel" #input
-              [ngModel]="model.coinB"
+              [ngModel]="formatRow(model.coinB)"
               (ngModelChange)="filterCoins('coinB', $event)">
           </div>
         </div>

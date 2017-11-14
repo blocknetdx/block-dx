@@ -86,12 +86,20 @@ export class PairSelectorComponent {
     }
   }
 
+  formatRow(row) {
+    if (row) return `${row.currency.capitalize()} (${row.coin.toUpperCase()})`;
+    return null;
+  }
+
   onSubmit() {
     console.log('submit form', this.model);
   }
 
 }
 
+/**
+ * Temporary
+ */
 function makeid() {
   var text = "";
   var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
