@@ -5,6 +5,7 @@ import {
 
 import { fadeInOut } from '../animations';
 import { TableComponent } from '../table/table.component';
+import { CryptocurrencyService } from '../cryptocurrency.service';
 
 @Component({
   selector: 'app-pair-selector',
@@ -37,20 +38,38 @@ export class PairSelectorComponent {
     }
   }
 
-  constructor() { }
+  constructor(
+    private cryptoService: CryptocurrencyService
+  ) { }
 
   ngOnInit() {
-    this.rows = Array.from(Array(50)).map((obj, idx) => {
-      return {
-        coin: makeid(),
-        currency: nameGenerator(),
-        last_price: 0.00020220,
-        volume: 30003,
-        change: 1.508,
-        section: idx <= 8 ? 'My Wallet' : 'All Coins'
-      }
-    });
-    this.filteredRows = this.rows;
+    this.cryptoService.getCurrencies().first()
+      .subscribe((data) => {
+        this.rows = data.map((coin) => {
+          return {
+            coin: coin.symbol,
+            currency: coin.name,
+            last_price: coin.last,
+            volume: coin.volume,
+            change: coin.change,
+            section: 'All Coins'
+          };
+        });
+
+        this.filteredRows = this.rows;
+      });
+
+    // this.rows = Array.from(Array(50)).map((obj, idx) => {
+    //   return {
+    //     coin: makeid(),
+    //     currency: nameGenerator(),
+    //     last_price: 0.00020220,
+    //     volume: 30003,
+    //     change: 1.508,
+    //     section: idx <= 8 ? 'My Wallet' : 'All Coins'
+    //   }
+    // });
+    // this.filteredRows = this.rows;
   }
 
   filterCoins(key: string, val: string) {

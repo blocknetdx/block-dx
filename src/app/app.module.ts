@@ -8,7 +8,6 @@ import { DecimalPipe } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 
-
 // Imports for loading & configuring the in-memory web api
 import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { InMemoryDataService }  from './in-memory-data.service';
@@ -41,6 +40,7 @@ import { TableColumnHeaderDirective } from './table/table-column-header.directiv
 import { TableColumnCellDirective } from './table/table-column-cell.directive';
 import { PairSelectorComponent } from './pair-selector/pair-selector.component';
 import { ValidCoinDirective } from './pair-selector/valid-coin.directive';
+import { CryptocurrencyService } from './cryptocurrency.service';
 
 
 @NgModule({
@@ -84,7 +84,8 @@ import { ValidCoinDirective } from './pair-selector/valid-coin.directive';
     DecimalPipe,
     BreakpointService,
     CurrentpriceService,
-    BlockCurrencyPipe
+    BlockCurrencyPipe,
+    CryptocurrencyService
   ],
   bootstrap: [AppComponent]
 })

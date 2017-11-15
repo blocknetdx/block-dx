@@ -357,7 +357,185 @@ export class InMemoryDataService implements InMemoryDbService {
       	"status": "open",
       	"settled": false
       }
-		]
+		];
+
+		const currency = [
+			{
+				symbol: 'DGB',
+				name: 'DigiByte',
+				last: 1439.726,
+				volume: 1182.167,
+				change: 1.1200
+			},
+			{
+				symbol: 'OMG',
+				name: 'OmiseGO',
+				last: 1182.167,
+				volume: 1070.861,
+				change: -0.0744
+			},
+			{
+				symbol: 'LTC',
+				name: 'Litecoin',
+				last: 1070.861,
+				volume: 1038.665,
+				change: -0.0070
+			},
+			{
+				symbol: 'ADA',
+				name: 'Cardano',
+				last: 1038.665,
+				volume: 998.691,
+				change: 0.0710
+			},
+			{
+				symbol: 'XLM',
+				name: 'Lumen',
+				last: 998.691,
+				volume: 998.591,
+				change: -0.0430
+			},
+			{
+				symbol: 'XRP',
+				name: 'Ripple',
+				last: 998.591,
+				volume: 997.691,
+				change: -0.4338
+			},
+			{
+				symbol: 'ETH',
+				name: 'Etherium',
+				last: 997.691,
+				volume: 986.456,
+				change: -0.0430
+			},
+			{
+				symbol: 'MONA',
+				name: 'Monacoin',
+				last: 986.456,
+				volume: 978.456,
+				change: -0.4338
+			},
+			{
+				symbol: 'NEO',
+				name: 'Neo',
+				last: 978.456,
+				volume: 931.154,
+				change: 1.1200
+			},
+			{
+				symbol: 'QTUM',
+				name: 'Quantum',
+				last: 931.154,
+				volume: 931.691,
+				change: -0.0744
+			},
+			{
+				symbol: 'DGB',
+				name: 'DigiByte',
+				last: 16498.691,
+				volume: 930.591,
+				change: -0.0070
+			},
+			{
+				symbol: 'OMG',
+				name: 'OmiseGO',
+				last: 9128.084,
+				volume: 920.691,
+				change: 0.0710
+			},
+			{
+				symbol: 'LTC',
+				name: 'Litecoin',
+				last: 4369.267,
+				volume: 920.456,
+				change: -0.0430
+			},
+			{
+				symbol: 'ADA',
+				name: 'Cardano',
+				last: 2283.857,
+				volume: 919.456,
+				change: -0.4338
+			},
+			{
+				symbol: 'XRP',
+				name: 'Ripple',
+				last: 1833.960,
+				volume: 919.154,
+				change: -0.0430
+			},
+			{
+				symbol: 'ETH',
+				name: 'Etherium',
+				last: 1493.858,
+				volume: 918.691,
+				change: -0.4338
+			},
+			{
+				symbol: 'MONA',
+				name: 'Monacoin',
+				last: 978.456,
+				volume: 931.691,
+				change: 1.1200
+			},
+			{
+				symbol: 'NEO',
+				name: 'Neo',
+				last: 931.154,
+				volume: 930.591,
+				change: -0.0744
+			},
+			{
+				symbol: 'QTUM',
+				name: 'Quantum',
+				last: 16498.691,
+				volume: 920.691,
+				change: -0.0070
+			},
+			{
+				symbol: 'DGB',
+				name: 'DigiByte',
+				last: 9128.084,
+				volume: 920.456,
+				change: 0.0710
+			},
+			{
+				symbol: 'OMG',
+				name: 'OmiseGO',
+				last: 4369.267,
+				volume: 919.456,
+				change: -0.0430
+			},
+			{
+				symbol: 'LTC',
+				name: 'Litecoin',
+				last: 2283.857,
+				volume: 919.154,
+				change: -0.4338
+			},
+			{
+				symbol: 'ADA',
+				name: 'Cardano',
+				last: 1833.960,
+				volume: 918.691,
+				change: -0.0430
+			},
+			{
+				symbol: 'XRP',
+				name: 'Ripple',
+				last: 1493.858,
+				volume: 931.154,
+				change: -0.4338
+			},
+			{
+				symbol: 'ETH',
+				name: 'Etherium',
+				last: 978.456,
+				volume: 931.691,
+				change: 1.1200
+			}
+		];
 
 		return {
       tradehistory_ETH_BTC,
@@ -370,7 +548,8 @@ export class InMemoryDataService implements InMemoryDbService {
       stats_ETH,
       stats_BTC,
       openorders_ETH_BTC,
-      openorders_BTC_USD
+      openorders_BTC_USD,
+			currency
     };
 	}
 }

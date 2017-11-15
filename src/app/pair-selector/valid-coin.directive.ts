@@ -12,7 +12,7 @@ import { NG_VALIDATORS, Validator, AbstractControl, ValidatorFn } from '@angular
   ]
 })
 export class ValidCoinDirective implements Validator {
-  @Input() validCoin: any;
+  @Input() validCoin: any[];
 
   private validator: ValidatorFn;
 
@@ -21,8 +21,7 @@ export class ValidCoinDirective implements Validator {
   }
 
   validate(control: AbstractControl): {[key: string]: any} {
-    console.log(control, this.validCoin);
-    // return this.forbiddenName ? forbiddenNameValidator(new RegExp(this.forbiddenName, 'i'))(control) : null;
+    console.log(this.validCoin);
     return this.validator(control);
   }
 
