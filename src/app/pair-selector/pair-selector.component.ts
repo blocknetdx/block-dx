@@ -20,7 +20,7 @@ export class PairSelectorComponent {
   @ViewChildren('input') public inputs: QueryList<ElementRef>;
 
   public symbols: string[] = ['ETH', 'BTC'];
-  public rows: any[];
+  public rows: Cryptocurrency[];
   public filteredRows: any[];
   public model: {coinA?: Cryptocurrency, coinB?: Cryptocurrency};
   public activeInputKey: string;
@@ -47,10 +47,10 @@ export class PairSelectorComponent {
     this.cryptoService.getCurrencies().first()
       .subscribe((data) => {
         const user_wallet = data.slice(0,5).map((coin) => {
-          return Object.assign({}, coin, { section: 'My Wallet'});
+          return Object.assign({section: 'My Wallet'}, coin);
         });
         const all_coins = data.map((coin) => {
-          return Object.assign({}, coin, {section: 'All Coins'});
+          return Object.assign({section: 'All Coins'}, coin);
         });
 
         this.rows = [...user_wallet, ...all_coins];
@@ -64,8 +64,8 @@ export class PairSelectorComponent {
 
     this.filteredRows = this.rows.filter((row) => {
       if (val.length <= 0) return true;
-      const coinIdx = row.coin.toLowerCase().indexOf(val.toLowerCase());
-      const currencyIdx = row.currency.toLowerCase().indexOf(val.toLowerCase());
+      const coinIdx = row.symbol.toLowerCase().indexOf(val.toLowerCase());
+      const currencyIdx = row.name.toLowerCase().indexOf(val.toLowerCase());
       return coinIdx >= 0 || currencyIdx >= 0;
     });
   }

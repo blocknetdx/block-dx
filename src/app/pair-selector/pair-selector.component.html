@@ -16,7 +16,7 @@
             <input name="coinA" type="text"
               required placeholder="Select first coin"
               tabindex="1" autocomplete="off"
-              validCoin="{{rows}}"
+              validCoin
               (focus)="activeInputKey = 'coinA'"
               (keyup.ArrowDown)="onArrowDown($event)"
               #coinA="ngModel" #input
@@ -29,6 +29,7 @@
             <input name="coinB" type="text"
               required placeholder="second coin"
               tabindex="2" autocomplete="off"
+              validCoin
               (focus)="activeInputKey = 'coinB'"
               (keyup.ArrowDown)="onArrowDown($event)"
               [disabled]="!coinA.valid"

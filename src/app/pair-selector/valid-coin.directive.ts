@@ -1,44 +1,47 @@
-import { Directive, Input } from '@angular/core';
-import { NG_VALIDATORS, Validator, AbstractControl, ValidatorFn } from '@angular/forms';
+import { Directive, Input, forwardRef } from '@angular/core';
+import { NG_ASYNC_VALIDATORS, Validator, AbstractControl, ValidatorFn, NgModel } from '@angular/forms';
+import { Observable } from 'rxjs/Observable';
+
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/debounceTime';
+import 'rxjs/add/operator/distinctUntilChanged';
+
+import { CryptocurrencyService } from '../cryptocurrency.service';
 
 @Directive({
-  selector: '[validCoin]',
+  selector: '[validCoin][ngModel]',
   providers: [
     {
-      provide: NG_VALIDATORS,
-      useExisting: ValidCoinDirective,
+      provide: NG_ASYNC_VALIDATORS,
+      useExisting: forwardRef(() => ValidCoinDirective),
       multi: true
     }
   ]
 })
 export class ValidCoinDirective implements Validator {
-  @Input() validCoin: any[];
-
   private validator: ValidatorFn;
 
-  constructor() {
-    this.validator = coinValidator();
+  constructor(
+    private cryptoService: CryptocurrencyService
+  ) {
+    this.validator = coinValidator(this.cryptoService);
   }
 
-  validate(control: AbstractControl): {[key: string]: any} {
-    console.log(this.validCoin);
-    return this.validator(control);
+  validate(control: AbstractControl) {
+    return this.validator(control).debounceTime(500).distinctUntilChanged().first();
   }
-
 }
 
-function coinValidator(): ValidatorFn {
-  return (c: AbstractControl) => {
-    let isValid = false;
-
-    if (isValid) {
-      return null;
-    } else {
-      return {
-        coin: {
-          valid: false
-        }
-      }
-    }
+function coinValidator(service: CryptocurrencyService): ValidatorFn {
+  return (c: AbstractControl): Observable<any> => {
+    return service.getCurrencies()
+      .map((data) => {
+        const valid = data.some((d) => d.toString() === c.value);
+        return valid ? null : {
+            coin: {
+              valid: false
+            }
+          }
+      });
   }
 }

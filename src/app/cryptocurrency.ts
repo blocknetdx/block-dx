@@ -5,6 +5,10 @@ export class Cryptocurrency {
   public volume: number;
   public change: number;
 
+  public toString(): string {
+    return `${this.name['capitalize']()} (${this.symbol.toUpperCase()})`;
+  }
+
   public static fromObject(obj: any): Cryptocurrency {
     let inst = new Cryptocurrency();
     Object.assign(inst, obj);
