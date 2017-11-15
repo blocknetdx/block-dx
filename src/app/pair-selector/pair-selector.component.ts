@@ -6,6 +6,7 @@ import {
 import { fadeInOut } from '../animations';
 import { TableComponent } from '../table/table.component';
 import { CryptocurrencyService } from '../cryptocurrency.service';
+import { Cryptocurrency } from '../cryptocurrency';
 
 @Component({
   selector: 'app-pair-selector',
@@ -21,7 +22,7 @@ export class PairSelectorComponent {
   public symbols: string[] = ['ETH', 'BTC'];
   public rows: any[];
   public filteredRows: any[];
-  public model: {coinA?: string, coinB?: string};
+  public model: {coinA?: Cryptocurrency, coinB?: Cryptocurrency};
   public activeInputKey: string;
   public coinASuggest: string;
   public coinBSuggest: string;
@@ -45,31 +46,17 @@ export class PairSelectorComponent {
   ngOnInit() {
     this.cryptoService.getCurrencies().first()
       .subscribe((data) => {
-        this.rows = data.map((coin) => {
-          return {
-            coin: coin.symbol,
-            currency: coin.name,
-            last_price: coin.last,
-            volume: coin.volume,
-            change: coin.change,
-            section: 'All Coins'
-          };
+        const user_wallet = data.slice(0,5).map((coin) => {
+          return Object.assign({}, coin, { section: 'My Wallet'});
         });
+        const all_coins = data.map((coin) => {
+          return Object.assign({}, coin, {section: 'All Coins'});
+        });
+
+        this.rows = [...user_wallet, ...all_coins];
 
         this.filteredRows = this.rows;
       });
-
-    // this.rows = Array.from(Array(50)).map((obj, idx) => {
-    //   return {
-    //     coin: makeid(),
-    //     currency: nameGenerator(),
-    //     last_price: 0.00020220,
-    //     volume: 30003,
-    //     change: 1.508,
-    //     section: idx <= 8 ? 'My Wallet' : 'All Coins'
-    //   }
-    // });
-    // this.filteredRows = this.rows;
   }
 
   filterCoins(key: string, val: string) {
@@ -107,7 +94,7 @@ export class PairSelectorComponent {
 
   formatRow(row) {
     if (typeof row === 'object') {
-      return `${row.currency.capitalize()} (${row.coin.toUpperCase()})`
+      return `${row.name.capitalize()} (${row.symbol.toUpperCase()})`
     } else if(typeof row === 'string') {
       return row;
     }
@@ -118,23 +105,4 @@ export class PairSelectorComponent {
     console.log('submit form', this.model);
   }
 
-}
-
-/**
- * Temporary
- */
-function makeid() {
-  var text = "";
-  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-  for (var i = 0; i < 3; i++)
-    text += possible.charAt(Math.floor(Math.random() * possible.length));
-
-  return text;
-}
-
-function nameGenerator() {
-  var things = ['basin','minute','certain','callous','judicious','deranged','worm','enchanting','gabby','skinny','iron','motion','ahead','excited','medical','leather','mist','secretive','ripe','terrify','supreme','plough','mellow','inquisitive','quill'];
-  var thing = things[Math.floor(Math.random()*things.length)];
-  return thing;
 }
