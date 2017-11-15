@@ -1,11 +1,12 @@
 <nav class="navbar">
-  <div class="navbar-bar">
+  <div class="navbar-bar" [class.menu-active]="pairSelectorActiveState">
     <a class="navbar-brand">
       <img src="assets/icon_blk.png" alt="Blocknet Logo">
     </a>
-    <div *isBp="['xs', 'sm', 'md']">
+    <app-pair-selector (onActiveStatus)="pairSelectorActiveState = $event"></app-pair-selector>
+    <!-- <div *isBp="['xs', 'sm', 'md']">
       <div class="navbar-pricing__upper">{{symbols[0]}} / {{symbols[1]}}</div>
-    </div>
+    </div> -->
     <div class="navbar-collapse__overlay" [class.active]="navCollapsed"></div>
     <div class="collapse navbar-collapse" [class.active]="navCollapsed">
       <a (click)="toggleNav()" class="close"><i class="material-icons">close</i></a>
@@ -36,7 +37,7 @@
   </div>
 
   <div class="navbar-pricing" *ngIf="currentPrice">
-    <app-pair-selector *isBp="['lg', 'xl']"></app-pair-selector>
+    <!-- <app-pair-selector *isBp="['lg', 'xl']"></app-pair-selector> -->
     <!-- <div class="navbar-pricing__cell" *isBp="['lg', 'xl']">
       <div class="navbar-pricing__upper">{{symbols[0]}} / {{symbols[1]}}</div>
       <div class="navbar-pricing__lower">Select Market Pair</div>

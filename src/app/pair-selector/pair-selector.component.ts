@@ -1,6 +1,6 @@
 import {
-  Component, ViewChild,
-  ElementRef, ViewChildren, QueryList
+  Component, ViewChild, ElementRef, EventEmitter,
+  ViewChildren, QueryList, Output
 } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Subject } from 'rxjs/Subject';
@@ -22,6 +22,9 @@ export class PairSelectorComponent {
   @ViewChild('pairForm') public pairForm: NgForm;
   @ViewChildren('input') public inputs: QueryList<ElementRef>;
 
+  @Output('onActiveStatus')
+  public onActiveStatus: EventEmitter<boolean> = new EventEmitter();
+
   public symbols: string[] = ['ETH', 'BTC'];
   public rows: any[];
   public filteredRows: any[];
@@ -31,6 +34,7 @@ export class PairSelectorComponent {
   public coinBSuggest: string;
 
   private _controlStatus: Subject<boolean> = new Subject();
+
   private _active: boolean;
   public get active(): boolean { return this._active; }
   public set active(val: boolean) {
@@ -47,21 +51,20 @@ export class PairSelectorComponent {
                   setTimeout(() => {
                     this.inputs.last.nativeElement.focus();
                   });
+                } else if (key === 'coinB') {
+                  setTimeout(() => {
+                    this.submit.nativeElement.focus();
+                  });
                 }
               }
             });
-        })
-        // console.log(this.pairForm);
-        // this.pairForm.controls.coinA.statusChanges
-        //   .takeUntil(this._controlStatus)
-        //   .subscribe((changes) => {
-        //     console.log('coinA', changes);
-        //   });
+        });
         this.inputs.first.nativeElement.focus();
       });
     } else {
       this._controlStatus.next(true);
     }
+    this.onActiveStatus.emit(val);
   }
 
   constructor(
@@ -107,17 +110,6 @@ export class PairSelectorComponent {
   onRowSelect(row) {
     if (this.activeInputKey) {
       this.model[this.activeInputKey] = row;
-      // if (this.activeInputKey === 'coinA') {
-      //   setTimeout(() => {
-      //     this.inputs.last.nativeElement.focus();
-      //   });
-      // } else if (this.activeInputKey === 'coinB') {
-      //   setTimeout(() => {
-      //     this.submit.nativeElement.focus();
-      //   });
-      // } else {
-      //   this.activeInputKey = null;
-      // }
     }
   }
 

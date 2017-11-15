@@ -22,8 +22,16 @@
   border-bottom: 2px solid rgba(255, 255, 255, 0.24);
 
   @include screen(lg) {
-    padding: 25px 40px;
+    justify-content: flex-start;
+    padding: 18px 40px;
     border-bottom: none;
+  }
+
+  &.menu-active {
+    background: $bn-blue-light5;
+    @include screen(md) {
+      background: inherit;
+    }
   }
 }
 
@@ -39,8 +47,18 @@
   }
 }
 
+app-pair-selector {
+  @include screen(lg) {
+    margin-left: 25px;
+  }
+}
+
 .navbar-toggler {
   display: inline-block;
+  cursor: pointer;
+  @include screen(lg) {
+    margin-left: auto;
+  }
   div {
     width: 17px;
     height: 1px;
@@ -76,7 +94,7 @@
   font-family: $open-sans;
   font-size: 14px;
   line-height: 19px;
-  background-color: #133049;
+  background-color: $bn-blue-light4;
 	box-shadow: -2px 0 4px 0 rgba(0,0,0,0.2);
   z-index: 9999;
   padding: 40px 34px;
@@ -146,7 +164,7 @@
     padding: 0;
     position: absolute;
     top: 0;
-    left: 120px;
+    left: 290px;
   }
 
   &__cell {

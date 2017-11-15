@@ -5,15 +5,14 @@
     <div class="navbar-pricing__upper">{{symbols[0]}} / {{symbols[1]}}</div>
     <div class="navbar-pricing__lower">Select Market Pair</div>
   </div>
-</div>
 
-<div [@fadeInOut] class="pair-container" *ngIf="active">
-  <header>
-    <form (ngSubmit)="onSubmit()" #pairForm="ngForm" novalidate>
-      <div class="form-group row">
-        <div class="col-4">
-          <div class="input-group">
-            <input name="coinA" type="text"
+  <div [@fadeInOut] class="pair-container" *ngIf="active">
+    <header>
+      <form (ngSubmit)="onSubmit()" #pairForm="ngForm" novalidate>
+        <div class="form-group row">
+          <div class="col-4">
+            <div class="input-group">
+              <input name="coinA" type="text"
               required placeholder="Select first coin"
               tabindex="1" autocomplete="off"
               validCoin
@@ -22,11 +21,11 @@
               #coinA="ngModel" #input
               [ngModel]="formatRow(model.coinA)"
               (ngModelChange)="filterCoins('coinA', $event)">
+            </div>
           </div>
-        </div>
-        <div class="col-4">
-          <div class="input-group">
-            <input name="coinB" type="text"
+          <div class="col-4">
+            <div class="input-group">
+              <input name="coinB" type="text"
               required placeholder="second coin"
               tabindex="2" autocomplete="off"
               validCoin
@@ -36,16 +35,16 @@
               #coinB="ngModel" #input
               [ngModel]="formatRow(model.coinB)"
               (ngModelChange)="filterCoins('coinB', $event)">
+            </div>
+          </div>
+          <div class="col-4">
+            <button #submit tabindex="0" type="submit" [disabled]="!pairForm.form.valid">Select</button>
           </div>
         </div>
-        <div class="col-4">
-          <button #submit tabindex="0" type="submit" [disabled]="!pairForm.form.valid">Select</button>
-        </div>
-      </div>
-    </form>
-  </header>
+      </form>
+    </header>
 
-  <app-table
+    <app-table
     #pairTable
     [rows]="filteredRows"
     [selectable]="true"
@@ -90,4 +89,5 @@
 
   </app-table>
 
+</div>
 </div>

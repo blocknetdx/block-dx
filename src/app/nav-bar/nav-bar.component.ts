@@ -15,6 +15,7 @@ export class NavBarComponent {
   @Input() public currentPrice: Currentprice = new Currentprice();
 
   public navCollapsed: boolean;
+  public pairSelectorActiveState: boolean;
 
   constructor(
     private decimalPipe: DecimalPipe
