@@ -2,6 +2,8 @@ import {
   Component, ViewChild,
   ElementRef, ViewChildren, QueryList
 } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { Subject } from 'rxjs/Subject';
 
 import { fadeInOut } from '../animations';
 import { TableComponent } from '../table/table.component';
@@ -17,16 +19,18 @@ import { Cryptocurrency } from '../cryptocurrency';
 export class PairSelectorComponent {
   @ViewChild('pairTable') public pairTable: TableComponent;
   @ViewChild('submit') public submit: ElementRef;
+  @ViewChild('pairForm') public pairForm: NgForm;
   @ViewChildren('input') public inputs: QueryList<ElementRef>;
 
   public symbols: string[] = ['ETH', 'BTC'];
-  public rows: Cryptocurrency[];
+  public rows: any[];
   public filteredRows: any[];
-  public model: {coinA?: Cryptocurrency, coinB?: Cryptocurrency};
+  public model: {coinA?: any, coinB?: any};
   public activeInputKey: string;
   public coinASuggest: string;
   public coinBSuggest: string;
 
+  private _controlStatus: Subject<boolean> = new Subject();
   private _active: boolean;
   public get active(): boolean { return this._active; }
   public set active(val: boolean) {
@@ -34,8 +38,29 @@ export class PairSelectorComponent {
     this.model = {};
     if (val) {
       setTimeout(() => {
+        Object.keys(this.pairForm.controls).forEach((key) => {
+          const control = this.pairForm.controls[key];
+          control.statusChanges.takeUntil(this._controlStatus)
+            .subscribe((status) => {
+              if (status === 'VALID') {
+                if (key === 'coinA') {
+                  setTimeout(() => {
+                    this.inputs.last.nativeElement.focus();
+                  });
+                }
+              }
+            });
+        })
+        // console.log(this.pairForm);
+        // this.pairForm.controls.coinA.statusChanges
+        //   .takeUntil(this._controlStatus)
+        //   .subscribe((changes) => {
+        //     console.log('coinA', changes);
+        //   });
         this.inputs.first.nativeElement.focus();
       });
+    } else {
+      this._controlStatus.next(true);
     }
   }
 
@@ -59,6 +84,10 @@ export class PairSelectorComponent {
       });
   }
 
+  ngAfterViewInit() {
+    console.log(this.pairForm);
+  }
+
   filterCoins(key: string, val: string) {
     this.model[key] = val;
 
@@ -78,17 +107,17 @@ export class PairSelectorComponent {
   onRowSelect(row) {
     if (this.activeInputKey) {
       this.model[this.activeInputKey] = row;
-      if (this.activeInputKey === 'coinA') {
-        setTimeout(() => {
-          this.inputs.last.nativeElement.focus();
-        });
-      } else if (this.activeInputKey === 'coinB') {
-        setTimeout(() => {
-          this.submit.nativeElement.focus();
-        });
-      } else {
-        this.activeInputKey = null;
-      }
+      // if (this.activeInputKey === 'coinA') {
+      //   setTimeout(() => {
+      //     this.inputs.last.nativeElement.focus();
+      //   });
+      // } else if (this.activeInputKey === 'coinB') {
+      //   setTimeout(() => {
+      //     this.submit.nativeElement.focus();
+      //   });
+      // } else {
+      //   this.activeInputKey = null;
+      // }
     }
   }
 
