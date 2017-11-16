@@ -1,7 +1,7 @@
 <div [@fadeInOut] (click)="active = false" class="overlay" *ngIf="active"></div>
 
-<div (click)="active = !active" class="navbar-pricing__cell" [class.active]="active">
-  <div class="navbar-pricing__cell_body">
+<div class="navbar-pricing__cell" [class.active]="active">
+  <div class="navbar-pricing__cell_body" (click)="active = !active">
     <div class="navbar-pricing__upper">{{symbols[0]}} / {{symbols[1]}}</div>
     <div class="navbar-pricing__lower">Select Market Pair</div>
   </div>
@@ -45,49 +45,49 @@
     </header>
 
     <app-table
-    #pairTable
-    [rows]="filteredRows"
-    [selectable]="true"
-    (onRowSelect)="onRowSelect($event)">
+      #pairTable
+      [rows]="filteredRows"
+      [selectable]="true"
+      (onRowSelect)="onRowSelect($event)">
 
-    <app-table-column [prop]="'symbol'" [classList]="'col-2 align-left'">
-      <ng-template columnHeader>Coin</ng-template>
-      <ng-template let-row="row" columnCell>
-        <span class="coin-cell">
-          <span *ngIf="model.coinA && coinA.valid">{{model.coinA.symbol}}/</span>{{row.symbol}}
-        </span>
-      </ng-template>
-    </app-table-column>
+      <app-table-column [prop]="'symbol'" [classList]="'col-2 align-left'">
+        <ng-template columnHeader>Coin</ng-template>
+        <ng-template let-row="row" columnCell>
+          <span class="coin-cell">
+            <span *ngIf="model.coinA && coinA.valid">{{model.coinA.symbol}}/</span>{{row.symbol}}
+          </span>
+        </ng-template>
+      </app-table-column>
 
-    <app-table-column [prop]="'name'" [classList]="'col-2 align-left'">
-      <ng-template columnHeader>Currency</ng-template>
-      <ng-template let-row="row" columnCell>
-        <span class="capitalize">{{row.name}}</span>
-      </ng-template>
-    </app-table-column>
+      <app-table-column [prop]="'name'" [classList]="'col-2 align-left d-none d-lg-block'">
+        <ng-template columnHeader>Currency</ng-template>
+        <ng-template let-row="row" columnCell>
+          <span class="capitalize">{{row.name}}</span>
+        </ng-template>
+      </app-table-column>
 
-    <app-table-column [prop]="'last'" [classList]="'col-3'">
-      <ng-template columnHeader>Last Price</ng-template>
-      <ng-template let-row="row" columnCell>
-        <span>{{row.last}}</span>
-      </ng-template>
-    </app-table-column>
+      <app-table-column [prop]="'last'" [classList]="'col-5 col-lg-3'">
+        <ng-template columnHeader>Last Price</ng-template>
+        <ng-template let-row="row" columnCell>
+          <span>{{row.last}}</span>
+        </ng-template>
+      </app-table-column>
 
-    <app-table-column [prop]="'volume'" [classList]="'col-3'">
-      <ng-template columnHeader>Volume</ng-template>
-      <ng-template let-row="row" columnCell>
-        <span>{{row.volume}}</span>
-      </ng-template>
-    </app-table-column>
+      <app-table-column [prop]="'volume'" [classList]="'col-3 d-none d-lg-block'">
+        <ng-template columnHeader>Volume</ng-template>
+        <ng-template let-row="row" columnCell>
+          <span>{{row.volume}}</span>
+        </ng-template>
+      </app-table-column>
 
-    <app-table-column [prop]="'change'" [classList]="'col-2'">
-      <ng-template columnHeader>% Change</ng-template>
-      <ng-template let-row="row" columnCell>
-        <span>{{row.change | percent:'1.2-2'}}</span>
-      </ng-template>
-    </app-table-column>
+      <app-table-column [prop]="'change'" [classList]="'col-5 col-lg-2'">
+        <ng-template columnHeader>% Change</ng-template>
+        <ng-template let-row="row" columnCell>
+          <span>{{row.change | percent:'1.2-2'}}</span>
+        </ng-template>
+      </app-table-column>
 
-  </app-table>
+    </app-table>
 
-</div>
+  </div>
 </div>
