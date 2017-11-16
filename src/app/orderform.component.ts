@@ -6,12 +6,14 @@ import { CurrentpriceService } from './currentprice.service';
 
 @Component({
   selector: 'orderform',
-  templateUrl: './orderform.component.html'
-  // styleUrls: ['./open-orders.component.scss']
+  templateUrl: './orderform.component.html',
+  styleUrls: ['./orderform.component.scss']
 })
 export class OrderformComponent {
   @Input() public symbols:string[];
   @Input() public currentPrice: Currentprice;
+
+  public selectedTab: string = 'buy';
 
   public title = 'Order Form';
   public totalPrice = 0;
@@ -29,5 +31,9 @@ export class OrderformComponent {
     var enteredValue = event.target.value;
     var currPrice = parseFloat(this.currentPrice.last);
     this.totalPrice = enteredValue * currPrice;
+  }
+
+  onOrderSubmit() {
+
   }
 }

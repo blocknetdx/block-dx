@@ -1,3 +1,7 @@
+a, button {
+  cursor: pointer;
+}
+
 button, .btn, [class^="btn-"], [class*=" btn-"] {
   border: none;
 	background-color: $bn-blue-light1;
@@ -9,7 +13,6 @@ button, .btn, [class^="btn-"], [class*=" btn-"] {
   text-transform: uppercase;
   padding: 0 15px;
   box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
-  cursor: pointer;
 
   &[disabled] {
     opacity: 0.4;

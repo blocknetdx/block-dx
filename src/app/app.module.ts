@@ -7,6 +7,7 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { DecimalPipe } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
+import { MatSelectModule } from '@angular/material';
 
 // Imports for loading & configuring the in-memory web api
 import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
@@ -77,6 +78,7 @@ import { CryptocurrencyService } from './cryptocurrency.service';
     BrowserAnimationsModule,
     FormsModule,
     LayoutModule,
+    MatSelectModule,
     InMemoryWebApiModule.forRoot(InMemoryDataService),
     AppRoutingModule
   ],
