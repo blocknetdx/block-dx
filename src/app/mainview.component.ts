@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-import { Location }                 from '@angular/common';
 
 import { Currentprice } from './currentprice';
 import { CurrentpriceService } from './currentprice.service';
@@ -11,14 +10,14 @@ import { CurrentpriceService } from './currentprice.service';
   styleUrls: ['./mainview.component.scss']
 })
 export class MainviewComponent {
+  @Input()
   public symbols:string[];
-  public currPrice: Currentprice;
 
-  private breakpoint: string;
+  @Input()
+  public currPrice: Currentprice;
 
   constructor(
     private route: ActivatedRoute,
-    private location: Location,
     private priceService: CurrentpriceService
   ) {}
 
@@ -38,6 +37,6 @@ export class MainviewComponent {
     this.currPrice = new Currentprice();
     this.priceService.getCurrentprice(this.symbols).then(cp => {
       this.currPrice = cp[0];
-    })
+    });
   }
 }
