@@ -27,10 +27,10 @@
     &.content {
       width: 100%;
       @include screen(lg) {
-        width: calc(100% - 280px);
+        width: calc(100% - 320px);
       }
       @include screen(xl) {
-        width: calc(100% - 320px);
+        width: calc(100% - 338px);
       }
     }
   }
@@ -47,10 +47,10 @@
 
     &.sidebar {
       @include screen(lg) {
-        width: 280px;
+        width: 320px;
       }
       @include screen(xl) {
-        width: 320px;
+        width: 338px;
       }
       /deep/ .bn-card {
         height: auto;

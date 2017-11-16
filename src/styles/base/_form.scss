@@ -4,10 +4,17 @@ form {
       display: inline-block;
     }
   }
+
+  .spacer {
+    height: 24px;
+    display: block;
+  }
 }
 
 .input-group {
   position: relative;
+  background-color: $bn-blue-light4;
+
   input {
     width: 100%;
   }
@@ -24,6 +31,8 @@ form {
   .col-form-label {
     font: 12px/40px $open-sans;
     margin: 0;
+    padding-left: 12px;
+    white-space: nowrap;
   	background-color: rgba(255,255,255,0.06);
   }
 
@@ -48,7 +57,7 @@ input {
 input[type="text"] {
   border: none;
   padding: 13px 16px;
-  background-color: #133049;
+  background: none;
   font: 12px/14px $roboto-mono;
   color: white;
   &::placeholder {

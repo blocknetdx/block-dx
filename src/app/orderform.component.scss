@@ -5,7 +5,11 @@
   position: relative;
   top: auto;
   bottom: auto;
-  padding: 24px 16px;
+  padding: 12px 8px;
+
+  @include screen(lg) {
+    padding: 24px 16px;
+  }
 }
 
 form {

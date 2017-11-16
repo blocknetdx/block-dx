@@ -42,6 +42,7 @@ import { TableColumnCellDirective } from './table/table-column-cell.directive';
 import { PairSelectorComponent } from './pair-selector/pair-selector.component';
 import { ValidCoinDirective } from './pair-selector/valid-coin.directive';
 import { CryptocurrencyService } from './cryptocurrency.service';
+import { SelectComponent } from './select/select.component';
 
 
 @NgModule({
@@ -69,7 +70,8 @@ import { CryptocurrencyService } from './cryptocurrency.service';
     TableColumnHeaderDirective,
     TableColumnCellDirective,
     PairSelectorComponent,
-    ValidCoinDirective
+    ValidCoinDirective,
+    SelectComponent
   ],
   imports: [
     BrowserModule,

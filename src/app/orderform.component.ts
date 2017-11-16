@@ -13,14 +13,31 @@ export class OrderformComponent {
   @Input() public symbols:string[];
   @Input() public currentPrice: Currentprice;
 
-  public selectedTab: string = 'buy';
-
   public title = 'Order Form';
   public totalPrice = 0;
 
+  public selectedTab: string = 'buy';
+  public buyOrderTypes: any[];
+  public sellOrderTypes: any[];
+
+  public selectedBuyType: any;
+  public selectedSellType: any;
+
   constructor(private decimalPipe: DecimalPipe) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.buyOrderTypes = [
+      { value: 'market', viewValue: 'Market Order'},
+      { value: 'limit', viewValue: 'Limit Order'},
+      { value: 'stop', viewValue: 'Stop Order'}
+    ];
+
+    this.sellOrderTypes = [
+      { value: 'market', viewValue: 'Market Order'},
+      { value: 'limit', viewValue: 'Limit Order'},
+      { value: 'stop', viewValue: 'Stop Order'}
+    ];
+  }
 
   formatNumber(num:string, symbol:string): string {
     const format = symbol !== "USD" ? "1.8-8" : "1.2-2";

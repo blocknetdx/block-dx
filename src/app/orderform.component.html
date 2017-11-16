@@ -11,11 +11,12 @@
       <div class="input-group row">
         <label class="col-4 col-form-label" for="type">Type</label>
         <div class="col-8">
-          <select class="form-control col-8" name="type" id="type">
-            <option value="market">Market Order</option>
-          </select>
+          <bn-select [options]="buyOrderTypes"
+            (onSelectChange)="selectedBuyType = $event"
+            placeholder="Choose a type"></bn-select>
         </div>
       </div>
+      <span class="spacer"></span>
 
       <div class="input-group row">
         <label class="col-4 col-form-label" for="amount">Amount ({{symbols[0]}})</label>
@@ -30,6 +31,7 @@
           <input class="form-control" name="total" id="total_calc" type="text" placeholder="{{formatNumber(0.00000,symbols[1])}}" value="{{formatNumber(totalPrice,symbols[1])}}" disabled />
         </div>
       </div>
+      <span class="spacer"></span>
 
       <div class="input-group row">
         <button type="submit">Place Buy Order</button>

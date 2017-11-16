@@ -1,0 +1,57 @@
+@import '../../styles/utils/mixins';
+@import '../../styles/utils/variables';
+
+.select-wrapper {
+  position: relative;
+  width: 100%;
+  padding: 0 16px;
+  background-color: $bn-blue-light4;
+  cursor: pointer;
+  &::after {
+    content: 'keyboard_arrow_down';
+    font: 26px/1em 'Material Icons';
+    color: $bn-blue-light3;
+    position: absolute;
+    right: 8px;
+    top: calc(50% + 0.05em);
+    transform: translateY(-50%);
+  }
+
+  &.active {
+    z-index: 9991;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
+  }
+}
+
+.placeholder, .selected-value {
+  font: 12px/40px $open-sans;
+}
+
+.placeholder {
+  opacity: 0.4;
+}
+
+.dropdown-list {
+  position: absolute;
+  top: 100%;
+  width: 100%;
+  left: 0;
+  background: $bn-blue-light4;
+  list-style: none;
+  padding: 4px 0;
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
+
+  &__item {
+    font: 12px/24px $open-sans;
+    padding: 0 16px;
+    display: block;
+    &:hover {
+      background-color: rgba(255,255,255,0.04);
+      box-shadow: 0 2px 4px 0 rgba(0,0,0,0.1);
+    }
+
+    & + .dropdown-list__item {
+      margin-top: 4px;
+    }
+  }
+}
