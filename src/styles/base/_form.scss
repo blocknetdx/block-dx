@@ -36,6 +36,14 @@ form {
   	background-color: rgba(255,255,255,0.06);
   }
 
+  &-addon {
+    font: 12px/40px $open-sans;
+    position: absolute;
+    right: 8px;
+    color: $bn-blue-light3;
+    top: 0;
+  }
+
   & + .input-group {
     margin-top: 8px;
   }

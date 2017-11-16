@@ -19,22 +19,40 @@
       <span class="spacer"></span>
 
       <div class="input-group row">
-        <label class="col-4 col-form-label" for="amount">Amount ({{symbols[0]}})</label>
+        <label class="col-4 col-form-label" for="amount">Amount</label>
         <div class="col-8">
           <input (keyup)="calcPrice($event)" class="form-control" name="amount" id="amount" type="text" placeholder="{{formatNumber(0.00000,symbols[0])}}" />
+          <span class="input-group-addon">{{symbols[0]}}</span>
+        </div>
+      </div>
+
+      <div class="input-group row" *ngIf="selectedBuyType == 'limit'">
+        <label class="col-4 col-form-label" for="limit">Limit Price</label>
+        <div class="col-8">
+          <input (keyup)="calcPrice($event)" class="form-control" name="limit" id="limit" type="text" placeholder="{{formatNumber(0.00000,symbols[1])}}" />
+          <span class="input-group-addon">{{symbols[1]}}</span>
+        </div>
+      </div>
+
+      <div class="input-group row" *ngIf="selectedBuyType == 'stop'">
+        <label class="col-4 col-form-label" for="stop">Stop Price</label>
+        <div class="col-8">
+          <input (keyup)="calcPrice($event)" class="form-control" name="stop" id="stop" type="text" placeholder="{{formatNumber(0.00000,symbols[1])}}" />
+          <span class="input-group-addon">{{symbols[1]}}</span>
         </div>
       </div>
 
       <div class="input-group row">
-        <label class="col-4 col-form-label" for="total">Total ({{symbols[1]}})</label>
+        <label class="col-4 col-form-label" for="total">Total</label>
         <div class="col-8">
           <input class="form-control" name="total" id="total_calc" type="text" placeholder="{{formatNumber(0.00000,symbols[1])}}" value="{{formatNumber(totalPrice,symbols[1])}}" disabled />
+          <span class="input-group-addon">{{symbols[1]}}</span>
         </div>
       </div>
       <span class="spacer"></span>
 
       <div class="input-group row">
-        <button type="submit">Place Buy Order</button>
+        <button type="submit">Place {{selectedTab}} Order</button>
       </div>
     </form>
   </div>
