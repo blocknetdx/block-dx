@@ -1,5 +1,5 @@
 import {
-  Component, ContentChild, ContentChildren, ViewChildren,
+  Component, ContentChild, ContentChildren, ViewChildren, ViewChild,
   QueryList, Input, Output, EventEmitter, ElementRef
 } from '@angular/core';
 
@@ -23,7 +23,7 @@ import { TableColumnDirective } from './table-column.directive';
           <ng-template *ngTemplateOutlet="col.headerTemplate"></ng-template>
         </div>
       </div>
-      <div class="bn-table__body">
+      <div #tableBody class="bn-table__body">
         <div class="bn-table__section" *ngFor="let section of sections">
           <div class="bn-table__section-title" *ngIf="section.title != 'undefined'">
             <div class="col-12">{{section.title}}</div>
@@ -46,7 +46,10 @@ import { TableColumnDirective } from './table-column.directive';
 })
 export class TableComponent {
   @ViewChildren('rowRef')
-  private rowRefs: QueryList<ElementRef>
+  public rowRefs: QueryList<ElementRef>;
+
+  @ViewChild('tableBody')
+  public tableBody: ElementRef;
 
   @Output('onRowSelect')
   public onRowSelect: EventEmitter<any> = new EventEmitter();
@@ -119,6 +122,18 @@ export class TableComponent {
         sec.rows = arr;
         return sec;
       });
+    }
+  }
+
+  scrollToMiddle() {
+    if (this.rows) {
+      const mid = Math.floor(this.rows.length/2);
+      const el = this.rowRefs.toArray()[mid].nativeElement;
+      const body = this.tableBody.nativeElement;
+      el.scrollIntoView(true);
+
+      const scrollBack = (body.scrollHeight - body.scrollTop <= body.clientHeight) ? 0 : body.clientHeight/2;
+      body.scrollTop = body.scrollTop - scrollBack;
     }
   }
 

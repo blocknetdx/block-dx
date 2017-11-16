@@ -1,9 +1,10 @@
 import 'rxjs/add/operator/map';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 
 import { Order } from './order';
 import { OrderbookService } from './orderbook.service';
+import { TableComponent } from './table/table.component';
 
 @Component({
   selector: 'orderbook',
@@ -12,6 +13,8 @@ import { OrderbookService } from './orderbook.service';
   providers: [OrderbookService]
 })
 export class OrderbookComponent {
+  @ViewChild('orderbookTable') public orderbookTable: TableComponent;
+
   public title = 'Order Book';
   public rows: any[];
 
@@ -22,7 +25,13 @@ export class OrderbookComponent {
   getOrderbook(): void {
     this.orderbookService.getOrderbook(this.symbols)
       .subscribe(orderbook => {
-        this.rows = [...orderbook.asks, ...orderbook.bids];
+        this.rows = [
+          ...orderbook.asks,
+          [null, null, null, null, 'divide'],
+          ...orderbook.bids
+        ];
+
+        this.orderbookTable.scrollToMiddle();
       });
   }
 
@@ -32,5 +41,9 @@ export class OrderbookComponent {
 
   ngOnChanges(): void {
     this.getOrderbook();
+  }
+
+  onRowSelect(row) {
+    console.log(row);
   }
 }

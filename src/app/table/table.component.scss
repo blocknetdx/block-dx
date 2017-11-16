@@ -65,6 +65,7 @@
   &__row {
     padding: 0 13px;
     cursor: default;
+    min-height: 16px;
     &.selectable {
       cursor: pointer;
     }
