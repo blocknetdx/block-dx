@@ -43,6 +43,7 @@ import { PairSelectorComponent } from './pair-selector/pair-selector.component';
 import { ValidCoinDirective } from './pair-selector/valid-coin.directive';
 import { CryptocurrencyService } from './cryptocurrency.service';
 import { SelectComponent } from './select/select.component';
+import { OrderbookService } from './orderbook.service';
 
 
 @NgModule({
@@ -89,6 +90,7 @@ import { SelectComponent } from './select/select.component';
     BreakpointService,
     CurrentpriceService,
     BlockCurrencyPipe,
+    OrderbookService,
     CryptocurrencyService
   ],
   bootstrap: [AppComponent]

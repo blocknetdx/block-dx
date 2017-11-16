@@ -11,7 +11,7 @@
       <div class="input-group row">
         <label class="col-4 col-form-label" for="type">Type</label>
         <div class="col-8">
-          <bn-select [options]="buyOrderTypes"
+          <bn-select [options]="buyOrderTypes" #typeSelect
             (onSelectChange)="selectedBuyType = $event"
             placeholder="Choose a type"></bn-select>
         </div>
@@ -21,7 +21,7 @@
       <div class="input-group row">
         <label class="col-4 col-form-label" for="amount">Amount</label>
         <div class="col-8">
-          <input (keyup)="calcPrice($event)" class="form-control" name="amount" id="amount" type="text" placeholder="{{formatNumber(0.00000,symbols[0])}}" />
+          <input (keyup)="calcPrice($event)" [(ngModel)]="model.amount" class="form-control" name="amount" id="amount" type="text" placeholder="{{formatNumber(0.00000,symbols[0])}}" />
           <span class="input-group-addon">{{symbols[0]}}</span>
         </div>
       </div>

@@ -9,8 +9,7 @@ import { TableComponent } from './table/table.component';
 @Component({
   selector: 'orderbook',
   templateUrl: './orderbook.component.html',
-  styleUrls: ['./order-book.component.scss'],
-  providers: [OrderbookService]
+  styleUrls: ['./order-book.component.scss']
 })
 export class OrderbookComponent {
   @ViewChild('orderbookTable') public orderbookTable: TableComponent;
@@ -44,6 +43,6 @@ export class OrderbookComponent {
   }
 
   onRowSelect(row) {
-    console.log(row);
+    this.orderbookService.requestOrder(row);
   }
 }

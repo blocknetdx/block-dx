@@ -1,8 +1,10 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 
 import { Currentprice } from './currentprice';
 import { CurrentpriceService } from './currentprice.service';
+import { OrderbookService } from './orderbook.service';
+import { SelectComponent } from './select/select.component';
 
 @Component({
   selector: 'orderform',
@@ -10,6 +12,8 @@ import { CurrentpriceService } from './currentprice.service';
   styleUrls: ['./orderform.component.scss']
 })
 export class OrderformComponent {
+  @ViewChild('typeSelect') public typeSelect: SelectComponent;
+
   @Input() public symbols:string[];
   @Input() public currentPrice: Currentprice;
 
@@ -23,9 +27,23 @@ export class OrderformComponent {
   public selectedBuyType: any;
   public selectedSellType: any;
 
-  constructor(private decimalPipe: DecimalPipe) { }
+  public model: any;
+
+  constructor(
+    private decimalPipe: DecimalPipe,
+    private orderbookService: OrderbookService
+  ) { }
 
   ngOnInit() {
+    this.model = {};
+
+    this.orderbookService.requestedOrder
+      .subscribe((order) => {
+        this.selectedTab = order[4] === 'ask' ? 'buy' : 'sell';
+        this.typeSelect.selected = this.buyOrderTypes[0];
+        this.model.amount = order[1];
+      });
+
     this.buyOrderTypes = [
       { value: 'market', viewValue: 'Market Order'},
       { value: 'limit', viewValue: 'Limit Order'},
