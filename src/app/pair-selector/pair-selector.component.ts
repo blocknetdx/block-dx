@@ -5,6 +5,7 @@ import {
 import { NgForm } from '@angular/forms';
 import { Subject } from 'rxjs/Subject';
 
+import { AppService } from '../app.service';
 import { fadeInOut } from '../animations';
 import { TableComponent } from '../table/table.component';
 import { CryptocurrencyService } from '../cryptocurrency.service';
@@ -25,7 +26,7 @@ export class PairSelectorComponent {
   @Output('onActiveStatus')
   public onActiveStatus: EventEmitter<boolean> = new EventEmitter();
 
-  public symbols: string[] = ['ETH', 'BTC'];
+  public symbols: string[];
   public rows: any[];
   public filteredRows: any[];
   public model: {coinA?: any, coinB?: any};
@@ -68,10 +69,14 @@ export class PairSelectorComponent {
   }
 
   constructor(
+    private appService: AppService,
     private cryptoService: CryptocurrencyService
   ) { }
 
   ngOnInit() {
+    this.appService.marketPairChanges.subscribe((symbols) => {
+      this.symbols = symbols;
+    });
     this.cryptoService.getCurrencies().first()
       .subscribe((data) => {
         const user_wallet = data.slice(0,5).map((coin) => {
