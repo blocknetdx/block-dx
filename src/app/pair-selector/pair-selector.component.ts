@@ -3,6 +3,7 @@ import {
   ViewChildren, QueryList, Output
 } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 
 import { AppService } from '../app.service';
@@ -70,7 +71,9 @@ export class PairSelectorComponent {
 
   constructor(
     private appService: AppService,
-    private cryptoService: CryptocurrencyService
+    private cryptoService: CryptocurrencyService,
+    private router: Router,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit() {
@@ -124,7 +127,10 @@ export class PairSelectorComponent {
   }
 
   onSubmit() {
-    console.log('submit form', this.model);
+    const a: string = this.model.coinA.symbol;
+    const b: string = this.model.coinB.symbol;
+    this.router.navigate(['/trading', `${a}-${b}`]);
+    this.active = false;
   }
 
 }

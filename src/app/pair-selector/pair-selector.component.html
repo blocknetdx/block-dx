@@ -1,6 +1,6 @@
 <div [@fadeInOut] (click)="active = false" class="overlay" *ngIf="active"></div>
 
-<div class="navbar-pricing__cell" [class.active]="active">
+<div class="navbar-pricing__cell" [class.active]="active" *ngIf="symbols">
   <div class="navbar-pricing__cell_body" (click)="active = !active">
     <div class="navbar-pricing__upper">{{symbols[0]}} / {{symbols[1]}}</div>
     <div class="navbar-pricing__lower">Select Market Pair</div>

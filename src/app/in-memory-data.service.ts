@@ -361,6 +361,20 @@ export class InMemoryDataService implements InMemoryDbService {
 
 		const currency = [
 			{
+				symbol: 'USD',
+				name: 'US Dollars',
+				last: null,
+				volume: null,
+				change: null
+			},
+			{
+				symbol: 'BTC',
+				name: 'Bitcoin',
+				last: 986.456,
+				volume: 978.456,
+				change: -0.4338
+			},
+			{
 				symbol: 'DGB',
 				name: 'DigiByte',
 				last: 1439.726,
