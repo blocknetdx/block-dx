@@ -14,21 +14,21 @@
     <app-table-column [prop]="'price'" [classList]="'col-4 col-sm-2'">
       <ng-template columnHeader>Price ({{symbols[1]}})</ng-template>
       <ng-template let-row="row" columnCell>
-        <span>{{row.price | blockCurrency:symbols[1]}}</span>
+        <span class="bn-number" [innerHtml]="row.price | blockCurrency:symbols[1]"></span>
       </ng-template>
     </app-table-column>
 
     <app-table-column [prop]="'size'" [classList]="'col-4 col-sm-2'">
       <ng-template columnHeader>Amount ({{symbols[0]}})</ng-template>
       <ng-template let-row="row" columnCell>
-        <span>{{row.size | blockCurrency:symbols[0]}}</span>
+        <span class="bn-number" [innerHtml]="row.size | blockCurrency:symbols[0]"></span>
       </ng-template>
     </app-table-column>
 
     <app-table-column [prop]="'price'" [classList]="'col-4 col-sm-2'">
       <ng-template columnHeader>Total ({{symbols[1]}})</ng-template>
       <ng-template let-row="row" columnCell>
-        <span>{{row.price*row.size | blockCurrency:symbols[1]}}</span>
+        <span class="bn-number" [innerHtml]="row.price*row.size | blockCurrency:symbols[1]"></span>
       </ng-template>
     </app-table-column>
 

@@ -10,7 +10,11 @@ export class BlockCurrencyPipe implements PipeTransform {
 
   transform(value: any, symbol?: any): any {
     const format = symbol !== "USD" ? "1.8-8" : "1.2-2";
-    return this.decimalPipe.transform(value,format);
+    let v = this.decimalPipe.transform(value,format);
+    if (v) {
+      v = v.replace(/(0{2,})$/, '<span>$1</span>');
+    }
+    return v;
   }
 
 }

@@ -37,3 +37,9 @@ body {
 
 .bg-red { background-color: $bn-red; }
 .bg-green { background-color: $bn-green; }
+
+.bn-number {
+  & > span {
+    opacity: 0.4;
+  }
+}
