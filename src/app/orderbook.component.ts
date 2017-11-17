@@ -5,7 +5,7 @@ import { DecimalPipe } from '@angular/common';
 import { Order } from './order';
 import { OrderbookService } from './orderbook.service';
 import { TableComponent } from './table/table.component';
-import { CurrentpriceService } from './currentprice.service';
+import { AppService } from './app.service';
 
 @Component({
   selector: 'orderbook',
@@ -18,30 +18,34 @@ export class OrderbookComponent {
   public title = 'Order Book';
   public rows: any[];
 
-  @Input() public symbols:string[];
+  public symbols:string[];
 
   constructor(
-    private currentpriceService: CurrentpriceService,
+    private appService: AppService,
     private orderbookService: OrderbookService,
     private decimalPipe:DecimalPipe
   ) { }
 
   ngOnInit(): void {
-    this.orderbookService.getOrderbook(this.symbols)
-      .subscribe(orderbook => {
-        this.rows = [
-          ...orderbook.asks,
-          [null, null, null, null, 'divide'],
-          ...orderbook.bids
-        ];
+    this.appService.marketPairChanges.subscribe((symbols) => {
+      this.symbols = symbols;
+      if (symbols) {
+        this.orderbookService.getOrderbook(this.symbols)
+          .first()
+          .subscribe(orderbook => {
+            this.rows = [
+              ...orderbook.asks,
+              [null, null, null, null, 'divide'],
+              ...orderbook.bids
+            ];
 
-        this.orderbookTable.scrollToMiddle();
-      });
+            setTimeout(() => {
+              this.orderbookTable.scrollToMiddle();
+            });
+          });
+      }
+    });
   }
-
-  // ngOnChanges(): void {
-  //   this.getOrderbook();
-  // }
 
   onRowSelect(row) {
     this.orderbookService.requestOrder(row);

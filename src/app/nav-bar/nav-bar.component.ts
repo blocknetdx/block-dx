@@ -13,7 +13,7 @@ import { CurrentpriceService } from '../currentprice.service';
 })
 export class NavBarComponent {
   public symbols: string[];
-  public currentPrice: Currentprice = new Currentprice();
+  public currentPrice: Currentprice;
 
   public navCollapsed: boolean;
   public pairSelectorActiveState: boolean;
@@ -27,14 +27,10 @@ export class NavBarComponent {
   ngOnInit() {
     this.appService.marketPairChanges.subscribe((symbols) => {
       this.symbols = symbols;
-      if (symbols) {
-        this.currentpriceService.getCurrentprice(symbols)
-          .first()
-          .subscribe((cp) => {
-            this.currentPrice = cp;
-          });
-      }
-    })
+    });
+    this.currentpriceService.currentprice.subscribe((cp) => {
+      this.currentPrice = cp;
+    });
   }
 
   toggleNav() {

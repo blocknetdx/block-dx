@@ -6,7 +6,7 @@
   <div class="chart-holder">
     <div id="chartdiv"></div>
     <div class="midmarket-price"  *ngIf="currentPrice">
-      {{formatNumber(currentPrice.last,symbols[1])}}
+      {{currentPrice.last | blockCurrency:symbols[1]}}
     </div>
   </div>
 </div>

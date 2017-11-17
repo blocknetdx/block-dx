@@ -1,6 +1,7 @@
 import { Component, OnInit, NgZone, Input } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 
+import { AppService } from './app.service';
 import { OrderbookService } from './orderbook.service';
 import { Currentprice } from './currentprice';
 import { CurrentpriceService } from './currentprice.service';
@@ -13,19 +14,25 @@ declare var AmCharts;
   styleUrls: ['./depth.component.scss'],
 })
 export class DepthComponent {
-  @Input() public symbols:string[];
-  @Input() public currentPrice: Currentprice;
-
+  public symbols:string[];
+  public currentPrice: Currentprice;
   public title = 'Depth Chart';
-  private currency1 = 'ETH';
-  private currency2 = 'BTC';
 
   constructor(
     private zone: NgZone,
+    private appService: AppService,
+    private currentpriceService: CurrentpriceService,
     private decimalPipe:DecimalPipe
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.appService.marketPairChanges.subscribe((symbols) => {
+      this.symbols = symbols;
+    });
+    this.currentpriceService.currentprice.subscribe((cp) => {
+      this.currentPrice = cp;
+    });
+  }
 
   ngAfterViewInit() {
     this.runDepthChart();
@@ -33,11 +40,6 @@ export class DepthComponent {
 
   ngOnChanges() {
     this.runDepthChart();
-  }
-
-  formatNumber(num:string, symbol:string): string {
-    const format = symbol !== "USD" ? "1.5-5" : "1.2-2";
-    return this.decimalPipe.transform(num,format);
   }
 
   runDepthChart(): void {

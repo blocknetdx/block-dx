@@ -26,7 +26,6 @@ import { DepthComponent } from './depth.component';
 import { SwitcherComponent } from './switcher.component';
 import { MainviewComponent } from './mainview.component';
 import { WatchlistComponent } from './watchlist.component';
-import { CurrentpriceComponent } from './currentprice.component';
 
 import { AppRoutingModule }     from './app-routing.module';
 import { BreakpointService } from './breakpoint.service';
@@ -51,7 +50,6 @@ import { OrderbookService } from './orderbook.service';
   declarations: [
     AppComponent,
     BalancesComponent,
-    CurrentpriceComponent,
     DepthchartComponent,
     DepthComponent,
     MainviewComponent,

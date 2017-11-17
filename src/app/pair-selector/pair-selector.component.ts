@@ -87,10 +87,6 @@ export class PairSelectorComponent {
       });
   }
 
-  ngAfterViewInit() {
-    console.log(this.pairForm);
-  }
-
   filterCoins(key: string, val: string) {
     this.model[key] = val;
 

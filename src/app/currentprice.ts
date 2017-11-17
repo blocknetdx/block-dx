@@ -1,10 +1,10 @@
 export class Currentprice {
-  open: string;
-  high: string;
-  low: string;
-  volume: string;
-  last: string;
-  volume_30day: string;
+  public open: string;
+  public high: string;
+  public low: string;
+  public volume: string;
+  public last: string;
+  public volume_30day: string;
 
   constructor() {}
 

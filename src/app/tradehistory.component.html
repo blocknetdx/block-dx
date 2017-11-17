@@ -31,24 +31,5 @@
     </app-table>
 
   </div>
-  <!-- <div class="bn-table">
-    <div class="row bn-table__header">
-      <div class="col-4">Amount ({{symbols[0]}})</div>
-      <div class="col-4">Price ({{symbols[1]}})</div>
-      <div class="col-4">Time</div>
-    </div>
-
-
-    <div class="bn-table__body">
-      <div class="row bn-table__row"  *ngFor="let trade of tradehistory">
-        <div class="col-4"><div class="percentBar {{trade.percentbarClasses}}" [ngStyle]="{'width.%': trade.percent}"></div> {{formatNumber(trade.size,symbols[0])}}</div>
-        <div class="col-4 {{trade.priceClasses}} bn-table__offset">
-          {{formatNumber(trade.price,symbols[1])}}
-            <img *ngIf="trade.side === 'sell'" class="my-icon" aria-label="My icon" src="assets/icons/arrow-diagonal-up.svg">
-            <img *ngIf="trade.side === 'buy'" class="my-icon" aria-label="My icon" src="assets/icons/arrow-diagonal-down.svg">
-        </div>
-        <div class="col-4">{{trade.time | date:'HH:mm:ss' }}</div>
-      </div>
-    </div>
-  </div> -->
+  
 </div>

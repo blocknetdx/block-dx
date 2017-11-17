@@ -1,19 +1,31 @@
 import { Injectable } from '@angular/core';
 import { Headers, Http } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/debounceTime';
 
+import { AppService } from './app.service';
 import { Currentprice } from './currentprice';
-
 
 @Injectable()
 export class CurrentpriceService {
-  private currentpriceUrl = '';  // URL to web api
+  public currentprice: BehaviorSubject<Currentprice> = new BehaviorSubject(null);
 
-  constructor(private http: Http) { }
+  private currentpriceUrl: string = '';  // URL to web api
 
-  getCurrentprice(symbols:string[]): Observable<Currentprice> {
+  constructor(private http: Http, private appService: AppService) {
+    this.appService.marketPairChanges.subscribe((symbols) => {
+      if (symbols) {
+        this.getCurrentprice(symbols).first().subscribe((cp) => {
+          this.currentprice.next(cp);
+        });
+      }
+    });
+  }
+
+  private getCurrentprice(symbols:string[]): Observable<Currentprice> {
     this.currentpriceUrl = 'api/stats_' + symbols[0];
 
     return this.http.get(this.currentpriceUrl)
@@ -23,6 +35,7 @@ export class CurrentpriceService {
         });
         return data[0];
       })
+      .debounceTime(5000)
       .catch(this.handleError);
   }
 

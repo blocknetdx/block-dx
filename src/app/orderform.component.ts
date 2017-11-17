@@ -1,6 +1,7 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 
+import { AppService } from './app.service';
 import { Currentprice } from './currentprice';
 import { CurrentpriceService } from './currentprice.service';
 import { OrderbookService } from './orderbook.service';
@@ -14,28 +15,33 @@ import { SelectComponent } from './select/select.component';
 export class OrderformComponent {
   @ViewChild('typeSelect') public typeSelect: SelectComponent;
 
-  @Input() public symbols:string[];
-  @Input() public currentPrice: Currentprice;
-
+  public symbols:string[];
+  public currentPrice: Currentprice;
   public title = 'Order Form';
   public totalPrice = 0;
-
   public selectedTab: string = 'buy';
   public buyOrderTypes: any[];
   public sellOrderTypes: any[];
-
   public selectedBuyType: any;
   public selectedSellType: any;
-
   public model: any;
 
   constructor(
     private decimalPipe: DecimalPipe,
+    private appService: AppService,
+    private currentpriceService: CurrentpriceService,
     private orderbookService: OrderbookService
   ) { }
 
   ngOnInit() {
     this.model = {};
+
+    this.appService.marketPairChanges.subscribe((symbols) => {
+      this.symbols = symbols;
+    });
+    this.currentpriceService.currentprice.subscribe((cp) => {
+      this.currentPrice = cp;
+    });
 
     this.orderbookService.requestedOrder
       .subscribe((order) => {

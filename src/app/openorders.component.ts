@@ -1,10 +1,9 @@
 import { Component, Input, TemplateRef, ViewChild } from '@angular/core';
-import { DecimalPipe } from '@angular/common';
 import 'rxjs/add/operator/map';
 
+import { AppService } from './app.service';
 import { Openorder } from './openorder';
 import { OpenordersService } from './openorders.service';
-import { BlockCurrencyPipe } from './block-currency.pipe';
 
 @Component({
   selector: 'openorders',
@@ -18,28 +17,24 @@ export class OpenordersComponent {
 
   private _symbols: string[];
   public get symbols(): string[] { return this._symbols; }
-  @Input() public set symbols(val:string[]) {
+  public set symbols(val:string[]) {
     this._symbols = val;
   }
 
   constructor(
-    private openorderService: OpenordersService,
-    private blockCurrency: BlockCurrencyPipe,
-    private decimalPipe: DecimalPipe
+    private appService: AppService,
+    private openorderService: OpenordersService
   ) { }
 
-  getOpenorders(): void {
-    this.openorderService.getOpenorders(this.symbols)
-      .then(openorders => {
-        this.openorders = openorders;
-      });
-  }
-
-  ngOnInit(): void {
-    this.getOpenorders();
-  }
-
-  ngOnChanges(): void {
-    this.getOpenorders();
+  ngOnInit() {
+    this.appService.marketPairChanges.subscribe((symbols) => {
+      this.symbols = symbols;
+      if (symbols) {
+        this.openorderService.getOpenorders(this.symbols)
+          .then(openorders => {
+            this.openorders = openorders;
+          });
+      }
+    });
   }
 }

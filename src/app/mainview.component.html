@@ -1,12 +1,9 @@
-<!-- <switcher></switcher> -->
-<!-- <app-nav-bar [currentPrice]="currPrice" [symbols]="symbols"></app-nav-bar> -->
-
 <div class="container-fluid">
 
   <div class="trade_table">
     <div #trade class="trade_table__cell sidebar">
       <!-- <balances></balances> -->
-      <orderform [currentPrice]="currPrice" [symbols]="symbols"></orderform>
+      <orderform></orderform>
     </div>
 
     <div class="trade_table__group content">
@@ -15,19 +12,19 @@
       </div>
 
       <div #depth class="trade_table__cell depth">
-        <depth [currentPrice]="currPrice" [symbols]="symbols"></depth>
+        <depth></depth>
       </div>
 
       <div #book class="trade_table__cell book">
-        <orderbook [symbols]="symbols"></orderbook>
+        <orderbook></orderbook>
       </div>
 
       <div #orders class="trade_table__cell orders">
-        <openorders [symbols]="symbols"></openorders>
+        <openorders></openorders>
       </div>
 
       <div #history class="trade_table__cell history">
-        <tradehistory [symbols]="symbols"></tradehistory>
+        <tradehistory></tradehistory>
       </div>
     </div>
 

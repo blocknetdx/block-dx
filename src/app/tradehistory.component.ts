@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 
+import { AppService } from './app.service';
 import { Trade } from './trade';
 import { TradehistoryService } from './tradehistory.service';
 
@@ -11,30 +12,25 @@ import { TradehistoryService } from './tradehistory.service';
   providers: [TradehistoryService]
 })
 export class TradehistoryComponent {
-  title = 'Trade History';
-  tradehistory: Trade[];
+  public title = 'Trade History';
+  public tradehistory: Trade[];
 
-  @Input() public symbols:string[];
+  public symbols:string[];
 
-  constructor(private tradeHistoryService: TradehistoryService, private decimalPipe:DecimalPipe) { }
+  constructor(
+    private appService: AppService,
+    private tradeHistoryService: TradehistoryService
+  ) {}
 
-  getTradehistory(): void {
-    this.tradeHistoryService.getTradehistory(this.symbols)
-      .subscribe(tradehistory => {
-        this.tradehistory = tradehistory;
-      });
-  }
-
-  formatNumber(num:string, symbol:string): string {
-    const format = symbol !== "USD" ? "1.8-8" : "1.2-2";
-    return this.decimalPipe.transform(num,format);
-  }
-
-  ngOnInit(): void {
-    this.getTradehistory();
-  }
-
-  ngOnChanges(): void {
-    this.getTradehistory();
+  ngOnInit() {
+    this.appService.marketPairChanges.subscribe((symbols) => {
+      this.symbols = symbols;
+      if (symbols) {
+        this.tradeHistoryService.getTradehistory(this.symbols)
+          .subscribe(tradehistory => {
+            this.tradehistory = tradehistory;
+          });
+      }
+    });
   }
 }
