@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+
+import { AppService } from './app.service';
 
 @Component({
   selector: 'mainview',
@@ -6,5 +9,17 @@ import { Component } from '@angular/core';
   styleUrls: ['./mainview.component.scss']
 })
 export class MainviewComponent {
-  constructor() {}
+
+  constructor(
+    private route: ActivatedRoute,
+    private appService: AppService
+  ) {}
+
+  ngOnInit() {
+    this.route.params.subscribe((params) => {
+      const pair = params['pair'];
+      const symbols = pair ? pair.split('-') : ['ETH', 'BTC'];
+      this.appService.updateMarketPair(symbols);
+    });
+  }
 }
