@@ -14,6 +14,7 @@ import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { InMemoryDataService }  from './in-memory-data.service';
 
 import { AppComponent } from './app.component';
+import { AppService } from './app.service';
 import { BalancesComponent } from './balances.component';
 import { TradehistoryComponent } from './tradehistory.component';
 import { PricechartComponent } from './pricechart.component';
@@ -87,6 +88,7 @@ import { OrderbookService } from './orderbook.service';
   ],
   providers: [
     DecimalPipe,
+    AppService,
     BreakpointService,
     CurrentpriceService,
     BlockCurrencyPipe,

@@ -8,7 +8,7 @@ import { CurrentpriceService } from './currentprice.service';
   selector: 'currentprice',
   templateUrl: './currentprice.component.html',
   // styleUrls: ['./currentprice.component.scss']
-  providers: [CurrentpriceService]
+  // providers: [CurrentpriceService]
 })
   export class CurrentpriceComponent {
   title = 'Current Price';
@@ -18,11 +18,11 @@ import { CurrentpriceService } from './currentprice.service';
 
   constructor(private currentpriceService: CurrentpriceService, private decimalPipe: DecimalPipe) { }
 
-  getCurrentprice(): void {
-    this.currentpriceService.getCurrentprice(this.symbols).then(currentprice => {
-      this.currentprice = currentprice[0];
-    })
-  }
+  // getCurrentprice(): void {
+  //   this.currentpriceService.getCurrentprice(this.symbols).then(currentprice => {
+  //     this.currentprice = currentprice[0];
+  //   })
+  // }
 
   formatNumber(num:string, symbol:string): string {
     const format = symbol !== "USD" ? "1.5-5" : "1.2-2";
@@ -30,10 +30,10 @@ import { CurrentpriceService } from './currentprice.service';
   }
 
   ngOnInit(): void {
-    this.getCurrentprice();
+    // this.getCurrentprice();
   }
 
   ngOnChanges(): void {
-    this.getCurrentprice();
+    // this.getCurrentprice();
   }
 }

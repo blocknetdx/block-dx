@@ -5,6 +5,7 @@ import { DecimalPipe } from '@angular/common';
 import { Order } from './order';
 import { OrderbookService } from './orderbook.service';
 import { TableComponent } from './table/table.component';
+import { CurrentpriceService } from './currentprice.service';
 
 @Component({
   selector: 'orderbook',
@@ -19,9 +20,13 @@ export class OrderbookComponent {
 
   @Input() public symbols:string[];
 
-  constructor(private orderbookService: OrderbookService, private decimalPipe:DecimalPipe) { }
+  constructor(
+    private currentpriceService: CurrentpriceService,
+    private orderbookService: OrderbookService,
+    private decimalPipe:DecimalPipe
+  ) { }
 
-  getOrderbook(): void {
+  ngOnInit(): void {
     this.orderbookService.getOrderbook(this.symbols)
       .subscribe(orderbook => {
         this.rows = [
@@ -34,13 +39,9 @@ export class OrderbookComponent {
       });
   }
 
-  ngOnInit(): void {
-    this.getOrderbook();
-  }
-
-  ngOnChanges(): void {
-    this.getOrderbook();
-  }
+  // ngOnChanges(): void {
+  //   this.getOrderbook();
+  // }
 
   onRowSelect(row) {
     this.orderbookService.requestOrder(row);

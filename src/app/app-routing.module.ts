@@ -5,9 +5,12 @@ import { MainviewComponent } from './mainview.component';
 
 
 const routes: Routes = [
-  { path: '', redirectTo: '/trading', pathMatch: 'full' },
-  { path: 'trading',  component: MainviewComponent },
-  { path: 'trading/:id', component: MainviewComponent }
+  { path: '', redirectTo: '/trading/ETH-BTC', pathMatch: 'full' },
+  { path: 'trading', redirectTo: '/trading/ETH-BTC', pathMatch: 'full' },
+  {
+    path: 'trading/:pair',
+    component: MainviewComponent
+  }
 ];
 
 @NgModule({

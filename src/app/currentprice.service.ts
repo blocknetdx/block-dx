@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-
 import { Headers, Http } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
 
-import 'rxjs/add/operator/toPromise';
+import 'rxjs/add/operator/catch';
 
 import { Currentprice } from './currentprice';
 
@@ -13,7 +13,7 @@ export class CurrentpriceService {
 
   constructor(private http: Http) { }
 
-  getCurrentprice(symbols:string[]): Promise<Currentprice[]> {
+  getCurrentprice(symbols:string[]): Observable<Currentprice> {
     this.currentpriceUrl = 'api/stats_' + symbols[0];
 
     return this.http.get(this.currentpriceUrl)
@@ -21,9 +21,8 @@ export class CurrentpriceService {
         const data = res.json().map(d => {
           return Currentprice.fromObject(d);
         });
-        return data;
+        return data[0];
       })
-      .toPromise()
       .catch(this.handleError);
   }
 

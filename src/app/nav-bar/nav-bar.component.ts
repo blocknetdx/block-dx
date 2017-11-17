@@ -1,6 +1,7 @@
 import { Component, Input, ViewEncapsulation } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 
+import { AppService } from '../app.service';
 import { Currentprice } from '../currentprice';
 import { CurrentpriceService } from '../currentprice.service';
 
@@ -11,21 +12,29 @@ import { CurrentpriceService } from '../currentprice.service';
   encapsulation: ViewEncapsulation.None
 })
 export class NavBarComponent {
-  @Input() public symbols: string[];
-  @Input() public currentPrice: Currentprice = new Currentprice();
+  public symbols: string[];
+  public currentPrice: Currentprice = new Currentprice();
 
   public navCollapsed: boolean;
   public pairSelectorActiveState: boolean;
 
   constructor(
+    private appService: AppService,
+    private currentpriceService: CurrentpriceService,
     private decimalPipe: DecimalPipe
   ) { }
 
-  ngOnInit() {}
-
-  formatNumber(num:string, symbol:string): string {
-    const format = symbol !== "USD" ? "1.5-5" : "1.2-2";
-    return this.decimalPipe.transform(num,format);
+  ngOnInit() {
+    this.appService.marketPairChanges.subscribe((symbols) => {
+      this.symbols = symbols;
+      if (symbols) {
+        this.currentpriceService.getCurrentprice(symbols)
+          .first()
+          .subscribe((cp) => {
+            this.currentPrice = cp;
+          });
+      }
+    })
   }
 
   toggleNav() {
