@@ -83,10 +83,6 @@ export class TableComponent {
           rows: _groups[s]
         };
       });
-
-      this._rows.forEach((r) => {
-        console.log(r.constructor.name);
-      })
     }
   }
 

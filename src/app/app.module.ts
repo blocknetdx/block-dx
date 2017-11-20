@@ -44,6 +44,7 @@ import { ValidCoinDirective } from './pair-selector/valid-coin.directive';
 import { CryptocurrencyService } from './cryptocurrency.service';
 import { SelectComponent } from './select/select.component';
 import { OrderbookService } from './orderbook.service';
+import { WebSocketService } from './web-socket.service';
 
 
 @NgModule({
@@ -91,6 +92,7 @@ import { OrderbookService } from './orderbook.service';
     CurrentpriceService,
     BlockCurrencyPipe,
     OrderbookService,
+    WebSocketService,
     CryptocurrencyService
   ],
   bootstrap: [AppComponent]

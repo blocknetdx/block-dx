@@ -1,0 +1,12 @@
+@import '../styles/utils/variables';
+
+a.close {
+  display: inline-block;
+  color: white;
+  opacity: 0.4;
+  transition: all 0.3s ease;
+  &:hover {
+    color: $bn-blue-light1;
+    opacity: 1;
+  }
+}
