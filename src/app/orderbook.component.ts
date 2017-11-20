@@ -5,6 +5,7 @@ import { DecimalPipe } from '@angular/common';
 import { Order } from './order';
 import { OrderbookService } from './orderbook.service';
 import { TableComponent } from './table/table.component';
+import { TableRowDivider } from './table/table-row-divider';
 import { AppService } from './app.service';
 
 @Component({
@@ -35,7 +36,7 @@ export class OrderbookComponent {
           .subscribe(orderbook => {
             this.rows = [
               ...orderbook.asks,
-              [null, null, null, null, 'divide'],
+              new TableRowDivider(),
               ...orderbook.bids
             ];
 

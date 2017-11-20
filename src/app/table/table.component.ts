@@ -31,12 +31,15 @@ import { TableColumnDirective } from './table-column.directive';
           <div class="bn-table__row" #rowRef
             tabindex="-1"
             [class.selectable]="selectable"
+            [class.divider]="row.constructor.name === 'TableRowDivider'"
             (keyup.enter)="rowSelected(row)"
             (click)="rowSelected(row)"
             *ngFor="let row of section.rows">
-            <div class="bn-table__cell {{col.classList}}" *ngFor="let col of columns">
-              <ng-template *ngTemplateOutlet="col.cellTemplate; context: {row: row}"></ng-template>
-            </div>
+            <ng-container *ngIf="row.constructor.name !== 'TableRowDivider'">
+              <div class="bn-table__cell {{col.classList}}" *ngFor="let col of columns">
+                <ng-template *ngTemplateOutlet="col.cellTemplate; context: {row: row}"></ng-template>
+              </div>
+            </ng-container>
           </div>
         </div>
       </div>
@@ -80,6 +83,10 @@ export class TableComponent {
           rows: _groups[s]
         };
       });
+
+      this._rows.forEach((r) => {
+        console.log(r.constructor.name);
+      })
     }
   }
 
