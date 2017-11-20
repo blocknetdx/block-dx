@@ -13,6 +13,16 @@ button, .btn, [class^="btn-"], [class*=" btn-"] {
   text-transform: uppercase;
   padding: 0 15px;
   box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
+  transition: background-color 0.3s ease;
+
+  .material-icons {
+    font-size: 1.4em;
+    vertical-align: text-bottom;
+  }
+
+  &:hover, &:active {
+    background-color: $bn-blue-light2;
+  }
 
   &[disabled] {
     opacity: 0.4;

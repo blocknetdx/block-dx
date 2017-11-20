@@ -52,7 +52,11 @@
       <span class="spacer"></span>
 
       <div class="input-group row">
-        <button type="submit">Place {{selectedTab}} Order</button>
+        <button type="submit">
+          <i *ngIf="selectedTab == 'buy'" class="material-icons">add</i>
+          <i *ngIf="selectedTab == 'sell'" class="material-icons">remove</i>
+          {{selectedBuyType}} {{selectedTab}}
+        </button>
       </div>
     </form>
   </div>
