@@ -7,9 +7,7 @@ import { Subject } from 'rxjs/Subject';
 export class WebSocketService {
   public socket: Subject<any>;
 
-  constructor() {
-    console.log('WebSocketService');
-  }
+  constructor() {}
 
   public connect(url): Subject<any> {
     if (!this.socket) {
@@ -19,10 +17,10 @@ export class WebSocketService {
   }
 
   private create(url): Subject<any> {
-    console.log('create websocket');
     const ws = new WebSocket(url);
 
     const observable = Observable.create((obs: Observer<any>) => {
+      ws.onopen = obs.next.bind(obs);
       ws.onmessage = obs.next.bind(obs);
       ws.onerror = obs.error.bind(obs);
       ws.onclose = obs.complete.bind(obs);
@@ -32,7 +30,6 @@ export class WebSocketService {
 
     const observer = {
       next: (data: Object) => {
-        console.log('observer', data, ws.readyState, WebSocket.OPEN);
         if (ws.readyState === WebSocket.OPEN) {
           ws.send(JSON.stringify(data));
         }

@@ -12,34 +12,41 @@ export class AppService {
   constructor(private wsService: WebSocketService) {
     // this.wsService.connect('wss://ws-feed.gdax.com')
     //   .subscribe((data) => {
-    //     console.log('connect', JSON.parse(data.data));
+    //     if (data.type) {
+    //       if (data.type === 'open') {
+    //         this.wsService.socket.next({
+    //           type: "subscribe",
+    //           product_ids: [
+    //             "ETH-USD",
+    //           ],
+    //           "channels": [
+    //             "level2",
+    //             "heartbeat",
+    //           ]
+    //         });
+    //
+    //         setTimeout(() => {
+    //           this.wsService.socket.next({
+    //             type: "unsubscribe",
+    //             product_ids: [
+    //               "ETH-USD",
+    //             ],
+    //             "channels": [
+    //               "level2",
+    //               "heartbeat",
+    //             ]
+    //           });
+    //         }, 1000);
+    //
+    //       } else if (data.type === 'message') {
+    //         const d = JSON.parse(data.data);
+    //         // console.log(d.type);
+    //         if (d.type === 'subscriptions') {
+    //           console.log(d);
+    //         }
+    //       }
+    //     }
     //   }, (e) => console.log('error', e));
-    //
-    // setTimeout(() => {
-    //   this.wsService.socket.next({
-    //     type: "subscribe",
-    //     product_ids: [
-    //       "ETH-USD",
-    //     ],
-    //     "channels": [
-    //       "level2",
-    //       "heartbeat",
-    //     ]
-    //   });
-    //
-    //   setTimeout(() => {
-    //     this.wsService.socket.next({
-    //       type: "unsubscribe",
-    //       product_ids: [
-    //         "ETH-USD",
-    //       ],
-    //       "channels": [
-    //         "level2",
-    //         "heartbeat",
-    //       ]
-    //     });
-    //   }, 1000);
-    // }, 2500);
   }
 
   public updateMarketPair(pair: string[]) {

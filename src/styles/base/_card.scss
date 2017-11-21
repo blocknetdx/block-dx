@@ -38,6 +38,7 @@
         text-decoration: none;
         font-size: 12px;
         padding-bottom: 7px;
+        transition: all 0.3s ease;
 
         &:hover {
           border-color: $bn-blue-light1;
