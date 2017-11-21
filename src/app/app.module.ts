@@ -45,6 +45,7 @@ import { CryptocurrencyService } from './cryptocurrency.service';
 import { SelectComponent } from './select/select.component';
 import { OrderbookService } from './orderbook.service';
 import { WebSocketService } from './web-socket.service';
+import { TimeAgoPipe } from './time-ago.pipe';
 
 
 @NgModule({
@@ -72,7 +73,8 @@ import { WebSocketService } from './web-socket.service';
     TableColumnCellDirective,
     PairSelectorComponent,
     ValidCoinDirective,
-    SelectComponent
+    SelectComponent,
+    TimeAgoPipe
   ],
   imports: [
     BrowserModule,
