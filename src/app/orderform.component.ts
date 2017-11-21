@@ -63,6 +63,10 @@ export class OrderformComponent {
     ];
   }
 
+  ngAfterViewInit() {
+    this.typeSelect.selected = this.buyOrderTypes[0];
+  }
+
   formatNumber(num:string, symbol:string): string {
     const format = symbol !== "USD" ? "1.8-8" : "1.2-2";
     return this.decimalPipe.transform(num,format);
