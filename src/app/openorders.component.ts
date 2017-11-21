@@ -55,6 +55,12 @@ export class OpenordersComponent {
     });
   }
 
+  cancelOrder(row) {
+    this.openorders = this.openorders.filter((r) => {
+      return r !== row;
+    });
+  }
+
   setActiveTab(tab) {
     this.tabs = this.tabs.map((t) => {
       t.active = t === tab;
