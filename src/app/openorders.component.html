@@ -4,12 +4,6 @@
   <div class="bn-card__title"> {{title}} </div>
 
   <app-table [rows]="openorders">
-    <app-table-column [prop]="'side'" [classList]="'col-1 align-left d-none d-sm-block'">
-      <ng-template columnHeader>Type</ng-template>
-      <ng-template let-row="row" columnCell>
-        <span class="capitalize">{{row.side}}</span>
-      </ng-template>
-    </app-table-column>
 
     <app-table-column [prop]="'price'" [classList]="'col-4 col-sm-2'">
       <ng-template columnHeader>Price ({{symbols[1]}})</ng-template>
@@ -32,7 +26,14 @@
       </ng-template>
     </app-table-column>
 
-    <app-table-column [prop]="'created_at'" [classList]="'col-4 d-none d-sm-block'">
+    <app-table-column [prop]="'fee'" [classList]="'d-none d-sm-block col-1 col-sm-2'">
+      <ng-template columnHeader>Fee ({{symbols[1]}})</ng-template>
+      <ng-template let-row="row" columnCell>
+        <span class="bn-number" [innerHtml]="row.price*row.size*0.05 | blockCurrency:symbols[1]"></span>
+      </ng-template>
+    </app-table-column>
+
+    <app-table-column [prop]="'created_at'" [classList]="'col-2 d-none d-sm-block'">
       <ng-template columnHeader>Date</ng-template>
       <ng-template let-row="row" columnCell>
         <span>{{row.created_at | date:'y-MM-dd HH:mm:ss'}}</span>
@@ -40,7 +41,7 @@
     </app-table-column>
 
     <app-table-column [sortable]="false" [classList]="'col-1 d-none d-sm-block align-center'">
-      <ng-template columnHeader>&nbsp;</ng-template>
+      <ng-template columnHeader>Status</ng-template>
       <ng-template let-row="row" columnCell>
         <a class="close"><i class="material-icons">close</i></a>
       </ng-template>
