@@ -30,6 +30,10 @@
       }
       &.sortable {
         cursor: pointer;
+        transition: all 0.3s ease;
+        &:hover, &:active {
+          color: $bn-blue-light;
+        }
       }
       &.active {
         font-weight: bold;
