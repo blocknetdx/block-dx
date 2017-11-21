@@ -36,6 +36,7 @@ export class PairSelectorComponent {
   public coinASuggest: string;
   public coinBSuggest: string;
 
+  private _rawData: any[];
   private _controlStatus: Subject<boolean> = new Subject();
 
   private _active: boolean;
@@ -84,6 +85,8 @@ export class PairSelectorComponent {
     });
     this.cryptoService.getCurrencies().first()
       .subscribe((data) => {
+        this._rawData = data;
+        
         const user_wallet = data.slice(0,5).map((coin) => {
           return Object.assign({section: 'My Wallet'}, coin);
         });
