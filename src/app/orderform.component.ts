@@ -64,7 +64,9 @@ export class OrderformComponent {
   }
 
   ngAfterViewInit() {
-    this.typeSelect.selected = this.buyOrderTypes[0];
+    setTimeout(() => {
+      this.typeSelect.selected = this.buyOrderTypes[0];
+    });
   }
 
   formatNumber(num:string, symbol:string): string {

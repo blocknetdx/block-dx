@@ -31,8 +31,11 @@ export class OpenordersComponent {
       this.symbols = symbols;
       if (symbols) {
         this.openorderService.getOpenorders(this.symbols)
-          .then(openorders => {
-            this.openorders = openorders;
+          .then((openorders) => {
+            this.openorders = openorders.map((o) => {
+              o['row_class'] = o.side;
+              return o;
+            });
           });
       }
     });

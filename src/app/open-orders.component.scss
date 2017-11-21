@@ -10,3 +10,12 @@ a.close {
     opacity: 1;
   }
 }
+
+/deep/ .bn-table__row {
+  &.sell {
+    box-shadow: inset 2px 0 0 0 $bn-red;
+  }
+  &.buy {
+    box-shadow: inset 2px 0 0 0 $bn-green;
+  }
+}

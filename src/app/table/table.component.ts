@@ -28,7 +28,7 @@ import { TableColumnDirective } from './table-column.directive';
           <div class="bn-table__section-title" *ngIf="section.title != 'undefined'">
             <div class="col-12">{{section.title}}</div>
           </div>
-          <div class="bn-table__row" #rowRef
+          <div class="bn-table__row {{row.row_class}}" #rowRef
             tabindex="-1"
             [class.selectable]="selectable"
             [class.divider]="row.constructor.name === 'TableRowDivider'"
