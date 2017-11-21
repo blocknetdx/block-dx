@@ -86,7 +86,9 @@
       <app-table-column [prop]="'change'" [classList]="'col-5 col-md-2'">
         <ng-template columnHeader>% Change</ng-template>
         <ng-template let-row="row" columnCell>
-          <span>{{row.change | percent:'1.2-2'}}</span>
+          <span [class.color-red]="row.change < 0" [class.color-green]="row.change > 0">{{row.change | percent:'1.2-2'}}</span>
+          <img *ngIf="row.change > 0" class="my-icon" aria-label="My icon" src="assets/icons/arrow-diagonal-up.svg">
+          <img *ngIf="row.change < 0" class="my-icon" aria-label="My icon" src="assets/icons/arrow-diagonal-down.svg">
         </ng-template>
       </app-table-column>
 
