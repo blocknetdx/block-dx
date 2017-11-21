@@ -12,8 +12,9 @@ import { OpenordersService } from './openorders.service';
   providers: [OpenordersService]
 })
 export class OpenordersComponent {
-  public title = 'Open Orders';
   public openorders: Openorder[];
+  public filledorders: Openorder[];
+  public tabs: any[];
 
   private _symbols: string[];
   public get symbols(): string[] { return this._symbols; }
@@ -27,6 +28,11 @@ export class OpenordersComponent {
   ) { }
 
   ngOnInit() {
+    this.tabs = [
+      {title: 'Open Orders', active: true},
+      {title: 'Filled Orders', active: false}
+    ];
+
     this.appService.marketPairChanges.subscribe((symbols) => {
       this.symbols = symbols;
       if (symbols) {
@@ -37,7 +43,22 @@ export class OpenordersComponent {
               return o;
             });
           });
+
+        this.openorderService.getFilledorders(this.symbols)
+          .then((filledorders) => {
+            this.filledorders = filledorders.map((o) => {
+              o['row_class'] = o.side;
+              return o;
+            });
+          });
       }
+    });
+  }
+
+  setActiveTab(tab) {
+    this.tabs = this.tabs.map((t) => {
+      t.active = t === tab;
+      return t;
     });
   }
 }

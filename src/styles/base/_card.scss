@@ -9,6 +9,36 @@
     text-transform: uppercase;
     background: $bn-blue2;
     padding: 11px 17px;
+
+    &.tabbed {
+      & > a {
+        font-weight: normal;
+        transition: all 0.3s ease;
+        position: relative;
+        display: inline-block;
+        &.active {
+          font-weight: bold;
+          pointer-events: none;
+          color: $bn-blue-light3;
+        }
+        &:hover, &:active {
+          color: $bn-blue-light;
+        }
+
+        & + a {
+          margin-left: 2em;
+          &::before {
+            content: '|';
+            position: absolute;
+            left: -1em;
+            top: -1px;
+            transform: translateX(-50%);
+            color: white;
+            font-weight: normal;
+          }
+        }
+      }
+    }
   }
 
   &__subhead {

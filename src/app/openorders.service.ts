@@ -15,12 +15,21 @@ export class OpenordersService {
   constructor(private http: Http) { }
 
   getOpenorders(symbols:string[]): Promise<Openorder[]> {
-    this.openordersUrl = 'api/openorders_' + symbols.join("_");
+    const url = 'api/openorders_' + symbols.join("_");
 
-    return this.http.get(this.openordersUrl)
-       .toPromise()
-       .then(response => response.json() as Openorder[])
-       .catch(this.handleError);
+    return this.http.get(url)
+      .map(response => response.json() as Openorder[])
+      .toPromise()
+      .catch(this.handleError);
+  }
+
+  getFilledorders(symbols:string[]): Promise<Openorder[]> {
+    const url = 'api/filledorders_' + symbols.join("_");
+
+    return this.http.get(url)
+      .map((res) => res.json() as Openorder[])
+      .toPromise()
+      .catch(this.handleError);
   }
 
   private handleError(error: any): Promise<any> {

@@ -265,7 +265,7 @@ export class InMemoryDataService implements InMemoryDbService {
       	"type": "limit",
       	"time_in_force": "GTC",
       	"post_only": true,
-      	"created_at": "2017-10-26T16:15:35.628349Z",
+      	"created_at": "2017-11-16T20:05:15+00:00",
       	"fill_fees": "0.0000000000000000",
       	"filled_size": "0.00000000",
       	"executed_value": "0.0000000000000000",
@@ -281,7 +281,7 @@ export class InMemoryDataService implements InMemoryDbService {
       	"type": "limit",
       	"time_in_force": "GTC",
       	"post_only": true,
-      	"created_at": "2017-10-26T16:19:28.158102Z",
+      	"created_at": "2017-11-21T20:05:15+00:00",
       	"fill_fees": "0.0000000000000000",
       	"filled_size": "0.00000000",
       	"executed_value": "0.0000000000000000",
@@ -297,7 +297,59 @@ export class InMemoryDataService implements InMemoryDbService {
       	"type": "limit",
       	"time_in_force": "GTC",
       	"post_only": true,
-      	"created_at": "2017-10-26T16:22:00.52126Z",
+      	"created_at": "2017-11-16T20:05:15+00:00",
+      	"fill_fees": "0.0000000000000000",
+      	"filled_size": "0.00000000",
+      	"executed_value": "0.0000000000000000",
+      	"status": "open",
+      	"settled": false
+      }
+		]
+
+		const filledorders_ETH_BTC = [
+      {
+      	"id": "1c4c474a-1226-432e-bb57-be00a349ddd7",
+      	"price": "0.05011999",
+      	"size": "1.00000000",
+        "product_id": "ETH-BTC",
+      	"side": "sell",
+      	"stp": "dc",
+      	"type": "limit",
+      	"time_in_force": "GTC",
+      	"post_only": true,
+      	"created_at": "2017-11-21T20:05:15+00:00",
+      	"fill_fees": "0.0000000000000000",
+      	"filled_size": "0.00000000",
+      	"executed_value": "0.0000000000000000",
+      	"status": "open",
+      	"settled": false
+      }, {
+      	"id": "00426d45-8425-4af0-ad53-9599453bd038",
+      	"price": "0.04994000",
+      	"size": "51.11000000",
+        "product_id": "ETH-BTC",
+      	"side": "sell",
+      	"stp": "dc",
+      	"type": "limit",
+      	"time_in_force": "GTC",
+      	"post_only": true,
+      	"created_at": "2017-11-20T20:05:15+00:00",
+      	"fill_fees": "0.0000000000000000",
+      	"filled_size": "0.00000000",
+      	"executed_value": "0.0000000000000000",
+      	"status": "open",
+      	"settled": false
+      }, {
+      	"id": "48d136e7-7aac-4331-8920-355483a5d739",
+      	"price": "0.04923000",
+      	"size": "0.01000000",
+        "product_id": "ETH-BTC",
+      	"side": "buy",
+      	"stp": "dc",
+      	"type": "limit",
+      	"time_in_force": "GTC",
+      	"post_only": true,
+      	"created_at": "2017-11-20T20:05:15+00:00",
       	"fill_fees": "0.0000000000000000",
       	"filled_size": "0.00000000",
       	"executed_value": "0.0000000000000000",
@@ -308,6 +360,58 @@ export class InMemoryDataService implements InMemoryDbService {
 
 
     const openorders_BTC_USD = [
+      {
+      	"id": "1c4c474a-1226-432e-bb57-be00a349ddd7",
+      	"price": "5960.79000000",
+      	"size": "1.01000000",
+      	"product_id": "BTC-USD",
+      	"side": "sell",
+      	"stp": "dc",
+      	"type": "limit",
+      	"time_in_force": "GTC",
+      	"post_only": true,
+      	"created_at": "2017-10-26T16:15:35.628349Z",
+      	"fill_fees": "0.0000000000000000",
+      	"filled_size": "0.00000000",
+      	"executed_value": "0.0000000000000000",
+      	"status": "open",
+      	"settled": false
+      }, {
+      	"id": "00426d45-8425-4af0-ad53-9599453bd038",
+      	"price": "5961.80000000",
+      	"size": "0.45777785",
+        "product_id": "BTC-USD",
+      	"side": "sell",
+      	"stp": "dc",
+      	"type": "limit",
+      	"time_in_force": "GTC",
+      	"post_only": true,
+      	"created_at": "2017-10-26T16:19:28.158102Z",
+      	"fill_fees": "0.0000000000000000",
+      	"filled_size": "0.00000000",
+      	"executed_value": "0.0000000000000000",
+      	"status": "open",
+      	"settled": false
+      }, {
+      	"id": "48d136e7-7aac-4331-8920-355483a5d739",
+      	"price": "5958.01000000",
+      	"size": "0.21457895",
+        "product_id": "BTC-USD",
+      	"side": "buy",
+      	"stp": "dc",
+      	"type": "limit",
+      	"time_in_force": "GTC",
+      	"post_only": true,
+      	"created_at": "2017-10-26T16:22:00.52126Z",
+      	"fill_fees": "0.0000000000000000",
+      	"filled_size": "0.00000000",
+      	"executed_value": "0.0000000000000000",
+      	"status": "open",
+      	"settled": false
+      }
+		];
+
+		const filledorders_BTC_USD = [
       {
       	"id": "1c4c474a-1226-432e-bb57-be00a349ddd7",
       	"price": "5960.79000000",
@@ -563,6 +667,8 @@ export class InMemoryDataService implements InMemoryDbService {
       stats_BTC,
       openorders_ETH_BTC,
       openorders_BTC_USD,
+      filledorders_ETH_BTC,
+      filledorders_BTC_USD,
 			currency
     };
 	}
