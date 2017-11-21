@@ -202,14 +202,33 @@ app-table {
 }
 
 .input-group {
-  &::after {
-    content: "search";
-    font-family: "Material Icons";
+  position: relative;
+  &-addon {
     position: absolute;
-    right: 10px;
+    font-size: 1.2em;
+    line-height: 1em;
     top: 50%;
+    right: 5px;
     transform: translateY(-50%);
-    opacity: 0.4;
+    pointer-events: none;
+    color: white;
+
+    &.as-button {
+      pointer-events: auto;
+    }
+
+    .material-icons {
+      opacity: 0.4;
+      font-size: inherit;
+      float: left;
+    }
+
+    a {
+      color: $bn-blue-light3;
+      .material-icons {
+        opacity: 1;
+      }
+    }
   }
 }
 

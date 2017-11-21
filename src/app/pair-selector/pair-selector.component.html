@@ -24,6 +24,10 @@
               #coinA="ngModel" #input
               [ngModel]="formatRow(model.coinA)"
               (ngModelChange)="filterCoins('coinA', $event)">
+              <div class="input-group-addon" [class.as-button]="coinA.valid">
+                <i *ngIf="!coinA.valid" class="material-icons">search</i>
+                <a (click)="resetModel('coinA')" *ngIf="coinA.valid"><i class="material-icons">close</i></a>
+              </div>
             </div>
           </div>
           <div class="col-6 col-md-4">
@@ -38,6 +42,10 @@
               #coinB="ngModel" #input
               [ngModel]="formatRow(model.coinB)"
               (ngModelChange)="filterCoins('coinB', $event)">
+              <div class="input-group-addon" [class.as-button]="coinB.valid">
+                <i *ngIf="!coinB.valid" class="material-icons">search</i>
+                <a (click)="resetModel('coinB')" *ngIf="coinB.valid"><i class="material-icons">close</i></a>
+              </div>
             </div>
           </div>
           <div class="col-md-4 d-none d-md-block">

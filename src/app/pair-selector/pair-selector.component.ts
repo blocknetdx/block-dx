@@ -119,6 +119,16 @@ export class PairSelectorComponent {
     }
   }
 
+  resetModel(coin) {
+    if (coin === 'coinA') {
+      this.model = {};
+      this.inputs.first.nativeElement.focus();
+    } else if (coin === 'coinB') {
+      this.model.coinB = '';
+      this.inputs.last.nativeElement.focus();
+    }
+  }
+
   formatRow(row) {
     if (typeof row === 'object') {
       return `${row.name.capitalize()} (${row.symbol.toUpperCase()})`
