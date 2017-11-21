@@ -12,7 +12,7 @@ export class TableColumnDirective {
   @Input() prop: string;
 
   active: boolean;
-  desc: boolean;
+  desc: boolean = true;
 
   @ContentChild(TableColumnHeaderDirective, {read: TemplateRef})
   headerTemplate: TemplateRef<any>

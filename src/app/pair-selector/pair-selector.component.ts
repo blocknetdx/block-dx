@@ -9,6 +9,7 @@ import { Subject } from 'rxjs/Subject';
 import { AppService } from '../app.service';
 import { fadeInOut } from '../animations';
 import { TableComponent } from '../table/table.component';
+import { TableColumnDirective } from '../table/table-column.directive';
 import { CryptocurrencyService } from '../cryptocurrency.service';
 import { Cryptocurrency } from '../cryptocurrency';
 
@@ -61,6 +62,7 @@ export class PairSelectorComponent {
               }
             });
         });
+        this.pairTable.sort(this.pairTable.columns[3]);
         this.inputs.first.nativeElement.focus();
       });
     } else {
