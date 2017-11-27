@@ -1,14 +1,46 @@
 @import '../styles/utils/mixins';
 @import '../styles/utils/variables';
 
-.bn-card__body {
-  position: relative;
-  top: auto;
-  bottom: auto;
-  padding: 12px 8px;
+bn-card /deep/ {
 
-  @include screen(lg) {
-    padding: 24px 16px;
+  .bn-card__subhead {
+    margin: -12px -8px 12px;
+    @include screen(lg) {
+      margin: -24px -16px 24px;
+    }
+
+    a {
+      display: inline-block;
+      width: 49%;
+      border-bottom: 2px solid $bn-blue2;
+      text-align: center;
+      color: white;
+      text-decoration: none;
+      font-size: 12px;
+      padding-bottom: 7px;
+      transition: all 0.3s ease;
+
+      &:hover {
+        border-color: $bn-blue-light1;
+      }
+
+      &.selected {
+        border-color: $bn-blue-light2;
+        color: $bn-blue-light3;
+        font-weight: 700;
+      }
+    }
+  }
+
+  .bn-card__body {
+    position: relative;
+    top: auto;
+    bottom: auto;
+    padding: 12px 8px;
+
+    @include screen(lg) {
+      padding: 24px 16px;
+    }
   }
 }
 

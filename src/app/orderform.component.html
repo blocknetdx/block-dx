@@ -1,12 +1,12 @@
-<div class="bn-card bn-orderform">
+<bn-card cardClass="bn-orderform">
   <!-- <div class="bn-card__FPO"></div> -->
-  <div class="bn-card__title"> {{ title }} </div>
-  <div class="bn-card__subhead">
-    <a (click)="selectedTab = 'buy'" [class.selected]="selectedTab == 'buy'">Buy</a>
-    <a (click)="selectedTab = 'sell'" [class.selected]="selectedTab == 'sell'">Sell</a>
-  </div>
+  <bn-card-title>{{ title }}</bn-card-title>
 
-  <div class="bn-card__body">
+  <bn-card-body>
+    <div class="bn-card__subhead">
+      <a (click)="selectedTab = 'buy'" [class.selected]="selectedTab == 'buy'">Buy</a>
+      <a (click)="selectedTab = 'sell'" [class.selected]="selectedTab == 'sell'">Sell</a>
+    </div>
     <form (ngSubmit)="onOrderSubmit()" #orderForm="ngForm" id="market_order">
       <div class="input-group row">
         <label class="col-4 col-form-label" for="type">Type</label>
@@ -59,7 +59,6 @@
         </button>
       </div>
     </form>
-  </div>
 
-
-</div>
+  </bn-card-body>
+</bn-card>

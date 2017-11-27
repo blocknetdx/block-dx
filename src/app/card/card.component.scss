@@ -15,7 +15,7 @@
     padding: 11px 17px;
 
     &.tabbed {
-      & > a {
+      a {
         font-weight: normal;
         transition: all 0.3s ease;
         position: relative;
@@ -59,31 +59,4 @@
     bottom: 0;
     width: 100%;
   }
-
-  // &.bn-orderform {
-  //
-  //   .bn-card__subhead {
-  //     a {
-  //       display: inline-block;
-  //       width: 49%;
-  //       border-bottom: 2px solid $bn-blue2;
-  //       text-align: center;
-  //       color: white;
-  //       text-decoration: none;
-  //       font-size: 12px;
-  //       padding-bottom: 7px;
-  //       transition: all 0.3s ease;
-  //
-  //       &:hover {
-  //         border-color: $bn-blue-light1;
-  //       }
-  //
-  //       &.selected {
-  //         border-color: $bn-blue-light2;
-  //         color: $bn-blue-light3;
-  //         font-weight: 700;
-  //       }
-  //     }
-  //   }
-  // }
 }

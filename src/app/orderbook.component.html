@@ -1,6 +1,6 @@
-<div class="bn-card bn-orderbook">
-  <div class="bn-card__title"> {{title}} </div>
-  <div class="bn-card__body">
+<bn-card cardClass="bn-orderbook">
+  <bn-card-title> {{title}} </bn-card-title>
+  <bn-card-body>
 
     <app-table #orderbookTable
       [selectable]="true" [rows]="rows"
@@ -37,5 +37,5 @@
       </app-table-column>
     </app-table>
 
-  </div>
-</div>
+  </bn-card-body>
+</bn-card>

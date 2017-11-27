@@ -1,100 +1,103 @@
-
-<div class="bn-card bn-openorders">
-  <div class="bn-card__title tabbed">
+<bn-card cardClass="bn-openorders" cardTitleClass="tabbed">
+  <bn-card-title>
     <a *ngFor="let tab of tabs"
       (click)="setActiveTab(tab)"
       [class.active]="tab.active">{{tab.title}}</a>
-  </div>
+  </bn-card-title>
 
-  <app-table *ngIf="tabs[0].active" [rows]="openorders">
+  <bn-card-body>
+    <app-table *ngIf="tabs[0].active" [rows]="openorders">
 
-    <app-table-column [prop]="'price'" [classList]="'col-4 col-sm-2'">
-      <ng-template columnHeader>Price ({{symbols[1]}})</ng-template>
-      <ng-template let-row="row" columnCell>
-        <span class="bn-number" [innerHtml]="row.price | blockCurrency:symbols[1]"></span>
-      </ng-template>
-    </app-table-column>
+      <app-table-column [prop]="'price'" [classList]="'col-4 col-sm-2'">
+        <ng-template columnHeader>Price ({{symbols[1]}})</ng-template>
+        <ng-template let-row="row" columnCell>
+          <span class="bn-number" [innerHtml]="row.price | blockCurrency:symbols[1]"></span>
+        </ng-template>
+      </app-table-column>
 
-    <app-table-column [prop]="'size'" [classList]="'col-4 col-sm-2'">
-      <ng-template columnHeader>Amount ({{symbols[0]}})</ng-template>
-      <ng-template let-row="row" columnCell>
-        <span class="bn-number" [innerHtml]="row.size | blockCurrency:symbols[0]"></span>
-      </ng-template>
-    </app-table-column>
+      <app-table-column [prop]="'size'" [classList]="'col-4 col-sm-2'">
+        <ng-template columnHeader>Amount ({{symbols[0]}})</ng-template>
+        <ng-template let-row="row" columnCell>
+          <span class="bn-number" [innerHtml]="row.size | blockCurrency:symbols[0]"></span>
+        </ng-template>
+      </app-table-column>
 
-    <app-table-column [prop]="'price'" [classList]="'col-4 col-sm-2'">
-      <ng-template columnHeader>Total ({{symbols[1]}})</ng-template>
-      <ng-template let-row="row" columnCell>
-        <span class="bn-number" [innerHtml]="row.price*row.size | blockCurrency:symbols[1]"></span>
-      </ng-template>
-    </app-table-column>
+      <app-table-column [prop]="'price'" [classList]="'col-4 col-sm-2'">
+        <ng-template columnHeader>Total ({{symbols[1]}})</ng-template>
+        <ng-template let-row="row" columnCell>
+          <span class="bn-number" [innerHtml]="row.price*row.size | blockCurrency:symbols[1]"></span>
+        </ng-template>
+      </app-table-column>
 
-    <app-table-column [prop]="'fee'" [classList]="'d-none d-sm-block col-1 col-sm-2'">
-      <ng-template columnHeader>Fee ({{symbols[1]}})</ng-template>
-      <ng-template let-row="row" columnCell>
-        <span class="bn-number" [innerHtml]="row.price*row.size*0.05 | blockCurrency:symbols[1]"></span>
-      </ng-template>
-    </app-table-column>
+      <app-table-column [prop]="'fee'" [classList]="'d-none d-sm-block col-1 col-sm-2'">
+        <ng-template columnHeader>Fee ({{symbols[1]}})</ng-template>
+        <ng-template let-row="row" columnCell>
+          <span class="bn-number" [innerHtml]="row.price*row.size*0.05 | blockCurrency:symbols[1]"></span>
+        </ng-template>
+      </app-table-column>
 
-    <app-table-column [prop]="'filled'" [classList]="'d-none d-sm-block col-1 col-sm-2'">
-      <ng-template columnHeader>Filled ({{symbols[1]}})</ng-template>
-      <ng-template let-row="row" columnCell>
-        <span class="bn-number" [innerHtml]="row.size | blockCurrency:symbols[1]"></span>
-      </ng-template>
-    </app-table-column>
+      <app-table-column [prop]="'filled'" [classList]="'d-none d-sm-block col-1 col-sm-2'">
+        <ng-template columnHeader>Filled ({{symbols[1]}})</ng-template>
+        <ng-template let-row="row" columnCell>
+          <span class="bn-number" [innerHtml]="row.size | blockCurrency:symbols[1]"></span>
+        </ng-template>
+      </app-table-column>
 
-    <app-table-column [prop]="'created_at'" [classList]="'col-1 d-none d-sm-block'">
-      <ng-template columnHeader>Date</ng-template>
-      <ng-template let-row="row" columnCell>
-        <span>{{row.created_at | timeAgo}}</span>
-      </ng-template>
-    </app-table-column>
+      <app-table-column [prop]="'created_at'" [classList]="'col-1 d-none d-sm-block'">
+        <ng-template columnHeader>Date</ng-template>
+        <ng-template let-row="row" columnCell>
+          <span>{{row.created_at | timeAgo}}</span>
+        </ng-template>
+      </app-table-column>
 
-    <app-table-column [sortable]="false" [classList]="'col-1 d-none d-sm-block align-center'">
-      <ng-template columnHeader>Status</ng-template>
-      <ng-template let-row="row" columnCell>
-        <a (click)="cancelOrder(row)" class="close"><i class="material-icons">close</i></a>
-      </ng-template>
-    </app-table-column>
-  </app-table>
+      <app-table-column [sortable]="false" [classList]="'col-1 d-none d-sm-block align-center'">
+        <ng-template columnHeader>Status</ng-template>
+        <ng-template let-row="row" columnCell>
+          <a (click)="cancelOrder(row)" class="close"><i class="material-icons">close</i></a>
+        </ng-template>
+      </app-table-column>
+    </app-table>
 
 
-  <app-table *ngIf="tabs[1].active" [rows]="openorders">
+    <app-table *ngIf="tabs[1].active" [rows]="openorders">
 
-    <app-table-column [prop]="'size'" [classList]="'col-4 col-sm-3'">
-      <ng-template columnHeader>Amount ({{symbols[0]}})</ng-template>
-      <ng-template let-row="row" columnCell>
-        <span class="bn-number" [innerHtml]="row.size | blockCurrency:symbols[0]"></span>
-      </ng-template>
-    </app-table-column>
+      <app-table-column [prop]="'size'" [classList]="'col-4 col-sm-3'">
+        <ng-template columnHeader>Amount ({{symbols[0]}})</ng-template>
+        <ng-template let-row="row" columnCell>
+          <span class="bn-number" [innerHtml]="row.size | blockCurrency:symbols[0]"></span>
+        </ng-template>
+      </app-table-column>
 
-    <app-table-column [prop]="'price'" [classList]="'col-4 col-sm-3'">
-      <ng-template columnHeader>Price ({{symbols[1]}})</ng-template>
-      <ng-template let-row="row" columnCell>
-        <span class="bn-number" [innerHtml]="row.price | blockCurrency:symbols[1]"></span>
-      </ng-template>
-    </app-table-column>
+      <app-table-column [prop]="'price'" [classList]="'col-4 col-sm-3'">
+        <ng-template columnHeader>Price ({{symbols[1]}})</ng-template>
+        <ng-template let-row="row" columnCell>
+          <span class="bn-number" [innerHtml]="row.price | blockCurrency:symbols[1]"></span>
+        </ng-template>
+      </app-table-column>
 
-    <app-table-column [prop]="'fee'" [classList]="'d-none d-sm-block col-1 col-sm-2'">
-      <ng-template columnHeader>Fee ({{symbols[1]}})</ng-template>
-      <ng-template let-row="row" columnCell>
-        <span class="bn-number" [innerHtml]="row.price*row.size*0.05 | blockCurrency:symbols[1]"></span>
-      </ng-template>
-    </app-table-column>
+      <app-table-column [prop]="'fee'" [classList]="'d-none d-sm-block col-1 col-sm-2'">
+        <ng-template columnHeader>Fee ({{symbols[1]}})</ng-template>
+        <ng-template let-row="row" columnCell>
+          <span class="bn-number" [innerHtml]="row.price*row.size*0.05 | blockCurrency:symbols[1]"></span>
+        </ng-template>
+      </app-table-column>
 
-    <app-table-column [prop]="'created_at'" [classList]="'col-4 col-sm-2'">
-      <ng-template columnHeader>Time</ng-template>
-      <ng-template let-row="row" columnCell>
-        <span>{{row.created_at | timeAgo}}</span>
-      </ng-template>
-    </app-table-column>
+      <app-table-column [prop]="'created_at'" [classList]="'col-4 col-sm-2'">
+        <ng-template columnHeader>Time</ng-template>
+        <ng-template let-row="row" columnCell>
+          <span>{{row.created_at | timeAgo}}</span>
+        </ng-template>
+      </app-table-column>
 
-    <app-table-column [classList]="'col-2 d-none d-sm-block align-center'">
-      <ng-template columnHeader>Product</ng-template>
-      <ng-template let-row="row" columnCell>
-        {{symbols[0]}}-{{symbols[1]}}
-      </ng-template>
-    </app-table-column>
-  </app-table>
+      <app-table-column [classList]="'col-2 d-none d-sm-block align-center'">
+        <ng-template columnHeader>Product</ng-template>
+        <ng-template let-row="row" columnCell>
+          {{symbols[0]}}-{{symbols[1]}}
+        </ng-template>
+      </app-table-column>
+    </app-table>
 
-</div>
+  </bn-card-body>
+
+
+</bn-card>
