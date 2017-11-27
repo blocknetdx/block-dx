@@ -6,12 +6,6 @@
   cursor: pointer;
   background: none;
 
-  &:hover, &:active {
-    .navbar-pricing__lower {
-      color: $bn-blue-light3;
-    }
-  }
-
   @include screen(lg) {
     position: relative;
     transition: background-color 0.3s ease;
@@ -34,6 +28,12 @@
   &_body {
     padding: 0;
     position: relative;
+
+    &:hover, &:active {
+      .navbar-pricing__lower {
+        color: $bn-blue-light3;
+      }
+    }
 
     @include screen(lg) {
       padding: 6px 30px;
@@ -247,8 +247,12 @@ input {
   font-family: $open-sans;
 }
 
+.currency-cell, .coin-cell {
+  font-family: $open-sans;
+}
+
 .coin-cell {
-  & > span {
+  span {
     opacity: 0.4;
   }
 }
