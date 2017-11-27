@@ -1,6 +1,6 @@
-<div class="bn-card bn-tradehistory">
-  <div class="bn-card__title"> {{title}} </div>
-  <div class="bn-card__body">
+<bn-card class="bn-tradehistory">
+  <bn-card-title>{{title}}</bn-card-title>
+  <bn-card-body>
 
     <app-table [rows]="tradehistory">
       <app-table-column [sortable]="false" [classList]="'col-4'">
@@ -30,6 +30,5 @@
       </app-table-column>
     </app-table>
 
-  </div>
-
-</div>
+  </bn-card-body>
+</bn-card>

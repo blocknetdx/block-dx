@@ -46,6 +46,9 @@ import { SelectComponent } from './select/select.component';
 import { OrderbookService } from './orderbook.service';
 import { WebSocketService } from './web-socket.service';
 import { TimeAgoPipe } from './time-ago.pipe';
+import { CardComponent } from './card/card.component';
+import { CardTitleDirective } from './card/card-title.directive';
+import { CardBodyDirective } from './card/card-body.directive';
 
 
 @NgModule({
@@ -74,7 +77,10 @@ import { TimeAgoPipe } from './time-ago.pipe';
     PairSelectorComponent,
     ValidCoinDirective,
     SelectComponent,
-    TimeAgoPipe
+    TimeAgoPipe,
+    CardComponent,
+    CardTitleDirective,
+    CardBodyDirective
   ],
   imports: [
     BrowserModule,
