@@ -54,6 +54,7 @@ export class PairSelectorComponent {
                 if (key === 'coinA') {
                   setTimeout(() => {
                     this.inputs.last.nativeElement.focus();
+                    this.filterCoins('coinB', '');
                   });
                 } else if (key === 'coinB') {
                   setTimeout(() => {
@@ -86,7 +87,7 @@ export class PairSelectorComponent {
     this.cryptoService.getCurrencies().first()
       .subscribe((data) => {
         this._rawData = data;
-        
+
         const user_wallet = data.slice(0,5).map((coin) => {
           return Object.assign({section: 'My Wallet'}, coin);
         });
