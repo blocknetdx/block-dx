@@ -6,6 +6,12 @@
   cursor: pointer;
   background: none;
 
+  &:hover, &:active {
+    .navbar-pricing__lower {
+      color: $bn-blue-light3;
+    }
+  }
+
   @include screen(lg) {
     position: relative;
     transition: background-color 0.3s ease;
@@ -28,6 +34,7 @@
   &_body {
     padding: 0;
     position: relative;
+
     @include screen(lg) {
       padding: 6px 30px;
 
@@ -74,6 +81,10 @@
       content: 'keyboard_arrow_up';
     }
   }
+}
+
+.navbar-pricing__lower {
+  transition: color 0.2s ease;
 }
 
 .navbar-pricing__upper {
