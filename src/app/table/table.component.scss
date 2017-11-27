@@ -65,22 +65,22 @@
     font-family: $open-sans;
     font-weight: bold;
     opacity: 0.4;
+    cursor: default;
   }
 
   &__row {
     padding: 0 13px;
     cursor: default;
-    &.selectable {
-      cursor: pointer;
-    }
     &.divider {
       cursor: default;
       background-color: rgba(1,27,54,0.6);
       height: 20px;
     }
-    &:not(.divider) {
+    &.selectable:not(.divider) {
+      cursor: pointer;
       &:hover, &:focus, &:active {
         background-color: rgba(255,255,255,0.04);
+        box-shadow: 0 2px 4px 0 rgba(0,0,0,0.1);
       }
     }
   }
