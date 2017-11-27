@@ -235,7 +235,10 @@ app-table {
     }
 
     a {
-      color: $bn-blue-light3;
+      transition: color 0.2s ease;
+      &:hover, &:active {
+        color: $bn-blue-light3;
+      }
       .material-icons {
         opacity: 1;
       }
