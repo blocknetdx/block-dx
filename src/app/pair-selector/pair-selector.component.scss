@@ -133,16 +133,18 @@
 }
 
 .pair-container {
-  position: absolute;
-  top: calc(100% + 2px);
+  position: fixed;
+  top: 51px;
   left: 0;
   width: 100%;
-  height: calc(100vh - 51px);
+  bottom: 0;
   background-color: $bn-blue-light4;
 	box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
 
   @include screen(lg) {
+    position: absolute;
     top: 100%;
+    bottom: auto;
     width: 580px;
     height: 70vh;
   }
@@ -198,15 +200,22 @@ form {
   z-index: 9992;
 }
 
-app-table {
-  /deep/ .bn-table {
-    height: calc(100% - 70px);
+app-table /deep/ {
+  .bn-table {
+    height: calc(100% - 98px);
+    @include screen(lg) {
+      height: calc(100% - 70px);
+    }
   }
-  /deep/ .bn-table__header {
+  .bn-table__header {
   	background-color: $bn-blue-light5;
     padding: 10px 30px;
   }
-  /deep/ .bn-table__row, /deep/ .bn-table__section-title {
+  .bn-table__body {
+    padding-bottom: 15px;
+  }
+
+  .bn-table__row, .bn-table__section-title {
     padding-left: 30px;
     padding-right: 30px;
   }

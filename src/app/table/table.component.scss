@@ -61,6 +61,7 @@
     padding: 5px 0;
     height: calc(100% - 36px);
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   &__section-title {
