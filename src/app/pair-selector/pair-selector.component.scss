@@ -196,15 +196,22 @@ app-table /deep/ {
   }
   .bn-table__header {
   	background-color: $bn-blue-light5;
-    padding: 10px 30px;
+    padding: 10px 8px;
+    @include screen(lg) {
+      padding: 10px 30px;
+    }
   }
   .bn-table__body {
     padding-bottom: 15px;
   }
 
   .bn-table__row, .bn-table__section-title {
-    padding-left: 30px;
-    padding-right: 30px;
+    padding-left: 8px;
+    padding-right: 8px;
+    @include screen(lg) {
+      padding-left: 30px;
+      padding-right: 30px;
+    }
   }
 }
 

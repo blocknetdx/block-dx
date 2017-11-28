@@ -102,9 +102,11 @@
 
     </app-table>
 
-    <div class="submit-button" *isBp="['xs', 'sm']" [style.display]="pairForm.form.valid ? 'block' : 'none'">
-      <button tabindex="-1" type="submit" form="pairForm">Select</button>
-    </div>
+    <ng-container *isBp="['xs', 'sm']">
+      <div [@fadeInOut] class="submit-button" *ngIf="pairForm.form.valid">
+        <button tabindex="-1" type="submit" form="pairForm">Select</button>
+      </div>
+    </ng-container>
 
   </div>
 </div>
