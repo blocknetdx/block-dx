@@ -15,7 +15,7 @@ export const fadeInOut = trigger('fadeInOut', [
     animate('0.26s ease-out')
   ]),
   transition('* => void', [
-    animate('0.26s ease-in', style({ opacity: 0}))
+    animate('0.26s ease', style({ opacity: 0}))
   ]),
-  transition('visible <=> hidden', animate('0.26s ease-in-out'))
+  transition('visible <=> hidden', animate('0.26s ease'))
 ]);
