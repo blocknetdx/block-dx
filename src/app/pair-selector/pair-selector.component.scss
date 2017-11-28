@@ -1,6 +1,10 @@
 @import '../../styles/utils/mixins';
 @import '../../styles/utils/variables';
 
+:host {
+  z-index: 999;
+}
+
 .navbar-pricing__cell {
   margin-left: 0;
   cursor: pointer;
