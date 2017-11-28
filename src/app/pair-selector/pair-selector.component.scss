@@ -203,7 +203,7 @@ app-table {
     height: calc(100% - 70px);
   }
   /deep/ .bn-table__header {
-  	background-color: rgba(255,255,255,0.05);
+  	background-color: $bn-blue-light5;
     padding: 10px 30px;
   }
   /deep/ .bn-table__row, /deep/ .bn-table__section-title {
