@@ -6,5 +6,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  constructor() {}
+  constructor() {
+    if ('ontouchstart' in document.documentElement) {
+      document.querySelector('html').classList.add('touch');
+    }
+  }
 }

@@ -28,7 +28,7 @@
       width: 100%;
       height: 100%;
       @include screen(lg) {
-        width: calc(100% - 320px);
+        width: calc(100% - 300px);
       }
       @include screen(xl) {
         width: calc(100% - 338px);
@@ -48,7 +48,7 @@
 
     &.sidebar {
       @include screen(lg) {
-        width: 320px;
+        width: 300px;
       }
       @include screen(xl) {
         width: 338px;
