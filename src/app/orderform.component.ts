@@ -52,14 +52,14 @@ export class OrderformComponent {
 
     this.buyOrderTypes = [
       { value: 'market', viewValue: 'Market Order'},
-      { value: 'limit', viewValue: 'Limit Order'},
-      { value: 'stop', viewValue: 'Stop Order'}
+      { value: 'limit', viewValue: 'Limit Order'}
+      // { value: 'stop', viewValue: 'Stop Order'}
     ];
 
     this.sellOrderTypes = [
       { value: 'market', viewValue: 'Market Order'},
-      { value: 'limit', viewValue: 'Limit Order'},
-      { value: 'stop', viewValue: 'Stop Order'}
+      { value: 'limit', viewValue: 'Limit Order'}
+      // { value: 'stop', viewValue: 'Stop Order'}
     ];
   }
 
