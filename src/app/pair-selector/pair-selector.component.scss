@@ -23,7 +23,7 @@
 
     &:hover, &:active {
       .navbar-pricing__lower {
-        color: $bn-blue-light3;
+        color: $bn-blue-light6;
       }
     }
 
@@ -240,7 +240,7 @@ app-table /deep/ {
     a {
       transition: color 0.26s ease;
       &:hover, &:active {
-        color: $bn-blue-light3;
+        color: $bn-blue-light6;
       }
       .material-icons {
         opacity: 1;

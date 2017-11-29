@@ -2,6 +2,10 @@
 @import '../../styles/utils/variables';
 @import '../../styles/base/typography';
 
+.material-icons {
+  transition: color 0.26s ease;
+}
+
 .navbar {
   position: fixed;
   top: 0;
@@ -54,6 +58,13 @@ app-pair-selector {
 .navbar-toggler {
   display: inline-block;
   cursor: pointer;
+
+  &:hover {
+    .material-icons {
+      color: $bn-blue-light6;
+    }
+  }
+
   @include screen(lg) {
     margin-left: auto;
   }
@@ -113,6 +124,13 @@ app-pair-selector {
     position: absolute;
     top: 12px;
     right: 16px;
+    color: white;
+
+    &:hover {
+      .material-icons {
+        color: $bn-blue-light6;
+      }
+    }
   }
 
   ul {
