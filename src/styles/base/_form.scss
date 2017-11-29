@@ -62,7 +62,7 @@ input {
   }
 }
 
-input[type="text"] {
+input[type="text"], input[type="number"] {
   border: none;
   padding: 13px 16px;
   background: none;
