@@ -111,6 +111,7 @@ app-pair-selector {
   transition: transform 0.2s ease;
   will-change: transform;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 
   @include screen(md) {
     width: 320px;
@@ -121,7 +122,7 @@ app-pair-selector {
   }
 
   .close {
-    position: absolute;
+    position: fixed;
     top: 12px;
     right: 16px;
     color: white;
