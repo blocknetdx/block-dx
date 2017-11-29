@@ -1,29 +1,29 @@
 <div class="container-fluid">
 
-  <div class="trade_table">
-    <div #trade class="trade_table__cell sidebar">
+  <div class="trade_table row">
+    <div #trade class="trade_table__cell sidebar col">
       <!-- <balances></balances> -->
       <orderform></orderform>
     </div>
 
     <div class="trade_table__group content">
-      <div #price class="trade_table__cell price">
+      <div #price class="trade_table__cell price col-lg-6">
         <pricechart></pricechart>
       </div>
 
-      <div #depth class="trade_table__cell depth">
+      <div #depth class="trade_table__cell depth col-lg-2">
         <depth></depth>
       </div>
 
-      <div #book class="trade_table__cell book">
+      <div #book class="trade_table__cell book col-lg-4">
         <orderbook></orderbook>
       </div>
 
-      <div #orders class="trade_table__cell orders">
+      <div #orders class="trade_table__cell orders col-lg-8">
         <openorders></openorders>
       </div>
 
-      <div #history class="trade_table__cell history">
+      <div #history class="trade_table__cell history col-lg-4">
         <tradehistory></tradehistory>
       </div>
     </div>

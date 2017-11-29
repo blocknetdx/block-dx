@@ -1,4 +1,3 @@
-@import '../styles/vendor/bootstrap';
 @import '../styles/utils/mixins';
 @import '../styles/utils/variables';
 @import '../styles/base/typography';
@@ -17,7 +16,6 @@
 }
 
 .trade_table {
-  @include make-row();
   height: 100%;
 
   &__group {
@@ -37,7 +35,6 @@
   }
 
   &__cell {
-    @include make-col-ready();
     overflow-x: hidden;
     height: 100%;
 
@@ -55,36 +52,6 @@
       }
       /deep/ .bn-card {
         height: auto;
-      }
-    }
-
-    &.price {
-      @include screen(lg) {
-        @include make-col(6);
-      }
-    }
-
-    &.depth {
-      @include screen(lg) {
-        @include make-col(2);
-      }
-    }
-
-    &.book {
-      @include screen(lg) {
-        @include make-col(4);
-      }
-    }
-
-    &.orders {
-      @include screen(lg) {
-        @include make-col(8);
-      }
-    }
-
-    &.history {
-      @include screen(lg) {
-        @include make-col(4);
       }
     }
 
