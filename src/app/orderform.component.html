@@ -1,78 +1,76 @@
 <bn-card cardClass="bn-orderform">
-  <!-- <div class="bn-card__FPO"></div> -->
-  <bn-card-title>{{ title }}</bn-card-title>
-
+  <bn-card-title>Order Form</bn-card-title>
   <bn-card-body>
-    <div class="bn-card__subhead">
-      <a (click)="selectedTab = 'buy'" [class.selected]="selectedTab == 'buy'">Buy</a>
-      <a (click)="selectedTab = 'sell'" [class.selected]="selectedTab == 'sell'">Sell</a>
-    </div>
-    <form (ngSubmit)="onOrderSubmit()" #orderForm="ngForm" id="market_order">
-      <div class="input-group row">
-        <label class="col-4 col-form-label" for="type">Type</label>
-        <div class="col-8">
-          <bn-select [options]="buyOrderTypes" #typeSelect
-            (onSelectChange)="selectedBuyType = $event"
-            placeholder="Choose a type"></bn-select>
-        </div>
-      </div>
-      <span class="spacer"></span>
-
-      <div class="input-group row">
-        <label class="col-4 col-form-label" for="amount">Amount</label>
-        <div class="col-8">
-          <input (keyup)="calcPrice($event)"
-            [(ngModel)]="model.amount"
-            class="form-control" name="amount" id="amount"
-            type="number" step="0.00000001" pattern="\d*" inputmode="numeric"
-            placeholder="{{formatNumber(0,symbols[0])}}" />
-          <span class="input-group-addon">{{symbols[0]}}</span>
-        </div>
-      </div>
-
-      <div class="input-group row" *ngIf="selectedBuyType == 'limit'">
-        <label class="col-4 col-form-label" for="limit">Limit Price</label>
-        <div class="col-8">
-          <input (keyup)="calcPrice($event)"
-            class="form-control" name="limit" id="limit"
-            type="number" step="0.00000001" pattern="\d*" inputmode="numeric"
-            placeholder="{{formatNumber(0,symbols[1])}}" />
-          <span class="input-group-addon">{{symbols[1]}}</span>
-        </div>
-      </div>
-
-      <!-- <div class="input-group row" *ngIf="selectedBuyType == 'stop'">
-        <label class="col-4 col-form-label" for="stop">Stop Price</label>
-        <div class="col-8">
-          <input (keyup)="calcPrice($event)"
-            class="form-control" name="stop" id="stop"
-            type="number" step="0.00000001" pattern="\d*" inputmode="numeric"
-            placeholder="{{formatNumber(0,symbols[1])}}" />
-          <span class="input-group-addon">{{symbols[1]}}</span>
-        </div>
-      </div> -->
-
-      <div class="input-group row">
-        <label class="col-4 col-form-label" for="total">Total</label>
-        <div class="col-8">
-          <input class="form-control"
-            name="total" id="total_calc" type="number"
-            step="0.00000001" pattern="\d*" inputmode="numeric"
-            placeholder="{{formatNumber(0,symbols[1])}}"
-            value="{{formatNumber(totalPrice,symbols[1])}}" />
-          <span class="input-group-addon">{{symbols[1]}}</span>
-        </div>
-      </div>
-      <span class="spacer"></span>
-
-      <div class="input-group row">
-        <button type="submit">
-          <i *ngIf="selectedTab == 'buy'" class="material-icons">add</i>
-          <i *ngIf="selectedTab == 'sell'" class="material-icons">remove</i>
-          {{selectedBuyType}} {{selectedTab}}
-        </button>
-      </div>
-    </form>
+    <bn-tab-view #tabView>
+      <bn-tab label="Buy">
+        <ng-template #content>
+          <ng-container *ngTemplateOutlet="formTemplate; context: {type: 'buy'}"></ng-container>
+        </ng-template>
+      </bn-tab>
+      <bn-tab label="Sell">
+        <ng-template #content>
+          <ng-container *ngTemplateOutlet="formTemplate; context: {type: 'sell'}"></ng-container>
+        </ng-template>
+      </bn-tab>
+    </bn-tab-view>
 
   </bn-card-body>
 </bn-card>
+
+<ng-template #formTemplate let-type="type">
+  <form (ngSubmit)="onOrderSubmit()" #orderForm="ngForm" id="market_order">
+    <div class="input-group row">
+      <label class="col-4 col-form-label" for="type">Type</label>
+      <div class="col-8">
+        <bn-select [options]="orderTypes" #typeSelect
+          (onSelectChange)="selectedOrderType = $event"
+          placeholder="Choose a type"></bn-select>
+      </div>
+    </div>
+    <span class="spacer"></span>
+
+    <div class="input-group row">
+      <label class="col-4 col-form-label" for="amount">Amount</label>
+      <div class="col-8">
+        <input (keyup)="calcPrice($event)"
+          [(ngModel)]="model.amount"
+          class="form-control" name="amount" id="amount"
+          type="number" step="0.00000001" pattern="\d*" inputmode="numeric"
+          placeholder="{{formatNumber(0,symbols[0])}}" />
+        <span class="input-group-addon">{{symbols[0]}}</span>
+      </div>
+    </div>
+
+    <div class="input-group row" *ngIf="selectedOrderType == 'limit'">
+      <label class="col-4 col-form-label" for="limit">Limit Price</label>
+      <div class="col-8">
+        <input (keyup)="calcPrice($event)"
+          class="form-control" name="limit" id="limit"
+          type="number" step="0.00000001" pattern="\d*" inputmode="numeric"
+          placeholder="{{formatNumber(0,symbols[1])}}" />
+        <span class="input-group-addon">{{symbols[1]}}</span>
+      </div>
+    </div>
+
+    <div class="input-group row">
+      <label class="col-4 col-form-label" for="total">Total</label>
+      <div class="col-8">
+        <input class="form-control"
+          name="total" id="total_calc" type="number"
+          step="0.00000001" pattern="\d*" inputmode="numeric"
+          placeholder="{{formatNumber(0,symbols[1])}}"
+          value="{{formatNumber(totalPrice,symbols[1])}}" />
+        <span class="input-group-addon">{{symbols[1]}}</span>
+      </div>
+    </div>
+    <span class="spacer"></span>
+
+    <div class="input-group row">
+      <button type="submit">
+        <i *ngIf="type == 'buy'" class="material-icons">add</i>
+        <i *ngIf="type == 'sell'" class="material-icons">remove</i>
+        {{selectedOrderType}} {{type}}
+      </button>
+    </div>
+  </form>
+</ng-template>

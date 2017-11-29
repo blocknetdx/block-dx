@@ -5,6 +5,7 @@ import { AppService } from './app.service';
 import { Currentprice } from './currentprice';
 import { CurrentpriceService } from './currentprice.service';
 import { OrderbookService } from './orderbook.service';
+import { TabViewComponent } from './tab-view/tab-view.component';
 import { SelectComponent } from './select/select.component';
 
 @Component({
@@ -13,17 +14,14 @@ import { SelectComponent } from './select/select.component';
   styleUrls: ['./orderform.component.scss']
 })
 export class OrderformComponent {
+  @ViewChild('tabView') public tabView: TabViewComponent;
   @ViewChild('typeSelect') public typeSelect: SelectComponent;
 
   public symbols:string[];
   public currentPrice: Currentprice;
-  public title = 'Order Form';
   public totalPrice = 0;
-  public selectedTab: string = 'buy';
-  public buyOrderTypes: any[];
-  public sellOrderTypes: any[];
-  public selectedBuyType: any;
-  public selectedSellType: any;
+  public orderTypes: any[];
+  public selectedOrderType: any;
   public model: any;
 
   constructor(
@@ -45,28 +43,15 @@ export class OrderformComponent {
 
     this.orderbookService.requestedOrder
       .subscribe((order) => {
-        this.selectedTab = order[4] === 'ask' ? 'buy' : 'sell';
-        this.typeSelect.selected = this.buyOrderTypes[0];
+        const tabIndex = order[4] === 'ask' ? 0 : 1;
+        this.tabView.activeIndex = tabIndex;
         this.model.amount = order[1];
       });
 
-    this.buyOrderTypes = [
+    this.orderTypes = [
       { value: 'market', viewValue: 'Market Order'},
       { value: 'limit', viewValue: 'Limit Order'}
-      // { value: 'stop', viewValue: 'Stop Order'}
     ];
-
-    this.sellOrderTypes = [
-      { value: 'market', viewValue: 'Market Order'},
-      { value: 'limit', viewValue: 'Limit Order'}
-      // { value: 'stop', viewValue: 'Stop Order'}
-    ];
-  }
-
-  ngAfterViewInit() {
-    setTimeout(() => {
-      this.typeSelect.selected = this.buyOrderTypes[0];
-    });
   }
 
   formatNumber(num:string, symbol:string): string {

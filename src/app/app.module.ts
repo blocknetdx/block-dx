@@ -49,6 +49,8 @@ import { TimeAgoPipe } from './time-ago.pipe';
 import { CardComponent } from './card/card.component';
 import { CardTitleDirective } from './card/card-title.directive';
 import { CardBodyDirective } from './card/card-body.directive';
+import { TabViewComponent } from './tab-view/tab-view.component';
+import { TabDirective } from './tab-view/tab.directive';
 
 
 @NgModule({
@@ -80,7 +82,9 @@ import { CardBodyDirective } from './card/card-body.directive';
     TimeAgoPipe,
     CardComponent,
     CardTitleDirective,
-    CardBodyDirective
+    CardBodyDirective,
+    TabViewComponent,
+    TabDirective
   ],
   imports: [
     BrowserModule,

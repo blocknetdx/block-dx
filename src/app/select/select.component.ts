@@ -21,8 +21,15 @@ export class SelectComponent implements OnInit {
   @Input()
   public placeholder: string = 'Choose one';
 
+  private _options: {value: any, viewValue: string}[];
+  public get options(): {value: any, viewValue: string}[] {
+    return this._options;
+  }
   @Input()
-  public options: {value: any, viewValue: string}[];
+  public set options(val: {value: any, viewValue: string}[]) {
+    this._options = val;
+    this.selected = val[0];
+  }
 
   @Output('onSelectChange')
   public selectChangeEmitter: EventEmitter<any> = new EventEmitter();
