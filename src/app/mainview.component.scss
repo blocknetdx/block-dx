@@ -28,9 +28,6 @@
   @include screen(xl) {
     max-width: 320px;
   }
-  // /deep/ .bn-card {
-  //   height: auto;
-  // }
 }
 
 .content {
@@ -39,30 +36,6 @@
 
 .trade_table {
   height: 100%;
-  // width: 100%;
-  // height: 100%;
-  // @include screen(lg) {
-  //   width: calc(100% - 300px);
-  // }
-  // @include screen(xl) {
-  //   width: calc(100% - 338px);
-  // }
-
-  // &__group {
-  //   display: flex;
-  //   flex-wrap: wrap;
-  //
-  //   &.content {
-  //     width: 100%;
-  //     height: 100%;
-  //     @include screen(lg) {
-  //       width: calc(100% - 300px);
-  //     }
-  //     @include screen(xl) {
-  //       width: calc(100% - 338px);
-  //     }
-  //   }
-  // }
 
   &__cell {
     overflow-x: hidden;

@@ -1,6 +1,6 @@
-import 'rxjs/add/operator/map';
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
+import 'rxjs/add/operator/map';
 
 import { Order } from './order';
 import { OrderbookService } from './orderbook.service';
@@ -16,7 +16,6 @@ import { AppService } from './app.service';
 export class OrderbookComponent {
   @ViewChild('orderbookTable') public orderbookTable: TableComponent;
 
-  public title = 'Order Book';
   public rows: any[];
 
   public symbols:string[];

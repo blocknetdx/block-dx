@@ -1,34 +1,27 @@
-<bn-card cardClass="bn-tradehistory">
-  <bn-card-title>{{title}}</bn-card-title>
-  <bn-card-body>
+<app-table [rows]="tradehistory">
+  <app-table-column [sortable]="false" [classList]="'col-4'">
+    <ng-template columnHeader>Amount ({{symbols[0]}})</ng-template>
+    <ng-template let-row="row" columnCell>
+      <div class="percentBar {{row.percentbarClasses}}" [style.width]="row.percent + '%'"></div>
+      <span class="bn-number" [innerHtml]="row.size | blockCurrency:symbols[0]"></span>
+    </ng-template>
+  </app-table-column>
 
-    <app-table [rows]="tradehistory">
-      <app-table-column [sortable]="false" [classList]="'col-4'">
-        <ng-template columnHeader>Amount ({{symbols[0]}})</ng-template>
-        <ng-template let-row="row" columnCell>
-          <div class="percentBar {{row.percentbarClasses}}" [style.width]="row.percent + '%'"></div>
-          <span class="bn-number" [innerHtml]="row.size | blockCurrency:symbols[0]"></span>
-        </ng-template>
-      </app-table-column>
+  <app-table-column [sortable]="false" [classList]="'col-4'">
+    <ng-template columnHeader>Price ({{symbols[1]}})</ng-template>
+    <ng-template let-row="row" columnCell>
+      <span [class]="row.priceClasses">
+        <span class="bn-number" [innerHtml]="row.price | blockCurrency:symbols[1]"></span>
+        <img *ngIf="row.side === 'sell'" class="my-icon" aria-label="My icon" src="assets/icons/arrow-diagonal-up.svg">
+        <img *ngIf="row.side === 'buy'" class="my-icon" aria-label="My icon" src="assets/icons/arrow-diagonal-down.svg">
+      </span>
+    </ng-template>
+  </app-table-column>
 
-      <app-table-column [sortable]="false" [classList]="'col-4'">
-        <ng-template columnHeader>Price ({{symbols[1]}})</ng-template>
-        <ng-template let-row="row" columnCell>
-          <span [class]="row.priceClasses">
-            <span class="bn-number" [innerHtml]="row.price | blockCurrency:symbols[1]"></span>
-            <img *ngIf="row.side === 'sell'" class="my-icon" aria-label="My icon" src="assets/icons/arrow-diagonal-up.svg">
-            <img *ngIf="row.side === 'buy'" class="my-icon" aria-label="My icon" src="assets/icons/arrow-diagonal-down.svg">
-          </span>
-        </ng-template>
-      </app-table-column>
-
-      <app-table-column [sortable]="false" [classList]="'col-4'">
-        <ng-template columnHeader>Time</ng-template>
-        <ng-template let-row="row" columnCell>
-          <span>{{row.time | date:'HH:mm:ss' }}</span>
-        </ng-template>
-      </app-table-column>
-    </app-table>
-
-  </bn-card-body>
-</bn-card>
+  <app-table-column [sortable]="false" [classList]="'col-4'">
+    <ng-template columnHeader>Time</ng-template>
+    <ng-template let-row="row" columnCell>
+      <span>{{row.time | date:'HH:mm:ss' }}</span>
+    </ng-template>
+  </app-table-column>
+</app-table>

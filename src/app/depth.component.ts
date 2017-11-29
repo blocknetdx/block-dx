@@ -16,7 +16,6 @@ declare var AmCharts;
 export class DepthComponent {
   public symbols:string[];
   public currentPrice: Currentprice;
-  public title = 'Depth Chart';
 
   constructor(
     private zone: NgZone,
@@ -44,17 +43,17 @@ export class DepthComponent {
 
   runDepthChart(): void {
     this.zone.runOutsideAngular(() => {
-      var chart = AmCharts.makeChart("chartdiv", {
-        "responsive": {
-          "enabled": true
+      var chart = AmCharts.makeChart('chartdiv', {
+        'responsive': {
+          'enabled': true
         },
-        "type": "serial",
-        "theme": "dark",
-        "dataLoader": {
-          "url": "/assets/api/orderbook" + this.symbols.join("_") + ".json",
-          "format": "json",
-          "reload": 3000000000,
-          "postProcess": function(data) {
+        'type': 'serial',
+        'theme': 'dark',
+        'dataLoader': {
+          'url': '/assets/api/orderbook' + this.symbols.join('_') + '.json',
+          'format': 'json',
+          'reload': 3000000000,
+          'postProcess': function(data) {
 
             // Function to process (sort and calculate cummulative volume)
             function processData(list, type, desc) {
@@ -90,9 +89,9 @@ export class DepthComponent {
                     list[i].totalvolume = list[i].volume;
                   }
                   var dp = {};
-                  dp["value"] = list[i].value;
-                  dp[type + "volume"] = list[i].volume;
-                  dp[type + "totalvolume"] = list[i].totalvolume;
+                  dp['value'] = list[i].value;
+                  dp[type + 'volume'] = list[i].volume;
+                  dp[type + 'totalvolume'] = list[i].totalvolume;
                   res.unshift(dp);
                 }
               }
@@ -105,9 +104,9 @@ export class DepthComponent {
                     list[i].totalvolume = list[i].volume;
                   }
                   var dp = {};
-                  dp["value"] = list[i].value;
-                  dp[type + "volume"] = list[i].volume;
-                  dp[type + "totalvolume"] = list[i].totalvolume;
+                  dp['value'] = list[i].value;
+                  dp[type + 'volume'] = list[i].volume;
+                  dp[type + 'totalvolume'] = list[i].totalvolume;
                   res.push(dp);
                 }
               }
@@ -116,85 +115,85 @@ export class DepthComponent {
 
             // Init
             var res = [];
-            processData(data.bids, "bids", true);
-            processData(data.asks, "asks", false);
+            processData(data.bids, 'bids', true);
+            processData(data.asks, 'asks', false);
 
             //console.log(res);
             return res;
           }
         },
-        "graphs": [{
-          "id": "bids",
-          "fillAlphas": 0.1,
-          "lineAlpha": 1,
-          "lineThickness": 2,
-          "lineColor": "#4BF5C6",
-          "type": "step",
-          "valueField": "bidstotalvolume",
-          "balloonFunction": balloon
+        'graphs': [{
+          'id': 'bids',
+          'fillAlphas': 0.1,
+          'lineAlpha': 1,
+          'lineThickness': 2,
+          'lineColor': '#4BF5C6',
+          'type': 'step',
+          'valueField': 'bidstotalvolume',
+          'balloonFunction': balloon
         }, {
-          "id": "asks",
-          "fillAlphas": 0.1,
-          "lineAlpha": 1,
-          "lineThickness": 2,
-          "lineColor": "#FF7E70",
-          "type": "step",
-          "valueField": "askstotalvolume",
-          "balloonFunction": balloon
+          'id': 'asks',
+          'fillAlphas': 0.1,
+          'lineAlpha': 1,
+          'lineThickness': 2,
+          'lineColor': '#FF7E70',
+          'type': 'step',
+          'valueField': 'askstotalvolume',
+          'balloonFunction': balloon
         },
          {
-          "lineAlpha": 0,
-          "fillAlphas": 0.2,
-          "lineColor": "#FFF",
-          "type": "column",
-          "clustered": false,
-          "valueField": "bidsvolume",
-          "showBalloon": false
+          'lineAlpha': 0,
+          'fillAlphas': 0.2,
+          'lineColor': '#FFF',
+          'type': 'column',
+          'clustered': false,
+          'valueField': 'bidsvolume',
+          'showBalloon': false
         }, {
-          "lineAlpha": 0,
-          "fillAlphas": 0.2,
-          "lineColor": "#FFF",
-          "type": "column",
-          "clustered": false,
-          "valueField": "asksvolume",
-          "showBalloon": false
+          'lineAlpha': 0,
+          'fillAlphas': 0.2,
+          'lineColor': '#FFF',
+          'type': 'column',
+          'clustered': false,
+          'valueField': 'asksvolume',
+          'showBalloon': false
         }
       ],
-        "categoryField": "value",
-        "chartCursor": {},
-        "balloon": {
-          "textAlign": "left",
-          "disableMouseEvents": true,
-          "fixedPosition": false,
-          "fillAlpha": 1
+        'categoryField': 'value',
+        'chartCursor': {},
+        'balloon': {
+          'textAlign': 'left',
+          'disableMouseEvents': true,
+          'fixedPosition': false,
+          'fillAlpha': 1
         },
-        "valueAxes": [{
-          "showFirstLabel": false,
-          "showLastLabel": false,
-          "inside": true,
-          "gridAlpha": 0
+        'valueAxes': [{
+          'showFirstLabel': false,
+          'showLastLabel': false,
+          'inside': true,
+          'gridAlpha': 0
         }],
-        "categoryAxis": {
-          "gridAlpha": 0,
-          "minVerticalGap": 100,
-          "startOnAxis": true,
-          "showFirstLabel": false,
-          "showLastLabel": false,
-          "inside": true,
-          "balloon": {
-            "fontSize": 0,
-            "color": "#FFFFFF"
-            // "enabled" : false  // TODO: This isn't working for some reason.
+        'categoryAxis': {
+          'gridAlpha': 0,
+          'minVerticalGap': 100,
+          'startOnAxis': true,
+          'showFirstLabel': false,
+          'showLastLabel': false,
+          'inside': true,
+          'balloon': {
+            'fontSize': 0,
+            'color': '#FFFFFF'
+            // 'enabled' : false  // TODO: This isn't working for some reason.
           }
         },
-        "mouseWheelZoomEnabled": true,
-        "rotate": true,
-        "export": {
-          "enabled": false
+        'mouseWheelZoomEnabled': true,
+        'rotate': true,
+        'export': {
+          'enabled': false
         },
-        "listeners": [{
-          "event": "rendered",
-          "method": function(event) {
+        'listeners': [{
+          'event': 'rendered',
+          'method': function(event) {
             // var chart = event.chart;
             // var chartCursor = new AmCharts.ChartCursor();
             // chart.addChartCursor(chartCursor);
@@ -205,15 +204,15 @@ export class DepthComponent {
 
       function balloon(item, graph) {
         var txt;
-        if (graph.id == "asks") {
-          txt = "Ask: <strong>" + formatNumber(item.dataContext.value, graph.chart, 4) + "</strong><br />"
-            + "Total volume: <strong>" + formatNumber(item.dataContext.askstotalvolume, graph.chart, 4) + "</strong><br />"
-            + "Volume: <strong>" + formatNumber(item.dataContext.asksvolume, graph.chart, 4) + "</strong>";
+        if (graph.id == 'asks') {
+          txt = 'Ask: <strong>' + formatNumber(item.dataContext.value, graph.chart, 4) + '</strong><br />'
+            + 'Total volume: <strong>' + formatNumber(item.dataContext.askstotalvolume, graph.chart, 4) + '</strong><br />'
+            + 'Volume: <strong>' + formatNumber(item.dataContext.asksvolume, graph.chart, 4) + '</strong>';
         }
         else {
-          txt = "Bid: <strong>" + formatNumber(item.dataContext.value, graph.chart, 4) + "</strong><br />"
-            + "Total volume: <strong>" + formatNumber(item.dataContext.bidstotalvolume, graph.chart, 4) + "</strong><br />"
-            + "Volume: <strong>" + formatNumber(item.dataContext.bidsvolume, graph.chart, 4) + "</strong>";
+          txt = 'Bid: <strong>' + formatNumber(item.dataContext.value, graph.chart, 4) + '</strong><br />'
+            + 'Total volume: <strong>' + formatNumber(item.dataContext.bidstotalvolume, graph.chart, 4) + '</strong><br />'
+            + 'Volume: <strong>' + formatNumber(item.dataContext.bidsvolume, graph.chart, 4) + '</strong>';
         }
         return txt;
       }

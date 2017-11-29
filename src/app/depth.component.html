@@ -1,11 +1,6 @@
-<bn-card cardClass="bn-depthchart bn-toprow">
-  <bn-card-title>{{title}}</bn-card-title>
-  <bn-card-body>
-    <div class="chart-holder">
-      <div id="chartdiv"></div>
-      <div class="midmarket-price"  *ngIf="currentPrice">
-        <span class="bn-number" [innerHtml]="currentPrice.last | blockCurrency:symbols[1]"></span>
-      </div>
-    </div>
-  </bn-card-body>
-</bn-card>
+<div class="chart-holder">
+  <div id="chartdiv"></div>
+  <div class="midmarket-price"  *ngIf="currentPrice">
+    <span class="bn-number" [innerHtml]="currentPrice.last | blockCurrency:symbols[1]"></span>
+  </div>
+</div>

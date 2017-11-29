@@ -8,25 +8,43 @@
 
     <div class="content col-lg">
       <div class="trade_table row">
-        <div #price class="trade_table__cell price col-lg-6">
+        <div #price class="trade_table__cell col-lg-6">
           <pricechart></pricechart>
         </div>
 
-        <div #depth class="trade_table__cell depth col-lg-2">
+        <!-- <div #depth class="trade_table__cell depth col-lg-2">
           <depth></depth>
-        </div>
+        </div> -->
+        <bn-card class="trade_table__cell col-lg-2">
+          <bn-card-title>Depth Chart</bn-card-title>
+          <bn-card-body>
+            <depth></depth>
+          </bn-card-body>
+        </bn-card>
 
-        <div #book class="trade_table__cell book col-lg-4">
+        <!-- <div #book class="trade_table__cell book col-lg-4">
           <orderbook></orderbook>
-        </div>
+        </div> -->
+        <bn-card class="trade_table__cell col-lg-4">
+          <bn-card-title>Order Book</bn-card-title>
+          <bn-card-body>
+            <orderbook></orderbook>
+          </bn-card-body>
+        </bn-card>
 
         <div #orders class="trade_table__cell orders col-lg-8">
           <openorders></openorders>
         </div>
 
-        <div #history class="trade_table__cell history col-lg-4">
+        <!-- <div #history class="trade_table__cell history col-lg-4">
           <tradehistory></tradehistory>
-        </div>
+        </div> -->
+        <bn-card class="trade_table__cell history col-lg-4">
+          <bn-card-title>Trade History</bn-card-title>
+          <bn-card-body>
+            <tradehistory></tradehistory>
+          </bn-card-body>
+        </bn-card>
 
       </div>
 

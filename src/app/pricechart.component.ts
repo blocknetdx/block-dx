@@ -11,7 +11,6 @@ declare var Datafeeds;
   styleUrls: ['./pricechart.component.scss']
 })
 export class PricechartComponent {
-  title = 'Price Chart';
 
   constructor(
     private zone: NgZone

@@ -12,7 +12,6 @@ import { TradehistoryService } from './tradehistory.service';
   providers: [TradehistoryService]
 })
 export class TradehistoryComponent {
-  public title = 'Trade History';
   public tradehistory: Trade[];
 
   public symbols:string[];
