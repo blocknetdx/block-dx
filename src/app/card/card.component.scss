@@ -2,6 +2,17 @@
 @import '../../styles/utils/variables';
 @import '../../styles/base/typography';
 
+bn-card {
+  &.no-title {
+    .bn-card__title {
+      display: none;
+    }
+    .bn-card__body {
+      top: 0;
+    }
+  }
+}
+
 .bn-card {
   background: $bn-blue3;
   overflow: hidden;
