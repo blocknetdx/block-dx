@@ -8,31 +8,61 @@
   bottom: 40px;
   left: 0;
   right: 0;
-  overflow: auto;
+  overflow: hidden;
   @include screen(lg) {
     bottom: 0;
     top: 90px;
   }
+
+  & > .row {
+    height: 100%;
+  }
+}
+
+.sidebar {
+  width: 100%;
+  height: 100%;
+  @include screen(lg) {
+    max-width: 300px;
+  }
+  @include screen(xl) {
+    max-width: 320px;
+  }
+  // /deep/ .bn-card {
+  //   height: auto;
+  // }
+}
+
+.content {
+  height: 100%;
 }
 
 .trade_table {
   height: 100%;
+  // width: 100%;
+  // height: 100%;
+  // @include screen(lg) {
+  //   width: calc(100% - 300px);
+  // }
+  // @include screen(xl) {
+  //   width: calc(100% - 338px);
+  // }
 
-  &__group {
-    display: flex;
-    flex-wrap: wrap;
-
-    &.content {
-      width: 100%;
-      height: 100%;
-      @include screen(lg) {
-        width: calc(100% - 300px);
-      }
-      @include screen(xl) {
-        width: calc(100% - 338px);
-      }
-    }
-  }
+  // &__group {
+  //   display: flex;
+  //   flex-wrap: wrap;
+  //
+  //   &.content {
+  //     width: 100%;
+  //     height: 100%;
+  //     @include screen(lg) {
+  //       width: calc(100% - 300px);
+  //     }
+  //     @include screen(xl) {
+  //       width: calc(100% - 338px);
+  //     }
+  //   }
+  // }
 
   &__cell {
     overflow-x: hidden;
@@ -41,18 +71,6 @@
     @include screen(lg) {
       margin-bottom: 8px;
       height: 60vh;
-    }
-
-    &.sidebar {
-      @include screen(lg) {
-        width: 300px;
-      }
-      @include screen(xl) {
-        width: 338px;
-      }
-      /deep/ .bn-card {
-        height: auto;
-      }
     }
 
     &.orders, &.history {

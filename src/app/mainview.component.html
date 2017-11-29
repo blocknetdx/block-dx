@@ -1,41 +1,44 @@
 <div class="container-fluid">
+  <div class="row">
 
-  <div class="trade_table row">
-    <div #trade class="trade_table__cell sidebar col">
+    <div #trade class="sidebar col-lg">
       <!-- <balances></balances> -->
       <orderform></orderform>
     </div>
 
-    <div class="trade_table__group content">
-      <div #price class="trade_table__cell price col-lg-6">
-        <pricechart></pricechart>
+    <div class="content col-lg">
+      <div class="trade_table row">
+        <div #price class="trade_table__cell price col-lg-6">
+          <pricechart></pricechart>
+        </div>
+
+        <div #depth class="trade_table__cell depth col-lg-2">
+          <depth></depth>
+        </div>
+
+        <div #book class="trade_table__cell book col-lg-4">
+          <orderbook></orderbook>
+        </div>
+
+        <div #orders class="trade_table__cell orders col-lg-8">
+          <openorders></openorders>
+        </div>
+
+        <div #history class="trade_table__cell history col-lg-4">
+          <tradehistory></tradehistory>
+        </div>
+
       </div>
 
-      <div #depth class="trade_table__cell depth col-lg-2">
-        <depth></depth>
-      </div>
-
-      <div #book class="trade_table__cell book col-lg-4">
-        <orderbook></orderbook>
-      </div>
-
-      <div #orders class="trade_table__cell orders col-lg-8">
-        <openorders></openorders>
-      </div>
-
-      <div #history class="trade_table__cell history col-lg-4">
-        <tradehistory></tradehistory>
-      </div>
     </div>
 
+    <app-bottom-nav *isBp="['xs', 'sm', 'md']">
+      <app-nav-button [views]="[trade]">Trade</app-nav-button>
+      <app-nav-button [views]="[book]">Book</app-nav-button>
+      <app-nav-button [views]="[price, depth]">Charts</app-nav-button>
+      <app-nav-button [views]="[orders]">Orders</app-nav-button>
+      <app-nav-button [views]="[history]">History</app-nav-button>
+    </app-bottom-nav>
+
   </div>
-
-  <app-bottom-nav *isBp="['xs', 'sm', 'md']">
-    <app-nav-button [views]="[trade]">Trade</app-nav-button>
-    <app-nav-button [views]="[book]">Book</app-nav-button>
-    <app-nav-button [views]="[price, depth]">Charts</app-nav-button>
-    <app-nav-button [views]="[orders]">Orders</app-nav-button>
-    <app-nav-button [views]="[history]">History</app-nav-button>
-  </app-bottom-nav>
-
 </div>
