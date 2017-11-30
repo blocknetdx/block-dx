@@ -61,8 +61,8 @@
       <div #trade>
         <orderform></orderform>
       </div>
-      <div #book>
-        <orderbook></orderbook>
+      <div class="book" #book>
+        <orderbook #orderbook></orderbook>
       </div>
       <div #charts>
         <bn-tab-view>
@@ -98,7 +98,7 @@
 
     </div>
 
-    <app-bottom-nav>
+    <app-bottom-nav (onNavChange)="onNavChange($event)">
       <app-nav-button [views]="[trade]">Trade</app-nav-button>
       <app-nav-button [views]="[book]">Book</app-nav-button>
       <app-nav-button [views]="[charts]">Charts</app-nav-button>

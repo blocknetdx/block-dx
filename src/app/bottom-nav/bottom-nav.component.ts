@@ -3,6 +3,8 @@ import {
   Component,
   ContentChildren,
   Input,
+  Output,
+  EventEmitter,
   QueryList
 } from '@angular/core';
 
@@ -23,6 +25,9 @@ export class BottomNavComponent implements AfterContentInit {
   @Input()
   public activeIndex: number = 0;
 
+  @Output('onNavChange')
+  public onNavChangeEmitter: EventEmitter<DOMTokenList> = new EventEmitter();
+
   private destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor() { }
@@ -33,15 +38,14 @@ export class BottomNavComponent implements AfterContentInit {
         .takeUntil(this.destroy$)
         .subscribe((activeItem) => {
           this.setActiveNavItem(activeItem);
+          const view = activeItem.views[0];
+          this.onNavChangeEmitter.emit(view.classList);
         });
     });
     this.setActiveNavItem(this.navItems.find((itm, idx) => idx === this.activeIndex));
   }
 
   ngOnDestroy() {
-    this.navItems.forEach((item) => {
-      item.active = true;
-    });
     this.destroy$.next(true);
     this.destroy$.unsubscribe();
   }

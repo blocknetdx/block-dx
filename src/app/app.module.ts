@@ -53,6 +53,7 @@ import { CardBodyDirective } from './card/card-body.directive';
 import { TabViewComponent } from './tab-view/tab-view.component';
 import { TabDirective } from './tab-view/tab.directive';
 import { FilledOrdersComponent } from './filled-orders/filled-orders.component';
+import { BottomNavButtonDirective } from './bottom-nav/bottom-nav-button.directive';
 
 
 @NgModule({
@@ -87,7 +88,8 @@ import { FilledOrdersComponent } from './filled-orders/filled-orders.component';
     CardBodyDirective,
     TabViewComponent,
     TabDirective,
-    FilledOrdersComponent
+    FilledOrdersComponent,
+    BottomNavButtonDirective
   ],
   imports: [
     BrowserModule,
