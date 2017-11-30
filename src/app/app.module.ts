@@ -19,6 +19,7 @@ import { BalancesComponent } from './balances.component';
 import { TradehistoryComponent } from './tradehistory.component';
 import { PricechartComponent } from './pricechart.component';
 import { OpenordersComponent } from './openorders.component';
+import { OpenordersService } from './openorders.service';
 import { OrderformComponent } from './orderform.component';
 import { OrderbookComponent } from './orderbook.component';
 import { DepthchartComponent } from './depthchart.component';
@@ -51,6 +52,7 @@ import { CardTitleDirective } from './card/card-title.directive';
 import { CardBodyDirective } from './card/card-body.directive';
 import { TabViewComponent } from './tab-view/tab-view.component';
 import { TabDirective } from './tab-view/tab.directive';
+import { FilledOrdersComponent } from './filled-orders/filled-orders.component';
 
 
 @NgModule({
@@ -84,7 +86,8 @@ import { TabDirective } from './tab-view/tab.directive';
     CardTitleDirective,
     CardBodyDirective,
     TabViewComponent,
-    TabDirective
+    TabDirective,
+    FilledOrdersComponent
   ],
   imports: [
     BrowserModule,
@@ -103,6 +106,7 @@ import { TabDirective } from './tab-view/tab.directive';
     BreakpointService,
     CurrentpriceService,
     BlockCurrencyPipe,
+    OpenordersService,
     OrderbookService,
     WebSocketService,
     CryptocurrencyService

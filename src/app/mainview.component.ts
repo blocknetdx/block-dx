@@ -9,6 +9,7 @@ import { AppService } from './app.service';
   styleUrls: ['./mainview.component.scss']
 })
 export class MainviewComponent {
+  public orderCardIndex: number = 0; // Temporary FIXME
 
   constructor(
     private route: ActivatedRoute,

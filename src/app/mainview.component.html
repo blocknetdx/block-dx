@@ -29,9 +29,18 @@
           </bn-card-body>
         </bn-card>
 
-        <div class="trade_table__cell orders col-lg-8">
-          <openorders></openorders>
-        </div>
+        <bn-card class="trade_table__cell orders col-lg-8">
+          <bn-card-title>
+            <ng-container *ngFor="let tab of ['Open', 'Filled']; let i = index">
+              <a (click)="orderCardIndex = i"
+                [class.active]="orderCardIndex == i">{{tab}} Orders</a>
+            </ng-container>
+          </bn-card-title>
+          <bn-card-body>
+            <openorders *ngIf="orderCardIndex == 0"></openorders>
+            <bn-filled-orders *ngIf="orderCardIndex == 1"></bn-filled-orders>
+          </bn-card-body>
+        </bn-card>
 
         <bn-card class="trade_table__cell history col-lg-4">
           <bn-card-title>Trade History</bn-card-title>
