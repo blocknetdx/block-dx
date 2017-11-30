@@ -29,7 +29,7 @@
           </bn-card-body>
         </bn-card>
 
-        <div #orders class="trade_table__cell orders col-lg-8">
+        <div class="trade_table__cell orders col-lg-8">
           <openorders></openorders>
         </div>
 
@@ -71,6 +71,10 @@
       </bn-tab-view>
     </div>
 
+    <div #orders class="col">
+      <openorders></openorders>
+    </div>
+
     <div #history class="col">
       <tradehistory></tradehistory>
     </div>
@@ -79,7 +83,7 @@
       <app-nav-button [views]="[trade]">Trade</app-nav-button>
       <app-nav-button [views]="[book]">Book</app-nav-button>
       <app-nav-button [views]="[charts]">Charts</app-nav-button>
-      <!-- <app-nav-button [views]="[orders]">Orders</app-nav-button> -->
+      <app-nav-button [views]="[orders]">Orders</app-nav-button>
       <app-nav-button [views]="[history]">History</app-nav-button>
     </app-bottom-nav>
 
