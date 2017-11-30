@@ -81,7 +81,18 @@
     </div>
 
     <div #orders class="col">
-      <openorders></openorders>
+      <bn-tab-view>
+        <bn-tab label="Open Orders">
+          <ng-template #content>
+            <openorders></openorders>
+          </ng-template>
+        </bn-tab>
+        <bn-tab label="Filled Orders">
+          <ng-template #content>
+            <bn-filled-orders></bn-filled-orders>
+          </ng-template>
+        </bn-tab>
+      </bn-tab-view>
     </div>
 
     <div #history class="col">
