@@ -16,9 +16,9 @@ import { TabDirective } from './tab.directive';
     </div>
     <div class="tab-view__body">
       <ng-container *ngFor="let tab of tabs; let i = index">
-        <div class="tab-content" *ngIf="activeIndex === i">
+        <ng-container *ngIf="activeIndex === i">
           <ng-template *ngTemplateOutlet="tab.content"></ng-template>
-        </div>
+        </ng-container>
       </ng-container>
     </div>
   `

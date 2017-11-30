@@ -16,6 +16,7 @@ declare var AmCharts;
 export class DepthComponent {
   public symbols:string[];
   public currentPrice: Currentprice;
+  public chart: any;
 
   constructor(
     private zone: NgZone,
@@ -43,7 +44,7 @@ export class DepthComponent {
 
   runDepthChart(): void {
     this.zone.runOutsideAngular(() => {
-      var chart = AmCharts.makeChart('chartdiv', {
+      this.chart = AmCharts.makeChart('chartdiv', {
         'responsive': {
           'enabled': true
         },
@@ -201,6 +202,8 @@ export class DepthComponent {
           }
         }]
       });
+
+      // console.log(this.chart);
 
       function balloon(item, graph) {
         var txt;

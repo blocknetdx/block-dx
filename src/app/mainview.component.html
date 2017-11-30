@@ -1,9 +1,7 @@
 <div class="container-fluid">
-  <div class="row">
 
-    <!-- <div #trade class="sidebar col-lg">
-      <orderform></orderform>
-    </div> -->
+  <!-- Desktop -->
+  <div class="row" *isBp="['lg', 'xl']">
     <bn-card class="sidebar col-lg" [allowFullscreen]="false">
       <bn-card-title>Order Form</bn-card-title>
       <bn-card-body>
@@ -13,13 +11,10 @@
 
     <div class="content col-lg">
       <div class="trade_table row">
-        <div #price class="trade_table__cell col-lg-6">
+        <div class="trade_table__cell col-lg-6">
           <pricechart></pricechart>
         </div>
 
-        <!-- <div #depth class="trade_table__cell depth col-lg-2">
-          <depth></depth>
-        </div> -->
         <bn-card class="trade_table__cell col-lg-2">
           <bn-card-title>Depth Chart</bn-card-title>
           <bn-card-body>
@@ -27,9 +22,6 @@
           </bn-card-body>
         </bn-card>
 
-        <!-- <div #book class="trade_table__cell book col-lg-4">
-          <orderbook></orderbook>
-        </div> -->
         <bn-card class="trade_table__cell col-lg-4">
           <bn-card-title>Order Book</bn-card-title>
           <bn-card-body>
@@ -41,9 +33,6 @@
           <openorders></openorders>
         </div>
 
-        <!-- <div #history class="trade_table__cell history col-lg-4">
-          <tradehistory></tradehistory>
-        </div> -->
         <bn-card class="trade_table__cell history col-lg-4">
           <bn-card-title>Trade History</bn-card-title>
           <bn-card-body>
@@ -54,14 +43,46 @@
       </div>
 
     </div>
+  </div>
+  <!-- End Desktop -->
 
-    <app-bottom-nav *isBp="['xs', 'sm', 'md']">
+  <!-- Mobile and Tablet -->
+  <div class="row" *isBp="['xs', 'sm', 'md']">
+    <div #trade class="col">
+      <orderform></orderform>
+    </div>
+
+    <div #book class="col">
+      <orderbook></orderbook>
+    </div>
+
+    <div #charts class="col">
+      <bn-tab-view>
+        <bn-tab label="Price Chart">
+          <ng-template #content>
+            <pricechart></pricechart>
+          </ng-template>
+        </bn-tab>
+        <bn-tab label="Depth Chart">
+          <ng-template #content>
+            <depth></depth>
+          </ng-template>
+        </bn-tab>
+      </bn-tab-view>
+    </div>
+
+    <div #history class="col">
+      <tradehistory></tradehistory>
+    </div>
+
+    <app-bottom-nav>
       <app-nav-button [views]="[trade]">Trade</app-nav-button>
       <app-nav-button [views]="[book]">Book</app-nav-button>
-      <app-nav-button [views]="[price, depth]">Charts</app-nav-button>
-      <app-nav-button [views]="[orders]">Orders</app-nav-button>
+      <app-nav-button [views]="[charts]">Charts</app-nav-button>
+      <!-- <app-nav-button [views]="[orders]">Orders</app-nav-button> -->
       <app-nav-button [views]="[history]">History</app-nav-button>
     </app-bottom-nav>
 
   </div>
+  <!-- End Mobile and Tablet -->
 </div>
