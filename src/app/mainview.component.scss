@@ -24,6 +24,16 @@
   height: 100%;
   @include screen(lg) {
     max-width: 300px;
+    /deep/ {
+      .bn-card {
+        height: auto;
+      }
+      .bn-card__body {
+        position: relative;
+        top: auto;
+        bottom: auto;
+      }
+    }
   }
   @include screen(xl) {
     max-width: 320px;

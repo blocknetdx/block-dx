@@ -1,21 +1,15 @@
-<bn-card cardClass="bn-orderform">
-  <bn-card-title>Order Form</bn-card-title>
-  <bn-card-body>
-    <bn-tab-view #tabView>
-      <bn-tab label="Buy">
-        <ng-template #content>
-          <ng-container *ngTemplateOutlet="formTemplate; context: {type: 'buy'}"></ng-container>
-        </ng-template>
-      </bn-tab>
-      <bn-tab label="Sell">
-        <ng-template #content>
-          <ng-container *ngTemplateOutlet="formTemplate; context: {type: 'sell'}"></ng-container>
-        </ng-template>
-      </bn-tab>
-    </bn-tab-view>
-
-  </bn-card-body>
-</bn-card>
+<bn-tab-view #tabView>
+  <bn-tab label="Buy">
+    <ng-template #content>
+      <ng-container *ngTemplateOutlet="formTemplate; context: {type: 'buy'}"></ng-container>
+    </ng-template>
+  </bn-tab>
+  <bn-tab label="Sell">
+    <ng-template #content>
+      <ng-container *ngTemplateOutlet="formTemplate; context: {type: 'sell'}"></ng-container>
+    </ng-template>
+  </bn-tab>
+</bn-tab-view>
 
 <ng-template #formTemplate let-type="type">
   <form (ngSubmit)="onOrderSubmit()" #orderForm="ngForm" id="market_order">

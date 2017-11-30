@@ -14,19 +14,6 @@ bn-tab-view {
   }
 }
 
-@include screen(lg) {
-  bn-card /deep/ {
-    .bn-card, {
-      height: auto;
-    }
-    .bn-card__body {
-      position: relative;
-      top: auto;
-      bottom: auto;
-    }
-  }
-}
-
 form {
   padding: 0 4px;
 }

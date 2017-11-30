@@ -1,10 +1,15 @@
 <div class="container-fluid">
   <div class="row">
 
-    <div #trade class="sidebar col-lg">
-      <!-- <balances></balances> -->
+    <!-- <div #trade class="sidebar col-lg">
       <orderform></orderform>
-    </div>
+    </div> -->
+    <bn-card class="sidebar col-lg" [allowFullscreen]="false">
+      <bn-card-title>Order Form</bn-card-title>
+      <bn-card-body>
+        <orderform></orderform>
+      </bn-card-body>
+    </bn-card>
 
     <div class="content col-lg">
       <div class="trade_table row">
