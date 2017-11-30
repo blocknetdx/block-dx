@@ -9,7 +9,9 @@
   left: 0;
   right: 0;
   overflow: hidden;
+  padding: 0;
   @include screen(lg) {
+    padding: 0 4px;
     bottom: 0;
     top: 90px;
   }
@@ -42,6 +44,10 @@
 
 .content {
   height: 100%;
+  background: linear-gradient(0deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.04) 100%);
+  & > div {
+    height: 100%;
+  }
 }
 
 .trade_table {

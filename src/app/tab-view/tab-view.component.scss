@@ -20,9 +20,13 @@ a.tab {
   display: inline-block;
   width: 100%;
   text-align: center;
-  padding: 8px 0;
+  padding: 13px 0;
   transition: color 0.26s ease;
   font: 12px/14px $open-sans;
+
+  @include screen(lg) {
+    padding: 8px 0;
+  }
 
   &:hover {
     color: $bn-blue-light3;
@@ -47,9 +51,12 @@ a.tab {
 }
 
 .tab-view__body {
-  padding: 8px;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  height: calc(100% - 30px);
+  height: calc(100% - 40px);
   z-index: 8;
+
+  @include screen(lg) {
+    height: calc(100% - 30px);
+  }
 }
