@@ -19,11 +19,16 @@ bn-card {
   position: relative;
   height: 100%;
 
+  &:fullscreen {
+    width: 100%;
+  }
+
   &__title {
     @extend .type2;
     text-transform: uppercase;
     background: $bn-blue2;
     padding: 11px 17px;
+    position: relative;
 
     &.tabbed {
       a {
@@ -54,15 +59,40 @@ bn-card {
         }
       }
     }
+
+    .fullscreen {
+      display: block;
+      position: absolute;
+      padding: 5px;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      transition: opacity 0.26s ease;
+      opacity: 0.5;
+
+      &:hover {
+        opacity: 1;
+        .material-icons {
+          color: $bn-blue-light3;
+        }
+      }
+
+      .material-icons {
+        float: left;
+        font-size: 14px;
+        line-height: 1em;
+        transition: color 0.26s ease;
+      }
+    }
   }
 
-  &__subhead {
-    font-family: $open-sans;
-    background: $bn-blue2;
-    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
-    font-weight: 400;
-    text-align: right;
-  }
+  // &__subhead {
+  //   font-family: $open-sans;
+  //   background: $bn-blue2;
+  //   box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
+  //   font-weight: 400;
+  //   text-align: right;
+  // }
 
   &__body {
     position: absolute;
