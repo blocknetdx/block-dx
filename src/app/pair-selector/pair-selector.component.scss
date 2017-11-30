@@ -59,13 +59,13 @@
       // transition-delay: 0s;
     }
     .navbar-pricing__upper::after {
-      content: 'keyboard_arrow_up';
+      content: '\E316';
       @include screen(lg) {
         content: none;
       }
     }
     .navbar-pricing__lower::after {
-      content: 'keyboard_arrow_up';
+      content: '\E316';
     }
   }
 }
@@ -76,7 +76,7 @@
 
 .navbar-pricing__upper {
   &::after {
-    content: 'keyboard_arrow_down';
+    content: '\E313';
     font-family: 'Material Icons';
     font-weight: normal;
     line-height: 1em;
@@ -97,7 +97,7 @@
     display: block;
 
     &::after {
-      content: 'keyboard_arrow_down';
+      content: '\E313';
       font-family: 'Material Icons';
       vertical-align: bottom;
       margin-left: 3px;

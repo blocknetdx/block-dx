@@ -8,7 +8,7 @@
   background-color: $bn-blue-light4;
   cursor: pointer;
   &::after {
-    content: 'keyboard_arrow_down';
+    content: '\E313';
     font: 26px/1em 'Material Icons';
     color: $bn-blue-light3;
     position: absolute;

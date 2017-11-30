@@ -44,12 +44,12 @@
         font-weight: bold;
         &.sort-up {
           &::after {
-            content: 'keyboard_arrow_up';
+            content: '\E316';
           }
         }
         &.sort-down {
           &::after {
-            content: 'keyboard_arrow_down';
+            content: '\E313';
           }
         }
       }
