@@ -42,8 +42,11 @@
   }
 }
 
-.content {
+.content, .mobile-content {
   height: 100%;
+}
+
+.mobile-content {
   background: linear-gradient(0deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.04) 100%);
   & > div {
     height: 100%;
