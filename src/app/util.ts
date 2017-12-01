@@ -1,5 +1,5 @@
 
-export function naturalSort(arr:any[], key:string):any[] {
+export function naturalSort(arr:any[], key:any):any[] {
   var a, b, a1, b1, rx=/(\d+)|(\D+)/g, rd=/\d+/;
   return arr.sort((as,bs) => {
     a= String(eval('as.'+key)).toLowerCase().match(rx);

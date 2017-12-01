@@ -2,6 +2,7 @@ import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import 'rxjs/add/operator/map';
 
+import { naturalSort } from './util';
 import { Order } from './order';
 import { OrderbookService } from './orderbook.service';
 import { TableComponent } from './table/table.component';
@@ -16,9 +17,8 @@ import { AppService } from './app.service';
 export class OrderbookComponent {
   @ViewChild('orderbookTable') public orderbookTable: TableComponent;
 
-  public rows: any[];
-
-  public symbols:string[];
+  public rows: any[] = [];
+  public symbols:string[] = [];
 
   constructor(
     private appService: AppService,
@@ -33,15 +33,24 @@ export class OrderbookComponent {
         this.orderbookService.getOrderbook(this.symbols)
           .first()
           .subscribe(orderbook => {
+            const asks = orderbook.asks.sort((a,b) => {
+              if (a[0] < b[0]) return 1;
+              if (a[0] > b[0]) return -1;
+              return 0;
+            });
+            const bids = orderbook.bids.sort((a,b) => {
+              if (a[0] < b[0]) return -1;
+              if (a[0] > b[0]) return 1;
+              return 0;
+            });
+
             this.rows = [
-              ...orderbook.asks,
+              ...asks,
               new TableRowDivider(),
-              ...orderbook.bids
+              ...bids
             ];
 
-            setTimeout(() => {
-              this.orderbookTable.scrollToMiddle();
-            });
+            this.orderbookTable.scrollToMiddle();
           });
       }
     });

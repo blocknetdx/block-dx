@@ -62,6 +62,8 @@ export class TableComponent {
   public columns: any[];
   private sections: any[];
   private rowFocusIndex: number = 0;
+  private viewIsInit: boolean;
+  private scrollQueued: boolean;
 
   @ContentChildren(TableColumnDirective)
   set columnTemplates(val: QueryList<TableColumnDirective>) {
@@ -83,12 +85,23 @@ export class TableComponent {
           rows: _groups[s]
         };
       });
+
+      if (this.scrollQueued) {
+        this.scrollQueued = false;
+        setTimeout(() => {
+          this.scrollToMiddle();
+        });
+      }
     }
   }
 
   constructor() { }
 
   ngOnInit() {
+  }
+
+  ngAfterViewInit() {
+    this.viewIsInit = true;
   }
 
   focusNextRow(e?: any) {
@@ -130,13 +143,17 @@ export class TableComponent {
 
   scrollToMiddle() {
     if (this.rows) {
-      const mid = Math.floor(this.rows.length/2);
-      const el = this.rowRefs.toArray()[mid].nativeElement;
-      const body = this.tableBody.nativeElement;
-      el.scrollIntoView(true);
+      if (this.rows.length > 0) {
+        const mid = Math.floor(this.rows.length/2);
+        const el = this.rowRefs.toArray()[mid].nativeElement;
+        const body = this.tableBody.nativeElement;
+        el.scrollIntoView(true);
 
-      const scrollBack = (body.scrollHeight - body.scrollTop <= body.clientHeight) ? 0 : body.clientHeight/2;
-      body.scrollTop = body.scrollTop - scrollBack;
+        const scrollBack = (body.scrollHeight - body.scrollTop <= body.clientHeight) ? 0 : body.clientHeight/2;
+        body.scrollTop = body.scrollTop - scrollBack;
+      } else {
+        this.scrollQueued = true;
+      }
     }
   }
 

@@ -2,12 +2,19 @@
 
 a.close {
   display: inline-block;
-  color: white;
   opacity: 0.4;
-  transition: all 0.3s ease;
+  transition: opacity 0.26s ease;
+  vertical-align: text-bottom;
   &:hover {
-    color: $bn-blue-light1;
     opacity: 1;
+    .material-icons {
+      color: $bn-blue-light;
+    }
+  }
+
+  .material-icons {
+    float: left;
+    transition: color 0.26s ease;
   }
 }
 
