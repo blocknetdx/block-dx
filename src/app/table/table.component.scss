@@ -16,7 +16,11 @@
     font-family: $open-sans;
     background: $bn-blue2;
     box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
-    padding: 10px 13px;
+    padding: 13px;
+
+    @include screen(lg) {
+      padding: 10px 13px;
+    }
 
     & > div {
       white-space: nowrap;
@@ -60,9 +64,13 @@
   &__body {
     font-family: $roboto-mono;
     padding: 5px 0;
-    height: calc(100% - 36px);
+    height: calc(100% - 42px);
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+
+    @include screen(lg) {
+      height: calc(100% - 36px);
+    }
   }
 
   &__section-title {
