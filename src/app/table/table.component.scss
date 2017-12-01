@@ -1,4 +1,5 @@
 @import '../../styles/utils/variables';
+@import '../../styles/utils/mixins';
 
 .bn-table {
   font-size: 12px;
@@ -77,6 +78,10 @@
   &__row {
     padding: 0 13px;
     cursor: default;
+    line-height: 2em;
+    @include screen(lg) {
+      line-height: 1.6em;
+    }
     &.divider {
       cursor: default;
       background-color: rgba(1,27,54,0.6);
