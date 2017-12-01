@@ -1,7 +1,13 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import {
+  Component, OnInit, Input, Output,
+  EventEmitter, ElementRef
+} from '@angular/core';
 
 @Component({
   selector: 'bn-select',
+  host: {
+    '(document:click)': 'onClick($event)'
+  },
   template: `
     <div class="select-wrapper" [class.active]="active" (click)="active = !active">
       <span class="placeholder" *ngIf="!selected">{{placeholder}}</span>
@@ -45,9 +51,17 @@ export class SelectComponent implements OnInit {
     this.selectChangeEmitter.emit(this._selected.value);
   }
 
-  constructor() { }
+  constructor(
+    private el: ElementRef
+  ) { }
 
   ngOnInit() {
+  }
+
+  onClick(e) {
+    if (!this.el.nativeElement.contains(e.target)) {
+      this.active = false;
+    }
   }
 
 }
