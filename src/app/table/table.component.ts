@@ -60,7 +60,7 @@ export class TableComponent {
   @Input() public selectable: boolean;
 
   public columns: any[];
-  private sections: any[];
+  public sections: any[];
   private rowFocusIndex: number = 0;
   private viewIsInit: boolean;
   private scrollQueued: boolean;
