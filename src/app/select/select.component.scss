@@ -15,11 +15,21 @@
     right: 8px;
     top: calc(50% + 0.05em);
     transform: translateY(-50%);
+    transition: color 0.26s ease;
+  }
+
+  &:hover {
+    &::after {
+      color: $bn-blue-light7;
+    }
   }
 
   &.active {
     z-index: 9991;
     box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
+    &::after {
+      content: '\E316';
+    }
   }
 }
 
