@@ -6,7 +6,7 @@
 
     <app-pair-selector (onActiveStatus)="pairSelectorActiveState = $event"></app-pair-selector>
 
-    <div class="navbar-collapse__overlay" [class.active]="navCollapsed"></div>
+    <div (click)="toggleNav()" class="navbar-collapse__overlay" [class.active]="navCollapsed"></div>
     <div class="collapse navbar-collapse" [class.active]="navCollapsed">
       <a (click)="toggleNav()" class="close"><i class="material-icons">close</i></a>
       <ul>
