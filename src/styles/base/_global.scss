@@ -52,3 +52,7 @@ body {
     opacity: 0.4;
   }
 }
+
+.notransition {
+  transition: none !important;
+}

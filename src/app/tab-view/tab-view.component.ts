@@ -12,7 +12,7 @@ import { TabDirective } from './tab.directive';
         [class.active]="activeTab === tab">
         {{tab.label}}
       </a>
-      <span [ngStyle]="barStyles" class="bar"></span>
+      <span [class.notransition]="!allowTransition" [ngStyle]="calculateBar()" class="bar"></span>
     </div>
     <div class="tab-view__body">
       <ng-container *ngFor="let tab of tabs; let i = index">
@@ -36,29 +36,29 @@ export class TabViewComponent {
   }
 
   public tabs: TabDirective[];
-  public barStyles: any;
+  public contentInit: boolean;
+  public allowTransition: boolean;
 
   private _activeTab: TabDirective;
   public get activeTab(): TabDirective { return this._activeTab; }
   public set activeTab(val: TabDirective) {
     this._activeTab = val;
-    setTimeout(() => {
-      this.barStyles = this.calculateBar();
-    });
   }
 
   constructor() { }
 
-  ngAfterViewInit() {
-
-  }
-
   ngAfterContentInit() {
     this.activeTab = this.tabs[0];
+    setTimeout(() => {
+      this.contentInit = true;
+    });
   }
 
   calculateBar(): any {
-    if (!this.tabs || !this.buttons) return null;
+    if (!this.tabs || !this.buttons || !this.contentInit) return null;
+    if (!this.allowTransition) {
+      setTimeout(() => this.allowTransition = true);
+    }
 
     const idx = this.tabs.indexOf(this.activeTab);
     const rect = this.buttons.toArray()[idx].nativeElement.getBoundingClientRect();
