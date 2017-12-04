@@ -3,7 +3,10 @@
   <app-table-column [prop]="'price'" [classList]="'col-4 col-sm-2'">
     <ng-template columnHeader>Price ({{symbols[1]}})</ng-template>
     <ng-template let-row="row" columnCell>
-      <span class="bn-number" [innerHtml]="row.price | blockCurrency:symbols[1]"></span>
+      <span class="bn-number"
+        [class.color-red]="row.side == 'sell'"
+        [class.color-green]="row.side == 'buy'"
+        [innerHtml]="row.price | blockCurrency:symbols[1]"></span>
     </ng-template>
   </app-table-column>
 
@@ -28,21 +31,21 @@
     </ng-template>
   </app-table-column>
 
-  <app-table-column [prop]="'filled'" [classList]="'d-none d-sm-block col-1 col-sm-2'">
+  <!-- <app-table-column [prop]="'filled'" [classList]="'d-none d-sm-block col-1 col-sm-2'">
     <ng-template columnHeader>Filled ({{symbols[1]}})</ng-template>
     <ng-template let-row="row" columnCell>
       <span class="bn-number" [innerHtml]="row.size | blockCurrency:symbols[1]"></span>
     </ng-template>
-  </app-table-column>
+  </app-table-column> -->
 
-  <app-table-column [prop]="'created_at'" [classList]="'col-1 d-none d-sm-block'">
+  <app-table-column [prop]="'created_at'" [classList]="'col-2 d-none d-sm-block'">
     <ng-template columnHeader>Date</ng-template>
     <ng-template let-row="row" columnCell>
       <span>{{row.created_at | timeAgo}}</span>
     </ng-template>
   </app-table-column>
 
-  <app-table-column [sortable]="false" [classList]="'col-1 d-none d-sm-block align-center'">
+  <app-table-column [sortable]="false" [classList]="'col-2 d-none d-sm-block align-center'">
     <ng-template columnHeader>Status</ng-template>
     <ng-template let-row="row" columnCell>
       <a (click)="cancelOrder(row)" class="close"><i class="material-icons">close</i></a>
