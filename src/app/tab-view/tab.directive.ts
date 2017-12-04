@@ -1,4 +1,4 @@
-import { Directive, Input, ContentChild, TemplateRef } from '@angular/core';
+import { Directive, Input, ContentChild, TemplateRef, ElementRef } from '@angular/core';
 
 @Directive({
   selector: 'bn-tab'
@@ -9,5 +9,5 @@ export class TabDirective {
 
   @Input() public label: string;
 
-  constructor() { }
+  constructor() {}
 }

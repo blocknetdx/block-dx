@@ -36,11 +36,13 @@ bn-card {
         font-weight: normal;
         transition: all 0.3s ease;
         position: relative;
+        padding-bottom: 6px;
         display: inline-block;
         &.active {
           font-weight: bold;
           pointer-events: none;
           color: $bn-blue-light3;
+          box-shadow: inset 0 -2px 0 $bn-blue-light1;
         }
         &:hover, &:active {
           color: $bn-blue-light;

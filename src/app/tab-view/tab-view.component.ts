@@ -1,4 +1,4 @@
-import { Component, OnInit, ContentChildren, QueryList } from '@angular/core';
+import { Component, ContentChildren, QueryList, ViewChildren, ElementRef, ViewChild } from '@angular/core';
 
 import { TabDirective } from './tab.directive';
 
@@ -6,41 +6,68 @@ import { TabDirective } from './tab.directive';
   selector: 'bn-tab-view',
   styleUrls: ['./tab-view.component.scss'],
   template: `
-    <div class="tabs">
-      <a class="tab" *ngFor="let tab of tabs; let i = index"
-        (click)="activeIndex = i"
-        [class.active]="activeIndex === i">
+    <div #buttonContainer class="tabs">
+      <a class="tab" #button *ngFor="let tab of tabs; let i = index"
+        (click)="activeTab = tab"
+        [class.active]="activeTab === tab">
         {{tab.label}}
       </a>
-      <span [style.left]="((1/tabs.length)*activeIndex*100) + '%'" class="bar"></span>
+      <span [ngStyle]="barStyles" class="bar"></span>
     </div>
     <div class="tab-view__body">
       <ng-container *ngFor="let tab of tabs; let i = index">
-        <ng-container *ngIf="activeIndex === i">
+        <ng-container *ngIf="activeTab === tab">
           <ng-template *ngTemplateOutlet="tab.content"></ng-template>
         </ng-container>
       </ng-container>
     </div>
   `
 })
-export class TabViewComponent implements OnInit {
+export class TabViewComponent {
+  @ViewChild('buttonContainer')
+  public buttonContainer: ElementRef;
+
+  @ViewChildren('button')
+  public buttons: QueryList<ElementRef>;
+
   @ContentChildren(TabDirective)
   set tabTemplates(val: QueryList<TabDirective>) {
     this.tabs = val.toArray();
   }
 
   public tabs: TabDirective[];
+  public barStyles: any;
 
-  private _activeIndex: number = 0;
-  public get activeIndex(): number { return this._activeIndex; }
-  public set activeIndex(val: number) {
-    this._activeIndex = val;
+  private _activeTab: TabDirective;
+  public get activeTab(): TabDirective { return this._activeTab; }
+  public set activeTab(val: TabDirective) {
+    this._activeTab = val;
+    setTimeout(() => {
+      this.barStyles = this.calculateBar();
+    });
   }
 
   constructor() { }
 
-  ngOnInit() {
+  ngAfterViewInit() {
 
+  }
+
+  ngAfterContentInit() {
+    this.activeTab = this.tabs[0];
+  }
+
+  calculateBar(): any {
+    if (!this.tabs || !this.buttons) return null;
+
+    const idx = this.tabs.indexOf(this.activeTab);
+    const rect = this.buttons.toArray()[idx].nativeElement.getBoundingClientRect();
+    const parentRect = this.buttonContainer.nativeElement.getBoundingClientRect();
+
+    return {
+      'width': `${Math.ceil(rect.width)}px`,
+      'left': `${Math.floor(rect.x-parentRect.x)}px`
+    }
   }
 
 }

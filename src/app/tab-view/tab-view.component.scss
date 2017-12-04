@@ -42,12 +42,12 @@ a.tab {
 .bar {
   display: inline-block;
   background: $bn-blue-light3;
-  width: 50%;
+  // width: 50%;
   height: 2px;
   position: absolute;
   bottom: 0;
   left: 0;
-  transition: left 0.26s ease-in-out;
+  transition: left 0.26s ease-in-out, width 0.26s ease-in-out;
 }
 
 .tab-view__body {
@@ -58,5 +58,46 @@ a.tab {
 
   @include screen(lg) {
     height: calc(100% - 30px);
+  }
+}
+
+// Card Theme
+:host.card {
+
+  .tabs {
+    display: block;
+    padding: 0 17px;
+    box-shadow: none;
+    position: relative;
+  }
+
+  .tab {
+    width: auto;
+    text-transform: uppercase;
+    padding: 11px 0;
+    line-height: 17px;
+
+    & + .tab {
+      margin-left: 30px;
+      position: relative;
+
+      &::before {
+        content: '|';
+        position: absolute;
+        left: -1.5em;
+        color: white;
+        font-weight: normal;
+        margin-top: -1px;
+      }
+    }
+  }
+
+  .bar {
+    bottom: 4px;
+  }
+
+  .tab-view__body {
+    background: $bn-blue3;
+    height: calc(100% - 39px);
   }
 }
