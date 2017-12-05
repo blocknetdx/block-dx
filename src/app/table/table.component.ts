@@ -3,8 +3,9 @@ import {
   QueryList, Input, Output, EventEmitter, ElementRef
 } from '@angular/core';
 
-import { naturalSort } from '../util';
+import { naturalSort, debounce } from '../util';
 import { TableColumnDirective } from './table-column.directive';
+import { TableRowDetailDirective } from './table-row-detail.directive';
 
 @Component({
   selector: 'app-table',
@@ -23,7 +24,7 @@ import { TableColumnDirective } from './table-column.directive';
           <ng-template *ngTemplateOutlet="col.headerTemplate"></ng-template>
         </div>
       </div>
-      <div #tableBody class="bn-table__body">
+      <div #tableBody class="bn-table__body" (click)="rowSelected(null, $event)">
         <div class="bn-table__section" *ngFor="let section of sections">
           <div class="bn-table__section-title" *ngIf="section.title != 'undefined'">
             <div class="col-12">{{section.title}}</div>
@@ -31,13 +32,19 @@ import { TableColumnDirective } from './table-column.directive';
           <div class="bn-table__row {{row.row_class}}" #rowRef
             tabindex="-1"
             [class.selectable]="selectable"
+            [class.selected]="selectedRow == row"
             [class.divider]="row.constructor.name === 'TableRowDivider'"
-            (keyup.enter)="rowSelected(row)"
-            (click)="rowSelected(row)"
+            (keyup.enter)="rowSelected(row, $event)"
+            (click)="rowSelected(row, $event)"
             *ngFor="let row of section.rows">
             <ng-container *ngIf="row.constructor.name !== 'TableRowDivider'">
               <div class="bn-table__cell {{col.classList}}" *ngFor="let col of columns">
                 <ng-template *ngTemplateOutlet="col.cellTemplate; context: {row: row}"></ng-template>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="rowDetail">
+              <div *ngIf="selectedRow == row" class="bn-table__row-detail">
+                <ng-template *ngTemplateOutlet="rowDetail.template; context: {row: row}"></ng-template>
               </div>
             </ng-container>
           </div>
@@ -61,6 +68,7 @@ export class TableComponent {
 
   public columns: any[];
   public sections: any[];
+  public selectedRow: any;
   private rowFocusIndex: number = 0;
   private viewIsInit: boolean;
   private scrollQueued: boolean;
@@ -69,6 +77,9 @@ export class TableComponent {
   set columnTemplates(val: QueryList<TableColumnDirective>) {
     this.columns = val.toArray();
   }
+
+  @ContentChild(TableRowDetailDirective)
+  public rowDetail: TableRowDetailDirective;
 
   private _rows: any[];
   public get rows(): any[] { return this._rows; }
@@ -157,8 +168,11 @@ export class TableComponent {
     }
   }
 
-  rowSelected(row) {
+  rowSelected(row, e?:any) {
     if (this.selectable) {
+      e.stopPropagation();
+      console.log('row selected', row);
+      this.selectedRow = row;
       this.onRowSelect.emit(row);
     }
   }

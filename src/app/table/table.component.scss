@@ -9,7 +9,7 @@
 
   &__header, &__row {
     display: flex;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
   }
 
   &__header {
@@ -102,6 +102,11 @@
         box-shadow: 0 2px 4px 0 rgba(0,0,0,0.1);
       }
     }
+  }
+
+  &__row-detail {
+    flex: 0 0 100%;
+    text-align: left;
   }
 
   &__cell {

@@ -17,3 +17,23 @@ a.close {
     transition: color 0.26s ease;
   }
 }
+
+.row-detail {
+  padding: 2px 0 8px;
+  div {
+    display: flex;
+    justify-content: space-between;
+  }
+  div + div {
+    margin-top: 15px;
+    padding-top: 5px;
+    border-top: solid 2px rgba(255,255,255,0.25);
+  }
+
+  .close {
+  	font-family: "Open Sans";
+    color: $bn-red;
+    font-weight: bold;
+    opacity: 1;
+  }
+}

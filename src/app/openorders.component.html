@@ -1,4 +1,18 @@
-<app-table [rows]="openorders">
+<app-table [rows]="openorders" [selectable]="true">
+
+  <bn-table-row-detail *isBp="['xs','sm','md']">
+    <ng-template #rowDetail let-row="row">
+      <div class="row-detail">
+        <div>
+          <span>Fee: <span [innerHtml]="row.price*row.size*0.05 | blockCurrency:symbols[1]"></span></span>
+        </div>
+        <div>
+          <span>{{row.created_at | timeAgo}}</span>
+          <span><a class="close" (click)="cancelOrder(row)">Cancel</a></span>
+        </div>
+      </div>
+    </ng-template>
+  </bn-table-row-detail>
 
   <app-table-column [prop]="'price'" [classList]="'col-4 col-sm-2'">
     <ng-template columnHeader>Price ({{symbols[1]}})</ng-template>

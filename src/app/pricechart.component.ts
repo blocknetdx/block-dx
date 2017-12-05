@@ -29,7 +29,7 @@ export class PricechartComponent {
         fullscreen: false,
         interval: 'W',
         timeframe: '1M',
-        // custom_css_url: `${this.window.location.origin}/assets/tv/chart-dark-theme.css`,
+        custom_css_url: `${this.window.location.origin}/assets/tv/chart-dark-theme.css`,
         container_id: "tv_chart_container",
         //	BEWARE: no trailing slash is expected in feed URL
         symbol: 'AAPL',

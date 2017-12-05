@@ -54,6 +54,7 @@ import { TabViewComponent } from './tab-view/tab-view.component';
 import { TabDirective } from './tab-view/tab.directive';
 import { FilledOrdersComponent } from './filled-orders/filled-orders.component';
 import { BottomNavButtonDirective } from './bottom-nav/bottom-nav-button.directive';
+import { TableRowDetailDirective } from './table/table-row-detail.directive';
 
 
 @NgModule({
@@ -89,7 +90,8 @@ import { BottomNavButtonDirective } from './bottom-nav/bottom-nav-button.directi
     TabViewComponent,
     TabDirective,
     FilledOrdersComponent,
-    BottomNavButtonDirective
+    BottomNavButtonDirective,
+    TableRowDetailDirective
   ],
   imports: [
     BrowserModule,
