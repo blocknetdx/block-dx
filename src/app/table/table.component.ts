@@ -8,6 +8,7 @@ import { PerfectScrollbarComponent, PerfectScrollbarDirective } from 'ngx-perfec
 import { naturalSort, debounce } from '../util';
 import { TableColumnDirective } from './table-column.directive';
 import { TableRowDetailDirective } from './table-row-detail.directive';
+import { TableInfoDirective } from './table-info.directive';
 
 @Component({
   selector: 'app-table',
@@ -26,8 +27,13 @@ import { TableRowDetailDirective } from './table-row-detail.directive';
           <ng-template *ngTemplateOutlet="col.headerTemplate"></ng-template>
         </div>
       </div>
-      <div #tableBody class="bn-table__body" (click)="rowSelected(null, $event)">
+      <div #tableBody class="bn-table__body" (click)="deselect($event)">
         <perfect-scrollbar #scrollbar>
+          <ng-container *ngIf="tableInfo">
+            <div class="bn-table__info">
+              <ng-template *ngTemplateOutlet="tableInfo.template"></ng-template>
+            </div>
+          </ng-container>
           <div class="bn-table__section" *ngFor="let section of sections">
             <div class="bn-table__section-title" *ngIf="section.title != 'undefined'">
               <div class="col-12">{{section.title}}</div>
@@ -72,6 +78,8 @@ export class TableComponent {
   public onRowSelect: EventEmitter<any> = new EventEmitter();
 
   @Input() public selectable: boolean;
+  @Input() public deselectOnBlur: boolean = true;
+  @Input() public groupBy: string;
 
   public columns: any[];
   public sections: any[];
@@ -88,13 +96,16 @@ export class TableComponent {
   @ContentChild(TableRowDetailDirective)
   public rowDetail: TableRowDetailDirective;
 
+  @ContentChild(TableInfoDirective)
+  public tableInfo: TableInfoDirective;
+
   private _rows: any[];
   public get rows(): any[] { return this._rows; }
   @Input() public set rows(val: any[]) {
     this._rows = val;
     if (val) {
       const _groups = val.reduce((acc, row) => {
-        (acc[row.section] = acc[row.section] || []).push(row);
+        (acc[row[this.groupBy]] = acc[row[this.groupBy]] || []).push(row);
         return acc;
       }, {});
       this.sections = Object.keys(_groups).map((s) => {
@@ -176,9 +187,15 @@ export class TableComponent {
     }
   }
 
+  deselect(e) {
+    if (this.deselectOnBlur) {
+      this.rowSelected(null, e);
+    }
+  }
+
   rowSelected(row, e?:any) {
     if (this.selectable) {
-      e.stopPropagation();
+      if (e) e.stopPropagation();
       this.selectedRow = row;
       this.onRowSelect.emit(row);
     }

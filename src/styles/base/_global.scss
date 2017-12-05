@@ -53,6 +53,10 @@ body {
   }
 }
 
+.uppercase {
+  text-transform: uppercase;
+}
+
 .notransition {
   transition: none !important;
 }

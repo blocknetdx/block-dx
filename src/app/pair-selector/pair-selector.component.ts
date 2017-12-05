@@ -28,16 +28,44 @@ export class PairSelectorComponent {
   @Output('onActiveStatus')
   public onActiveStatus: EventEmitter<boolean> = new EventEmitter();
 
-  public symbols: string[];
-  public rows: any[];
+  public get symbols(): string[] {
+    let _s = this._loadedSymbols;
+    if (this.state === 'stage2') _s = [this.model.coinA.symbol, '___'];
+    if (this.state === 'stage3') _s = [this.model.coinA.symbol, this.model.coinB.symbol];
+    return _s;
+  }
+
   public filteredRows: any[];
   public model: {coinA?: any, coinB?: any};
   public activeInputKey: string;
   public coinASuggest: string;
   public coinBSuggest: string;
 
+  public get rows(): any[] {
+    let arr;
+    switch(this.state) {
+      case 'stage1' :
+        arr = [...this._userWallet,...this._allCoins];
+        break;
+      case 'stage2' :
+      case 'stage3' :
+        arr = [...this._rawData];
+        break;
+    }
+    return arr;
+  }
+
+  private _userWallet: any[];
+  private _allCoins: any[];
   private _rawData: any[];
+  private _loadedSymbols: string[];
   private _controlStatus: Subject<boolean> = new Subject();
+
+  private _state: string = 'stage1';
+  public get state(): string { return this._state; }
+  public set state(val: string) {
+    this._state = val;
+  }
 
   private _active: boolean;
   public get active(): boolean { return this._active; }
@@ -52,11 +80,13 @@ export class PairSelectorComponent {
             .subscribe((status) => {
               if (status === 'VALID') {
                 if (key === 'coinA') {
+                  this.state = 'stage2';
+                  this.filteredRows = this.rows;
                   setTimeout(() => {
                     this.inputs.last.nativeElement.focus();
-                    this.filterCoins('coinB', '');
                   });
                 } else if (key === 'coinB') {
+                  this.state = 'stage3';
                   setTimeout(() => {
                     this.submit.nativeElement.focus();
                   });
@@ -68,6 +98,7 @@ export class PairSelectorComponent {
         this.inputs.first.nativeElement.focus();
       });
     } else {
+      this.state = 'stage1';
       this._controlStatus.next(true);
       this.filterCoins('coinA', '');
     }
@@ -83,20 +114,18 @@ export class PairSelectorComponent {
 
   ngOnInit() {
     this.appService.marketPairChanges.subscribe((symbols) => {
-      this.symbols = symbols;
+      this._loadedSymbols = symbols;
     });
     this.cryptoService.getCurrencies().first()
       .subscribe((data) => {
         this._rawData = data;
 
-        const user_wallet = data.slice(0,5).map((coin) => {
+        this._userWallet = data.slice(0,5).map((coin) => {
           return Object.assign({section: 'My Wallet'}, coin);
         });
-        const all_coins = data.map((coin) => {
+        this._allCoins = data.map((coin) => {
           return Object.assign({section: 'All Coins'}, coin);
         });
-
-        this.rows = [...user_wallet, ...all_coins];
 
         this.filteredRows = this.rows;
       });
@@ -119,7 +148,7 @@ export class PairSelectorComponent {
   }
 
   onRowSelect(row) {
-    if (this.activeInputKey) {
+    if (row && this.activeInputKey) {
       this.model[this.activeInputKey] = row;
     }
   }
@@ -128,10 +157,14 @@ export class PairSelectorComponent {
     if (coin === 'coinA') {
       this.model = {};
       this.inputs.first.nativeElement.focus();
+      this.state = 'stage1';
     } else if (coin === 'coinB') {
       this.model.coinB = '';
       this.inputs.last.nativeElement.focus();
+      this.state = 'stage2';
     }
+    this.filteredRows = this.rows;
+    this.pairTable.rowSelected(null);
   }
 
   formatRow(row) {
@@ -144,6 +177,7 @@ export class PairSelectorComponent {
   }
 
   onSubmit() {
+    console.log(this.model);
     const a: string = this.model.coinA.symbol;
     const b: string = this.model.coinB.symbol;
     this.router.navigate(['/trading', `${a}-${b}`]);

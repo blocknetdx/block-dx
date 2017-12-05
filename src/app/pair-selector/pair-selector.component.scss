@@ -7,7 +7,6 @@
 
 .navbar-pricing__cell {
   margin-left: 0;
-  cursor: pointer;
   background: none;
 
   @include screen(lg) {
@@ -18,6 +17,7 @@
 
 
   &_body {
+    cursor: pointer;
     padding: 0;
     position: relative;
 
@@ -197,11 +197,33 @@ app-table /deep/ {
   .bn-table__header {
   	background-color: $bn-blue-light5;
   }
+  .bn-table__info > .row {
+    margin-left: 0;
+    margin-right: 0;
+  }
   .ps-content {
     padding-bottom: 15px;
   }
 
-  .bn-table__row, .bn-table__section-title {
+  .bn-table__row.selected {
+    position: relative;
+    &::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: #67B0FB;
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+
+  .bn-table__header,
+  .bn-table__info,
+  .bn-table__row,
+  .bn-table__section-title {
     padding-left: 8px;
     padding-right: 8px;
     @include screen(lg) {
@@ -218,6 +240,18 @@ app-table.formValid /deep/ {
       height: calc(100% - 70px);
     }
   }
+}
+
+.first-coin-info {
+  padding: 8px 0 12px;
+}
+
+hr {
+  margin: 0 4px 5px;
+  width: 100%;
+  height: 1px;
+  background: rgba(255,255,255,0.25);
+  border: none;
 }
 
 .input-group {
