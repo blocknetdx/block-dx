@@ -171,7 +171,6 @@ export class TableComponent {
   rowSelected(row, e?:any) {
     if (this.selectable) {
       e.stopPropagation();
-      console.log('row selected', row);
       this.selectedRow = row;
       this.onRowSelect.emit(row);
     }
