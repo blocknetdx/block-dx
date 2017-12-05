@@ -1,10 +1,9 @@
-import { Component, OnInit, Input, ViewEncapsulation, ElementRef, ViewChild, Inject } from '@angular/core';
+import { Component, OnInit, Input, ViewEncapsulation, ElementRef, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'bn-card',
   encapsulation: ViewEncapsulation.None,
   styleUrls: ['./card.component.scss'],
-  providers: [{provide: Document, useValue: document}],
   template: `
     <div #card class="bn-card {{cardClass}}">
       <div class="bn-card__title {{cardTitleClass}}">
@@ -30,31 +29,31 @@ export class CardComponent implements OnInit {
 
   public isFullscreen: boolean;
 
-  constructor(@Inject(Document) private document: Document) { }
+  constructor() { }
 
   ngOnInit() {
-    if (this.allowFullscreen && this.document.addEventListener) {
-      this.document.addEventListener('webkitfullscreenchange', this.fullscreenHandler.bind(this), false);
-      this.document.addEventListener('mozfullscreenchange', this.fullscreenHandler.bind(this), false);
-      this.document.addEventListener('fullscreenchange', this.fullscreenHandler.bind(this), false);
-      this.document.addEventListener('MSFullscreenChange', this.fullscreenHandler.bind(this), false);
+    if (this.allowFullscreen && document.addEventListener) {
+      document.addEventListener('webkitfullscreenchange', this.fullscreenHandler.bind(this), false);
+      document.addEventListener('mozfullscreenchange', this.fullscreenHandler.bind(this), false);
+      document.addEventListener('fullscreenchange', this.fullscreenHandler.bind(this), false);
+      document.addEventListener('MSFullscreenChange', this.fullscreenHandler.bind(this), false);
     }
   }
 
   ngOnDestroy() {
-    if (this.allowFullscreen && this.document.removeEventListener) {
-      this.document.removeEventListener('webkitfullscreenchange', this.fullscreenHandler.bind(this), false);
-      this.document.removeEventListener('mozfullscreenchange', this.fullscreenHandler.bind(this), false);
-      this.document.removeEventListener('fullscreenchange', this.fullscreenHandler.bind(this), false);
-      this.document.removeEventListener('MSFullscreenChange', this.fullscreenHandler.bind(this), false);
+    if (this.allowFullscreen && document.removeEventListener) {
+      document.removeEventListener('webkitfullscreenchange', this.fullscreenHandler.bind(this), false);
+      document.removeEventListener('mozfullscreenchange', this.fullscreenHandler.bind(this), false);
+      document.removeEventListener('fullscreenchange', this.fullscreenHandler.bind(this), false);
+      document.removeEventListener('MSFullscreenChange', this.fullscreenHandler.bind(this), false);
     }
   }
 
   fullscreenHandler(e) {
-    if ((this.document.fullscreenElement && this.document.fullscreenElement !== null) ||
-        (this.document.webkitFullscreenElement && this.document.webkitFullscreenElement !== null) ||
-        (this.document['mozFullScreenElement'] && this.document['mozFullScreenElement'] !== null) ||
-        (this.document['msFullscreenElement'] && this.document['msFullscreenElement'] !== null)) {
+    if ((document.fullscreenElement && document.fullscreenElement !== null) ||
+        (document.webkitFullscreenElement && document.webkitFullscreenElement !== null) ||
+        (document['mozFullScreenElement'] && document['mozFullScreenElement'] !== null) ||
+        (document['msFullscreenElement'] && document['msFullscreenElement'] !== null)) {
       this.isFullscreen = true;
     } else {
       this.isFullscreen = false;
@@ -75,14 +74,14 @@ export class CardComponent implements OnInit {
         this.card.nativeElement.webkitRequestFullscreen();
       }
     } else {
-      if (this.document.exitFullscreen) {
-        this.document.exitFullscreen();
-      } else if (this.document['webkitExitFullscreen']) {
-        this.document['webkitExitFullscreen']();
-      } else if (this.document['mozCancelFullScreen']) {
-        this.document['mozCancelFullScreen']();
-      } else if (this.document['msExitFullscreen']) {
-        this.document['msExitFullscreen']();
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document['webkitExitFullscreen']) {
+        document['webkitExitFullscreen']();
+      } else if (document['mozCancelFullScreen']) {
+        document['mozCancelFullScreen']();
+      } else if (document['msExitFullscreen']) {
+        document['msExitFullscreen']();
       }
     }
 

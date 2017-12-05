@@ -1,4 +1,4 @@
-import { Component, NgZone, ViewChild, ElementRef, Inject } from '@angular/core';
+import { Component, NgZone, ViewChild, ElementRef } from '@angular/core';
 
 import * as jQuery from 'jquery';
 
@@ -8,8 +8,7 @@ declare var Datafeeds;
 @Component({
   selector: 'pricechart',
   templateUrl: './pricechart.component.html',
-  styleUrls: ['./pricechart.component.scss'],
-  providers: [{provide: Window, useValue: window}]
+  styleUrls: ['./pricechart.component.scss']
 })
 export class PricechartComponent {
   @ViewChild('container')
@@ -18,8 +17,7 @@ export class PricechartComponent {
   private widget: any;
 
   constructor(
-    private zone: NgZone,
-    @Inject(Window) private window: Window
+    private zone: NgZone
   ) {}
 
   ngAfterViewInit() {
@@ -29,7 +27,7 @@ export class PricechartComponent {
         fullscreen: false,
         interval: 'W',
         timeframe: '1M',
-        custom_css_url: `${this.window.location.origin}/assets/tv/chart-dark-theme.css`,
+        custom_css_url: `${window.location.origin}/assets/tv/chart-dark-theme.css`,
         container_id: "tv_chart_container",
         //	BEWARE: no trailing slash is expected in feed URL
         symbol: 'AAPL',
