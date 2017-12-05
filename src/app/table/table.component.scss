@@ -63,13 +63,25 @@
 
   &__body {
     font-family: $roboto-mono;
-    padding: 5px 0;
+    padding: 0;
     height: calc(100% - 42px);
-    overflow-y: auto;
+    overflow: hidden;
     -webkit-overflow-scrolling: touch;
 
     @include screen(lg) {
-      height: calc(100% - 36px);
+      height: calc(100% - 28px);
+    }
+  }
+
+  /deep/ {
+    .ps-content {
+      padding: 5px 0;
+    }
+
+    .ps.ps--scrolling-y > .ps__rail-y,
+    .ps__rail-y:focus,
+    .ps__rail-y:hover {
+      background: none;
     }
   }
 

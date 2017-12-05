@@ -7,7 +7,10 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { DecimalPipe } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
-import { MatSelectModule } from '@angular/material';
+// import { MatSelectModule } from '@angular/material';
+import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
+import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 
 // Imports for loading & configuring the in-memory web api
 import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
@@ -56,6 +59,9 @@ import { FilledOrdersComponent } from './filled-orders/filled-orders.component';
 import { BottomNavButtonDirective } from './bottom-nav/bottom-nav-button.directive';
 import { TableRowDetailDirective } from './table/table-row-detail.directive';
 
+const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
+  suppressScrollX: true
+};
 
 @NgModule({
   declarations: [
@@ -100,7 +106,8 @@ import { TableRowDetailDirective } from './table/table-row-detail.directive';
     BrowserAnimationsModule,
     FormsModule,
     LayoutModule,
-    MatSelectModule,
+    // MatSelectModule,
+    PerfectScrollbarModule,
     InMemoryWebApiModule.forRoot(InMemoryDataService),
     AppRoutingModule
   ],
@@ -113,7 +120,11 @@ import { TableRowDetailDirective } from './table/table-row-detail.directive';
     OpenordersService,
     OrderbookService,
     WebSocketService,
-    CryptocurrencyService
+    CryptocurrencyService,
+    {
+      provide: PERFECT_SCROLLBAR_CONFIG,
+      useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
+    }
   ],
   bootstrap: [AppComponent]
 })
