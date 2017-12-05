@@ -69,6 +69,7 @@ export class PairSelectorComponent {
       });
     } else {
       this._controlStatus.next(true);
+      this.filterCoins('coinA', '');
     }
     this.onActiveStatus.emit(val);
   }

@@ -57,6 +57,7 @@
 
     <app-table
       #pairTable
+      [class.formValid]="pairForm.form.valid"
       [rows]="filteredRows"
       [selectable]="true"
       (onRowSelect)="onRowSelect($event)">

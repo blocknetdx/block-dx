@@ -196,10 +196,6 @@ app-table /deep/ {
   }
   .bn-table__header {
   	background-color: $bn-blue-light5;
-    padding: 10px 8px;
-    @include screen(lg) {
-      padding: 10px 30px;
-    }
   }
   .ps-content {
     padding-bottom: 15px;
@@ -211,6 +207,15 @@ app-table /deep/ {
     @include screen(lg) {
       padding-left: 30px;
       padding-right: 30px;
+    }
+  }
+}
+
+app-table.formValid /deep/ {
+  .bn-table {
+    height: calc(100% - 154px);
+    @include screen(lg) {
+      height: calc(100% - 70px);
     }
   }
 }
