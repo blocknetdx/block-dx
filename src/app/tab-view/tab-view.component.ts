@@ -45,6 +45,10 @@ export class TabViewComponent {
     this._activeTab = val;
   }
 
+  public get activeIndex(): number {
+    return this.tabs.indexOf(this.activeTab);
+  }
+
   constructor() { }
 
   ngAfterContentInit() {
@@ -60,8 +64,7 @@ export class TabViewComponent {
       setTimeout(() => this.allowTransition = true);
     }
 
-    const idx = this.tabs.indexOf(this.activeTab);
-    const rect = this.buttons.toArray()[idx].nativeElement.getBoundingClientRect();
+    const rect = this.buttons.toArray()[this.activeIndex].nativeElement.getBoundingClientRect();
     const parentRect = this.buttonContainer.nativeElement.getBoundingClientRect();
 
     return {

@@ -1,4 +1,4 @@
-import { Component, NgZone, ViewChild, ElementRef } from '@angular/core';
+import { Component, NgZone, ViewChild, ElementRef, Inject } from '@angular/core';
 
 import * as jQuery from 'jquery';
 
@@ -8,7 +8,8 @@ declare var Datafeeds;
 @Component({
   selector: 'pricechart',
   templateUrl: './pricechart.component.html',
-  styleUrls: ['./pricechart.component.scss']
+  styleUrls: ['./pricechart.component.scss'],
+  providers: [{provide: Window, useValue: window}]
 })
 export class PricechartComponent {
   @ViewChild('container')
@@ -17,8 +18,9 @@ export class PricechartComponent {
   private widget: any;
 
   constructor(
-    private zone: NgZone
-  ) { }
+    private zone: NgZone,
+    @Inject(Window) private window: Window
+  ) {}
 
   ngAfterViewInit() {
     this.zone.runOutsideAngular(() => {
@@ -27,6 +29,7 @@ export class PricechartComponent {
         fullscreen: false,
         interval: 'W',
         timeframe: '1M',
+        // custom_css_url: `${this.window.location.origin}/assets/tv/chart-dark-theme.css`,
         container_id: "tv_chart_container",
         //	BEWARE: no trailing slash is expected in feed URL
         symbol: 'AAPL',
@@ -51,7 +54,35 @@ export class PricechartComponent {
           // intervals: ["1D", "3D", "3W", "W"],
           // chartTypes: ["Area", "Line"]
         },
+
+        // mainSeriesProperties.hollowCandleStyle.borderColor:"#C400CB"
+        // mainSeriesProperties.hollowCandleStyle.borderDownColor:"#8A3A3B"
+        // mainSeriesProperties.hollowCandleStyle.borderUpColor:"#6A833A"
+        // mainSeriesProperties.hollowCandleStyle.downColor:"#8A3A3B"
+        // mainSeriesProperties.hollowCandleStyle.drawBorder:true
+        // mainSeriesProperties.hollowCandleStyle.drawWick:true
+        // mainSeriesProperties.hollowCandleStyle.upColor:"#6A833A"
+        // mainSeriesProperties.hollowCandleStyle.wickDownColor:"#8A3A3B"
+        // mainSeriesProperties.hollowCandleStyle.wickUpColor:"#6A833A"
+        // mainSeriesProperties.style:9
+        // paneProperties.background:"#1b262d"
+        // paneProperties.crossHairProperties.color:"#626c73"
+        // paneProperties.horzGridProperties.color:"#28343C"
+        // paneProperties.vertGridProperties.color:"#28343C"
+        // scalesProperties.backgroundColor:"#1b262d"
+        // scalesProperties.lineColor:"#555"
+        // scalesProperties.textColor:"#999"
+        // study_Overlay@tv-basicstudies.areaStyle.color1:"blue"
+        // study_Overlay@tv-basicstudies.areaStyle.color2:"blue"
+        // study_Overlay@tv-basicstudies.areaStyle.linecolor:"blue"
+        // study_Overlay@tv-basicstudies.barStyle.downColor:"blue"
+        // study_Overlay@tv-basicstudies.barStyle.upColor:"blue"
+        // study_Overlay@tv-basicstudies.lineStyle.color:"blue"
+        // symbolWatermarkProperties.color:"rgba(0, 0, 0, 0)"
+
         overrides: {
+          // "mainSeriesProperties.style":9,
+          //
           "paneProperties.background": "#0f2742",
           "paneProperties.vertGridProperties.color": "#0f2742",
           "paneProperties.horzGridProperties.color": "#0f2742",

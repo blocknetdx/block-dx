@@ -44,7 +44,7 @@ export class OrderformComponent {
     this.orderbookService.requestedOrder
       .subscribe((order) => {
         const tabIndex = order[4] === 'ask' ? 0 : 1;
-        this.tabView.activeIndex = tabIndex;
+        this.tabView.activeTab = this.tabView.tabs[tabIndex];
         this.model.amount = order[1];
       });
 
