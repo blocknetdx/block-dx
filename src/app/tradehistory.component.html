@@ -1,4 +1,4 @@
-<app-table [rows]="tradehistory">
+<app-table [rows]="tradehistory" [selectable]="true">
   <app-table-column [sortable]="false" [classList]="'col-4'">
     <ng-template columnHeader>Amount ({{symbols[0]}})</ng-template>
     <ng-template let-row="row" columnCell>
