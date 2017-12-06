@@ -58,8 +58,7 @@
     <app-table
       #pairTable
       [class.formValid]="pairForm.form.valid"
-      [rows]="filteredRows"
-      [groupBy]="'section'"
+      [sections]="filteredRows"
       [selectable]="true"
       [deselectOnBlur]="false"
       (onRowSelect)="onRowSelect($event)">

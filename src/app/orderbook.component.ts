@@ -6,7 +6,6 @@ import { naturalSort } from './util';
 import { Order } from './order';
 import { OrderbookService } from './orderbook.service';
 import { TableComponent } from './table/table.component';
-import { TableRowDivider } from './table/table-row-divider';
 import { AppService } from './app.service';
 
 @Component({
@@ -17,7 +16,7 @@ import { AppService } from './app.service';
 export class OrderbookComponent {
   @ViewChild('orderbookTable') public orderbookTable: TableComponent;
 
-  public rows: any[] = [];
+  public sections: any[] = [];
   public symbols:string[] = [];
 
   constructor(
@@ -44,10 +43,9 @@ export class OrderbookComponent {
               return 0;
             });
 
-            this.rows = [
-              ...asks,
-              new TableRowDivider(),
-              ...bids
+            this.sections = [
+              {rows: asks},
+              {rows: bids}
             ];
 
             this.orderbookTable.scrollToMiddle();
@@ -57,6 +55,8 @@ export class OrderbookComponent {
   }
 
   onRowSelect(row) {
-    this.orderbookService.requestOrder(row);
+    if (row) {
+      this.orderbookService.requestOrder(row);
+    }
   }
 }

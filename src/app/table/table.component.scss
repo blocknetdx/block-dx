@@ -103,14 +103,9 @@
   &__row {
     padding: 0 13px;
     cursor: default;
-    line-height: 2em;
+    line-height: 24px;
     @include screen(lg) {
-      line-height: 1.6em;
-    }
-    &.divider {
-      cursor: default;
-      background-color: rgba(1,27,54,0.6);
-      height: 20px;
+      line-height: 20px;
     }
     &.selectable:not(.divider) {
       cursor: pointer;

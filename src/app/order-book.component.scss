@@ -1,9 +1,12 @@
-app-table {
+@import '../styles/utils/variables';
+@import '../styles/utils/mixins';
 
-  /deep/ .bn-table__row {
+app-table /deep/ {
+
+  .bn-table__row {
     position: relative;
   }
-  /deep/ .bn-table__cell {
+  .bn-table__cell {
     position: static;
     span {
       position: relative;
@@ -20,5 +23,22 @@ app-table {
     z-index: 0;
     padding: 0;
     opacity: 0.3;
+  }
+
+  .bn-table__section + .bn-table__section {
+    margin-top: 0;
+  }
+}
+
+.divider {
+  padding: 0 17px;
+  line-height: 24px;
+  background-color: rgba(1,27,54,0.6);
+  @include screen(lg) {
+    line-height: 20px;
+  }
+  span {
+    opacity: 0.4;
+    font-weight: bold;
   }
 }

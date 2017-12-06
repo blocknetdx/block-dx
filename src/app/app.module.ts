@@ -59,6 +59,7 @@ import { FilledOrdersComponent } from './filled-orders/filled-orders.component';
 import { BottomNavButtonDirective } from './bottom-nav/bottom-nav-button.directive';
 import { TableRowDetailDirective } from './table/table-row-detail.directive';
 import { TableInfoDirective } from './table/table-info.directive';
+import { TableSectionDividerDirective } from './table/table-section-divider.directive';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -99,7 +100,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     FilledOrdersComponent,
     BottomNavButtonDirective,
     TableRowDetailDirective,
-    TableInfoDirective
+    TableInfoDirective,
+    TableSectionDividerDirective
   ],
   imports: [
     BrowserModule,

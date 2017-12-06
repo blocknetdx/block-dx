@@ -1,6 +1,16 @@
 <app-table #orderbookTable
-  [selectable]="true" [rows]="rows"
+  [selectable]="true"
+  [sections]="sections"
   (onRowSelect)="onRowSelect($event)">
+
+  <bn-table-section-divider>
+    <ng-template #sectionDivider>
+      <div class="divider">
+        <span>0.05289000</span>
+      </div>
+    </ng-template>
+  </bn-table-section-divider>
+
   <app-table-column [sortable]="false" [classList]="'col-4'">
     <ng-template columnHeader>Total ({{symbols[1]}})</ng-template>
     <ng-template let-row="row" columnCell>

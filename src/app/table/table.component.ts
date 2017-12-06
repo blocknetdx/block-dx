@@ -1,6 +1,6 @@
 import {
   Component, ContentChild, ContentChildren, ViewChildren, ViewChild,
-  QueryList, Input, Output, EventEmitter, ElementRef
+  QueryList, Input, Output, EventEmitter, ElementRef, ViewEncapsulation
 } from '@angular/core';
 
 import { PerfectScrollbarComponent, PerfectScrollbarDirective } from 'ngx-perfect-scrollbar';
@@ -9,9 +9,11 @@ import { naturalSort, debounce } from '../util';
 import { TableColumnDirective } from './table-column.directive';
 import { TableRowDetailDirective } from './table-row-detail.directive';
 import { TableInfoDirective } from './table-info.directive';
+import { TableSectionDividerDirective } from './table-section-divider.directive';
 
 @Component({
   selector: 'app-table',
+  encapsulation: ViewEncapsulation.None,
   template: `
     <div class="bn-table"
       (keydown.ArrowUp)="focusNextRow($event)"
@@ -29,20 +31,24 @@ import { TableInfoDirective } from './table-info.directive';
       </div>
       <div #tableBody class="bn-table__body" (click)="deselect($event)">
         <perfect-scrollbar #scrollbar>
-          <ng-container *ngIf="tableInfo">
-            <div class="bn-table__info">
-              <ng-template *ngTemplateOutlet="tableInfo.template"></ng-template>
-            </div>
-          </ng-container>
-          <div class="bn-table__section" *ngFor="let section of sections">
-            <div class="bn-table__section-title" *ngIf="section.title != 'undefined'">
+          <div class="bn-table__section" *ngFor="let section of sections; first as isFirst">
+            <ng-container *ngIf="sectionDivider && !isFirst">
+              <div class="bn-table__section-divider">
+                <ng-template *ngTemplateOutlet="sectionDivider.template"></ng-template>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="tableInfo">
+              <div class="bn-table__info">
+                <ng-template *ngTemplateOutlet="tableInfo.template"></ng-template>
+              </div>
+            </ng-container>
+            <div class="bn-table__section-title" *ngIf="section.title && section.title != 'undefined'">
               <div class="col-12">{{section.title}}</div>
             </div>
             <div class="bn-table__row {{row.row_class}}" #rowRef
               tabindex="-1"
               [class.selectable]="selectable"
               [class.selected]="selectedRow == row"
-              [class.divider]="row.constructor.name === 'TableRowDivider'"
               (keyup.enter)="rowSelected(row, $event)"
               (click)="rowSelected(row, $event)"
               *ngFor="let row of section.rows">
@@ -80,13 +86,12 @@ export class TableComponent {
   @Input() public selectable: boolean;
   @Input() public deselectOnBlur: boolean = true;
   @Input() public groupBy: string;
+  @Input() public sections: {rows: any[], title?: string}[];
 
   public columns: any[];
-  public sections: any[];
   public selectedRow: any;
   private rowFocusIndex: number = 0;
   private viewIsInit: boolean;
-  private scrollQueued: boolean;
 
   @ContentChildren(TableColumnDirective)
   set columnTemplates(val: QueryList<TableColumnDirective>) {
@@ -99,35 +104,19 @@ export class TableComponent {
   @ContentChild(TableInfoDirective)
   public tableInfo: TableInfoDirective;
 
+  @ContentChild(TableSectionDividerDirective)
+  public sectionDivider: TableSectionDividerDirective;
+
   private _rows: any[];
   public get rows(): any[] { return this._rows; }
   @Input() public set rows(val: any[]) {
     this._rows = val;
     if (val) {
-      const _groups = val.reduce((acc, row) => {
-        (acc[row[this.groupBy]] = acc[row[this.groupBy]] || []).push(row);
-        return acc;
-      }, {});
-      this.sections = Object.keys(_groups).map((s) => {
-        return {
-          title: s,
-          rows: _groups[s]
-        };
-      });
-
-      if (this.scrollQueued) {
-        this.scrollQueued = false;
-        setTimeout(() => {
-          this.scrollToMiddle();
-        });
-      }
+      this.sections = [{rows:val}];
     }
   }
 
   constructor() { }
-
-  ngOnInit() {
-  }
 
   ngAfterViewInit() {
     this.viewIsInit = true;
@@ -172,18 +161,17 @@ export class TableComponent {
 
   scrollToMiddle() {
     if (this.scrollbar) {
-      if (this.rows) {
-        if (this.rows.length) {
-          const el = this.scrollbar['elementRef'].nativeElement;
-          const elRect = el.getBoundingClientRect();
-          const content = el.querySelector('.ps-content');
-          const contentRect = content.getBoundingClientRect();
+      const el = this.scrollbar['elementRef'].nativeElement;
+      const elRect = el.getBoundingClientRect();
+      const content = el.querySelector('.ps-content');
+      const interval = setInterval(() => {
+        const contentRect = content.getBoundingClientRect();
+        if (contentRect.height > 10) {
+          clearInterval(interval);
           const mid = Math.round((contentRect.height*0.5)-(elRect.height*0.5));
           this.scrollbar['directiveRef'].scrollToY(mid);
-        } else {
-          this.scrollQueued = true;
         }
-      }
+      });
     }
   }
 

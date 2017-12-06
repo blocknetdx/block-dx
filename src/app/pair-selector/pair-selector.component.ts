@@ -41,15 +41,18 @@ export class PairSelectorComponent {
   public coinASuggest: string;
   public coinBSuggest: string;
 
-  public get rows(): any[] {
+  public get sections(): any[] {
     let arr;
     switch(this.state) {
       case 'stage1' :
-        arr = [...this._userWallet,...this._allCoins];
+        arr = [
+          {title: 'My Wallet', rows: this._userWallet},
+          {title: 'All Coins', rows: this._allCoins}
+        ];
         break;
       case 'stage2' :
       case 'stage3' :
-        arr = [...this._rawData];
+        arr = [{rows:this._allCoins}];
         break;
     }
     return arr;
@@ -57,7 +60,6 @@ export class PairSelectorComponent {
 
   private _userWallet: any[];
   private _allCoins: any[];
-  private _rawData: any[];
   private _loadedSymbols: string[];
   private _controlStatus: Subject<boolean> = new Subject();
 
@@ -81,7 +83,8 @@ export class PairSelectorComponent {
               if (status === 'VALID') {
                 if (key === 'coinA') {
                   this.state = 'stage2';
-                  this.filteredRows = this.rows;
+                  this.filteredRows = this.sections;
+                  this.pairTable.rowSelected(null);
                   setTimeout(() => {
                     this.inputs.last.nativeElement.focus();
                   });
@@ -118,27 +121,24 @@ export class PairSelectorComponent {
     });
     this.cryptoService.getCurrencies().first()
       .subscribe((data) => {
-        this._rawData = data;
+        this._userWallet = data.slice(0,5);
+        this._allCoins = data;
 
-        this._userWallet = data.slice(0,5).map((coin) => {
-          return Object.assign({section: 'My Wallet'}, coin);
-        });
-        this._allCoins = data.map((coin) => {
-          return Object.assign({section: 'All Coins'}, coin);
-        });
-
-        this.filteredRows = this.rows;
+        this.filteredRows = this.sections;
       });
   }
 
   filterCoins(key: string, val: string) {
     this.model[key] = val;
 
-    this.filteredRows = this.rows.filter((row) => {
-      if (val.length <= 0) return true;
-      const coinIdx = row.symbol.toLowerCase().indexOf(val.toLowerCase());
-      const currencyIdx = row.name.toLowerCase().indexOf(val.toLowerCase());
-      return coinIdx >= 0 || currencyIdx >= 0;
+    this.filteredRows = this.sections.map((section) => {
+      section.rows = section.rows.filter((row) => {
+        if (val.length <= 0) return true;
+        const coinIdx = row.symbol.toLowerCase().indexOf(val.toLowerCase());
+        const currencyIdx = row.name.toLowerCase().indexOf(val.toLowerCase());
+        return coinIdx >= 0 || currencyIdx >= 0;
+      });
+      return section;
     });
   }
 
@@ -163,7 +163,7 @@ export class PairSelectorComponent {
       this.inputs.last.nativeElement.focus();
       this.state = 'stage2';
     }
-    this.filteredRows = this.rows;
+    this.filteredRows = this.sections;
     this.pairTable.rowSelected(null);
   }
 
