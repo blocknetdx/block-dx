@@ -37,3 +37,17 @@ a.close {
     opacity: 1;
   }
 }
+
+app-table /deep/ {
+  .bn-table__row {
+    &.canceled {
+      pointer-events: none;
+      [class*=" col-"], [class^="col-"] {
+        opacity: 0.4;
+        &:not(:last-of-type) {
+          text-decoration: line-through;
+        }
+      }
+    }
+  }
+}

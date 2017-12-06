@@ -41,9 +41,11 @@ export class OpenordersComponent extends BaseComponent {
     });
   }
 
-  cancelOrder(row) {
-    this.openorders = this.openorders.filter((r) => {
-      return r !== row;
-    });
+  cancelOrder(order) {
+    order.canceled = true;
+    order['row_class'] = 'canceled';
+    // this.openorders = this.openorders.filter((r) => {
+    //   return r !== row;
+    // });
   }
 }

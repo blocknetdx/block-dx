@@ -14,4 +14,5 @@ export class Openorder {
 	executed_value: string;
 	status: string;
 	settled: boolean;
+  canceled: boolean;
 };

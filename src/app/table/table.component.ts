@@ -125,12 +125,13 @@ export class TableComponent {
   focusNextRow(e?: any) {
     if (e) {
       e.preventDefault();
+      const len = this.rowRefs.length;
       if (e.code === 'ArrowDown') {
         this.rowFocusIndex += 1;
-        if (this.rowFocusIndex > this.rows.length-1) this.rowFocusIndex = 0;
+        if (this.rowFocusIndex > len-1) this.rowFocusIndex = 0;
       } else if (e.code === 'ArrowUp') {
         this.rowFocusIndex -= 1;
-        if (this.rowFocusIndex < 0) this.rowFocusIndex = this.rows.length-1;
+        if (this.rowFocusIndex < 0) this.rowFocusIndex = len-1;
       }
     } else {
       this.rowFocusIndex = 0;
