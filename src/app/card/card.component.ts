@@ -1,4 +1,9 @@
-import { Component, OnInit, Input, ViewEncapsulation, ElementRef, ViewChild } from '@angular/core';
+import {
+  Component, OnInit, Input, ViewEncapsulation,
+  ElementRef, ViewChild, ContentChild
+} from '@angular/core';
+
+import { CardToolbarDirective } from './card-toolbar.directive';
 
 @Component({
   selector: 'bn-card',
@@ -8,6 +13,9 @@ import { Component, OnInit, Input, ViewEncapsulation, ElementRef, ViewChild } fr
     <div #card class="bn-card {{cardClass}}">
       <div class="bn-card__title {{cardTitleClass}}">
         <ng-content select="bn-card-title"></ng-content>
+        <div *ngIf="toolbar" class="bn-card__toolbar">
+          <ng-template *ngTemplateOutlet="toolbar.template"></ng-template>
+        </div>
         <a class="fullscreen" *ngIf="allowFullscreen"
           (click)="goFullscreen()">
           <i *ngIf="!isFullscreen" class="material-icons">zoom_out_map</i>
@@ -24,6 +32,9 @@ export class CardComponent implements OnInit {
   @Input() cardClass: string;
   @Input() cardTitleClass: string;
   @Input() allowFullscreen: boolean = true;
+
+  @ContentChild(CardToolbarDirective)
+  public toolbar: CardToolbarDirective;
 
   @ViewChild('card') public card: ElementRef;
 

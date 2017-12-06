@@ -60,6 +60,7 @@ import { BottomNavButtonDirective } from './bottom-nav/bottom-nav-button.directi
 import { TableRowDetailDirective } from './table/table-row-detail.directive';
 import { TableInfoDirective } from './table/table-info.directive';
 import { TableSectionDividerDirective } from './table/table-section-divider.directive';
+import { CardToolbarDirective } from './card/card-toolbar.directive';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -101,7 +102,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     BottomNavButtonDirective,
     TableRowDetailDirective,
     TableInfoDirective,
-    TableSectionDividerDirective
+    TableSectionDividerDirective,
+    CardToolbarDirective
   ],
   imports: [
     BrowserModule,

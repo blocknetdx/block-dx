@@ -91,6 +91,20 @@ bn-card {
     }
   }
 
+  &__toolbar {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 50px;
+    z-index: 9;
+
+    & > * {
+      position: relative;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+
   &__body {
     position: absolute;
     top: 40px;

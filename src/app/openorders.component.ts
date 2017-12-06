@@ -4,6 +4,7 @@ import { BaseComponent } from './base.component';
 import { AppService } from './app.service';
 import { Openorder } from './openorder';
 import { OpenordersService } from './openorders.service';
+import { BreakpointService } from './breakpoint.service';
 
 @Component({
   selector: 'openorders',
@@ -12,6 +13,7 @@ import { OpenordersService } from './openorders.service';
 })
 export class OpenordersComponent extends BaseComponent {
   public openorders: Openorder[];
+  public selectable: boolean;
 
   private _symbols: string[];
   public get symbols(): string[] { return this._symbols; }
@@ -21,7 +23,8 @@ export class OpenordersComponent extends BaseComponent {
 
   constructor(
     private appService: AppService,
-    private openorderService: OpenordersService
+    private openorderService: OpenordersService,
+    private breakpointService: BreakpointService
   ) { super(); }
 
   ngOnInit() {
@@ -39,13 +42,15 @@ export class OpenordersComponent extends BaseComponent {
             });
         }
     });
+
+    this.breakpointService.breakpointChanges.first()
+      .subscribe((bp) => {
+        this.selectable = ['xs', 'sm'].includes(bp);
+      });
   }
 
   cancelOrder(order) {
     order.canceled = true;
     order['row_class'] = 'canceled';
-    // this.openorders = this.openorders.filter((r) => {
-    //   return r !== row;
-    // });
   }
 }

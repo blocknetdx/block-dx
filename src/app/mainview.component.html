@@ -23,6 +23,13 @@
         </bn-card>
 
         <bn-card class="trade_table__cell col-lg-4">
+          <bn-card-toolbar>
+            <ng-template #toolbar>
+              <bn-select class="compact" 
+                [options]="decimalOptions">
+              </bn-select>
+            </ng-template>
+          </bn-card-toolbar>
           <bn-card-title>Order Book</bn-card-title>
           <bn-card-body>
             <orderbook></orderbook>

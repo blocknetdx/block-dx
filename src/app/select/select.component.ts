@@ -1,10 +1,11 @@
 import {
   Component, OnInit, Input, Output,
-  EventEmitter, ElementRef
+  EventEmitter, ElementRef, ViewEncapsulation
 } from '@angular/core';
 
 @Component({
   selector: 'bn-select',
+  encapsulation: ViewEncapsulation.None,
   host: {
     '(document:click)': 'onClick($event)'
   },

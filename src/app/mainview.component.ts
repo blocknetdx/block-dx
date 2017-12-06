@@ -14,6 +14,12 @@ export class MainviewComponent {
   public orderbook: OrderbookComponent;
 
   public orderCardIndex: number = 0; // Temporary FIXME
+  public decimalOptions: any[] = [
+    {value: '8', viewValue:'8 decimals'},
+    {value: '6', viewValue:'6 decimals'},
+    {value: '4', viewValue:'4 decimals'},
+    {value: '2', viewValue:'2 decimals'}
+  ];
 
   constructor(
     private route: ActivatedRoute,

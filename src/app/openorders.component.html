@@ -1,4 +1,4 @@
-<app-table [rows]="openorders">
+<app-table [rows]="openorders" [selectable]="selectable">
 
   <bn-table-row-detail *isBp="['xs','sm','md']">
     <ng-template #rowDetail let-row="row">
