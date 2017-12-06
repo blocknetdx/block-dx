@@ -11,7 +11,7 @@ import { Component, OnInit, Input, ViewEncapsulation, ElementRef, ViewChild } fr
         <a class="fullscreen" *ngIf="allowFullscreen"
           (click)="goFullscreen()">
           <i *ngIf="!isFullscreen" class="material-icons">zoom_out_map</i>
-          <i *ngIf="isFullscreen" class="material-icons">fullscreen_exit</i>
+          <i *ngIf="isFullscreen" class="material-icons">close</i>
         </a>
       </div>
       <div class="bn-card__body">
