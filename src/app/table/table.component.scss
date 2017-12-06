@@ -107,12 +107,12 @@
     @include screen(lg) {
       line-height: 20px;
     }
-    &.selectable:not(.divider) {
+    &.selectable {
       cursor: pointer;
-      &.selected, &:hover, &:focus, &:active {
-        background-color: rgba(255,255,255,0.04);
-        box-shadow: 0 2px 4px 0 rgba(0,0,0,0.1);
-      }
+    }
+    &.selected, &:hover, &:focus, &:active {
+      background-color: rgba(255,255,255,0.04);
+      box-shadow: 0 2px 4px 0 rgba(0,0,0,0.1);
     }
   }
 
