@@ -19,7 +19,7 @@
     padding: 13px;
 
     @include screen(lg) {
-      padding: 6px 13px;
+      padding: 2px 13px 6px;
     }
 
     & > div {

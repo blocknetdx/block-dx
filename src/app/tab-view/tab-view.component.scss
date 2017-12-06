@@ -25,7 +25,7 @@ a.tab {
   font: 12px/16px $open-sans;
 
   @include screen(lg) {
-    padding: 6px 0;
+    padding: 2px 0 6px;
   }
 
   &:hover {
@@ -75,7 +75,7 @@ a.tab {
     width: auto;
     text-transform: uppercase;
     padding: 11px 0;
-    line-height: 17px;
+    line-height: 18px;
 
     & + .tab {
       margin-left: 30px;
@@ -93,11 +93,11 @@ a.tab {
   }
 
   .bar {
-    bottom: 7px;
+    bottom: 4px;
   }
 
   .tab-view__body {
     background: $bn-blue3;
-    height: calc(100% - 39px);
+    height: calc(100% - 40px);
   }
 }

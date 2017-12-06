@@ -60,7 +60,7 @@
   </app-table-column>
 
   <app-table-column [sortable]="false" [classList]="'col-2 d-none d-sm-block align-center'">
-    <ng-template columnHeader>Status</ng-template>
+    <!-- <ng-template columnHeader>Status</ng-template> -->
     <ng-template let-row="row" columnCell>
       <a (click)="cancelOrder(row)" class="close"><i class="material-icons">close</i></a>
     </ng-template>

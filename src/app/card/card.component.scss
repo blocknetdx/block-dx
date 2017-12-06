@@ -27,9 +27,11 @@ bn-card {
     position: relative;
     background: $bn-blue2;
     padding: 11px 17px;
+    line-height: 17px;
 
     bn-card-title {
       @extend .type2;
+      line-height: inherit;
       text-transform: uppercase;
 
       a {
