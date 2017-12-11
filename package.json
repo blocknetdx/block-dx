@@ -2,6 +2,11 @@
   "name": "blocknet",
   "version": "0.0.0",
   "license": "MIT",
+  "contributors": [
+    { "name" : "Corey Roach",
+      "email" : "caroach@gmail.com"
+    }
+  ],
   "scripts": {
     "ng": "ng",
     "start": "ng serve --host 0.0.0.0",
