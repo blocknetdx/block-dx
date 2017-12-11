@@ -7,7 +7,6 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { DecimalPipe } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
-// import { MatSelectModule } from '@angular/material';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
@@ -112,9 +111,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     BrowserAnimationsModule,
     FormsModule,
     LayoutModule,
-    // MatSelectModule,
     PerfectScrollbarModule,
-    // InMemoryWebApiModule.forRoot(InMemoryDataService),
+    InMemoryWebApiModule.forRoot(InMemoryDataService),
     AppRoutingModule
   ],
   providers: [
