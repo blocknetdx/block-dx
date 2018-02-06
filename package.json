@@ -104,7 +104,7 @@
     },
     "mac": {
       "target": "dmg",
-      "category": "public.app-category.education",
+      "category": "public.app-category.utilities",
       "icon": "./src/assets/favicon_block.icns"
     },
     "linux": {
