@@ -3,7 +3,7 @@ const electron = require('electron');
 const express = require('express');
 const isDev = require('electron-is-dev');
 const path = require('path');
-const portscanner = require('portscanner');
+const plzPort = require('plz-port');
 
 // General Error Handler
 const handlError = err => {
@@ -25,7 +25,7 @@ if(isSecondInstance) app.quit();
 co(function*() {
   try {
 
-    const localhost = 'http://127.0.0.1';
+    const localhost = 'localhost';
 
     let port;
 
@@ -33,11 +33,8 @@ co(function*() {
     if(isDev) {
       port = 4200;
     } else {
-      const ports = [];
-      for(let i = 0; i < 1000; i++) {
-        ports.push(51236 + i);
-      }
-      port = yield portscanner.findAPortNotInUse(ports, localhost);
+      // Find a free port, starting with 51236
+      port = yield plzPort(51236);
       yield new Promise(resolve => {
         express()
             .use(express.static(path.join(__dirname, 'dist')))
@@ -47,7 +44,7 @@ co(function*() {
       });
     }
 
-    const serverLocation =  `${localhost}:${port}`;
+    const serverLocation =  `http://${localhost}:${port}`;
 
     app.on('ready', () => {
 
