@@ -16,13 +16,30 @@ describe('Service Node Interface', () => {
 
   describe('Service Node Interface Instance', () => {
 
+    let orderId;
+
     describe('getinfo method', () => {
       it('should get info from the service node', async function() {
-        const { status, body } = await sn.getinfo();
-        status.should.equal(200);
+        const body = await sn.getinfo();
         body.should.be.an.Object();
       });
     });
+
+    describe('dxGetOrderBook method', () => {
+      it('should get the order book', async function() {
+        const body = await sn.dxGetOrderBook(3, 'BLOCK', 'LTC', 50);
+        orderId = body.result.bids[0][2];
+        body.should.be.an.Object();
+      });
+    });
+
+    // describe('dxGetOrder method', () => {
+    //   it('should get order details', async function() {
+    //     const body = await sn.dxGetOrder(orderId);
+    //     console.log(body);
+    //     body.should.be.an.Object();
+    //   });
+    // });
 
   });
 
