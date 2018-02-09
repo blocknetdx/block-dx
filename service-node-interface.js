@@ -191,7 +191,7 @@ class ServiceNodeInterface {
    * @param {number} startTime - unix time
    * @param {number} endTime - unix time
    * @param {number} granularity - Time slice in seconds: 30, 60, 300, 900, 3600, 21600, 86400
-   * @param {String[]} [orderIds = []]}
+   * @param {String[]} [orderIds = []]
    * @returns {Promise<Object[]>}
    */
   async dxGetOrderHistory(maker, taker, startTime, endTime, granularity, orderIds = []) {
