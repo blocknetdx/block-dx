@@ -25,9 +25,10 @@ describe('Service Node Interface', () => {
       });
     });
 
-    describe('dxGetOrderBook method', () => {
+    describe('dxGetOrderBook1 method', () => {
       it('should get the order book', async function() {
-        const res = await sn.dxGetOrderBook(3, 'SYS', 'LTC', 50);
+        const res = await sn.dxGetOrderBook1('SYS', 'LTC', 50);
+        console.log(res);
         // orderId = body.bids[0][2];
         // console.log(orderId);
         res.should.be.an.Object();

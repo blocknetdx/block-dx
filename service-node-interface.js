@@ -88,26 +88,129 @@ const OrderHistory = data => ({
 });
 
 /**
- * @typedef {Object} OrderBookObject
- * @property {number} detail
- * @property {string} maker
- * @property {string} taker
- * @property {Array[]} bids
- * @property {Array[]} asks
+ * @typedef {Object} BidAskObject1
+ * @property {string} price
+ * @property {string} size
+ * @property {number} orderCount
  */
 
 /**
- *
+ * Constructs a bid/ask level 1 object
  * @param {Object} data
- * @returns {OrderBookObject}
+ * @returns {BidAskObject1}
  * @constructor
  */
-const OrderBook = data => ({
+const BidAsk1 = data => ({
+  price: data[0],
+  size: data[1],
+  orderCount: data[2]
+});
+
+/**
+ * @typedef {Object} OrderBookObject1
+ * @property {number} detail
+ * @property {string} maker
+ * @property {string} taker
+ * @property {BidAskObject1[]} bids
+ * @property {BidAskObject1[]} asks
+ */
+
+/**
+ * Constructs an order book level 1 and 2 object
+ * @param {Object} data
+ * @returns {OrderBookObject1}
+ * @constructor
+ */
+const OrderBook1 = data => ({
   detail: data.detail || 0,
   maker: data.maker || '',
   taker: data.taker || '',
-  bids: data.bids || [],
-  asks: data.asks || []
+  bids: data.bids.map(BidAsk1),
+  asks: data.asks.map(BidAsk1)
+});
+
+/**
+ * @typedef {Object} BidAskObject3
+ * @property {string} price
+ * @property {string} size
+ * @property {string} orderId
+ */
+
+/**
+ * Constructs a bid/ask level 3 object
+ * @param {Object} data
+ * @returns {BidAskObject3}
+ * @constructor
+ */
+const BidAsk3 = data => ({
+  price: data[0],
+  size: data[1],
+  orderId: data[2]
+});
+
+/**
+ * @typedef {Object} OrderBookObject3
+ * @property {number} detail
+ * @property {string} maker
+ * @property {string} taker
+ * @property {BidAskObject3[]} bids
+ * @property {BidAskObject3[]} asks
+ */
+
+/**
+ * Constructs an order book level 3 object
+ * @param {Object} data
+ * @returns {OrderBookObject3}
+ * @constructor
+ */
+const OrderBook3 = data => ({
+  detail: data.detail || 0,
+  maker: data.maker || '',
+  taker: data.taker || '',
+  bids: data.bids.map(BidAsk3),
+  asks: data.asks.map(BidAsk3)
+});
+
+/**
+ * @typedef {Object} BidAskObject4
+ * @property {string} price
+ * @property {string} size
+ * @property {string[]} orderIds
+ */
+
+/**
+ * Constructs a bid/ask level 4 object
+ * @param {Object} data
+ * @returns {BidAskObject4}
+ * @constructor
+ */
+const BidAsk4 = data => ({
+  price: data[0],
+  size: data[1],
+  orderIds: data[2]
+});
+
+/**
+ * @typedef {Object} OrderBookObject4
+ * @property {number} detail
+ * @property {string} maker
+ * @property {string} taker
+ * @property {BidAskObject4[]} bids
+ * @property {BidAskObject4[]} asks
+ */
+
+/**
+ * Constructs an order book level 4 object
+ * @param {Object} data
+ * @returns {OrderBookObject4}
+ * @constructor
+ */
+const OrderBook4 = data => ({
+  detail: data.detail || 0,
+  maker: data.maker || '',
+  taker: data.taker || '',
+  bids: data.bids.map(BidAsk4),
+  asks: data.asks.map(BidAsk4)
 });
 
 /**
@@ -264,24 +367,86 @@ class ServiceNodeInterface {
 
   /**
    * Gets the order book.
-   * @param {number} detail - 1, 2, 3, 4
    * @param {string} maker
    * @param {string} taker
    * @param {number} [maxOrders = 50]
-   * @returns {Promise<OrderObject>}
+   * @returns {Promise<OrderBookObject1>}
    */
-  async dxGetOrderBook(detail, maker, taker, maxOrders = 50) {
+  async dxGetOrderBook1(maker, taker, maxOrders = 50) {
     const { error, result } = await this._makeServiceNodeRequest({
       method: 'dxGetOrderBook',
       params: [
-        detail,
+        1,
         maker,
         taker,
         maxOrders
       ]
     });
     if(error) throw new Error(error);
-    return OrderBook(result);
+    return OrderBook1(result);
+  }
+
+  /**
+   * Gets the order book.
+   * @param {string} maker
+   * @param {string} taker
+   * @param {number} [maxOrders = 50]
+   * @returns {Promise<OrderBookObject1>}
+   */
+  async dxGetOrderBook2(maker, taker, maxOrders = 50) {
+    const { error, result } = await this._makeServiceNodeRequest({
+      method: 'dxGetOrderBook',
+      params: [
+        2,
+        maker,
+        taker,
+        maxOrders
+      ]
+    });
+    if(error) throw new Error(error);
+    return OrderBook1(result);
+  }
+
+  /**
+   * Gets the order book.
+   * @param {string} maker
+   * @param {string} taker
+   * @param {number} [maxOrders = 50]
+   * @returns {Promise<OrderBookObject3>}
+   */
+  async dxGetOrderBook3(maker, taker, maxOrders = 50) {
+    const { error, result } = await this._makeServiceNodeRequest({
+      method: 'dxGetOrderBook',
+      params: [
+        3,
+        maker,
+        taker,
+        maxOrders
+      ]
+    });
+    if(error) throw new Error(error);
+    return OrderBook3(result);
+  }
+
+  /**
+   * Gets the order book.
+   * @param {string} maker
+   * @param {string} taker
+   * @param {number} [maxOrders = 50]
+   * @returns {Promise<OrderBookObject4>}
+   */
+  async dxGetOrderBook4(maker, taker, maxOrders = 50) {
+    const { error, result } = await this._makeServiceNodeRequest({
+      method: 'dxGetOrderBook',
+      params: [
+        4,
+        maker,
+        taker,
+        maxOrders
+      ]
+    });
+    if(error) throw new Error(error);
+    return OrderBook4(result);
   }
 
   /**
