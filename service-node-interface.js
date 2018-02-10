@@ -1,6 +1,116 @@
 const request = require('superagent');
 
 /**
+ * @typedef {Object} OrderObject
+ * @property {string} id
+ * @property {string} maker
+ * @property {string} makerSize
+ * @property {string} makerAddress
+ * @property {string} taker
+ * @property {string} takerSize
+ * @property {string} takerAddress
+ * @property {string} updatedAt
+ * @property {string} createdAt
+ * @property {string} status
+ */
+
+/**
+ * Constructs an order object.
+ * @param {Object} data
+ * @returns {OrderObject}
+ * @constructor
+ */
+const Order = data => ({
+  id: data.id || '',
+  maker: data.maker || '',
+  makerSize: data.maker_size || '',
+  makerAddress: data.maker_address || '',
+  taker: data.taker || '',
+  takerSize: data.taker_size || '',
+  takerAddress: data.taker_address || '',
+  updatedAt: data.updated_at || '',
+  createdAt: data.created_at || '',
+  status: data.status || ''
+});
+
+/**
+ * @typedef {Object} TradeObject
+ * @property {string} id
+ * @property {string} time
+ * @property {string} maker
+ * @property {string} makerSize
+ * @property {string} makerTXID
+ * @property {string} taker
+ * @property {string} takerSize
+ * @property {string} takerTXID
+ */
+
+/**
+ * Constructs a trade object.
+ * @param data
+ * @returns {TradeObject}
+ * @constructor
+ */
+const Trade = data => ({
+  id: data.id || '',
+  time: data.time || '',
+  maker: data.maker || '',
+  makerSize: data.maker_size || '',
+  makerTXID: data.maker_txid || '',
+  taker: data.taker || '',
+  takerSize: data.taker_size || '',
+  takerTXID: data.taker_txid || ''
+});
+
+/**
+ * @typedef {Object} OrderHistoryObject
+ * @property {string} time
+ * @property {number} low
+ * @property {number} high
+ * @property {number} open
+ * @property {number} close
+ * @property {number} volume
+ */
+
+/**
+ * Constructs an order history object.
+ * @param data
+ * @returns {OrderHistoryObject}
+ * @constructor
+ */
+const OrderHistory = data => ({
+  time: data[0] || '',
+  low: data[1] || 0,
+  high: data[2] || 0,
+  open: data[3] || 0,
+  close: data[4] || 0,
+  volume: data[5] || 0
+});
+
+/**
+ * @typedef {Object} OrderBookObject
+ * @property {number} detail
+ * @property {string} maker
+ * @property {string} taker
+ * @property {Array[]} bids
+ * @property {Array[]} asks
+ */
+
+/**
+ *
+ * @param {Object} data
+ * @returns {OrderBookObject}
+ * @constructor
+ */
+const OrderBook = data => ({
+  detail: data.detail || 0,
+  maker: data.maker || '',
+  taker: data.taker || '',
+  bids: data.bids || [],
+  asks: data.asks || []
+});
+
+/**
  * Class representing a service node interface instance.
  */
 class ServiceNodeInterface {
@@ -35,10 +145,11 @@ class ServiceNodeInterface {
    * @returns {Promise<Object>}
    */
   async getinfo() {
-    const body = await this._makeServiceNodeRequest({
+    const { error, result } = await this._makeServiceNodeRequest({
       method: 'getinfo'
     });
-    return body;
+    if(error) throw new Error(error);
+    return result;
   }
 
   /**
@@ -50,10 +161,10 @@ class ServiceNodeInterface {
    * @param {string} takerSize
    * @param {string} takerAddress
    * @param {string} type
-   * @returns {Promise<Object>}
+   * @returns {Promise<OrderObject>}
    */
   async dxMakeOrder(maker, makerSize, makerAddress, taker, takerSize, takerAddress, type) {
-    const body = await this._makeServiceNodeRequest({
+    const { error, result } = await this._makeServiceNodeRequest({
       method: 'dxCreateTransaction',
       params: [
         maker,
@@ -65,7 +176,8 @@ class ServiceNodeInterface {
         type
       ]
     });
-    return body;
+    if(error) throw new Error(error);
+    return Order(result);
   }
 
   /**
@@ -75,10 +187,10 @@ class ServiceNodeInterface {
    * @param {string} sendAddress
    * @param {string} receive
    * @param {string} receiveAddress
-   * @returns {Promise<Object>}
+   * @returns {Promise<OrderObject>}
    */
   async dxTakeOrder(id, send, sendAddress, receive, receiveAddress) {
-    const body = await this._makeServiceNodeRequest({
+    const { error, result } = await this._makeServiceNodeRequest({
       method: 'dxAcceptTransaction',
       params: [
         id,
@@ -88,59 +200,66 @@ class ServiceNodeInterface {
         receiveAddress
       ]
     });
-    return body;
+    if(error) throw new Error(error);
+    return Order(result);
   }
 
   /**
    * Cancels and order.
    * @param {string} id
-   * @returns {Promise<Object>}
+   * @returns {Promise<OrderObject>}
    */
   async dxCancelOrder(id) {
-    const body = await this._makeServiceNodeRequest({
+    const { error, result } = await this._makeServiceNodeRequest({
       method: 'dxCancelTransaction',
       params: [
         id
       ]
     });
-    return body;
+    if(error) throw new Error(error);
+    return Order(result);
   }
 
   /**
    * Gets an order's details.
    * @param {string} id
-   * @returns {Promise<Object>}
+   * @returns {Promise<OrderObject>}
    */
   async dxGetOrder(id) {
-    const body = await this._makeServiceNodeRequest({
-      method: 'dxGetTransactionInfo',
+    const { error, result } = await this._makeServiceNodeRequest({
+      method: 'dxGetOrder',
       params: [
         id
       ]
     });
-    return body;
+    if(error) throw new Error(error);
+    return Order(result);
   }
 
   /**
    * Gets a list of orders.
-   * @returns {Promise<Object[]>}
+   * @returns {Promise<OrderObject[]>}
    */
   async dxGetOrders() {
-    const body = await this._makeServiceNodeRequest({
+    const { error, result } = await this._makeServiceNodeRequest({
       method: 'dxGetTransactions'
     });
-    return body;
+    if(error) throw new Error(error);
+    return result
+      .map(Order);
   }
 
   /**
    * Gets a list of orders made by the user.
-   * @returns {Promise<Object[]>}
+   * @returns {Promise<OrderObject[]>}
    */
   async dxGetMyOrders() {
-    const body = await this._makeServiceNodeRequest({
+    const { error, result } = await this._makeServiceNodeRequest({
       method: 'dxGetMyOrders'
     });
-    return body;
+    if(error) throw new Error(error);
+    return result
+      .map(Order);
   }
 
   /**
@@ -149,10 +268,10 @@ class ServiceNodeInterface {
    * @param {string} maker
    * @param {string} taker
    * @param {number} [maxOrders = 50]
-   * @returns {Promise<Object>}
+   * @returns {Promise<OrderObject>}
    */
   async dxGetOrderBook(detail, maker, taker, maxOrders = 50) {
-    const body = await this._makeServiceNodeRequest({
+    const { error, result } = await this._makeServiceNodeRequest({
       method: 'dxGetOrderBook',
       params: [
         detail,
@@ -161,7 +280,8 @@ class ServiceNodeInterface {
         maxOrders
       ]
     });
-    return body;
+    if(error) throw new Error(error);
+    return OrderBook(result);
   }
 
   /**
@@ -169,19 +289,20 @@ class ServiceNodeInterface {
    * @param {string} maker
    * @param {string} taker
    * @param {boolean} [combined = true]
-   * @returns {Promise<Object[]>}
+   * @returns {Promise<TradeObject[]>}
    */
   async dxGetOrderFills(maker, taker, combined) {
     if(combined !== false) combined = true;
-    const body = await this._makeServiceNodeRequest({
-      method: 'dxGetTransactionsHistory',
+    const { error, result } = await this._makeServiceNodeRequest({
+      method: 'dxGetOrderFills',
       params: [
         maker,
         taker,
         combined
       ]
     });
-    return body;
+    if(error) throw new Error(error);
+    return result.map(Trade);
   }
 
   /**
@@ -192,10 +313,10 @@ class ServiceNodeInterface {
    * @param {number} endTime - unix time
    * @param {number} granularity - Time slice in seconds: 30, 60, 300, 900, 3600, 21600, 86400
    * @param {String[]} [orderIds = []]
-   * @returns {Promise<Object[]>}
+   * @returns {Promise<OrderHistoryObject[]>}
    */
   async dxGetOrderHistory(maker, taker, startTime, endTime, granularity, orderIds = []) {
-    const body = await this._makeServiceNodeRequest({
+    const { error, result } = await this._makeServiceNodeRequest({
       method: 'dxGetTradeHistory',
       params: [
         maker,
@@ -206,7 +327,9 @@ class ServiceNodeInterface {
         orderIds
       ]
     });
-    return body;
+    if(error) throw new Error(error);
+    return result
+      .map(OrderHistory);
   }
 
   /**
@@ -214,10 +337,11 @@ class ServiceNodeInterface {
    * @returns {Promise<string[]>}
    */
   async dxGetLocalTokens() {
-    const body = await this._makeServiceNodeRequest({
+    const { error, result } = await this._makeServiceNodeRequest({
       method: 'dxGetCurrencies'
     });
-    return body;
+    if(error) throw new Error(error);
+    return result;
   }
 
   /**
@@ -225,10 +349,11 @@ class ServiceNodeInterface {
    * @returns {Promise<string[]>}
    */
   async dxGetNetworkTokens() {
-    const body = await this._makeServiceNodeRequest({
+    const { error, result } = await this._makeServiceNodeRequest({
       method: 'dxGetNetworkTokens'
     });
-    return body;
+    if(error) throw new Error(error);
+    return result;
   }
 
 }

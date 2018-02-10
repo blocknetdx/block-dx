@@ -20,7 +20,8 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "build-native": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --production && cd .. && electron-builder --dir",
-    "pack-native": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --production && cd .. && electron-builder"
+    "pack-native": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --production && cd .. && electron-builder",
+    "generate-docs": "jsdoc service-node-interface.js -d docs"
   },
   "private": true,
   "dependencies": {
@@ -70,6 +71,7 @@
     "fs-extra-promise": "^1.0.1",
     "jasmine-core": "^2.8.0",
     "jasmine-spec-reporter": "^4.2.1",
+    "jsdoc": "^3.5.5",
     "karma": "~1.7.0",
     "karma-chrome-launcher": "^2.2.0",
     "karma-cli": "~1.0.1",

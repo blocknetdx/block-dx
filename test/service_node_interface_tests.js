@@ -20,16 +20,17 @@ describe('Service Node Interface', () => {
 
     describe('getinfo method', () => {
       it('should get info from the service node', async function() {
-        const body = await sn.getinfo();
-        body.should.be.an.Object();
+        const res = await sn.getinfo();
+        res.should.be.an.Object();
       });
     });
 
     describe('dxGetOrderBook method', () => {
       it('should get the order book', async function() {
-        const body = await sn.dxGetOrderBook(3, 'BLOCK', 'LTC', 50);
-        orderId = body.result.bids[0][2];
-        body.should.be.an.Object();
+        const res = await sn.dxGetOrderBook(3, 'SYS', 'LTC', 50);
+        // orderId = body.bids[0][2];
+        // console.log(orderId);
+        res.should.be.an.Object();
       });
     });
 
