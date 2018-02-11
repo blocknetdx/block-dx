@@ -345,7 +345,7 @@ class ServiceNodeInterface {
    */
   async dxGetOrders() {
     const { error, result } = await this._makeServiceNodeRequest({
-      method: 'dxGetTransactions'
+      method: 'dxGetOrders'
     });
     if(error) throw new Error(error);
     return result
@@ -482,7 +482,7 @@ class ServiceNodeInterface {
    */
   async dxGetOrderHistory(maker, taker, startTime, endTime, granularity, orderIds = []) {
     const { error, result } = await this._makeServiceNodeRequest({
-      method: 'dxGetTradeHistory',
+      method: 'dxGetOrderHistory',
       params: [
         maker,
         taker,
@@ -503,7 +503,7 @@ class ServiceNodeInterface {
    */
   async dxGetLocalTokens() {
     const { error, result } = await this._makeServiceNodeRequest({
-      method: 'dxGetCurrencies'
+      method: 'dxGetLocalTokens'
     });
     if(error) throw new Error(error);
     return result;

@@ -26,22 +26,85 @@ describe('Service Node Interface', () => {
     });
 
     describe('dxGetOrderBook1 method', () => {
-      it('should get the order book', async function() {
+      it('should get the order book at level 1', async function() {
         const res = await sn.dxGetOrderBook1('SYS', 'LTC', 50);
-        console.log(res);
-        // orderId = body.bids[0][2];
-        // console.log(orderId);
         res.should.be.an.Object();
       });
     });
 
-    // describe('dxGetOrder method', () => {
-    //   it('should get order details', async function() {
-    //     const body = await sn.dxGetOrder(orderId);
-    //     console.log(body);
-    //     body.should.be.an.Object();
-    //   });
-    // });
+    describe('dxGetOrderBook2 method', () => {
+      it('should get the order book at level 2', async function() {
+        const res = await sn.dxGetOrderBook2('SYS', 'LTC', 50);
+        res.should.be.an.Object();
+      });
+    });
+
+    describe('dxGetOrderBook3 method', () => {
+      it('should get the order book at level 3', async function() {
+        const res = await sn.dxGetOrderBook3('SYS', 'LTC', 50);
+        orderId = res.bids[0].orderId;
+        res.should.be.an.Object();
+      });
+    });
+
+    describe('dxGetOrderBook4 method', () => {
+      it('should get the order book at level 4', async function() {
+        const res = await sn.dxGetOrderBook4('SYS', 'LTC', 50);
+        res.should.be.an.Object();
+      });
+    });
+
+    describe('dxGetOrder method', () => {
+      it('should get order details', async function() {
+        const order = await sn.dxGetOrder(orderId);
+        order.should.be.an.Object();
+        order.id.should.equal(orderId);
+      });
+    });
+
+    describe('dxGetOrders method', () => {
+      it('should get a list of order details', async function() {
+        const orders = await sn.dxGetOrders();
+        orders.should.be.an.Array();
+        orders.some(o => o.id === orderId).should.be.True();
+      });
+    });
+
+    describe('dxGetMyOrders method', () => {
+      it('should get a list of the user\'s orders', async function() {
+        const orders = await sn.dxGetMyOrders();
+        orders.should.be.an.Array();
+        orders.some(o => o.id === orderId).should.be.True();
+      });
+    });
+
+    describe('dxGetOrderFills method', () => {
+      it('should get a list of recent trades', async function() {
+        const orders = await sn.dxGetOrderFills('SYS', 'LTC');
+        orders.should.be.an.Array();
+      });
+    });
+
+    describe('dxGetOrderHistory method', () => {
+      it('should get a list of recently trades which have been filled', async function() {
+        const orders = await sn.dxGetOrderHistory('SYS', 'LTC', new Date().getTime('January 1, 1995 00:00:00'), new Date().getTime(), 30);
+        orders.should.be.an.Array();
+      });
+    });
+
+    describe('dxGetLocalTokens method', () => {
+      it('should get tokens supported by the local system', async function() {
+        const tokens = await sn.dxGetLocalTokens();
+        tokens.should.be.an.Array();
+      });
+    });
+
+    describe('dxGetNetworkTokens method', () => {
+      it('should get tokens supported by the network', async function() {
+        const tokens = await sn.dxGetNetworkTokens();
+        tokens.should.be.an.Array();
+      });
+    });
 
   });
 
