@@ -74,7 +74,6 @@ describe('Service Node Interface', () => {
       it('should get a list of the user\'s orders', async function() {
         const orders = await sn.dxGetMyOrders();
         orders.should.be.an.Array();
-        orders.some(o => o.id === orderId).should.be.True();
       });
     });
 
