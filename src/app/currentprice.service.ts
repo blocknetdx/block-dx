@@ -28,6 +28,8 @@ export class CurrentpriceService {
   private getCurrentprice(symbols:string[]): Observable<Currentprice> {
     this.currentpriceUrl = 'api/stats_' + symbols[0];
 
+    // ToDo Connect currentprice.service to data API
+
     return this.http.get(this.currentpriceUrl)
       .map((res) => {
         const data = res.json().map(d => {

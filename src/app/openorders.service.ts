@@ -7,6 +7,7 @@ import 'rxjs/add/operator/map';
 
 import { Openorder } from './openorder';
 
+// ToDo Connect openorders.service to data API.
 
 @Injectable()
 export class OpenordersService {

@@ -21,6 +21,9 @@ export class PricechartComponent {
   ) {}
 
   ngAfterViewInit() {
+
+    // ToDo Connect pricechart.component to data API
+
     this.zone.runOutsideAngular(() => {
       this.widget = new TradingView.widget({
         debug: false,

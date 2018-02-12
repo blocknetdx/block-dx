@@ -26,6 +26,8 @@ export class OrderbookService {
   getOrderbook(symbols:string[]): Observable<Order> {
     this.orderbookUrl = 'api/orderbook_' + symbols.join("_");
 
+    // ToDo Connect orderbook.service to data API
+
     return this.http.get(this.orderbookUrl)
       .map((res) => {
 

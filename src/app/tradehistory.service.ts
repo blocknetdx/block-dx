@@ -16,6 +16,8 @@ export class TradehistoryService {
   getTradehistory(symbols:string[]): Observable<Trade[]> {
     this.tradehistoryUrl = 'api/tradehistory_' + symbols.join("_");
 
+    // ToDo Connect tradehistory.service to data API.
+
     return this.http.get(this.tradehistoryUrl)
       .map((res) => {
         let p = res.json().map(data => Trade.fromObject(data));
