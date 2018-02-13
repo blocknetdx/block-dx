@@ -231,6 +231,9 @@ class ServiceNodeInterface {
   }
 
   async _makeServiceNodeRequest({ id = '', method, params = [] }) {
+    // console.log(JSON.stringify({
+    //   id, method, params
+    // }));
     const { status, body } = await request
       .post(this._endpoint)
       .auth(this._user, this._password)
@@ -268,14 +271,14 @@ class ServiceNodeInterface {
    */
   async dxMakeOrder(maker, makerSize, makerAddress, taker, takerSize, takerAddress, type) {
     const { error, result } = await this._makeServiceNodeRequest({
-      method: 'dxCreateTransaction',
+      method: 'dxMakeOrder',
       params: [
         maker,
-        makerSize,
         makerAddress,
+        makerSize,
         taker,
-        takerSize,
         takerAddress,
+        takerSize,
         type
       ]
     });
@@ -294,7 +297,7 @@ class ServiceNodeInterface {
    */
   async dxTakeOrder(id, send, sendAddress, receive, receiveAddress) {
     const { error, result } = await this._makeServiceNodeRequest({
-      method: 'dxAcceptTransaction',
+      method: 'dxTakeOrder',
       params: [
         id,
         send,
@@ -314,7 +317,7 @@ class ServiceNodeInterface {
    */
   async dxCancelOrder(id) {
     const { error, result } = await this._makeServiceNodeRequest({
-      method: 'dxCancelTransaction',
+      method: 'dxCancelOrder',
       params: [
         id
       ]

@@ -16,7 +16,7 @@ describe('Service Node Interface', () => {
 
   describe('Service Node Interface Instance', () => {
 
-    let orderId;
+    let orderId, orderToTake, myOrders;
 
     describe('getinfo method', () => {
       it('should get info from the service node', async function() {
@@ -43,6 +43,7 @@ describe('Service Node Interface', () => {
       it('should get the order book at level 3', async function() {
         const res = await sn.dxGetOrderBook3('SYS', 'LTC', 50);
         orderId = res.bids[0].orderId;
+        orderToTake = Object.assign({}, {maker: res.maker, taker: res.taker }, res.bids[0]);
         res.should.be.an.Object();
       });
     });
@@ -72,8 +73,8 @@ describe('Service Node Interface', () => {
 
     describe('dxGetMyOrders method', () => {
       it('should get a list of the user\'s orders', async function() {
-        const orders = await sn.dxGetMyOrders();
-        orders.should.be.an.Array();
+        myOrders = await sn.dxGetMyOrders();
+        myOrders.should.be.an.Array();
       });
     });
 
@@ -88,6 +89,30 @@ describe('Service Node Interface', () => {
       it('should get a list of recently trades which have been filled', async function() {
         const orders = await sn.dxGetOrderHistory('SYS', 'LTC', new Date().getTime('January 1, 1995 00:00:00'), new Date().getTime(), 30);
         orders.should.be.an.Array();
+      });
+    });
+
+    describe('dxMakeOrder method', () => {
+      it('should make a new order', async function() {
+        const { maker, makerSize, makerAddress, taker, takerSize, takerAddress } = myOrders[0];
+        const order = await sn.dxMakeOrder(maker, makerSize, makerAddress, taker, takerSize, takerAddress, 'exact');
+        order.should.be.an.Object();
+      });
+    });
+
+    describe('dxTakeOrder method', () => {
+      it('should take an order', async function() {
+        const { maker, taker } = orderToTake;
+        const res = await sn.dxTakeOrder(orderId, taker, '12345', maker, '54321');
+        res.should.be.an.Object();
+      });
+    });
+
+    describe('dxCancelOrder method', () => {
+      it('should cancel an order', async function() {
+        const { id } = myOrders.find(o => o.status === 'open');
+        const res = await sn.dxCancelOrder(id);
+        res.should.be.an.Object();
       });
     });
 
