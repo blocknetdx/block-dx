@@ -274,11 +274,11 @@ class ServiceNodeInterface {
       method: 'dxMakeOrder',
       params: [
         maker,
-        makerAddress,
         makerSize,
+        makerAddress,
         taker,
-        takerAddress,
         takerSize,
+        takerAddress,
         type
       ]
     });
