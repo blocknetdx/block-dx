@@ -62,8 +62,6 @@ import { TableInfoDirective } from './table/table-info.directive';
 import { TableSectionDividerDirective } from './table/table-section-divider.directive';
 import { CardToolbarDirective } from './card/card-toolbar.directive';
 
-import { AppDataService } from './appdata.service';
-
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
@@ -132,7 +130,6 @@ const dev = environment.useMockAPI ? [
     OrderbookService,
     WebSocketService,
     CryptocurrencyService,
-    AppDataService,
     {
       provide: PERFECT_SCROLLBAR_CONFIG,
       useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG

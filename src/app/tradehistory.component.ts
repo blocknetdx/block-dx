@@ -3,13 +3,13 @@ import { DecimalPipe } from '@angular/common';
 
 import { AppService } from './app.service';
 import { Trade } from './trade';
-import { AppDataService } from './appdata.service';
+import { TradehistoryService } from './tradehistory.service';
 
 @Component({
   selector: 'tradehistory',
   templateUrl: './tradehistory.component.html',
   styleUrls: ['./tradehistory.component.scss'],
-  providers: [AppDataService]
+  providers: [TradehistoryService]
 })
 export class TradehistoryComponent {
   public tradehistory: Trade[];
@@ -18,14 +18,14 @@ export class TradehistoryComponent {
 
   constructor(
     private appService: AppService,
-    private appDataService: AppDataService
+    private tradehistoryService: TradehistoryService
   ) {}
 
   ngOnInit() {
     this.appService.marketPairChanges.subscribe((symbols) => {
       this.symbols = symbols;
       if (symbols) {
-        this.appDataService.getTradehistory(this.symbols)
+        this.tradehistoryService.getTradehistory(this.symbols)
           .subscribe(tradehistory => {
             this.tradehistory = tradehistory;
           });
