@@ -30,7 +30,6 @@ export class OrderbookComponent {
       this.symbols = symbols;
       if (symbols) {
         this.orderbookService.getOrderbook(this.symbols)
-          .first()
           .subscribe(orderbook => {
             const asks = orderbook.asks.sort((a,b) => {
               if (a[0] < b[0]) return 1;

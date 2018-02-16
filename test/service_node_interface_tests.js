@@ -1,6 +1,6 @@
 /* global describe, it */
 require('should');
-const ServiceNodeInterface = require('../service-node-interface');
+const ServiceNodeInterface = require('../src-back/service-node-interface');
 
 describe('Service Node Interface', () => {
 
