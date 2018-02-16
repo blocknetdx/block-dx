@@ -101,6 +101,23 @@ const ready = () => {
 
   ipcMain.on('getOrderBook', () => sendOrderBook(true));
 
+  let tradeHistory = [];
+
+  const sendTradeHistory = force => {
+    sn.dxGetOrderFills(keyPair[0], keyPair[1])
+      .then(res => {
+        if(force === true || JSON.stringify(res) !== JSON.stringify(tradeHistory)) {
+          tradeHistory = res;
+          appWindow.send('tradeHistory', tradeHistory, keyPair);
+        }
+      })
+      .catch(handleError);
+  };
+
+  setInterval(sendTradeHistory, 4000);
+
+  ipcMain.on('sendTradeHistory', () => sendTradeHistory(true));
+
 };
 
 const onReady = new Promise(resolve => app.on('ready', resolve));

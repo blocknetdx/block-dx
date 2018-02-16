@@ -36,7 +36,7 @@ export class OrderbookService {
 
         electron.ipcRenderer.on('orderBook', (e, orderBook) => {
 
-          const p = Object.assign({}, orderBook, {
+          orderBook = Object.assign({}, orderBook, {
             asks: orderBook.asks.map(a => {
               return [a.price, a.size, a.orderId];
             }),
@@ -44,6 +44,8 @@ export class OrderbookService {
               return [a.price, a.size, a.orderId];
             }),
           });
+
+          const p = Order.fromObject(orderBook);
 
           const asks = p.asks;
           const totalAskSize = asks.reduce((acc, curr) => {

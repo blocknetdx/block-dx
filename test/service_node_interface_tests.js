@@ -81,6 +81,7 @@ describe('Service Node Interface', () => {
     describe('dxGetOrderFills method', () => {
       it('should get a list of recent trades', async function() {
         const orders = await sn.dxGetOrderFills('SYS', 'LTC');
+        console.log(orders);
         orders.should.be.an.Array();
       });
     });
