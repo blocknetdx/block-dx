@@ -7,6 +7,7 @@ import { Order } from './order';
 import { OrderbookService } from './orderbook.service';
 import { TableComponent } from './table/table.component';
 import { AppService } from './app.service';
+import { AppDataService } from './appdata.service';
 
 @Component({
   selector: 'orderbook',
@@ -21,7 +22,7 @@ export class OrderbookComponent {
 
   constructor(
     private appService: AppService,
-    private orderbookService: OrderbookService,
+    private appDataService: AppDataService,
     private decimalPipe:DecimalPipe
   ) { }
 
@@ -29,7 +30,7 @@ export class OrderbookComponent {
     this.appService.marketPairChanges.subscribe((symbols) => {
       this.symbols = symbols;
       if (symbols) {
-        this.orderbookService.getOrderbook(this.symbols)
+        this.appDataService.getOrderbook(this.symbols)
           .subscribe(orderbook => {
             const asks = orderbook.asks.sort((a,b) => {
               if (a[0] < b[0]) return 1;
