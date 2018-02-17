@@ -115,8 +115,33 @@ const ready = () => {
   };
 
   setInterval(sendTradeHistory, 4000);
-
   ipcMain.on('sendTradeHistory', () => sendTradeHistory(true));
+
+  const sendLocalTokens = () => {
+    sn.dxGetLocalTokens()
+      .then(res => appWindow.send('localTokens', res))
+      .catch(handleError);
+  };
+  ipcMain.on('getLocalTokens', sendLocalTokens);
+
+  const sendNetworkTokens = () => {
+    sn.dxGetNetworkTokens()
+      .then(res => appWindow.send('networkTokens', res))
+      .catch(handleError);
+  };
+  ipcMain.on('getLocalTokens', sendLocalTokens);
+
+  const sendKeyPair = () => {
+    appWindow.send('keyPair', keyPair);
+  };
+
+  ipcMain.on('getKeyPair', () => sendKeyPair());
+  ipcMain.on('setKeyPair', (e, pair) => {
+    keyPair = pair;
+    sendKeyPair();
+    sendOrderBook();
+    sendTradeHistory();
+  });
 
 };
 

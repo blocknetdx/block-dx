@@ -26,14 +26,6 @@ export class MainviewComponent {
     private appService: AppService
   ) {}
 
-  ngOnInit() {
-    this.route.params.subscribe((params) => {
-      const pair = params['pair'];
-      const symbols = pair ? pair.split('-') : ['ETH', 'BTC'];
-      this.appService.updateMarketPair(symbols);
-    });
-  }
-
   onNavChange(list) {
     if (list.contains('book')) {
       this.orderbook.orderbookTable.scrollToMiddle();

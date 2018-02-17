@@ -27,7 +27,6 @@ import { OrderformComponent } from './orderform.component';
 import { OrderbookComponent } from './orderbook.component';
 import { DepthchartComponent } from './depthchart.component';
 import { DepthComponent } from './depth.component';
-import { SwitcherComponent } from './switcher.component';
 import { MainviewComponent } from './mainview.component';
 import { WatchlistComponent } from './watchlist.component';
 
@@ -81,7 +80,6 @@ const dev = environment.useMockAPI ? [
     OrderbookComponent,
     OrderformComponent,
     PricechartComponent,
-    SwitcherComponent,
     TradehistoryComponent,
     WatchlistComponent,
     NavBarComponent,

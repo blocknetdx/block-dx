@@ -17,7 +17,7 @@ export class OrderformComponent {
   @ViewChild('tabView') public tabView: TabViewComponent;
   @ViewChild('typeSelect') public typeSelect: SelectComponent;
 
-  public symbols:string[];
+  public symbols:string[] = [];
   public currentPrice: Currentprice;
   public totalPrice = 0;
   public orderTypes: any[];
