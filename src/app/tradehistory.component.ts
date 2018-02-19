@@ -14,7 +14,7 @@ import { TradehistoryService } from './tradehistory.service';
 export class TradehistoryComponent {
   public tradehistory: Trade[];
 
-  public symbols:string[];
+  public symbols:string[] = [];
 
   constructor(
     private appService: AppService,

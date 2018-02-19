@@ -4,9 +4,6 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
 
-interface Window {
-    electron: any;
-}
 
 String.prototype['capitalize'] = function() {
   return this.charAt(0).toUpperCase() + this.slice(1);

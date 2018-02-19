@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Headers, Http } from '@angular/http';
+import * as rx from 'rxjs';
 
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
@@ -15,13 +16,46 @@ export class OpenordersService {
 
   constructor(private http: Http) { }
 
-  getOpenorders(symbols:string[]): Promise<Openorder[]> {
-    const url = 'api/openorders_' + symbols.join("_");
+  getOpenorders(symbols:string[]): Observable<Openorder[]> {
 
-    return this.http.get(url)
-      .map(response => response.json() as Openorder[])
-      .toPromise()
-      .catch(this.handleError);
+    return rx.Observable.create(observer => {
+      try {
+
+        window.electron.ipcRenderer.on('myOrders', (e, orders) => {
+          const newOrders = orders
+            .map(order => Openorder.createOpenOrder({
+              id: order.id,
+              price: order.takerSize,
+              size: order.makerSize,
+              product_id: '',
+              side: 'buy',
+              stp: '',
+              type: order.type,
+              time_in_force: '',
+              post_only: '',
+              created_at: order.updatedAt ? order.updatedAt : order.createdAt,
+              fill_fees: '',
+              filledSize: '',
+              executed_value: '',
+              status: order.status,
+              settled: order.status === 'filled' ? true : false,
+              canceled: order.status === 'canceled' ? true : false
+            }));
+          observer.next(newOrders);
+        });
+        window.electron.ipcRenderer.send('getMyOrders');
+
+      } catch(err) {
+        console.error(err);
+      }
+    });
+
+    // const url = 'api/openorders_' + symbols.join("_");
+    //
+    // return this.http.get(url)
+    //   .map(response => response.json() as Openorder[])
+    //   .toPromise()
+    //   .catch(this.handleError);
   }
 
   getFilledorders(symbols:string[]): Promise<Openorder[]> {

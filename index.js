@@ -1,8 +1,8 @@
-const co = require('co');
 const electron = require('electron');
 const express = require('express');
 const fs = require('fs-extra-promise');
 const isDev = require('electron-is-dev');
+const moment = require('moment');
 const path = require('path');
 const plzPort = require('plz-port');
 const SimpleStorage = require('./src-back/storage');
@@ -129,7 +129,23 @@ const ready = () => {
       .then(res => appWindow.send('networkTokens', res))
       .catch(handleError);
   };
-  ipcMain.on('getLocalTokens', sendLocalTokens);
+  ipcMain.on('getNetworkTokens', sendNetworkTokens);
+
+  const sendMyOrders = () => {
+    sn.dxGetMyOrders()
+      .then(res => appWindow.send('myOrders', res))
+      .catch(handleError);
+  };
+  ipcMain.on('getMyOrders', sendMyOrders);
+
+  const sendOrderHistory = () => {
+    const begin = moment().subtract(1, 'days').toDate();
+    const end = moment().toDate();
+    sn.dxGetOrderHistory(keyPair[0], keyPair[1], begin.getTime(), end.getTime(), 30)
+      .then(res => appWindow.send('orderHistory', res))
+      .catch(handleError);
+  };
+  ipcMain.on('getOrderHistory', sendOrderHistory);
 
   const sendKeyPair = () => {
     appWindow.send('keyPair', keyPair);

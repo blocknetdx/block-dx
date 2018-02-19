@@ -15,7 +15,7 @@ export class OpenordersComponent extends BaseComponent {
   public openorders: Openorder[];
   public selectable: boolean;
 
-  private _symbols: string[];
+  private _symbols: string[] = [];
   public get symbols(): string[] { return this._symbols; }
   public set symbols(val:string[]) {
     this._symbols = val;
@@ -29,18 +29,27 @@ export class OpenordersComponent extends BaseComponent {
 
   ngOnInit() {
     this.appService.marketPairChanges
-      .takeUntil(this.$destroy)
+      // .takeUntil(this.$destroy)
       .subscribe((symbols) => {
-        this.symbols = symbols;
-        if (symbols) {
+        if(symbols) {
           this.openorderService.getOpenorders(this.symbols)
-            .then((openorders) => {
+            .subscribe(openorders => {
               this.openorders = openorders.map((o) => {
                 o['row_class'] = o.side;
                 return o;
               });
             });
+          this.symbols = symbols;
         }
+        // if (symbols) {
+        //   this.openorderService.getOpenorders(this.symbols)
+        //     .then((openorders) => {
+        //       this.openorders = openorders.map((o) => {
+        //         o['row_class'] = o.side;
+        //         return o;
+        //       });
+        //     });
+        // }
     });
 
     this.breakpointService.breakpointChanges.first()
