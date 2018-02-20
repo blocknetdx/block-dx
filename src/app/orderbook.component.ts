@@ -7,22 +7,27 @@ import { Order } from './order';
 import { OrderbookService } from './orderbook.service';
 import { TableComponent } from './table/table.component';
 import { AppService } from './app.service';
+import {TradehistoryService} from './tradehistory.service';
+import { Trade } from './trade';
 
 @Component({
-  selector: 'orderbook',
+  selector: 'app-orderbook',
   templateUrl: './orderbook.component.html',
-  styleUrls: ['./order-book.component.scss']
+  styleUrls: ['./order-book.component.scss'],
+  providers: [TradehistoryService]
 })
-export class OrderbookComponent {
+export class OrderbookComponent implements OnInit {
   @ViewChild('orderbookTable') public orderbookTable: TableComponent;
 
   public sections: any[] = [];
   public symbols:string[] = [];
+  public lastTradePrice:string;
 
   constructor(
     private appService: AppService,
     private orderbookService: OrderbookService,
-    private decimalPipe:DecimalPipe
+    private decimalPipe:DecimalPipe,
+    private tradehistoryService:TradehistoryService
   ) { }
 
   ngOnInit(): void {
@@ -51,6 +56,13 @@ export class OrderbookComponent {
           });
       }
     });
+    this.tradehistoryService.getTradehistory()
+      .subscribe(tradehistory => {
+        const trades = [...tradehistory]
+          .sort((a, b) => a.time.localeCompare(b.time));
+        const lastTrade = trades[trades.length - 1];
+        console.log('lastTrade', lastTrade);
+      });
   }
 
   onRowSelect(row) {

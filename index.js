@@ -36,6 +36,8 @@ const ready = () => {
     height: height - 100
   });
 
+  appWindow.maximize();
+
   appWindow.loadURL(serverLocation);
 
   appWindow.once('ready-to-show', () => {

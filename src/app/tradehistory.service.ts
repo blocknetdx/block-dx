@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Headers, Http } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
-import * as rx from 'rxjs';
+import * as rx from 'rxjs/Rx';
 
 import 'rxjs/add/operator/toPromise';
 
@@ -11,13 +11,13 @@ declare var electron: any;
 
 @Injectable()
 export class TradehistoryService {
-  private tradehistoryUrl = '';  // URL to web api
+  // private tradehistoryUrl = '';  // URL to web api
   // private tradehistoryUrl = 'https://api-public.sandbox.gdax.com/products/BTC-USD/trades';
 
   constructor(private http: Http) { }
 
-  getTradehistory(symbols:string[]): Observable<Trade[]> {
-    this.tradehistoryUrl = 'api/tradehistory_' + symbols.join('_');
+  getTradehistory(): Observable<Trade[]> {
+    // this.tradehistoryUrl = 'api/tradehistory_' + symbols.join('_');
 
     // ToDo Connect tradehistory.service to data API.
 
@@ -26,10 +26,12 @@ export class TradehistoryService {
 
         electron.ipcRenderer.on('tradeHistory', (e, tradeHistory, keyPair) => {
 
+          console.log('tradehistory', tradeHistory);
+
           const p = tradeHistory
             .map(h => {
 
-              const side = h.maker === keyPair[1] ? 'buy' : 'sell';
+              const side = h.maker === keyPair[0] ? 'buy' : 'sell';
 
               return {
                 time: h.time || new Date().toISOString(),

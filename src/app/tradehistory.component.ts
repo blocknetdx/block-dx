@@ -6,12 +6,12 @@ import { Trade } from './trade';
 import { TradehistoryService } from './tradehistory.service';
 
 @Component({
-  selector: 'tradehistory',
+  selector: 'app-tradehistory',
   templateUrl: './tradehistory.component.html',
   styleUrls: ['./tradehistory.component.scss'],
   providers: [TradehistoryService]
 })
-export class TradehistoryComponent {
+export class TradehistoryComponent implements OnInit {
   public tradehistory: Trade[];
 
   public symbols:string[] = [];
@@ -25,7 +25,7 @@ export class TradehistoryComponent {
     this.appService.marketPairChanges.subscribe((symbols) => {
       this.symbols = symbols;
       if (symbols) {
-        this.tradehistoryService.getTradehistory(this.symbols)
+        this.tradehistoryService.getTradehistory()
           .subscribe(tradehistory => {
             this.tradehistory = tradehistory;
           });

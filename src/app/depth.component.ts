@@ -1,4 +1,4 @@
-import { Component, OnInit, NgZone, Input } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnChanges, NgZone, Input } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 
 import { AppService } from './app.service';
@@ -9,12 +9,12 @@ import { CurrentpriceService } from './currentprice.service';
 declare var AmCharts;
 
 @Component({
-  selector: 'depth',
+  selector: 'app-depth',
   templateUrl: './depth.component.html',
   styleUrls: ['./depth.component.scss'],
 })
-export class DepthComponent {
-  public symbols:string[];
+export class DepthComponent implements OnInit, AfterViewInit, OnChanges {
+  public symbols:string[] = [];
   public currentPrice: Currentprice;
   public chart: any;
 

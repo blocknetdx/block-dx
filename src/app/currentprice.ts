@@ -22,4 +22,4 @@ export class Currentprice {
     const inst = new Currentprice();
     return Object.assign(inst, obj);
   }
-};
+}

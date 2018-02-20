@@ -1,4 +1,4 @@
-import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
+import { Directive, Input, TemplateRef, ViewContainerRef, OnDestroy } from '@angular/core';
 
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/first';
@@ -8,7 +8,7 @@ import { BreakpointService } from './breakpoint.service';
 @Directive({
   selector: '[isBp]'
 })
-export class IsBreakpointDirective {
+export class IsBreakpointDirective implements OnDestroy {
 
   private destroy$: Subject<boolean> = new Subject<boolean>();
 

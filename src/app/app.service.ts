@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import * as rx from 'rxjs';
 
 import { WebSocketService } from './web-socket.service';
 import ipcRenderer = Electron.ipcRenderer;
@@ -13,7 +12,7 @@ export class AppService {
 
   constructor(private wsService: WebSocketService) {
 
-    this.marketPairChanges = rx.Observable.create(observer => {
+    this.marketPairChanges = Observable.create(observer => {
       try {
 
         window.electron.ipcRenderer.on('keyPair', (e, pair) => {

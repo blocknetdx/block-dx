@@ -1,4 +1,4 @@
-import { Component, NgZone, ViewChild, ElementRef } from '@angular/core';
+import { Component, NgZone, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 
 import * as jQuery from 'jquery';
 
@@ -6,11 +6,11 @@ declare var TradingView;
 declare var Datafeeds;
 
 @Component({
-  selector: 'pricechart',
+  selector: 'app-pricechart',
   templateUrl: './pricechart.component.html',
   styleUrls: ['./pricechart.component.scss']
 })
-export class PricechartComponent {
+export class PricechartComponent implements AfterViewInit {
   @ViewChild('container')
   public container: ElementRef;
 

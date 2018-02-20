@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Headers, Http } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import * as rx from 'rxjs';
 
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/debounceTime';
@@ -28,7 +27,7 @@ export class CurrentpriceService {
 
     // ToDo Connect currentprice.service to data API
 
-    return rx.Observable.create(observer => {
+    return Observable.create(observer => {
 
       window.electron.ipcRenderer.on('orderHistory', (e, orders) => {
         const preppedOrders = orders

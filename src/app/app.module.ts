@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpModule }    from '@angular/http';
-import { RouterModule }   from '@angular/router';
+import { HttpModule } from '@angular/http';
+import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { LayoutModule } from '@angular/cdk/layout';
 import { DecimalPipe } from '@angular/common';
@@ -14,7 +14,7 @@ import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 // Imports for loading & configuring the in-memory web api
 import { environment } from '../environments/environment';
 import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
-import { InMemoryDataService }  from './in-memory-data.service';
+import { InMemoryDataService } from './in-memory-data.service';
 
 import { AppComponent } from './app.component';
 import { AppService } from './app.service';
@@ -30,7 +30,7 @@ import { DepthComponent } from './depth.component';
 import { MainviewComponent } from './mainview.component';
 import { WatchlistComponent } from './watchlist.component';
 
-import { AppRoutingModule }     from './app-routing.module';
+import { AppRoutingModule } from './app-routing.module';
 import { BreakpointService } from './breakpoint.service';
 import { CurrentpriceService } from './currentprice.service';
 import { NavBarComponent } from './nav-bar/nav-bar.component';

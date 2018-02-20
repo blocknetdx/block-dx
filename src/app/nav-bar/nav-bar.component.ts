@@ -26,11 +26,11 @@ export class NavBarComponent {
 
   ngOnInit() {
     this.appService.marketPairChanges.subscribe((symbols) => {
-      console.log('symbols', symbols);
+      // console.log('symbols', symbols);
       this.symbols = symbols;
     });
     this.currentpriceService.currentprice.subscribe((cp) => {
-      console.log('currentPrice', cp);
+      // console.log('currentPrice', cp);
       this.currentPrice = cp;
     });
   }

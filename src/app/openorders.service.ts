@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Headers, Http } from '@angular/http';
-import * as rx from 'rxjs';
 
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
@@ -18,7 +17,7 @@ export class OpenordersService {
 
   getOpenorders(symbols:string[]): Observable<Openorder[]> {
 
-    return rx.Observable.create(observer => {
+    return Observable.create(observer => {
       try {
 
         window.electron.ipcRenderer.on('myOrders', (e, orders) => {
@@ -59,7 +58,7 @@ export class OpenordersService {
   }
 
   getFilledorders(symbols:string[]): Promise<Openorder[]> {
-    const url = 'api/filledorders_' + symbols.join("_");
+    const url = 'api/filledorders_' + symbols.join('_');
 
     return this.http.get(url)
       .map((res) => res.json() as Openorder[])

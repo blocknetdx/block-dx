@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild, OnInit } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 
 import { AppService } from './app.service';
@@ -9,11 +9,11 @@ import { TabViewComponent } from './tab-view/tab-view.component';
 import { SelectComponent } from './select/select.component';
 
 @Component({
-  selector: 'orderform',
+  selector: 'app-orderform',
   templateUrl: './orderform.component.html',
   styleUrls: ['./orderform.component.scss']
 })
-export class OrderformComponent {
+export class OrderformComponent implements OnInit {
   @ViewChild('tabView') public tabView: TabViewComponent;
   @ViewChild('typeSelect') public typeSelect: SelectComponent;
 
@@ -49,19 +49,19 @@ export class OrderformComponent {
       });
 
     this.orderTypes = [
-      { value: 'market', viewValue: 'Market Order'},
-      { value: 'limit', viewValue: 'Limit Order'}
+      { value: 'market', viewValue: 'Market Order'}
+      // { value: 'limit', viewValue: 'Limit Order'}
     ];
   }
 
   formatNumber(num:string, symbol:string): string {
-    const format = symbol !== "USD" ? "1.8-8" : "1.2-2";
+    const format = symbol !== 'USD' ? '1.8-8' : '1.2-2';
     return this.decimalPipe.transform(num,format);
   }
 
   calcPrice(event: any) { // without type info
-    var enteredValue = event.target.value;
-    var currPrice = parseFloat(this.currentPrice.last);
+    const enteredValue = event.target.value;
+    const currPrice = parseFloat(this.currentPrice.last);
     this.totalPrice = enteredValue * currPrice;
   }
 

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Headers, Http } from '@angular/http';
-import * as rx from 'rxjs';
+// import * as rx from 'rxjs';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { ipcRenderer } from 'electron';
@@ -27,17 +27,17 @@ export class OrderbookService {
   }
 
   getOrderbook(symbols:string[]): Observable<Order> {
-    this.orderbookUrl = 'api/orderbook_' + symbols.join('_');
+    // this.orderbookUrl = 'api/orderbook_' + symbolsolejoin('_');
 
     // ToDo Connect orderbook.service to data API
 
-    return rx.Observable.create(observer => {
+    return Observable.create(observer => {
       try {
 
         electron.ipcRenderer.on('orderBook', (e, orderBook) => {
 
           orderBook = Object.assign({}, orderBook, {
-            asks: orderBook.asks.map(a => {
+            asks: orderBook.asks.map((a: any) => {
               return [a.price, a.size, a.orderId];
             }),
             bids: orderBook.bids.map(a => {
@@ -66,6 +66,8 @@ export class OrderbookService {
             bid.push((parseFloat(bid[1]) / totalBidSize) * 100);
             bid.push('bid');
           }
+
+          console.log(p);
 
           observer.next(p);
 

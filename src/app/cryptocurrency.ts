@@ -5,13 +5,14 @@ export class Cryptocurrency {
   public volume: number;
   public change: number;
 
+  public static fromObject(obj: any): Cryptocurrency {
+    const inst = new Cryptocurrency();
+    Object.assign(inst, obj);
+    return inst;
+  }
+
   public toString(): string {
     return `${this.name['capitalize']()} (${this.symbol.toUpperCase()})`;
   }
 
-  public static fromObject(obj: any): Cryptocurrency {
-    let inst = new Cryptocurrency();
-    Object.assign(inst, obj);
-    return inst;
-  }
 }

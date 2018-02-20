@@ -1,4 +1,4 @@
-import { Component, Input, TemplateRef, ViewChild } from '@angular/core';
+import { Component, Input, TemplateRef, ViewChild, OnInit } from '@angular/core';
 
 import { BaseComponent } from './base.component';
 import { AppService } from './app.service';
@@ -7,11 +7,11 @@ import { OpenordersService } from './openorders.service';
 import { BreakpointService } from './breakpoint.service';
 
 @Component({
-  selector: 'openorders',
+  selector: 'app-openorders',
   templateUrl: './openorders.component.html',
   styleUrls: ['./open-orders.component.scss']
 })
-export class OpenordersComponent extends BaseComponent {
+export class OpenordersComponent extends BaseComponent implements OnInit {
   public openorders: Openorder[];
   public selectable: boolean;
 

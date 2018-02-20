@@ -5,7 +5,7 @@ import { AppService } from './app.service';
 import { OrderbookComponent } from './orderbook.component';
 
 @Component({
-  selector: 'mainview',
+  selector: 'app-mainview',
   templateUrl: './mainview.component.html',
   styleUrls: ['./mainview.component.scss']
 })
@@ -13,7 +13,7 @@ export class MainviewComponent {
   @ViewChild('orderbook')
   public orderbook: OrderbookComponent;
 
-  public orderCardIndex: number = 0; // Temporary FIXME
+  public orderCardIndex = 0; // Temporary FIXME
   public decimalOptions: any[] = [
     {value: '8', viewValue:'8 decimals'},
     {value: '6', viewValue:'6 decimals'},
