@@ -26,7 +26,7 @@ export class OrderbookService {
     this.requestedOrder.next(order);
   }
 
-  getOrderbook(symbols:string[]): Observable<Order> {
+  getOrderbook(): Observable<Order> {
     // this.orderbookUrl = 'api/orderbook_' + symbolsolejoin('_');
 
     // ToDo Connect orderbook.service to data API
@@ -37,7 +37,7 @@ export class OrderbookService {
         electron.ipcRenderer.on('orderBook', (e, orderBook) => {
 
           orderBook = Object.assign({}, orderBook, {
-            asks: orderBook.asks.map((a: any) => {
+            asks: orderBook.asks.map(a => {
               return [a.price, a.size, a.orderId];
             }),
             bids: orderBook.bids.map(a => {
@@ -48,7 +48,7 @@ export class OrderbookService {
           const p = Order.fromObject(orderBook);
 
           const asks = p.asks;
-          const totalAskSize = asks.reduce((acc, curr) => {
+          const totalAskSize: number = asks.reduce((acc, curr) => {
             return acc + parseFloat(curr[1]);
           }, 0);
 
@@ -67,7 +67,7 @@ export class OrderbookService {
             bid.push('bid');
           }
 
-          console.log(p);
+          // console.log(p);
 
           observer.next(p);
 

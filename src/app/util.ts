@@ -1,6 +1,6 @@
 
 export function naturalSort(arr:any[], key:any):any[] {
-  const a, b, a1, b1, rx = /(\d+)|(\D+)/g, rd=/\d+/;
+  let a, b, a1, b1, rx = /(\d+)|(\D+)/g, rd=/\d+/;
   return arr.sort((as,bs) => {
     a = String(eval('as.' + key)).toLowerCase().match(rx);
     b = String(eval('bs.' + key)).toLowerCase().match(rx);

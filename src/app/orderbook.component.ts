@@ -34,7 +34,7 @@ export class OrderbookComponent implements OnInit {
     this.appService.marketPairChanges.subscribe((symbols) => {
       this.symbols = symbols;
       if (symbols) {
-        this.orderbookService.getOrderbook(this.symbols)
+        this.orderbookService.getOrderbook()
           .subscribe(orderbook => {
             const asks = orderbook.asks.sort((a,b) => {
               if (a[0] < b[0]) return 1;
@@ -61,7 +61,7 @@ export class OrderbookComponent implements OnInit {
         const trades = [...tradehistory]
           .sort((a, b) => a.time.localeCompare(b.time));
         const lastTrade = trades[trades.length - 1];
-        console.log('lastTrade', lastTrade);
+        // console.log('lastTrade', lastTrade);
       });
   }
 

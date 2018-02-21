@@ -21,7 +21,7 @@
     "e2e": "ng e2e",
     "build-native": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --production && cd .. && electron-builder --dir",
     "pack-native": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --production && cd .. && electron-builder",
-    "generate-docs": "jsdoc service-node-interface.js -d docs"
+    "generate-docs": "jsdoc src-back/service-node-interface.js -d docs"
   },
   "private": true,
   "dependencies": {

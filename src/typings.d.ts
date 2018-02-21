@@ -6,6 +6,3 @@ interface NodeModule {
 interface Window {
   electron: any;
 }
-interface Array {
-  includes: any;
-}

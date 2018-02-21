@@ -26,7 +26,7 @@ export class TradehistoryService {
 
         electron.ipcRenderer.on('tradeHistory', (e, tradeHistory, keyPair) => {
 
-          console.log('tradehistory', tradeHistory);
+          // console.log('tradehistory', tradeHistory);
 
           const p = tradeHistory
             .map(h => {
