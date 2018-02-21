@@ -7,6 +7,7 @@ const path = require('path');
 const plzPort = require('plz-port');
 const SimpleStorage = require('./src-back/storage');
 const ServiceNodeInterface = require('./src-back/service-node-interface');
+const serve = require('electron-serve');
 
 // General Error Handler
 const handleError = err => {
@@ -17,6 +18,11 @@ const handleError = err => {
 process.on('uncaughtException', err => {
   handleError(err);
 });
+
+let loadURL;
+if(!isDev) {
+  loadURL = serve({directory: 'dist'});
+}
 
 const { app, BrowserWindow, Menu, ipcMain } = electron;
 
@@ -38,7 +44,12 @@ const ready = () => {
 
   appWindow.maximize();
 
-  appWindow.loadURL(serverLocation);
+  if(isDev) {
+    console.log(serverLocation);
+    appWindow.loadURL(serverLocation);
+  } else {
+    loadURL(appWindow);
+  }
 
   appWindow.once('ready-to-show', () => {
     appWindow.show();
@@ -216,19 +227,8 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
     // In development use the live ng server. In production serve the built files
     if(isDev) {
       port = 4200;
-    } else {
-      // Find a free port, starting with 51236
-      port = await plzPort(51236);
-      await new Promise(resolve => {
-        express()
-          .use(express.static(path.join(__dirname, 'dist')))
-          .listen(port, () => {
-            resolve();
-          });
-      });
+      serverLocation =  `http://${localhost}:${port}`;
     }
-
-    serverLocation =  `http://${localhost}:${port}`;
 
     await onReady;
 
