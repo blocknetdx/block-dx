@@ -219,9 +219,20 @@ export class DepthComponent implements OnInit, AfterViewInit, OnChanges {
               // chart.addChartCursor(chartCursor);
               // chartCursor.enabled=false;
             }
-          }
+          },
+          // {
+          //   'event': 'clickGraphItem',
+          //   'method': e => {
+          //     console.log('Clicked!', e);
+          //   }
+          // }
         ]
       });
+
+      // this.chart.addListener('clickGraphItem', () => {
+      //   console.log('Clicked!');
+      //   alert('Clicked!');
+      // });
 
       // console.log(this.chart);
 
