@@ -1,10 +1,8 @@
 const electron = require('electron');
-const express = require('express');
 const fs = require('fs-extra-promise');
 const isDev = require('electron-is-dev');
 const moment = require('moment');
 const path = require('path');
-const plzPort = require('plz-port');
 const SimpleStorage = require('./src-back/storage');
 const ServiceNodeInterface = require('./src-back/service-node-interface');
 const serve = require('electron-serve');
@@ -30,13 +28,86 @@ const { app, BrowserWindow, Menu, ipcMain } = electron;
 const isSecondInstance = app.makeSingleInstance(() => {});
 if(isSecondInstance) app.quit();
 
-let serverLocation, sn, keyPair;
+let appWindow, serverLocation, sn, keyPair, storage, user, password, port;
 
-const ready = () => {
+const openSettingsWindow = (options = {}) => {
+
+  let errorMessage;
+
+  if(options.error) {
+    const { error } = options;
+    console.log(error);
+    switch(error.status) {
+      case 401:
+        errorMessage = 'There was an authorization problem. Please correct your username and/or password.';
+        break;
+      default:
+        errorMessage = 'There was a problem connecting to the RPC server. Please check the RPC port.';
+    }
+    console.log(errorMessage);
+  }
+
+  ipcMain.on('getPort', e => {
+    e.returnValue = storage.getItem('port') || '';
+  });
+  ipcMain.on('getUser', e => {
+    e.returnValue = storage.getItem('user') || '';
+  });
+  ipcMain.on('saveData', async function(e, items) {
+    try {
+      for(const key of Object.keys(items)) {
+        const value = items[key];
+        if(key === 'password' && !value && storage.getItem('password')) continue;
+        storage.setItem(key, value);
+        await new Promise(resolve => setTimeout(resolve, 100));
+      }
+      e.sender.send('dataSaved');
+    } catch(err) {
+      handleError(err);
+    }
+  });
+  ipcMain.on('restart', () => {
+    app.relaunch();
+    app.quit();
+  });
+
+  const settingsWindow = new BrowserWindow({
+    show: false,
+    width: 500,
+    height: 346,
+    parent: appWindow
+  });
+  if(isDev) {
+    settingsWindow.loadURL(`file://${path.join(__dirname, 'src', 'settings.html')}`);
+  } else {
+    settingsWindow.loadURL(`file://${path.join(__dirname, 'dist', 'settings.html')}`);
+  }
+  settingsWindow.once('ready-to-show', () => {
+    settingsWindow.show();
+    if(errorMessage) {
+      settingsWindow.send('errorMessage', errorMessage);
+    }
+  });
+
+  if(isDev) {
+    const menuTemplate = [];
+    menuTemplate.push({
+      label: 'Window',
+      submenu: [
+        { label: 'Show Dev Tools', role: 'toggledevtools' }
+      ]
+    });
+    const windowMenu = Menu.buildFromTemplate(menuTemplate);
+    settingsWindow.setMenu(windowMenu);
+  }
+
+};
+
+const openAppWindow = () => {
 
   const { width, height } = electron.screen.getPrimaryDisplay().workAreaSize;
 
-  const appWindow = new BrowserWindow({
+  appWindow = new BrowserWindow({
     show: false,
     width: width - 100,
     height: height - 100
@@ -45,7 +116,6 @@ const ready = () => {
   appWindow.maximize();
 
   if(isDev) {
-    console.log(serverLocation);
     appWindow.loadURL(serverLocation);
   } else {
     loadURL(appWindow);
@@ -172,6 +242,10 @@ const ready = () => {
     sendTradeHistory();
   });
 
+  ipcMain.on('openSettings', () => {
+    openSettingsWindow();
+  });
+
 };
 
 const onReady = new Promise(resolve => app.on('ready', resolve));
@@ -188,26 +262,40 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
       dataPath = app.getPath('userData');
     }
 
-    const storage = new SimpleStorage(path.join(dataPath, 'meta.json'));
-    let user = storage.getItem('user');
-    let password = storage.getItem('password');
+    storage = new SimpleStorage(path.join(dataPath, 'meta.json'));
+    user = storage.getItem('user');
+    password = storage.getItem('password');
+    port = storage.getItem('port');
 
-    if(!user) {
-      user = 'myuser';
-      storage.setItem('user', user);
-    }
-    if(!password) {
-      password = 'mypassword';
-      storage.setItem('password', password);
+    if(!port) {
+      port = '41414';
+      storage.setItem('port', port);
     }
 
-    sn = new ServiceNodeInterface(user, password, 'http://localhost:41414');
+    if(!user || !password) {
+      await onReady;
+      openSettingsWindow();
+      return;
+    }
+
+    sn = new ServiceNodeInterface(user, password, `http://localhost:${port}`);
 
     await new Promise(resolve => setTimeout(resolve, 2000));
 
+    try {
+      await sn.getinfo();
+    } catch(err) {
+      // console.error(err);
+      await onReady;
+      openSettingsWindow({ error: err });
+      return;
+    }
+
     keyPair = storage.getItem('keyPair');
     if(!keyPair) {
+
       const tokens = await sn.dxGetLocalTokens();
+
       if(tokens.length < 2) {
         const dif = 2 - tokens.length;
         const networkTokens = await sn.dxGetNetworkTokens();
@@ -222,17 +310,14 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
 
     const localhost = 'localhost';
 
-    let port;
-
     // In development use the live ng server. In production serve the built files
     if(isDev) {
-      port = 4200;
-      serverLocation =  `http://${localhost}:${port}`;
+      serverLocation =  `http://${localhost}:4200`;
     }
 
     await onReady;
 
-    ready();
+    openAppWindow();
 
   } catch(err) {
     handleError(err);

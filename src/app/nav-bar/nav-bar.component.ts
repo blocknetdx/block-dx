@@ -39,4 +39,10 @@ export class NavBarComponent {
     this.navCollapsed = !this.navCollapsed;
   }
 
+  openSettings(e) {
+    e.preventDefault();
+    window.electron.ipcRenderer.send('openSettings');
+    this.toggleNav();
+  }
+
 }

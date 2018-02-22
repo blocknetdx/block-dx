@@ -53,7 +53,6 @@
     "moment": "^2.20.1",
     "ng-inline-svg": "^5.1.1",
     "ngx-perfect-scrollbar": "^5.0.5",
-    "plz-port": "^1.0.0",
     "popper.js": "^1.13.0",
     "rxjs": "^5.5.5",
     "superagent": "^3.8.2",

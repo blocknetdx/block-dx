@@ -10,7 +10,8 @@
       "assets": [
         "amcharts",
         "assets",
-        "favicon.ico"
+        "favicon.ico",
+        "settings.html"
       ],
       "index": "index.html",
       "main": "main.ts",
