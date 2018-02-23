@@ -234,13 +234,43 @@ const openAppWindow = () => {
     appWindow.send('keyPair', keyPair);
   };
 
-  ipcMain.on('getKeyPair', () => sendKeyPair());
+  ipcMain.on('getKeyPair', sendKeyPair);
   ipcMain.on('setKeyPair', (e, pair) => {
     keyPair = pair;
     sendKeyPair();
     sendOrderBook();
     sendTradeHistory();
   });
+
+  const sendCurrentPrice = () => {
+
+    // sn.dxGetOrderFills(keyPair[0], keyPair[1])
+    //   .then(orders => {
+    //     if(orders.length === 0) return;
+    //     orders.sort((a, b) => b.time.localeCompare(a.time));
+    //     const order = orders[0];
+    //     let price;
+    //     if(order.maker === keyPair[0]) {
+    //       price = order.takerSize / order.makerSize;
+    //     } else {
+    //       price = order.makerSize / order.takerSize;
+    //     }
+    //     appWindow.send('currentPrice', price);
+    //   })
+    //   .catch(handleError);
+
+    const start = moment()
+      .subtract(1, 'd')
+      .toDate()
+      .getTime();
+    const end = new Date().getTime();
+    sn.dxGetOrderHistory(keyPair[0], keyPair[1], start, end, 86400)
+      .then(data => {
+        appWindow.send('currentPrice', data[0]);
+      })
+      .catch(handleError);
+  };
+  ipcMain.on('getCurrentPrice', sendCurrentPrice);
 
   ipcMain.on('openSettings', () => {
     openSettingsWindow();

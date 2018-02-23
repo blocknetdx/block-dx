@@ -29,14 +29,22 @@ export class CurrentpriceService {
 
     return Observable.create(observer => {
 
-      window.electron.ipcRenderer.on('orderHistory', (e, orders) => {
-        const preppedOrders = orders
-          .sort((a, b) => a.time.localeCompare(b.time))
-          .map(order => Object.assign(order, {last: order.close}))
-          .map(Currentprice.fromObject);
-        observer.next(preppedOrders[preppedOrders.length - 1]);
+      // window.electron.ipcRenderer.on('orderHistory', (e, orders) => {
+      //   const preppedOrders = orders
+      //     .sort((a, b) => a.time.localeCompare(b.time))
+      //     .map(order => Object.assign(order, {last: order.close}))
+      //     .map(Currentprice.fromObject);
+      //   observer.next(preppedOrders[preppedOrders.length - 1]);
+      // });
+      // window.electron.ipcRenderer.send('getOrderHistory');
+
+      window.electron.ipcRenderer.on('currentPrice', (e, order) => {
+        const preppedOrder = Object.assign({}, order, {
+          last: order.close
+        });
+        observer.next(Currentprice.fromObject(preppedOrder));
       });
-      window.electron.ipcRenderer.send('getOrderHistory');
+      window.electron.ipcRenderer.send('getCurrentPrice');
 
     });
 
