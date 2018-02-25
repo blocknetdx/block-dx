@@ -12,7 +12,7 @@ declare var AmCharts;
 @Component({
   selector: 'app-depth',
   templateUrl: './depth.component.html',
-  styleUrls: ['./depth.component.scss'],
+  styleUrls: ['./depth.component.scss']
 })
 export class DepthComponent implements OnInit, AfterViewInit, OnChanges {
   public symbols:string[] = [];

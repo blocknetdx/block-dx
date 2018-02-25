@@ -17,10 +17,14 @@ declare var electron: any;
 export class OrderbookService {
   public requestedOrder: Subject<Order> = new Subject();
 
+  private orderbookObservable: Observable<Order>;
+
   private orderbookUrl = '';
   // private orderbookUrl = 'https://api-public.sandbox.gdax.com/products/ETH-BTC/book?level=2';
 
-  constructor(private http: Http) { }
+  constructor(private http: Http) {
+    console.log('Constructing OrderbookService');
+  }
 
   requestOrder(order: Order) {
     this.requestedOrder.next(order);
@@ -31,54 +35,58 @@ export class OrderbookService {
 
     // ToDo Connect orderbook.service to data API
 
-    return Observable.create(observer => {
-      try {
+    if(!this.orderbookObservable) {
+      this.orderbookObservable = Observable.create(observer => {
+        try {
 
-        electron.ipcRenderer.on('orderBook', (e, orderBook) => {
+          electron.ipcRenderer.on('orderBook', (e, orderBook) => {
 
-          orderBook = Object.assign({}, orderBook, {
-            asks: orderBook.asks.map(a => {
-              return [a.price, a.size, a.orderId];
-            }),
-            bids: orderBook.bids.map(a => {
-              return [a.price, a.size, a.orderId];
-            }),
+            orderBook = Object.assign({}, orderBook, {
+              asks: orderBook.asks.map(a => {
+                return [a.price, a.size, a.orderId];
+              }),
+              bids: orderBook.bids.map(a => {
+                return [a.price, a.size, a.orderId];
+              }),
+            });
+
+            const p = Order.fromObject(orderBook);
+
+            const asks = p.asks;
+            const totalAskSize: number = asks.reduce((acc, curr) => {
+              return acc + parseFloat(curr[1]);
+            }, 0);
+
+            for(const ask of asks) {
+              ask.push((parseFloat(ask[1]) / totalAskSize) * 100);
+              ask.push('ask');
+            }
+
+            const bids = p.bids;
+            const totalBidSize = asks.reduce((acc, curr) => {
+              return acc + parseFloat(curr[1]);
+            }, 0);
+
+            for(const bid of bids) {
+              bid.push((parseFloat(bid[1]) / totalBidSize) * 100);
+              bid.push('bid');
+            }
+
+            // console.log(p);
+
+            observer.next(p);
+
           });
 
-          const p = Order.fromObject(orderBook);
+          electron.ipcRenderer.send('getOrderBook');
 
-          const asks = p.asks;
-          const totalAskSize: number = asks.reduce((acc, curr) => {
-            return acc + parseFloat(curr[1]);
-          }, 0);
+        } catch(err) {
+          console.error(err);
+        }
+      });
 
-          for(const ask of asks) {
-            ask.push((parseFloat(ask[1]) / totalAskSize) * 100);
-            ask.push('ask');
-          }
-
-          const bids = p.bids;
-          const totalBidSize = asks.reduce((acc, curr) => {
-            return acc + parseFloat(curr[1]);
-          }, 0);
-
-          for(const bid of bids) {
-            bid.push((parseFloat(bid[1]) / totalBidSize) * 100);
-            bid.push('bid');
-          }
-
-          // console.log(p);
-
-          observer.next(p);
-
-        });
-
-        electron.ipcRenderer.send('getOrderBook');
-
-      } catch(err) {
-        console.error(err);
-      }
-    });
+    }
+    return this.orderbookObservable;
 
     /*return this.http.get(this.orderbookUrl)
       .map((res) => {

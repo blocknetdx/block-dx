@@ -28,17 +28,11 @@ export class OpenordersComponent extends BaseComponent implements OnInit {
   ) { super(); }
 
   ngOnInit() {
+
     this.appService.marketPairChanges
       // .takeUntil(this.$destroy)
       .subscribe((symbols) => {
         if(symbols) {
-          this.openorderService.getOpenorders(this.symbols)
-            .subscribe(openorders => {
-              this.openorders = openorders.map((o) => {
-                o['row_class'] = o.side;
-                return o;
-              });
-            });
           this.symbols = symbols;
         }
         // if (symbols) {
@@ -51,6 +45,16 @@ export class OpenordersComponent extends BaseComponent implements OnInit {
         //     });
         // }
     });
+
+    this.openorderService.getOpenorders()
+      .subscribe(openorders => {
+        this.openorders = openorders
+          .filter(o => o.status === 'open')
+          .map((o) => {
+            o['row_class'] = o.side;
+            return o;
+          });
+      });
 
     this.breakpointService.breakpointChanges.first()
       .subscribe((bp) => {

@@ -13,8 +13,7 @@ import { Trade } from './trade';
 @Component({
   selector: 'app-orderbook',
   templateUrl: './orderbook.component.html',
-  styleUrls: ['./order-book.component.scss'],
-  providers: [TradehistoryService]
+  styleUrls: ['./order-book.component.scss']
 })
 export class OrderbookComponent implements OnInit {
   @ViewChild('orderbookTable') public orderbookTable: TableComponent;
@@ -25,37 +24,58 @@ export class OrderbookComponent implements OnInit {
 
   constructor(
     private appService: AppService,
-    private orderbookService: OrderbookService,
     private decimalPipe:DecimalPipe,
-    private tradehistoryService:TradehistoryService
+    private orderbookService: OrderbookService,
+    private tradehistoryService: TradehistoryService
   ) { }
 
   ngOnInit(): void {
     this.appService.marketPairChanges.subscribe((symbols) => {
       this.symbols = symbols;
-      if (symbols) {
-        this.orderbookService.getOrderbook()
-          .subscribe(orderbook => {
-            const asks = orderbook.asks.sort((a,b) => {
-              if (a[0] < b[0]) return 1;
-              if (a[0] > b[0]) return -1;
-              return 0;
-            });
-            const bids = orderbook.bids.sort((a,b) => {
-              if (a[0] < b[0]) return -1;
-              if (a[0] > b[0]) return 1;
-              return 0;
-            });
-
-            this.sections = [
-              {rows: asks},
-              {rows: bids}
-            ];
-
-            this.orderbookTable.scrollToMiddle();
-          });
-      }
+      // if (symbols) {
+      //   this.orderbookService.getOrderbook()
+      //     .subscribe(orderbook => {
+      //       const asks = orderbook.asks.sort((a,b) => {
+      //         if (a[0] < b[0]) return 1;
+      //         if (a[0] > b[0]) return -1;
+      //         return 0;
+      //       });
+      //       const bids = orderbook.bids.sort((a,b) => {
+      //         if (a[0] < b[0]) return -1;
+      //         if (a[0] > b[0]) return 1;
+      //         return 0;
+      //       });
+      //
+      //       this.sections = [
+      //         {rows: asks},
+      //         {rows: bids}
+      //       ];
+      //
+      //       this.orderbookTable.scrollToMiddle();
+      //     });
+      // }
     });
+    this.orderbookService.getOrderbook()
+      // .first()
+      .subscribe(orderbook => {
+        const asks = orderbook.asks.sort((a,b) => {
+          if (a[0] < b[0]) return 1;
+          if (a[0] > b[0]) return -1;
+          return 0;
+        });
+        const bids = orderbook.bids.sort((a,b) => {
+          if (a[0] < b[0]) return -1;
+          if (a[0] > b[0]) return 1;
+          return 0;
+        });
+
+        this.sections = [
+          {rows: asks},
+          {rows: bids}
+        ];
+
+        this.orderbookTable.scrollToMiddle();
+      });
     this.tradehistoryService.getTradehistory()
       .subscribe(tradehistory => {
         const trades = [...tradehistory]

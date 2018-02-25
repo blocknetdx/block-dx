@@ -11,6 +11,7 @@ export class AppService {
   public marketPairChanges: BehaviorSubject<string[]> = new BehaviorSubject(null);
 
   constructor(private wsService: WebSocketService) {
+    console.log('constructing AppService');
 
     this.marketPairChanges = Observable.create(observer => {
       try {

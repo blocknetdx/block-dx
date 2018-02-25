@@ -8,8 +8,8 @@ import { TradehistoryService } from './tradehistory.service';
 @Component({
   selector: 'app-tradehistory',
   templateUrl: './tradehistory.component.html',
-  styleUrls: ['./tradehistory.component.scss'],
-  providers: [TradehistoryService]
+  styleUrls: ['./tradehistory.component.scss']
+  // providers: [TradehistoryService]
 })
 export class TradehistoryComponent implements OnInit {
   public tradehistory: Trade[];

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { BaseComponent } from '../base.component';
 import { AppService } from '../app.service';
@@ -10,8 +10,8 @@ import { OpenordersService } from '../openorders.service';
   templateUrl: './filled-orders.component.html',
   styleUrls: ['./filled-orders.component.scss']
 })
-export class FilledOrdersComponent extends BaseComponent {
-  public symbols: string[];
+export class FilledOrdersComponent extends BaseComponent implements OnInit {
+  public symbols: string[] = [];
   public filledorders: Openorder[];
 
   constructor(
@@ -24,15 +24,25 @@ export class FilledOrdersComponent extends BaseComponent {
       .takeUntil(this.$destroy)
       .subscribe((symbols) => {
         this.symbols = symbols;
-        if (symbols) {
-          this.openorderService.getFilledorders(this.symbols)
-            .then((filledorders) => {
-              this.filledorders = filledorders.map((o) => {
-                o['row_class'] = o.side;
-                return o;
-              });
-            });
-        }
     });
+    // this.openorderService.getOpenorders()
+    //   .then((filledorders) => {
+    //     this.filledorders = filledorders
+    //       .filter(o => o.settled)
+    //       .map((o) => {
+    //         o['row_class'] = o.side;
+    //         return o;
+    //       });
+    //   });
+    this.openorderService.getOpenorders()
+      .subscribe(openorders => {
+        this.filledorders = openorders
+          .filter(o => o.settled)
+          .map((o) => {
+            o['row_class'] = o.side;
+            return o;
+          });
+        console.log('filledorders', this.filledorders);
+      });
   }
 }

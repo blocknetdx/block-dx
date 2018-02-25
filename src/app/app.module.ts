@@ -10,6 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
+import { TradehistoryService } from './tradehistory.service';
 
 // Imports for loading & configuring the in-memory web api
 import { environment } from '../environments/environment';
@@ -128,6 +129,7 @@ const dev = environment.useMockAPI ? [
     OrderbookService,
     WebSocketService,
     CryptocurrencyService,
+    TradehistoryService,
     {
       provide: PERFECT_SCROLLBAR_CONFIG,
       useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG

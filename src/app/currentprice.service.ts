@@ -14,6 +14,7 @@ export class CurrentpriceService {
   public currentprice: BehaviorSubject<Currentprice> = new BehaviorSubject(null);
 
   constructor(private http: Http, private appService: AppService) {
+    console.log('constructing CurrentpriceService');
     this.appService.marketPairChanges.subscribe((symbols) => {
       if (symbols) {
         this.getCurrentprice(symbols).first().subscribe((cp) => {

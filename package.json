@@ -43,6 +43,7 @@
     "co": "^4.6.0",
     "core-js": "^2.5.2",
     "electron": "^1.8.2",
+    "electron-context-menu": "^0.9.1",
     "electron-is-dev": "^0.3.0",
     "electron-serve": "^0.1.0",
     "hammerjs": "^2.0.8",

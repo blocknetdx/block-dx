@@ -1,4 +1,4 @@
-<bn-tab-view #tabView>
+<app-bn-tab-view #tabView>
   <bn-tab label="Buy">
     <ng-template #content>
       <ng-container *ngTemplateOutlet="formTemplate; context: {type: 'buy'}"></ng-container>
@@ -9,7 +9,7 @@
       <ng-container *ngTemplateOutlet="formTemplate; context: {type: 'sell'}"></ng-container>
     </ng-template>
   </bn-tab>
-</bn-tab-view>
+</app-bn-tab-view>
 
 <ng-template #formTemplate let-type="type">
   <form (ngSubmit)="onOrderSubmit()" #orderForm="ngForm" id="market_order">

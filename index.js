@@ -24,6 +24,8 @@ if(!isDev) {
 
 const { app, BrowserWindow, Menu, ipcMain } = electron;
 
+require('electron-context-menu')();
+
 // Only allow one application instance to be open at a time
 const isSecondInstance = app.makeSingleInstance(() => {});
 if(isSecondInstance) app.quit();
@@ -172,10 +174,12 @@ const openAppWindow = () => {
   const sendOrderBook = force => {
     sn.dxGetOrderBook3(keyPair[0], keyPair[1])
       .then(res => {
-        if(force === true || JSON.stringify(res) !== JSON.stringify(orderBook)) {
+        // if(force === true || JSON.stringify(res) !== JSON.stringify(orderBook)) {
           orderBook = res;
+          orderBook.bids = orderBook.bids.map(p => Object.assign({}, p, { price: new Date().getSeconds() + p.price }));
+          orderBook.asks = orderBook.asks.map(p => Object.assign({}, p, { price: new Date().getSeconds() + p.price }));
           appWindow.send('orderBook', orderBook);
-        }
+        // }
       })
       .catch(handleError);
   };
@@ -216,7 +220,7 @@ const openAppWindow = () => {
 
   const sendMyOrders = () => {
     sn.dxGetMyOrders()
-      .then(res => appWindow.send('myOrders', res))
+      .then(res => appWindow.send('myOrders', res, keyPair))
       .catch(handleError);
   };
   ipcMain.on('getMyOrders', sendMyOrders);
