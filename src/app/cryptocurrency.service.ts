@@ -19,7 +19,6 @@ export class CryptocurrencyService {
       try {
 
         ipcRenderer.on('currencyComparisons', (e, currencies) => {
-          console.log(currencies);
           const preppedCurrencies = currencies
             .map(c => Cryptocurrency.fromObject(c));
           observer.next(preppedCurrencies);

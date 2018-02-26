@@ -57,7 +57,6 @@ export class PairSelectorComponent implements OnInit {
         }];
         break;
     }
-    console.log('filtered sections', arr);
     return arr;
   }
 
@@ -160,7 +159,6 @@ export class PairSelectorComponent implements OnInit {
 
         this.cryptoService.getCurrencyComparisons(row.symbol)
           .subscribe(data => {
-            console.log('comparisons', data);
             this.comparisons = [{rows: data}];
           });
 
@@ -196,6 +194,7 @@ export class PairSelectorComponent implements OnInit {
     const a: string = this.model.coinA.symbol;
     const b: string = this.model.coinB.symbol;
     // this.router.navigate(['/trading', `${a}-${b}`]);
+    window.electron.ipcRenderer.send('setKeyPair', [a, b]);
     this.active = false;
   }
 

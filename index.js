@@ -164,32 +164,31 @@ const openAppWindow = () => {
   const appMenu = Menu.buildFromTemplate(menuTemplate);
   Menu.setApplicationMenu(appMenu);
 
+  const sendKeyPair = () => {
+    appWindow.send('keyPair', keyPair);
+  };
+  ipcMain.on('getKeyPair', sendKeyPair);
+
   let orderBook = {
     maker: '',
     taker: '',
     bids: [],
     asks: []
   };
-
   const sendOrderBook = force => {
     sn.dxGetOrderBook3(keyPair[0], keyPair[1])
       .then(res => {
-        // if(force === true || JSON.stringify(res) !== JSON.stringify(orderBook)) {
+        if(force === true || JSON.stringify(res) !== JSON.stringify(orderBook)) {
           orderBook = res;
-          orderBook.bids = orderBook.bids.map(p => Object.assign({}, p, { price: new Date().getSeconds() + p.price }));
-          orderBook.asks = orderBook.asks.map(p => Object.assign({}, p, { price: new Date().getSeconds() + p.price }));
           appWindow.send('orderBook', orderBook);
-        // }
+        }
       })
       .catch(handleError);
   };
-
+  ipcMain.on('getOrderBook', () => sendOrderBook(true));
   setInterval(sendOrderBook, 4000);
 
-  ipcMain.on('getOrderBook', () => sendOrderBook(true));
-
   let tradeHistory = [];
-
   const sendTradeHistory = force => {
     sn.dxGetOrderFills(keyPair[0], keyPair[1])
       .then(res => {
@@ -200,9 +199,8 @@ const openAppWindow = () => {
       })
       .catch(handleError);
   };
-
-  setInterval(sendTradeHistory, 4000);
   ipcMain.on('sendTradeHistory', () => sendTradeHistory(true));
+  setInterval(sendTradeHistory, 4000);
 
   const sendLocalTokens = () => {
     sn.dxGetLocalTokens()
@@ -218,63 +216,56 @@ const openAppWindow = () => {
   };
   ipcMain.on('getNetworkTokens', sendNetworkTokens);
 
-  const sendMyOrders = () => {
+  let myOrders = [];
+  const sendMyOrders = force => {
     sn.dxGetMyOrders()
-      .then(res => appWindow.send('myOrders', res, keyPair))
+      .then(res => {
+        if(force === true || JSON.stringify(res) !== JSON.stringify(myOrders)) {
+          myOrders = res;
+          appWindow.send('myOrders', myOrders, keyPair);
+        }
+      })
       .catch(handleError);
   };
-  ipcMain.on('getMyOrders', sendMyOrders);
+  ipcMain.on('getMyOrders', () => sendMyOrders(true));
+  setInterval(sendMyOrders, 4000);
 
-  const sendOrderHistory = () => {
-    const begin = moment().subtract(1, 'days').toDate();
-    const end = moment().toDate();
-    sn.dxGetOrderHistory(keyPair[0], keyPair[1], begin.getTime(), end.getTime(), 30)
-      .then(res => appWindow.send('orderHistory', res))
+  let orderHistory = [];
+  const sendOrderHistory = force => {
+    const end = new Date().getTime();
+    const start = moment(new Date(end))
+      .subtract(1, 'd')
+      .toDate()
+      .getTime();
+    sn.dxGetOrderHistory(keyPair[0], keyPair[1], start, end, 60)
+      .then(res => {
+        if(force === true || JSON.stringify(res) !== JSON.stringify(orderHistory)) {
+          orderHistory = res;
+          appWindow.send('orderHistory', orderHistory);
+        }
+      })
       .catch(handleError);
   };
-  ipcMain.on('getOrderHistory', sendOrderHistory);
+  ipcMain.on('getOrderHistory', () => sendOrderHistory(true));
 
-  const sendKeyPair = () => {
-    appWindow.send('keyPair', keyPair);
-  };
-
-  ipcMain.on('getKeyPair', sendKeyPair);
-  ipcMain.on('setKeyPair', (e, pair) => {
-    keyPair = pair;
-    sendKeyPair();
-    sendOrderBook();
-    sendTradeHistory();
-  });
-
-  const sendCurrentPrice = () => {
-
-    // sn.dxGetOrderFills(keyPair[0], keyPair[1])
-    //   .then(orders => {
-    //     if(orders.length === 0) return;
-    //     orders.sort((a, b) => b.time.localeCompare(a.time));
-    //     const order = orders[0];
-    //     let price;
-    //     if(order.maker === keyPair[0]) {
-    //       price = order.takerSize / order.makerSize;
-    //     } else {
-    //       price = order.makerSize / order.takerSize;
-    //     }
-    //     appWindow.send('currentPrice', price);
-    //   })
-    //   .catch(handleError);
-
+  let currentPrice = {};
+  const sendCurrentPrice = force => {
     const end = new Date().getTime();
     const start = moment(new Date(end))
       .subtract(1, 'd')
       .toDate()
       .getTime();
     sn.dxGetOrderHistory(keyPair[0], keyPair[1], start, end, 86400)
-      .then(data => {
-        appWindow.send('currentPrice', data[0]);
+      .then(res => {
+        const [ data ] = res;
+        if(force === true || JSON.stringify(data) !== JSON.stringify(currentPrice)) {
+          currentPrice = data;
+          appWindow.send('currentPrice', data);
+        }
       })
       .catch(handleError);
   };
-  ipcMain.on('getCurrentPrice', sendCurrentPrice);
+  ipcMain.on('getCurrentPrice', () => sendCurrentPrice(true));
 
   const sendCurrencies = async function() {
     try {
@@ -364,6 +355,16 @@ const openAppWindow = () => {
     }
   };
   ipcMain.on('getCurrencyComparisons', (e, primary) => sendCurrencyComparisons(primary));
+
+  ipcMain.on('setKeyPair', (e, pair) => {
+    keyPair = pair;
+    sendKeyPair();
+    sendOrderBook();
+    sendTradeHistory();
+    sendMyOrders();
+    sendOrderHistory();
+    sendCurrentPrice();
+  });
 
   ipcMain.on('openSettings', () => {
     openSettingsWindow();
