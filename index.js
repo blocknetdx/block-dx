@@ -263,11 +263,11 @@ const openAppWindow = () => {
     //   })
     //   .catch(handleError);
 
-    const start = moment()
+    const end = new Date().getTime();
+    const start = moment(new Date(end))
       .subtract(1, 'd')
       .toDate()
       .getTime();
-    const end = new Date().getTime();
     sn.dxGetOrderHistory(keyPair[0], keyPair[1], start, end, 86400)
       .then(data => {
         appWindow.send('currentPrice', data[0]);
@@ -275,6 +275,95 @@ const openAppWindow = () => {
       .catch(handleError);
   };
   ipcMain.on('getCurrentPrice', sendCurrentPrice);
+
+  const sendCurrencies = async function() {
+    try {
+      const [ localTokens, networkTokens ] = await Promise.all([
+        sn.dxGetLocalTokens(),
+        sn.dxGetNetworkTokens()
+      ]);
+      const localTokensSet = new Set(localTokens);
+      const comparator = networkTokens.includes('BTC') ? 'BTC' : networkTokens.includes('LTC') ? 'LTC' : networkTokens[0];
+      const currencies = [];
+      const end = new Date().getTime();
+      const start = moment(new Date(end))
+        .subtract(1, 'd')
+        .toDate()
+        .getTime();
+
+      for(const token of networkTokens) {
+        const second = token === comparator ? networkTokens.find(t => t !== comparator) : comparator;
+        const res = await sn.dxGetOrderHistory(token, second, start, end, 86400);
+        if(res.length === 0) {
+          currencies.push({
+            symbol: token,
+            name: token,
+            last: 0,
+            volume: 0,
+            change: 0,
+            local: localTokensSet.has(token)
+          });
+        } else {
+          const obj = res[0];
+          currencies.push(Object.assign({}, obj, {
+            symbol: token,
+            name: token,
+            last: obj.close,
+            change: (obj.close / obj.open) - 1,
+            local: localTokensSet.has(token)
+          }));
+        }
+      }
+      appWindow.send('currencies', currencies);
+    } catch(err) {
+      handleError(err);
+    }
+  };
+  ipcMain.on('getCurrencies', sendCurrencies);
+
+  const sendCurrencyComparisons = async function(primary) {
+    try {
+      const [ localTokens, networkTokens ] = await Promise.all([
+        sn.dxGetLocalTokens(),
+        sn.dxGetNetworkTokens()
+      ]);
+      const localTokensSet = new Set(localTokens);
+      const currencies = [];
+      const end = new Date().getTime();
+      const start = moment(new Date(end))
+        .subtract(1, 'd')
+        .toDate()
+        .getTime();
+
+      for(const second of networkTokens) {
+        if(second === primary) continue;
+        const res = await sn.dxGetOrderHistory(primary, second, start, end, 86400);
+        if(res.length === 0) {
+          currencies.push({
+            symbol: second,
+            name: second,
+            last: 0,
+            volume: 0,
+            change: 0,
+            local: localTokensSet.has(primary) && localTokensSet.has(second)
+          });
+        } else {
+          const obj = res[0];
+          currencies.push(Object.assign({}, obj, {
+            symbol: second,
+            name: second,
+            last: obj.close,
+            change: (obj.close / obj.open) - 1,
+            local: localTokensSet.has(primary) && localTokensSet.has(second)
+          }));
+        }
+      }
+      appWindow.send('currencyComparisons', currencies);
+    } catch(err) {
+      handleError(err);
+    }
+  };
+  ipcMain.on('getCurrencyComparisons', (e, primary) => sendCurrencyComparisons(primary));
 
   ipcMain.on('openSettings', () => {
     openSettingsWindow();

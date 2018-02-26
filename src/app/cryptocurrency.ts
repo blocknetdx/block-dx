@@ -4,6 +4,7 @@ export class Cryptocurrency {
   public last: number;
   public volume: number;
   public change: number;
+  public local: boolean;
 
   public static fromObject(obj: any): Cryptocurrency {
     const inst = new Cryptocurrency();

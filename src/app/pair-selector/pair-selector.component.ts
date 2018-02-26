@@ -1,9 +1,8 @@
 import {
   Component, ViewChild, ElementRef, EventEmitter,
-  ViewChildren, QueryList, Output
+  ViewChildren, QueryList, Output, OnInit
 } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 
 import { AppService } from '../app.service';
@@ -19,7 +18,7 @@ import { Cryptocurrency } from '../cryptocurrency';
   styleUrls: ['./pair-selector.component.scss'],
   animations: [fadeInOut]
 })
-export class PairSelectorComponent {
+export class PairSelectorComponent implements OnInit {
   @ViewChild('pairTable') public pairTable: TableComponent;
   @ViewChild('submit') public submit: ElementRef;
   @ViewChild('pairForm') public pairForm: NgForm;
@@ -52,18 +51,24 @@ export class PairSelectorComponent {
         break;
       case 'stage2' :
       case 'stage3' :
-        arr = [{rows:this._allCoins}];
+        arr = [{
+          rows: this._allCoins
+            .filter(c => c.symbol !== this.model.coinA.symbol)
+        }];
         break;
     }
+    console.log('filtered sections', arr);
     return arr;
   }
+
+  public comparisons: any[] = [];
 
   private _userWallet: any[];
   private _allCoins: any[];
   private _loadedSymbols: string[];
   private _controlStatus: Subject<boolean> = new Subject();
 
-  private _state: string = 'stage1';
+  private _state = 'stage1';
   public get state(): string { return this._state; }
   public set state(val: string) {
     this._state = val;
@@ -110,18 +115,17 @@ export class PairSelectorComponent {
 
   constructor(
     private appService: AppService,
-    private cryptoService: CryptocurrencyService,
-    private router: Router,
-    private route: ActivatedRoute
+    private cryptoService: CryptocurrencyService
   ) { }
 
   ngOnInit() {
     this.appService.marketPairChanges.subscribe((symbols) => {
       this._loadedSymbols = symbols;
     });
-    this.cryptoService.getCurrencies().first()
+    this.cryptoService.getCurrencies()
       .subscribe((data) => {
-        this._userWallet = data.slice(0,5);
+        this._userWallet = data
+          .filter(c => c.local);
         this._allCoins = data;
 
         this.filteredRows = this.sections;
@@ -148,8 +152,19 @@ export class PairSelectorComponent {
   }
 
   onRowSelect(row) {
-    if (row && this.activeInputKey) {
-      this.model[this.activeInputKey] = row;
+    const { activeInputKey } = this;
+    if (row && activeInputKey) {
+      this.model[activeInputKey] = row;
+      if(activeInputKey === 'coinA') {
+        this.activeInputKey = 'coinB';
+
+        this.cryptoService.getCurrencyComparisons(row.symbol)
+          .subscribe(data => {
+            console.log('comparisons', data);
+            this.comparisons = [{rows: data}];
+          });
+
+      }
     }
   }
 
@@ -169,7 +184,7 @@ export class PairSelectorComponent {
 
   formatRow(row) {
     if (typeof row === 'object') {
-      return `${row.name.capitalize()} (${row.symbol.toUpperCase()})`
+      return `${row.name.capitalize()} (${row.symbol.toUpperCase()})`;
     } else if(typeof row === 'string') {
       return row;
     }
@@ -180,7 +195,7 @@ export class PairSelectorComponent {
     console.log(this.model);
     const a: string = this.model.coinA.symbol;
     const b: string = this.model.coinB.symbol;
-    this.router.navigate(['/trading', `${a}-${b}`]);
+    // this.router.navigate(['/trading', `${a}-${b}`]);
     this.active = false;
   }
 

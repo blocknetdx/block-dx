@@ -23,7 +23,8 @@
               (keyup.ArrowDown)="onArrowDown($event)"
               #coinA="ngModel" #input
               [ngModel]="formatRow(model.coinA)"
-              (ngModelChange)="filterCoins('coinA', $event)">
+              (ngModelChange)="filterCoins('coinA', $event)"
+              [readonly]="model && model.coinA && coinA.valid ? true : false">
               <div class="input-group-addon" [class.as-button]="coinA.valid">
                 <i *ngIf="!model.coinA" class="material-icons">search</i>
                 <a (click)="resetModel('coinA')" *ngIf="model.coinA"><i class="material-icons">close</i></a>
@@ -41,7 +42,8 @@
               [disabled]="!coinA.valid"
               #coinB="ngModel" #input
               [ngModel]="formatRow(model.coinB)"
-              (ngModelChange)="filterCoins('coinB', $event)">
+              (ngModelChange)="filterCoins('coinB', $event)"
+              [readonly]="model && model.coinB && coinB.valid ? true : false">
               <div class="input-group-addon" [class.as-button]="coinB.valid">
                 <i *ngIf="!model.coinB" class="material-icons">search</i>
                 <a (click)="resetModel('coinB')" *ngIf="model.coinB"><i class="material-icons">close</i></a>
@@ -58,7 +60,7 @@
     <app-table
       #pairTable
       [class.formValid]="pairForm.form.valid"
-      [sections]="filteredRows"
+      [sections]="(model.coinA && coinA.valid) ? comparisons : filteredRows"
       [selectable]="true"
       [deselectOnBlur]="false"
       (onRowSelect)="onRowSelect($event)">
