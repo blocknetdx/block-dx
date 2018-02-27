@@ -19,7 +19,8 @@ co(function*() {
     const filesToCopy = [
       'dist',
       'index.js',
-      'tos.txt'
+      'tos.txt',
+      'src-back'
     ];
 
     for(const file of filesToCopy) {
