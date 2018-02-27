@@ -3,6 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { WebSocketService } from './web-socket.service';
+import ipcRenderer = Electron.ipcRenderer;
 
 @Injectable()
 export class AppService {
@@ -10,6 +11,22 @@ export class AppService {
   public marketPairChanges: BehaviorSubject<string[]> = new BehaviorSubject(null);
 
   constructor(private wsService: WebSocketService) {
+    console.log('constructing AppService');
+
+    this.marketPairChanges = Observable.create(observer => {
+      try {
+
+        window.electron.ipcRenderer.on('keyPair', (e, pair) => {
+          observer.next(pair);
+        });
+
+        window.electron.ipcRenderer.send('getKeyPair');
+
+      } catch(err) {
+        console.error(err);
+      }
+    });
+
     // this.wsService.connect('wss://ws-feed.gdax.com')
     //   .subscribe((data) => {
     //     if (data.type) {
@@ -50,6 +67,7 @@ export class AppService {
   }
 
   public updateMarketPair(pair: string[]) {
-    this.marketPairChanges.next(pair);
+    window.electron.ipcRenderer.send('setKeyPair', pair);
+    // this.marketPairChanges.next(pair);
   }
 }

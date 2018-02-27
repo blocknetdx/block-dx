@@ -5,41 +5,41 @@
     <bn-card class="sidebar col-lg" [allowFullscreen]="false">
       <bn-card-title>Order Form</bn-card-title>
       <bn-card-body>
-        <orderform></orderform>
+        <app-orderform></app-orderform>
       </bn-card-body>
     </bn-card>
 
     <div class="content col-lg">
       <div class="trade_table row">
         <div class="trade_table__cell col-lg-6">
-          <pricechart></pricechart>
+          <app-pricechart></app-pricechart>
         </div>
 
         <bn-card class="trade_table__cell col-lg-2">
           <bn-card-title>Depth Chart</bn-card-title>
           <bn-card-body>
-            <depth></depth>
+            <app-depth></app-depth>
           </bn-card-body>
         </bn-card>
 
         <bn-card class="trade_table__cell col-lg-4">
           <bn-card-toolbar>
             <ng-template #toolbar>
-              <bn-select class="compact" 
+              <bn-select class="compact"
                 [options]="decimalOptions">
               </bn-select>
             </ng-template>
           </bn-card-toolbar>
           <bn-card-title>Order Book</bn-card-title>
           <bn-card-body>
-            <orderbook></orderbook>
+            <app-orderbook></app-orderbook>
           </bn-card-body>
         </bn-card>
 
-        <bn-tab-view class="trade_table__cell card orders col-lg-8">
+        <app-bn-tab-view class="trade_table__cell card orders col-lg-8">
           <bn-tab label="Open Orders">
             <ng-template #content>
-              <openorders></openorders>
+              <app-openorders></app-openorders>
             </ng-template>
           </bn-tab>
           <bn-tab label="Filled Orders">
@@ -47,12 +47,12 @@
               <bn-filled-orders></bn-filled-orders>
             </ng-template>
           </bn-tab>
-        </bn-tab-view>
+        </app-bn-tab-view>
 
         <bn-card class="trade_table__cell history col-lg-4">
           <bn-card-title>Trade History</bn-card-title>
           <bn-card-body>
-            <tradehistory></tradehistory>
+            <app-tradehistory></app-tradehistory>
           </bn-card-body>
         </bn-card>
 
@@ -66,30 +66,31 @@
   <div class="row" *isBp="['xs', 'sm', 'md']">
     <div class="col mobile-content">
       <div #trade>
-        <orderform></orderform>
+        <app-orderform></app-orderform>
       </div>
       <div class="book" #book>
-        <orderbook #orderbook></orderbook>
+        <app-orderbook #orderbook></app-orderbook>
       </div>
       <div #charts>
-        <bn-tab-view>
+        <app-bn-tab-view>
           <bn-tab label="Price Chart">
             <ng-template #content>
-              <pricechart></pricechart>
+              <!--<app-pricechart></app-pricechart>-->
             </ng-template>
           </bn-tab>
           <bn-tab label="Depth Chart">
             <ng-template #content>
-              <depth></depth>
+              <app-depth></app-depth>
             </ng-template>
           </bn-tab>
-        </bn-tab-view>
+        </app-bn-tab-view>
       </div>
+
       <div #orders>
-        <bn-tab-view>
+        <app-bn-tab-view>
           <bn-tab label="Open Orders">
             <ng-template #content>
-              <openorders></openorders>
+              <app-openorders></app-openorders>
             </ng-template>
           </bn-tab>
           <bn-tab label="Filled Orders">
@@ -97,10 +98,11 @@
               <bn-filled-orders></bn-filled-orders>
             </ng-template>
           </bn-tab>
-        </bn-tab-view>
+        </app-bn-tab-view>
       </div>
+
       <div #history>
-        <tradehistory></tradehistory>
+        <app-tradehistory></app-tradehistory>
       </div>
 
     </div>

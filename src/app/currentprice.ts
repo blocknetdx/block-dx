@@ -11,7 +11,7 @@ export class Currentprice {
   public get priceDiff(): number {
     const last = parseFloat(this.last);
     const open = parseFloat(this.open);
-    return (last/open) - 1;
+    return (last / open) - 1;
   }
 
   public get priceStatus(): string {
@@ -22,4 +22,4 @@ export class Currentprice {
     const inst = new Currentprice();
     return Object.assign(inst, obj);
   }
-};
+}

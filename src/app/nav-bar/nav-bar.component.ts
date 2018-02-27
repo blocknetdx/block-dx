@@ -26,15 +26,23 @@ export class NavBarComponent {
 
   ngOnInit() {
     this.appService.marketPairChanges.subscribe((symbols) => {
+      // console.log('symbols', symbols);
       this.symbols = symbols;
     });
     this.currentpriceService.currentprice.subscribe((cp) => {
+      // console.log('currentPrice', cp);
       this.currentPrice = cp;
     });
   }
 
   toggleNav() {
     this.navCollapsed = !this.navCollapsed;
+  }
+
+  openSettings(e) {
+    e.preventDefault();
+    window.electron.ipcRenderer.send('openSettings');
+    this.toggleNav();
   }
 
 }

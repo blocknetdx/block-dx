@@ -13,9 +13,8 @@ import { Currentprice } from './currentprice';
 export class CurrentpriceService {
   public currentprice: BehaviorSubject<Currentprice> = new BehaviorSubject(null);
 
-  private currentpriceUrl: string = '';  // URL to web api
-
   constructor(private http: Http, private appService: AppService) {
+    console.log('constructing CurrentpriceService');
     this.appService.marketPairChanges.subscribe((symbols) => {
       if (symbols) {
         this.getCurrentprice(symbols).first().subscribe((cp) => {
@@ -26,17 +25,30 @@ export class CurrentpriceService {
   }
 
   private getCurrentprice(symbols:string[]): Observable<Currentprice> {
-    this.currentpriceUrl = 'api/stats_' + symbols[0];
 
-    return this.http.get(this.currentpriceUrl)
-      .map((res) => {
-        const data = res.json().map(d => {
-          return Currentprice.fromObject(d);
+    // ToDo Connect currentprice.service to data API
+
+    return Observable.create(observer => {
+
+      // window.electron.ipcRenderer.on('orderHistory', (e, orders) => {
+      //   const preppedOrders = orders
+      //     .sort((a, b) => a.time.localeCompare(b.time))
+      //     .map(order => Object.assign(order, {last: order.close}))
+      //     .map(Currentprice.fromObject);
+      //   observer.next(preppedOrders[preppedOrders.length - 1]);
+      // });
+      // window.electron.ipcRenderer.send('getOrderHistory');
+
+      window.electron.ipcRenderer.on('currentPrice', (e, order) => {
+        const preppedOrder = Object.assign({}, order, {
+          last: order.close
         });
-        return data[0];
-      })
-      .debounceTime(5000)
-      .catch(this.handleError);
+        observer.next(Currentprice.fromObject(preppedOrder));
+      });
+      window.electron.ipcRenderer.send('getCurrentPrice');
+
+    });
+
   }
 
   private handleError(error: any): Promise<any> {

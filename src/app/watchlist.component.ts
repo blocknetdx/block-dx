@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'watchlist',
+  selector: 'app-watchlist',
   templateUrl: './watchlist.component.html',
   // styleUrls: ['./open-orders.component.scss']
 })

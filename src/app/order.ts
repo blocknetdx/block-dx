@@ -7,4 +7,5 @@ export class Order {
     const inst = new Order();
     return Object.assign(inst, obj);
   }
-};
+
+}

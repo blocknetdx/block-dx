@@ -8,8 +8,10 @@
       "root": "src",
       "outDir": "dist",
       "assets": [
+        "amcharts",
         "assets",
-        "favicon.ico"
+        "favicon.ico",
+        "settings.html"
       ],
       "index": "index.html",
       "main": "main.ts",
@@ -20,18 +22,18 @@
       "prefix": "bn",
       "styles": [
         "styles/main.scss",
-        "assets/amcharts/plugins/export/export.css"
+        "amcharts/plugins/export/export.css"
       ],
       "scripts": [
         "../node_modules/jquery/dist/jquery.min.js",
         "assets/charting_library/charting_library.min.js",
         "assets/charting_library/datafeed/udf/datafeed.js",
-        "assets/amcharts/amcharts.js",
-        "assets/amcharts/serial.js",
-        "assets/amcharts/plugins/dataloader/dataloader.min.js",
-        "assets/amcharts/plugins/export/export.min.js",
-        "assets/amcharts/themes/dark.js",
-        "assets/amcharts/plugins/responsive/responsive.min.js",
+        "amcharts/amcharts.js",
+        "amcharts/serial.js",
+        "amcharts/plugins/dataloader/dataloader.min.js",
+        "amcharts/plugins/export/export.min.js",
+        "amcharts/themes/dark.js",
+        "amcharts/plugins/responsive/responsive.min.js",
         "scripts/main.js"
       ],
       "environmentSource": "environments/environment.ts",

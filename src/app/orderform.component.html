@@ -1,4 +1,4 @@
-<bn-tab-view #tabView>
+<app-bn-tab-view #tabView>
   <bn-tab label="Buy">
     <ng-template #content>
       <ng-container *ngTemplateOutlet="formTemplate; context: {type: 'buy'}"></ng-container>
@@ -9,7 +9,7 @@
       <ng-container *ngTemplateOutlet="formTemplate; context: {type: 'sell'}"></ng-container>
     </ng-template>
   </bn-tab>
-</bn-tab-view>
+</app-bn-tab-view>
 
 <ng-template #formTemplate let-type="type">
   <form (ngSubmit)="onOrderSubmit()" #orderForm="ngForm" id="market_order">
@@ -27,10 +27,11 @@
       <label class="col-4 col-form-label" for="amount">Amount</label>
       <div class="col-8">
         <input (keyup)="calcPrice($event)"
-          [(ngModel)]="model.amount"
+          value="{{formatNumber(model.amount,symbols[0])}}"
           class="form-control" name="amount" id="amount"
           type="number" step="0.00000001" pattern="\d*" inputmode="numeric"
-          placeholder="{{formatNumber(0,symbols[0])}}" />
+          placeholder="{{formatNumber(0,symbols[0])}}"
+          readonly />
         <span class="input-group-addon">{{symbols[0]}}</span>
       </div>
     </div>
@@ -53,18 +54,31 @@
           name="total" id="total_calc" type="number"
           step="0.00000001" pattern="\d*" inputmode="numeric"
           placeholder="{{formatNumber(0,symbols[1])}}"
-          value="{{formatNumber(totalPrice,symbols[1])}}" />
+          value="{{formatNumber(model.totalPrice,symbols[1])}}"
+          readonly />
         <span class="input-group-addon">{{symbols[1]}}</span>
       </div>
     </div>
     <span class="spacer"></span>
 
     <div class="input-group row">
-      <button type="submit">
-        <i *ngIf="type == 'buy'" class="material-icons">add</i>
-        <i *ngIf="type == 'sell'" class="material-icons">remove</i>
-        {{selectedOrderType}} {{type}}
+
+      <!--<button type="submit">-->
+        <!--<i *ngIf="type == 'buy'" class="material-icons">add</i>-->
+        <!--<i *ngIf="type == 'sell'" class="material-icons">remove</i>-->
+        <!--{{selectedOrderType}} {{type}}-->
+      <!--</button>-->
+
+      <button *ngIf="type == 'buy'" type="submit" [disabled]="model.id ? false : true">
+        <i class="material-icons">add</i>
+        Accept Order
       </button>
+
+      <button *ngIf="type == 'sell'" type="submit" [disabled]="model.id ? false : true">
+        <i class="material-icons">remove</i>
+        Accept Order
+      </button>
+
     </div>
   </form>
 </ng-template>

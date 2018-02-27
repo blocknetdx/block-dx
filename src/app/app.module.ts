@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpModule }    from '@angular/http';
-import { RouterModule }   from '@angular/router';
+import { HttpModule } from '@angular/http';
+import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { LayoutModule } from '@angular/cdk/layout';
 import { DecimalPipe } from '@angular/common';
@@ -10,11 +10,12 @@ import { FormsModule } from '@angular/forms';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
+import { TradehistoryService } from './tradehistory.service';
 
 // Imports for loading & configuring the in-memory web api
 import { environment } from '../environments/environment';
 import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
-import { InMemoryDataService }  from './in-memory-data.service';
+import { InMemoryDataService } from './in-memory-data.service';
 
 import { AppComponent } from './app.component';
 import { AppService } from './app.service';
@@ -27,11 +28,10 @@ import { OrderformComponent } from './orderform.component';
 import { OrderbookComponent } from './orderbook.component';
 import { DepthchartComponent } from './depthchart.component';
 import { DepthComponent } from './depth.component';
-import { SwitcherComponent } from './switcher.component';
 import { MainviewComponent } from './mainview.component';
 import { WatchlistComponent } from './watchlist.component';
 
-import { AppRoutingModule }     from './app-routing.module';
+import { AppRoutingModule } from './app-routing.module';
 import { BreakpointService } from './breakpoint.service';
 import { CurrentpriceService } from './currentprice.service';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
@@ -44,7 +44,7 @@ import { TableColumnDirective } from './table/table-column.directive';
 import { TableColumnHeaderDirective } from './table/table-column-header.directive';
 import { TableColumnCellDirective } from './table/table-column-cell.directive';
 import { PairSelectorComponent } from './pair-selector/pair-selector.component';
-import { ValidCoinDirective } from './pair-selector/valid-coin.directive';
+// import { ValidCoinDirective } from './pair-selector/valid-coin.directive';
 import { CryptocurrencyService } from './cryptocurrency.service';
 import { SelectComponent } from './select/select.component';
 import { OrderbookService } from './orderbook.service';
@@ -81,7 +81,6 @@ const dev = environment.useMockAPI ? [
     OrderbookComponent,
     OrderformComponent,
     PricechartComponent,
-    SwitcherComponent,
     TradehistoryComponent,
     WatchlistComponent,
     NavBarComponent,
@@ -94,7 +93,7 @@ const dev = environment.useMockAPI ? [
     TableColumnHeaderDirective,
     TableColumnCellDirective,
     PairSelectorComponent,
-    ValidCoinDirective,
+    // ValidCoinDirective,
     SelectComponent,
     TimeAgoPipe,
     CardComponent,
@@ -130,6 +129,7 @@ const dev = environment.useMockAPI ? [
     OrderbookService,
     WebSocketService,
     CryptocurrencyService,
+    TradehistoryService,
     {
       provide: PERFECT_SCROLLBAR_CONFIG,
       useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
