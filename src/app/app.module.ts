@@ -44,7 +44,7 @@ import { TableColumnDirective } from './table/table-column.directive';
 import { TableColumnHeaderDirective } from './table/table-column-header.directive';
 import { TableColumnCellDirective } from './table/table-column-cell.directive';
 import { PairSelectorComponent } from './pair-selector/pair-selector.component';
-import { ValidCoinDirective } from './pair-selector/valid-coin.directive';
+// import { ValidCoinDirective } from './pair-selector/valid-coin.directive';
 import { CryptocurrencyService } from './cryptocurrency.service';
 import { SelectComponent } from './select/select.component';
 import { OrderbookService } from './orderbook.service';
@@ -93,7 +93,7 @@ const dev = environment.useMockAPI ? [
     TableColumnHeaderDirective,
     TableColumnCellDirective,
     PairSelectorComponent,
-    ValidCoinDirective,
+    // ValidCoinDirective,
     SelectComponent,
     TimeAgoPipe,
     CardComponent,

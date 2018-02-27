@@ -18,14 +18,12 @@
               <input name="coinA" type="text"
               required placeholder="Select first coin"
               tabindex="1" autocomplete="off"
-              validCoin
-              (focus)="activeInputKey = 'coinA'"
               (keyup.ArrowDown)="onArrowDown($event)"
               #coinA="ngModel" #input
               [ngModel]="formatRow(model.coinA)"
               (ngModelChange)="filterCoins('coinA', $event)"
-              [readonly]="model && model.coinA && coinA.valid ? true : false">
-              <div class="input-group-addon" [class.as-button]="coinA.valid">
+              [readonly]="(model && model.coinA && coinAValid) ? true : false">
+              <div class="input-group-addon" [class.as-button]="coinAValid">
                 <i *ngIf="!model.coinA" class="material-icons">search</i>
                 <a (click)="resetModel('coinA')" *ngIf="model.coinA"><i class="material-icons">close</i></a>
               </div>
@@ -36,22 +34,20 @@
               <input name="coinB" type="text"
               required placeholder="second coin"
               tabindex="2" autocomplete="off"
-              validCoin
-              (focus)="activeInputKey = 'coinB'"
               (keyup.ArrowDown)="onArrowDown($event)"
-              [disabled]="!coinA.valid"
+              [disabled]="!coinAValid"
               #coinB="ngModel" #input
               [ngModel]="formatRow(model.coinB)"
               (ngModelChange)="filterCoins('coinB', $event)"
-              [readonly]="model && model.coinB && coinB.valid ? true : false">
-              <div class="input-group-addon" [class.as-button]="coinB.valid">
+              [readonly]="coinBValid ? true : false">
+              <div class="input-group-addon" [class.as-button]="coinBValid">
                 <i *ngIf="!model.coinB" class="material-icons">search</i>
                 <a (click)="resetModel('coinB')" *ngIf="model.coinB"><i class="material-icons">close</i></a>
               </div>
             </div>
           </div>
           <div class="col-md-4 d-none d-md-block">
-            <button #submit tabindex="0" type="submit" [disabled]="!pairForm.form.valid">Select</button>
+            <button #submit tabindex="0" type="submit" [disabled]="!(coinAValid && coinBValid)">Select</button>
           </div>
         </div>
       </form>
@@ -60,12 +56,12 @@
     <app-table
       #pairTable
       [class.formValid]="pairForm.form.valid"
-      [sections]="(model.coinA && coinA.valid) ? comparisons : filteredRows"
+      [sections]="(coinAValid) ? filteredComparisons : filteredRows"
       [selectable]="true"
       [deselectOnBlur]="false"
       (onRowSelect)="onRowSelect($event)">
 
-      <bn-table-info *ngIf="model.coinA && coinA.valid">
+      <bn-table-info *ngIf="coinAValid">
         <ng-template #tableInfo>
           <div class="row first-coin-info">
             <div class="col-4 align-left uppercase"><b>{{formatRow(model.coinA)}}</b></div>
@@ -84,7 +80,7 @@
         <ng-template columnHeader>Coin</ng-template>
         <ng-template let-row="row" columnCell>
           <span class="coin-cell">
-            <b><span *ngIf="model.coinA && coinA.valid">{{model.coinA.symbol}}/</span>{{row.symbol}}</b>
+            <b><span *ngIf="coinAValid">{{model.coinA.symbol}}/</span>{{row.symbol}}</b>
           </span>
         </ng-template>
       </app-table-column>

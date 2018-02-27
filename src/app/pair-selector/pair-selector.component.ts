@@ -35,10 +35,13 @@ export class PairSelectorComponent implements OnInit {
   }
 
   public filteredRows: any[];
-  public model: {coinA?: any, coinB?: any};
-  public activeInputKey: string;
+  public model: {coinA?: any, coinB?: any} = {coinA: '', coinB: ''};
+  public activeInputKey = 'coinA';
   public coinASuggest: string;
   public coinBSuggest: string;
+
+  private coinAValid = false;
+  private coinBValid = false;
 
   public get sections(): any[] {
     let arr;
@@ -61,6 +64,7 @@ export class PairSelectorComponent implements OnInit {
   }
 
   public comparisons: any[] = [];
+  public filteredComparisons: any[] = [];
 
   private _userWallet: any[];
   private _allCoins: any[];
@@ -80,34 +84,61 @@ export class PairSelectorComponent implements OnInit {
     this.model = {};
     if (val) {
       setTimeout(() => {
-        Object.keys(this.pairForm.controls).forEach((key) => {
-          const control = this.pairForm.controls[key];
-          control.statusChanges.takeUntil(this._controlStatus)
-            .subscribe((status) => {
-              if (status === 'VALID') {
-                if (key === 'coinA') {
-                  this.state = 'stage2';
-                  this.filteredRows = this.sections;
-                  this.pairTable.rowSelected(null);
-                  setTimeout(() => {
-                    this.inputs.last.nativeElement.focus();
-                  });
-                } else if (key === 'coinB') {
-                  this.state = 'stage3';
-                  setTimeout(() => {
-                    this.submit.nativeElement.focus();
-                  });
-                }
-              }
-            });
-        });
         this.pairTable.sort(this.pairTable.columns[3]);
         this.inputs.first.nativeElement.focus();
-      });
+
+        /*console.log(this.inputs);
+        debugger;
+        Object.keys(this.pairForm.controls).forEach((key) => {
+          if(key === 'coinA' && this.coinAValid) {
+            this.state = 'stage2';
+            this.filteredRows = this.sections;
+            this.pairTable.rowSelected(null);
+            setTimeout(() => {
+              console.log(this.inputs[1]);
+              this.inputs._results[1].focus();
+              // this.inputs.last.nativeElement.focus();
+            }, 100);
+          } else if (key === 'coinB' && this.coinBValid) {
+            this.state = 'stage3';
+            setTimeout(() => {
+              this.submit.nativeElement.focus();
+            }, 0);
+          }
+        });*/
+      }, 0);
+
+      // setTimeout(() => {
+      //   Object.keys(this.pairForm.controls).forEach((key) => {
+      //     const control = this.pairForm.controls[key];
+      //     control.statusChanges.takeUntil(this._controlStatus)
+      //       .subscribe((status) => {
+      //         if (status === 'VALID') {
+      //           if (key === 'coinA') {
+      //             this.state = 'stage2';
+      //             this.filteredRows = this.sections;
+      //             this.pairTable.rowSelected(null);
+      //             setTimeout(() => {
+      //               this.inputs.last.nativeElement.focus();
+      //             });
+      //           } else if (key === 'coinB') {
+      //             this.state = 'stage3';
+      //             setTimeout(() => {
+      //               this.submit.nativeElement.focus();
+      //             });
+      //           }
+      //         }
+      //       });
+      //   });
+      //   this.pairTable.sort(this.pairTable.columns[3]);
+      //   this.inputs.first.nativeElement.focus();
+      // });
     } else {
       this.state = 'stage1';
       this._controlStatus.next(true);
       this.filterCoins('coinA', '');
+      this.filterCoins('coinB', '');
+      this.resetModel('coinA');
     }
     this.onActiveStatus.emit(val);
   }
@@ -133,16 +164,39 @@ export class PairSelectorComponent implements OnInit {
 
   filterCoins(key: string, val: string) {
     this.model[key] = val;
+    if(key === 'coinA') {
 
-    this.filteredRows = this.sections.map((section) => {
-      section.rows = section.rows.filter((row) => {
-        if (val.length <= 0) return true;
-        const coinIdx = row.symbol.toLowerCase().indexOf(val.toLowerCase());
-        const currencyIdx = row.name.toLowerCase().indexOf(val.toLowerCase());
-        return coinIdx >= 0 || currencyIdx >= 0;
+      // this.filteredRows = this.sections.map((section) => {
+      //   section.rows = section.rows.filter((row) => {
+      //     if (val.length <= 0) return true;
+      //     const coinIdx = row.symbol.toLowerCase().indexOf(val.toLowerCase());
+      //     const currencyIdx = row.name.toLowerCase().indexOf(val.toLowerCase());
+      //     return coinIdx >= 0 || currencyIdx >= 0;
+      //   });
+      //   return section;
+      // });
+      this.filteredRows = this.sections.map((section) => {
+        return Object.assign({}, section, {
+          rows: section.rows.filter(row => {
+            if (val.length <= 0) return true;
+            const coinIdx = row.symbol.toLowerCase().indexOf(val.toLowerCase());
+            const currencyIdx = row.name.toLowerCase().indexOf(val.toLowerCase());
+            return coinIdx >= 0 || currencyIdx >= 0;
+          })
+        });
       });
-      return section;
-    });
+    } else if(key === 'coinB') {
+      this.filteredComparisons = this.comparisons.map((section) => {
+        return Object.assign({}, section, {
+          rows: section.rows.filter((row) => {
+            if (val.length <= 0) return true;
+            const coinIdx = row.symbol.toLowerCase().indexOf(val.toLowerCase());
+            const currencyIdx = row.name.toLowerCase().indexOf(val.toLowerCase());
+            return coinIdx >= 0 || currencyIdx >= 0;
+          })
+        });
+      });
+    }
   }
 
   onArrowDown(e) {
@@ -154,14 +208,19 @@ export class PairSelectorComponent implements OnInit {
     const { activeInputKey } = this;
     if (row && activeInputKey) {
       this.model[activeInputKey] = row;
+      this[activeInputKey + 'Valid'] = true;
       if(activeInputKey === 'coinA') {
         this.activeInputKey = 'coinB';
-
         this.cryptoService.getCurrencyComparisons(row.symbol)
+          // .first()
           .subscribe(data => {
             this.comparisons = [{rows: data}];
+            this.filteredComparisons = this.comparisons;
+            setTimeout(() => {
+              this.inputs.last.nativeElement.click();
+              setTimeout(() => this.inputs.last.nativeElement.focus(), 0);
+            }, 0);
           });
-
       }
     }
   }
@@ -169,10 +228,14 @@ export class PairSelectorComponent implements OnInit {
   resetModel(coin) {
     if (coin === 'coinA') {
       this.model = {};
-      this.inputs.first.nativeElement.focus();
       this.state = 'stage1';
+      this.activeInputKey = 'coinA';
+      this.coinAValid = false;
+      this.coinBValid = false;
+      this.inputs.first.nativeElement.focus();
     } else if (coin === 'coinB') {
       this.model.coinB = '';
+      this.coinBValid = false;
       this.inputs.last.nativeElement.focus();
       this.state = 'stage2';
     }
@@ -190,7 +253,7 @@ export class PairSelectorComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.model);
+    // console.log(this.model);
     const a: string = this.model.coinA.symbol;
     const b: string = this.model.coinB.symbol;
     // this.router.navigate(['/trading', `${a}-${b}`]);
