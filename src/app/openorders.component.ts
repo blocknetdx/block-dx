@@ -1,4 +1,4 @@
-import { Component, Input, TemplateRef, ViewChild, OnInit } from '@angular/core';
+import { Component, Input, TemplateRef, ViewChild, OnInit, NgZone } from '@angular/core';
 
 import { BaseComponent } from './base.component';
 import { AppService } from './app.service';
@@ -24,7 +24,8 @@ export class OpenordersComponent extends BaseComponent implements OnInit {
   constructor(
     private appService: AppService,
     private openorderService: OpenordersService,
-    private breakpointService: BreakpointService
+    private breakpointService: BreakpointService,
+    private zone: NgZone
   ) { super(); }
 
   ngOnInit() {
@@ -32,38 +33,38 @@ export class OpenordersComponent extends BaseComponent implements OnInit {
     this.appService.marketPairChanges
       // .takeUntil(this.$destroy)
       .subscribe((symbols) => {
-        if(symbols) {
-          this.symbols = symbols;
-        }
-        // if (symbols) {
-        //   this.openorderService.getOpenorders(this.symbols)
-        //     .then((openorders) => {
-        //       this.openorders = openorders.map((o) => {
-        //         o['row_class'] = o.side;
-        //         return o;
-        //       });
-        //     });
-        // }
+        this.zone.run(() => {
+          if(symbols) {
+            this.symbols = symbols;
+          }
+        });
     });
 
     this.openorderService.getOpenorders()
       .subscribe(openorders => {
-        this.openorders = openorders
-          .filter(o => o.status === 'open')
-          .map((o) => {
-            o['row_class'] = o.side;
-            return o;
-          });
+        this.zone.run(() => {
+          this.openorders = openorders
+            .filter(o => o.status === 'open')
+            .map((o) => {
+              o['row_class'] = o.side;
+              return o;
+            });
+        });
       });
 
     this.breakpointService.breakpointChanges.first()
       .subscribe((bp) => {
-        this.selectable = ['xs', 'sm'].includes(bp);
+        this.zone.run(() => {
+          this.selectable = ['xs', 'sm'].includes(bp);
+        });
       });
   }
 
   cancelOrder(order) {
+    const { electron } = window;
     order.canceled = true;
     order['row_class'] = 'canceled';
+    electron.ipcRenderer
+      .send('cancelOrder', order.id);
   }
 }

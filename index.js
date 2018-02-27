@@ -356,6 +356,17 @@ const openAppWindow = () => {
   };
   ipcMain.on('getCurrencyComparisons', (e, primary) => sendCurrencyComparisons(primary));
 
+  ipcMain.on('cancelOrder', (e, id) => {
+    sn.dxCancelOrder(id)
+      .then(res => {
+        appWindow.send('orderCancelled', res.id);
+        setTimeout(() => {
+          sendMyOrders(true);
+        }, 1000);
+      })
+      .catch(handleError);
+  });
+
   ipcMain.on('setKeyPair', (e, pair) => {
     keyPair = pair;
     sendKeyPair();
