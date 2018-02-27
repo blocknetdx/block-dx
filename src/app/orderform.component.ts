@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild, OnInit } from '@angular/core';
+import { Component, Input, ViewChild, OnInit, NgZone } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 
 import { AppService } from './app.service';
@@ -28,7 +28,8 @@ export class OrderformComponent implements OnInit {
     private decimalPipe: DecimalPipe,
     private appService: AppService,
     private currentpriceService: CurrentpriceService,
-    private orderbookService: OrderbookService
+    private orderbookService: OrderbookService,
+    private zone: NgZone
   ) { }
 
   ngOnInit() {
@@ -43,9 +44,15 @@ export class OrderformComponent implements OnInit {
 
     this.orderbookService.requestedOrder
       .subscribe((order) => {
-        const tabIndex = order[4] === 'ask' ? 0 : 1;
-        this.tabView.activeTab = this.tabView.tabs[tabIndex];
-        this.model.amount = order[1];
+        this.zone.run(() => {
+          const tabIndex = order[4] === 'ask' ? 0 : 1;
+          this.tabView.activeTab = this.tabView.tabs[tabIndex];
+          this.model = {
+            id: order[2],
+            amount: order[1],
+            totalPrice: order[0] * order[1]
+          };
+        });
       });
 
     this.orderTypes = [
@@ -66,6 +73,7 @@ export class OrderformComponent implements OnInit {
   }
 
   onOrderSubmit() {
-
+    console.log('Submit order', this.model);
+    this.model = {};
   }
 }
