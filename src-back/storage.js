@@ -25,19 +25,27 @@ class SimpleStorage {
     }
   }
 
+  saveDataSync() {
+    fs.writeJsonSync(this._dataFilePath, this._data);
+  }
+
   getItem(key) {
     const item = this._data[key];
     if(!item) return item;
     return cloneDeep(item);
   }
 
-  setItem(key, val) {
+  setItem(key, val, saveSync) {
     if(!val) {
       this._data[key] = val;
     } else {
       this._data[key] = cloneDeep(val);
     }
-    this.saveData();
+    if(saveSync) {
+      this.saveDataSync();
+    } else {
+      this.saveData();
+    }
     return val;
   }
 
