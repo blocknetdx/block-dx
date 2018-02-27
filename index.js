@@ -55,13 +55,12 @@ const openSettingsWindow = (options = {}) => {
   ipcMain.on('getUser', e => {
     e.returnValue = storage.getItem('user') || '';
   });
-  ipcMain.on('saveData', async function(e, items) {
+  ipcMain.on('saveData', (e, items) => {
     try {
       for(const key of Object.keys(items)) {
         const value = items[key];
         if(key === 'password' && !value && storage.getItem('password')) continue;
-        storage.setItem(key, value);
-        await new Promise(resolve => setTimeout(resolve, 100));
+        storage.setItem(key, value, true);
       }
       e.sender.send('dataSaved');
     } catch(err) {
@@ -387,7 +386,7 @@ const openTOSWindow = () => {
 
   ipcMain.on('getTOS', e => {
     try {
-      const text = fs.readFileSync('tos.txt', 'utf8');
+      const text = fs.readFileSync(path.join(__dirname, 'tos.txt'), 'utf8');
       e.returnValue = text;
     } catch(err) {
       console.error(err);
