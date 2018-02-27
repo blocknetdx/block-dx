@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, NgZone } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import 'rxjs/add/operator/map';
 
@@ -26,62 +26,48 @@ export class OrderbookComponent implements OnInit {
     private appService: AppService,
     private decimalPipe:DecimalPipe,
     private orderbookService: OrderbookService,
-    private tradehistoryService: TradehistoryService
+    private tradehistoryService: TradehistoryService,
+    private zone: NgZone
   ) { }
 
   ngOnInit(): void {
+
+    const { zone } = this;
+
     this.appService.marketPairChanges.subscribe((symbols) => {
-      this.symbols = symbols;
-      // if (symbols) {
-      //   this.orderbookService.getOrderbook()
-      //     .subscribe(orderbook => {
-      //       const asks = orderbook.asks.sort((a,b) => {
-      //         if (a[0] < b[0]) return 1;
-      //         if (a[0] > b[0]) return -1;
-      //         return 0;
-      //       });
-      //       const bids = orderbook.bids.sort((a,b) => {
-      //         if (a[0] < b[0]) return -1;
-      //         if (a[0] > b[0]) return 1;
-      //         return 0;
-      //       });
-      //
-      //       this.sections = [
-      //         {rows: asks},
-      //         {rows: bids}
-      //       ];
-      //
-      //       this.orderbookTable.scrollToMiddle();
-      //     });
-      // }
+      zone.run(() => {
+        this.symbols = symbols;
+      });
     });
     this.orderbookService.getOrderbook()
       // .first()
       .subscribe(orderbook => {
-        const asks = orderbook.asks.sort((a,b) => {
-          if (a[0] < b[0]) return 1;
-          if (a[0] > b[0]) return -1;
-          return 0;
-        });
-        const bids = orderbook.bids.sort((a,b) => {
-          if (a[0] < b[0]) return -1;
-          if (a[0] > b[0]) return 1;
-          return 0;
-        });
+        zone.run(() => {
+          const asks = orderbook.asks.sort((a,b) => {
+            if (a[0] < b[0]) return 1;
+            if (a[0] > b[0]) return -1;
+            return 0;
+          });
+          const bids = orderbook.bids.sort((a,b) => {
+            if (a[0] < b[0]) return -1;
+            if (a[0] > b[0]) return 1;
+            return 0;
+          });
 
-        this.sections = [
-          {rows: asks},
-          {rows: bids}
-        ];
-
-        this.orderbookTable.scrollToMiddle();
+          this.sections = [
+            {rows: asks},
+            {rows: bids}
+          ];
+          this.orderbookTable.scrollToMiddle();
+        });
       });
     this.tradehistoryService.getTradehistory()
       .subscribe(tradehistory => {
-        const trades = [...tradehistory]
-          .sort((a, b) => a.time.localeCompare(b.time));
-        const lastTrade = trades[trades.length - 1];
-        // console.log('lastTrade', lastTrade);
+        zone.run(() => {
+          const trades = [...tradehistory]
+            .sort((a, b) => a.time.localeCompare(b.time));
+          const lastTrade = trades[trades.length - 1];
+        });
       });
   }
 

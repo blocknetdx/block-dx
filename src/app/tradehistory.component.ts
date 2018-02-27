@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, NgZone } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 
 import { AppService } from './app.service';
@@ -18,18 +18,22 @@ export class TradehistoryComponent implements OnInit {
 
   constructor(
     private appService: AppService,
-    private tradehistoryService: TradehistoryService
+    private tradehistoryService: TradehistoryService,
+    private zone: NgZone
   ) {}
 
   ngOnInit() {
+    const { zone } = this;
     this.appService.marketPairChanges.subscribe((symbols) => {
-      this.symbols = symbols;
-      if (symbols) {
-        this.tradehistoryService.getTradehistory()
-          .subscribe(tradehistory => {
-            this.tradehistory = tradehistory;
-          });
-      }
+      zone.run(() => {
+        this.symbols = symbols;
+      });
     });
+    this.tradehistoryService.getTradehistory()
+      .subscribe(tradehistory => {
+        zone.run(() => {
+          this.tradehistory = tradehistory;
+        });
+      });
   }
 }
