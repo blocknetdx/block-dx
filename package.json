@@ -1,9 +1,9 @@
 {
-  "name": "blocknet-ui",
+  "name": "BlockDX",
   "version": "0.0.0",
   "license": "MIT",
   "author": "blocknet <something@something.com>",
-  "description": "blocknet",
+  "description": "BlockDX",
   "contributors": [
     {
       "name": "Corey Roach",
@@ -92,8 +92,8 @@
   "build": {
     "electronVersion": "1.7.9",
     "appId": "com.blocknet.client",
-    "productName": "blocknet",
-    "copyright": "Copyright © 2018 by blocknet,",
+    "productName": "BlockDX",
+    "copyright": "Copyright © 2018 by Blocknet,",
     "directories": {
       "app": "temp",
       "output": "dist-native"
@@ -118,11 +118,11 @@
     "linux": {
       "target": "deb",
       "icon": "./src/assets/linux_icons/",
-      "synopsis": "Copyright 2018 by blocknet.",
-      "description": "Copyright 2018 blocknet.",
+      "synopsis": "Copyright 2018 by Blocknet.",
+      "description": "Copyright 2018 Blocknet.",
       "category": "Other",
       "desktop": {
-        "Name": "blocknet"
+        "Name": "BlockDX"
       }
     }
   }
