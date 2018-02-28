@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 
 import { BaseComponent } from '../base.component';
 import { AppService } from '../app.service';
@@ -16,7 +16,8 @@ export class FilledOrdersComponent extends BaseComponent implements OnInit {
 
   constructor(
     private appService: AppService,
-    private openorderService: OpenordersService
+    private openorderService: OpenordersService,
+    private zone: NgZone
   ) { super(); }
 
   ngOnInit() {
@@ -36,13 +37,15 @@ export class FilledOrdersComponent extends BaseComponent implements OnInit {
     //   });
     this.openorderService.getOpenorders()
       .subscribe(openorders => {
-        this.filledorders = openorders
-          .filter(o => o.settled)
-          .map((o) => {
-            o['row_class'] = o.side;
-            return o;
-          });
-        console.log('filledorders', this.filledorders);
+        this.zone.run(() => {
+          this.filledorders = openorders
+            .filter(o => o.settled)
+            .map((o) => {
+              o['row_class'] = o.side;
+              return o;
+            });
+          console.log('filledorders', this.filledorders);
+        });
       });
   }
 }

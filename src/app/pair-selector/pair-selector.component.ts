@@ -1,6 +1,6 @@
 import {
   Component, ViewChild, ElementRef, EventEmitter,
-  ViewChildren, QueryList, Output, OnInit
+  ViewChildren, QueryList, Output, OnInit, NgZone
 } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Subject } from 'rxjs/Subject';
@@ -145,20 +145,25 @@ export class PairSelectorComponent implements OnInit {
 
   constructor(
     private appService: AppService,
-    private cryptoService: CryptocurrencyService
+    private cryptoService: CryptocurrencyService,
+    private zone: NgZone
   ) { }
 
   ngOnInit() {
     this.appService.marketPairChanges.subscribe((symbols) => {
-      this._loadedSymbols = symbols;
+      this.zone.run(() => {
+        this._loadedSymbols = symbols;
+      });
     });
     this.cryptoService.getCurrencies()
       .subscribe((data) => {
-        this._userWallet = data
-          .filter(c => c.local);
-        this._allCoins = data;
+        this.zone.run(() => {
+          this._userWallet = data
+            .filter(c => c.local);
+          this._allCoins = data;
 
-        this.filteredRows = this.sections;
+          this.filteredRows = this.sections;
+        });
       });
   }
 
@@ -214,12 +219,14 @@ export class PairSelectorComponent implements OnInit {
         this.cryptoService.getCurrencyComparisons(row.symbol)
           // .first()
           .subscribe(data => {
-            this.comparisons = [{rows: data}];
-            this.filteredComparisons = this.comparisons;
-            setTimeout(() => {
-              this.inputs.last.nativeElement.click();
-              setTimeout(() => this.inputs.last.nativeElement.focus(), 0);
-            }, 0);
+            this.zone.run(() => {
+              this.comparisons = [{rows: data}];
+              this.filteredComparisons = this.comparisons;
+              setTimeout(() => {
+                // this.inputs.last.nativeElement.click();
+                setTimeout(() => this.inputs.last.nativeElement.focus(), 0);
+              }, 0);
+            });
           });
       }
     }

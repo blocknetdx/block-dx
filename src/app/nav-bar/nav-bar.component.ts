@@ -1,4 +1,4 @@
-import { Component, Input, ViewEncapsulation } from '@angular/core';
+import { Component, Input, ViewEncapsulation, OnInit } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 
 import { AppService } from '../app.service';
@@ -11,7 +11,7 @@ import { CurrentpriceService } from '../currentprice.service';
   styleUrls: ['./nav-bar.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class NavBarComponent {
+export class NavBarComponent implements OnInit {
   public symbols: string[];
   public currentPrice: Currentprice;
 
