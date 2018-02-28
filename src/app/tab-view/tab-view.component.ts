@@ -70,7 +70,7 @@ export class TabViewComponent implements AfterContentInit {
 
     return {
       'width': `${Math.ceil(rect.width)}px`,
-      'left': `${Math.floor(rect.x-parentRect.x)}px`
+      'left': `${Math.floor(rect.left - parentRect.left)}px`
     };
   }
 
