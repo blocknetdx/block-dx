@@ -370,6 +370,22 @@ const openAppWindow = () => {
   };
   ipcMain.on('getCurrencyComparisons', (e, primary) => sendCurrencyComparisons(primary));
 
+  ipcMain.on('saveAddress', (e, key, address) => {
+    try {
+      const addresses = storage.getItem('addresses');
+      storage.setItem('addresses', Object.assign({}, addresses, {
+        [key]: address
+      }));
+    } catch(err) {
+      handleError(err);
+    }
+  });
+
+  ipcMain.on('getAddressesSync', e => {
+    const addresses = storage.getItem('addresses');
+    e.returnValue = addresses;
+  });
+
   ipcMain.on('cancelOrder', (e, id) => {
     sn.dxCancelOrder(id)
       .then(res => {
@@ -462,6 +478,10 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
     user = storage.getItem('user');
     password = storage.getItem('password');
     port = storage.getItem('port');
+
+    if(!storage.getItem('addresses')) {
+      storage.setItem('addresses', {});
+    }
 
     if(!storage.getItem('tos')) {
       await onReady;

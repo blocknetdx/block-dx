@@ -29,6 +29,7 @@ export class OrderformComponent implements OnInit {
   public orderTypes: any[];
   public selectedOrderType: any;
   public model: any;
+  public addresses: {};
 
   constructor(
     private decimalPipe: DecimalPipe,
@@ -41,9 +42,12 @@ export class OrderformComponent implements OnInit {
   ngOnInit() {
     this.model = {};
 
+    this.addresses = window.electron.ipcRenderer.sendSync('getAddressesSync');
+
     this.appService.marketPairChanges.subscribe((symbols) => {
       this.symbols = symbols;
-      this.model = {};
+      // this.model = {};
+      this.resetModel();
     });
     this.currentpriceService.currentprice.subscribe((cp) => {
       this.currentPrice = cp;
@@ -112,8 +116,8 @@ export class OrderformComponent implements OnInit {
       id: '',
       amount: '',
       totalPrice: '',
-      makerAddress: '',
-      takerAddress: ''
+      makerAddress: this.addresses[this.symbols[0]] || '',
+      takerAddress: this.addresses[this.symbols[1]] || ''
     };
   }
 
@@ -141,6 +145,13 @@ export class OrderformComponent implements OnInit {
       !totalPrice ||
       !this.validateNumber(totalPrice)
     ) return;
+
+    this.addresses = Object.assign({}, this.addresses, {
+      [this.symbols[0]]: makerAddress,
+      [this.symbols[1]]: takerAddress
+    });
+    window.electron.ipcRenderer.send('saveAddress', this.symbols[0], makerAddress);
+    window.electron.ipcRenderer.send('saveAddress', this.symbols[1], takerAddress);
 
     if(id) { // take order
       if(type === 'buy') {
