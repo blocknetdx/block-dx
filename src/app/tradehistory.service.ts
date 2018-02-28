@@ -2,6 +2,12 @@ import { Injectable } from '@angular/core';
 import { Headers, Http } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import * as rx from 'rxjs/Rx';
+import * as math from 'mathjs';
+
+math.config({
+  number: 'BigNumber',
+  precision: 64
+});
 
 import 'rxjs/add/operator/toPromise';
 
@@ -46,11 +52,17 @@ export class TradehistoryService {
             .map(t => Trade.fromObject(t));
 
           const totalTradeSize = p.reduce((acc, curr) => {
-            return acc + parseFloat(curr.size);
+            // return acc + parseFloat(curr.size);
+            return math.add(acc, parseFloat(curr.size));
           }, 0);
 
           for(const trade of p) {
-            trade.percent = (parseFloat(trade.size) / totalTradeSize) * 100;
+            // trade.percent = (parseFloat(trade.size) / totalTradeSize) * 100;
+            trade.percent = math
+              .chain(parseFloat(trade.size))
+              .divide(totalTradeSize)
+              .multiply(100)
+              .done();
           }
 
           observer.next(p);

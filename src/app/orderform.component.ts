@@ -1,5 +1,6 @@
 import { Component, Input, ViewChild, OnInit, NgZone } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
+import * as math from 'mathjs';
 
 import { AppService } from './app.service';
 import { Currentprice } from './currentprice';
@@ -7,6 +8,11 @@ import { CurrentpriceService } from './currentprice.service';
 import { OrderbookService } from './orderbook.service';
 import { TabViewComponent } from './tab-view/tab-view.component';
 import { SelectComponent } from './select/select.component';
+
+math.config({
+  number: 'BigNumber',
+  precision: 64
+});
 
 @Component({
   selector: 'app-orderform',
@@ -52,7 +58,8 @@ export class OrderformComponent implements OnInit {
           this.model = Object.assign(this.model, {
             id: order[2],
             amount: this.formatNumber(String(order[1]), this.symbols[0]),
-            totalPrice: this.formatNumber(String(order[0] * order[1]), this.symbols[1])
+            totalPrice: this.formatNumber(String(math.multiply(order[0], order[1])), this.symbols[1])
+            // totalPrice: this.formatNumber(String(order[0] * order[1]), this.symbols[1])
           });
         });
       });

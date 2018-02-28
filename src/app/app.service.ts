@@ -3,7 +3,6 @@ import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { WebSocketService } from './web-socket.service';
-import ipcRenderer = Electron.ipcRenderer;
 
 @Injectable()
 export class AppService {
