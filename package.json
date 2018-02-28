@@ -1,8 +1,8 @@
 {
-  "name": "block-dx",
-  "version": "0.0.0",
+  "name": "BLOCK-DX",
+  "version": "0.7.0",
   "license": "MIT",
-  "author": "blocknet <something@something.com>",
+  "author": "Blocknet <contact@blocknet.co>",
   "description": "BLOCK DX",
   "contributors": [
     {
@@ -91,9 +91,9 @@
   "main": "index.js",
   "build": {
     "electronVersion": "1.7.9",
-    "appId": "com.electron.block-dx",
+    "appId": "co.blocknet.blockdx",
     "productName": "BLOCK DX",
-    "copyright": "Copyright © 2018 by Blocknet,",
+    "copyright": "Copyright © 2018 The Blocknet",
     "directories": {
       "app": "temp",
       "output": "dist-native"
@@ -118,8 +118,8 @@
     "linux": {
       "target": "deb",
       "icon": "./src/assets/linux_icons/",
-      "synopsis": "Copyright 2018 by Blocknet.",
-      "description": "Copyright 2018 Blocknet.",
+      "synopsis": "Copyright © 2018 The Blocknet",
+      "description": "Copyright © 2018 The Blocknet",
       "category": "Other",
       "desktop": {
         "Name": "BLOCK DX"

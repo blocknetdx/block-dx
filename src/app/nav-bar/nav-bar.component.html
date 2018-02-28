@@ -1,7 +1,7 @@
 <nav class="navbar">
   <div class="navbar-bar" [class.menu-active]="pairSelectorActiveState">
     <a class="navbar-brand" [routerLink]="['/trading']">
-      <img src="assets/icon_blk.png" alt="Blocknet Logo">
+      <img src="assets/icon.svg" alt="Blocknet Logo">
     </a>
 
     <app-pair-selector (onActiveStatus)="pairSelectorActiveState = $event"></app-pair-selector>
