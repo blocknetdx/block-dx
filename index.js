@@ -404,7 +404,7 @@ const openTOSWindow = () => {
   const tosWindow = new BrowserWindow({
     show: false,
     width: 500,
-    height: 710,
+    height: 720,
     parent: appWindow
   });
   if(isDev) {
