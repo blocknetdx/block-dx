@@ -12,6 +12,7 @@ export class Currentprice {
   public volume: string;
   public last: string;
   public volume_30day: string;
+  public time: string;
 
   constructor() {}
 
