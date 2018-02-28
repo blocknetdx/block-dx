@@ -14,3 +14,7 @@ if (environment.production) {
 
 platformBrowserDynamic().bootstrapModule(AppModule)
   .catch(err => console.log(err));
+
+window.electron.ipcRenderer.on('error', (e, { name, message }) => {
+  alert(name + ': ' + message);
+});
