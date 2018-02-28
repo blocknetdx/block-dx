@@ -37,6 +37,7 @@ export class OrderformComponent implements OnInit {
 
     this.appService.marketPairChanges.subscribe((symbols) => {
       this.symbols = symbols;
+      this.model = {};
     });
     this.currentpriceService.currentprice.subscribe((cp) => {
       this.currentPrice = cp;
@@ -47,11 +48,12 @@ export class OrderformComponent implements OnInit {
         this.zone.run(() => {
           const tabIndex = order[4] === 'ask' ? 0 : 1;
           this.tabView.activeTab = this.tabView.tabs[tabIndex];
-          this.model = {
+          this.resetModel();
+          this.model = Object.assign(this.model, {
             id: order[2],
-            amount: order[1],
-            totalPrice: order[0] * order[1]
-          };
+            amount: this.formatNumber(String(order[1]), this.symbols[0]),
+            totalPrice: this.formatNumber(String(order[0] * order[1]), this.symbols[1])
+          });
         });
       });
 
@@ -59,6 +61,32 @@ export class OrderformComponent implements OnInit {
       { value: 'market', viewValue: 'Market Order'}
       // { value: 'limit', viewValue: 'Limit Order'}
     ];
+  }
+
+  amountChanged(e) {
+    e.preventDefault();
+    this.model.id = '';
+    this.model.amount = e.target.value;
+  }
+
+  totalPriceChanged(e) {
+    e.preventDefault();
+    this.model.id = '';
+    this.model.totalPrice = e.target.value;
+  }
+
+  makerAddressChanged(e) {
+    e.preventDefault();
+    this.model.makerAddress = e.target.value;
+  }
+
+  takerAddressChanged(e) {
+    e.preventDefault();
+    this.model.takerAddress = e.target.value;
+  }
+
+  onNumberInputBlur(field) {
+    this.model[field] = this.formatNumber(this.model[field], field === 'amount' ? this.symbols[0] : this.symbols[1]);
   }
 
   formatNumber(num:string, symbol:string): string {
@@ -72,8 +100,82 @@ export class OrderformComponent implements OnInit {
     this.totalPrice = enteredValue * currPrice;
   }
 
+  resetModel() {
+    this.model = {
+      id: '',
+      amount: '',
+      totalPrice: '',
+      makerAddress: '',
+      takerAddress: ''
+    };
+  }
+
+  validateNumber(numStr = '') {
+    numStr = numStr.trim();
+    return /\d+/.test(numStr) && /^\d*\.?\d*$/.test(numStr) && Number(numStr) !== 0;
+  }
+
   onOrderSubmit() {
-    console.log('Submit order', this.model);
-    this.model = {};
+    const { ipcRenderer } = window.electron;
+    const type = this.tabView.activeIndex === 0 ? 'buy' : 'sell';
+    console.log('Submit order', type, this.model);
+    const { id } = this.model;
+    let { makerAddress = '', takerAddress = '', amount = '', totalPrice = '' } = this.model;
+    makerAddress = makerAddress.trim();
+    takerAddress = takerAddress.trim();
+    amount = amount.trim();
+    totalPrice = totalPrice.trim();
+
+    if(
+      !makerAddress ||
+      !takerAddress ||
+      !amount ||
+      !this.validateNumber(amount) ||
+      !totalPrice ||
+      !this.validateNumber(totalPrice)
+    ) return;
+
+    if(id) { // take order
+      if(type === 'buy') {
+        ipcRenderer.send('takeOrder', {
+          id,
+          send: this.symbols[1],
+          sendAddress: takerAddress,
+          receive: this.symbols[0],
+          receiveAddress: makerAddress
+        });
+      } else if(type === 'sell') {
+        ipcRenderer.send('takeOrder', {
+          id,
+          send: this.symbols[0],
+          sendAddress: makerAddress,
+          receive: this.symbols[1],
+          receiveAddress: takerAddress
+        });
+      }
+    } else { // make order
+      if(type === 'buy') {
+        ipcRenderer.send('makeOrder', {
+          maker: this.symbols[1],
+          makerSize: totalPrice,
+          makerAddress: takerAddress,
+          taker: this.symbols[0],
+          takerSize: amount,
+          takerAddress: makerAddress,
+          type: 'exact'
+        });
+      } else if(type === 'sell') {
+        ipcRenderer.send('makeOrder', {
+          maker: this.symbols[1],
+          makerSize: totalPrice,
+          makerAddress: takerAddress,
+          taker: this.symbols[0],
+          takerSize: amount,
+          takerAddress: makerAddress,
+          type: 'exact'
+        });
+      }
+    }
+    this.resetModel();
   }
 }

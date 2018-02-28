@@ -7,9 +7,14 @@ const SimpleStorage = require('./src-back/storage');
 const ServiceNodeInterface = require('./src-back/service-node-interface');
 const serve = require('electron-serve');
 
+let appWindow, serverLocation, sn, keyPair, storage, user, password, port;
+
 // General Error Handler
 const handleError = err => {
   console.error(err);
+  if(appWindow) {
+    appWindow.send('error', { name: err.name, message: err.message });
+  }
 };
 
 // Handle any uncaught exceptions
@@ -29,8 +34,6 @@ require('electron-context-menu')();
 // Only allow one application instance to be open at a time
 const isSecondInstance = app.makeSingleInstance(() => {});
 if(isSecondInstance) app.quit();
-
-let appWindow, serverLocation, sn, keyPair, storage, user, password, port;
 
 const openSettingsWindow = (options = {}) => {
 
@@ -167,6 +170,18 @@ const openAppWindow = () => {
     appWindow.send('keyPair', keyPair);
   };
   ipcMain.on('getKeyPair', sendKeyPair);
+
+  ipcMain.on('makeOrder', (e, data) => {
+    sn.dxMakeOrder(data.maker, data.makerSize, data.makerAddress, data.taker, data.takerSize, data.takerAddress, data.type)
+      .then(() => sendOrderBook())
+      .catch(handleError);
+  });
+
+  ipcMain.on('takeOrder', (e, data) => {
+    sn.dxTakeOrder(data.id, data.send, data.sendAddress, data.receive, data.receiveAddress)
+      .then(() => sendOrderBook())
+      .catch(handleError);
+  });
 
   let orderBook = {
     maker: '',
