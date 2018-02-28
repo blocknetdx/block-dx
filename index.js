@@ -248,7 +248,7 @@ const openAppWindow = () => {
   const sendOrderHistory = force => {
     const end = new Date().getTime();
     const start = moment(new Date(end))
-      .subtract(1, 'd')
+      .subtract(7, 'd')
       .toDate()
       .getTime();
     sn.dxGetOrderHistory(keyPair[0], keyPair[1], start, end, 60)
