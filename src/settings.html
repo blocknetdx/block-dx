@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>BLOCK DX Setting</title>
+  <title>Settings</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0">
   <meta name="format-detection" content="telephone=no">
@@ -30,7 +30,7 @@
       letter-spacing: 1px;
     }
     .container {
-      padding: 20px;
+      padding: 0 20px;
     }
     .input-group {
       display: flex;
@@ -65,6 +65,12 @@
       border-color: #4b6275;
       border-style: solid;
     }
+    .label {
+      color: #fff;
+      padding: 15px 15px;
+      font-weight: 300;
+      font-size: 14px;
+    }
     button {
       display: block;
       width: 100%;
@@ -97,8 +103,10 @@
 </head>
 <body>
 
+  <div style="width:100%; padding: 20px 0 20px 0; text-align:center;"><img style="max-width:300px;" src="assets/logo_full.svg" alt="Blocknet Logo"></div>
   <h3>SETTINGS</h3>
   <form class="container">
+    <div class="label">In order to conduct peer-to-peer trades BLOCK DX requires RPC access to The Blocknet blockchain.</div>
 
     <div class="input-group">
       <label>Blocknet RPC Port</label>
