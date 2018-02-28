@@ -51,6 +51,7 @@
     "javascript-natural-sort": "^0.7.1",
     "jquery": "^3.2.1",
     "lodash": "^4.17.5",
+    "mathjs": "^4.0.0",
     "moment": "^2.20.1",
     "ng-inline-svg": "^5.1.1",
     "ngx-perfect-scrollbar": "^5.0.5",

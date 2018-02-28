@@ -3,7 +3,12 @@ import { Headers, Http } from '@angular/http';
 // import * as rx from 'rxjs';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
-import { ipcRenderer } from 'electron';
+import * as math from 'mathjs';
+
+math.config({
+  number: 'BigNumber',
+  precision: 64
+});
 
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
@@ -39,7 +44,7 @@ export class OrderbookService {
       this.orderbookObservable = Observable.create(observer => {
         try {
 
-          electron.ipcRenderer.on('orderBook', (e, orderBook) => {
+          window.electron.ipcRenderer.on('orderBook', (e, orderBook) => {
 
             orderBook = Object.assign({}, orderBook, {
               asks: orderBook.asks.map(a => {
@@ -58,7 +63,13 @@ export class OrderbookService {
             }, 0);
 
             for(const ask of asks) {
-              ask.push((parseFloat(ask[1]) / totalAskSize) * 100);
+              // ask.push((parseFloat(ask[1]) / totalAskSize) * 100);
+              ask.push(math
+                .chain(parseFloat(ask[1]))
+                .divide(totalAskSize)
+                .multiply(100)
+                .done()
+              );
               ask.push('ask');
             }
 
@@ -68,7 +79,13 @@ export class OrderbookService {
             }, 0);
 
             for(const bid of bids) {
-              bid.push((parseFloat(bid[1]) / totalBidSize) * 100);
+              // bid.push((parseFloat(bid[1]) / totalBidSize) * 100);
+              bid.push(math
+                .chain(parseFloat(bid[1]))
+                .divide(totalBidSize)
+                .multiply(100)
+                .done()
+              );
               bid.push('bid');
             }
 

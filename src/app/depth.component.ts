@@ -123,11 +123,11 @@ export class DepthComponent implements OnInit, AfterViewInit, OnChanges {
     if(data.length === 0) return;
     this.zone.runOutsideAngular(() => {
 
-      setTimeout(() => {
-        const item = document.getElementById('chartdiv');
-        const items = $(item).find('a');
-        items.css('display', 'none');
-      }, 0);
+      // setTimeout(() => {
+      //   const item = document.getElementById('chartdiv');
+      //   const items = $(item).find('a');
+      //   items.css('display', 'none');
+      // }, 0);
 
       this.chart = AmCharts.makeChart('chartdiv', {
         'responsive': {
