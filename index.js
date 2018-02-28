@@ -248,7 +248,7 @@ const openAppWindow = () => {
   const sendOrderHistory = force => {
     const end = new Date().getTime();
     const start = moment(new Date(end))
-      .subtract(1, 'd')
+      .subtract(7, 'd')
       .toDate()
       .getTime();
     sn.dxGetOrderHistory(keyPair[0], keyPair[1], start, end, 60)
@@ -370,6 +370,22 @@ const openAppWindow = () => {
   };
   ipcMain.on('getCurrencyComparisons', (e, primary) => sendCurrencyComparisons(primary));
 
+  ipcMain.on('saveAddress', (e, key, address) => {
+    try {
+      const addresses = storage.getItem('addresses');
+      storage.setItem('addresses', Object.assign({}, addresses, {
+        [key]: address
+      }));
+    } catch(err) {
+      handleError(err);
+    }
+  });
+
+  ipcMain.on('getAddressesSync', e => {
+    const addresses = storage.getItem('addresses');
+    e.returnValue = addresses;
+  });
+
   ipcMain.on('cancelOrder', (e, id) => {
     sn.dxCancelOrder(id)
       .then(res => {
@@ -382,6 +398,7 @@ const openAppWindow = () => {
   });
 
   ipcMain.on('setKeyPair', (e, pair) => {
+    storage.setItem('keyPair', pair);
     keyPair = pair;
     sendKeyPair();
     sendOrderBook();
@@ -462,6 +479,10 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
     user = storage.getItem('user');
     password = storage.getItem('password');
     port = storage.getItem('port');
+
+    if(!storage.getItem('addresses')) {
+      storage.setItem('addresses', {});
+    }
 
     if(!storage.getItem('tos')) {
       await onReady;

@@ -12,6 +12,7 @@ import { Currentprice } from './currentprice';
 @Injectable()
 export class CurrentpriceService {
   public currentprice: BehaviorSubject<Currentprice> = new BehaviorSubject(null);
+  public orderHistory: Observable<Currentprice[]>;
 
   constructor(private http: Http, private appService: AppService) {
 
@@ -38,6 +39,23 @@ export class CurrentpriceService {
 
     });
 
+  }
+
+  getOrderHistory() {
+    if(!this.orderHistory) {
+      this.orderHistory = Observable.create(observer => {
+        window.electron.ipcRenderer.on('orderHistory', (e, data) => {
+          const preppedData = data
+            .map(d => Object.assign({}, d, {
+              last: d.close
+            }))
+            .map(d => Currentprice.fromObject(d));
+          observer.next(preppedData);
+        });
+        window.electron.ipcRenderer.send('getOrderHistory');
+      });
+    }
+    return this.orderHistory;
   }
 
   private handleError(error: any): Promise<any> {
