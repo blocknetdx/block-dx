@@ -14,31 +14,20 @@ export class CurrentpriceService {
   public currentprice: BehaviorSubject<Currentprice> = new BehaviorSubject(null);
 
   constructor(private http: Http, private appService: AppService) {
+
     console.log('constructing CurrentpriceService');
-    this.appService.marketPairChanges.subscribe((symbols) => {
-      if (symbols) {
-        this.getCurrentprice(symbols).first().subscribe((cp) => {
-          this.currentprice.next(cp);
-        });
-      }
+
+    this.getCurrentprice().first().subscribe((cp) => {
+      this.currentprice.next(cp);
     });
+
   }
 
-  private getCurrentprice(symbols:string[]): Observable<Currentprice> {
+  private getCurrentprice(): Observable<Currentprice> {
 
     // ToDo Connect currentprice.service to data API
 
     return Observable.create(observer => {
-
-      // window.electron.ipcRenderer.on('orderHistory', (e, orders) => {
-      //   const preppedOrders = orders
-      //     .sort((a, b) => a.time.localeCompare(b.time))
-      //     .map(order => Object.assign(order, {last: order.close}))
-      //     .map(Currentprice.fromObject);
-      //   observer.next(preppedOrders[preppedOrders.length - 1]);
-      // });
-      // window.electron.ipcRenderer.send('getOrderHistory');
-
       window.electron.ipcRenderer.on('currentPrice', (e, order) => {
         const preppedOrder = Object.assign({}, order, {
           last: order.close
