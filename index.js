@@ -44,7 +44,7 @@ const openSettingsWindow = (options = {}) => {
         errorMessage = 'There was an authorization problem. Please correct your username and/or password.';
         break;
       default:
-        errorMessage = 'There was a problem connecting to the RPC server. Please check the RPC port.';
+        errorMessage = 'There was a problem connecting to the Blocknet RPC server. Please check the RPC port.';
     }
     console.log(errorMessage);
   }
@@ -75,7 +75,7 @@ const openSettingsWindow = (options = {}) => {
   const settingsWindow = new BrowserWindow({
     show: false,
     width: 500,
-    height: 346,
+    height: 505,
     parent: appWindow
   });
   if(isDev) {
