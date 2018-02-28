@@ -398,6 +398,7 @@ const openAppWindow = () => {
   });
 
   ipcMain.on('setKeyPair', (e, pair) => {
+    storage.setItem('keyPair', pair);
     keyPair = pair;
     sendKeyPair();
     sendOrderBook();
