@@ -69,7 +69,7 @@ export class OrderformComponent implements OnInit {
       });
 
     this.orderTypes = [
-      { value: 'market', viewValue: 'Market Order'}
+      { value: 'market', viewValue: 'Exact Order'}
       // { value: 'limit', viewValue: 'Limit Order'}
     ];
   }
