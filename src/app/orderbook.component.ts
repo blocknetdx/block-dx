@@ -47,16 +47,8 @@ export class OrderbookComponent implements OnInit {
       // .first()
       .subscribe(orderbook => {
         zone.run(() => {
-          const asks = orderbook.asks.sort((a,b) => {
-            if (a[0] < b[0]) return 1;
-            if (a[0] > b[0]) return -1;
-            return 0;
-          });
-          const bids = orderbook.bids.sort((a,b) => {
-            if (a[0] < b[0]) return -1;
-            if (a[0] > b[0]) return 1;
-            return 0;
-          });
+          const asks = orderbook.asks;
+          const bids = orderbook.bids;
 
           this.showSpread = asks.length === 0 && bids.length === 0 ? false : true;
 
