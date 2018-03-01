@@ -480,17 +480,17 @@ class ServiceNodeInterface {
    * @param {number} startTime - unix time
    * @param {number} endTime - unix time
    * @param {number} granularity - Time slice in seconds: 30, 60, 300, 900, 3600, 21600, 86400
-   * @param {String[]} [orderIds = []]
+   * @param {boolean} [orderIds = false]
    * @returns {Promise<OrderHistoryObject[]>}
    */
-  async dxGetOrderHistory(maker, taker, startTime, endTime, granularity, orderIds = []) {
+  async dxGetOrderHistory(maker, taker, startTime, endTime, granularity, orderIds = false) {
     const { error, result } = await this._makeServiceNodeRequest({
       method: 'dxGetOrderHistory',
       params: [
         maker,
         taker,
-        startTime,
-        endTime,
+        Math.floor(startTime/1000), // convert to unix time seconds
+        Math.floor(endTime/1000), // convert to unix time seconds
         granularity,
         orderIds
       ]
