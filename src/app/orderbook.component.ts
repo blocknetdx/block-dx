@@ -1,15 +1,21 @@
 import { Component, OnInit, Input, ViewChild, NgZone } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import 'rxjs/add/operator/map';
+import * as math from 'mathjs';
 
 import { naturalSort } from './util';
 import { Order } from './order';
 import { OrderbookService } from './orderbook.service';
 import { TableComponent } from './table/table.component';
 import { AppService } from './app.service';
-import {TradehistoryService} from './tradehistory.service';
-import { Trade } from './trade';
-import {CurrentpriceService} from './currentprice.service';
+// import {TradehistoryService} from './tradehistory.service';
+// import { Trade } from './trade';
+// import {CurrentpriceService} from './currentprice.service';
+
+math.config({
+  number: 'BigNumber',
+  precision: 64
+});
 
 @Component({
   selector: 'app-orderbook',
@@ -21,15 +27,16 @@ export class OrderbookComponent implements OnInit {
 
   public sections: any[] = [];
   public symbols:string[] = [];
-  public lastTradePrice = '';
+  // public lastTradePrice = '';
+  public spread = '';
   private showSpread = false;
 
   constructor(
     private appService: AppService,
     private decimalPipe:DecimalPipe,
     private orderbookService: OrderbookService,
-    private tradehistoryService: TradehistoryService,
-    private currentpriceService: CurrentpriceService,
+    // private tradehistoryService: TradehistoryService,
+    // private currentpriceService: CurrentpriceService,
     private zone: NgZone
   ) { }
 
@@ -56,15 +63,26 @@ export class OrderbookComponent implements OnInit {
             {rows: asks},
             {rows: bids}
           ];
+
+          let spread;
+          if(asks.length > 0 && bids.length > 0) {
+            const bestAsk = Number(asks[asks.length - 1][0]);
+            const bestBid = Number(bids[0][0]);
+            spread = String(math.subtract(bestAsk, bestBid));
+          } else {
+            spread = '';
+          }
+          this.spread = spread;
+
           this.orderbookTable.scrollToMiddle();
         });
       });
 
-    this.currentpriceService.currentprice.subscribe((cp) => {
-      zone.run(() => {
-        this.lastTradePrice = cp.last;
-      });
-    });
+    // this.currentpriceService.currentprice.subscribe((cp) => {
+    //   zone.run(() => {
+    //     this.lastTradePrice = cp.last;
+    //   });
+    // });
 
   }
 

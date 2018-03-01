@@ -6,7 +6,7 @@
   <bn-table-section-divider>
     <ng-template #sectionDivider>
       <div class="divider" *ngIf="showSpread">
-        <span [innerHtml]="lastTradePrice | blockCurrency"></span>
+        <span [innerHtml]="spread | blockCurrency"></span>
       </div>
     </ng-template>
   </bn-table-section-divider>
