@@ -408,6 +408,16 @@ const openAppWindow = () => {
     sendCurrentPrice();
   });
 
+  ipcMain.on('isFirstRun', e => {
+    const isFirstRun = storage.getItem('isFirstRun');
+    if(isFirstRun !== false) {
+      storage.setItem('isFirstRun', false);
+      e.returnValue = true;
+    } else {
+      e.returnValue = false;
+    }
+  });
+
   ipcMain.on('openSettings', () => {
     openSettingsWindow();
   });

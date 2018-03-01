@@ -1,6 +1,6 @@
 import {
   Component, ViewChild, ElementRef, EventEmitter,
-  ViewChildren, QueryList, Output, OnInit, NgZone
+  ViewChildren, QueryList, Output, OnInit, NgZone, AfterViewInit
 } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Subject } from 'rxjs/Subject';
@@ -18,7 +18,7 @@ import { Cryptocurrency } from '../cryptocurrency';
   styleUrls: ['./pair-selector.component.scss'],
   animations: [fadeInOut]
 })
-export class PairSelectorComponent implements OnInit {
+export class PairSelectorComponent implements OnInit, AfterViewInit {
   @ViewChild('pairTable') public pairTable: TableComponent;
   @ViewChild('submit') public submit: ElementRef;
   @ViewChild('pairForm') public pairForm: NgForm;
@@ -165,6 +165,11 @@ export class PairSelectorComponent implements OnInit {
           this.filteredRows = this.sections;
         });
       });
+  }
+
+  ngAfterViewInit() {
+    const isFirstRun = window.electron.ipcRenderer.sendSync('isFirstRun');
+    if(isFirstRun) this.active = true;
   }
 
   filterCoins(key: string, val: string) {
