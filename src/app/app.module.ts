@@ -30,6 +30,7 @@ import { DepthchartComponent } from './depthchart.component';
 import { DepthComponent } from './depth.component';
 import { MainviewComponent } from './mainview.component';
 import { WatchlistComponent } from './watchlist.component';
+import { BalancesService } from './balances.service';
 
 import { AppRoutingModule } from './app-routing.module';
 import { BreakpointService } from './breakpoint.service';
@@ -130,6 +131,7 @@ const dev = environment.useMockAPI ? [
     WebSocketService,
     CryptocurrencyService,
     TradehistoryService,
+    BalancesService,
     {
       provide: PERFECT_SCROLLBAR_CONFIG,
       useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG

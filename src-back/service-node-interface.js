@@ -524,6 +524,22 @@ class ServiceNodeInterface {
     return result;
   }
 
+  /**
+   * Gets wallet balances
+   * @returns {Promise<{coin: string, amount: string}[]>}
+   */
+  async dxGetTokenBalances() {
+    const { error, result } = await this._makeServiceNodeRequest({
+      method: 'dxGetTokenBalances'
+    });
+    if(error) throw new Error(error);
+    return Object.keys(result)
+      .map(coin => ({
+        coin,
+        amount: result[coin]
+      }));
+  }
+
 }
 
 module.exports = ServiceNodeInterface;
