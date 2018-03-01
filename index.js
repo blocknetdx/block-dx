@@ -323,6 +323,7 @@ const openAppWindow = () => {
       .getTime();
     sn.dxGetOrderHistory(keyPair[0], keyPair[1], start, end, 86400)
       .then(res => {
+        if(res.length === 0) return;
         const [ data ] = res;
         if(force === true || JSON.stringify(data) !== JSON.stringify(currentPrice)) {
           currentPrice = data;
