@@ -956,18 +956,15 @@ export class PricechartComponent implements AfterViewInit {
       const chart = AmCharts.makeChart( 'tv_chart_container', {
         'type': 'serial',
         'theme': 'dark',
-        // 'dataDateFormat':'YYYY-MM-DD',
         minSelectedTime: 60000,
         'valueAxes': [ {
           'position': 'left'
         } ],
         'graphs': [ {
           'id': 'g1',
-          // 'proCandlesticks': true,
           'balloonText': 'Open:<b>[[open]]</b><br>Low:<b>[[low]]</b><br>High:<b>[[high]]</b><br>Close:<b>[[close]]</b><br>',
           'closeField': 'close',
           'fillColors': '#4bf5c6',
-          // fillAlphas: 1,
           'highField': 'high',
           'lineColor': '#4bf5c6',
           'lineAlpha': 1,
@@ -981,9 +978,12 @@ export class PricechartComponent implements AfterViewInit {
           'valueField': 'close'
         } ],
         'chartScrollbar': {
+          // dragIcon: 'dragIconRoundSmallBlack',
           'graph': 'g1',
           'graphType': 'line',
-          'scrollbarHeight': 30
+          'scrollbarHeight': 30,
+          graphFillAlpha: .1,
+          selectedGraphFillAlpha: .1
         },
         'chartCursor': {
           'valueLineEnabled': true,
