@@ -105,7 +105,7 @@
       opacity: .7;
     }
     div.button-container {
-      display: flex;
+      display: none;
       flex-direction: row;
       flex-wrap: nowrap;
       justify-content: flex-start;
@@ -134,7 +134,7 @@
 
     <div id="js-tosContainer" class="tos-container"></div>
 
-    <div class="button-container">
+    <div id="js-buttonContainer" class="button-container">
       <button id="js-cancelBtn" type="button" class="gray-button">CANCEL</button>
       <button id="js-acceptBtn" type="button">ACCEPT</button>
     </div>
@@ -159,6 +159,9 @@
 
       const tos = ipcRenderer.sendSync('getTOS');
       $('#js-tosContainer').text(tos);
+
+      const alreadyAccepted = ipcRenderer.sendSync('alreadyAccepted');
+      if(!alreadyAccepted) $('#js-buttonContainer').css('display', 'flex');
 
       const $cancelBtn = $('#js-cancelBtn');
       $cancelBtn.on('click', () => {

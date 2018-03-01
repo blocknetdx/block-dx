@@ -107,6 +107,56 @@ const openSettingsWindow = (options = {}) => {
 
 };
 
+const openTOSWindow = (alreadyAccepted = false) => {
+
+  ipcMain.on('getTOS', e => {
+    try {
+      const text = fs.readFileSync(path.join(__dirname, 'tos.txt'), 'utf8');
+      e.returnValue = text;
+    } catch(err) {
+      console.error(err);
+    }
+  });
+  ipcMain.on('cancelTOS', () => {
+    app.quit();
+  });
+  ipcMain.on('acceptTOS', () => {
+    storage.setItem('tos', true, true);
+    app.relaunch();
+    app.quit();
+  });
+  ipcMain.on('alreadyAccepted', e => {
+    e.returnValue = alreadyAccepted;
+  });
+
+  const tosWindow = new BrowserWindow({
+    show: false,
+    width: 500,
+    height: alreadyAccepted ? 645 : 720,
+    parent: appWindow
+  });
+  if(isDev) {
+    tosWindow.loadURL(`file://${path.join(__dirname, 'src', 'tos.html')}`);
+  } else {
+    tosWindow.loadURL(`file://${path.join(__dirname, 'dist', 'tos.html')}`);
+  }
+  tosWindow.once('ready-to-show', () => {
+    tosWindow.show();
+  });
+
+  if(isDev) {
+    const menuTemplate = [];
+    menuTemplate.push({
+      label: 'Window',
+      submenu: [
+        { label: 'Show Dev Tools', role: 'toggledevtools' }
+      ]
+    });
+    const windowMenu = Menu.buildFromTemplate(menuTemplate);
+    tosWindow.setMenu(windowMenu);
+  }
+};
+
 const openAppWindow = () => {
 
   const { width, height } = electron.screen.getPrimaryDisplay().workAreaSize;
@@ -422,53 +472,10 @@ const openAppWindow = () => {
     openSettingsWindow();
   });
 
-};
-
-const openTOSWindow = () => {
-
-  ipcMain.on('getTOS', e => {
-    try {
-      const text = fs.readFileSync(path.join(__dirname, 'tos.txt'), 'utf8');
-      e.returnValue = text;
-    } catch(err) {
-      console.error(err);
-    }
-  });
-  ipcMain.on('cancelTOS', () => {
-    app.quit();
-  });
-  ipcMain.on('acceptTOS', () => {
-    storage.setItem('tos', true, true);
-    app.relaunch();
-    app.quit();
+  ipcMain.on('openTOS', () => {
+    openTOSWindow(true);
   });
 
-  const tosWindow = new BrowserWindow({
-    show: false,
-    width: 500,
-    height: 720,
-    parent: appWindow
-  });
-  if(isDev) {
-    tosWindow.loadURL(`file://${path.join(__dirname, 'src', 'tos.html')}`);
-  } else {
-    tosWindow.loadURL(`file://${path.join(__dirname, 'dist', 'tos.html')}`);
-  }
-  tosWindow.once('ready-to-show', () => {
-    tosWindow.show();
-  });
-
-  if(isDev) {
-    const menuTemplate = [];
-    menuTemplate.push({
-      label: 'Window',
-      submenu: [
-        { label: 'Show Dev Tools', role: 'toggledevtools' }
-      ]
-    });
-    const windowMenu = Menu.buildFromTemplate(menuTemplate);
-    tosWindow.setMenu(windowMenu);
-  }
 };
 
 const onReady = new Promise(resolve => app.on('ready', resolve));
