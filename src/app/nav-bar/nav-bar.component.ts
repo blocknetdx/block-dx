@@ -1,4 +1,4 @@
-import { Component, Input, ViewEncapsulation, OnInit } from '@angular/core';
+import { Component, Input, ViewEncapsulation, OnInit, NgZone } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 
 import { AppService } from '../app.service';
@@ -21,18 +21,26 @@ export class NavBarComponent implements OnInit {
   constructor(
     private appService: AppService,
     private currentpriceService: CurrentpriceService,
-    private decimalPipe: DecimalPipe
+    private decimalPipe: DecimalPipe,
+    private zone: NgZone
   ) { }
 
   ngOnInit() {
+
     this.appService.marketPairChanges.subscribe((symbols) => {
-      // console.log('symbols', symbols);
-      this.symbols = symbols;
+      this.zone.run(() => {
+        // console.log('symbols', symbols);
+        this.symbols = symbols;
+      });
     });
+
     this.currentpriceService.currentprice.subscribe((cp) => {
-      // console.log('currentPrice', cp);
-      this.currentPrice = cp;
+      this.zone.run(() => {
+        // console.log('currentPrice', cp);
+        this.currentPrice = cp;
+      });
     });
+
   }
 
   toggleNav() {
