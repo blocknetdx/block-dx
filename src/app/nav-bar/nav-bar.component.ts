@@ -59,4 +59,33 @@ export class NavBarComponent implements OnInit {
     this.toggleNav();
   }
 
+  openLink(e, name) {
+    e.preventDefault();
+    const { openExternal } = window.electron.remote.shell;
+    switch(name) {
+      case 'email':
+        openExternal('mailto:contact@blocknet.co');
+        break;
+      case 'reddit':
+        openExternal('https://www.reddit.com/r/theblocknet/');
+        break;
+      case 'twitter':
+        openExternal('https://twitter.com/The_Blocknet/');
+        break;
+      case 'faq':
+        // openExternal('');
+        break;
+      case 'fees':
+        // openExternal('');
+        break;
+      case 'help':
+        // openExternal('');
+        break;
+      case 'community':
+        // openExternal('');
+        break;
+    }
+    this.toggleNav();
+  }
+
 }

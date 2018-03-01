@@ -18,16 +18,16 @@
       <ul>
         <li>Support</li>
         <li><a href="#" (click)="openNotices($event)">Notices</a></li>
-        <li><a href="#">FAQ</a></li>
-        <li><a href="#">Fees</a></li>
-        <li><a href="#">Help articles</a></li>
-        <li><a href="#">Community Forum</a></li>
+        <li><a href="#" (click)="openLink($event, 'faq')">FAQ</a></li>
+        <li><a href="#" (click)="openLink($event, 'fees')">Fees</a></li>
+        <li><a href="#" (click)="openLink($event, 'help')">Help articles</a></li>
+        <li><a href="#" (click)="openLink($event, 'community')">Community Forum</a></li>
       </ul>
       <ul>
         <li>Contact Us</li>
-        <li><a href="#">Email</a></li>
-        <li><a href="#">Reddit</a></li>
-        <li><a href="#">Twitter</a></li>
+        <li><a href="#" (click)="openLink($event, 'email')">Email</a></li>
+        <li><a href="#" (click)="openLink($event, 'reddit')">Reddit</a></li>
+        <li><a href="#" (click)="openLink($event, 'twitter')">Twitter</a></li>
       </ul>
     </div>
     <a (click)="toggleNav()" class="navbar-toggler">
