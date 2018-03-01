@@ -20,6 +20,7 @@ export class BalancesService {
       this.balancesObservable = Observable.create(observer => {
         ipcRenderer.on('balances', (e, balances) => {
           const preppedBalances = balances
+            .sort((a, b) => a.coin.localeCompare(b.coin))
             .map(b => Balance.fromObject(b));
           observer.next(preppedBalances);
         });
