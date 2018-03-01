@@ -9,6 +9,7 @@ import { TableComponent } from './table/table.component';
 import { AppService } from './app.service';
 import {TradehistoryService} from './tradehistory.service';
 import { Trade } from './trade';
+import {CurrentpriceService} from './currentprice.service';
 
 @Component({
   selector: 'app-orderbook',
@@ -20,7 +21,7 @@ export class OrderbookComponent implements OnInit {
 
   public sections: any[] = [];
   public symbols:string[] = [];
-  public lastTradePrice:string;
+  public lastTradePrice = '';
   private showSpread = false;
 
   constructor(
@@ -28,6 +29,7 @@ export class OrderbookComponent implements OnInit {
     private decimalPipe:DecimalPipe,
     private orderbookService: OrderbookService,
     private tradehistoryService: TradehistoryService,
+    private currentpriceService: CurrentpriceService,
     private zone: NgZone
   ) { }
 
@@ -40,6 +42,7 @@ export class OrderbookComponent implements OnInit {
         this.symbols = symbols;
       });
     });
+
     this.orderbookService.getOrderbook()
       // .first()
       .subscribe(orderbook => {
@@ -64,14 +67,13 @@ export class OrderbookComponent implements OnInit {
           this.orderbookTable.scrollToMiddle();
         });
       });
-    this.tradehistoryService.getTradehistory()
-      .subscribe(tradehistory => {
-        zone.run(() => {
-          const trades = [...tradehistory]
-            .sort((a, b) => a.time.localeCompare(b.time));
-          const lastTrade = trades[trades.length - 1];
-        });
+
+    this.currentpriceService.currentprice.subscribe((cp) => {
+      zone.run(() => {
+        this.lastTradePrice = cp.last;
       });
+    });
+
   }
 
   onRowSelect(row) {

@@ -11,16 +11,14 @@ import { Currentprice } from './currentprice';
 
 @Injectable()
 export class CurrentpriceService {
-  public currentprice: BehaviorSubject<Currentprice> = new BehaviorSubject(null);
+  public currentprice: Observable<Currentprice>;
   public orderHistory: Observable<Currentprice[]>;
 
   constructor(private http: Http, private appService: AppService) {
 
     console.log('constructing CurrentpriceService');
 
-    this.getCurrentprice().first().subscribe((cp) => {
-      this.currentprice.next(cp);
-    });
+    this.currentprice = this.getCurrentprice();
 
   }
 
