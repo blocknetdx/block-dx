@@ -21,6 +21,7 @@ export class OrderbookComponent implements OnInit {
   public sections: any[] = [];
   public symbols:string[] = [];
   public lastTradePrice:string;
+  private showSpread = false;
 
   constructor(
     private appService: AppService,
@@ -53,6 +54,8 @@ export class OrderbookComponent implements OnInit {
             if (a[0] > b[0]) return 1;
             return 0;
           });
+
+          this.showSpread = asks.length === 0 && bids.length === 0 ? false : true;
 
           this.sections = [
             {rows: asks},
