@@ -233,6 +233,8 @@ const openAppWindow = () => {
       .catch(handleError);
   });
 
+  const stdInterval = 4000;
+
   let orderBook = {
     maker: '',
     taker: '',
@@ -250,7 +252,7 @@ const openAppWindow = () => {
       .catch(handleError);
   };
   ipcMain.on('getOrderBook', () => sendOrderBook(true));
-  setInterval(sendOrderBook, 4000);
+  setInterval(sendOrderBook, stdInterval);
 
   let tradeHistory = [];
   const sendTradeHistory = force => {
@@ -264,7 +266,7 @@ const openAppWindow = () => {
       .catch(handleError);
   };
   ipcMain.on('sendTradeHistory', () => sendTradeHistory(true));
-  setInterval(sendTradeHistory, 4000);
+  setInterval(sendTradeHistory, stdInterval);
 
   const sendLocalTokens = () => {
     sn.dxGetLocalTokens()
@@ -292,7 +294,7 @@ const openAppWindow = () => {
       .catch(handleError);
   };
   ipcMain.on('getMyOrders', () => sendMyOrders(true));
-  setInterval(sendMyOrders, 4000);
+  setInterval(sendMyOrders, stdInterval);
 
   let orderHistory = [];
   const sendOrderHistory = force => {
@@ -321,6 +323,7 @@ const openAppWindow = () => {
       .getTime();
     sn.dxGetOrderHistory(keyPair[0], keyPair[1], start, end, 86400)
       .then(res => {
+        if(res.length === 0) return;
         const [ data ] = res;
         if(force === true || JSON.stringify(data) !== JSON.stringify(currentPrice)) {
           currentPrice = data;
@@ -330,6 +333,7 @@ const openAppWindow = () => {
       .catch(handleError);
   };
   ipcMain.on('getCurrentPrice', () => sendCurrentPrice(true));
+  setInterval(sendCurrentPrice, stdInterval);
 
   const sendCurrencies = async function() {
     try {
@@ -446,6 +450,20 @@ const openAppWindow = () => {
       })
       .catch(handleError);
   });
+
+  let balances = [];
+  const sendBalances = force  => {
+    sn.dxGetTokenBalances()
+      .then(data => {
+        if(force === true || JSON.stringify(data) !== JSON.stringify(balances)) {
+          balances = data;
+          appWindow.send('balances', balances);
+        }
+      })
+      .catch(handleError);
+  };
+  ipcMain.on('getBalances', () => sendBalances(true));
+  setInterval(sendBalances, stdInterval);
 
   ipcMain.on('setKeyPair', (e, pair) => {
     storage.setItem('keyPair', pair);

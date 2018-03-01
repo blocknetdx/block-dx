@@ -4,19 +4,25 @@
   <div class="row" *isBp="['lg', 'xl']">
 
     <div class="sidebar col-lg">
-    <bn-card class="sidebar col-lg" [allowFullscreen]="false">
-      <bn-card-title>My Balances</bn-card-title>
-      <bn-card-body>
-        <app-balances></app-balances>
-      </bn-card-body>
-    </bn-card>
 
-    <bn-card class="sidebar col-lg" [allowFullscreen]="false">
-      <bn-card-title>Order Form</bn-card-title>
-      <bn-card-body>
-        <app-orderform></app-orderform>
-      </bn-card-body>
-    </bn-card>
+      <div class="row" style="margin-bottom: 8px;">
+        <bn-card class="col-lg" [allowFullscreen]="false">
+          <bn-card-title>My Balances</bn-card-title>
+          <bn-card-body>
+            <app-balances></app-balances>
+          </bn-card-body>
+        </bn-card>
+      </div>
+
+      <div class="row">
+        <bn-card class="col-lg" [allowFullscreen]="false">
+          <bn-card-title>Order Form</bn-card-title>
+          <bn-card-body>
+            <app-orderform></app-orderform>
+          </bn-card-body>
+        </bn-card>
+
+      </div>
     </div>
 
     <div class="content col-lg">
