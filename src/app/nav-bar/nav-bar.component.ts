@@ -85,6 +85,7 @@ export class NavBarComponent implements OnInit {
         // openExternal('');
         break;
     }
+    this.toggleNav();
   }
 
 }
