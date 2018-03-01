@@ -845,83 +845,9 @@ export class PricechartComponent implements AfterViewInit {
           }
         ];
 
-        this.zone.runOutsideAngular(() => {
-          const chart = AmCharts.makeChart( 'tv_chart_container', {
-            'type': 'serial',
-            'theme': 'dark',
-            // 'dataDateFormat':'YYYY-MM-DD',
-            minSelectedTime: 60000,
-            'valueAxes': [ {
-              'position': 'left'
-            } ],
-            'graphs': [ {
-              'id': 'g1',
-              // 'proCandlesticks': true,
-              'balloonText': 'Open:<b>[[open]]</b><br>Low:<b>[[low]]</b><br>High:<b>[[high]]</b><br>Close:<b>[[close]]</b><br>',
-              'closeField': 'close',
-              'fillColors': '#4bf5c6',
-              // fillAlphas: 1,
-              'highField': 'high',
-              'lineColor': '#4bf5c6',
-              'lineAlpha': 1,
-              'lowField': 'low',
-              'fillAlphas': 1,
-              'negativeFillColors': '#ff7e70',
-              'negativeLineColor': '#ff7e70',
-              'openField': 'open',
-              'title': 'Price:',
-              'type': 'candlestick',
-              'valueField': 'close'
-            } ],
-            'chartScrollbar': {
-              'graph': 'g1',
-              'graphType': 'line',
-              'scrollbarHeight': 30
-            },
-            'chartCursor': {
-              'valueLineEnabled': true,
-              'valueLineBalloonEnabled': true
-            },
-            'categoryField': 'date',
-            'categoryAxis': {
-              dateFormats: [
-                {'period':'fff','format':'JJ:NN:SS'},
-                {'period':'ss','format':'JJ:NN:SS'},
-                {'period':'mm','format':'JJ:NN'},
-                {'period':'hh','format':'JJ:NN'},
-                {'period':'DD','format':'MMM DD'},
-                {'period':'WW','format':'MMM DD'},
-                {'period':'MM','format':'MMM'},
-                {'period':'YYYY','format':'YYYY'}],
-              parseDates: true,
-              minPeriod: 'mm'
-            },
-            dataProvider: items
-              .map(i => Object.assign({}, i, {
-                date: moment(i.time).toDate()
-              })),
-            // dataProvider: sampleData
-            //   .map(d => Object.assign({}, d, {
-            //     date: moment(d.date).toISOString()
-            //   })),
-            'export': {
-              'enabled': false,
-              'position': 'bottom-right'
-            }
-          } );
-
-          chart.addListener( 'rendered', zoomChart );
-          zoomChart();
-
-          // this method is called when chart is first inited as we listen for 'dataUpdated' event
-          function zoomChart() {
-            // different zoom methods can be used - zoomToIndexes, zoomToDates, zoomToCategoryValues
-            chart.zoomToIndexes( chart.dataProvider.length - 50, chart.dataProvider.length - 1 );
-          }
-        });
+        this.renderPriceChart(items);
 
       });
-
 
     // this.zone.runOutsideAngular(() => {
     //   this.widget = new TradingView.widget({
@@ -1023,4 +949,83 @@ export class PricechartComponent implements AfterViewInit {
     //   });
     // });
   }
+
+  renderPriceChart(items) {
+
+    this.zone.runOutsideAngular(() => {
+      const chart = AmCharts.makeChart( 'tv_chart_container', {
+        'type': 'serial',
+        'theme': 'dark',
+        // 'dataDateFormat':'YYYY-MM-DD',
+        minSelectedTime: 60000,
+        'valueAxes': [ {
+          'position': 'left'
+        } ],
+        'graphs': [ {
+          'id': 'g1',
+          // 'proCandlesticks': true,
+          'balloonText': 'Open:<b>[[open]]</b><br>Low:<b>[[low]]</b><br>High:<b>[[high]]</b><br>Close:<b>[[close]]</b><br>',
+          'closeField': 'close',
+          'fillColors': '#4bf5c6',
+          // fillAlphas: 1,
+          'highField': 'high',
+          'lineColor': '#4bf5c6',
+          'lineAlpha': 1,
+          'lowField': 'low',
+          'fillAlphas': 1,
+          'negativeFillColors': '#ff7e70',
+          'negativeLineColor': '#ff7e70',
+          'openField': 'open',
+          'title': 'Price:',
+          'type': 'candlestick',
+          'valueField': 'close'
+        } ],
+        'chartScrollbar': {
+          'graph': 'g1',
+          'graphType': 'line',
+          'scrollbarHeight': 30
+        },
+        'chartCursor': {
+          'valueLineEnabled': true,
+          'valueLineBalloonEnabled': true
+        },
+        'categoryField': 'date',
+        'categoryAxis': {
+          dateFormats: [
+            {'period':'fff','format':'JJ:NN:SS'},
+            {'period':'ss','format':'JJ:NN:SS'},
+            {'period':'mm','format':'JJ:NN'},
+            {'period':'hh','format':'JJ:NN'},
+            {'period':'DD','format':'MMM DD'},
+            {'period':'WW','format':'MMM DD'},
+            {'period':'MM','format':'MMM'},
+            {'period':'YYYY','format':'YYYY'}],
+          parseDates: true,
+          minPeriod: 'mm'
+        },
+        dataProvider: items
+          .map(i => Object.assign({}, i, {
+            date: moment(i.time).toDate()
+          })),
+        // dataProvider: sampleData
+        //   .map(d => Object.assign({}, d, {
+        //     date: moment(d.date).toISOString()
+        //   })),
+        'export': {
+          'enabled': false,
+          'position': 'bottom-right'
+        }
+      } );
+
+      chart.addListener( 'rendered', zoomChart );
+      zoomChart();
+
+      // this method is called when chart is first inited as we listen for 'dataUpdated' event
+      function zoomChart() {
+        // different zoom methods can be used - zoomToIndexes, zoomToDates, zoomToCategoryValues
+        chart.zoomToIndexes( chart.dataProvider.length - 50, chart.dataProvider.length - 1 );
+      }
+    });
+  }
+
 }
