@@ -19,7 +19,7 @@ export class OpenordersService {
 
   private ordersObservable: Observable<Openorder[]>;
 
-  getOpenorders(firstPair: string): Observable<Openorder[]> {
+  getOpenorders(): Observable<Openorder[]> {
 
     if(!this.ordersObservable) {
       this.ordersObservable = Observable.create(observer => {
@@ -27,6 +27,7 @@ export class OpenordersService {
 
           window.electron.ipcRenderer.on('myOrders', (e, orders, symbols) => {
             // console.log('myOrders', orders);
+            const firstPair = symbols[0];
             const newOrders = orders
               .map(order => Openorder.createOpenOrder({
                 id: order.id,

@@ -35,7 +35,7 @@ export class FilledOrdersComponent extends BaseComponent implements OnInit {
     //         return o;
     //       });
     //   });
-    this.openorderService.getOpenorders(this.symbols[0])
+    this.openorderService.getOpenorders()
       .subscribe(openorders => {
         this.zone.run(() => {
           this.filledorders = openorders
