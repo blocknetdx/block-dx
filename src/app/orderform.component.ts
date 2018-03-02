@@ -156,17 +156,13 @@ export class OrderformComponent implements OnInit {
       if(type === 'buy') {
         ipcRenderer.send('takeOrder', {
           id,
-          send: this.symbols[1],
           sendAddress: takerAddress,
-          receive: this.symbols[0],
           receiveAddress: makerAddress
         });
       } else if(type === 'sell') {
         ipcRenderer.send('takeOrder', {
           id,
-          send: this.symbols[0],
           sendAddress: makerAddress,
-          receive: this.symbols[1],
           receiveAddress: takerAddress
         });
       }

@@ -237,7 +237,7 @@ const openAppWindow = () => {
   });
 
   ipcMain.on('takeOrder', (e, data) => {
-    sn.dxTakeOrder(data.id, data.send, data.sendAddress, data.receive, data.receiveAddress)
+    sn.dxTakeOrder(data.id, data.sendAddress, data.receiveAddress)
       .then(() => sendOrderBook())
       .catch(handleError);
   });
