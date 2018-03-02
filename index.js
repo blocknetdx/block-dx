@@ -9,7 +9,7 @@ const serve = require('electron-serve');
 
 const { platform } = process;
 
-let appWindow, serverLocation, sn, keyPair, storage, user, password, port;
+let appWindow, serverLocation, sn, keyPair, storage, user, password, port, info;
 
 // General Error Handler
 const handleError = err => {
@@ -80,7 +80,7 @@ const openSettingsWindow = (options = {}) => {
   const settingsWindow = new BrowserWindow({
     show: false,
     width: 500,
-    height: platform === 'win32' ? 520 : 505,
+    height: platform === 'win32' ? 520 : 530,
     parent: appWindow
   });
   if(isDev) {
@@ -186,6 +186,15 @@ const openAppWindow = () => {
 
   appWindow.once('ready-to-show', () => {
     appWindow.show();
+  });
+
+  appWindow.once('show', () => {
+    // version check
+    const err = versionCheck(info["version"]);
+    if (err) {
+      handleError(err);
+      app.quit();
+    }
   });
 
   const menuTemplate = [];
@@ -550,7 +559,7 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
     await new Promise(resolve => setTimeout(resolve, 2000));
 
     try {
-      await sn.getinfo();
+      info = await sn.getinfo();
     } catch(err) {
       // console.error(err);
       await onReady;
@@ -596,3 +605,11 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
 app.on('window-all-closed', () => {
   app.quit();
 });
+
+// check for version number. Minimum supported blocknet client version
+function versionCheck(version) {
+  if (version < 3090400) {
+    return {name:"Unsupported Version", message:"BLOCK DX requires Blocknet wallet version 3.9.04 or greater."};
+  }
+  return null;
+}
