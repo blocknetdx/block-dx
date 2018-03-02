@@ -478,11 +478,11 @@ const openAppWindow = () => {
     storage.setItem('keyPair', pair);
     keyPair = pair;
     sendKeyPair();
-    sendOrderBook();
-    sendTradeHistory();
-    sendMyOrders();
-    sendOrderHistory();
-    sendCurrentPrice();
+    sendOrderBook(true);
+    sendTradeHistory(true);
+    sendMyOrders(true);
+    sendOrderHistory(true);
+    sendCurrentPrice(true);
   });
 
   ipcMain.on('isFirstRun', e => {
