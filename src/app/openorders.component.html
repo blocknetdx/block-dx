@@ -70,7 +70,7 @@
     <!-- <ng-template columnHeader>Status</ng-template> -->
     <ng-template let-row="row" columnCell>
       <!--<span *ngIf="row.canceled">Canceled</span>-->
-      <a *ngIf="row.status === 'open'" (click)="cancelOrder(row)" class="close">
+      <a *ngIf="row.status === 'open'" (click)="cancelOrder(row)" class="close" title="Cancel Order">
         <i class="material-icons">close</i>
       </a>
     </ng-template>
