@@ -26,8 +26,6 @@ export class PricechartComponent implements AfterViewInit {
 
   ngAfterViewInit() {
 
-    // ToDo Connect pricechart.component to data API
-
     this.currentpriceService.getOrderHistory()
       .subscribe(items => {
 

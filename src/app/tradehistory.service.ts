@@ -20,14 +20,10 @@ export class TradehistoryService {
   // private tradehistoryUrl = '';  // URL to web api
   // private tradehistoryUrl = 'https://api-public.sandbox.gdax.com/products/BTC-USD/trades';
 
-  constructor(private http: Http) {
-    console.log('constructing TradehistoryService');
-  }
+  constructor(private http: Http) { }
 
   getTradehistory(): Observable<Trade[]> {
     // this.tradehistoryUrl = 'api/tradehistory_' + symbols.join('_');
-
-    // ToDo Connect tradehistory.service to data API.
 
     return rx.Observable.create(observer => {
       try {

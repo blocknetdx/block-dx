@@ -69,8 +69,7 @@ export class OrderformComponent implements OnInit {
       });
 
     this.orderTypes = [
-      { value: 'market', viewValue: 'Exact Order'}
-      // { value: 'limit', viewValue: 'Limit Order'}
+      { value: 'exact', viewValue: 'Exact Order'}
     ];
   }
 
@@ -157,17 +156,13 @@ export class OrderformComponent implements OnInit {
       if(type === 'buy') {
         ipcRenderer.send('takeOrder', {
           id,
-          send: this.symbols[1],
           sendAddress: takerAddress,
-          receive: this.symbols[0],
           receiveAddress: makerAddress
         });
       } else if(type === 'sell') {
         ipcRenderer.send('takeOrder', {
           id,
-          send: this.symbols[0],
           sendAddress: makerAddress,
-          receive: this.symbols[1],
           receiveAddress: takerAddress
         });
       }
@@ -184,12 +179,12 @@ export class OrderformComponent implements OnInit {
         });
       } else if(type === 'sell') {
         ipcRenderer.send('makeOrder', {
-          maker: this.symbols[1],
-          makerSize: totalPrice,
-          makerAddress: takerAddress,
-          taker: this.symbols[0],
-          takerSize: amount,
-          takerAddress: makerAddress,
+          maker: this.symbols[0],
+          makerSize: amount,
+          makerAddress: makerAddress,
+          taker: this.symbols[1],
+          takerSize: totalPrice,
+          takerAddress: takerAddress,
           type: 'exact'
         });
       }

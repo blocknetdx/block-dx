@@ -15,6 +15,17 @@ if (environment.production) {
 platformBrowserDynamic().bootstrapModule(AppModule)
   .catch(err => console.log(err));
 
+let alertTimeout;
+let count = 0;
 window.electron.ipcRenderer.on('error', (e, { name, message }) => {
-  alert(name + ': ' + message);
+  if(count === 0) {
+    count++;
+    alert(name + ': ' + message);
+    alertTimeout = setTimeout(() => {
+      count = 0;
+    }, 60000);
+  } else if(count === 1) {
+    count++;
+    alert(name + ': ' + message);
+  }
 });

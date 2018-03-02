@@ -27,7 +27,7 @@
     <span class="spacer"></span>
 
     <div class="input-group row">
-      <label class="col-4 col-form-label" for="amount">Amount</label>
+      <label class="col-4 col-form-label" for="amount">Size</label>
       <div class="col-8">
         <input
           (keyup)="amountChanged($event)"
@@ -92,6 +92,17 @@
           value="{{model.takerAddress}}"
           pattern="\w+"
           required />
+      </div>
+    </div>
+
+    <div class="input-group row">
+      <label class="col-4 col-form-label" for="js-order-id">Order ID</label>
+      <div class="col-8">
+        <input class="form-control"
+               style="padding-right:16px;"
+               name="total" id="js-order-id" type="text"
+               value="{{model.id || 'N/A'}}"
+               readonly />
       </div>
     </div>
 

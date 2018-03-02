@@ -7,7 +7,9 @@ const SimpleStorage = require('./src-back/storage');
 const ServiceNodeInterface = require('./src-back/service-node-interface');
 const serve = require('electron-serve');
 
-let appWindow, serverLocation, sn, keyPair, storage, user, password, port;
+const { platform } = process;
+
+let appWindow, serverLocation, sn, keyPair, storage, user, password, port, info;
 
 // General Error Handler
 const handleError = err => {
@@ -78,7 +80,7 @@ const openSettingsWindow = (options = {}) => {
   const settingsWindow = new BrowserWindow({
     show: false,
     width: 500,
-    height: 505,
+    height: platform === 'win32' ? 520 : 530,
     parent: appWindow
   });
   if(isDev) {
@@ -129,10 +131,17 @@ const openTOSWindow = (alreadyAccepted = false) => {
     e.returnValue = alreadyAccepted;
   });
 
+  let height;
+  if(process.platform === 'win32') {
+    height = alreadyAccepted ? 660 : 735;
+  } else {
+    height = alreadyAccepted ? 645 : 720;
+  }
+
   const tosWindow = new BrowserWindow({
     show: false,
     width: 500,
-    height: alreadyAccepted ? 645 : 720,
+    height: height,
     parent: appWindow
   });
   if(isDev) {
@@ -177,6 +186,15 @@ const openAppWindow = () => {
 
   appWindow.once('ready-to-show', () => {
     appWindow.show();
+  });
+
+  appWindow.once('show', () => {
+    // version check
+    const err = versionCheck(info["version"]);
+    if (err) {
+      handleError(err);
+      app.quit();
+    }
   });
 
   const menuTemplate = [];
@@ -228,10 +246,12 @@ const openAppWindow = () => {
   });
 
   ipcMain.on('takeOrder', (e, data) => {
-    sn.dxTakeOrder(data.id, data.send, data.sendAddress, data.receive, data.receiveAddress)
+    sn.dxTakeOrder(data.id, data.sendAddress, data.receiveAddress)
       .then(() => sendOrderBook())
       .catch(handleError);
   });
+
+  const stdInterval = 4000;
 
   let orderBook = {
     maker: '',
@@ -250,7 +270,7 @@ const openAppWindow = () => {
       .catch(handleError);
   };
   ipcMain.on('getOrderBook', () => sendOrderBook(true));
-  setInterval(sendOrderBook, 4000);
+  setInterval(sendOrderBook, stdInterval);
 
   let tradeHistory = [];
   const sendTradeHistory = force => {
@@ -264,7 +284,7 @@ const openAppWindow = () => {
       .catch(handleError);
   };
   ipcMain.on('sendTradeHistory', () => sendTradeHistory(true));
-  setInterval(sendTradeHistory, 4000);
+  setInterval(sendTradeHistory, stdInterval);
 
   const sendLocalTokens = () => {
     sn.dxGetLocalTokens()
@@ -292,7 +312,7 @@ const openAppWindow = () => {
       .catch(handleError);
   };
   ipcMain.on('getMyOrders', () => sendMyOrders(true));
-  setInterval(sendMyOrders, 4000);
+  setInterval(sendMyOrders, stdInterval);
 
   let orderHistory = [];
   const sendOrderHistory = force => {
@@ -321,6 +341,7 @@ const openAppWindow = () => {
       .getTime();
     sn.dxGetOrderHistory(keyPair[0], keyPair[1], start, end, 86400)
       .then(res => {
+        if(res.length === 0) return;
         const [ data ] = res;
         if(force === true || JSON.stringify(data) !== JSON.stringify(currentPrice)) {
           currentPrice = data;
@@ -330,6 +351,7 @@ const openAppWindow = () => {
       .catch(handleError);
   };
   ipcMain.on('getCurrentPrice', () => sendCurrentPrice(true));
+  setInterval(sendCurrentPrice, stdInterval);
 
   const sendCurrencies = async function() {
     try {
@@ -447,15 +469,29 @@ const openAppWindow = () => {
       .catch(handleError);
   });
 
+  let balances = [];
+  const sendBalances = force  => {
+    sn.dxGetTokenBalances()
+      .then(data => {
+        if(force === true || JSON.stringify(data) !== JSON.stringify(balances)) {
+          balances = data;
+          appWindow.send('balances', balances);
+        }
+      })
+      .catch(handleError);
+  };
+  ipcMain.on('getBalances', () => sendBalances(true));
+  setInterval(sendBalances, stdInterval);
+
   ipcMain.on('setKeyPair', (e, pair) => {
     storage.setItem('keyPair', pair);
     keyPair = pair;
     sendKeyPair();
-    sendOrderBook();
-    sendTradeHistory();
-    sendMyOrders();
-    sendOrderHistory();
-    sendCurrentPrice();
+    sendOrderBook(true);
+    sendTradeHistory(true);
+    sendMyOrders(true);
+    sendOrderHistory(true);
+    sendCurrentPrice(true);
   });
 
   ipcMain.on('isFirstRun', e => {
@@ -523,7 +559,7 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
     await new Promise(resolve => setTimeout(resolve, 2000));
 
     try {
-      await sn.getinfo();
+      info = await sn.getinfo();
     } catch(err) {
       // console.error(err);
       await onReady;
@@ -569,3 +605,11 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
 app.on('window-all-closed', () => {
   app.quit();
 });
+
+// check for version number. Minimum supported blocknet client version
+function versionCheck(version) {
+  if (version < 3090400) {
+    return {name:"Unsupported Version", message:"BLOCK DX requires Blocknet wallet version 3.9.04 or greater."};
+  }
+  return null;
+}

@@ -242,7 +242,7 @@ class ServiceNodeInterface {
         method,
         params
       }));
-    if(status !== 200) throw new Error(`Respose code ${status}`);
+    if(status !== 200) throw new Error(`Response code ${status}`);
     return body;
   }
 
@@ -295,14 +295,12 @@ class ServiceNodeInterface {
    * @param {string} receiveAddress
    * @returns {Promise<OrderObject>}
    */
-  async dxTakeOrder(id, send, sendAddress, receive, receiveAddress) {
+  async dxTakeOrder(id, sendAddress, receiveAddress) {
     const { error, result } = await this._makeServiceNodeRequest({
       method: 'dxTakeOrder',
       params: [
         id,
-        send,
         sendAddress,
-        receive,
         receiveAddress
       ]
     });
@@ -484,7 +482,7 @@ class ServiceNodeInterface {
    * @returns {Promise<OrderHistoryObject[]>}
    */
   async dxGetOrderHistory(maker, taker, startTime, endTime, granularity, orderIds = false) {
-    const { error, result } = await this._makeServiceNodeRequest({
+    const { error, result = [] } = await this._makeServiceNodeRequest({
       method: 'dxGetOrderHistory',
       params: [
         maker,
@@ -496,8 +494,9 @@ class ServiceNodeInterface {
       ]
     });
     if(error) throw new Error(error);
-    return result
-      .map(OrderHistory);
+    if (result && result.length > 0)
+      return result.map(OrderHistory);
+    else return [];
   }
 
   /**
@@ -522,6 +521,22 @@ class ServiceNodeInterface {
     });
     if(error) throw new Error(error);
     return result;
+  }
+
+  /**
+   * Gets wallet balances
+   * @returns {Promise<{coin: string, amount: string}[]>}
+   */
+  async dxGetTokenBalances() {
+    const { error, result } = await this._makeServiceNodeRequest({
+      method: 'dxGetTokenBalances'
+    });
+    if(error) throw new Error(error);
+    return Object.keys(result)
+      .map(coin => ({
+        coin,
+        amount: result[coin]
+      }));
   }
 
 }
