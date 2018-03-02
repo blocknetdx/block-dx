@@ -38,12 +38,12 @@
     </ng-template>
   </app-table-column>
 
-  <app-table-column [prop]="'fee'" [classList]="'d-none d-sm-block col-1 col-sm-2'">
-    <ng-template columnHeader>Fee ({{symbols[1]}})</ng-template>
-    <ng-template let-row="row" columnCell>
-      <span class="bn-number" [innerHtml]="row.price*row.size*0.05 | blockCurrency:symbols[1]"></span>
-    </ng-template>
-  </app-table-column>
+  <!--<app-table-column [prop]="'fee'" [classList]="'d-none d-sm-block col-1 col-sm-2'">-->
+    <!--<ng-template columnHeader>Fee ({{symbols[1]}})</ng-template>-->
+    <!--<ng-template let-row="row" columnCell>-->
+      <!--<span class="bn-number" [innerHtml]="row.price*row.size*0.05 | blockCurrency:symbols[1]"></span>-->
+    <!--</ng-template>-->
+  <!--</app-table-column>-->
 
   <!-- <app-table-column [prop]="'filled'" [classList]="'d-none d-sm-block col-1 col-sm-2'">
     <ng-template columnHeader>Filled ({{symbols[1]}})</ng-template>
