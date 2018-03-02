@@ -242,7 +242,7 @@ class ServiceNodeInterface {
         method,
         params
       }));
-    if(status !== 200) throw new Error(`Respose code ${status}`);
+    if(status !== 200) throw new Error(`Response code ${status}`);
     return body;
   }
 
@@ -482,7 +482,7 @@ class ServiceNodeInterface {
    * @returns {Promise<OrderHistoryObject[]>}
    */
   async dxGetOrderHistory(maker, taker, startTime, endTime, granularity, orderIds = false) {
-    const { error, result } = await this._makeServiceNodeRequest({
+    const { error, result = [] } = await this._makeServiceNodeRequest({
       method: 'dxGetOrderHistory',
       params: [
         maker,
@@ -494,8 +494,9 @@ class ServiceNodeInterface {
       ]
     });
     if(error) throw new Error(error);
-    return result
-      .map(OrderHistory);
+    if (result && result.length > 0)
+      return result.map(OrderHistory);
+    else return [];
   }
 
   /**
