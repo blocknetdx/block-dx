@@ -71,6 +71,7 @@ export class OpenordersService {
                   canceled: order.status === 'canceled'
                 });
               });
+            // console.log('myOrders', newOrders);
             observer.next(newOrders);
           });
           window.electron.ipcRenderer.send('getMyOrders');
