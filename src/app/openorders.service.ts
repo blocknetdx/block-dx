@@ -31,7 +31,7 @@ export class OpenordersService {
               .map(order => Openorder.createOpenOrder({
                 id: order.id,
                 price: firstPair === order.maker ? order.takerSize/order.makerSize : order.makerSize/order.takerSize, // TODO mathjs
-                size: order.makerSize,
+                size: firstPair === order.maker ? order.makerSize : order.takerSize,
                 product_id: '',
                 side: firstPair === order.maker ? 'sell' : 'buy',
                 stp: '',
