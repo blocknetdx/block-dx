@@ -29,6 +29,15 @@ export class TradehistoryComponent implements OnInit {
         this.symbols = symbols;
       });
     });
+
+    // Just some sample data for checking UI
+    // this.tradehistory = [
+    //   {time: new Date().toISOString(), trade_id: '12345', price: '.025', size: '4', side: 'buy'},
+    //   {time: new Date().toISOString(), trade_id: '23451', price: '.025', size: '5', side: 'buy'},
+    //   {time: new Date().toISOString(), trade_id: '34512', price: '.033', size: '1', side: 'sell'},
+    //   {time: new Date().toISOString(), trade_id: '45123', price: '.025', size: '4', side: 'sell'}]
+    //   .map(t => Trade.fromObject(t));
+
     this.tradehistoryService.getTradehistory()
       .subscribe(tradehistory => {
         zone.run(() => {

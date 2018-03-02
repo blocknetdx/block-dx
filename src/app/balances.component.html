@@ -1,7 +1,7 @@
 <app-table #balancesTable
   [sections]="sections">
 
-  <app-table-column [classList]="'col-2'">
+  <app-table-column [sortable]="false" [classList]="'col-2'">
     <ng-template columnHeader>Coin</ng-template>
     <ng-template let-row="row" columnCell>
 

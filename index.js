@@ -7,6 +7,8 @@ const SimpleStorage = require('./src-back/storage');
 const ServiceNodeInterface = require('./src-back/service-node-interface');
 const serve = require('electron-serve');
 
+const { platform } = process;
+
 let appWindow, serverLocation, sn, keyPair, storage, user, password, port;
 
 // General Error Handler
@@ -78,7 +80,7 @@ const openSettingsWindow = (options = {}) => {
   const settingsWindow = new BrowserWindow({
     show: false,
     width: 500,
-    height: 505,
+    height: platform === 'win32' ? 520 : 505,
     parent: appWindow
   });
   if(isDev) {
@@ -129,10 +131,17 @@ const openTOSWindow = (alreadyAccepted = false) => {
     e.returnValue = alreadyAccepted;
   });
 
+  let height;
+  if(process.platform === 'win32') {
+    height = alreadyAccepted ? 660 : 735;
+  } else {
+    height = alreadyAccepted ? 645 : 720;
+  }
+
   const tosWindow = new BrowserWindow({
     show: false,
     width: 500,
-    height: alreadyAccepted ? 645 : 720,
+    height: height,
     parent: appWindow
   });
   if(isDev) {
