@@ -95,6 +95,19 @@
       </div>
     </div>
 
+    <div class="input-group row">
+      <label class="col-4 col-form-label" for="js-order-id">Order ID</label>
+      <div class="col-8">
+        <input class="form-control"
+               style="padding-right:16px;"
+               name="total" id="js-order-id" type="text"
+               (keyup)="takerAddressChanged($event)"
+               (onchange)="takerAddressChanged($event)"
+               value="{{model.id || 'N/A'}}"
+               readonly />
+      </div>
+    </div>
+
     <span class="spacer"></span>
 
     <div class="input-group row">
