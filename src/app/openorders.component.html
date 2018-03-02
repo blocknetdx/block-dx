@@ -25,7 +25,7 @@
   </app-table-column>
 
   <app-table-column [prop]="'size'" [classList]="'col-4 col-sm-2'">
-    <ng-template columnHeader>Amount ({{symbols[0]}})</ng-template>
+    <ng-template columnHeader>Size ({{symbols[0]}})</ng-template>
     <ng-template let-row="row" columnCell>
       <span class="bn-number" [innerHtml]="row.size | blockCurrency:symbols[0]"></span>
     </ng-template>
