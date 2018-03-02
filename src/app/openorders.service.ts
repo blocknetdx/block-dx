@@ -1,9 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Headers, Http } from '@angular/http';
+import * as math from 'mathjs';
 
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
+
+math.config({
+  number: 'BigNumber',
+  precision: 64
+});
 
 import { Openorder } from './openorder';
 
@@ -19,6 +25,17 @@ export class OpenordersService {
 
   private ordersObservable: Observable<Openorder[]>;
 
+  private calculatePrice(order, symbols) {
+    const firstPair = symbols[0];
+    const makerSize = Number(order.makerSize);
+    const takerSize = Number(order.takerSize);
+    if(firstPair === order.maker) {
+      return math.divide(takerSize, makerSize);
+    } else {
+      return math.divide(makerSize, takerSize);
+    }
+  }
+
   getOpenorders(): Observable<Openorder[]> {
 
     if(!this.ordersObservable) {
@@ -31,7 +48,7 @@ export class OpenordersService {
             const newOrders = orders
               .map(order => Openorder.createOpenOrder({
                 id: order.id,
-                price: firstPair === order.maker ? order.takerSize/order.makerSize : order.makerSize/order.takerSize, // TODO mathjs
+                price: this.calculatePrice(order, symbols),
                 size: firstPair === order.maker ? order.makerSize : order.takerSize,
                 product_id: '',
                 side: firstPair === order.maker ? 'sell' : 'buy',
