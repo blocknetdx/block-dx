@@ -8,9 +8,7 @@ export class BalancesService {
 
   private balancesObservable: Observable<Balance[]>;
 
-  constructor() {
-    console.log('Constructing BalancesService');
-  }
+  constructor() { }
 
   public getBalances(): Observable<Balance[]> {
 

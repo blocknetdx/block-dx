@@ -15,16 +15,10 @@ export class CurrentpriceService {
   public orderHistory: Observable<Currentprice[]>;
 
   constructor(private http: Http, private appService: AppService) {
-
-    console.log('constructing CurrentpriceService');
-
     this.currentprice = this.getCurrentprice();
-
   }
 
   private getCurrentprice(): Observable<Currentprice> {
-
-    // ToDo Connect currentprice.service to data API
 
     return Observable.create(observer => {
       window.electron.ipcRenderer.on('currentPrice', (e, order) => {

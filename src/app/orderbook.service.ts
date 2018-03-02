@@ -27,9 +27,7 @@ export class OrderbookService {
   private orderbookUrl = '';
   // private orderbookUrl = 'https://api-public.sandbox.gdax.com/products/ETH-BTC/book?level=2';
 
-  constructor(private http: Http) {
-    console.log('Constructing OrderbookService');
-  }
+  constructor(private http: Http) { }
 
   requestOrder(order: Order) {
     this.requestedOrder.next(order);
@@ -37,8 +35,6 @@ export class OrderbookService {
 
   getOrderbook(): Observable<Order> {
     // this.orderbookUrl = 'api/orderbook_' + symbolsolejoin('_');
-
-    // ToDo Connect orderbook.service to data API
 
     if(!this.orderbookObservable) {
       this.orderbookObservable = Observable.create(observer => {

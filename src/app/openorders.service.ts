@@ -13,15 +13,11 @@ math.config({
 
 import { Openorder } from './openorder';
 
-// ToDo Connect openorders.service to data API.
-
 @Injectable()
 export class OpenordersService {
   private openordersUrl = '';
 
-  constructor(private http: Http) {
-    console.log('constructing OpenordersService');
-  }
+  constructor(private http: Http) { }
 
   private ordersObservable: Observable<Openorder[]>;
 

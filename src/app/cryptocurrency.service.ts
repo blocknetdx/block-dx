@@ -9,9 +9,7 @@ export class CryptocurrencyService {
 
   private currenciesObservable: Observable<Cryptocurrency[]>;
 
-  constructor(private http: Http) {
-    console.log('Constructing CryptocurrencyService');
-  }
+  constructor(private http: Http) { }
 
   public getCurrencyComparisons(token): Observable<Cryptocurrency[]> {
     const { ipcRenderer } = window.electron;
@@ -32,8 +30,6 @@ export class CryptocurrencyService {
   }
 
   public getCurrencies(): Observable<Cryptocurrency[]> {
-
-    // ToDo Connect cryptocurrency.service to data API
 
     const { ipcRenderer } = window.electron;
 
