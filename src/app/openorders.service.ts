@@ -19,7 +19,7 @@ export class OpenordersService {
 
   private ordersObservable: Observable<Openorder[]>;
 
-  getOpenorders(): Observable<Openorder[]> {
+  getOpenorders(firstPair: string): Observable<Openorder[]> {
 
     if(!this.ordersObservable) {
       this.ordersObservable = Observable.create(observer => {
@@ -30,10 +30,10 @@ export class OpenordersService {
             const newOrders = orders
               .map(order => Openorder.createOpenOrder({
                 id: order.id,
-                price: order.takerSize,
+                price: firstPair === order.maker ? order.takerSize/order.makerSize : order.makerSize/order.takerSize, // TODO mathjs
                 size: order.makerSize,
                 product_id: '',
-                side: symbols[0] === order.maker ? 'sell' : 'buy',
+                side: firstPair === order.maker ? 'sell' : 'buy',
                 stp: '',
                 type: order.type,
                 time_in_force: '',
@@ -43,8 +43,8 @@ export class OpenordersService {
                 filledSize: '',
                 executed_value: '',
                 status: order.status,
-                settled: order.status === 'filled' ? true : false,
-                canceled: order.status === 'canceled' ? true : false
+                settled: order.status === 'filled',
+                canceled: order.status === 'canceled'
               }));
             observer.next(newOrders);
           });
