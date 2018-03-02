@@ -27,14 +27,14 @@
   @include screen(lg) {
     max-width: 300px;
     /deep/ {
-      .bn-card {
-        height: auto;
-      }
-      .bn-card__body {
-        position: relative;
-        top: auto;
-        bottom: auto;
-      }
+      //.bn-card {
+      //  height: auto;
+      //}
+      //.bn-card__body {
+      //  position: relative;
+      //  top: auto;
+      //  bottom: auto;
+      //}
     }
   }
   @include screen(xl) {
@@ -68,6 +68,19 @@
     &.orders, &.history {
       @include screen(lg) {
         height: calc(40vh - 106px);
+      }
+    }
+
+    &.balances {
+      @include screen(lg) {
+        //height: calc(25vh);
+        max-height: calc(100vh - 457px - 106px);
+      }
+    }
+    &.orderform {
+      @include screen(lg) {
+        //height: calc(75vh - 106px);
+        height: 457px;
       }
     }
   }

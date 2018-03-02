@@ -21,17 +21,16 @@ export class BalancesComponent implements OnInit {
     private zone: NgZone
   ) {
 
-    const sampleData = [
-      {coin: 'BTC', amount: '0.00000432'},
-      {coin: 'LTC', amount: '0.00323242'},
-      {coin: 'ETH', amount: '34.0000'},
-      {coin: 'SYS', amount: '5.00000432'},
-      {coin: 'DGB', amount: '103.0009743'},]
-      .map(b => Balance.fromObject(b));
-
-    this.sections = [{
-      rows: sampleData
-    }];
+    // const sampleData = [
+    //   {coin: 'BTC', amount: '0.00000432'},
+    //   {coin: 'LTC', amount: '0.00323242'},
+    //   {coin: 'ETH', amount: '34.0000'},
+    //   {coin: 'SYS', amount: '5.00000432'},
+    //   {coin: 'DGB', amount: '103.0009743'},]
+    //   .map(b => Balance.fromObject(b));
+    // this.sections = [{
+    //   rows: sampleData
+    // }];
 
   }
 
