@@ -179,12 +179,12 @@ export class OrderformComponent implements OnInit {
         });
       } else if(type === 'sell') {
         ipcRenderer.send('makeOrder', {
-          maker: this.symbols[1],
-          makerSize: totalPrice,
-          makerAddress: takerAddress,
-          taker: this.symbols[0],
-          takerSize: amount,
-          takerAddress: makerAddress,
+          maker: this.symbols[0],
+          makerSize: amount,
+          makerAddress: makerAddress,
+          taker: this.symbols[1],
+          takerSize: totalPrice,
+          takerAddress: takerAddress,
           type: 'exact'
         });
       }
