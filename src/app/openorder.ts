@@ -1,6 +1,6 @@
 export class Openorder {
   id: string;
-  price: string;
+  price: number; // TODO mathjs
   size: string;
   product_id: string;
   side: string;

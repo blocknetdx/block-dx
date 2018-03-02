@@ -40,7 +40,7 @@ export class OpenordersComponent extends BaseComponent implements OnInit {
         });
     });
 
-    this.openorderService.getOpenorders()
+    this.openorderService.getOpenorders(this.symbols[0])
       .subscribe(openorders => {
         this.zone.run(() => {
           this.openorders = openorders
