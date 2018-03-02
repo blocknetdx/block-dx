@@ -120,7 +120,6 @@ export class DepthComponent implements OnInit, AfterViewInit, OnChanges {
 
   runDepthChart(): void {
     const data = this.orderbook;
-    if(data.length === 0) return;
     this.zone.runOutsideAngular(() => {
 
       // setTimeout(() => {
