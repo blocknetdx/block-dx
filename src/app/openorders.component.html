@@ -34,7 +34,7 @@
   <app-table-column [prop]="'price'" [classList]="'col-4 col-sm-2'">
     <ng-template columnHeader>Total ({{symbols[1]}})</ng-template>
     <ng-template let-row="row" columnCell>
-      <span class="bn-number" [innerHtml]="row.price*row.size | blockCurrency:symbols[1]"></span>
+      <span class="bn-number" [innerHtml]="row.total | blockCurrency:symbols[1]"></span>
     </ng-template>
   </app-table-column>
 

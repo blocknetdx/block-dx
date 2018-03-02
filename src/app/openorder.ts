@@ -2,6 +2,7 @@ export class Openorder {
   id: string;
   price: number;
   size: string;
+  total: string;
   product_id: string;
   side: string;
   stp: string;

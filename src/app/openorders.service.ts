@@ -46,24 +46,31 @@ export class OpenordersService {
             // console.log('myOrders', orders);
             const firstPair = symbols[0];
             const newOrders = orders
-              .map(order => Openorder.createOpenOrder({
-                id: order.id,
-                price: this.calculatePrice(order, symbols),
-                size: firstPair === order.maker ? order.makerSize : order.takerSize,
-                product_id: '',
-                side: firstPair === order.maker ? 'sell' : 'buy',
-                stp: '',
-                type: order.type,
-                time_in_force: '',
-                post_only: '',
-                created_at: order.updatedAt ? order.updatedAt : order.createdAt,
-                fill_fees: '',
-                filledSize: '',
-                executed_value: '',
-                status: order.status,
-                settled: order.status === 'filled',
-                canceled: order.status === 'canceled'
-              }));
+              .map(order => {
+
+                const price = this.calculatePrice(order, symbols);
+                const size = firstPair === order.maker ? order.makerSize : order.takerSize;
+
+                return Openorder.createOpenOrder({
+                  id: order.id,
+                  price,
+                  size,
+                  total: String(math.multiply(price, Number(size))),
+                  product_id: '',
+                  side: firstPair === order.maker ? 'sell' : 'buy',
+                  stp: '',
+                  type: order.type,
+                  time_in_force: '',
+                  post_only: '',
+                  created_at: order.updatedAt ? order.updatedAt : order.createdAt,
+                  fill_fees: '',
+                  filledSize: '',
+                  executed_value: '',
+                  status: order.status,
+                  settled: order.status === 'filled',
+                  canceled: order.status === 'canceled'
+                });
+              });
             observer.next(newOrders);
           });
           window.electron.ipcRenderer.send('getMyOrders');
