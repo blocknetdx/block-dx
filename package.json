@@ -1,6 +1,6 @@
 {
   "name": "BLOCK-DX",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "license": "MIT",
   "author": "Blocknet <contact@blocknet.co>",
   "description": "BLOCK DX",
@@ -8,6 +8,10 @@
     {
       "name": "Corey Roach",
       "email": "caroach@gmail.com"
+    },
+    {
+      "name": "Ryan Burgett",
+      "email": "ryan@burgettweb.net"
     }
   ],
   "scripts": {
