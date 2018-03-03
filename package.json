@@ -1,6 +1,6 @@
 {
   "name": "BLOCK-DX",
-  "version": "0.7.0",
+  "version": "0.7.3",
   "license": "MIT",
   "author": "Blocknet <contact@blocknet.co>",
   "description": "BLOCK DX",
@@ -8,10 +8,14 @@
     {
       "name": "Corey Roach",
       "email": "caroach@gmail.com"
+    },
+    {
+      "name": "Ryan Burgett",
+      "email": "ryan@burgettweb.net"
     }
   ],
   "scripts": {
-    "start-app": "electron .",
+    "start-app": "./node_modules/.bin/electron .",
     "ng": "ng",
     "start": "ng serve --host 0.0.0.0",
     "build": "ng build",
@@ -70,6 +74,7 @@
     "@types/jquery": "^3.2.16",
     "@types/node": "^8.0.57",
     "codelyzer": "^4.0.2",
+    "electron": "^1.8.2",
     "electron-builder": "^19.56.0",
     "eslint": "^4.17.0",
     "jasmine-core": "^2.8.0",

@@ -316,11 +316,10 @@ const openAppWindow = () => {
 
   let orderHistory = [];
   const sendOrderHistory = force => {
-    const end = new Date().getTime();
-    const start = moment(new Date(end))
-      .subtract(7, 'd')
-      .toDate()
-      .getTime();
+    const end = moment.utc().valueOf();
+    const start = moment(end).utc()
+      .subtract(1, 'd')
+      .valueOf();
     sn.dxGetOrderHistory(keyPair[0], keyPair[1], start, end, 60)
       .then(res => {
         if(force === true || JSON.stringify(res) !== JSON.stringify(orderHistory)) {
@@ -334,11 +333,10 @@ const openAppWindow = () => {
 
   let currentPrice = {};
   const sendCurrentPrice = force => {
-    const end = new Date().getTime();
-    const start = moment(new Date(end))
+    const end = moment.utc().valueOf();
+    const start = moment(end).utc()
       .subtract(1, 'd')
-      .toDate()
-      .getTime();
+      .valueOf();
     sn.dxGetOrderHistory(keyPair[0], keyPair[1], start, end, 86400)
       .then(res => {
         if(res.length === 0) return;
@@ -362,11 +360,10 @@ const openAppWindow = () => {
       const localTokensSet = new Set(localTokens);
       const comparator = networkTokens.includes('BTC') ? 'BTC' : networkTokens.includes('LTC') ? 'LTC' : networkTokens[0];
       const currencies = [];
-      const end = new Date().getTime();
-      const start = moment(new Date(end))
+      const end = moment.utc().valueOf();
+      const start = moment(end).utc()
         .subtract(1, 'd')
-        .toDate()
-        .getTime();
+        .valueOf();
 
       for(const token of networkTokens) {
         const second = token === comparator ? networkTokens.find(t => t !== comparator) : comparator;
@@ -406,11 +403,10 @@ const openAppWindow = () => {
       ]);
       const localTokensSet = new Set(localTokens);
       const currencies = [];
-      const end = new Date().getTime();
-      const start = moment(new Date(end))
+      const end = moment.utc().valueOf();
+      const start = moment(end).utc()
         .subtract(1, 'd')
-        .toDate()
-        .getTime();
+        .valueOf();
 
       for(const second of networkTokens) {
         if(second === primary) continue;

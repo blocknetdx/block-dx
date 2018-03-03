@@ -242,7 +242,17 @@ class ServiceNodeInterface {
         method,
         params
       }));
-    if(status !== 200) throw new Error(`Response code ${status}`);
+    let { result, error } = body;
+    if (error) {
+      throw new Error('Internal server error');
+    }
+    if (result.hasOwnProperty('error')) {
+      const { code, name } = result;
+      const message = result.error ? result.error : 'Internal server error';
+      throw new Error(`${name} code ${code} ${message}`);
+    }
+    if(status !== 200)
+      throw new Error(`Response code ${status}`);
     return body;
   }
 
@@ -477,7 +487,7 @@ class ServiceNodeInterface {
    * @param {string} taker
    * @param {number} startTime - unix time
    * @param {number} endTime - unix time
-   * @param {number} granularity - Time slice in seconds: 30, 60, 300, 900, 3600, 21600, 86400
+   * @param {number} granularity - Time slice in seconds: 60, 300, 900, 3600, 21600, 86400
    * @param {boolean} [orderIds = false]
    * @returns {Promise<OrderHistoryObject[]>}
    */
