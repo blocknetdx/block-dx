@@ -242,7 +242,17 @@ class ServiceNodeInterface {
         method,
         params
       }));
-    if(status !== 200) throw new Error(`Response code ${status}`);
+    let { result, error } = body;
+    if (error) {
+      throw new Error('Internal server error');
+    }
+    if (result.hasOwnProperty('error')) {
+      const { code, name } = result;
+      const message = result.error ? result.error : 'Internal server error';
+      throw new Error(`${name} code ${code} ${message}`);
+    }
+    if(status !== 200)
+      throw new Error(`Response code ${status}`);
     return body;
   }
 
