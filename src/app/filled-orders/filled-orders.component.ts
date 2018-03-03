@@ -44,7 +44,7 @@ export class FilledOrdersComponent extends BaseComponent implements OnInit {
               o['row_class'] = o.side;
               return o;
             });
-          console.log('filledorders', this.filledorders);
+          // console.log('filledorders', this.filledorders);
         });
       });
   }
