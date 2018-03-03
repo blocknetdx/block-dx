@@ -19,4 +19,4 @@ export class Trade {
     const inst = new Trade();
     return Object.assign(inst, obj);
   }
-};
+}

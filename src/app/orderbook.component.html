@@ -5,8 +5,8 @@
 
   <bn-table-section-divider>
     <ng-template #sectionDivider>
-      <div class="divider">
-        <span>0.05289000</span>
+      <div class="divider" *ngIf="showSpread">
+        <span [innerHtml]="spread | blockCurrency"></span>
       </div>
     </ng-template>
   </bn-table-section-divider>
@@ -25,7 +25,7 @@
   </app-table-column>
 
   <app-table-column [sortable]="false" [classList]="'col-4'">
-    <ng-template columnHeader>Amount ({{symbols[0]}})</ng-template>
+    <ng-template columnHeader>Size ({{symbols[0]}})</ng-template>
     <ng-template let-row="row" columnCell>
       <span class="bn-number" [innerHtml]="row[1] | blockCurrency:symbols[0]"></span>
     </ng-template>
@@ -41,4 +41,5 @@
       </span>
     </ng-template>
   </app-table-column>
+
 </app-table>

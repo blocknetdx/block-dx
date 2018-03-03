@@ -11,32 +11,43 @@ import { Currentprice } from './currentprice';
 
 @Injectable()
 export class CurrentpriceService {
-  public currentprice: BehaviorSubject<Currentprice> = new BehaviorSubject(null);
-
-  private currentpriceUrl: string = '';  // URL to web api
+  public currentprice: Observable<Currentprice>;
+  public orderHistory: Observable<Currentprice[]>;
 
   constructor(private http: Http, private appService: AppService) {
-    this.appService.marketPairChanges.subscribe((symbols) => {
-      if (symbols) {
-        this.getCurrentprice(symbols).first().subscribe((cp) => {
-          this.currentprice.next(cp);
-        });
-      }
-    });
+    this.currentprice = this.getCurrentprice();
   }
 
-  private getCurrentprice(symbols:string[]): Observable<Currentprice> {
-    this.currentpriceUrl = 'api/stats_' + symbols[0];
+  private getCurrentprice(): Observable<Currentprice> {
 
-    return this.http.get(this.currentpriceUrl)
-      .map((res) => {
-        const data = res.json().map(d => {
-          return Currentprice.fromObject(d);
+    return Observable.create(observer => {
+      window.electron.ipcRenderer.on('currentPrice', (e, order) => {
+        const preppedOrder = Object.assign({}, order, {
+          last: order.close
         });
-        return data[0];
-      })
-      .debounceTime(5000)
-      .catch(this.handleError);
+        observer.next(Currentprice.fromObject(preppedOrder));
+      });
+      window.electron.ipcRenderer.send('getCurrentPrice');
+
+    });
+
+  }
+
+  getOrderHistory() {
+    if(!this.orderHistory) {
+      this.orderHistory = Observable.create(observer => {
+        window.electron.ipcRenderer.on('orderHistory', (e, data) => {
+          const preppedData = data
+            .map(d => Object.assign({}, d, {
+              last: d.close
+            }))
+            .map(d => Currentprice.fromObject(d));
+          observer.next(preppedData);
+        });
+        window.electron.ipcRenderer.send('getOrderHistory');
+      });
+    }
+    return this.orderHistory;
   }
 
   private handleError(error: any): Promise<any> {

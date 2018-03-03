@@ -1,9 +1,9 @@
-import { Component, ContentChildren, QueryList, ViewChildren, ElementRef, ViewChild } from '@angular/core';
+import { Component, ContentChildren, QueryList, ViewChildren, ElementRef, ViewChild, AfterContentInit } from '@angular/core';
 
 import { TabDirective } from './tab.directive';
 
 @Component({
-  selector: 'bn-tab-view',
+  selector: 'app-bn-tab-view',
   styleUrls: ['./tab-view.component.scss'],
   template: `
     <div #buttonContainer class="tabs">
@@ -16,14 +16,15 @@ import { TabDirective } from './tab.directive';
     </div>
     <div class="tab-view__body">
       <ng-container *ngFor="let tab of tabs; let i = index">
-        <ng-container *ngIf="activeTab === tab">
+        <ng-container *ngIf="activeTab.label === tab.label">
+          <!--<div>{{tab.label}}</div>-->
           <ng-template *ngTemplateOutlet="tab.content"></ng-template>
         </ng-container>
       </ng-container>
     </div>
   `
 })
-export class TabViewComponent {
+export class TabViewComponent implements AfterContentInit {
   @ViewChild('buttonContainer')
   public buttonContainer: ElementRef;
 
@@ -69,8 +70,8 @@ export class TabViewComponent {
 
     return {
       'width': `${Math.ceil(rect.width)}px`,
-      'left': `${Math.floor(rect.x-parentRect.x)}px`
-    }
+      'left': `${Math.floor(rect.left - parentRect.left)}px`
+    };
   }
 
 }

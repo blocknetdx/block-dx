@@ -10,6 +10,21 @@ export class AppService {
   public marketPairChanges: BehaviorSubject<string[]> = new BehaviorSubject(null);
 
   constructor(private wsService: WebSocketService) {
+
+    this.marketPairChanges = Observable.create(observer => {
+      try {
+
+        window.electron.ipcRenderer.on('keyPair', (e, pair) => {
+          observer.next(pair);
+        });
+
+        window.electron.ipcRenderer.send('getKeyPair');
+
+      } catch(err) {
+        console.error(err);
+      }
+    });
+
     // this.wsService.connect('wss://ws-feed.gdax.com')
     //   .subscribe((data) => {
     //     if (data.type) {
@@ -50,6 +65,7 @@ export class AppService {
   }
 
   public updateMarketPair(pair: string[]) {
-    this.marketPairChanges.next(pair);
+    window.electron.ipcRenderer.send('setKeyPair', pair);
+    // this.marketPairChanges.next(pair);
   }
 }

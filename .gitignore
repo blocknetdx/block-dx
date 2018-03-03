@@ -40,3 +40,8 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+.idea
+/temp
+/dist-native
+/docs

@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>License Agreement</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0">
+  <meta name="format-detection" content="telephone=no">
+
+  <link rel="shortcut icon" href="assets/favicon_block.png"  />
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700|Roboto+Mono:300,400,700" rel="stylesheet">
+  <!--<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">-->
+
+  <style>
+
+    body {
+      background-color: #0e2742;
+      font-family: "Open Sans", sans-serif;
+      margin-left: 0;
+      margin-right: 0;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+    h1, h2, h3, h4 {
+      color: #fff;
+      margin-top: 0;
+      margin-bottom: 0;
+      padding: 10px 15px;
+      background-color: #172e48;
+      letter-spacing: 1px;
+    }
+    .container {
+      padding: 20px;
+      padding-bottom: 10px;
+    }
+    .input-group {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      margin-bottom: 15px;
+    }
+    .input-group label {
+      width: 35%;
+      background-color: #213d54;
+      color: #fff;
+      padding: 15px 15px;
+      font-weight: 300;
+      font-size: 14px;
+    }
+    .input-group input {
+      flex-grow: 1;
+      background-color: #123149;
+      color: #fff;
+      padding: 15px 20px;
+      font-weight: 300;
+      font-size: 14px;
+      border-width: 1px;
+      border-color: #123149;
+      border-style: solid;
+      outline-width: 0;
+    }
+    .input-group input:focus {
+      outline-width: 0px;
+      border-width: 1px;
+      border-color: #4b6275;
+      border-style: solid;
+    }
+    button {
+      display: block;
+      flex-grow: 1;
+      /*flex-basis: 1;*/
+      /*width: 100%;*/
+      margin: 10px;
+      background-color: #0069ff;
+      color: #fff;
+      padding: 15px 20px;
+      font-size: 14px;
+      border-top-width: 0;
+      border-bottom-width: 0;
+      border-left-width: 0;
+      border-right-width: 0;
+      outline-width: 0;
+      cursor: pointer;
+      transition: background-color .5s;
+    }
+    button:hover {
+      background-color: #0054cc;
+    }
+    button:active {
+      outline-width: 0;
+    }
+    button:disabled {
+      background-color: #0054cc;
+      opacity: .8;
+      cursor: default;
+    }
+    button.gray-button {
+      background-color: #ddd;
+      color: #0069ff;
+      opacity: 1;
+      transition: opacity .5s;
+    }
+    button.gray-button:hover {
+      opacity: .7;
+    }
+    div.button-container {
+      display: none;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+    div.tos-container {
+      background-color: #213d54;
+      color: #fff;
+      padding: 15px 15px;
+      font-weight: 300;
+      font-size: 14px;
+      margin-bottom: 10px;
+      height: 395px;
+      overflow-y: scroll;
+      white-space: pre-line;
+    }
+
+  </style>
+
+</head>
+<body>
+<div style="width:100%; padding: 20px 0 20px 0; text-align:center;"><img style="max-width:300px;" src="assets/logo_full.svg" alt="Blocknet Logo"></div>
+<h3>LICENSE AGREEMENT</h3>
+  <div class="container">
+
+    <div id="js-tosContainer" class="tos-container"></div>
+
+    <div id="js-buttonContainer" class="button-container">
+      <button id="js-cancelBtn" type="button" class="gray-button">CANCEL</button>
+      <button id="js-acceptBtn" type="button">ACCEPT</button>
+    </div>
+
+  </div>
+
+  <script type="text/javascript">
+    window.electron = require('electron');
+  </script>
+
+  <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+
+  <script type="text/javascript" src="assets/vendor/jquery.min.js"></script>
+
+  <script>if (window.module) module = window.module;</script>
+
+  <script type="text/javascript">
+
+    $(document).ready(() => {
+
+      const { ipcRenderer } = require('electron');
+
+      const tos = ipcRenderer.sendSync('getTOS');
+      $('#js-tosContainer').text(tos);
+
+      const alreadyAccepted = ipcRenderer.sendSync('alreadyAccepted');
+      if(!alreadyAccepted) $('#js-buttonContainer').css('display', 'flex');
+
+      const $cancelBtn = $('#js-cancelBtn');
+      $cancelBtn.on('click', () => {
+        console.log('canceled!');
+        ipcRenderer.send('cancelTOS');
+      });
+
+      const $acceptBtn = $('#js-acceptBtn');
+      $acceptBtn.on('click', () => {
+        $cancelBtn.attr('disabled', true);
+        $acceptBtn.attr('disabled', true);
+        console.log('accepted!');
+        ipcRenderer.send('acceptTOS');
+      });
+
+    });
+
+  </script>
+
+</body>
+</html>

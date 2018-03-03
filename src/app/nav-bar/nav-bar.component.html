@@ -1,7 +1,7 @@
 <nav class="navbar">
   <div class="navbar-bar" [class.menu-active]="pairSelectorActiveState">
     <a class="navbar-brand" [routerLink]="['/trading']">
-      <img src="assets/icon_blk.png" alt="Blocknet Logo">
+      <img src="assets/icon.svg" alt="Blocknet Logo">
     </a>
 
     <app-pair-selector (onActiveStatus)="pairSelectorActiveState = $event"></app-pair-selector>
@@ -11,23 +11,23 @@
       <a (click)="toggleNav()" class="close"><i class="material-icons">close</i></a>
       <ul>
         <li>Account</li>
-        <li><a href="#">My Balances</a></li>
-        <li><a href="#">Setup Wallet</a></li>
-        <li><a href="#">Settings</a></li>
+        <!--<li><a href="#">My Balances</a></li>-->
+        <!--<li><a href="#">Setup Wallet</a></li>-->
+        <li><a href="#" (click)="openSettings($event)">Settings</a></li>
       </ul>
       <ul>
         <li>Support</li>
-        <li><a href="#">Notices</a></li>
-        <li><a href="#">FAQ</a></li>
-        <li><a href="#">Fees</a></li>
-        <li><a href="#">Help articles</a></li>
-        <li><a href="#">Community Forum</a></li>
+        <li><a href="#" (click)="openNotices($event)">Notices</a></li>
+        <li><a href="#" (click)="openLink($event, 'faq')">FAQ</a></li>
+        <li><a href="#" (click)="openLink($event, 'fees')">Fees</a></li>
+        <li><a href="#" (click)="openLink($event, 'help')">Help articles</a></li>
+        <li><a href="#" (click)="openLink($event, 'community')">Community Forum</a></li>
       </ul>
       <ul>
         <li>Contact Us</li>
-        <li><a href="#">Email</a></li>
-        <li><a href="#">Reddit</a></li>
-        <li><a href="#">Twitter</a></li>
+        <li><a href="#" (click)="openLink($event, 'email')">Email</a></li>
+        <li><a href="#" (click)="openLink($event, 'reddit')">Reddit</a></li>
+        <li><a href="#" (click)="openLink($event, 'twitter')">Twitter</a></li>
       </ul>
     </div>
     <a (click)="toggleNav()" class="navbar-toggler">
