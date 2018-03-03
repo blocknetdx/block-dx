@@ -63,7 +63,7 @@ export class OpenordersService {
                   filledSize: '',
                   executed_value: '',
                   status: order.status,
-                  settled: order.status === 'filled',
+                  settled: order.status === 'finished',
                   canceled: order.status === 'canceled'
                 });
               });
