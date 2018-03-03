@@ -487,7 +487,7 @@ class ServiceNodeInterface {
    * @param {string} taker
    * @param {number} startTime - unix time
    * @param {number} endTime - unix time
-   * @param {number} granularity - Time slice in seconds: 30, 60, 300, 900, 3600, 21600, 86400
+   * @param {number} granularity - Time slice in seconds: 60, 300, 900, 3600, 21600, 86400
    * @param {boolean} [orderIds = false]
    * @returns {Promise<OrderHistoryObject[]>}
    */

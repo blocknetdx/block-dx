@@ -88,7 +88,7 @@ describe('Service Node Interface', () => {
 
     describe('dxGetOrderHistory method', () => {
       it('should get a list of recently trades which have been filled', async function() {
-        const orders = await sn.dxGetOrderHistory('SYS', 'LTC', new Date().getTime('January 1, 1995 00:00:00'), new Date().getTime(), 30);
+        const orders = await sn.dxGetOrderHistory('SYS', 'LTC', new Date().getTime('January 1, 1995 00:00:00'), new Date().getTime(), 60);
         orders.should.be.an.Array();
       });
     });
