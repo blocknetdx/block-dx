@@ -30,6 +30,7 @@ export class OrderbookComponent implements OnInit {
   // public lastTradePrice = '';
   public spread = '';
   private showSpread = false;
+  public priceDecimal = '6';
 
   constructor(
     private appService: AppService,
@@ -75,6 +76,13 @@ export class OrderbookComponent implements OnInit {
           this.spread = spread;
 
           this.orderbookTable.scrollToMiddle();
+        });
+      });
+
+    this.orderbookService.getPriceDecimal()
+      .subscribe(priceDecimal => {
+        this.zone.run(() => {
+          this.priceDecimal = priceDecimal;
         });
       });
 

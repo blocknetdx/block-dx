@@ -20,6 +20,7 @@
       <label class="col-4 col-form-label">Type</label>
       <div class="col-8">
         <bn-select [options]="orderTypes" #typeSelect
+          [initialSelectedIndex]="0"
           (onSelectChange)="selectedOrderType = $event"
           placeholder="Choose a type"></bn-select>
       </div>
