@@ -1,9 +1,9 @@
 import { Component, Input, ViewEncapsulation, OnInit, NgZone } from '@angular/core';
-import { DecimalPipe } from '@angular/common';
 
 import { AppService } from '../app.service';
 import { Currentprice } from '../currentprice';
 import { CurrentpriceService } from '../currentprice.service';
+import {NumberFormatPipe} from '../pipes/decimal.pipe';
 
 @Component({
   selector: 'app-nav-bar',
@@ -21,7 +21,7 @@ export class NavBarComponent implements OnInit {
   constructor(
     private appService: AppService,
     private currentpriceService: CurrentpriceService,
-    private decimalPipe: DecimalPipe,
+    private numberFormatPipe: NumberFormatPipe,
     private zone: NgZone
   ) { }
 

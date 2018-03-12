@@ -17,7 +17,7 @@
     <span class="spacer"></span>
 
     <div class="input-group row">
-      <label class="col-4 col-form-label" for="type">Type</label>
+      <label class="col-4 col-form-label">Type</label>
       <div class="col-8">
         <bn-select [options]="orderTypes" #typeSelect
           (onSelectChange)="selectedOrderType = $event"
@@ -35,7 +35,7 @@
           (blur)="onNumberInputBlur('amount')"
           value="{{model.amount}}"
           class="form-control" name="amount" id="amount"
-          type="number" step="0.00000001" pattern="\d+" inputmode="numeric"
+          type="number" step="0.000001" pattern="\d+" inputmode="numeric"
           placeholder="{{formatNumber(0,symbols[0])}}" />
         <span class="input-group-addon">{{symbols[0]}}</span>
       </div>
@@ -46,21 +46,21 @@
       <div class="col-8">
         <input (keyup)="calcPrice($event)"
           class="form-control" name="limit" id="limit"
-          type="number" step="0.00000001" pattern="\d+" inputmode="numeric"
+          type="number" step="0.000001" pattern="\d+" inputmode="numeric"
           placeholder="{{formatNumber(0,symbols[1])}}" />
         <span class="input-group-addon">{{symbols[1]}}</span>
       </div>
     </div>
 
     <div class="input-group row">
-      <label class="col-4 col-form-label" for="total">Total</label>
+      <label class="col-4 col-form-label" for="total_calc">Total</label>
       <div class="col-8">
         <input class="form-control"
           name="total" id="total_calc" type="number"
           (keyup)="totalPriceChanged($event)"
           (onchange)="totalPriceChanged($event)"
           (blur)="onNumberInputBlur('totalPrice')"
-          step="0.00000001" pattern="\d+" inputmode="numeric"
+          step="0.000001" pattern="\d+" inputmode="numeric"
           placeholder="{{formatNumber(0,symbols[1])}}"
           value="{{model.totalPrice}}" />
         <span class="input-group-addon">{{symbols[1]}}</span>

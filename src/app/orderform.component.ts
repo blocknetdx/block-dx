@@ -1,5 +1,4 @@
 import { Component, Input, ViewChild, OnInit, NgZone } from '@angular/core';
-import { DecimalPipe } from '@angular/common';
 import * as math from 'mathjs';
 
 import { AppService } from './app.service';
@@ -8,6 +7,7 @@ import { CurrentpriceService } from './currentprice.service';
 import { OrderbookService } from './orderbook.service';
 import { TabViewComponent } from './tab-view/tab-view.component';
 import { SelectComponent } from './select/select.component';
+import {NumberFormatPipe} from './pipes/decimal.pipe';
 
 math.config({
   number: 'BigNumber',
@@ -32,7 +32,7 @@ export class OrderformComponent implements OnInit {
   public addresses: {};
 
   constructor(
-    private decimalPipe: DecimalPipe,
+    private numberFormatPipe: NumberFormatPipe,
     private appService: AppService,
     private currentpriceService: CurrentpriceService,
     private orderbookService: OrderbookService,
@@ -100,8 +100,8 @@ export class OrderformComponent implements OnInit {
   }
 
   formatNumber(num:string, symbol:string): string {
-    const format = symbol !== 'USD' ? '1.8-8' : '1.2-2';
-    return this.decimalPipe.transform(num,format);
+    const format = symbol !== 'USD' ? '1.6-6' : '1.2-2';
+    return this.numberFormatPipe.transform(num, format);
   }
 
   calcPrice(event: any) { // without type info

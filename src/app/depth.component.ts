@@ -1,11 +1,11 @@
 import { Component, OnInit, AfterViewInit, OnChanges, NgZone, Input } from '@angular/core';
-import { DecimalPipe } from '@angular/common';
 import * as $ from 'jquery';
 
 import { AppService } from './app.service';
 import { OrderbookService } from './orderbook.service';
 import { Currentprice } from './currentprice';
 import { CurrentpriceService } from './currentprice.service';
+import {NumberFormatPipe} from './pipes/decimal.pipe';
 
 declare var AmCharts;
 
@@ -26,7 +26,7 @@ export class DepthComponent implements OnInit, AfterViewInit, OnChanges {
     private appService: AppService,
     private currentpriceService: CurrentpriceService,
     private orderbookService: OrderbookService,
-    private decimalPipe:DecimalPipe
+    private numberFormatPipe: NumberFormatPipe
   ) {}
 
   ngOnInit() {
