@@ -99,9 +99,18 @@ export class OrderformComponent implements OnInit {
     this.model[field] = this.formatNumber(this.model[field], field === 'amount' ? this.symbols[0] : this.symbols[1]);
   }
 
+  upperCheck(num: string) {
+    const splitNum = num.split('.');
+    if(splitNum[0].length > 7) {
+      splitNum[0] = splitNum[0].slice(-7);
+    }
+    return splitNum.join('.');
+  }
+
   formatNumber(num:string, symbol:string): string {
     const format = symbol !== 'USD' ? '1.6-6' : '1.2-2';
-    return this.numberFormatPipe.transform(num, format);
+    const formattedNumber = this.numberFormatPipe.transform(num, format);
+    return this.upperCheck(formattedNumber);
   }
 
   calcPrice(event: any) { // without type info
