@@ -31,6 +31,16 @@ export class OrderformComponent implements OnInit {
   public model: any;
   public addresses: {};
 
+  public amountPopperText: string;
+  public amountPopperShow = false;
+
+  public totalPopperText: string;
+  public totalPopperShow = false;
+
+  // number limits for order amount and total in order form
+  private upperLimit = 9;
+  private precisionLimit = 6;
+
   constructor(
     private numberFormatPipe: NumberFormatPipe,
     private appService: AppService,
@@ -73,16 +83,63 @@ export class OrderformComponent implements OnInit {
     ];
   }
 
+  validAmount(numStr: string): boolean {
+    const { upperLimit, precisionLimit } = this;
+    console.log(upperLimit, precisionLimit);
+    const numPatt = /^(\d*)\.?(\d*)$/;
+    if(!numPatt.test(numStr)) return false;
+    const matches = numStr.match(numPatt);
+    const int = matches[1];
+    if(int.length > upperLimit) return false;
+    const dec = matches[2];
+    if(dec.length > precisionLimit) return false;
+    return true;
+  }
+
+  showPopper(type: string, text: string, duration: number) {
+    let showProp, textProp;
+    switch(type) {
+      case 'amount':
+        showProp = 'amountPopperShow';
+        textProp = 'amountPopperText';
+        break;
+      case 'total':
+        showProp = 'totalPopperShow';
+        textProp = 'totalPopperText';
+        break;
+    }
+    this[textProp] = text;
+    this[showProp] = true;
+    setTimeout(() => {
+      this[showProp] = false;
+    }, duration);
+  }
+
   amountChanged(e) {
     e.preventDefault();
     this.model.id = '';
-    this.model.amount = e.target.value;
+    const { value } = e.target;
+    const valid = this.validAmount(value);
+    console.log('validAmount', valid);
+    if(valid) {
+      this.model.amount = value;
+    } else {
+      this.showPopper('amount', 'Oops! That was not right.', 5000);
+      e.target.value = this.model.amount;
+    }
   }
 
   totalPriceChanged(e) {
     e.preventDefault();
     this.model.id = '';
-    this.model.totalPrice = e.target.value;
+    const { value } = e.target;
+    const valid = this.validAmount(value);
+    if(valid) {
+      this.model.totalPrice = value;
+    } else {
+      this.showPopper('total', 'Oops! That was not right.', 5000);
+      e.target.value = this.model.totalPrice;
+    }
   }
 
   makerAddressChanged(e) {
@@ -108,7 +165,7 @@ export class OrderformComponent implements OnInit {
   }
 
   formatNumber(num:string, symbol:string): string {
-    const format = symbol !== 'USD' ? '1.6-6' : '1.2-2';
+    const format = symbol !== 'USD' ? `1.${this.precisionLimit}-${this.precisionLimit}` : '1.2-2';
     const formattedNumber = this.numberFormatPipe.transform(num, format);
     return this.upperCheck(formattedNumber);
   }
