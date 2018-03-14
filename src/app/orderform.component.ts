@@ -192,13 +192,19 @@ export class OrderformComponent implements OnInit {
 
   onOrderSubmit() {
 
+    let { makerAddress = '', takerAddress = '', amount = '', totalPrice = '' } = this.model;
+
+    if(makerAddress === takerAddress) {
+      alert(`Oops! You have the same address entered for both ${this.symbols[0]} and ${this.symbols[1]}.`);
+      return;
+    }
+
     this.disableSubmit = true;
 
     const { ipcRenderer } = window.electron;
     const type = this.tabView.activeIndex === 0 ? 'buy' : 'sell';
     console.log('Submit order', type, this.model);
     const { id } = this.model;
-    let { makerAddress = '', takerAddress = '', amount = '', totalPrice = '' } = this.model;
     makerAddress = makerAddress.trim();
     takerAddress = takerAddress.trim();
     amount = amount.trim();
