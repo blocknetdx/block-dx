@@ -118,12 +118,12 @@
         <!--{{selectedOrderType}} {{type}}-->
       <!--</button>-->
 
-      <button *ngIf="type == 'buy'" type="submit" [disabled]="(model.amount && model.totalPrice && model.makerAddress && model.takerAddress) ? false : true">
+      <button *ngIf="type == 'buy'" type="submit" [disabled]="(disableSubmit) ? true : (model.amount && model.totalPrice && model.makerAddress && model.takerAddress) ? false : true">
         <i class="material-icons">add</i>
         {{model.id ? 'Accept' : 'Make'}} Order
       </button>
 
-      <button *ngIf="type == 'sell'" type="submit" [disabled]="(model.amount && model.totalPrice && model.makerAddress && model.takerAddress) ? false : true">
+      <button *ngIf="type == 'sell'" type="submit" [disabled]="(disableSubmit) ? true : (model.amount && model.totalPrice && model.makerAddress && model.takerAddress) ? false : true">
         <i class="material-icons">remove</i>
         {{model.id ? 'Accept' : 'Make'}} Order
       </button>

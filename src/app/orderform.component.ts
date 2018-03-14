@@ -30,6 +30,7 @@ export class OrderformComponent implements OnInit {
   public selectedOrderType: any;
   public model: any;
   public addresses: {};
+  public disableSubmit = false;
 
   public amountPopperText: string;
   public amountPopperShow = false;
@@ -85,7 +86,6 @@ export class OrderformComponent implements OnInit {
 
   validAmount(numStr: string): boolean {
     const { upperLimit, precisionLimit } = this;
-    console.log(upperLimit, precisionLimit);
     const numPatt = /^(\d*)\.?(\d*)$/;
     if(!numPatt.test(numStr)) return false;
     const matches = numStr.match(numPatt);
@@ -120,7 +120,6 @@ export class OrderformComponent implements OnInit {
     this.model.id = '';
     const { value } = e.target;
     const valid = this.validAmount(value);
-    console.log('validAmount', valid);
     if(valid) {
       this.model.amount = value;
     } else {
@@ -158,8 +157,8 @@ export class OrderformComponent implements OnInit {
 
   upperCheck(num: string) {
     const splitNum = num.split('.');
-    if(splitNum[0].length > 7) {
-      splitNum[0] = splitNum[0].slice(-7);
+    if(splitNum[0].length > this.upperLimit) {
+      splitNum[0] = splitNum[0].slice(-1 * this.upperLimit);
     }
     return splitNum.join('.');
   }
@@ -192,6 +191,9 @@ export class OrderformComponent implements OnInit {
   }
 
   onOrderSubmit() {
+
+    this.disableSubmit = true;
+
     const { ipcRenderer } = window.electron;
     const type = this.tabView.activeIndex === 0 ? 'buy' : 'sell';
     console.log('Submit order', type, this.model);
@@ -215,46 +217,58 @@ export class OrderformComponent implements OnInit {
       [this.symbols[0]]: makerAddress,
       [this.symbols[1]]: takerAddress
     });
-    window.electron.ipcRenderer.send('saveAddress', this.symbols[0], makerAddress);
-    window.electron.ipcRenderer.send('saveAddress', this.symbols[1], takerAddress);
 
-    if(id) { // take order
-      if(type === 'buy') {
-        ipcRenderer.send('takeOrder', {
-          id,
-          sendAddress: takerAddress,
-          receiveAddress: makerAddress
-        });
-      } else if(type === 'sell') {
-        ipcRenderer.send('takeOrder', {
-          id,
-          sendAddress: makerAddress,
-          receiveAddress: takerAddress
-        });
+    ipcRenderer.once('orderDone', (e, success) => {
+      if(success) {
+        ipcRenderer.send('saveAddress', this.symbols[0], makerAddress);
+        ipcRenderer.send('saveAddress', this.symbols[1], takerAddress);
+        this.resetModel();
+      } else {
+        alert('There was a problem with your order.');
       }
-    } else { // make order
-      if(type === 'buy') {
-        ipcRenderer.send('makeOrder', {
-          maker: this.symbols[1],
-          makerSize: totalPrice,
-          makerAddress: takerAddress,
-          taker: this.symbols[0],
-          takerSize: amount,
-          takerAddress: makerAddress,
-          type: 'exact'
-        });
-      } else if(type === 'sell') {
-        ipcRenderer.send('makeOrder', {
-          maker: this.symbols[0],
-          makerSize: amount,
-          makerAddress: makerAddress,
-          taker: this.symbols[1],
-          takerSize: totalPrice,
-          takerAddress: takerAddress,
-          type: 'exact'
-        });
+      this.zone.run(() => {
+        this.disableSubmit = false;
+      });
+    });
+
+    // setTimeout(() => {
+      if(id) { // take order
+        if(type === 'buy') {
+          ipcRenderer.send('takeOrder', {
+            id,
+            sendAddress: takerAddress,
+            receiveAddress: makerAddress
+          });
+        } else if(type === 'sell') {
+          ipcRenderer.send('takeOrder', {
+            id,
+            sendAddress: makerAddress,
+            receiveAddress: takerAddress
+          });
+        }
+      } else { // make order
+        if(type === 'buy') {
+          ipcRenderer.send('makeOrder', {
+            maker: this.symbols[1],
+            makerSize: totalPrice,
+            makerAddress: takerAddress,
+            taker: this.symbols[0],
+            takerSize: amount,
+            takerAddress: makerAddress,
+            type: 'exact'
+          });
+        } else if(type === 'sell') {
+          ipcRenderer.send('makeOrder', {
+            maker: this.symbols[0],
+            makerSize: amount,
+            makerAddress: makerAddress,
+            taker: this.symbols[1],
+            takerSize: totalPrice,
+            takerAddress: takerAddress,
+            type: 'exact'
+          });
+        }
       }
-    }
-    this.resetModel();
+    // }, 0);
   }
 }
