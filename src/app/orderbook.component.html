@@ -6,7 +6,7 @@
   <bn-table-section-divider>
     <ng-template #sectionDivider>
       <div class="divider" *ngIf="showSpread">
-        <span [innerHtml]="spread | blockCurrency"></span>
+        <span [innerHtml]="spread | blockCurrency:symbols[1]:priceDecimal"></span>
       </div>
     </ng-template>
   </bn-table-section-divider>
@@ -37,7 +37,7 @@
       <span
         [class.color-red]="row[4] == 'ask'"
         [class.color-green]="row[4] == 'bid'">
-        <span class="bn-number" [innerHtml]="row[0] | blockCurrency:symbols[1]"></span>
+        <span class="bn-number" [innerHtml]="row[0] | blockCurrency:symbols[1]:priceDecimal"></span>
       </span>
     </ng-template>
   </app-table-column>

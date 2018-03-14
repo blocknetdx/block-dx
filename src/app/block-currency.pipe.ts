@@ -1,16 +1,16 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { DecimalPipe } from '@angular/common';
+import {NumberFormatPipe} from './pipes/decimal.pipe';
 
 @Pipe({
   name: 'blockCurrency'
 })
 export class BlockCurrencyPipe implements PipeTransform {
 
-  constructor(private decimalPipe: DecimalPipe) {}
+  constructor(private numberFormatPipe: NumberFormatPipe) {}
 
-  transform(value: any, symbol?: any): any {
-    const format = symbol !== 'USD' ? '1.8-8' : '1.2-2';
-    let v = this.decimalPipe.transform(value,format);
+  transform(value: any, symbol?: any, decimalMax = 8): any {
+    const format = symbol !== 'USD' ? `1.${decimalMax}-${decimalMax}` : '1.2-2';
+    let v = this.numberFormatPipe.transform(value,format);
     if (v) {
       v = v.replace(/(0{2,})$/, '<span>$1</span>');
     }

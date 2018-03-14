@@ -4,13 +4,15 @@ import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { LayoutModule } from '@angular/cdk/layout';
-import { DecimalPipe } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { TradehistoryService } from './tradehistory.service';
+import { NumberFormatPipe } from './pipes/decimal.pipe';
+import { PopperComponent } from './angular-popper/angular-popper.component';
+// import { DecimalPipe } from '@angular/common';
 
 // Imports for loading & configuring the in-memory web api
 import { environment } from '../environments/environment';
@@ -107,7 +109,9 @@ const dev = environment.useMockAPI ? [
     TableRowDetailDirective,
     TableInfoDirective,
     TableSectionDividerDirective,
-    CardToolbarDirective
+    CardToolbarDirective,
+    NumberFormatPipe,
+    PopperComponent
   ],
   imports: [
     BrowserModule,
@@ -121,7 +125,7 @@ const dev = environment.useMockAPI ? [
     ...dev
   ],
   providers: [
-    DecimalPipe,
+    NumberFormatPipe,
     AppService,
     BreakpointService,
     CurrentpriceService,
