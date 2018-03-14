@@ -32,10 +32,15 @@ export class SelectComponent implements OnInit {
   public get options(): {value: any, viewValue: string}[] {
     return this._options;
   }
+
   @Input()
   public set options(val: {value: any, viewValue: string}[]) {
     this._options = val;
-    this.selected = val[0];
+  }
+
+  @Input()
+  public set initialSelectedIndex(idx) {
+    if(this.options && this.options.length > 0) this._selected = this.options[idx];
   }
 
   @Output('onSelectChange')

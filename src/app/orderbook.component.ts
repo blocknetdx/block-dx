@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, ViewChild, NgZone } from '@angular/core';
-import { DecimalPipe } from '@angular/common';
 import 'rxjs/add/operator/map';
 import * as math from 'mathjs';
 
@@ -8,6 +7,7 @@ import { Order } from './order';
 import { OrderbookService } from './orderbook.service';
 import { TableComponent } from './table/table.component';
 import { AppService } from './app.service';
+import {NumberFormatPipe} from './pipes/decimal.pipe';
 // import {TradehistoryService} from './tradehistory.service';
 // import { Trade } from './trade';
 // import {CurrentpriceService} from './currentprice.service';
@@ -30,10 +30,11 @@ export class OrderbookComponent implements OnInit {
   // public lastTradePrice = '';
   public spread = '';
   private showSpread = false;
+  public priceDecimal = '6';
 
   constructor(
     private appService: AppService,
-    private decimalPipe:DecimalPipe,
+    private numberFormatPipe: NumberFormatPipe,
     private orderbookService: OrderbookService,
     // private tradehistoryService: TradehistoryService,
     // private currentpriceService: CurrentpriceService,
@@ -75,6 +76,13 @@ export class OrderbookComponent implements OnInit {
           this.spread = spread;
 
           this.orderbookTable.scrollToMiddle();
+        });
+      });
+
+    this.orderbookService.getPriceDecimal()
+      .subscribe(priceDecimal => {
+        this.zone.run(() => {
+          this.priceDecimal = priceDecimal;
         });
       });
 

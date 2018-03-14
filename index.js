@@ -241,7 +241,14 @@ const openAppWindow = () => {
 
   ipcMain.on('makeOrder', (e, data) => {
     sn.dxMakeOrder(data.maker, data.makerSize, data.makerAddress, data.taker, data.takerSize, data.takerAddress, data.type)
-      .then(() => sendOrderBook())
+      .then(res => {
+        if(res.id) { // success
+          appWindow.send('orderDone', true);
+          sendOrderBook();
+        } else {
+          appWindow.send('orderDone', false);
+        }
+      })
       .catch(handleError);
   });
 
