@@ -44,7 +44,9 @@
           <bn-card-toolbar>
             <ng-template #toolbar>
               <bn-select class="compact"
-                [options]="decimalOptions">
+                [options]="decimalOptions"
+                [initialSelectedIndex]="initialDecimalIdx"
+                (onSelectChange)="setPriceDecimal($event)">
               </bn-select>
             </ng-template>
           </bn-card-toolbar>
