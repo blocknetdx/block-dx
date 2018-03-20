@@ -131,16 +131,6 @@ export class PairSelectorComponent implements OnInit, AfterViewInit {
   filterCoins(key: string, val: string) {
     this.model[key] = val;
     if(key === 'coinA') {
-
-      // this.filteredRows = this.sections.map((section) => {
-      //   section.rows = section.rows.filter((row) => {
-      //     if (val.length <= 0) return true;
-      //     const coinIdx = row.symbol.toLowerCase().indexOf(val.toLowerCase());
-      //     const currencyIdx = row.name.toLowerCase().indexOf(val.toLowerCase());
-      //     return coinIdx >= 0 || currencyIdx >= 0;
-      //   });
-      //   return section;
-      // });
       this.filteredRows = this.sections.map((section) => {
         return Object.assign({}, section, {
           rows: section.rows.filter(row => {
