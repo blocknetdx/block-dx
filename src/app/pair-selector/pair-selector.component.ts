@@ -86,53 +86,7 @@ export class PairSelectorComponent implements OnInit, AfterViewInit {
       setTimeout(() => {
         this.pairTable.sort(this.pairTable.columns[3]);
         this.inputs.first.nativeElement.focus();
-
-        /*console.log(this.inputs);
-        debugger;
-        Object.keys(this.pairForm.controls).forEach((key) => {
-          if(key === 'coinA' && this.coinAValid) {
-            this.state = 'stage2';
-            this.filteredRows = this.sections;
-            this.pairTable.rowSelected(null);
-            setTimeout(() => {
-              console.log(this.inputs[1]);
-              this.inputs._results[1].focus();
-              // this.inputs.last.nativeElement.focus();
-            }, 100);
-          } else if (key === 'coinB' && this.coinBValid) {
-            this.state = 'stage3';
-            setTimeout(() => {
-              this.submit.nativeElement.focus();
-            }, 0);
-          }
-        });*/
       }, 0);
-
-      // setTimeout(() => {
-      //   Object.keys(this.pairForm.controls).forEach((key) => {
-      //     const control = this.pairForm.controls[key];
-      //     control.statusChanges.takeUntil(this._controlStatus)
-      //       .subscribe((status) => {
-      //         if (status === 'VALID') {
-      //           if (key === 'coinA') {
-      //             this.state = 'stage2';
-      //             this.filteredRows = this.sections;
-      //             this.pairTable.rowSelected(null);
-      //             setTimeout(() => {
-      //               this.inputs.last.nativeElement.focus();
-      //             });
-      //           } else if (key === 'coinB') {
-      //             this.state = 'stage3';
-      //             setTimeout(() => {
-      //               this.submit.nativeElement.focus();
-      //             });
-      //           }
-      //         }
-      //       });
-      //   });
-      //   this.pairTable.sort(this.pairTable.columns[3]);
-      //   this.inputs.first.nativeElement.focus();
-      // });
     } else {
       this.state = 'stage1';
       this._controlStatus.next(true);
@@ -168,23 +122,15 @@ export class PairSelectorComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    const isFirstRun = window.electron.ipcRenderer.sendSync('isFirstRun');
-    if(isFirstRun) this.active = true;
+    setTimeout(() => {
+      const isFirstRun = window.electron.ipcRenderer.sendSync('isFirstRun');
+      if(isFirstRun) this.active = true;
+    }, 0);
   }
 
   filterCoins(key: string, val: string) {
     this.model[key] = val;
     if(key === 'coinA') {
-
-      // this.filteredRows = this.sections.map((section) => {
-      //   section.rows = section.rows.filter((row) => {
-      //     if (val.length <= 0) return true;
-      //     const coinIdx = row.symbol.toLowerCase().indexOf(val.toLowerCase());
-      //     const currencyIdx = row.name.toLowerCase().indexOf(val.toLowerCase());
-      //     return coinIdx >= 0 || currencyIdx >= 0;
-      //   });
-      //   return section;
-      // });
       this.filteredRows = this.sections.map((section) => {
         return Object.assign({}, section, {
           rows: section.rows.filter(row => {
