@@ -123,7 +123,7 @@ export class OrderformComponent implements OnInit {
     if(valid) {
       this.model.amount = value;
     } else {
-      this.showPopper('amount', 'Oops! That was not right.', 5000);
+      this.showPopper('amount', 'You can only specify amounts with at most 0.000001 precision.', 5000);
       e.target.value = this.model.amount;
     }
   }
@@ -136,7 +136,7 @@ export class OrderformComponent implements OnInit {
     if(valid) {
       this.model.totalPrice = value;
     } else {
-      this.showPopper('total', 'Oops! That was not right.', 5000);
+      this.showPopper('total', 'You can only specify amounts with at most 0.000001 precision.', 5000);
       e.target.value = this.model.totalPrice;
     }
   }
