@@ -29,3 +29,12 @@ window.electron.ipcRenderer.on('error', (e, { name, message }) => {
     alert(name + ': ' + message);
   }
 });
+
+window.document.addEventListener('drop', e => {
+  e.preventDefault();
+  e.stopPropagation();
+});
+window.document.addEventListener('dragover', e => {
+  e.preventDefault();
+  e.stopPropagation();
+});
