@@ -99,4 +99,9 @@ export class OrderbookComponent implements OnInit {
       this.orderbookService.requestOrder(row);
     }
   }
+
+  calculateTotal(row) {
+    return math.multiply(row[1], row[0]);
+  }
+
 }

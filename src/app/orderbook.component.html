@@ -19,7 +19,7 @@
         [class.bg-green]="row[4] == 'bid'"
         [ngStyle]="{'width.%': row[3]}"></div>
       <span>
-        <span class="bn-number" [innerHtml]="row[1]*row[0] | blockCurrency:symbols[1]"></span>
+        <span class="bn-number" [innerHtml]="calculateTotal(row) | blockCurrency:symbols[1]"></span>
       </span>
     </ng-template>
   </app-table-column>
