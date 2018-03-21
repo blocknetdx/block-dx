@@ -257,7 +257,14 @@ const openAppWindow = () => {
 
   ipcMain.on('takeOrder', (e, data) => {
     sn.dxTakeOrder(data.id, data.sendAddress, data.receiveAddress)
-      .then(() => sendOrderBook())
+      .then(res => {
+        if(res.id) { // success
+          appWindow.send('orderDone', 'success');
+          sendOrderBook();
+        } else {
+          appWindow.send('orderDone', 'failed');
+        }
+      })
       .catch(e => {
         appWindow.send('orderDone', 'server error');
         handleError(e);
