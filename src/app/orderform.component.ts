@@ -229,6 +229,9 @@ export class OrderformComponent implements OnInit {
     });
 
     ipcRenderer.once('orderDone', (e, state) => {
+      this.zone.run(() => {
+        this.disableSubmit = false;
+      });
       if(state === 'success') {
         ipcRenderer.send('saveAddress', this.symbols[0], makerAddress);
         ipcRenderer.send('saveAddress', this.symbols[1], takerAddress);
@@ -236,9 +239,6 @@ export class OrderformComponent implements OnInit {
       } else if (state === 'failed') {
         alert('There was a problem with your order.');
       }
-      this.zone.run(() => {
-        this.disableSubmit = false;
-      });
     });
 
     // setTimeout(() => {
