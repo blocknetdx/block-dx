@@ -243,19 +243,25 @@ const openAppWindow = () => {
     sn.dxMakeOrder(data.maker, data.makerSize, data.makerAddress, data.taker, data.takerSize, data.takerAddress, data.type)
       .then(res => {
         if(res.id) { // success
-          appWindow.send('orderDone', true);
+          appWindow.send('orderDone', 'success');
           sendOrderBook();
         } else {
-          appWindow.send('orderDone', false);
+          appWindow.send('orderDone', 'failed');
         }
       })
-      .catch(handleError);
+      .catch(e => {
+        appWindow.send('orderDone', 'server error');
+        handleError(e);
+      });
   });
 
   ipcMain.on('takeOrder', (e, data) => {
     sn.dxTakeOrder(data.id, data.sendAddress, data.receiveAddress)
       .then(() => sendOrderBook())
-      .catch(handleError);
+      .catch(e => {
+        appWindow.send('orderDone', 'server error');
+        handleError(e);
+      });
   });
 
   const stdInterval = 4000;
