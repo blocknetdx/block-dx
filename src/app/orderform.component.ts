@@ -190,6 +190,10 @@ export class OrderformComponent implements OnInit {
     return /\d+/.test(numStr) && /^\d*\.?\d*$/.test(numStr) && Number(numStr) !== 0;
   }
 
+  textForBuySellState(a:string, b:string): string {
+    return (this.tabView.activeIndex === 0 ? a : b);
+  }
+
   onOrderSubmit() {
 
     let { makerAddress = '', takerAddress = '', amount = '', totalPrice = '' } = this.model;
