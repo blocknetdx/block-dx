@@ -37,7 +37,7 @@
           [value]="model.amount"
           class="form-control" name="amount" id="amount"
           type="number" step="0.000001" pattern="\d+" inputmode="numeric"
-          placeholder="{{formatNumber(0,symbols[0])}}" />
+          placeholder="{{formatNumber('0',symbols[0])}}" />
         <span class="input-group-addon">{{symbols[0]}}</span>
       </div>
     </div>
@@ -48,7 +48,7 @@
         <input (keyup)="calcPrice($event)"
           class="form-control" name="limit" id="limit"
           type="number" step="0.000001" pattern="\d+" inputmode="numeric"
-          placeholder="{{formatNumber(0,symbols[1])}}" />
+          placeholder="{{formatNumber('0',symbols[1])}}" />
         <span class="input-group-addon">{{symbols[1]}}</span>
       </div>
     </div>
@@ -63,7 +63,7 @@
           (onchange)="totalPriceChanged($event)"
           (blur)="onNumberInputBlur('totalPrice')"
           step="0.000001" pattern="\d+" inputmode="numeric"
-          placeholder="{{formatNumber(0,symbols[1])}}"
+          placeholder="{{formatNumber('0',symbols[1])}}"
           [value]="model.totalPrice" />
         <span class="input-group-addon">{{symbols[1]}}</span>
       </div>
