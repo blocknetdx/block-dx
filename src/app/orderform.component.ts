@@ -119,6 +119,8 @@ export class OrderformComponent implements OnInit {
     e.preventDefault();
     this.model.id = '';
     const { value } = e.target;
+    if (value === '' || value === '.')
+      return;
     const valid = this.validAmount(value);
     if(valid) {
       this.model.amount = value;
@@ -152,7 +154,11 @@ export class OrderformComponent implements OnInit {
   }
 
   onNumberInputBlur(field) {
-    this.model[field] = this.formatNumber(this.model[field], field === 'amount' ? this.symbols[0] : this.symbols[1]);
+    const emptyOrZero = (s => /^0*\.?0*$/.test(s) || /^\s*$/.test(s));
+    if (emptyOrZero(this.model[field]))
+      this.model[field] = '';
+    else
+      this.model[field] = this.formatNumber(this.model[field], field === 'amount' ? this.symbols[0] : this.symbols[1]);
   }
 
   upperCheck(num: string) {
@@ -164,6 +170,11 @@ export class OrderformComponent implements OnInit {
   }
 
   formatNumber(num:string, symbol:string): string {
+    // strip leading 0s
+    if (/[0-9]*\.?[0-9]*/.test(num)) {
+      const n = math.bignumber(num);
+      num = n.toString();
+    }
     const format = symbol !== 'USD' ? `1.${this.precisionLimit}-${this.precisionLimit}` : '1.2-2';
     const formattedNumber = this.numberFormatPipe.transform(num, format);
     return this.upperCheck(formattedNumber);
@@ -187,7 +198,7 @@ export class OrderformComponent implements OnInit {
 
   validateNumber(numStr = '') {
     numStr = numStr.trim();
-    return /\d+/.test(numStr) && /^\d*\.?\d*$/.test(numStr) && Number(numStr) !== 0;
+    return /\d+/.test(numStr) && /^\d*\.?\d*$/.test(numStr) && Number(numStr) > 0;
   }
 
   textForBuySellState(a:string, b:string): string {
