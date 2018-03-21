@@ -224,12 +224,12 @@ export class OrderformComponent implements OnInit {
       [this.symbols[1]]: takerAddress
     });
 
-    ipcRenderer.once('orderDone', (e, success) => {
-      if(success) {
+    ipcRenderer.once('orderDone', (e, state) => {
+      if(state === 'success') {
         ipcRenderer.send('saveAddress', this.symbols[0], makerAddress);
         ipcRenderer.send('saveAddress', this.symbols[1], takerAddress);
         this.resetModel();
-      } else {
+      } else if (state === 'failed') {
         alert('There was a problem with your order.');
       }
       this.zone.run(() => {
