@@ -5,6 +5,12 @@ import { AppService } from './app.service';
 import { Openorder } from './openorder';
 import { OpenordersService } from './openorders.service';
 import { BreakpointService } from './breakpoint.service';
+import * as math from 'mathjs';
+
+math.config({
+  number: 'BigNumber',
+  precision: 64
+});
 
 @Component({
   selector: 'app-openorders',
@@ -66,5 +72,9 @@ export class OpenordersComponent extends BaseComponent implements OnInit {
     order['row_class'] = 'canceled';
     electron.ipcRenderer
       .send('cancelOrder', order.id);
+  }
+
+  prepareNumber(num) {
+    return math.round(num, 6);
   }
 }

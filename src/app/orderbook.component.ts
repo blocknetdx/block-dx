@@ -101,7 +101,7 @@ export class OrderbookComponent implements OnInit {
   }
 
   calculateTotal(row) {
-    return math.multiply(row[1], row[0]);
+    return math.round(math.multiply(row[1], row[0]), 6);
   }
 
 }
