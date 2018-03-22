@@ -77,4 +77,8 @@ export class OpenordersComponent extends BaseComponent implements OnInit {
   prepareNumber(num) {
     return math.round(num, 6);
   }
+
+  cancelable(state) {
+    return state !== 'finished' && state !== 'canceled' && state !== 'created';
+  }
 }
