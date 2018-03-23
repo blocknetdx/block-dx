@@ -371,6 +371,7 @@ const openAppWindow = () => {
   ipcMain.on('getCurrentPrice', () => sendCurrentPrice(true));
   setInterval(sendCurrentPrice, stdInterval);
 
+  // TODO This is too aggressive to be called as frequently as it is...
   const sendCurrencies = async function() {
     try {
       const [ localTokens, networkTokens ] = await Promise.all([
