@@ -1,0 +1,15 @@
+<ng-content></ng-content>
+
+<div class="angular-popper"
+     [class.visible]="show">
+  <button type="button"
+          class="angular-popper__close"
+          *ngIf="closeButton"
+          (click)="onClose()">
+    <ng-content select=".close-button, [close-button]"></ng-content>
+  </button>
+
+  <ng-content select=".content, [content]"></ng-content>
+
+  <div class="angular-popper__arrow" x-arrow></div>
+</div>

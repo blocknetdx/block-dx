@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Headers, Http } from '@angular/http';
-// import * as rx from 'rxjs';
 import { Observable } from 'rxjs/Observable';
+import { Observer } from 'rxjs/Observer';
 import { Subject } from 'rxjs/Subject';
 import * as math from 'mathjs';
 
@@ -23,6 +23,8 @@ export class OrderbookService {
   public requestedOrder: Subject<Order> = new Subject();
 
   private orderbookObservable: Observable<Order>;
+  private priceDecimalObservable: Observable<string>;
+  public priceDecimalObserver: Observer<string>;
 
   private orderbookUrl = '';
   // private orderbookUrl = 'https://api-public.sandbox.gdax.com/products/ETH-BTC/book?level=2';
@@ -31,6 +33,26 @@ export class OrderbookService {
 
   requestOrder(order: Order) {
     this.requestedOrder.next(order);
+  }
+
+  public setPriceDecimal(num: string) {
+    localStorage.setItem('priceDecimal', num);
+    this.priceDecimalObserver.next(num);
+  }
+
+  getPriceDecimal(): Observable<string> {
+    if(!this.priceDecimalObservable) {
+      this.priceDecimalObservable = Observable.create(observer => {
+        this.priceDecimalObserver = observer;
+        let priceDecimal = localStorage.getItem('priceDecimal');
+        if(!priceDecimal) {
+          priceDecimal = '6';
+          localStorage.setItem('priceDecimal', priceDecimal);
+        }
+        observer.next(priceDecimal);
+      });
+    }
+    return this.priceDecimalObservable;
   }
 
   getOrderbook(): Observable<Order> {

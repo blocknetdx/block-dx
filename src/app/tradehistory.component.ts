@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, NgZone } from '@angular/core';
-import { DecimalPipe } from '@angular/common';
 
 import { AppService } from './app.service';
 import { Trade } from './trade';

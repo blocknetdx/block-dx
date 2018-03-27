@@ -241,14 +241,34 @@ const openAppWindow = () => {
 
   ipcMain.on('makeOrder', (e, data) => {
     sn.dxMakeOrder(data.maker, data.makerSize, data.makerAddress, data.taker, data.takerSize, data.takerAddress, data.type)
-      .then(() => sendOrderBook())
-      .catch(handleError);
+      .then(res => {
+        if(res.id) { // success
+          appWindow.send('orderDone', 'success');
+          sendOrderBook();
+        } else {
+          appWindow.send('orderDone', 'failed');
+        }
+      })
+      .catch(e => {
+        appWindow.send('orderDone', 'server error');
+        handleError(e);
+      });
   });
 
   ipcMain.on('takeOrder', (e, data) => {
     sn.dxTakeOrder(data.id, data.sendAddress, data.receiveAddress)
-      .then(() => sendOrderBook())
-      .catch(handleError);
+      .then(res => {
+        if(res.id) { // success
+          appWindow.send('orderDone', 'success');
+          sendOrderBook();
+        } else {
+          appWindow.send('orderDone', 'failed');
+        }
+      })
+      .catch(e => {
+        appWindow.send('orderDone', 'server error');
+        handleError(e);
+      });
   });
 
   const stdInterval = 4000;

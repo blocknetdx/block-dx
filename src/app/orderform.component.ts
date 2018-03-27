@@ -1,5 +1,4 @@
 import { Component, Input, ViewChild, OnInit, NgZone } from '@angular/core';
-import { DecimalPipe } from '@angular/common';
 import * as math from 'mathjs';
 
 import { AppService } from './app.service';
@@ -8,6 +7,7 @@ import { CurrentpriceService } from './currentprice.service';
 import { OrderbookService } from './orderbook.service';
 import { TabViewComponent } from './tab-view/tab-view.component';
 import { SelectComponent } from './select/select.component';
+import {NumberFormatPipe} from './pipes/decimal.pipe';
 
 math.config({
   number: 'BigNumber',
@@ -30,9 +30,20 @@ export class OrderformComponent implements OnInit {
   public selectedOrderType: any;
   public model: any;
   public addresses: {};
+  public disableSubmit = false;
+
+  public amountPopperText: string;
+  public amountPopperShow = false;
+
+  public totalPopperText: string;
+  public totalPopperShow = false;
+
+  // number limits for order amount and total in order form
+  private upperLimit = 9;
+  private precisionLimit = 6;
 
   constructor(
-    private decimalPipe: DecimalPipe,
+    private numberFormatPipe: NumberFormatPipe,
     private appService: AppService,
     private currentpriceService: CurrentpriceService,
     private orderbookService: OrderbookService,
@@ -73,16 +84,63 @@ export class OrderformComponent implements OnInit {
     ];
   }
 
+  validAmount(numStr: string): boolean {
+    const { upperLimit, precisionLimit } = this;
+    const numPatt = /^(\d*)\.?(\d*)$/;
+    if(!numPatt.test(numStr)) return false;
+    const matches = numStr.match(numPatt);
+    const int = matches[1];
+    if(int.length > upperLimit) return false;
+    const dec = matches[2];
+    if(dec.length > precisionLimit) return false;
+    return true;
+  }
+
+  showPopper(type: string, text: string, duration: number) {
+    let showProp, textProp;
+    switch(type) {
+      case 'amount':
+        showProp = 'amountPopperShow';
+        textProp = 'amountPopperText';
+        break;
+      case 'total':
+        showProp = 'totalPopperShow';
+        textProp = 'totalPopperText';
+        break;
+    }
+    this[textProp] = text;
+    this[showProp] = true;
+    setTimeout(() => {
+      this[showProp] = false;
+    }, duration);
+  }
+
   amountChanged(e) {
     e.preventDefault();
     this.model.id = '';
-    this.model.amount = e.target.value;
+    const { value } = e.target;
+    if (value === '' || value === '.')
+      return;
+    const valid = this.validAmount(value);
+    if(valid) {
+      this.model.amount = value;
+    } else {
+      this.showPopper('amount', 'You can only specify amounts with at most 0.000001 precision.', 5000);
+      e.target.value = this.model.amount;
+    }
   }
 
   totalPriceChanged(e) {
     e.preventDefault();
     this.model.id = '';
-    this.model.totalPrice = e.target.value;
+    const { value } = e.target;
+    const valid = this.validAmount(value);
+    if(valid) {
+      this.model.totalPrice = value;
+    } else {
+      this.showPopper('total', 'You can only specify amounts with at most 0.000001 precision.', 5000);
+      e.target.value = this.model.totalPrice;
+    }
   }
 
   makerAddressChanged(e) {
@@ -96,12 +154,30 @@ export class OrderformComponent implements OnInit {
   }
 
   onNumberInputBlur(field) {
-    this.model[field] = this.formatNumber(this.model[field], field === 'amount' ? this.symbols[0] : this.symbols[1]);
+    const emptyOrZero = (s => /^0*\.?0*$/.test(s) || /^\s*$/.test(s));
+    if (emptyOrZero(this.model[field]))
+      this.model[field] = '';
+    else
+      this.model[field] = this.formatNumber(this.model[field], field === 'amount' ? this.symbols[0] : this.symbols[1]);
+  }
+
+  upperCheck(num: string) {
+    const splitNum = num.split('.');
+    if(splitNum[0].length > this.upperLimit) {
+      splitNum[0] = splitNum[0].slice(-1 * this.upperLimit);
+    }
+    return splitNum.join('.');
   }
 
   formatNumber(num:string, symbol:string): string {
-    const format = symbol !== 'USD' ? '1.8-8' : '1.2-2';
-    return this.decimalPipe.transform(num,format);
+    // strip leading 0s
+    if (/[0-9]*\.?[0-9]*/.test(num)) {
+      const n = math.bignumber(num);
+      num = n.toString();
+    }
+    const format = symbol !== 'USD' ? `1.${this.precisionLimit}-${this.precisionLimit}` : '1.2-2';
+    const formattedNumber = this.numberFormatPipe.transform(num, format);
+    return this.upperCheck(formattedNumber);
   }
 
   calcPrice(event: any) { // without type info
@@ -122,15 +198,28 @@ export class OrderformComponent implements OnInit {
 
   validateNumber(numStr = '') {
     numStr = numStr.trim();
-    return /\d+/.test(numStr) && /^\d*\.?\d*$/.test(numStr) && Number(numStr) !== 0;
+    return /\d+/.test(numStr) && /^\d*\.?\d*$/.test(numStr) && Number(numStr) > 0;
+  }
+
+  textForBuySellState(a:string, b:string): string {
+    return (this.tabView.activeIndex === 0 ? a : b);
   }
 
   onOrderSubmit() {
+
+    let { makerAddress = '', takerAddress = '', amount = '', totalPrice = '' } = this.model;
+
+    if(makerAddress === takerAddress) {
+      alert(`Oops! You have the same address entered for both ${this.symbols[0]} and ${this.symbols[1]}.`);
+      return;
+    }
+
+    this.disableSubmit = true;
+
     const { ipcRenderer } = window.electron;
     const type = this.tabView.activeIndex === 0 ? 'buy' : 'sell';
     console.log('Submit order', type, this.model);
     const { id } = this.model;
-    let { makerAddress = '', takerAddress = '', amount = '', totalPrice = '' } = this.model;
     makerAddress = makerAddress.trim();
     takerAddress = takerAddress.trim();
     amount = amount.trim();
@@ -149,46 +238,58 @@ export class OrderformComponent implements OnInit {
       [this.symbols[0]]: makerAddress,
       [this.symbols[1]]: takerAddress
     });
-    window.electron.ipcRenderer.send('saveAddress', this.symbols[0], makerAddress);
-    window.electron.ipcRenderer.send('saveAddress', this.symbols[1], takerAddress);
 
-    if(id) { // take order
-      if(type === 'buy') {
-        ipcRenderer.send('takeOrder', {
-          id,
-          sendAddress: takerAddress,
-          receiveAddress: makerAddress
-        });
-      } else if(type === 'sell') {
-        ipcRenderer.send('takeOrder', {
-          id,
-          sendAddress: makerAddress,
-          receiveAddress: takerAddress
-        });
+    ipcRenderer.once('orderDone', (e, state) => {
+      this.zone.run(() => {
+        this.disableSubmit = false;
+      });
+      if(state === 'success') {
+        ipcRenderer.send('saveAddress', this.symbols[0], makerAddress);
+        ipcRenderer.send('saveAddress', this.symbols[1], takerAddress);
+        this.resetModel();
+      } else if (state === 'failed') {
+        alert('There was a problem with your order.');
       }
-    } else { // make order
-      if(type === 'buy') {
-        ipcRenderer.send('makeOrder', {
-          maker: this.symbols[1],
-          makerSize: totalPrice,
-          makerAddress: takerAddress,
-          taker: this.symbols[0],
-          takerSize: amount,
-          takerAddress: makerAddress,
-          type: 'exact'
-        });
-      } else if(type === 'sell') {
-        ipcRenderer.send('makeOrder', {
-          maker: this.symbols[0],
-          makerSize: amount,
-          makerAddress: makerAddress,
-          taker: this.symbols[1],
-          takerSize: totalPrice,
-          takerAddress: takerAddress,
-          type: 'exact'
-        });
+    });
+
+    // setTimeout(() => {
+      if(id) { // take order
+        if(type === 'buy') {
+          ipcRenderer.send('takeOrder', {
+            id,
+            sendAddress: takerAddress,
+            receiveAddress: makerAddress
+          });
+        } else if(type === 'sell') {
+          ipcRenderer.send('takeOrder', {
+            id,
+            sendAddress: makerAddress,
+            receiveAddress: takerAddress
+          });
+        }
+      } else { // make order
+        if(type === 'buy') {
+          ipcRenderer.send('makeOrder', {
+            maker: this.symbols[1],
+            makerSize: totalPrice,
+            makerAddress: takerAddress,
+            taker: this.symbols[0],
+            takerSize: amount,
+            takerAddress: makerAddress,
+            type: 'exact'
+          });
+        } else if(type === 'sell') {
+          ipcRenderer.send('makeOrder', {
+            maker: this.symbols[0],
+            makerSize: amount,
+            makerAddress: makerAddress,
+            taker: this.symbols[1],
+            takerSize: totalPrice,
+            takerAddress: takerAddress,
+            type: 'exact'
+          });
+        }
       }
-    }
-    this.resetModel();
+    // }, 0);
   }
 }

@@ -1,9 +1,9 @@
 import {Component, NgZone, OnInit} from '@angular/core';
-import { DecimalPipe } from '@angular/common';
 
 import {BalancesService} from './balances.service';
 import {Balance} from './balance';
 import {AppService} from './app.service';
+import {NumberFormatPipe} from './pipes/decimal.pipe';
 
 @Component({
   selector: 'app-balances',
@@ -15,7 +15,7 @@ export class BalancesComponent implements OnInit {
   public sections: {rows: Balance[]}[] = [];
 
   constructor(
-    private decimalPipe: DecimalPipe,
+    private numberFormatPipe: NumberFormatPipe,
     private appService: AppService,
     private balanceService: BalancesService,
     private zone: NgZone
@@ -47,7 +47,7 @@ export class BalancesComponent implements OnInit {
 
   formatNumber(num:string, symbol:string): string {
     const format = symbol !== 'USD' ? '1.8-8' : '1.2-2';
-    return this.decimalPipe.transform(num, format);
+    return this.numberFormatPipe.transform(num, format);
   }
 
 }

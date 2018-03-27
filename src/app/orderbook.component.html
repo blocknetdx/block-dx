@@ -6,7 +6,7 @@
   <bn-table-section-divider>
     <ng-template #sectionDivider>
       <div class="divider" *ngIf="showSpread">
-        <span [innerHtml]="spread | blockCurrency"></span>
+        <span [innerHtml]="spread | blockCurrency:symbols[1]:priceDecimal"></span>
       </div>
     </ng-template>
   </bn-table-section-divider>
@@ -19,7 +19,7 @@
         [class.bg-green]="row[4] == 'bid'"
         [ngStyle]="{'width.%': row[3]}"></div>
       <span>
-        <span class="bn-number" [innerHtml]="row[1]*row[0] | blockCurrency:symbols[1]"></span>
+        <span class="bn-number" [innerHtml]="calculateTotal(row) | blockCurrency:symbols[1]:'6'"></span>
       </span>
     </ng-template>
   </app-table-column>
@@ -27,7 +27,7 @@
   <app-table-column [sortable]="false" [classList]="'col-4'">
     <ng-template columnHeader>Size ({{symbols[0]}})</ng-template>
     <ng-template let-row="row" columnCell>
-      <span class="bn-number" [innerHtml]="row[1] | blockCurrency:symbols[0]"></span>
+      <span class="bn-number" [innerHtml]="row[1] | blockCurrency:symbols[0]:'6'"></span>
     </ng-template>
   </app-table-column>
 
@@ -37,7 +37,7 @@
       <span
         [class.color-red]="row[4] == 'ask'"
         [class.color-green]="row[4] == 'bid'">
-        <span class="bn-number" [innerHtml]="row[0] | blockCurrency:symbols[1]"></span>
+        <span class="bn-number" [innerHtml]="row[0] | blockCurrency:symbols[1]:priceDecimal"></span>
       </span>
     </ng-template>
   </app-table-column>
