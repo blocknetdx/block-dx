@@ -20,7 +20,7 @@ import { TableSectionDividerDirective } from './table-section-divider.directive'
       (keydown.ArrowDown)="focusNextRow($event)">
       <div class="bn-table__header">
         <div (click)="sort(col)"
-          [class]="col.classList"
+          [class]="col.classList + ' no-highlight'"
           [class.sortable]="col.sortable"
           [class.active]="col.active"
           [class.sort-up]="col.active && !col.desc"
