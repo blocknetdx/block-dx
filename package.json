@@ -75,7 +75,7 @@
     "@types/jquery": "^3.2.16",
     "@types/node": "^8.0.57",
     "codelyzer": "^4.0.2",
-    "electron": "^1.8.2",
+    "electron": "^1.8.4",
     "electron-builder": "^19.56.0",
     "eslint": "^4.17.0",
     "jasmine-core": "^2.8.0",
@@ -97,7 +97,7 @@
   },
   "main": "index.js",
   "build": {
-    "electronVersion": "1.7.9",
+    "electronVersion": "1.8.4",
     "appId": "co.blocknet.blockdx",
     "productName": "BLOCK DX",
     "copyright": "Copyright © 2018 The Blocknet",
