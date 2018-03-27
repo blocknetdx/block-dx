@@ -176,7 +176,16 @@ const openAppWindow = () => {
     height: height - 100
   });
 
-  appWindow.maximize();
+  const initialBounds = storage.getItem('bounds');
+  if(initialBounds) {
+    try {
+      appWindow.setBounds(initialBounds);
+    } catch(err) {
+      appWindow.maximize();
+    }
+  } else {
+    appWindow.maximize();
+  }
 
   if(isDev) {
     appWindow.loadURL(serverLocation);
@@ -194,6 +203,15 @@ const openAppWindow = () => {
     if (err) {
       handleError(err);
       app.quit();
+    }
+  });
+
+  appWindow.on('close', () => {
+    try {
+      const bounds = appWindow.getBounds();
+      storage.setItem('bounds', bounds);
+    } catch(err) {
+      console.error(err);
     }
   });
 
