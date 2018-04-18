@@ -6,6 +6,7 @@ const path = require('path');
 const SimpleStorage = require('./src-back/storage');
 const ServiceNodeInterface = require('./src-back/service-node-interface');
 const serve = require('electron-serve');
+const { autoUpdater } = require('electron-updater');
 
 const { platform } = process;
 
@@ -36,6 +37,46 @@ require('electron-context-menu')();
 // Only allow one application instance to be open at a time
 const isSecondInstance = app.makeSingleInstance(() => {});
 if(isSecondInstance) app.quit();
+
+const openUpdateAvailableWindow = version => new Promise(resolve => {
+  const updateAvailableWindow = new BrowserWindow({
+    show: false,
+    width: 550,
+    height: platform === 'win32' ? 320 : 330,
+    parent: appWindow
+  });
+  if(isDev) {
+    updateAvailableWindow.loadURL(`file://${path.join(__dirname, 'src', 'update-available.html')}`);
+  } else {
+    updateAvailableWindow.loadURL(`file://${path.join(__dirname, 'dist', 'update-available.html')}`);
+  }
+  updateAvailableWindow.once('ready-to-show', () => {
+    updateAvailableWindow.show();
+  });
+  updateAvailableWindow.on('close', () => {
+    resolve();
+  });
+  ipcMain.on('getUpdateVersion', e => {
+    e.returnValue = version;
+  });
+  ipcMain.on('cancel', () => {
+    resolve();
+    setTimeout(() => {
+      updateAvailableWindow.close();
+    }, 0);
+  });
+  ipcMain.on('accept', () => {
+    autoUpdater.quitAndInstall();
+  });
+
+});
+
+autoUpdater.on('update-downloaded', ({ version }) => {
+  openUpdateAvailableWindow(version);
+});
+autoUpdater.on('error', err => {
+  handleError(err);
+});
 
 const openSettingsWindow = (options = {}) => {
 
@@ -199,7 +240,7 @@ const openAppWindow = () => {
 
   appWindow.once('show', () => {
     // version check
-    const err = versionCheck(info["version"]);
+    const err = versionCheck(info['version']);
     if (err) {
       handleError(err);
       app.quit();
@@ -267,9 +308,9 @@ const openAppWindow = () => {
           appWindow.send('orderDone', 'failed');
         }
       })
-      .catch(e => {
+      .catch(err => {
         appWindow.send('orderDone', 'server error');
-        handleError(e);
+        handleError(err);
       });
   });
 
@@ -283,9 +324,9 @@ const openAppWindow = () => {
           appWindow.send('orderDone', 'failed');
         }
       })
-      .catch(e => {
+      .catch(err => {
         appWindow.send('orderDone', 'server error');
-        handleError(e);
+        handleError(err);
       });
   });
 
@@ -562,7 +603,23 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
       dataPath = app.getPath('userData');
     }
 
-    storage = new SimpleStorage(path.join(dataPath, 'meta.json'));
+    const fileExists = p => {
+      try {
+        fs.statSync(p);
+        return true;
+      } catch(err) {
+        return false;
+      }
+    };
+
+    const previousMetaPath = path.join(dataPath, 'meta.json');
+    const metaPath = path.join(dataPath, 'app-meta.json');
+
+    if(!fileExists(metaPath) && fileExists(previousMetaPath)) {
+      fs.moveSync(previousMetaPath, metaPath);
+    }
+
+    storage = new SimpleStorage(metaPath);
     user = storage.getItem('user');
     password = storage.getItem('password');
     port = storage.getItem('port');
@@ -574,6 +631,7 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
     if(!storage.getItem('tos')) {
       await onReady;
       openTOSWindow();
+      if(!isDev) autoUpdater.checkForUpdates();
       return;
     }
 
@@ -585,8 +643,10 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
     if(!user || !password) {
       await onReady;
       openSettingsWindow();
+      if(!isDev) autoUpdater.checkForUpdates();
       return;
     }
+
 
     sn = new ServiceNodeInterface(user, password, `http://localhost:${port}`);
 
@@ -627,7 +687,14 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
 
     await onReady;
 
+    if(!isDev) autoUpdater.checkForUpdates();
+
     openAppWindow();
+
+    // Properly close the application
+    app.on('window-all-closed', () => {
+      app.quit();
+    });
 
   } catch(err) {
     handleError(err);
@@ -635,15 +702,10 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
 
 })();
 
-// Properly close the application
-app.on('window-all-closed', () => {
-  app.quit();
-});
-
 // check for version number. Minimum supported blocknet client version
 function versionCheck(version) {
   if (version < 3090400) {
-    return {name:"Unsupported Version", message:"BLOCK DX requires Blocknet wallet version 3.9.04 or greater."};
+    return {name: 'Unsupported Version', message: 'BLOCK DX requires Blocknet wallet version 3.9.04 or greater.'};
   }
   return null;
 }
