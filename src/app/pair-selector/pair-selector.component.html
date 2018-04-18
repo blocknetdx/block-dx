@@ -22,7 +22,7 @@
               #coinA="ngModel" #input
               [ngModel]="formatRow(model.coinA)"
               (ngModelChange)="filterCoins('coinA', $event)"
-              [readonly]="(model && model.coinA && coinAValid) ? true : false">
+              [readonly]="model && model.coinA && coinAValid">
               <div class="input-group-addon" [class.as-button]="coinAValid">
                 <i *ngIf="!model.coinA" class="material-icons">search</i>
                 <a (click)="resetModel('coinA')" *ngIf="model.coinA"><i class="material-icons">close</i></a>
@@ -39,7 +39,7 @@
               #coinB="ngModel" #input
               [ngModel]="formatRow(model.coinB)"
               (ngModelChange)="filterCoins('coinB', $event)"
-              [readonly]="coinBValid ? true : false">
+              [readonly]="coinBValid">
               <div class="input-group-addon" [class.as-button]="coinBValid">
                 <i *ngIf="!model.coinB" class="material-icons">search</i>
                 <a (click)="resetModel('coinB')" *ngIf="model.coinB"><i class="material-icons">close</i></a>
@@ -56,7 +56,7 @@
     <app-table
       #pairTable
       [class.formValid]="pairForm.form.valid"
-      [sections]="(coinAValid) ? filteredComparisons : filteredRows"
+      [sections]="coinAValid ? filteredComparisons : filteredRows"
       [selectable]="true"
       [deselectOnBlur]="false"
       (onRowSelect)="onRowSelect($event)">

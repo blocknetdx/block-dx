@@ -8,6 +8,10 @@
 @import "base/buttons";
 @import "base/form";
 
+.no-highlight {
+  user-select: none;
+}
+
 /*
 .debug {
   &::after {
