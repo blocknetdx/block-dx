@@ -8,6 +8,7 @@ import { Cryptocurrency } from './cryptocurrency';
 export class CryptocurrencyService {
 
   private currenciesObservable: Observable<Cryptocurrency[]>;
+  private tokensObservable: Observable<Cryptocurrency[]>;
 
   constructor(private http: Http) { }
 
@@ -69,6 +70,35 @@ export class CryptocurrencyService {
     // });
 
 
+  }
+
+  /**
+   * Returns local tokens.
+   * @returns {Observable<Cryptocurrency[]>}
+   */
+  public getTokens(): Observable<Cryptocurrency[]> {
+    const { ipcRenderer } = window.electron;
+    if (!this.tokensObservable) {
+      this.tokensObservable = Observable.create(observer => {
+        try {
+          ipcRenderer.on('localTokens', (e, tokens) => {
+            observer.next(tokens.map(token => {
+              return Cryptocurrency.fromObject({
+                symbol: token,
+                name: token,
+                last: 0,
+                change: 0,
+                local: true
+              });
+            }));
+          });
+          ipcRenderer.send('getLocalTokens');
+        } catch(err) {
+          console.error(err);
+        }
+      });
+    }
+    return this.tokensObservable;
   }
 
 }
