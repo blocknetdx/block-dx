@@ -118,7 +118,11 @@
           ]
         }
       ],
-      "icon": "./src/assets/favicon_block.ico"
+      "icon": "./src/assets/favicon_block.ico",
+      "publish": {
+        "provider": "github",
+        "releaseType": "draft"
+      }
     },
     "mac": {
       "target": [
@@ -128,9 +132,8 @@
       "category": "public.app-category.utilities",
       "icon": "./src/assets/favicon_block.icns",
       "publish": {
-        "provider": "s3",
-        "bucket": "",
-        "region": "us-east-1"
+        "provider": "github",
+        "releaseType": "draft"
       }
     },
     "linux": {
@@ -141,6 +144,10 @@
       "category": "Other",
       "desktop": {
         "Name": "BLOCK DX"
+      },
+      "publish": {
+        "provider": "github",
+        "releaseType": "draft"
       }
     }
   }
