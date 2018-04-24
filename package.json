@@ -137,11 +137,11 @@
       }
     },
     "linux": {
-      "target": "deb",
+      "target": "appImage",
       "icon": "./src/assets/linux_icons/",
       "synopsis": "Copyright © 2018 The Blocknet",
       "description": "Copyright © 2018 The Blocknet",
-      "category": "Other",
+      "category": "Utility",
       "desktop": {
         "Name": "BLOCK DX"
       },
