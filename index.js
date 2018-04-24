@@ -42,7 +42,7 @@ const openUpdateAvailableWindow = version => new Promise(resolve => {
   const updateAvailableWindow = new BrowserWindow({
     show: false,
     width: 550,
-    height: platform === 'win32' ? 320 : 330,
+    height: platform === 'win32' ? 355 : 330,
     parent: appWindow
   });
   if(isDev) {
@@ -121,7 +121,7 @@ const openSettingsWindow = (options = {}) => {
   const settingsWindow = new BrowserWindow({
     show: false,
     width: 500,
-    height: platform === 'win32' ? 520 : 530,
+    height: platform === 'win32' ? 540 : 530,
     parent: appWindow
   });
   if(isDev) {
@@ -692,16 +692,16 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
 
     openAppWindow();
 
-    // Properly close the application
-    app.on('window-all-closed', () => {
-      app.quit();
-    });
-
   } catch(err) {
     handleError(err);
   }
 
 })();
+
+// Properly close the application
+app.on('window-all-closed', () => {
+  app.quit();
+});
 
 // check for version number. Minimum supported blocknet client version
 function versionCheck(version) {
