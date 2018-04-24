@@ -121,7 +121,7 @@ const openSettingsWindow = (options = {}) => {
   const settingsWindow = new BrowserWindow({
     show: false,
     width: 500,
-    height: platform === 'win32' ? 540 : 530,
+    height: platform === 'win32' ? 540 : 525,
     parent: appWindow
   });
   if(isDev) {
