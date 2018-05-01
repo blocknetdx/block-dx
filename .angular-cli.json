@@ -12,7 +12,8 @@
         "assets",
         "favicon.ico",
         "settings.html",
-        "tos.html"
+        "tos.html",
+        "update-available.html"
       ],
       "index": "index.html",
       "main": "main.ts",
