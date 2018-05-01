@@ -8,7 +8,14 @@ const ServiceNodeInterface = require('./src-back/service-node-interface');
 const serve = require('electron-serve');
 const { autoUpdater } = require('electron-updater');
 
+const { app, BrowserWindow, Menu, ipcMain } = electron;
+
 const { platform } = process;
+
+const { name, version } = fs.readJSONSync(path.join(__dirname, 'package.json'));
+ipcMain.on('getAppVersion', e => {
+  e.returnValue = version;
+});
 
 let appWindow, serverLocation, sn, keyPair, storage, user, password, port, info;
 
@@ -29,8 +36,6 @@ let loadURL;
 if(!isDev) {
   loadURL = serve({directory: 'dist'});
 }
-
-const { app, BrowserWindow, Menu, ipcMain } = electron;
 
 require('electron-context-menu')();
 
@@ -121,7 +126,7 @@ const openSettingsWindow = (options = {}) => {
   const settingsWindow = new BrowserWindow({
     show: false,
     width: 500,
-    height: platform === 'win32' ? 540 : 525,
+    height: platform === 'win32' ? 550 : 535,
     parent: appWindow
   });
   if(isDev) {
@@ -595,7 +600,6 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
 // Run the application within async function for flow control
 (async function() {
   try {
-    const { name } = fs.readJSONSync(path.join(__dirname, 'package.json'));
     let dataPath;
     if(process.platform === 'win32') {
       dataPath = path.join(process.env.LOCALAPPDATA, name);

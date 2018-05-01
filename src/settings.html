@@ -97,6 +97,11 @@
       opacity: .8;
       cursor: default;
     }
+    .version {
+      color: #fff;
+      text-align: right;
+      justify-content: flex-end;
+    }
 
   </style>
 
@@ -123,7 +128,13 @@
       <input type="password" id="js-password" />
     </div>
 
-    <button type="submit">SAVE CHANGES</button>
+    <div class="input-group">
+      <button type="submit">SAVE CHANGES</button>
+    </div>
+
+    <div class="input-group version">
+      <span id="js-versionSpan"></span>
+    </div>
 
   </form>
 
@@ -145,6 +156,7 @@
 
       const port = ipcRenderer.sendSync('getPort');
       const user = ipcRenderer.sendSync('getUser');
+      const version = ipcRenderer.sendSync('getAppVersion');
 
       console.log(port);
       console.log(user);
@@ -155,6 +167,7 @@
 
       $port.val(port);
       $user.val(user);
+      $('#js-versionSpan').text(`BLOCK DX v${version}`);
 
       if(!port) {
         $port[0].focus();
