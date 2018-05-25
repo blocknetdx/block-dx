@@ -649,7 +649,7 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
     }
 
 
-    sn = new ServiceNodeInterface(user, password, `http://localhost:${port}`);
+    sn = new ServiceNodeInterface(user, password, `http://${platform === 'linux' ? '127.0.0.1' : 'localhost'}:${port}`);
 
     await new Promise(resolve => setTimeout(resolve, 2000));
 
