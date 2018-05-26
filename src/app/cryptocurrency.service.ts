@@ -82,15 +82,19 @@ export class CryptocurrencyService {
       this.tokensObservable = Observable.create(observer => {
         try {
           ipcRenderer.on('localTokens', (e, tokens) => {
-            observer.next(tokens.map(token => {
-              return Cryptocurrency.fromObject({
-                symbol: token,
-                name: token,
-                last: 0,
-                change: 0,
-                local: true
-              });
-            }));
+            const preppedTokens = tokens
+              .map(token => {
+                const preppedToken = Cryptocurrency.fromObject({
+                  symbol: token,
+                  name: token,
+                  last: 0,
+                  change: 0,
+                  local: true
+                });
+                return preppedToken;
+              })
+              .sort((a, b) => a.symbol.localeCompare(b.symbol));
+            observer.next(preppedTokens);
           });
           ipcRenderer.send('getLocalTokens');
         } catch(err) {
