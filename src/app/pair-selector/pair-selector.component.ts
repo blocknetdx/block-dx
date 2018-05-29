@@ -85,7 +85,7 @@ export class PairSelectorComponent implements OnInit, AfterViewInit {
     this.model = {};
     if (val) {
       setTimeout(() => {
-        this.pairTable.sort(this.pairTable.columns[3]);
+        // this.pairTable.sort(this.pairTable.columns[3]);
         this.inputs.first.nativeElement.focus();
       }, 0);
     } else {
