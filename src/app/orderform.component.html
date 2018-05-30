@@ -33,10 +33,10 @@
         <input #amountInput
           (keyup)="amountChanged($event)"
           (onchange)="amountChanged($event)"
-          (blur)="onNumberInputBlur('amount')"
+          (blur)="onNumberInputBlur($event, 'amount')"
           [value]="model.amount"
           class="form-control" name="amount" id="amount"
-          type="number" step="0.000001" pattern="\d+" inputmode="numeric"
+          type="text" pattern="\d+" inputmode="numeric"
           placeholder="{{formatNumber('0',symbols[0])}}" />
         <span class="input-group-addon">{{symbols[0]}}</span>
       </div>
@@ -58,10 +58,10 @@
       <div class="col-8">
         <input #totalInput
           class="form-control"
-          name="total" id="total_calc" type="number"
+          name="total" id="total_calc" type="text"
           (keyup)="totalPriceChanged($event)"
           (onchange)="totalPriceChanged($event)"
-          (blur)="onNumberInputBlur('totalPrice')"
+          (blur)="onNumberInputBlur($event, 'totalPrice')"
           step="0.000001" pattern="\d+" inputmode="numeric"
           placeholder="{{formatNumber('0',symbols[1])}}"
           [value]="model.totalPrice" />
@@ -118,12 +118,18 @@
         <!--{{selectedOrderType}} {{type}}-->
       <!--</button>-->
 
-      <button *ngIf="type == 'buy'" type="submit" [disabled]="(disableSubmit) ? true : (model.amount && model.totalPrice && model.makerAddress && model.takerAddress) ? false : true">
+      <button
+        *ngIf="type == 'buy'"
+        type="submit"
+        [disabled]="(disableSubmit) ? true : (model.amount && Number(model.amount) !== NaN && Number(model.amount !== 0) && model.totalPrice && Number(model.totalPrice) !== Nan && Number(model.totalPrice) !== 0 && model.makerAddress && model.takerAddress) ? false : true">
         <i class="material-icons">add</i>
         {{model.id ? 'Accept' : 'Make'}} Order
       </button>
 
-      <button *ngIf="type == 'sell'" type="submit" [disabled]="(disableSubmit) ? true : (model.amount && model.totalPrice && model.makerAddress && model.takerAddress) ? false : true">
+      <button
+        *ngIf="type == 'sell'"
+        type="submit"
+        [disabled]="(disableSubmit) ? true : (model.amount && Number(model.amount) !== NaN && Number(model.amount !== 0) && model.totalPrice && Number(model.totalPrice) !== Nan && Number(model.totalPrice) !== 0 && model.makerAddress && model.takerAddress) ? false : true">
         <i class="material-icons">remove</i>
         {{model.id ? 'Accept' : 'Make'}} Order
       </button>
