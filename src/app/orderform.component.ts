@@ -31,6 +31,7 @@ export class OrderformComponent implements OnInit {
   public model: any;
   public addresses: {};
   public disableSubmit = false;
+  public Number = Number;
 
   public amountPopperText: string;
   public amountPopperShow = false;
@@ -84,16 +85,31 @@ export class OrderformComponent implements OnInit {
     ];
   }
 
-  validAmount(numStr: string): boolean {
+  fixAmount(numStr: string): string {
+    numStr = numStr.replace(/[^\d.]/g, '');
+    const { upperLimit, precisionLimit } = this;
+    const sides = numStr.split('.');
+    const int = sides[0] || '0';
+    const dec = sides[1] || '';
+    if(!dec) {
+      return int.slice(0, upperLimit);
+    } else {
+      return int.slice(0, upperLimit) + '.' + dec.slice(0, precisionLimit);
+    }
+  }
+
+  validAmount(numStr: string): any {
     const { upperLimit, precisionLimit } = this;
     const numPatt = /^(\d*)\.?(\d*)$/;
-    if(!numPatt.test(numStr)) return false;
+    if(!numPatt.test(numStr)) {
+      return [ false, true ];
+    }
     const matches = numStr.match(numPatt);
-    const int = matches[1];
-    if(int.length > upperLimit) return false;
-    const dec = matches[2];
-    if(dec.length > precisionLimit) return false;
-    return true;
+    const int = matches[1] || '';
+    if(int.length > upperLimit) return [ false ];
+    const dec = matches[2] || '';
+    if(dec.length > precisionLimit) return [ false ];
+    return [ true ];
   }
 
   showPopper(type: string, text: string, duration: number) {
@@ -119,14 +135,10 @@ export class OrderformComponent implements OnInit {
     e.preventDefault();
     this.model.id = '';
     const { value } = e.target;
-    if (value === '' || value === '.')
-      return;
-    const valid = this.validAmount(value);
-    if(valid) {
-      this.model.amount = value;
-    } else {
-      this.showPopper('amount', 'You can only specify amounts with at most 0.000001 precision.', 5000);
-      e.target.value = this.model.amount;
+    const [ valid, skipPopper = false ] = this.validAmount(value);
+    if(!valid) {
+      if(!skipPopper) this.showPopper('amount', 'You can only specify amounts with at most 0.000001 precision.', 5000);
+      e.target.value = this.fixAmount(value);
     }
   }
 
@@ -134,12 +146,10 @@ export class OrderformComponent implements OnInit {
     e.preventDefault();
     this.model.id = '';
     const { value } = e.target;
-    const valid = this.validAmount(value);
-    if(valid) {
-      this.model.totalPrice = value;
-    } else {
-      this.showPopper('total', 'You can only specify amounts with at most 0.000001 precision.', 5000);
-      e.target.value = this.model.totalPrice;
+    const [ valid, skipPopper = false ] = this.validAmount(value);
+    if(!valid) {
+      if(!skipPopper) this.showPopper('amount', 'You can only specify amounts with at most 0.000001 precision.', 5000);
+      e.target.value = this.fixAmount(value);
     }
   }
 
@@ -153,12 +163,14 @@ export class OrderformComponent implements OnInit {
     this.model.takerAddress = e.target.value;
   }
 
-  onNumberInputBlur(field) {
+  onNumberInputBlur(e, field) {
+    const { value } = e.target;
     const emptyOrZero = (s => /^0*\.?0*$/.test(s) || /^\s*$/.test(s));
-    if (emptyOrZero(this.model[field]))
+    if (value === '.' || emptyOrZero(value)) {
       this.model[field] = '';
-    else
-      this.model[field] = this.formatNumber(this.model[field], field === 'amount' ? this.symbols[0] : this.symbols[1]);
+    } else {
+      this.model[field] = this.formatNumber(value, field === 'amount' ? this.symbols[0] : this.symbols[1]);
+    }
   }
 
   upperCheck(num: string) {
