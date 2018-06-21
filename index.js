@@ -10,6 +10,11 @@ const { autoUpdater } = require('electron-updater');
 
 const { app, BrowserWindow, Menu, ipcMain } = electron;
 
+// Properly close the application
+app.on('window-all-closed', () => {
+  app.quit();
+});
+
 const { platform } = process;
 
 const { name, version } = fs.readJSONSync(path.join(__dirname, 'package.json'));
@@ -82,6 +87,37 @@ autoUpdater.on('update-downloaded', ({ version }) => {
 autoUpdater.on('error', err => {
   handleError(err);
 });
+
+const openConfigurationWindow = () => {
+
+  const configurationWindow = new BrowserWindow({
+    show: false,
+    width: 1000,
+    height: platform === 'win32' ? 575 : platform === 'darwin' ? 560 : 700,
+    parent: appWindow
+  });
+  if(isDev) {
+    configurationWindow.loadURL(`file://${path.join(__dirname, 'src', 'configuration.html')}`);
+  } else {
+    configurationWindow.loadURL(`file://${path.join(__dirname, 'dist', 'configuration.html')}`);
+  }
+  configurationWindow.once('ready-to-show', () => {
+    configurationWindow.show();
+  });
+
+  if(isDev) {
+    const menuTemplate = [];
+    menuTemplate.push({
+      label: 'Window',
+      submenu: [
+        { label: 'Show Dev Tools', role: 'toggledevtools' }
+      ]
+    });
+    const windowMenu = Menu.buildFromTemplate(menuTemplate);
+    configurationWindow.setMenu(windowMenu);
+  }
+
+};
 
 const openSettingsWindow = (options = {}) => {
 
@@ -647,11 +683,11 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
 
     if(!user || !password) {
       await onReady;
-      openSettingsWindow();
+      openConfigurationWindow();
+      // openSettingsWindow();
       if(!isDev) autoUpdater.checkForUpdates();
       return;
     }
-
 
     sn = new ServiceNodeInterface(user, password, `http://${platform === 'linux' ? '127.0.0.1' : 'localhost'}:${port}`);
 
@@ -701,11 +737,6 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
   }
 
 })();
-
-// Properly close the application
-app.on('window-all-closed', () => {
-  app.quit();
-});
 
 // check for version number. Minimum supported blocknet client version
 function versionCheck(version) {
