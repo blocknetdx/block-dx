@@ -11,6 +11,8 @@
         "amcharts",
         "assets",
         "favicon.ico",
+        "scripts",
+        "automation.html",
         "settings.html",
         "tos.html",
         "update-available.html"

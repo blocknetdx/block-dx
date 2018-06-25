@@ -97,9 +97,9 @@ const openConfigurationWindow = () => {
     parent: appWindow
   });
   if(isDev) {
-    configurationWindow.loadURL(`file://${path.join(__dirname, 'src', 'configuration.html')}`);
+    configurationWindow.loadURL(`file://${path.join(__dirname, 'src', 'automation.html')}`);
   } else {
-    configurationWindow.loadURL(`file://${path.join(__dirname, 'dist', 'configuration.html')}`);
+    configurationWindow.loadURL(`file://${path.join(__dirname, 'dist', 'automation.html')}`);
   }
   configurationWindow.once('ready-to-show', () => {
     configurationWindow.show();
