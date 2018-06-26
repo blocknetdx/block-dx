@@ -234,7 +234,7 @@ $(document).ready(() => {
 
       $('#js-continueBtn')
         .off('click')
-        .on('click', e => {
+        .on('click', async function(e) {
           e.preventDefault();
           const generateCredentials = state.get('generateCredentials');
           const skipSetup = state.get('skipSetup');
@@ -265,14 +265,62 @@ $(document).ready(() => {
                 state.set('sidebarSelected', 1);
               }
               break;
-            case 'settings2':
+            case 'settings2': {
+              const wallets = state.get('wallets');
+              const selected = state.get('selectedWallets');
+              const incomplete = wallets
+                .filter(w => selected.has(w.abbr))
+                .filter(w => !w.username || !w.password);
+              if(incomplete.length > 0) {
+                if(incomplete.some(w => w.abbr === 'BLOCK')) {
+                  await swal({
+                    title: 'Missing Credentials',
+                    html: `You must enter credentials for ${incomplete[0].name} in order to continue.`,
+                    type: 'error',
+                    showConfirmButton: true,
+                    confirmButtonText: 'OK'
+                  });
+                  return;
+                }
+                const { dismiss } = await swal({
+                  title: 'Missing Credentials',
+                  html: `Credentials for the coins listed below have not been entered. Select 'Cancel' to add credentials for these coins. If 'Continue' is selected, these coins will not be setup for trading.<br><br>${incomplete.map(w => w.name).join('<br>')}`,
+                  type: 'warning',
+                  showConfirmButton: true,
+                  confirmButtonText: 'Continue',
+                  showCancelButton: true,
+                  cancelButtonText: 'Cancel',
+                  reverseButtons: true
+                });
+                if(dismiss === 'cancel') {
+                  return;
+                } else {
+                  const newSelected = incomplete
+                    .reduce((set, w) => {
+                      return set.delete(w.abbr);
+                    }, selected);
+                  state.set('selectedWallets', newSelected);
+                }
+              }
               state.set('active', 'settings3');
               state.set('sidebarSelected', 1);
               break;
-            case 'settings3':
+            } case 'settings3': {
+              const [ wallet ] = state.get('wallets');
+              if(!wallet.username || !wallet.password) {
+                await swal({
+                  title: 'Missing Credentials',
+                  html: `You must enter credentials for ${wallet.name} in order to continue.`,
+                  type: 'error',
+                  showConfirmButton: true,
+                  confirmButtonText: 'OK'
+                });
+                return;
+              }
               state.set('active', 'complete');
               state.set('sidebarSelected', 1);
               break;
+            }
           }
           render();
         });
