@@ -127,6 +127,10 @@ const openConfigurationWindow = () => {
     }
   });
 
+  ipcMain.on('getDataPath', e => {
+    e.returnValue = app.getPath('appData');
+  });
+
 };
 
 const openSettingsWindow = (options = {}) => {

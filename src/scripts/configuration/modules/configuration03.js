@@ -1,4 +1,8 @@
-const renderConfiguration3 = ({ wallets }) => {
+const renderConfiguration3 = ({ state }) => {
+  const allWallets = state.get('wallets');
+  const selectedWallets = state.get('selectedWallets');
+  const wallets = allWallets
+    .filter(w => selectedWallets.has(w.abbr));
   const items = wallets
     .map(w => {
       return `

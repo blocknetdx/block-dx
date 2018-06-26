@@ -26,7 +26,8 @@
     "build-native": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --production && cd .. && electron-builder --dir",
     "pack-native": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --production && cd .. && electron-builder",
     "publish-native": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --production && cd .. && electron-builder --publish always",
-    "generate-docs": "jsdoc src-back/service-node-interface.js -d docs"
+    "generate-docs": "jsdoc src-back/service-node-interface.js -d docs",
+    "compile-sweetalert-css": "node ./sweetalert-scss/compile.js"
   },
   "private": true,
   "dependencies": {
@@ -67,6 +68,7 @@
     "popper.js": "^1.14.1",
     "rxjs": "^5.5.5",
     "superagent": "^3.8.2",
+    "sweetalert": "^2.1.0",
     "web-animations-js": "^2.3.1",
     "zone.js": "^0.8.18"
   },
@@ -93,6 +95,7 @@
     "karma-jasmine": "^1.1.1",
     "karma-jasmine-html-reporter": "^0.2.2",
     "mocha": "^5.0.0",
+    "node-sass": "^4.9.0",
     "protractor": "^5.2.1",
     "rmrf-promise": "^1.1.0",
     "should": "^13.2.1",

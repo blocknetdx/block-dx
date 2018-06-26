@@ -1,6 +1,7 @@
 /* global $ */
 
 const fs = require('fs');
+const path = require('path');
 const { ipcRenderer } = require('electron');
 const { dialog } = require('electron').remote;
 const { Set } = require('immutable');
@@ -58,6 +59,19 @@ class Wallet {
 
 $(document).ready(() => {
 
+  // setTimeout(() => {
+  //   swal({
+  //     title: 'Something!',
+  //     text: 'Some text here.',
+  //     type: 'warning',
+  //     showConfirmButton: true,
+  //     confirmButtonText: 'OK',
+  //     showCancelButton: true,
+  //     cancelButtonText: 'Cancel',
+  //     reverseButtons: true
+  //   });
+  // }, 500);
+
   const state = {
 
     _data: new Map(),
@@ -97,25 +111,48 @@ $(document).ready(() => {
   state.set('rpcUser', '');
   state.set('rpcPassword', '');
 
+  const checkForDataFolders = () => {
+    const dataPath = ipcRenderer.sendSync('getDataPath');
+    const allWallets = state.get('wallets');
+    const selectedWallets = state.get('selectedWallets');
+    const newWallets = allWallets
+      .map(w => {
+        if(!selectedWallets.has(w.abbr)) return w;
+        try {
+          if(w.directory) {
+            fs.statSync(w.directory);
+            w = w.set('error', false);
+          } else {
+            const { platform } = process;
+            const folder = platform === 'win32' ? w.dirNameWin : (platform === 'darwin' || !w.dirNameLinux) ? w.dirNameMac : w.dirNameLinux;
+            if(!folder) throw new Error();
+            const fullPath = path.join(dataPath, folder);
+            fs.statSync(fullPath);
+            w = w.set({
+              directory: fullPath,
+              error: false
+            });
+          }
+          return w;
+        } catch(err) {
+          console.error(err);
+          w = w.set({
+            directory: '',
+            error: true
+          });
+          return w;
+        }
+      });
+    state.set('wallets', newWallets);
+  };
+
   const render = () => {
 
     const sidebarSelected = state.get('sidebarSelected');
     const allWallets = state.get('wallets');
     const selectedWalletsSet = state.get('selectedWallets');
     const filteredWallets = allWallets
-      .filter(w => selectedWalletsSet.has(w.abbr))
-      .map(w => {
-        if(!w.directory) return w;
-        try {
-          fs.statSync(w.directory);
-          w.error = false;
-          return w;
-        } catch(err) {
-          console.error(err);
-          w.error = true;
-          return w;
-        }
-      });
+      .filter(w => selectedWalletsSet.has(w.abbr));
 
     const active = state.get('active');
     const sidebarHTML = renderSidebar({ state });
@@ -128,7 +165,8 @@ $(document).ready(() => {
         mainHTML = renderConfiguration2({ wallets: filteredWallets });
         break;
       case 'configuration3':
-        mainHTML = renderConfiguration3({ wallets: filteredWallets });
+        checkForDataFolders();
+        mainHTML = renderConfiguration3({ state });
         break;
       case 'settings1':
         mainHTML = renderSettings1({ state });
@@ -302,15 +340,16 @@ $(document).ready(() => {
         .on('click', e => {
           e.preventDefault();
           const abbr = $(e.currentTarget).attr('data-abbr');
+          const wallets = state.get('wallets');
+          const idx = wallets.findIndex(w => w.abbr === abbr);
           dialog.showOpenDialog({
-            title: `${abbr} Data Directory`,
+            title: `${wallets[idx].name} Data Directory`,
+            defaultPath: ipcRenderer.sendSync('getDataPath'),
             properties: ['openDirectory']
           }, ([ directoryPath ]) => {
             if(directoryPath) {
               $(`#${abbr}`).val(directoryPath);
               $(`#${abbr}-error`).css('display', 'none');
-              const wallets = state.get('wallets');
-              const idx = wallets.findIndex(w => w.abbr === abbr);
               const newWallets = [
                 ...wallets.slice(0, idx),
                 wallets[idx].set({directory: directoryPath, error: false}),
@@ -509,6 +548,21 @@ $(document).ready(() => {
             wallets[blockIdx],
             ...others
           ];
+          wallets  = wallets.reduce((arr, w) => {
+            const idx = arr.findIndex(ww => ww.abbr === w.abbr);
+            if(idx > -1) {
+              return [
+                ...arr.slice(0, idx),
+                arr[idx].set('versions', [...arr[idx].versions, ...w.versions]),
+                ...arr.slice(idx + 1)
+              ];
+            } else {
+              return [
+                ...arr,
+                w
+              ];
+            }
+          }, []);
           resolve(wallets);
         });
       })
