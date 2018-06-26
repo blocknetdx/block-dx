@@ -1,14 +1,21 @@
 $swal2-white:       #fff !default;
 $swal2-black:       #000 !default;
+$blockdx-darkblue1: #243b55 !default;
+$blockdx-darkblue2: #0e2742 !default;
+$blockdx-blue:      #0069ff !default;
+$blockdx-gray:      #8c97a3 !default;
+$blockdx-white:     #fff !default;
 
 // BOX MODEL
 $swal2-width: 32em !default;
 $swal2-padding: 1.25em !default;
-$swal2-border-radius: .3125em !default;
+//$swal2-border-radius: .3125em !default;
+$swal2-border-radius: 0px !default;
 $swal2-box-shadow: #d9d9d9 !default;
 
 // BACKGROUND
-$swal2-background: $swal2-white !default;
+//$swal2-background: $swal2-white !default;
+$swal2-background: $blockdx-darkblue1 !default;
 
 // TYPOGRAPHY
 $swal2-font: inherit !default;
@@ -33,11 +40,13 @@ $swal2-image-margin: 1.25em auto !default;
 
 // TITLE
 $swal2-title-margin: 0 0 .4em !default;
-$swal2-title-color: lighten($swal2-black, 35) !default;
+//$swal2-title-color: lighten($swal2-black, 35) !default;
+$swal2-title-color: $blockdx-white !default;
 $swal2-title-font-size: 1.875em !default;
 
 // CONTENT
-$swal2-content-color: lighten($swal2-black, 33) !default;
+//$swal2-content-color: lighten($swal2-black, 33) !default;
+$swal2-content-color: $blockdx-white !default;
 $swal2-content-font-size: 1.125em !default;
 
 // INPUT
@@ -71,7 +80,8 @@ $swal2-progress-steps-distance: 2.5em !default;
 
 // FOOTER
 $swal2-footer-margin: 1.25em 0 0 !default;
-$swal2-footer-border-color: #eee !default;
+//$swal2-footer-border-color: #eee !default;
+$swal2-footer-border-color: $blockdx-darkblue1 !default;
 $swal2-footer-color: lighten($swal2-black, 33) !default;
 $swal2-footer-font-size: 1em !default;
 
@@ -93,7 +103,8 @@ $swal2-close-button-transition: color .1s ease-out !default;
 $swal2-close-button-border: none !default;
 $swal2-close-button-border-radius: 0 !default;
 $swal2-close-button-background: transparent !default;
-$swal2-close-button-color: lighten($swal2-black, 80) !default;
+//$swal2-close-button-color: lighten($swal2-black, 80) !default;
+$swal2-close-button-color: $blockdx-darkblue1 !default;
 $swal2-close-button-font-size: 2.5em !default;
 
 // CLOSE BUTTON:HOVER
@@ -105,14 +116,18 @@ $swal2-actions-margin: 1.25em auto 0 !default;
 
 // CONFIRM BUTTON
 $swal2-confirm-button-border: 0 !default;
-$swal2-confirm-button-border-radius: .25em !default;
-$swal2-confirm-button-background-color: #3085d6 !default;
-$swal2-confirm-button-color: $swal2-white !default;
+//$swal2-confirm-button-border-radius: .25em !default;
+$swal2-confirm-button-border-radius: 0px !default;
+//$swal2-confirm-button-background-color: #3085d6 !default;
+//$swal2-confirm-button-color: $swal2-white !default;
+$swal2-confirm-button-background-color: $blockdx-blue !default;
+$swal2-confirm-button-color: $blockdx-white !default;
 $swal2-confirm-button-font-size: 1.0625em !default;
 
 // CANCEL BUTTON
 $swal2-cancel-button-border: 0 !default;
-$swal2-cancel-button-border-radius: .25em !default;
+//$swal2-cancel-button-border-radius: .25em !default;
+$swal2-cancel-button-border-radius: 0px !default;
 $swal2-cancel-button-background-color: #aaa !default;
 $swal2-cancel-button-color: $swal2-white !default;
 $swal2-cancel-button-font-size: 1.0625em !default;
@@ -120,7 +135,8 @@ $swal2-cancel-button-font-size: 1.0625em !default;
 // COMMON VARIABLES FOR CONFIRM AND CANCEL BUTTONS
 $swal2-button-darken-hover: rgba($swal2-black, .1) !default;
 $swal2-button-darken-active: rgba($swal2-black, .2) !default;
-$swal2-button-focus-outline: rgba(50, 100, 150, .4) !default;
+//$swal2-button-focus-outline: rgba(50, 100, 150, .4) !default;
+$swal2-button-focus-outline: transparent !default;
 
 // TOASTS
 $swal2-toast-width: auto !default;

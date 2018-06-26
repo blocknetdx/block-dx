@@ -209,7 +209,7 @@ body.swal2-toast-shown > .swal2-container {
     padding: .3125em .625em;
     font-size: 1em; }
     .swal2-popup.swal2-toast .swal2-styled:focus {
-      box-shadow: 0 0 0 0.0625em #fff, 0 0 0 0.125em rgba(50, 100, 150, 0.4); }
+      box-shadow: 0 0 0 0.0625em #fff, 0 0 0 0.125em transparent; }
   .swal2-popup.swal2-toast .swal2-success {
     border-color: #a5dc86; }
     .swal2-popup.swal2-toast .swal2-success [class^='swal2-success-circular-line'] {
@@ -447,8 +447,8 @@ body.swal2-no-backdrop .swal2-shown {
   width: 32em;
   max-width: 100%;
   padding: 1.25em;
-  border-radius: 0.3125em;
-  background: #fff;
+  border-radius: 0px;
+  background: #243b55;
   font-family: inherit;
   font-size: 1rem;
   box-sizing: border-box; }
@@ -461,12 +461,13 @@ body.swal2-no-backdrop .swal2-shown {
     flex-direction: column;
     align-items: center; }
   .swal2-popup .swal2-title {
+    background-color: #243b55;
     display: block;
     position: relative;
     max-width: 100%;
     margin: 0 0 0.4em;
     padding: 0;
-    color: #595959;
+    color: #fff;
     font-size: 1.875em;
     font-weight: 600;
     text-align: center;
@@ -519,28 +520,28 @@ body.swal2-no-backdrop .swal2-shown {
       cursor: pointer; }
     .swal2-popup .swal2-styled.swal2-confirm {
       border: 0;
-      border-radius: 0.25em;
+      border-radius: 0px;
       background: initial;
-      background-color: #3085d6;
+      background-color: #0069ff;
       color: #fff;
       font-size: 1.0625em; }
     .swal2-popup .swal2-styled.swal2-cancel {
       border: 0;
-      border-radius: 0.25em;
+      border-radius: 0px;
       background: initial;
       background-color: #aaa;
       color: #fff;
       font-size: 1.0625em; }
     .swal2-popup .swal2-styled:focus {
       outline: none;
-      box-shadow: 0 0 0 2px #fff, 0 0 0 4px rgba(50, 100, 150, 0.4); }
+      box-shadow: 0 0 0 2px #fff, 0 0 0 4px transparent; }
     .swal2-popup .swal2-styled::-moz-focus-inner {
       border: 0; }
   .swal2-popup .swal2-footer {
     justify-content: center;
     margin: 1.25em 0 0;
     padding-top: 1em;
-    border-top: 1px solid #eee;
+    border-top: 1px solid #243b55;
     color: #545454;
     font-size: 1em; }
   .swal2-popup .swal2-image {
@@ -558,8 +559,8 @@ body.swal2-no-backdrop .swal2-shown {
     border: none;
     border-radius: 0;
     background: transparent;
-    color: #cccccc;
-    font-family: serif;
+    color: #243b55;
+    font-family: "Open Sans", sans-serif;
     font-size: 2.5em;
     line-height: 1.2;
     cursor: pointer;
@@ -578,7 +579,7 @@ body.swal2-no-backdrop .swal2-shown {
     justify-content: center;
     margin: 0;
     padding: 0;
-    color: #545454;
+    color: #fff;
     font-size: 1.125em;
     font-weight: 300;
     line-height: normal;
@@ -696,7 +697,7 @@ body.swal2-no-backdrop .swal2-shown {
 
 @-moz-document url-prefix() {
   .swal2-close:focus {
-    outline: 2px solid rgba(50, 100, 150, 0.4); } }
+    outline: 2px solid transparent; } }
 
 .swal2-icon {
   position: relative;

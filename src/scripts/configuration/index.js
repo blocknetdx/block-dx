@@ -1,4 +1,4 @@
-/* global $ */
+/* global $, swal */
 
 const fs = require('fs');
 const path = require('path');
@@ -58,19 +58,6 @@ class Wallet {
 }
 
 $(document).ready(() => {
-
-  // setTimeout(() => {
-  //   swal({
-  //     title: 'Something!',
-  //     text: 'Some text here.',
-  //     type: 'warning',
-  //     showConfirmButton: true,
-  //     confirmButtonText: 'OK',
-  //     showCancelButton: true,
-  //     cancelButtonText: 'Cancel',
-  //     reverseButtons: true
-  //   });
-  // }, 500);
 
   const state = {
 

@@ -276,6 +276,7 @@ body {
   }
 
   .swal2-title {
+    background-color: $blockdx-darkblue1;
     display: block;
     position: relative;
     max-width: 100%;
@@ -418,7 +419,8 @@ body {
     border-radius: $swal2-close-button-border-radius;
     background: $swal2-close-button-background;
     color: $swal2-close-button-color;
-    font-family: serif;
+    //font-family: serif;
+    font-family: "Open Sans", sans-serif;
     font-size: $swal2-close-button-font-size;
     line-height: 1.2;
     cursor: pointer;
