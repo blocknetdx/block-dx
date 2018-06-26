@@ -133,6 +133,11 @@ const openConfigurationWindow = () => {
 
 };
 
+ipcMain.on('restart', () => {
+  app.relaunch();
+  app.quit();
+});
+
 const openSettingsWindow = (options = {}) => {
 
   let errorMessage;
@@ -167,10 +172,6 @@ const openSettingsWindow = (options = {}) => {
     } catch(err) {
       handleError(err);
     }
-  });
-  ipcMain.on('restart', () => {
-    app.relaunch();
-    app.quit();
   });
 
   const settingsWindow = new BrowserWindow({

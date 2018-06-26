@@ -320,7 +320,8 @@ $(document).ready(() => {
               state.set('active', 'complete');
               state.set('sidebarSelected', 1);
               break;
-            }
+            } case 'complete':
+              ipcRenderer.send('restart');
           }
           render();
         });
@@ -349,7 +350,7 @@ $(document).ready(() => {
               state.set('sidebarSelected', 1);
               break;
             case 'settings3':
-              if(skipSetup) {
+              if (skipSetup) {
                 state.set('active', 'configuration1');
                 state.set('sidebarSelected', 0);
               } else {
@@ -358,7 +359,7 @@ $(document).ready(() => {
               }
               break;
             case 'complete':
-              if(!skipSetup && generateCredentials) {
+              if (!skipSetup && generateCredentials) {
                 state.set('active', 'settings1');
                 state.set('sidebarSelected', 1);
               } else {

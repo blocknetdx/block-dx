@@ -7,7 +7,7 @@ const renderComplete = () => {
           <div class="main-area" style="background-color:#0e2742;overflow-y:auto;"></div>
           <div id="js-buttonContainer" class="button-container">
             <button id="js-backBtn" type="button" class="gray-button">BACK</button>
-            <button id="js-finish" type="button">FINISH</button>
+            <button id="js-continueBtn" type="button">FINISH</button>
           </div>
         `;
   return html;
