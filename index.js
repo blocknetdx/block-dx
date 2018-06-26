@@ -117,6 +117,16 @@ const openConfigurationWindow = () => {
     configurationWindow.setMenu(windowMenu);
   }
 
+  ipcMain.on('getManifest', async function() {
+    try {
+      const filePath = '/home/tandy/Downloads/coin-configuration-files/manifest.json';
+      const data = await fs.readJsonAsync(filePath);
+      configurationWindow.send('manifest', data);
+    } catch(err) {
+      handleError(err);
+    }
+  });
+
 };
 
 const openSettingsWindow = (options = {}) => {

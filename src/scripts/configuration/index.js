@@ -1,9 +1,9 @@
 /* global $ */
 
 const fs = require('fs');
+const { ipcRenderer } = require('electron');
 const { dialog } = require('electron').remote;
 const { Set } = require('immutable');
-const { sortByVersion } = require('./scripts/configuration/modules/util');
 const renderSidebar = require('./scripts/configuration/modules/sidebar');
 const renderConfiguration1 = require('./scripts/configuration/modules/configuration01');
 const renderConfiguration2 = require('./scripts/configuration/modules/configuration02');
@@ -12,6 +12,49 @@ const renderSettings1 = require('./scripts/configuration/modules/settings01');
 const renderSettings2 = require('./scripts/configuration/modules/settings02');
 const renderSettings3 = require('./scripts/configuration/modules/settings03');
 const renderComplete = require('./scripts/configuration/modules/complete');
+
+class Wallet {
+
+  constructor(w = {}) {
+
+    const { versions = [] } = w;
+
+    this.name = w.coin_name || '';
+    this.abbr = w.ticker || '';
+    this.versionId = w.ver_id || '';
+    this.versionName = w.ver_name || '';
+    this.dirNameLinux = w.dir_name_linux || '';
+    this.dirNameMac = w.dir_name_mac || '';
+    this.dirNameWin = w.dir_name_win || '';
+    this.repoURL = w.repo_url || '';
+    this.versions = versions;
+    this.xBridgeConf = w.xbridge_conf || '';
+    this.walletConf = w.wallet_conf || '';
+
+    this.error = false;
+    this.username = '';
+    this.password = '';
+    this.version = versions.length > 0 ? versions[versions.length - 1] : '';
+    this.directory = '';
+
+  }
+
+  set(arg1, arg2) {
+    const wallet = Object.assign({}, this);
+    if(typeof arg1 === 'string') {
+      wallet[arg1] = arg2;
+    } else if(typeof arg1 === 'object') {
+      const keys = Object.keys(arg1);
+      for(const key of keys) {
+        wallet[key] = arg1[key];
+      }
+    } else {
+      throw new Error('You must pass in either a string or an object as the first argument to the set() method.');
+    }
+    return Object.assign(new Wallet(), wallet);
+  }
+
+}
 
 $(document).ready(() => {
 
@@ -39,14 +82,14 @@ $(document).ready(() => {
   ]);
   state.set('selectedWallets', Set(['BLOCK']));
 
-  const versions = ['0.1.1', '0.1.2', '0.1.3', '0.1.4'];
-  const latest = versions[versions.length -1];
-  state.set('wallets', [
-    {name: 'Blocknet', abbr: 'BLOCK', directory: '', error: false, username: '', password: '', version: latest, versions},
-    {name: 'Bitcoin', abbr: 'BTC', directory: '', error: false, username: '', password: '', version: latest, versions},
-    {name: 'Mona', abbr: 'MONA', directory: '', error: false, username: '', password: '', version: latest, versions},
-    {name: 'Sys', abbr: 'SYS', directory: '', error: false, username: '', password: '', version: latest, versions}
-  ]);
+  // const versions = ['0.1.1', '0.1.2', '0.1.3', '0.1.4'];
+  // const latest = versions[versions.length -1];
+  // state.set('wallets', [
+  //   {name: 'Blocknet', abbr: 'BLOCK', directory: '', error: false, username: '', password: '', version: latest, versions},
+  //   {name: 'Bitcoin', abbr: 'BTC', directory: '', error: false, username: '', password: '', version: latest, versions},
+  //   {name: 'Mona', abbr: 'MONA', directory: '', error: false, username: '', password: '', version: latest, versions},
+  //   {name: 'Sys', abbr: 'SYS', directory: '', error: false, username: '', password: '', version: latest, versions}
+  // ]);
   state.set('skipSetup', false);
   state.set('active', 'configuration1');
   state.set('generateCredentials', true);
@@ -270,7 +313,7 @@ $(document).ready(() => {
               const idx = wallets.findIndex(w => w.abbr === abbr);
               const newWallets = [
                 ...wallets.slice(0, idx),
-                Object.assign({}, wallets[idx], {directory: directoryPath, error: false}),
+                wallets[idx].set({directory: directoryPath, error: false}),
                 ...wallets.slice(idx + 1)
               ];
               state.set('wallets', newWallets);
@@ -320,9 +363,7 @@ $(document).ready(() => {
           const idx = wallets.findIndex(w => w.abbr === abbr);
           const newWallets = [
             ...wallets.slice(0, idx),
-            Object.assign({}, wallets[idx], {
-              username: value.trim()
-            }),
+            wallets[idx].set({username: value.trim()}),
             ...wallets.slice(idx + 1)
           ];
           state.set('wallets', newWallets);
@@ -336,9 +377,7 @@ $(document).ready(() => {
           const idx = wallets.findIndex(w => w.abbr === abbr);
           const newWallets = [
             ...wallets.slice(0, idx),
-            Object.assign({}, wallets[idx], {
-              password: value
-            }),
+            wallets[idx].set({password: value}),
             ...wallets.slice(idx + 1)
           ];
           state.set('wallets', newWallets);
@@ -357,9 +396,7 @@ $(document).ready(() => {
           const idx = wallets.findIndex(w => w.abbr === 'BLOCK');
           const newWallets = [
             ...wallets.slice(0, idx),
-            Object.assign({}, wallets[idx], {
-              username: value.trim()
-            }),
+            wallets[idx].set({username: value.trim()}),
             ...wallets.slice(idx + 1)
           ];
           state.set('wallets', newWallets);
@@ -372,9 +409,7 @@ $(document).ready(() => {
           const idx = wallets.findIndex(w => w.abbr === 'BLOCK');
           const newWallets = [
             ...wallets.slice(0, idx),
-            Object.assign({}, wallets[idx], {
-              password: value
-            }),
+            wallets[idx].set({password: value}),
             ...wallets.slice(idx + 1)
           ];
           state.set('wallets', newWallets);
@@ -430,7 +465,7 @@ $(document).ready(() => {
 
               $target.append(`
                     <div class="js-dropdownMenu" style="z-index:1000;position:absolute;top:${height}px;left:0;background-color:#ddd;width:${width}px;max-height:162px;overflow-y:auto;">
-                      ${sortByVersion(wallet.versions).reverse().map(v => `<div class="js-dropdownMenuItem dropdown-button" data-version="${v}"><div>${v}</div></div>`).join('')}
+                      ${[...wallet.versions].reverse().map(v => `<div class="js-dropdownMenuItem dropdown-button" data-version="${v}"><div>${v}</div></div>`).join('')}
                     </div>
                   `);
 
@@ -442,9 +477,7 @@ $(document).ready(() => {
                     const v = $(ee.currentTarget).attr('data-version');
                     state.set('wallets', [
                       ...wallets.slice(0, idx),
-                      Object.assign({}, wallet, {
-                        version: v
-                      }),
+                      wallets[idx].set({version: v}),
                       ...wallets.slice(idx + 1)
                     ]);
                     $($target.find('div')[0]).text(v);
@@ -460,6 +493,35 @@ $(document).ready(() => {
     }, 0);
   };
 
-  render();
+  Promise
+    .all([
+
+      new Promise(resolve => {
+        ipcRenderer.send('getManifest');
+        ipcRenderer.on('manifest', (e, wallets) => {
+          wallets = wallets.map(w => new Wallet(w));
+          const blockIdx = wallets.findIndex(w => w.abbr === 'BLOCK');
+          const others = [
+            ...wallets.slice(0, blockIdx),
+            ...wallets.slice(blockIdx + 1)
+          ].sort((a, b) => a.name.localeCompare(b.name));
+          wallets = [
+            wallets[blockIdx],
+            ...others
+          ];
+          resolve(wallets);
+        });
+      })
+
+    ])
+    .then(([ wallets ]) => {
+
+      state.set('wallets', wallets);
+
+      render();
+    })
+    .catch(err => {
+      console.error(err);
+    });
 
 });
