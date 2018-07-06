@@ -119,7 +119,7 @@ const openConfigurationWindow = () => {
 
   ipcMain.on('getManifest', async function() {
     try {
-      const filePath = '/home/tandy/Downloads/coin-configuration-files/manifest.json';
+      const filePath = path.join(__dirname, 'data', 'manifest.json');
       const data = await fs.readJsonAsync(filePath);
       configurationWindow.send('manifest', data);
     } catch(err) {
