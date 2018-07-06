@@ -1,3 +1,5 @@
+const removeNameFromId = str => str.replace(/^\w+--/, '');
+
 const renderConfiguration1 = ({ state }) => {
   const selected = state.get('selectedWallets');
   const items = state.get('wallets');
@@ -7,10 +9,11 @@ const renderConfiguration1 = ({ state }) => {
           <div id="js-mainConfigurationArea" class="main-area" style="position:relative;${skip ? 'opacity:.6;overflow-y:hidden;' : 'opacity:1;overflow-y:scroll;'}">
             ${items
               .map(i => {
+                const versionId = removeNameFromId(i.versionId);
                 if(i.abbr === 'BLOCK') {
-                  return `<div class="main-area-item" style="cursor:default;opacity:1;"><i class="far ${selected.has(i.abbr) ? 'fa-check-square' : 'fa-square'} radio-icon"></i> ${i.name} (${i.abbr})</div>`;
+                  return `<div class="main-area-item" style="cursor:default;opacity:1;"><i class="far ${selected.has(i.versionId) ? 'fa-check-square' : 'fa-square'} radio-icon"></i> ${i.name} ${versionId} (${i.abbr})</div>`;
                 } else {
-                  return `<div class="js-mainAreaItem main-area-item" data-abbr="${i.abbr}"><i class="far ${selected.has(i.abbr) ? 'fa-check-square' : 'fa-square'} radio-icon"></i> ${i.name} (${i.abbr})</div>`;
+                  return `<div class="js-mainAreaItem main-area-item" data-id="${i.versionId}"><i class="far ${selected.has(i.versionId) ? 'fa-check-square' : 'fa-square'} radio-icon"></i> ${i.name} ${versionId} (${i.abbr})</div>`;
                 }
               })
               .join('\n')

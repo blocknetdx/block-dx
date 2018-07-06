@@ -6,11 +6,11 @@ const renderConfiguration2 = ({ wallets }) => {
               <div class="main-area-item2">
                 <div style="display:flex;flex-direction:row:flex-wrap:nowrap;justify-content:space-between;">
                   <div>${w.name}</div>
-                  <!--<div id="${w.abbr}-error" class="text-danger" style="display:${w.error || !w.directory ? 'block' : 'none'};text-align:right;">Error: data directory not found</div>-->
+                  <!--<div id="${w.versionId}-error" class="text-danger" style="display:${w.error || !w.directory ? 'block' : 'none'};text-align:right;">Error: data directory not found</div>-->
                 </div>
                 <div class="input-group" style="margin-bottom:0;margin-top:10px;">
                   <label style="flex-basis:0;flex-grow:1;">Wallet Version</label>
-                  <div class="js-versionDropdownButton dropdown-button" data-abbr="${w.abbr}" style="flex-basis:0;flex-grow:1;">
+                  <div class="js-versionDropdownButton dropdown-button" data-id="${w.versionId}" style="flex-basis:0;flex-grow:1;">
                     <div style="margin-left:10px;">${w.version}</div>
                     <div><i class="fas fa-angle-down radio-icon" style="margin-right:0;font-size:20px;"></i></div>
                   </div>

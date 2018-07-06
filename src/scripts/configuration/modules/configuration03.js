@@ -1,19 +1,21 @@
+const { removeNonWordCharacters } = require('./util');
+
 const renderConfiguration3 = ({ state }) => {
   const allWallets = state.get('wallets');
   const selectedWallets = state.get('selectedWallets');
   const wallets = allWallets
-    .filter(w => selectedWallets.has(w.abbr));
+    .filter(w => selectedWallets.has(w.versionId));
   const items = wallets
     .map(w => {
       return `
               <div class="main-area-item2">
                 <div style="display:flex;flex-direction:row:flex-wrap:nowrap;justify-content:space-between;">
                   <div>${w.name}</div>
-                  <div id="${w.abbr}-error" class="text-danger" style="display:${w.error || !w.directory ? 'block' : 'none'};text-align:right;">Error: data directory not found</div>
+                  <div id="${removeNonWordCharacters(w.versionId)}-error" class="text-danger" style="display:${w.error || !w.directory ? 'block' : 'none'};text-align:right;">Error: data directory not found</div>
                 </div>
                 <div style="margin-top:10px;display:flex;flex-direction:row;flex-wrap:nowrap;justify-content:flex-start;">
-                  <input id="${w.abbr}" type="text" value="${w.directory}" readonly />
-                  <button class="js-browseBtn" type="button" data-abbr="${w.abbr}" style="margin-top:0;margin-right:0;width:100px;min-width:100px;">BROWSE</button>
+                  <input id="${removeNonWordCharacters(w.versionId)}" type="text" value="${w.directory}" readonly />
+                  <button class="js-browseBtn" type="button" data-id="${w.versionId}" style="margin-top:0;margin-right:0;width:100px;min-width:100px;">BROWSE</button>
                 </div>
               </div>
               <div style="height:1px;"></div>

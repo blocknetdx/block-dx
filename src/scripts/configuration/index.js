@@ -13,6 +13,7 @@ const renderSettings1 = require('./scripts/configuration/modules/settings01');
 const renderSettings2 = require('./scripts/configuration/modules/settings02');
 const renderSettings3 = require('./scripts/configuration/modules/settings03');
 const renderComplete = require('./scripts/configuration/modules/complete');
+const { removeNonWordCharacters } = require('./scripts/configuration/modules/util');
 
 class Wallet {
 
@@ -81,7 +82,7 @@ $(document).ready(() => {
     {text: 'Configuration Setup'},
     {text: 'RPC Settings'}
   ]);
-  state.set('selectedWallets', Set(['BLOCK']));
+  // state.set('selectedWallets', Set(['BLOCK']));
 
   // const versions = ['0.1.1', '0.1.2', '0.1.3', '0.1.4'];
   // const latest = versions[versions.length -1];
@@ -104,7 +105,7 @@ $(document).ready(() => {
     const selectedWallets = state.get('selectedWallets');
     const newWallets = allWallets
       .map(w => {
-        if(!selectedWallets.has(w.abbr)) return w;
+        if(!selectedWallets.has(w.versionId)) return w;
         try {
           if(w.directory) {
             fs.statSync(w.directory);
@@ -122,7 +123,7 @@ $(document).ready(() => {
           }
           return w;
         } catch(err) {
-          console.error(err);
+          // console.error(err);
           w = w.set({
             directory: '',
             error: true
@@ -139,7 +140,7 @@ $(document).ready(() => {
     const allWallets = state.get('wallets');
     const selectedWalletsSet = state.get('selectedWallets');
     const filteredWallets = allWallets
-      .filter(w => selectedWalletsSet.has(w.abbr));
+      .filter(w => selectedWalletsSet.has(w.versionId));
 
     const active = state.get('active');
     const sidebarHTML = renderSidebar({ state });
@@ -192,17 +193,17 @@ $(document).ready(() => {
         .off('click')
         .on('click', e => {
           e.preventDefault();
-          const abbr = $(e.currentTarget).attr('data-abbr');
+          const versionId = $(e.currentTarget).attr('data-id');
           const $target = $(e.currentTarget).find('i');
           const selectedWallets = state.get('selectedWallets');
           if($target.hasClass('fa-check-square')) { // it is checked
             $target.addClass('fa-square');
             $target.removeClass('fa-check-square');
-            state.set('selectedWallets', selectedWallets.delete(abbr));
+            state.set('selectedWallets', selectedWallets.delete(versionId));
           } else { // it is not checked
             $target.addClass('fa-check-square');
             $target.removeClass('fa-square');
-            state.set('selectedWallets', selectedWallets.add(abbr));
+            state.set('selectedWallets', selectedWallets.add(versionId));
           }
 
         });
@@ -252,11 +253,23 @@ $(document).ready(() => {
               state.set('active', 'configuration3');
               state.set('sidebarSelected', 0);
               break;
-            case 'configuration3':
+            case 'configuration3': {
+              const wallets = state.get('wallets');
+              const selected = state.get('selectedWallets');
+              const hasErrors = wallets
+                .filter(w => selected.has(w.versionId))
+                .filter(w => w.error);
+              if(hasErrors.length > 0) {
+                const newSelected = hasErrors
+                  .reduce((set, w) => {
+                    return set.delete(w.versionId);
+                  }, selected);
+                state.set('selectedWallets', newSelected);
+              }
               state.set('active', 'settings1');
               state.set('sidebarSelected', 1);
               break;
-            case 'settings1':
+            } case 'settings1':
               if(generateCredentials) {
                 state.set('active', 'complete');
                 state.set('sidebarSelected', 1);
@@ -269,7 +282,7 @@ $(document).ready(() => {
               const wallets = state.get('wallets');
               const selected = state.get('selectedWallets');
               const incomplete = wallets
-                .filter(w => selected.has(w.abbr))
+                .filter(w => selected.has(w.versionId))
                 .filter(w => !w.username || !w.password);
               if(incomplete.length > 0) {
                 if(incomplete.some(w => w.abbr === 'BLOCK')) {
@@ -297,7 +310,7 @@ $(document).ready(() => {
                 } else {
                   const newSelected = incomplete
                     .reduce((set, w) => {
-                      return set.delete(w.abbr);
+                      return set.delete(w.versionId);
                     }, selected);
                   state.set('selectedWallets', newSelected);
                 }
@@ -375,17 +388,18 @@ $(document).ready(() => {
         .off('click')
         .on('click', e => {
           e.preventDefault();
-          const abbr = $(e.currentTarget).attr('data-abbr');
+          const versionId = $(e.currentTarget).attr('data-id');
           const wallets = state.get('wallets');
-          const idx = wallets.findIndex(w => w.abbr === abbr);
+          const idx = wallets.findIndex(w => w.versionId === versionId);
           dialog.showOpenDialog({
             title: `${wallets[idx].name} Data Directory`,
             defaultPath: ipcRenderer.sendSync('getDataPath'),
             properties: ['openDirectory']
           }, ([ directoryPath ]) => {
             if(directoryPath) {
-              $(`#${abbr}`).val(directoryPath);
-              $(`#${abbr}-error`).css('display', 'none');
+              console.log($('#' + removeNonWordCharacters(versionId)));
+              $(`#${removeNonWordCharacters(versionId)}`).val(directoryPath);
+              $(`#${removeNonWordCharacters(versionId)}-error`).css('display', 'none');
               const newWallets = [
                 ...wallets.slice(0, idx),
                 wallets[idx].set({directory: directoryPath, error: false}),
@@ -394,7 +408,7 @@ $(document).ready(() => {
               state.set('wallets', newWallets);
               const selectedWallets = state.get('selectedWallets');
               const filtered = newWallets
-                .filter(w => selectedWallets.has(w.abbr));
+                .filter(w => selectedWallets.has(w.versionId));
               const errorCount = filtered.reduce((num, w) => (!w.error && w.directory) ? num : num + 1, 0);
               if(errorCount === 0) {
                 $('#js-errors').css('display', 'none');
@@ -434,8 +448,8 @@ $(document).ready(() => {
         .on('change', e => {
           const wallets = state.get('wallets');
           const { value } = e.target;
-          const abbr = $(e.target).attr('data-abbr');
-          const idx = wallets.findIndex(w => w.abbr === abbr);
+          const versionId = $(e.target).attr('data-id');
+          const idx = wallets.findIndex(w => w.versionId === versionId);
           const newWallets = [
             ...wallets.slice(0, idx),
             wallets[idx].set({username: value.trim()}),
@@ -448,8 +462,8 @@ $(document).ready(() => {
         .on('change', e => {
           const wallets = state.get('wallets');
           const { value } = e.target;
-          const abbr = $(e.target).attr('data-abbr');
-          const idx = wallets.findIndex(w => w.abbr === abbr);
+          const versionId = $(e.target).attr('data-id');
+          const idx = wallets.findIndex(w => w.versionId === versionId);
           const newWallets = [
             ...wallets.slice(0, idx),
             wallets[idx].set({password: value}),
@@ -523,9 +537,9 @@ $(document).ready(() => {
             });
 
           const $target = $(e.currentTarget);
-          const abbr = $target.attr('data-abbr');
+          const versionId = $target.attr('data-id');
           const wallets = state.get('wallets');
-          const idx = wallets.findIndex(w => w.abbr === abbr);
+          const idx = wallets.findIndex(w => w.versionId === versionId);
           const wallet = wallets[idx];
           const $icon = $target.find('i');
           if($icon.hasClass('fa-angle-down')) { // dropdown currently closed
@@ -584,21 +598,22 @@ $(document).ready(() => {
             wallets[blockIdx],
             ...others
           ];
-          wallets  = wallets.reduce((arr, w) => {
-            const idx = arr.findIndex(ww => ww.abbr === w.abbr);
-            if(idx > -1) {
-              return [
-                ...arr.slice(0, idx),
-                arr[idx].set('versions', [...arr[idx].versions, ...w.versions]),
-                ...arr.slice(idx + 1)
-              ];
-            } else {
-              return [
-                ...arr,
-                w
-              ];
-            }
-          }, []);
+          state.set('selectedWallets', Set([wallets[0].versionId]));
+          // wallets  = wallets.reduce((arr, w) => {
+          //   const idx = arr.findIndex(ww => ww.versionId === w.versionId);
+          //   if(idx > -1) {
+          //     return [
+          //       ...arr.slice(0, idx),
+          //       arr[idx].set('versions', [...arr[idx].versions, ...w.versions]),
+          //       ...arr.slice(idx + 1)
+          //     ];
+          //   } else {
+          //     return [
+          //       ...arr,
+          //       w
+          //     ];
+          //   }
+          // }, []);
           resolve(wallets);
         });
       })

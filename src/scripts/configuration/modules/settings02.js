@@ -5,12 +5,12 @@ const renderSettings2 = ({ wallets }) => {
               <div class="main-area-item2">
                 <div style="display:flex;flex-direction:row:flex-wrap:nowrap;justify-content:space-between;">
                   <div>${w.name}</div>
-                  <div id="${w.abbr}-error" class="text-danger" style="display:none;text-align:right;">Error: data directory not found</div>
+                  <div id="${w.versionId}-error" class="text-danger" style="display:none;text-align:right;">Error: data directory not found</div>
                 </div>
                 <div style="margin-top:10px;display:flex;flex-direction:row;flex-wrap:nowrap;justify-content:flex-start;">
-                  <input class="js-usernameInput" data-abbr="${w.abbr}" type="text" style="margin-right:10px;" value="${w.username}" placeholder="RPC username" />
-                  <input class="js-passwordInput" data-abbr="${w.abbr}" type="text" value="${w.password}" placeholder="RPC password" />
-                  <!--<button class="js-saveBtn" type="button" data-abbr="${w.abbr}" style="margin-top:0;margin-right:0;width:100px;min-width:100px;">SAVE</button>-->
+                  <input class="js-usernameInput" data-id="${w.versionId}" type="text" style="margin-right:10px;" value="${w.username}" placeholder="RPC username" />
+                  <input class="js-passwordInput" data-id="${w.versionId}" type="text" value="${w.password}" placeholder="RPC password" />
+                  <!--<button class="js-saveBtn" type="button" data-id="${w.versionId}" style="margin-top:0;margin-right:0;width:100px;min-width:100px;">SAVE</button>-->
                 </div>
               </div>
               <div style="height:1px;"></div>

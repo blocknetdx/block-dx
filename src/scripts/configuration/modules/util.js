@@ -20,3 +20,5 @@ module.exports.sortByVersion = arr => [...arr]
       return splitA[0] > splitB[0] ? 1 : -1;
     }
   });
+
+module.exports.removeNonWordCharacters = (str = '') => str.replace(/\W/g, '');
