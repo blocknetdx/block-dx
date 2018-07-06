@@ -133,6 +133,9 @@ const openConfigurationWindow = () => {
 
 };
 
+ipcMain.on('quit', () => {
+  app.quit();
+});
 ipcMain.on('restart', () => {
   app.relaunch();
   app.quit();

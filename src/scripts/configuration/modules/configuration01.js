@@ -25,7 +25,7 @@ const renderConfiguration1 = ({ state }) => {
           </div>
 
           <div id="js-buttonContainer" class="button-container">
-            <button style="visibility:hidden;" id="js-backBtn" type="button" class="gray-button">BACK</button>
+            <button id="js-backBtn" type="button" class="gray-button">CANCEL</button>
             <button id="js-continueBtn" type="button">CONTINUE</button>
           </div>
           `;

@@ -346,6 +346,9 @@ $(document).ready(() => {
           const generateCredentials = state.get('generateCredentials');
           const skipSetup = state.get('skipSetup');
           switch(active) {
+            case 'configuration1':
+              ipcRenderer.send('quit');
+              return;
             case 'configuration2':
               state.set('active', 'configuration1');
               state.set('sidebarSelected', 0);
