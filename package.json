@@ -69,6 +69,7 @@
     "rxjs": "^5.5.5",
     "superagent": "^3.8.2",
     "sweetalert": "^2.1.0",
+    "uuid": "^3.3.2",
     "web-animations-js": "^2.3.1",
     "zone.js": "^0.8.18"
   },

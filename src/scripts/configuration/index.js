@@ -14,49 +14,7 @@ const renderSettings2 = require('./scripts/configuration/modules/settings02');
 const renderSettings3 = require('./scripts/configuration/modules/settings03');
 const renderComplete = require('./scripts/configuration/modules/complete');
 const { removeNonWordCharacters } = require('./scripts/configuration/modules/util');
-
-class Wallet {
-
-  constructor(w = {}) {
-
-    const { versions = [] } = w;
-
-    this.name = w.coin_name || '';
-    this.abbr = w.ticker || '';
-    this.versionId = w.ver_id || '';
-    this.versionName = w.ver_name || '';
-    this.dirNameLinux = w.dir_name_linux || '';
-    this.dirNameMac = w.dir_name_mac || '';
-    this.dirNameWin = w.dir_name_win || '';
-    this.repoURL = w.repo_url || '';
-    this.versions = versions;
-    this.xBridgeConf = w.xbridge_conf || '';
-    this.walletConf = w.wallet_conf || '';
-
-    this.error = false;
-    this.username = '';
-    this.password = '';
-    this.version = versions.length > 0 ? versions[versions.length - 1] : '';
-    this.directory = '';
-
-  }
-
-  set(arg1, arg2) {
-    const wallet = Object.assign({}, this);
-    if(typeof arg1 === 'string') {
-      wallet[arg1] = arg2;
-    } else if(typeof arg1 === 'object') {
-      const keys = Object.keys(arg1);
-      for(const key of keys) {
-        wallet[key] = arg1[key];
-      }
-    } else {
-      throw new Error('You must pass in either a string or an object as the first argument to the set() method.');
-    }
-    return Object.assign(new Wallet(), wallet);
-  }
-
-}
+const Wallet = require('./scripts/configuration/modules/wallet');
 
 $(document).ready(() => {
 
@@ -271,6 +229,7 @@ $(document).ready(() => {
               break;
             } case 'settings1':
               if(generateCredentials) {
+                filteredWallets.forEach(w => console.log(JSON.stringify(w.generateCredentials())));
                 state.set('active', 'complete');
                 state.set('sidebarSelected', 1);
               } else {
