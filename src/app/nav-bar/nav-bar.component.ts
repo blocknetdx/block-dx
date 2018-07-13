@@ -82,13 +82,16 @@ export class NavBarComponent implements OnInit {
         openExternal('https://blocknetsupport.cayzu.com/KnowledgeBase/Folder/4472');
         break;
       case 'fees':
-        openExternal('https://blocknetsupport.cayzu.com/KnowledgeBase/Details/?id=1-What-are-the-fees-on-Block-DX?');
+        openExternal('https://docs.google.com/document/d/1FOtlZN9cITzRKIDSOaPuVRyB4-lVXVw4VUJjCuDSzYU/preview');
         break;
       case 'help':
-        openExternal('https://blocknetsupport.cayzu.com/');
+        openExternal('https://sites.google.com/view/blocknet/blockdx');
         break;
       case 'community':
         openExternal('https://discord.gg/2e6s7H8');
+        break;
+      case 'supportTicket':
+        openExternal('https://blocknetsupport.cayzu.com/Tickets/Create');
         break;
     }
     this.toggleNav();
