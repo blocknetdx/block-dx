@@ -88,7 +88,7 @@ export class NavBarComponent implements OnInit {
         openExternal('https://sites.google.com/view/blocknet/blockdx');
         break;
       case 'community':
-        openExternal('https://discord.gg/2e6s7H8');
+        openExternal('https://discord.gg/7RHfBdY');
         break;
       case 'supportTicket':
         openExternal('https://blocknetsupport.cayzu.com/Tickets/Create');
