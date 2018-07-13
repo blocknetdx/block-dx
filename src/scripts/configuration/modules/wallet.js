@@ -1,4 +1,19 @@
+const fs = require('fs-extra-promise');
+const path = require('path');
+const { ipcRenderer } = require('electron');
 const uuid = require('uuid');
+const { splitConf, joinConf } = require('./util');
+
+const fileExists = p => {
+  try {
+    fs.statSync(p);
+    return true;
+  } catch(err) {
+    return false;
+  }
+};
+
+const { platform } = process;
 
 class Wallet {
 
@@ -21,6 +36,7 @@ class Wallet {
     this.error = false;
     this.username = '';
     this.password = '';
+    this.port = '';
     this.version = versions.length > 0 ? versions[versions.length - 1] : '';
     this.directory = '';
 
@@ -46,6 +62,32 @@ class Wallet {
     const username = 'BlockDX' + name.replace(/\s/g, '');
     const password = uuid.v4();
     return { username, password };
+  }
+
+  getDefaultDirectory() {
+    const folder = platform === 'win32' ? this.dirNameWin : platform === 'darwin' ? this.dirNameMac : '.' + this.dirNameMac.toLowerCase();
+    const basePath = (platform === 'win32' || platform === 'darwin') ? ipcRenderer.sendSync('getDataPath') : ipcRenderer.sendSync('getHomePath');
+    return path.join(basePath, folder);
+  }
+
+  saveWalletConf() {
+    const { directory } = this;
+    const conf = this.walletConf.replace(/--.*$/, '') + '.conf';
+    const filePath = path.join(directory, conf);
+    fs.ensureFileSync(filePath);
+    const defaultFile = filePath + '-default';
+    if(!fileExists(defaultFile)) fs.copySync(filePath, defaultFile);
+    const contentsStr = fs.readFileSync(filePath, 'utf8');
+    const contents = splitConf(contentsStr);
+    const baseConfStr = ipcRenderer.sendSync('getBaseConf', this.walletConf);
+    const baseConf = splitConf(baseConfStr);
+    const newContents = Object.assign({}, contents, baseConf, {
+      rpcuser: this.username,
+      rpcpassword: this.password
+    });
+    const newContentsStr = joinConf(newContents);
+    fs.writeFileSync(filePath, newContentsStr, 'utf8');
+    return newContents;
   }
 
 }

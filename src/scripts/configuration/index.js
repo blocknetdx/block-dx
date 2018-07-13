@@ -1,6 +1,6 @@
 /* global $, swal */
 
-const fs = require('fs');
+const fs = require('fs-extra-promise');
 const path = require('path');
 const { ipcRenderer } = require('electron');
 const { dialog } = require('electron').remote;
@@ -13,8 +13,84 @@ const renderSettings1 = require('./scripts/configuration/modules/settings01');
 const renderSettings2 = require('./scripts/configuration/modules/settings02');
 const renderSettings3 = require('./scripts/configuration/modules/settings03');
 const renderComplete = require('./scripts/configuration/modules/complete');
-const { removeNonWordCharacters } = require('./scripts/configuration/modules/util');
+const { removeNonWordCharacters, splitConf, joinConf } = require('./scripts/configuration/modules/util');
 const Wallet = require('./scripts/configuration/modules/wallet');
+
+class XBridgeConf {
+
+  constructor(address) {
+    this._address = address;
+    this._data = new Map();
+  }
+
+  add(wallet) {
+    const { abbr, directory, xBridgeConf, username, password } = wallet;
+    if(abbr === 'BLOCK') this._directory = directory;
+    const confStr = ipcRenderer.sendSync('getBridgeConf', xBridgeConf);
+    const conf = splitConf(confStr);
+    this._data.set(abbr, Object.assign({}, conf, {
+      Username: username,
+      Password: password,
+      Address: ''
+    }));
+  }
+
+  save() {
+    const data = [
+      [
+        '[Main]',
+        `ExchangeWallets=${[...this._data.keys()].join(',')}`,
+        'FullLog=true',
+        'LogPath=',
+        'ExchangeTax=300'
+      ].join('\n'),
+      '\n',
+      ...[...this._data.entries()]
+        .map(([ abbr, conf ]) => {
+          return [
+            `\n[${abbr}]`,
+            joinConf(conf)
+          ].join('\n');
+        })
+    ].join('');
+    const confPath = path.join(this._directory, 'xbridge.conf');
+    let confExists;
+    try {
+      fs.statSync(confPath);
+      confExists = true;
+    } catch(err) {
+      confExists = false;
+    }
+    if(confExists) {
+      const currentConf = fs.readFileSync(confPath, 'utf8');
+      if(data !== currentConf) {
+        fs.copySync(confPath, path.join(this._directory, `xbridge-${new Date().getTime()}.conf`));
+      }
+    }
+    fs.writeFileSync(confPath, data, 'utf8');
+    return data;
+  }
+
+}
+
+const generateXBridgeConf = wallets => {
+  const conf = new XBridgeConf();
+  for(const wallet of wallets) {
+    conf.add(wallet);
+  }
+  const confStr = conf.save();
+  console.log(confStr);
+};
+
+const saveConfs = wallets => {
+  const confs = new Map();
+  for(const w of wallets) {
+    const conf = w.saveWalletConf();
+    confs.set(w.abbr, conf);
+  }
+  generateXBridgeConf(wallets);
+  return confs;
+};
 
 $(document).ready(() => {
 
@@ -54,11 +130,8 @@ $(document).ready(() => {
   state.set('active', 'configuration1');
   state.set('generateCredentials', true);
   state.set('rpcPort', '41414');
-  state.set('rpcUser', '');
-  state.set('rpcPassword', '');
 
   const checkForDataFolders = () => {
-    const dataPath = ipcRenderer.sendSync('getDataPath');
     const allWallets = state.get('wallets');
     const selectedWallets = state.get('selectedWallets');
     const newWallets = allWallets
@@ -69,10 +142,7 @@ $(document).ready(() => {
             fs.statSync(w.directory);
             w = w.set('error', false);
           } else {
-            const { platform } = process;
-            const folder = platform === 'win32' ? w.dirNameWin : (platform === 'darwin' || !w.dirNameLinux) ? w.dirNameMac : w.dirNameLinux;
-            if(!folder) throw new Error();
-            const fullPath = path.join(dataPath, folder);
+            const fullPath = w.getDefaultDirectory();
             fs.statSync(fullPath);
             w = w.set({
               directory: fullPath,
@@ -229,7 +299,35 @@ $(document).ready(() => {
               break;
             } case 'settings1':
               if(generateCredentials) {
-                filteredWallets.forEach(w => console.log(JSON.stringify(w.generateCredentials())));
+                let wallets = state.get('wallets');
+                const updatedWallets = filteredWallets.map(w => {
+                  const { username, password } = w;
+                  if(!username || !password) {
+                    const credentials = w.generateCredentials();
+                    w = w.set({
+                      username: credentials.username,
+                      password: credentials.password
+                    });
+                  }
+                  return w;
+                });
+                updatedWallets.forEach(w => {
+                  const idx = wallets.findIndex(ww => ww.versionId === w.versionId);
+                  wallets = [
+                    ...wallets.slice(0, idx),
+                    w,
+                    ...wallets.slice(idx + 1)
+                  ];
+                });
+                const confs = saveConfs(updatedWallets);
+                const { rpcport } = confs.get('BLOCK');
+                const block = updatedWallets
+                  .find(w => w.abbr === 'BLOCK');
+                const { username, password } = block;
+                ipcRenderer.sendSync('saveDXData', username, password, rpcport);
+                ipcRenderer.sendSync('saveSelected', [...selectedWalletsSet]);
+                state.set('rpcPort', rpcport);
+                state.set('wallets', wallets);
                 state.set('active', 'complete');
                 state.set('sidebarSelected', 1);
               } else {
@@ -289,6 +387,25 @@ $(document).ready(() => {
                 });
                 return;
               }
+              const wallets = state.get('wallets');
+              const selectedWallets = state.get('selectedWallets');
+
+              // the manually entered their setup information
+              if(!state.get('skipSetup')) {
+                const filtered = wallets
+                  .filter(w => selectedWallets.has(w.versionId));
+                for(const w of filtered) {
+                  w.saveWalletConf();
+                }
+                generateXBridgeConf(filtered);
+              }
+
+              const block = wallets
+                .find(w => w.abbr === 'BLOCK');
+              const { username, password } = block;
+              const port = state.get('rpcPort');
+              ipcRenderer.sendSync('saveDXData', username, password, port);
+              ipcRenderer.sendSync('saveSelected', [...selectedWalletsSet]);
               state.set('active', 'complete');
               state.set('sidebarSelected', 1);
               break;
@@ -355,7 +472,7 @@ $(document).ready(() => {
           const idx = wallets.findIndex(w => w.versionId === versionId);
           dialog.showOpenDialog({
             title: `${wallets[idx].name} Data Directory`,
-            defaultPath: ipcRenderer.sendSync('getDataPath'),
+            defaultPath: ipcRenderer.sendSync('getHomePath'),
             properties: ['openDirectory']
           }, ([ directoryPath ]) => {
             if(directoryPath) {
@@ -560,7 +677,10 @@ $(document).ready(() => {
             wallets[blockIdx],
             ...others
           ];
-          state.set('selectedWallets', Set([wallets[0].versionId]));
+          state.set('selectedWallets', Set([
+            wallets[0].versionId,
+            ...ipcRenderer.sendSync('getSelected')
+          ]));
           // wallets  = wallets.reduce((arr, w) => {
           //   const idx = arr.findIndex(ww => ww.versionId === w.versionId);
           //   if(idx > -1) {

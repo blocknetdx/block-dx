@@ -93,7 +93,7 @@ const openConfigurationWindow = () => {
   const configurationWindow = new BrowserWindow({
     show: false,
     width: 1000,
-    height: platform === 'win32' ? 575 : platform === 'darwin' ? 560 : 700,
+    height: platform === 'win32' ? 575 : platform === 'darwin' ? 695 : 700,
     parent: appWindow
   });
   if(isDev) {
@@ -126,9 +126,45 @@ const openConfigurationWindow = () => {
       handleError(err);
     }
   });
-
+  ipcMain.on('getBaseConf', function(e, walletConf) {
+    try {
+      const filePath = path.join(__dirname, 'data', 'wallet-confs', walletConf);
+      const contents = fs.readFileSync(filePath, 'utf8');
+      e.returnValue = contents;
+    } catch(err) {
+      handleError(err);
+    }
+  });
+  ipcMain.on('getBridgeConf', (e, bridgeConf) => {
+    try {
+      const filePath = path.join(__dirname, 'data', 'xbridge-confs', bridgeConf);
+      const contents = fs.readFileSync(filePath, 'utf8');
+      e.returnValue = contents;
+    } catch(err) {
+      handleError(err);
+    }
+  });
+  ipcMain.on('saveDXData', (e, dxUser, dxPassword, dxPort) => {
+    storage.setItems({
+      user: dxUser,
+      password: dxPassword,
+      port: dxPort
+    }, true);
+    e.returnValue = true;
+  });
+  ipcMain.on('getHomePath', e => {
+    e.returnValue = app.getPath('home');
+  });
   ipcMain.on('getDataPath', e => {
     e.returnValue = app.getPath('appData');
+  });
+  ipcMain.on('getSelected', e => {
+    const selectedWallets = storage.getItem('selectedWallets') || [];
+    e.returnValue = selectedWallets;
+  });
+  ipcMain.on('saveSelected', (e, selectedArr) => {
+    storage.setItem('selectedWallets', selectedArr, true);
+    e.returnValue = selectedArr;
   });
 
 };
@@ -643,6 +679,10 @@ const openAppWindow = () => {
     openSettingsWindow();
   });
 
+  ipcMain.on('openConfigurationWizard', () => {
+    openConfigurationWindow();
+  });
+
   ipcMain.on('openTOS', () => {
     openTOSWindow(true);
   });
@@ -716,7 +756,8 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
     } catch(err) {
       // console.error(err);
       await onReady;
-      openSettingsWindow({ error: err });
+      // openSettingsWindow({ error: err });
+      openConfigurationWindow();
       return;
     }
 

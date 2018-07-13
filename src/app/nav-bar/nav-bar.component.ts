@@ -53,6 +53,12 @@ export class NavBarComponent implements OnInit {
     this.toggleNav();
   }
 
+  openConfigurationWizard(e) {
+    e.preventDefault();
+    window.electron.ipcRenderer.send('openConfigurationWizard');
+    this.toggleNav();
+  }
+
   openNotices(e) {
     e.preventDefault();
     window.electron.ipcRenderer.send('openTOS');
