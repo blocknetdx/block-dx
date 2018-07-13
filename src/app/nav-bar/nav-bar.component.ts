@@ -93,6 +93,9 @@ export class NavBarComponent implements OnInit {
       case 'supportTicket':
         openExternal('https://blocknetsupport.cayzu.com/Tickets/Create');
         break;
+      case 'discord':
+        openExternal('https://discord.gg/2e6s7H8');
+        break;
     }
     this.toggleNav();
   }
