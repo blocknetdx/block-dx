@@ -17,6 +17,7 @@ co(function*() {
     yield fs.ensureDirAsync(buildDir);
 
     const filesToCopy = [
+      'data',
       'dist',
       'index.js',
       'tos.txt',

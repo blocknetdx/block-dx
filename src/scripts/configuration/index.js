@@ -16,6 +16,13 @@ const renderComplete = require('./scripts/configuration/modules/complete');
 const { removeNonWordCharacters, splitConf, joinConf } = require('./scripts/configuration/modules/util');
 const Wallet = require('./scripts/configuration/modules/wallet');
 
+const handleError = err => {
+  console.error(err);
+  alert(err);
+};
+
+window.onerror = handleError;
+
 class XBridgeConf {
 
   constructor(address) {
@@ -707,8 +714,6 @@ $(document).ready(() => {
 
       render();
     })
-    .catch(err => {
-      console.error(err);
-    });
+    .catch(handleError);
 
 });
