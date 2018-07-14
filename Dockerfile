@@ -1,5 +1,7 @@
 FROM ubuntu:18.04
 
+ARG APP_DIR="/app"
+
 # Update packages & install native dependencies
 RUN apt-get update
 RUN apt-get upgrade -y
@@ -13,14 +15,14 @@ RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
 RUN apt-get install -y nodejs
 
 # Create app directory
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
+RUN mkdir -p $APP_DIR
+WORKDIR $APP_DIR
 
 # Install app dependencies
-COPY package.json /usr/src/app/
+COPY package.json $APP_DIR
 RUN npm install --no-audit
 
 # Bundle app source
-COPY . /usr/src/app
+COPY . $APP_DIR
 
 CMD [ "npm", "run", "build-native-all" ]
