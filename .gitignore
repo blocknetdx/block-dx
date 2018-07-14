@@ -47,3 +47,4 @@ Thumbs.db
 /temp
 /dist-native
 /docs
+/docker-builds

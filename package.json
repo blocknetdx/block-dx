@@ -24,7 +24,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "build-native": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --production && cd .. && electron-builder --dir",
-    "build-native-all": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --production && cd .. && electron-builder --dir -mwl",
+    "build-native-all": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --no-audit --production && cd .. && electron-builder --dir -mwl",
     "pack-native": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --production && cd .. && electron-builder",
     "publish-native": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --production && cd .. && electron-builder --publish always",
     "generate-docs": "jsdoc src-back/service-node-interface.js -d docs",
