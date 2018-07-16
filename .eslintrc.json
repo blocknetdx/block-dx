@@ -31,7 +31,8 @@
     "no-var": 2,
     "prefer-const": [1, {"destructuring": "all"}],
     "rest-spread-spacing": [2, "never"],
-    "yield-star-spacing": [2, "after"]
+    "yield-star-spacing": [2, "after"],
+    "no-loop-func": 0
   },
   "env": {
     "browser": true,

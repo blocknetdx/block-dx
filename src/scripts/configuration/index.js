@@ -276,16 +276,37 @@ $(document).ready(() => {
           const generateCredentials = state.get('generateCredentials');
           const skipSetup = state.get('skipSetup');
           switch(active) {
-            case 'configuration1':
-              if(skipSetup) {
+            case 'configuration1': {
+              if (skipSetup) {
                 state.set('active', 'settings3');
                 state.set('sidebarSelected', 1);
               } else {
+                const wallets = state.get('wallets');
+                let selectedWallets = state.get('selectedWallets');
+                const selectedAbbrs = state.get('selectedAbbrs');
+                const versionGroups = wallets
+                  .reduce((map, w) => {
+                    if(!selectedAbbrs.has(w.abbr)) {
+                      selectedWallets = selectedWallets.delete(w.versionId);
+                      state.set('selectedWallets', selectedWallets);
+                      return map;
+                    } else if(map.has(w.abbr)) {
+                      return map.set(w.abbr, [...map.get(w.abbr), w.versionId]);
+                    } else {
+                      return map.set(w.abbr, [w.versionId]);
+                    }
+                  }, new Map());
+                for(const ids of [...versionGroups.values()]) {
+                  if(!ids.some(id => selectedWallets.has(id))) {
+                    selectedWallets = selectedWallets.add(ids[ids.length - 1]);
+                  }
+                }
+                state.set('selectedWallets', selectedWallets);
                 state.set('active', 'configuration2');
                 state.set('sidebarSelected', 0);
               }
               break;
-            case 'configuration2':
+            } case 'configuration2':
               state.set('active', 'configuration3');
               state.set('sidebarSelected', 0);
               break;
@@ -301,6 +322,11 @@ $(document).ready(() => {
                     return set.delete(w.versionId);
                   }, selected);
                 state.set('selectedWallets', newSelected);
+                const newSelectedAbbrs = hasErrors
+                  .reduce((set, w) => {
+                    return set.delete(w.abbr);
+                  }, state.get('selectedAbbrs'));
+                state.set('selectedAbbrs', newSelectedAbbrs);
               }
               state.set('active', 'settings1');
               state.set('sidebarSelected', 1);
@@ -378,6 +404,11 @@ $(document).ready(() => {
                       return set.delete(w.versionId);
                     }, selected);
                   state.set('selectedWallets', newSelected);
+                  const newSelectedAbbrs = incomplete
+                    .reduce((set, w) => {
+                      return set.delete(w.abbr);
+                    }, state.get('selectedAbbrs'));
+                  state.set('selectedAbbrs', newSelectedAbbrs);
                 }
               }
               state.set('active', 'settings3');
@@ -613,21 +644,16 @@ $(document).ready(() => {
               if(!$target.hasClass('js-versionDropdownButton') && !$target.parent().hasClass('js-versionDropdownButton')) {
                 closeDropdowns();
               }
-
-              // console.log('Clicked!', e.target);
-              // const $icons = $(e.currentTarget).find('i.fa-angle-up');
-              // $(e.currentTarget).find('.js-dropdownMenu').remove();
-              // $icons
-              //   .addClass('fa-angle-down')
-              //   .removeClass('fa-angle-up');
-
             });
 
           const $target = $(e.currentTarget);
-          const versionId = $target.attr('data-id');
+          const abbr = $target.attr('data-abbr');
           const wallets = state.get('wallets');
-          const idx = wallets.findIndex(w => w.versionId === versionId);
-          const wallet = wallets[idx];
+          const versions = wallets
+            .filter(w => w.abbr === abbr)
+            .reduce((arr, w) => {
+              return arr.concat(w.versions);
+            }, []);
           const $icon = $target.find('i');
           if($icon.hasClass('fa-angle-down')) { // dropdown currently closed
 
@@ -641,7 +667,7 @@ $(document).ready(() => {
 
               $target.append(`
                     <div class="js-dropdownMenu" style="z-index:1000;position:absolute;top:${height}px;left:0;background-color:#ddd;width:${width}px;max-height:162px;overflow-y:auto;">
-                      ${[...wallet.versions].reverse().map(v => `<div class="js-dropdownMenuItem dropdown-button" data-version="${v}"><div>${v}</div></div>`).join('')}
+                      ${[...versions].reverse().map(v => `<div class="js-dropdownMenuItem dropdown-button" data-version="${v}"><div>${v}</div></div>`).join('')}
                     </div>
                   `);
 
@@ -650,13 +676,22 @@ $(document).ready(() => {
                   .off('click')
                   .on('click', ee => {
                     ee.preventDefault();
+                    let selectedWallets = state.get('selectedWallets');
                     const v = $(ee.currentTarget).attr('data-version');
+                    const idx = wallets
+                      .findIndex(w => w.abbr === abbr && w.versions.includes(v));
                     state.set('wallets', [
                       ...wallets.slice(0, idx),
                       wallets[idx].set({version: v}),
                       ...wallets.slice(idx + 1)
                     ]);
                     $($target.find('div')[0]).text(v);
+                    const versionId = wallets[idx].versionId;
+                    for(const w of wallets) {
+                      if(w.abbr === abbr) selectedWallets = selectedWallets.delete(w.versionId);
+                    }
+                    selectedWallets = selectedWallets.add(versionId);
+                    state.set('selectedWallets', selectedWallets);
                   });
               }, 0);
             });
