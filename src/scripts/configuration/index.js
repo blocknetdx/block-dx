@@ -261,7 +261,7 @@ $(document).ready(() => {
           } else { // it is not checked
             $target.addClass('fa-check-square');
             $target.removeClass('fa-square');
-            $main.css('opacity', '.6');
+            $main.css('opacity', '.3');
             $main.css('overflow-y', 'hidden');
             state.set('skipSetup', true);
             $overlay.css('display', 'block');
