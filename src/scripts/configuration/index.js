@@ -228,17 +228,18 @@ $(document).ready(() => {
         .off('click')
         .on('click', e => {
           e.preventDefault();
-          const versionId = $(e.currentTarget).attr('data-id');
+          const abbr = $(e.currentTarget).attr('data-id');
           const $target = $(e.currentTarget).find('i');
-          const selectedWallets = state.get('selectedWallets');
-          if($target.hasClass('fa-check-square')) { // it is checked
+          // const selectedWallets = state.get('selectedWallets');
+          const selectedAbbrs = state.get('selectedAbbrs');
+          if(selectedAbbrs.has(abbr)) { // it is checked
             $target.addClass('fa-square');
             $target.removeClass('fa-check-square');
-            state.set('selectedWallets', selectedWallets.delete(versionId));
+            state.set('selectedAbbrs', selectedAbbrs.delete(abbr));
           } else { // it is not checked
             $target.addClass('fa-check-square');
             $target.removeClass('fa-square');
-            state.set('selectedWallets', selectedWallets.add(versionId));
+            state.set('selectedAbbrs', selectedAbbrs.add(abbr));
           }
 
         });
@@ -684,10 +685,17 @@ $(document).ready(() => {
             wallets[blockIdx],
             ...others
           ];
-          state.set('selectedWallets', Set([
+          const selectedWalletIds = new Set([
             wallets[0].versionId,
             ...ipcRenderer.sendSync('getSelected')
-          ]));
+          ]);
+          const selectedAbbrs = new Set([...wallets
+            .filter(w => selectedWalletIds.has(w.versionId))
+            .map(w => w.abbr)
+          ]);
+          state.set('selectedWallets', selectedWalletIds);
+          state.set('selectedAbbrs', selectedAbbrs);
+
           // wallets  = wallets.reduce((arr, w) => {
           //   const idx = arr.findIndex(ww => ww.versionId === w.versionId);
           //   if(idx > -1) {
