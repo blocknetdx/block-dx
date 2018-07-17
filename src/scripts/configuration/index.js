@@ -13,6 +13,7 @@ const renderSettings1 = require('./scripts/configuration/modules/settings01');
 const renderSettings2 = require('./scripts/configuration/modules/settings02');
 const renderSettings3 = require('./scripts/configuration/modules/settings03');
 const renderComplete = require('./scripts/configuration/modules/complete');
+const renderFinalInstructions = require('./scripts/configuration/modules/final-instructions');
 const { removeNonWordCharacters, splitConf, joinConf } = require('./scripts/configuration/modules/util');
 const Wallet = require('./scripts/configuration/modules/wallet');
 
@@ -202,6 +203,9 @@ $(document).ready(() => {
         break;
       case 'complete':
         mainHTML = renderComplete();
+        break;
+      case 'finalInstructions':
+        mainHTML = renderFinalInstructions();
         break;
       default:
         mainHTML = '';
@@ -449,6 +453,10 @@ $(document).ready(() => {
               state.set('sidebarSelected', 1);
               break;
             } case 'complete':
+              state.set('active', 'finalInstructions');
+              state.set('sidebarSelected', 1);
+              break;
+            case 'finalInstructions':
               ipcRenderer.send('restart');
           }
           render();
@@ -498,6 +506,8 @@ $(document).ready(() => {
                 state.set('sidebarSelected', 1);
               }
               break;
+            case 'finalInstructions':
+              ipcRenderer.send('quit');
           }
           render();
         });
