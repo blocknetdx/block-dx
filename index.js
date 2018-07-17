@@ -93,7 +93,7 @@ const openConfigurationWindow = () => {
   const configurationWindow = new BrowserWindow({
     show: false,
     width: 1000,
-    height: platform === 'win32' ? 575 : platform === 'darwin' ? 695 : 700,
+    height: platform === 'win32' ? 708 : platform === 'darwin' ? 695 : 700,
     parent: appWindow
   });
   if(isDev) {
