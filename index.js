@@ -88,7 +88,24 @@ autoUpdater.on('error', err => {
   handleError(err);
 });
 
-const openConfigurationWindow = () => {
+const openConfigurationWindow = (options = {}) => {
+
+  const { error } = options;
+
+  const errorMessage = error ? 'There was a problem connecting to the Blocknet RPC server. What would you like to do?' : '';
+  // if(error) {
+  //   console.log(error);
+  //   switch(error.status) {
+  //     case 401:
+  //       errorMessage = 'There was an authorization problem. Please correct your username and/or password.';
+  //       break;
+  //     default:
+  //       errorMessage = 'There was a problem connecting to the Blocknet RPC server. Please check the RPC port.';
+  //   }
+  //   console.log(errorMessage);
+  // } else {
+  //   errorMessage = '';
+  // }
 
   const configurationWindow = new BrowserWindow({
     show: false,
@@ -103,6 +120,11 @@ const openConfigurationWindow = () => {
   }
   configurationWindow.once('ready-to-show', () => {
     configurationWindow.show();
+
+    setTimeout(() => {
+      if(errorMessage) configurationWindow.send('errorMessage', errorMessage);
+    }, 200);
+
   });
 
   if(isDev) {
@@ -117,6 +139,14 @@ const openConfigurationWindow = () => {
     configurationWindow.setMenu(windowMenu);
   }
 
+  ipcMain.on('openSettingsWindow', () => {
+    try {
+      openSettingsWindow();
+      configurationWindow.close();
+    } catch(err) {
+      handleError(err);
+    }
+  });
   ipcMain.on('getManifest', async function() {
     try {
       const filePath = path.join(__dirname, 'data', 'manifest.json');
@@ -757,7 +787,7 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
       // console.error(err);
       await onReady;
       // openSettingsWindow({ error: err });
-      openConfigurationWindow();
+      openConfigurationWindow({ error: err });
       return;
     }
 

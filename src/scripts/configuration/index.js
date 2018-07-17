@@ -22,6 +22,29 @@ const handleError = err => {
   alert(err);
 };
 
+ipcRenderer.on('errorMessage', async function(e, message) {
+  try {
+    const { dismiss } = await swal({
+      title: 'Missing Credentials',
+      html: message,
+      type: 'warning',
+      showConfirmButton: true,
+      confirmButtonText: 'Run Configuration Wizard',
+      showCancelButton: true,
+      cancelButtonText: 'Open Settings Window',
+      reverseButtons: true,
+      allowEscapeKey: false,
+      allowOutsideClick: false
+    });
+    if(dismiss === 'cancel') {
+      ipcRenderer.send('openSettingsWindow');
+    }
+
+  } catch(err) {
+    handleError(err);
+  }
+});
+
 window.onerror = handleError;
 
 class XBridgeConf {
