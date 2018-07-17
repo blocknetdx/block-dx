@@ -3,7 +3,7 @@
 const fs = require('fs-extra-promise');
 const path = require('path');
 const { ipcRenderer } = require('electron');
-const { dialog } = require('electron').remote;
+const { dialog, shell } = require('electron').remote;
 const { Set } = require('immutable');
 const renderSidebar = require('./scripts/configuration/modules/sidebar');
 const renderConfiguration1 = require('./scripts/configuration/modules/configuration01');
@@ -723,6 +723,13 @@ $(document).ready(() => {
           } else { // dropdown currently open
             closeDropdowns();
           }
+        });
+
+      $('.js-blocknetWalletLink')
+        .off('click')
+        .on('click', e => {
+          e.preventDefault();
+          shell.openExternal('https://github.com/BlocknetDX/BlockDX/releases/latest');
         });
 
     }, 0);
