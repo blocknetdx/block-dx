@@ -357,14 +357,6 @@ $(document).ready(() => {
                     ...wallets.slice(idx + 1)
                   ];
                 });
-                const confs = saveConfs(updatedWallets);
-                const { rpcport } = confs.get('BLOCK');
-                const block = updatedWallets
-                  .find(w => w.abbr === 'BLOCK');
-                const { username, password } = block;
-                ipcRenderer.sendSync('saveDXData', username, password, rpcport);
-                ipcRenderer.sendSync('saveSelected', [...selectedWalletsSet]);
-                state.set('rpcPort', rpcport);
                 state.set('wallets', wallets);
                 state.set('active', 'complete');
                 state.set('sidebarSelected', 1);
@@ -430,17 +422,19 @@ $(document).ready(() => {
                 });
                 return;
               }
+              state.set('active', 'complete');
+              state.set('sidebarSelected', 1);
+              break;
+            } case 'complete': {
+
               const wallets = state.get('wallets');
               const selectedWallets = state.get('selectedWallets');
 
-              // the manually entered their setup information
+              // they did not manually enter their setup information
               if(!state.get('skipSetup')) {
                 const filtered = wallets
                   .filter(w => selectedWallets.has(w.versionId));
-                for(const w of filtered) {
-                  w.saveWalletConf();
-                }
-                generateXBridgeConf(filtered);
+                saveConfs(filtered);
               }
 
               const block = wallets
@@ -449,14 +443,11 @@ $(document).ready(() => {
               const port = state.get('rpcPort');
               ipcRenderer.sendSync('saveDXData', username, password, port);
               ipcRenderer.sendSync('saveSelected', [...selectedWalletsSet]);
-              state.set('active', 'complete');
-              state.set('sidebarSelected', 1);
-              break;
-            } case 'complete':
               state.set('active', 'finalInstructions');
               state.set('sidebarSelected', 1);
               break;
-            case 'finalInstructions':
+            } case 'finalInstructions':
+
               ipcRenderer.send('restart');
           }
           render();
