@@ -25,7 +25,7 @@ const handleError = err => {
 ipcRenderer.on('errorMessage', async function(e, message) {
   try {
     const { dismiss } = await swal({
-      title: 'Missing Credentials',
+      title: 'Connection Problem',
       html: message,
       type: 'warning',
       showConfirmButton: true,

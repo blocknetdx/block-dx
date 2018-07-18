@@ -110,7 +110,7 @@ const openConfigurationWindow = (options = {}) => {
   const configurationWindow = new BrowserWindow({
     show: false,
     width: 1000,
-    height: platform === 'win32' ? 708 : platform === 'darwin' ? 695 : 700,
+    height: platform === 'win32' ? 708 : platform === 'darwin' ? 695 : 670,
     parent: appWindow
   });
   if(isDev) {
@@ -300,8 +300,10 @@ const openTOSWindow = (alreadyAccepted = false) => {
   let height;
   if(process.platform === 'win32') {
     height = alreadyAccepted ? 660 : 735;
-  } else {
+  } else if(process.platform === 'darwin') {
     height = alreadyAccepted ? 645 : 720;
+  } else {
+    height = alreadyAccepted ? 625 : 690;
   }
 
   const tosWindow = new BrowserWindow({
