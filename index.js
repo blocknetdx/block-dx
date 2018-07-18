@@ -92,20 +92,23 @@ const openConfigurationWindow = (options = {}) => {
 
   const { error } = options;
 
-  const errorMessage = error ? 'There was a problem connecting to the Blocknet RPC server. What would you like to do?' : '';
-  // if(error) {
-  //   console.log(error);
-  //   switch(error.status) {
-  //     case 401:
-  //       errorMessage = 'There was an authorization problem. Please correct your username and/or password.';
-  //       break;
-  //     default:
-  //       errorMessage = 'There was a problem connecting to the Blocknet RPC server. Please check the RPC port.';
-  //   }
-  //   console.log(errorMessage);
-  // } else {
-  //   errorMessage = '';
-  // }
+  // const errorMessage = error ? 'There was a problem connecting to the Blocknet RPC server. What would you like to do?' : '';
+  let errorTitle, errorMessage;
+  if(error) {
+    console.log(error);
+    switch(error.status) {
+      case 401:
+        errorTitle = 'Authorization Problem';
+        errorMessage = 'There was an authorization problem. Please check your Blocknet RPC username and/or password.';
+        break;
+      default:
+        errorTitle = 'Connection Problem';
+        errorMessage = 'There was a problem connecting to the Blocknet RPC server. What would you like to do?';
+    }
+    console.log(errorMessage);
+  } else {
+    errorMessage = '';
+  }
 
   const configurationWindow = new BrowserWindow({
     show: false,
@@ -122,7 +125,7 @@ const openConfigurationWindow = (options = {}) => {
     configurationWindow.show();
 
     setTimeout(() => {
-      if(errorMessage) configurationWindow.send('errorMessage', errorMessage);
+      if(error) configurationWindow.send('errorMessage', errorTitle, errorMessage);
     }, 200);
 
   });

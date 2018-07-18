@@ -22,16 +22,16 @@ const handleError = err => {
   alert(err);
 };
 
-ipcRenderer.on('errorMessage', async function(e, message) {
+ipcRenderer.on('errorMessage', async function(e, title, message) {
   try {
     const { dismiss } = await swal({
-      title: 'Connection Problem',
+      title,
       html: message,
       type: 'warning',
       showConfirmButton: true,
       confirmButtonText: 'Run Configuration Wizard',
       showCancelButton: true,
-      cancelButtonText: 'Open Settings Window',
+      cancelButtonText: 'Open RPC Settings Window',
       reverseButtons: true,
       allowEscapeKey: false,
       allowOutsideClick: false
