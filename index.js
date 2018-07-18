@@ -119,6 +119,7 @@ const openConfigurationWindow = (options = {}) => {
   if(isDev) {
     configurationWindow.loadURL(`file://${path.join(__dirname, 'src', 'automation.html')}`);
   } else {
+    configurationWindow.setMenu(null);
     configurationWindow.loadURL(`file://${path.join(__dirname, 'dist', 'automation.html')}`);
   }
   configurationWindow.once('ready-to-show', () => {
@@ -255,6 +256,7 @@ const openSettingsWindow = (options = {}) => {
   if(isDev) {
     settingsWindow.loadURL(`file://${path.join(__dirname, 'src', 'settings.html')}`);
   } else {
+    settingsWindow.setMenu(null);
     settingsWindow.loadURL(`file://${path.join(__dirname, 'dist', 'settings.html')}`);
   }
   settingsWindow.once('ready-to-show', () => {
