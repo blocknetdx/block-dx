@@ -147,11 +147,11 @@ const openConfigurationWindow = (options = {}) => {
       handleError(err);
     }
   });
-  ipcMain.on('getManifest', async function() {
+  ipcMain.on('getManifest', async function(e) {
     try {
       const filePath = path.join(__dirname, 'data', 'manifest.json');
       const data = await fs.readJsonAsync(filePath);
-      configurationWindow.send('manifest', data);
+      e.returnValue = data;
     } catch(err) {
       handleError(err);
     }
@@ -303,7 +303,7 @@ const openTOSWindow = (alreadyAccepted = false) => {
   } else if(process.platform === 'darwin') {
     height = alreadyAccepted ? 645 : 720;
   } else {
-    height = alreadyAccepted ? 625 : 690;
+    height = alreadyAccepted ? 645 : 690;
   }
 
   const tosWindow = new BrowserWindow({

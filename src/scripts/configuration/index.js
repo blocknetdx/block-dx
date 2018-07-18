@@ -735,59 +735,32 @@ $(document).ready(() => {
     }, 0);
   };
 
-  Promise
-    .all([
-
-      new Promise(resolve => {
-        ipcRenderer.send('getManifest');
-        ipcRenderer.on('manifest', (e, wallets) => {
-          wallets = wallets.map(w => new Wallet(w));
-          const blockIdx = wallets.findIndex(w => w.abbr === 'BLOCK');
-          const others = [
-            ...wallets.slice(0, blockIdx),
-            ...wallets.slice(blockIdx + 1)
-          ].sort((a, b) => a.name.localeCompare(b.name));
-          wallets = [
-            wallets[blockIdx],
-            ...others
-          ];
-          const selectedWalletIds = new Set([
-            wallets[0].versionId,
-            ...ipcRenderer.sendSync('getSelected')
-          ]);
-          const selectedAbbrs = new Set([...wallets
-            .filter(w => selectedWalletIds.has(w.versionId))
-            .map(w => w.abbr)
-          ]);
-          state.set('selectedWallets', selectedWalletIds);
-          state.set('selectedAbbrs', selectedAbbrs);
-
-          // wallets  = wallets.reduce((arr, w) => {
-          //   const idx = arr.findIndex(ww => ww.versionId === w.versionId);
-          //   if(idx > -1) {
-          //     return [
-          //       ...arr.slice(0, idx),
-          //       arr[idx].set('versions', [...arr[idx].versions, ...w.versions]),
-          //       ...arr.slice(idx + 1)
-          //     ];
-          //   } else {
-          //     return [
-          //       ...arr,
-          //       w
-          //     ];
-          //   }
-          // }, []);
-          resolve(wallets);
-        });
-      })
-
-    ])
-    .then(([ wallets ]) => {
-
-      state.set('wallets', wallets);
-
-      render();
-    })
-    .catch(handleError);
+  try {
+    let wallets = ipcRenderer.sendSync('getManifest');
+    wallets = wallets.map(w => new Wallet(w));
+    const blockIdx = wallets.findIndex(w => w.abbr === 'BLOCK');
+    const others = [
+      ...wallets.slice(0, blockIdx),
+      ...wallets.slice(blockIdx + 1)
+    ].sort((a, b) => a.name.localeCompare(b.name));
+    wallets = [
+      wallets[blockIdx],
+      ...others
+    ];
+    const selectedWalletIds = new Set([
+      wallets[0].versionId,
+      ...ipcRenderer.sendSync('getSelected')
+    ]);
+    const selectedAbbrs = new Set([...wallets
+      .filter(w => selectedWalletIds.has(w.versionId))
+      .map(w => w.abbr)
+    ]);
+    state.set('selectedWallets', selectedWalletIds);
+    state.set('selectedAbbrs', selectedAbbrs);
+    state.set('wallets', wallets);
+    render();
+  } catch(err) {
+    handleError(err);
+  }
 
 });
