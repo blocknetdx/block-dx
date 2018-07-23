@@ -234,22 +234,25 @@ class ServiceNodeInterface {
     // console.log(JSON.stringify({
     //   id, method, params
     // }));
-    const { status, body } = await request
-      .post(this._endpoint)
-      .auth(this._user, this._password)
-      .send(JSON.stringify({
-        id,
-        method,
-        params
-      }));
-    let { result, error } = body;
-    if (error) {
-      throw new Error('Internal server error');
+    let status, body;
+    try {
+      const res = await request
+        .post(this._endpoint)
+        .auth(this._user, this._password)
+        .send(JSON.stringify({
+          id,
+          method,
+          params
+        }));
+        status = res.status || '';
+        body = res.body;
+    } catch(err) {
+      const { message = '', code = '', status: httpStatus = '' } = err;
+      throw new Error(`${message}\n\n` + (code ? `Code:\n${code}\n\n` : '') + (httpStatus ? `HTTP Status:\n${httpStatus}\n\n` : '') + `RPC Endpoint:\n${method}`);
     }
-    if (result.hasOwnProperty('error')) {
-      const { code, name } = result;
-      const message = result.error ? result.error : 'Internal server error';
-      throw new Error(`${name} code ${code} ${message}`);
+    if(body.error) {
+      const { code = '', name = '', message = '' } = body.error;
+      throw new Error(`Name:\n${name}\n\nCode: ${code}\n\nMessage: ${message}`);
     }
     if(status !== 200)
       throw new Error(`Response code ${status}`);
