@@ -12,6 +12,9 @@ const confController = require('./src-back/conf-controller');
 
 const { app, BrowserWindow, Menu, ipcMain } = electron;
 
+autoUpdater.autoDownload = false;
+autoUpdater.autoInstallOnAppQuit = true;
+
 // Properly close the application
 app.on('window-all-closed', () => {
   app.quit();
@@ -20,11 +23,15 @@ app.on('window-all-closed', () => {
 const { platform } = process;
 
 const { name, version } = fs.readJSONSync(path.join(__dirname, 'package.json'));
+ipcMain.on('getAppName', e => {
+  e.returnValue = name;
+});
 ipcMain.on('getAppVersion', e => {
   e.returnValue = version;
 });
 
-let appWindow, serverLocation, sn, keyPair, storage, user, password, port, info, pricingSource, pricingUnit, apiKeys, pricingFrequency, enablePricing, sendPricingMultipliers, clearPricingInterval, setPricingInterval, sendMarketPricingEnabled;
+let appWindow, serverLocation, sn, keyPair, storage, user, password, port, info, pricingSource, pricingUnit, apiKeys, pricingFrequency, enablePricing, sendPricingMultipliers, clearPricingInterval, setPricingInterval, sendMarketPricingEnabled, metaPath, macMetaBackupPath, availableUpdate;
+let updateError = false;
 
 const configurationFilesDirectory = path.join(__dirname, 'blockchain-configuration-files');
 
@@ -61,13 +68,19 @@ require('electron-context-menu')();
 const isSecondInstance = app.makeSingleInstance(() => {});
 if(isSecondInstance) app.quit();
 
-const openUpdateAvailableWindow = version => new Promise(resolve => {
+let updateAvailableWindowOpen = false;
+
+const openUpdateAvailableWindow = (v, windowType, hideCheckbox = false) => new Promise(resolve => { // windowType: updateAvailable|updateDownloaded
+
+  updateAvailableWindowOpen = true;
+
   const updateAvailableWindow = new BrowserWindow({
     show: false,
-    width: 550,
-    height: platform === 'win32' ? 355 : 330,
+    width: 580,
+    height: platform === 'win32' ? 375 : platform === 'darwin' ? 355 : 340,
     parent: appWindow
   });
+  if(platform !== 'darwin') updateAvailableWindow.setMenu(null);
   if(isDev) {
     updateAvailableWindow.loadURL(`file://${path.join(__dirname, 'src', 'update-available.html')}`);
   } else {
@@ -76,29 +89,84 @@ const openUpdateAvailableWindow = version => new Promise(resolve => {
   updateAvailableWindow.once('ready-to-show', () => {
     updateAvailableWindow.show();
   });
-  updateAvailableWindow.on('close', () => {
+  updateAvailableWindow.once('close', () => {
+    updateAvailableWindowOpen = false;
     resolve();
   });
-  ipcMain.on('getUpdateVersion', e => {
-    e.returnValue = version;
+  ipcMain.removeAllListeners('getUpdatedVersion');
+  ipcMain.once('getUpdateVersion', e => {
+    e.returnValue = v;
   });
-  ipcMain.on('cancel', () => {
+  ipcMain.removeAllListeners('cancel');
+  ipcMain.once('cancel', async function(e, notAskAgain) {
+    if(!hideCheckbox) storage.setItem('ignoreUpdates', notAskAgain ? v : '', true);
     resolve();
     setTimeout(() => {
       updateAvailableWindow.close();
     }, 0);
   });
-  ipcMain.on('accept', () => {
-    autoUpdater.quitAndInstall();
+  ipcMain.removeAllListeners('accept');
+  ipcMain.once('accept', () => {
+    if(windowType === 'updateAvailable') {
+      storage.setItem('ignoreUpdates', '', true);
+      autoUpdater.downloadUpdate();
+      downloadingUpdate = true;
+      updateAvailableWindow.close();
+    } else if(windowType === 'updateDownloaded') {
+      if(platform === 'darwin') fs.copySync(metaPath, macMetaBackupPath);
+      autoUpdater.quitAndInstall();
+    }
+  });
+  ipcMain.removeAllListeners('getUpdatedWindowType');
+  ipcMain.once('getUpdateWindowType', e => {
+    e.returnValue = windowType;
+  });
+  ipcMain.removeAllListeners('hideCheckbox');
+  ipcMain.once('hideCheckbox', e => {
+    e.returnValue = hideCheckbox;
   });
 
 });
 
-autoUpdater.on('update-downloaded', ({ version }) => {
-  openUpdateAvailableWindow(version);
+let downloadingUpdate = false;
+let updateDownloaded = false;
+
+let downloadedUpdateVersion = '';
+
+autoUpdater.on('update-downloaded', ({ version: v }) => {
+  downloadedUpdateVersion = v;
+  downloadingUpdate = false;
+  updateDownloaded = true;
+  openUpdateAvailableWindow(v, 'updateDownloaded');
+});
+autoUpdater.on('update-available', res => {
+  availableUpdate = res;
+  const { version: v } = availableUpdate;
+  const ignoreUpdates = storage.getItem('ignoreUpdates') || '';
+  if(ignoreUpdates && ignoreUpdates === v) return;
+  openUpdateAvailableWindow(v, 'updateAvailable');
 });
 autoUpdater.on('error', err => {
-  handleError(err);
+  updateError = true;
+  if(!/update\.yml/.test(err.message) && !/latest\.yml/.test(err.message)) {
+    handleError(err);
+  }
+});
+ipcMain.on('updateError', e => {
+  e.returnValue = updateError;
+});
+ipcMain.on('checkForUpdates', e => {
+  if(downloadingUpdate) {
+    e.returnValue = 'downloading';
+  } else if(updateDownloaded) {
+    if(!updateAvailableWindowOpen) openUpdateAvailableWindow(downloadedUpdateVersion, 'updateDownloaded');
+    e.returnValue = 'downloaded';
+  } else if(availableUpdate) {
+    if(!updateAvailableWindowOpen) openUpdateAvailableWindow(availableUpdate.version, 'updateAvailable', true);
+    e.returnValue = 'available';
+  } else {
+    e.returnValue = 'none';
+  }
 });
 
 const openConfigurationWindow = (options = {}) => {
@@ -164,7 +232,6 @@ const openConfigurationWindow = (options = {}) => {
       handleError(err);
     }
   });
-
   ipcMain.on('getManifest', async function(e) {
     try {
       e.returnValue = getManifest();
@@ -391,8 +458,6 @@ const openAppWindow = () => {
     width: width - 100,
     height: height - 100
   });
-
-  // appWindow.toggleDevTools();
 
   const initialBounds = storage.getItem('bounds');
   if(initialBounds) {
@@ -897,6 +962,11 @@ ipcMain.on('saveGeneralSettings', (e, s) => {
   sendMarketPricingEnabled();
 });
 
+const checkForUpdates = () => {
+  // if(!isDev) setTimeout(() => autoUpdater.checkForUpdates(), 3000);
+  setTimeout(() => autoUpdater.checkForUpdates(), 3000);
+};
+
 const onReady = new Promise(resolve => app.on('ready', resolve));
 
 // Run the application within async function for flow control
@@ -920,9 +990,12 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
     };
 
     const previousMetaPath = path.join(dataPath, 'meta.json');
-    const metaPath = path.join(dataPath, 'app-meta.json');
+    metaPath = path.join(dataPath, 'app-meta.json');
+    macMetaBackupPath = metaPath + '-backup';
 
-    if(!fileExists(metaPath) && fileExists(previousMetaPath)) {
+    if(fileExists(macMetaBackupPath)) {
+      fs.moveSync(macMetaBackupPath, metaPath, {overwrite: true});
+    } else if(!fileExists(metaPath) && fileExists(previousMetaPath)) {
       fs.moveSync(previousMetaPath, metaPath);
     }
 
@@ -964,7 +1037,6 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
     if(!storage.getItem('tos')) {
       await onReady;
       openTOSWindow();
-      // if(!isDev) autoUpdater.checkForUpdates();
       return;
     }
 
@@ -996,7 +1068,7 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
     if(!user || !password) {
       await onReady;
       openConfigurationWindow();
-      // if(!isDev) autoUpdater.checkForUpdates();
+      checkForUpdates();
       return;
     }
 
@@ -1008,6 +1080,8 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
       info = await sn.getinfo();
     } catch(err) {
       await onReady;
+
+      checkForUpdates();
       openConfigurationWindow({ error: err });
       return;
     }
@@ -1038,7 +1112,7 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
 
     await onReady;
 
-    // if(!isDev) autoUpdater.checkForUpdates();
+    checkForUpdates();
 
     openAppWindow();
 

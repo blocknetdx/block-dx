@@ -16,6 +16,7 @@
         <li><a href="#" (click)="openGeneralSettings($event)">General Settings</a></li>
         <li><a href="#" (click)="openConfigurationWizard($event)">Basic Setup</a></li>
         <li><a href="#" (click)="openSettings($event)">RPC Settings</a></li>
+        <li><a href="#" (click)="checkForUpdates($event)">Check for Updates</a></li>
       </ul>
       <ul>
         <li>Information</li>
@@ -34,6 +35,10 @@
         <li><a href="#" (click)="openLink($event, 'reddit')">Reddit</a></li>
         <li><a href="#" (click)="openLink($event, 'twitter')">Twitter</a></li>
         <li><a href="#" (click)="openLink($event, 'discord')">Discord</a></li>
+      </ul>
+      <ul>
+        <li class="app-version"></li>
+        <li class="app-version">v {{appVersion}}</li>
       </ul>
     </div>
     <a (click)="toggleNav()" class="navbar-toggler">
