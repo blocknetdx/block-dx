@@ -3,7 +3,7 @@
 const fs = require('fs-extra-promise');
 const path = require('path');
 const { ipcRenderer } = require('electron');
-const { dialog, shell } = require('electron').remote;
+const { dialog, shell, app } = require('electron').remote;
 const { Set } = require('immutable');
 const renderSidebar = require('./scripts/configuration/modules/sidebar');
 const renderConfiguration1 = require('./scripts/configuration/modules/configuration01');
@@ -16,6 +16,8 @@ const renderComplete = require('./scripts/configuration/modules/complete');
 const renderFinalInstructions = require('./scripts/configuration/modules/final-instructions');
 const { removeNonWordCharacters, splitConf, joinConf } = require('./scripts/configuration/modules/util');
 const Wallet = require('./scripts/configuration/modules/wallet');
+
+const { platform } = process;
 
 const handleError = err => {
   console.error(err);
@@ -535,9 +537,10 @@ $(document).ready(() => {
           const idx = wallets.findIndex(w => w.versionId === versionId);
           dialog.showOpenDialog({
             title: `${wallets[idx].name} Data Directory`,
-            defaultPath: ipcRenderer.sendSync('getHomePath'),
+            defaultPath: platform === 'linux' ? ipcRenderer.sendSync('getHomePath') : app.getPath('appData'),
             properties: ['openDirectory']
-          }, ([ directoryPath ]) => {
+          }, (paths = []) => {
+            const [ directoryPath ] = paths;
             if(directoryPath) {
               console.log($('#' + removeNonWordCharacters(versionId)));
               $(`#${removeNonWordCharacters(versionId)}`).val(directoryPath);
