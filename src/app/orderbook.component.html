@@ -45,6 +45,6 @@
 
   </app-table>
 
-  <div *ngIf="sections && sections.length === 0" class="no-open-orders-message">No open orders.</div>
+  <div *ngIf="sections[0].rows.length === 0 && sections[1].rows.length === 0" class="no-open-orders-message">No open orders.</div>
 
 </div>
