@@ -360,37 +360,40 @@ $(document).ready(() => {
               state.set('active', 'settings1');
               state.set('sidebarSelected', 1);
               break;
-            } case 'settings1':
-              if(generateCredentials) {
-                let wallets = state.get('wallets');
-                const updatedWallets = filteredWallets.map(w => {
-                  const { username, password } = w;
-                  if(!username || !password) {
-                    const credentials = w.generateCredentials();
-                    w = w.set({
-                      username: credentials.username,
-                      password: credentials.password
-                    });
-                  }
-                  return w;
-                });
-                updatedWallets.forEach(w => {
-                  const idx = wallets.findIndex(ww => ww.versionId === w.versionId);
-                  wallets = [
-                    ...wallets.slice(0, idx),
-                    w,
-                    ...wallets.slice(idx + 1)
-                  ];
-                });
-                state.set('wallets', wallets);
+            } case 'settings1': {
+              let wallets = state.get('wallets');
+              const updatedWallets = filteredWallets.map(w => {
+                const credentials = w.generateCredentials();
+                if(generateCredentials) {
+                  return w.set({
+                    username: credentials.username,
+                    password: credentials.password
+                  });
+                } else {
+                  return w.set({
+                    username: '',
+                    password: ''
+                  });
+                }
+              });
+              updatedWallets.forEach(w => {
+                const idx = wallets.findIndex(ww => ww.versionId === w.versionId);
+                wallets = [
+                  ...wallets.slice(0, idx),
+                  w,
+                  ...wallets.slice(idx + 1)
+                ];
+              });
+              state.set('wallets', wallets);
+              state.set('sidebarSelected', 1);
+              if (generateCredentials) {
                 state.set('active', 'complete');
-                state.set('sidebarSelected', 1);
               } else {
                 state.set('active', 'settings2');
-                state.set('sidebarSelected', 1);
               }
+              state.set('sidebarSelected', 1);
               break;
-            case 'settings2': {
+            } case 'settings2': {
               const wallets = state.get('wallets');
               const selected = state.get('selectedWallets');
               const incomplete = wallets
