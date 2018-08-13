@@ -1,0 +1,7 @@
+.git
+.gitignore
+node_modules
+temp
+dist
+dist-native
+docker-builds

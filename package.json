@@ -24,9 +24,11 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "build-native": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --production && cd .. && electron-builder --dir",
+    "build-native-all": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --no-audit --production && cd .. && electron-builder --dir -mwl",
     "pack-native": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --production && cd .. && electron-builder",
     "publish-native": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --production && cd .. && electron-builder --publish always",
-    "generate-docs": "jsdoc src-back/service-node-interface.js -d docs"
+    "generate-docs": "jsdoc src-back/service-node-interface.js -d docs",
+    "compile-sweetalert-css": "node ./sweetalert-scss/compile.js"
   },
   "private": true,
   "dependencies": {
@@ -52,8 +54,10 @@
     "electron-is-dev": "^0.3.0",
     "electron-serve": "^0.1.0",
     "electron-updater": "^2.21.4",
+    "font-awesome": "^4.7.0",
     "fs-extra-promise": "^1.0.1",
     "hammerjs": "^2.0.8",
+    "immutable": "^3.8.2",
     "intl": "^1.2.5",
     "javascript-natural-sort": "^0.7.1",
     "jquery": "^3.2.1",
@@ -65,6 +69,8 @@
     "popper.js": "^1.14.1",
     "rxjs": "^5.5.5",
     "superagent": "^3.8.2",
+    "sweetalert": "^2.1.0",
+    "uuid": "^3.3.2",
     "web-animations-js": "^2.3.1",
     "zone.js": "^0.8.18"
   },
@@ -91,6 +97,7 @@
     "karma-jasmine": "^1.1.1",
     "karma-jasmine-html-reporter": "^0.2.2",
     "mocha": "^5.0.0",
+    "node-sass": "^4.9.0",
     "protractor": "^5.2.1",
     "rmrf-promise": "^1.1.0",
     "should": "^13.2.1",

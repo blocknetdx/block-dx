@@ -49,6 +49,23 @@ class SimpleStorage {
     return val;
   }
 
+  setItems(obj, saveSync) {
+    for(const key of Object.keys(obj) ) {
+      const val = obj[key];
+      if(!val) {
+        this._data[key] = val;
+      } else {
+        this._data[key] = cloneDeep(val);
+      }
+    }
+    if(saveSync) {
+      this.saveDataSync();
+    } else {
+      this.saveData();
+    }
+    return obj;
+  }
+
   removeItem(key) {
     const newData = omit(this._data, [key]);
     this._data = newData;

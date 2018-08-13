@@ -10,6 +10,11 @@ const { autoUpdater } = require('electron-updater');
 
 const { app, BrowserWindow, Menu, ipcMain } = electron;
 
+// Properly close the application
+app.on('window-all-closed', () => {
+  app.quit();
+});
+
 const { platform } = process;
 
 const { name, version } = fs.readJSONSync(path.join(__dirname, 'package.json'));
@@ -83,6 +88,129 @@ autoUpdater.on('error', err => {
   handleError(err);
 });
 
+const openConfigurationWindow = (options = {}) => {
+
+  const { error } = options;
+
+  // const errorMessage = error ? 'There was a problem connecting to the Blocknet RPC server. What would you like to do?' : '';
+  let errorTitle, errorMessage;
+  if(error) {
+    console.log(error);
+    switch(error.status) {
+      case 401:
+        errorTitle = 'Authorization Problem';
+        errorMessage = 'There was an authorization problem. Please check your Blocknet RPC username and/or password.';
+        break;
+      default:
+        errorTitle = 'Connection Problem';
+        errorMessage = 'There was a problem connecting to the Blocknet RPC server. What would you like to do?';
+    }
+    console.log(errorMessage);
+  } else {
+    errorMessage = '';
+  }
+
+  const configurationWindow = new BrowserWindow({
+    show: false,
+    width: 1000,
+    height: platform === 'win32' ? 708 : platform === 'darwin' ? 695 : 670,
+    parent: appWindow
+  });
+  if(isDev) {
+    configurationWindow.loadURL(`file://${path.join(__dirname, 'src', 'automation.html')}`);
+  } else {
+    configurationWindow.setMenu(null);
+    configurationWindow.loadURL(`file://${path.join(__dirname, 'dist', 'automation.html')}`);
+  }
+  configurationWindow.once('ready-to-show', () => {
+    configurationWindow.show();
+
+    setTimeout(() => {
+      if(error) configurationWindow.send('errorMessage', errorTitle, errorMessage);
+    }, 200);
+
+  });
+
+  if(isDev) {
+    const menuTemplate = [];
+    menuTemplate.push({
+      label: 'Window',
+      submenu: [
+        { label: 'Show Dev Tools', role: 'toggledevtools' }
+      ]
+    });
+    const windowMenu = Menu.buildFromTemplate(menuTemplate);
+    configurationWindow.setMenu(windowMenu);
+  }
+
+  ipcMain.on('openSettingsWindow', () => {
+    try {
+      openSettingsWindow();
+      configurationWindow.close();
+    } catch(err) {
+      handleError(err);
+    }
+  });
+  ipcMain.on('getManifest', async function(e) {
+    try {
+      const filePath = path.join(__dirname, 'data', 'manifest.json');
+      const data = await fs.readJsonAsync(filePath);
+      e.returnValue = data;
+    } catch(err) {
+      handleError(err);
+    }
+  });
+  ipcMain.on('getBaseConf', function(e, walletConf) {
+    try {
+      const filePath = path.join(__dirname, 'data', 'wallet-confs', walletConf);
+      const contents = fs.readFileSync(filePath, 'utf8');
+      e.returnValue = contents;
+    } catch(err) {
+      handleError(err);
+    }
+  });
+  ipcMain.on('getBridgeConf', (e, bridgeConf) => {
+    try {
+      const filePath = path.join(__dirname, 'data', 'xbridge-confs', bridgeConf);
+      const contents = fs.readFileSync(filePath, 'utf8');
+      e.returnValue = contents;
+    } catch(err) {
+      handleError(err);
+    }
+  });
+  ipcMain.on('saveDXData', (e, dxUser, dxPassword, dxPort) => {
+    storage.setItems({
+      user: dxUser,
+      password: dxPassword,
+      port: dxPort
+    }, true);
+    e.returnValue = true;
+  });
+  ipcMain.on('getHomePath', e => {
+    e.returnValue = app.getPath('home');
+  });
+  ipcMain.on('getDataPath', e => {
+    e.returnValue = app.getPath('appData');
+  });
+  ipcMain.on('getSelected', e => {
+    const selectedWallets = storage.getItem('selectedWallets') || [];
+    e.returnValue = selectedWallets;
+  });
+  ipcMain.on('saveSelected', (e, selectedArr) => {
+    storage.setItem('selectedWallets', selectedArr, true);
+    e.returnValue = selectedArr;
+  });
+
+};
+
+ipcMain.on('quit', () => {
+  app.quit();
+});
+ipcMain.on('restart', () => {
+  app.relaunch();
+  app.quit();
+});
+
 const openSettingsWindow = (options = {}) => {
 
   let errorMessage;
@@ -118,10 +246,6 @@ const openSettingsWindow = (options = {}) => {
       handleError(err);
     }
   });
-  ipcMain.on('restart', () => {
-    app.relaunch();
-    app.quit();
-  });
 
   const settingsWindow = new BrowserWindow({
     show: false,
@@ -132,6 +256,7 @@ const openSettingsWindow = (options = {}) => {
   if(isDev) {
     settingsWindow.loadURL(`file://${path.join(__dirname, 'src', 'settings.html')}`);
   } else {
+    settingsWindow.setMenu(null);
     settingsWindow.loadURL(`file://${path.join(__dirname, 'dist', 'settings.html')}`);
   }
   settingsWindow.once('ready-to-show', () => {
@@ -180,8 +305,10 @@ const openTOSWindow = (alreadyAccepted = false) => {
   let height;
   if(process.platform === 'win32') {
     height = alreadyAccepted ? 660 : 735;
-  } else {
+  } else if(process.platform === 'darwin') {
     height = alreadyAccepted ? 645 : 720;
+  } else {
+    height = alreadyAccepted ? 645 : 690;
   }
 
   const tosWindow = new BrowserWindow({
@@ -589,6 +716,10 @@ const openAppWindow = () => {
     openSettingsWindow();
   });
 
+  ipcMain.on('openConfigurationWizard', () => {
+    openConfigurationWindow();
+  });
+
   ipcMain.on('openTOS', () => {
     openTOSWindow(true);
   });
@@ -647,11 +778,11 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
 
     if(!user || !password) {
       await onReady;
-      openSettingsWindow();
+      openConfigurationWindow();
+      // openSettingsWindow();
       if(!isDev) autoUpdater.checkForUpdates();
       return;
     }
-
 
     sn = new ServiceNodeInterface(user, password, `http://${platform === 'linux' ? '127.0.0.1' : 'localhost'}:${port}`);
 
@@ -662,7 +793,8 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
     } catch(err) {
       // console.error(err);
       await onReady;
-      openSettingsWindow({ error: err });
+      // openSettingsWindow({ error: err });
+      openConfigurationWindow({ error: err });
       return;
     }
 
@@ -701,11 +833,6 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
   }
 
 })();
-
-// Properly close the application
-app.on('window-all-closed', () => {
-  app.quit();
-});
 
 // check for version number. Minimum supported blocknet client version
 function versionCheck(version) {
