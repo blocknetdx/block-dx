@@ -25,7 +25,10 @@ math.config({
 export class OrderbookComponent implements OnInit {
   @ViewChild('orderbookTable') public orderbookTable: TableComponent;
 
-  public sections: any[] = [];
+  public sections: any[] = [
+    {rows: []},
+    {rows: []}
+  ];
   public symbols:string[] = [];
   // public lastTradePrice = '';
   public spread = '';
