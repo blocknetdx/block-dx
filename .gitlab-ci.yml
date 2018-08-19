@@ -1,0 +1,62 @@
+before_script:
+  - docker info
+
+build_linux:
+  stage: build
+  script:
+    - mkdir -p $CI_PROJECT_DIR/dist/linux
+    - docker build -f Dockerfile-linux -t blocknetdx/blockdx-ui-devbuilds:$CI_COMMIT_REF_NAME-linux .
+    - if [ ! -z "$(docker ps -qa -f name=$CI_COMMIT_REF_NAME-linux)" ]; then docker rm $CI_COMMIT_REF_NAME-linux; fi
+    - docker run --name=$CI_COMMIT_REF_NAME-linux blocknetdx/blockdx-ui-devbuilds:$CI_COMMIT_REF_NAME-linux
+    - docker stop $CI_COMMIT_REF_NAME-linux
+    - docker cp $CI_COMMIT_REF_NAME-linux:/opt/blockdx-ui/dist-native/ $CI_PROJECT_DIR/dist/linux
+    - if [ ! -z "$(docker ps -qa -f name=$CI_COMMIT_REF_NAME-linux)" ]; then docker rm $CI_COMMIT_REF_NAME-linux; fi
+  artifacts:
+    name: "BLOCKDX-$CI_COMMIT_REF_NAME-linux"
+    paths:
+     - dist/linux/dist-native/linux-unpacked
+
+test_linux:
+  stage: test
+  script:
+    - "[ -f $CI_PROJECT_DIR/dist/linux/dist-native/linux-unpacked/block-dx ];"
+
+build_win:
+  stage: build
+  script:
+    - mkdir -p $CI_PROJECT_DIR/dist/win
+    - docker build -f Dockerfile-win -t blocknetdx/blockdx-ui-devbuilds:$CI_COMMIT_REF_NAME-win .
+    - if [ ! -z "$(docker ps -qa -f name=$CI_COMMIT_REF_NAME-win)" ]; then docker rm $CI_COMMIT_REF_NAME-win; fi
+    - docker run --name=$CI_COMMIT_REF_NAME-win blocknetdx/blockdx-ui-devbuilds:$CI_COMMIT_REF_NAME-win
+    - docker stop $CI_COMMIT_REF_NAME-win
+    - docker cp $CI_COMMIT_REF_NAME-win:/opt/blockdx-ui/dist-native/ $CI_PROJECT_DIR/dist/win
+    - if [ ! -z "$(docker ps -qa -f name=$CI_COMMIT_REF_NAME-win)" ]; then docker rm $CI_COMMIT_REF_NAME-win; fi
+  artifacts:
+    name: "BLOCKDX-$CI_COMMIT_REF_NAME-win"
+    paths:
+     - dist/win/dist-native/win-unpacked
+
+test_win:
+  stage: test
+  script:
+    - "[ -f \"$CI_PROJECT_DIR/dist/win/dist-native/win-unpacked/BLOCK DX.exe\" ];"
+
+build_mac:
+  stage: build
+  script:
+    - mkdir -p $CI_PROJECT_DIR/dist/mac
+    - docker build -f Dockerfile-mac -t blocknetdx/blockdx-ui-devbuilds:$CI_COMMIT_REF_NAME-mac .
+    - if [ ! -z "$(docker ps -qa -f name=$CI_COMMIT_REF_NAME-mac)" ]; then docker rm $CI_COMMIT_REF_NAME-mac; fi
+    - docker run --name=$CI_COMMIT_REF_NAME-mac blocknetdx/blockdx-ui-devbuilds:$CI_COMMIT_REF_NAME-mac
+    - docker stop $CI_COMMIT_REF_NAME-mac
+    - docker cp $CI_COMMIT_REF_NAME-mac:/opt/blockdx-ui/dist-native/ $CI_PROJECT_DIR/dist/mac
+    - if [ ! -z "$(docker ps -qa -f name=$CI_COMMIT_REF_NAME-mac)" ]; then docker rm $CI_COMMIT_REF_NAME-mac; fi
+  artifacts:
+    name: "BLOCKDX-$CI_COMMIT_REF_NAME-mac"
+    paths:
+     - dist/mac/dist-native/mac
+
+test_mac:
+  stage: test
+  script:
+    - "[ -f \"$CI_PROJECT_DIR/dist/mac/dist-native/mac/BLOCK DX.app/Contents/MacOS/BLOCK DX\" ];"
