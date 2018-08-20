@@ -3,7 +3,7 @@
 const fs = require('fs-extra-promise');
 const path = require('path');
 const { ipcRenderer } = require('electron');
-const { dialog, shell } = require('electron').remote;
+const { dialog, shell, app } = require('electron').remote;
 const { Set } = require('immutable');
 const renderSidebar = require('./scripts/configuration/modules/sidebar');
 const renderConfiguration1 = require('./scripts/configuration/modules/configuration01');
@@ -16,6 +16,8 @@ const renderComplete = require('./scripts/configuration/modules/complete');
 const renderFinalInstructions = require('./scripts/configuration/modules/final-instructions');
 const { removeNonWordCharacters, splitConf, joinConf } = require('./scripts/configuration/modules/util');
 const Wallet = require('./scripts/configuration/modules/wallet');
+
+const { platform } = process;
 
 const handleError = err => {
   console.error(err);
@@ -358,37 +360,40 @@ $(document).ready(() => {
               state.set('active', 'settings1');
               state.set('sidebarSelected', 1);
               break;
-            } case 'settings1':
-              if(generateCredentials) {
-                let wallets = state.get('wallets');
-                const updatedWallets = filteredWallets.map(w => {
-                  const { username, password } = w;
-                  if(!username || !password) {
-                    const credentials = w.generateCredentials();
-                    w = w.set({
-                      username: credentials.username,
-                      password: credentials.password
-                    });
-                  }
-                  return w;
-                });
-                updatedWallets.forEach(w => {
-                  const idx = wallets.findIndex(ww => ww.versionId === w.versionId);
-                  wallets = [
-                    ...wallets.slice(0, idx),
-                    w,
-                    ...wallets.slice(idx + 1)
-                  ];
-                });
-                state.set('wallets', wallets);
+            } case 'settings1': {
+              let wallets = state.get('wallets');
+              const updatedWallets = filteredWallets.map(w => {
+                const credentials = w.generateCredentials();
+                if(generateCredentials) {
+                  return w.set({
+                    username: credentials.username,
+                    password: credentials.password
+                  });
+                } else {
+                  return w.set({
+                    username: '',
+                    password: ''
+                  });
+                }
+              });
+              updatedWallets.forEach(w => {
+                const idx = wallets.findIndex(ww => ww.versionId === w.versionId);
+                wallets = [
+                  ...wallets.slice(0, idx),
+                  w,
+                  ...wallets.slice(idx + 1)
+                ];
+              });
+              state.set('wallets', wallets);
+              state.set('sidebarSelected', 1);
+              if (generateCredentials) {
                 state.set('active', 'complete');
-                state.set('sidebarSelected', 1);
               } else {
                 state.set('active', 'settings2');
-                state.set('sidebarSelected', 1);
               }
+              state.set('sidebarSelected', 1);
               break;
-            case 'settings2': {
+            } case 'settings2': {
               const wallets = state.get('wallets');
               const selected = state.get('selectedWallets');
               const incomplete = wallets
@@ -535,9 +540,10 @@ $(document).ready(() => {
           const idx = wallets.findIndex(w => w.versionId === versionId);
           dialog.showOpenDialog({
             title: `${wallets[idx].name} Data Directory`,
-            defaultPath: ipcRenderer.sendSync('getHomePath'),
+            defaultPath: platform === 'linux' ? ipcRenderer.sendSync('getHomePath') : app.getPath('appData'),
             properties: ['openDirectory']
-          }, ([ directoryPath ]) => {
+          }, (paths = []) => {
+            const [ directoryPath ] = paths;
             if(directoryPath) {
               console.log($('#' + removeNonWordCharacters(versionId)));
               $(`#${removeNonWordCharacters(versionId)}`).val(directoryPath);
