@@ -27,8 +27,9 @@
     </div>
     <span class="spacer"></span>
 
+
     <div class="input-group row">
-      <label class="col-4 col-form-label" for="amount">{{textForBuySellState('Receive', 'Send')}}</label>
+      <label class="col-4 col-form-label" for="amount">Amount</label>
       <div class="col-8">
         <input #amountInput
           (keyup)="amountChanged($event)"
@@ -54,17 +55,31 @@
     </div>
 
     <div class="input-group row">
-      <label class="col-4 col-form-label" for="total_calc">{{textForBuySellState('Send', 'Receive')}}</label>
+      <label class="col-4 col-form-label" for="amount">Price</label>
+      <div class="col-8">
+        <input #amountInput
+               (keyup)="priceChanged($event)"
+               (onchange)="priceChanged($event)"
+               (blur)="onNumberInputBlur($event, 'price')"
+               [value]="model.price"
+               class="form-control" name="amount" id="price"
+               type="text" pattern="\d+" inputmode="numeric"
+               placeholder="{{formatNumber('0',symbols[1])}}" />
+        <span class="input-group-addon">{{symbols[1]}}</span>
+      </div>
+    </div>
+
+    <div class="input-group row">
+      <label class="col-4 col-form-label" for="total_calc">Total</label>
       <div class="col-8">
         <input #totalInput
           class="form-control"
           name="total" id="total_calc" type="text"
           (keyup)="totalPriceChanged($event)"
-          (onchange)="totalPriceChanged($event)"
           (blur)="onNumberInputBlur($event, 'totalPrice')"
           step="0.000001" pattern="\d+" inputmode="numeric"
           placeholder="{{formatNumber('0',symbols[1])}}"
-          [value]="model.totalPrice" />
+          [value]="model.totalPrice" readonly />
         <span class="input-group-addon">{{symbols[1]}}</span>
       </div>
     </div>
