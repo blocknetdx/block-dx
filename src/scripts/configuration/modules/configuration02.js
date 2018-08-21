@@ -21,7 +21,7 @@ const renderConfiguration2 = ({ wallets }) => {
     .join('\n');
 
   const html = `
-          <p style="margin-top:0;padding-top:0;padding-left:10px;padding-right:10px;margin-bottom:10px;">Please select the version of the wallet installed for each of the following coins.</p>
+          <p style="margin-top:0;padding-top:0;padding-left:10px;padding-right:10px;margin-bottom:10px;">Please select the version of the wallet installed for each of the following blockchains.</p>
           <div id="js-mainConfigurationArea" class="main-area">
             ${items}
           </div>
