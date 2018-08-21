@@ -151,9 +151,12 @@ const openConfigurationWindow = (options = {}) => {
       handleError(err);
     }
   });
+
+  const configurationFilesDirectory = path.join(__dirname, 'blockchain-configuration-files');
+
   ipcMain.on('getManifest', async function(e) {
     try {
-      const filePath = path.join(__dirname, 'data', 'manifest.json');
+      const filePath = path.join(configurationFilesDirectory, 'manifest.json');
       const data = await fs.readJsonAsync(filePath);
       e.returnValue = data;
     } catch(err) {
@@ -162,7 +165,7 @@ const openConfigurationWindow = (options = {}) => {
   });
   ipcMain.on('getBaseConf', function(e, walletConf) {
     try {
-      const filePath = path.join(__dirname, 'data', 'wallet-confs', walletConf);
+      const filePath = path.join(configurationFilesDirectory, 'wallet-confs', walletConf);
       const contents = fs.readFileSync(filePath, 'utf8');
       e.returnValue = contents;
     } catch(err) {
@@ -171,7 +174,7 @@ const openConfigurationWindow = (options = {}) => {
   });
   ipcMain.on('getBridgeConf', (e, bridgeConf) => {
     try {
-      const filePath = path.join(__dirname, 'data', 'xbridge-confs', bridgeConf);
+      const filePath = path.join(configurationFilesDirectory, 'xbridge-confs', bridgeConf);
       const contents = fs.readFileSync(filePath, 'utf8');
       e.returnValue = contents;
     } catch(err) {

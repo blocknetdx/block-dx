@@ -1,6 +1,6 @@
 [
   {
-    "coin_name": "AeriumX",
+    "blockchain": "AeriumX",
     "ticker": "AEX",
     "ver_id": "aeriumx--v2.0",
     "ver_name": "AeriumX",
@@ -15,7 +15,7 @@
     "wallet_conf": "aeriumx--v2.0.conf"
   },
   {
-    "coin_name": "ALQO",
+    "blockchain": "ALQO",
     "ticker": "ALQO",
     "ver_id": "alqo--v3.5",
     "ver_name": "ALQO",
@@ -30,7 +30,7 @@
     "wallet_conf": "alqo--v3.5.conf"
   },
   {
-    "coin_name": "AmsterdamCoin",
+    "blockchain": "AmsterdamCoin",
     "ticker": "AMS",
     "ver_id": "amsterdamcoin--v4.6.0.0",
     "ver_name": "AmsterdamCoin",
@@ -45,7 +45,7 @@
     "wallet_conf": "amsterdamcoin--v4.6.0.0.conf"
   },
   {
-    "coin_name": "APR Coin",
+    "blockchain": "APR Coin",
     "ticker": "APR",
     "ver_id": "aprcoin--1.0",
     "ver_name": "APR Coin",
@@ -60,7 +60,7 @@
     "wallet_conf": "aprcoin--1.0.conf"
   },
   {
-    "coin_name": "Banq",
+    "blockchain": "Banq",
     "ticker": "BANQ",
     "ver_id": "banq--v1.0",
     "ver_name": "Banq",
@@ -76,7 +76,7 @@
     "wallet_conf": "banq--v1.0.conf"
   },
   {
-    "coin_name": "Bitcoin",
+    "blockchain": "Bitcoin",
     "ticker": "BTC",
     "ver_id": "bitcoin--v0.16.0",
     "ver_name": "Bitcoin",
@@ -91,7 +91,7 @@
     "wallet_conf": "bitcoin--v0.16.0.conf"
   },
   {
-    "coin_name": "Bitcoin Green",
+    "blockchain": "Bitcoin Green",
     "ticker": "BITG",
     "ver_id": "bitcoingreen--1.1.0",
     "ver_name": "Bitcoin Green",
@@ -106,7 +106,7 @@
     "wallet_conf": "bitcoingreen--1.1.0.conf"
   },
   {
-    "coin_name": "BLAST",
+    "blockchain": "BLAST",
     "ticker": "BLAST",
     "ver_id": "blast--v1.2.0.2",
     "ver_name": "BLAST",
@@ -121,7 +121,7 @@
     "wallet_conf": "blast--v1.2.0.2.conf"
   },
   {
-    "coin_name": "Blocknet",
+    "blockchain": "Blocknet",
     "ticker": "BLOCK",
     "ver_id": "blocknetdx--v3.9.16",
     "ver_name": "Blocknet v3.9.16+",
@@ -138,7 +138,7 @@
     "wallet_conf": "blocknetdx--v3.9.16.conf"
   },
   {
-    "coin_name": "Bulwark",
+    "blockchain": "Bulwark",
     "ticker": "BWK",
     "ver_id": "bulwark--1.2.4",
     "ver_name": "Bulwark",
@@ -153,7 +153,7 @@
     "wallet_conf": "bulwark--1.2.4.conf"
   },
   {
-    "coin_name": "Carebit",
+    "blockchain": "Carebit",
     "ticker": "CARE",
     "ver_id": "carebit--v3.0.0.0",
     "ver_name": "Carebit",
@@ -168,7 +168,7 @@
     "wallet_conf": "carebit--v3.0.0.0.conf"
   },
   {
-    "coin_name": "Civitas",
+    "blockchain": "Civitas",
     "ticker": "CIV",
     "ver_id": "civitas--v1.2.2",
     "ver_name": "Civitas",
@@ -183,7 +183,7 @@
     "wallet_conf": "civitas--v1.2.2.conf"
   },
   {
-    "coin_name": "ColossusXT",
+    "blockchain": "ColossusXT",
     "ticker": "COLX",
     "ver_id": "colossusXT--v1.0.5",
     "ver_name": "ColossusXT",
@@ -198,7 +198,7 @@
     "wallet_conf": "colossusXT--v1.0.5.conf"
   },
   {
-    "coin_name": "Crave",
+    "blockchain": "Crave",
     "ticker": "CRAVE",
     "ver_id": "crave--v2.5.0.3",
     "ver_name": "Crave",
@@ -213,7 +213,7 @@
     "wallet_conf": "crave--v2.5.0.3.conf"
   },
   {
-    "coin_name": "CrowdCoin",
+    "blockchain": "CrowdCoin",
     "ticker": "CRC",
     "ver_id": "crowdcoin--1.1.0",
     "ver_name": "CrowdCoin",
@@ -228,7 +228,7 @@
     "wallet_conf": "crowdcoin--1.1.0.conf"
   },
   {
-    "coin_name": "Crown",
+    "blockchain": "Crown",
     "ticker": "CRW",
     "ver_id": "crown--v0.12.4.1",
     "ver_name": "Crown",
@@ -243,7 +243,7 @@
     "wallet_conf": "crown--v0.12.4.1.conf"
   },
   {
-    "coin_name": "Dash",
+    "blockchain": "Dash",
     "ticker": "DASH",
     "ver_id": "dash--v0.12.2.3",
     "ver_name": "Dash",
@@ -258,7 +258,7 @@
     "wallet_conf": "dash--v0.12.2.3.conf"
   },
   {
-    "coin_name": "Desire",
+    "blockchain": "Desire",
     "ticker": "DSR",
     "ver_id": "desire--Desire-v.0.12.2.2",
     "ver_name": "Desire",
@@ -273,7 +273,7 @@
     "wallet_conf": "desire--Desire-v.0.12.2.2.conf"
   },
   {
-    "coin_name": "Diamond",
+    "blockchain": "Diamond",
     "ticker": "DMD",
     "ver_id": "diamond--v3.0.1.1",
     "ver_name": "Diamond",
@@ -288,7 +288,7 @@
     "wallet_conf": "diamond--v3.0.1.1.conf"
   },
   {
-    "coin_name": "DigiByte",
+    "blockchain": "DigiByte",
     "ticker": "DGB",
     "ver_id": "digibyte--v6.16.2",
     "ver_name": "DigiByte",
@@ -303,7 +303,7 @@
     "wallet_conf": "digibyte--v6.16.2.conf"
   },
   {
-    "coin_name": "Digiwage",
+    "blockchain": "Digiwage",
     "ticker": "WAGE",
     "ver_id": "digiwage--v1.1.0",
     "ver_name": "Digiwage",
@@ -318,7 +318,7 @@
     "wallet_conf": "digiwage--v1.1.0.conf"
   },
   {
-    "coin_name": "Dinero",
+    "blockchain": "Dinero",
     "ticker": "DIN",
     "ver_id": "dinero--v1.0.1.1",
     "ver_name": "Dinero",
@@ -333,7 +333,7 @@
     "wallet_conf": "dinero--v1.0.1.1.conf"
   },
   {
-    "coin_name": "Dogecoin",
+    "blockchain": "Dogecoin",
     "ticker": "DOGE",
     "ver_id": "dogecoin--v1.10.0-dogeparty",
     "ver_name": "Dogecoin",
@@ -348,7 +348,7 @@
     "wallet_conf": "dogecoin--v1.10.0-dogeparty.conf"
   },
   {
-    "coin_name": "Einsteinium",
+    "blockchain": "Einsteinium",
     "ticker": "EMC2",
     "ver_id": "einsteinium--v0.13.48.0",
     "ver_name": "Einsteinium",
@@ -363,7 +363,7 @@
     "wallet_conf": "einsteinium--v0.13.48.0.conf"
   },
   {
-    "coin_name": "Eternity",
+    "blockchain": "Eternity",
     "ticker": "ENT",
     "ver_id": "eternity--v0.12.1.7",
     "ver_name": "Eternity",
@@ -378,7 +378,7 @@
     "wallet_conf": "eternity--v0.12.1.7.conf"
   },
   {
-    "coin_name": "Faircoin",
+    "blockchain": "Faircoin",
     "ticker": "FAIR",
     "ver_id": "faircoin--v2.0.0",
     "ver_name": "Faircoin",
@@ -393,7 +393,7 @@
     "wallet_conf": "faircoin--v2.0.0.conf"
   },
   {
-    "coin_name": "Flo",
+    "blockchain": "Flo",
     "ticker": "FLO",
     "ver_id": "flo--v0.15.0.3",
     "ver_name": "Flo",
@@ -408,7 +408,7 @@
     "wallet_conf": "flo--v0.15.0.3.conf"
   },
   {
-    "coin_name": "FujiCoin",
+    "blockchain": "FujiCoin",
     "ticker": "FJC",
     "ver_id": "fujicoin--fujicoin-v0.16.1",
     "ver_name": "FujiCoin",
@@ -423,7 +423,7 @@
     "wallet_conf": "fujicoin--fujicoin-v0.16.1.conf"
   },
   {
-    "coin_name": "Galactrum",
+    "blockchain": "Galactrum",
     "ticker": "ORE",
     "ver_id": "galactrum--v1.1.6",
     "ver_name": "Galactrum",
@@ -438,7 +438,7 @@
     "wallet_conf": "galactrum--v1.1.6.conf"
   },
   {
-    "coin_name": "GINcoin",
+    "blockchain": "GINcoin",
     "ticker": "GIN",
     "ver_id": "gincoin--1.1.0.0",
     "ver_name": "GINcoin",
@@ -453,7 +453,7 @@
     "wallet_conf": "gincoin--1.1.0.0.conf"
   },
   {
-    "coin_name": "GoByte",
+    "blockchain": "GoByte",
     "ticker": "GBX",
     "ver_id": "gobyte--v0.12.2.4",
     "ver_name": "GoByte",
@@ -468,7 +468,7 @@
     "wallet_conf": "gobyte--v0.12.2.4.conf"
   },
   {
-    "coin_name": "Hexx",
+    "blockchain": "Hexx",
     "ticker": "HXX",
     "ver_id": "hexxcoin--4.0.3.8",
     "ver_name": "Hexx",
@@ -483,7 +483,7 @@
     "wallet_conf": "hexxcoin--4.0.3.8.conf"
   },
   {
-    "coin_name": "HTMLCoin",
+    "blockchain": "HTMLCoin",
     "ticker": "HTML",
     "ver_id": "htmlcoin--v2.0.3.0",
     "ver_name": "HTMLCoin",
@@ -498,7 +498,7 @@
     "wallet_conf": "htmlcoin--v2.0.3.0.conf"
   },
   {
-    "coin_name": "Innova",
+    "blockchain": "Innova",
     "ticker": "INN",
     "ver_id": "innova--12.1.10",
     "ver_name": "Innova",
@@ -513,7 +513,7 @@
     "wallet_conf": "innova--12.1.10.conf"
   },
   {
-    "coin_name": "Internet of People",
+    "blockchain": "Internet of People",
     "ticker": "IOP",
     "ver_id": "iop--v6.1.0",
     "ver_name": "Internet of People",
@@ -528,7 +528,7 @@
     "wallet_conf": "iop--v6.1.0.conf"
   },
   {
-    "coin_name": "Ixcoin",
+    "blockchain": "Ixcoin",
     "ticker": "IXC",
     "ver_id": "ixcoin--v0.14.1",
     "ver_name": "Ixcoin",
@@ -543,7 +543,7 @@
     "wallet_conf": "ixcoin--v0.14.1.conf"
   },
   {
-    "coin_name": "Jiyo",
+    "blockchain": "Jiyo",
     "ticker": "JIYO",
     "ver_id": "jiyo--2.1",
     "ver_name": "Jiyo",
@@ -558,7 +558,7 @@
     "wallet_conf": "jiyo--2.1.conf"
   },
   {
-    "coin_name": "Kalkulus",
+    "blockchain": "Kalkulus",
     "ticker": "KLKS",
     "ver_id": "klks--v2.6.0",
     "ver_name": "Kalkulus",
@@ -573,7 +573,7 @@
     "wallet_conf": "klks--v2.6.0.conf"
   },
   {
-    "coin_name": "Kreds",
+    "blockchain": "Kreds",
     "ticker": "KREDS",
     "ver_id": "kreds--v1.0.0.5.1",
     "ver_name": "Kreds",
@@ -588,7 +588,7 @@
     "wallet_conf": "kreds--v1.0.0.5.1.conf"
   },
   {
-    "coin_name": "LBRY Credits",
+    "blockchain": "LBRY Credits",
     "ticker": "LBC",
     "ver_id": "lbrycrd--v0.12.2.1",
     "ver_name": "LBRY Credits",
@@ -603,7 +603,7 @@
     "wallet_conf": "lbrycrd--v0.12.2.1.conf"
   },
   {
-    "coin_name": "Light Pay Coin",
+    "blockchain": "Light Pay Coin",
     "ticker": "LPC",
     "ver_id": "lightpaycoin--v1.0.0.0",
     "ver_name": "Light Pay Coin",
@@ -618,7 +618,7 @@
     "wallet_conf": "lightpaycoin--v1.0.0.0.conf"
   },
   {
-    "coin_name": "Litecoin",
+    "blockchain": "Litecoin",
     "ticker": "LTC",
     "ver_id": "litecoin--v0.15.1",
     "ver_name": "Litecoin",
@@ -633,7 +633,7 @@
     "wallet_conf": "litecoin--v0.15.1.conf"
   },
   {
-    "coin_name": "Lynx",
+    "blockchain": "Lynx",
     "ticker": "LYNX",
     "ver_id": "lynx--v0.15.1.0",
     "ver_name": "Lynx",
@@ -648,7 +648,7 @@
     "wallet_conf": "lynx--v0.15.1.0.conf"
   },
   {
-    "coin_name": "Machinecoin",
+    "blockchain": "Machinecoin",
     "ticker": "MAC",
     "ver_id": "machinecoin--v0.16.1.4",
     "ver_name": "Machinecoin",
@@ -663,7 +663,7 @@
     "wallet_conf": "machinecoin--v0.16.1.4.conf"
   },
   {
-    "coin_name": "Magna Coin",
+    "blockchain": "Magna Coin",
     "ticker": "MGN",
     "ver_id": "magnacoin--v1.0.0",
     "ver_name": "Magna Coin",
@@ -678,7 +678,7 @@
     "wallet_conf": "magnacoin--v1.0.0.conf"
   },
   {
-    "coin_name": "MinexCoin",
+    "blockchain": "MinexCoin",
     "ticker": "MNX",
     "ver_id": "minexcoin--v1.3.1",
     "ver_name": "MinexCoin",
@@ -693,7 +693,7 @@
     "wallet_conf": "minexcoin--v1.3.1.conf"
   },
   {
-    "coin_name": "MktCoin",
+    "blockchain": "MktCoin",
     "ticker": "MLM",
     "ver_id": "mktcoin--0.14.3",
     "ver_name": "MktCoin",
@@ -708,7 +708,7 @@
     "wallet_conf": "mktcoin--0.14.3.conf"
   },
   {
-    "coin_name": "MonaCoin",
+    "blockchain": "MonaCoin",
     "ticker": "MONA",
     "ver_id": "monacoin--monacoin-0.15.1",
     "ver_name": "MonaCoin",
@@ -723,7 +723,7 @@
     "wallet_conf": "monacoin--monacoin-0.15.1.conf"
   },
   {
-    "coin_name": "MonetaryUnit",
+    "blockchain": "MonetaryUnit",
     "ticker": "MUE",
     "ver_id": "mue--v1.0.3.2",
     "ver_name": "MonetaryUnit",
@@ -738,7 +738,7 @@
     "wallet_conf": "mue--v1.0.3.2.conf"
   },
   {
-    "coin_name": "Monoeci",
+    "blockchain": "Monoeci",
     "ticker": "XMCC",
     "ver_id": "monoeci--v0.12.2.3",
     "ver_name": "Monoeci",
@@ -753,7 +753,7 @@
     "wallet_conf": "monoeci--v0.12.2.3.conf"
   },
   {
-    "coin_name": "Myriad",
+    "blockchain": "Myriad",
     "ticker": "XMY",
     "ver_id": "myriadcoin--v0.14.2.5",
     "ver_name": "Myriad",
@@ -768,7 +768,7 @@
     "wallet_conf": "myriadcoin--v0.14.2.5.conf"
   },
   {
-    "coin_name": "Namecoin",
+    "blockchain": "Namecoin",
     "ticker": "NMC",
     "ver_id": "namecoin--nc0.13.99-name-tab-beta1",
     "ver_name": "Namecoin",
@@ -783,7 +783,7 @@
     "wallet_conf": "namecoin--nc0.13.99-name-tab-beta1.conf"
   },
   {
-    "coin_name": "Nodium",
+    "blockchain": "Nodium",
     "ticker": "XN",
     "ver_id": "nodium--3.0.6",
     "ver_name": "Nodium",
@@ -798,7 +798,7 @@
     "wallet_conf": "nodium--3.0.6.conf"
   },
   {
-    "coin_name": "Northern",
+    "blockchain": "Northern",
     "ticker": "NORT",
     "ver_id": "northern--1.0.0",
     "ver_name": "Northern",
@@ -813,7 +813,7 @@
     "wallet_conf": "northern--1.0.0.conf"
   },
   {
-    "coin_name": "NyxCoin",
+    "blockchain": "NyxCoin",
     "ticker": "NYX",
     "ver_id": "nyxcoin--v2.0.0.0",
     "ver_name": "NyxCoin",
@@ -828,7 +828,7 @@
     "wallet_conf": "nyxcoin--v2.0.0.0.conf"
   },
   {
-    "coin_name": "Ohmcoin",
+    "blockchain": "Ohmcoin",
     "ticker": "OHM",
     "ver_id": "ohmcoin--v2.3.0.0-gcbcb549",
     "ver_name": "Ohmcoin",
@@ -843,7 +843,7 @@
     "wallet_conf": "ohmcoin--v2.3.0.0-gcbcb549.conf"
   },
   {
-    "coin_name": "Phore",
+    "blockchain": "Phore",
     "ticker": "PHORE",
     "ver_id": "phore--v1.3.0",
     "ver_name": "Phore",
@@ -858,7 +858,7 @@
     "wallet_conf": "phore--v1.3.0.conf"
   },
   {
-    "coin_name": "PIVX",
+    "blockchain": "PIVX",
     "ticker": "PIVX",
     "ver_id": "pivx--v3.1.0.2",
     "ver_name": "PIVX",
@@ -873,7 +873,7 @@
     "wallet_conf": "pivx--v3.1.0.2.conf"
   },
   {
-    "coin_name": "Polis",
+    "blockchain": "Polis",
     "ticker": "POLIS",
     "ver_id": "polis--v1.3.1",
     "ver_name": "Polis",
@@ -888,7 +888,7 @@
     "wallet_conf": "polis--v1.3.1.conf"
   },
   {
-    "coin_name": "Pura",
+    "blockchain": "Pura",
     "ticker": "PURA",
     "ver_id": "pura--v1.0.0.0",
     "ver_name": "Pura",
@@ -903,7 +903,7 @@
     "wallet_conf": "pura--v1.0.0.0.conf"
   },
   {
-    "coin_name": "Qbic",
+    "blockchain": "Qbic",
     "ticker": "QBIC",
     "ver_id": "qbic--v1.0",
     "ver_name": "Qbic",
@@ -918,7 +918,7 @@
     "wallet_conf": "qbic--v1.0.conf"
   },
   {
-    "coin_name": "Qtum",
+    "blockchain": "Qtum",
     "ticker": "QTUM",
     "ver_id": "qtum--mainnet-ignition-v0.15.2",
     "ver_name": "Qtum",
@@ -933,7 +933,7 @@
     "wallet_conf": "qtum--mainnet-ignition-v0.15.2.conf"
   },
   {
-    "coin_name": "Ravencoin",
+    "blockchain": "Ravencoin",
     "ticker": "RVN",
     "ver_id": "ravencoin--v0.15.99.0",
     "ver_name": "Ravencoin",
@@ -948,7 +948,7 @@
     "wallet_conf": "ravencoin--v0.15.99.0.conf"
   },
   {
-    "coin_name": "Shekel",
+    "blockchain": "Shekel",
     "ticker": "JEW",
     "ver_id": "shekel--1.4.0",
     "ver_name": "Shekel",
@@ -963,7 +963,7 @@
     "wallet_conf": "shekel--1.4.0.conf"
   },
   {
-    "coin_name": "Sibcoin",
+    "blockchain": "Sibcoin",
     "ticker": "SIB",
     "ver_id": "sibcoin--v0.16.1.3",
     "ver_name": "Sibcoin",
@@ -978,7 +978,7 @@
     "wallet_conf": "sibcoin--v0.16.1.3.conf"
   },
   {
-    "coin_name": "Social Send",
+    "blockchain": "Social Send",
     "ticker": "SEND",
     "ver_id": "send--v1.1.0.0",
     "ver_name": "Social Send",
@@ -993,7 +993,7 @@
     "wallet_conf": "send--v1.1.0.0.conf"
   },
   {
-    "coin_name": "Solaris",
+    "blockchain": "Solaris",
     "ticker": "XLR",
     "ver_id": "solaris--v2.8.0.0",
     "ver_name": "Solaris",
@@ -1008,7 +1008,7 @@
     "wallet_conf": "solaris--v2.8.0.0.conf"
   },
   {
-    "coin_name": "Sparks",
+    "blockchain": "Sparks",
     "ticker": "SPK",
     "ver_id": "sparks--0.12.1.3",
     "ver_name": "Sparks",
@@ -1023,7 +1023,7 @@
     "wallet_conf": "sparks--0.12.1.3.conf"
   },
   {
-    "coin_name": "Stakenet",
+    "blockchain": "Stakenet",
     "ticker": "XSN",
     "ver_id": "xsn--v1.0.9",
     "ver_name": "Stakenet",
@@ -1038,7 +1038,7 @@
     "wallet_conf": "xsn--v1.0.9.conf"
   },
   {
-    "coin_name": "STRAKS",
+    "blockchain": "STRAKS",
     "ticker": "STAK",
     "ver_id": "straks--1.14.7.3",
     "ver_name": "STRAKS",
@@ -1053,7 +1053,7 @@
     "wallet_conf": "straks--1.14.7.3.conf"
   },
   {
-    "coin_name": "Sucre",
+    "blockchain": "Sucre",
     "ticker": "SUCR",
     "ver_id": "sucre--v0.12.2.1",
     "ver_name": "Sucre",
@@ -1068,7 +1068,7 @@
     "wallet_conf": "sucre--v0.12.2.1.conf"
   },
   {
-    "coin_name": "Syndicate",
+    "blockchain": "Syndicate",
     "ticker": "SYNX",
     "ver_id": "syndicate--v2.0.0",
     "ver_name": "Syndicate",
@@ -1083,7 +1083,7 @@
     "wallet_conf": "syndicate--v2.0.0.conf"
   },
   {
-    "coin_name": "Syscoin",
+    "blockchain": "Syscoin",
     "ticker": "SYS",
     "ver_id": "syscoin--3.0.5.0",
     "ver_name": "Syscoin",
@@ -1098,7 +1098,7 @@
     "wallet_conf": "syscoin--3.0.5.0.conf"
   },
   {
-    "coin_name": "Terracoin",
+    "blockchain": "Terracoin",
     "ticker": "TRC",
     "ver_id": "terracoin--v0.12.1.8",
     "ver_name": "Terracoin",
@@ -1113,7 +1113,7 @@
     "wallet_conf": "terracoin--v0.12.1.8.conf"
   },
   {
-    "coin_name": "Tribe",
+    "blockchain": "Tribe",
     "ticker": "TRB",
     "ver_id": "tribe--v1.0.0",
     "ver_name": "Tribe",
@@ -1128,7 +1128,7 @@
     "wallet_conf": "tribe--v1.0.0.conf"
   },
   {
-    "coin_name": "Ultranatum",
+    "blockchain": "Ultranatum",
     "ticker": "ULTRA",
     "ver_id": "ultranatum--1.1.0.2",
     "ver_name": "Ultranatum",
@@ -1143,7 +1143,7 @@
     "wallet_conf": "ultranatum--1.1.0.2.conf"
   },
   {
-    "coin_name": "Unbreakablecoin",
+    "blockchain": "Unbreakablecoin",
     "ticker": "UNB",
     "ver_id": "unbreakable--v0.10.3.0",
     "ver_name": "Unbreakablecoin",
@@ -1158,7 +1158,7 @@
     "wallet_conf": "unbreakable--v0.10.3.0.conf"
   },
   {
-    "coin_name": "Uniform Fiscal Object",
+    "blockchain": "Uniform Fiscal Object",
     "ticker": "UFO",
     "ver_id": "uniformfiscalobject--v0.16.1",
     "ver_name": "Uniform Fiscal Object",
@@ -1173,7 +1173,7 @@
     "wallet_conf": "uniformfiscalobject--v0.16.1.conf"
   },
   {
-    "coin_name": "United Crypto Community",
+    "blockchain": "United Crypto Community",
     "ticker": "UCOM",
     "ver_id": "unitedcryptocommunity--v0.1.8.1",
     "ver_name": "United Crypto Community",
@@ -1188,7 +1188,7 @@
     "wallet_conf": "unitedcryptocommunity--v0.1.8.1.conf"
   },
   {
-    "coin_name": "Unobtanium",
+    "blockchain": "Unobtanium",
     "ticker": "UNO",
     "ver_id": "unobtanium--v0.10.1.1",
     "ver_name": "Unobtanium",
@@ -1203,7 +1203,7 @@
     "wallet_conf": "unobtanium--v0.10.1.1.conf"
   },
   {
-    "coin_name": "Vertcoin",
+    "blockchain": "Vertcoin",
     "ticker": "VTC",
     "ver_id": "vertcoin--0.13.2",
     "ver_name": "Vertcoin",
@@ -1218,7 +1218,7 @@
     "wallet_conf": "vertcoin--0.13.2.conf"
   },
   {
-    "coin_name": "Viacoin",
+    "blockchain": "Viacoin",
     "ticker": "VIA",
     "ver_id": "viacoin--v0.15.1",
     "ver_name": "Viacoin",
@@ -1233,7 +1233,7 @@
     "wallet_conf": "viacoin--v0.15.1.conf"
   },
   {
-    "coin_name": "Vitae",
+    "blockchain": "Vitae",
     "ticker": "VITAE",
     "ver_id": "vitae--v4.1.0.1",
     "ver_name": "Vitae",
@@ -1248,7 +1248,7 @@
     "wallet_conf": "vitae--v4.1.0.1.conf"
   },
   {
-    "coin_name": "VIVO",
+    "blockchain": "VIVO",
     "ticker": "VIVO",
     "ver_id": "vivo--v0.12.1.8",
     "ver_name": "VIVO",
@@ -1263,7 +1263,7 @@
     "wallet_conf": "vivo--v0.12.1.8.conf"
   },
   {
-    "coin_name": "Vsync",
+    "blockchain": "Vsync",
     "ticker": "VSX",
     "ver_id": "vsync--v3.8.5.0",
     "ver_name": "Vsync",
@@ -1278,7 +1278,7 @@
     "wallet_conf": "vsync--v3.8.5.0.conf"
   },
   {
-    "coin_name": "Vyigrat",
+    "blockchain": "Vyigrat",
     "ticker": "VYI",
     "ver_id": "vyigrat--v1.3.0.0",
     "ver_name": "Vyigrat",
@@ -1293,7 +1293,7 @@
     "wallet_conf": "vyigrat--v1.3.0.0.conf"
   },
   {
-    "coin_name": "Wagerr",
+    "blockchain": "Wagerr",
     "ticker": "WGR",
     "ver_id": "wagerr--1.5.0",
     "ver_name": "Wagerr",
@@ -1308,7 +1308,7 @@
     "wallet_conf": "wagerr--1.5.0.conf"
   },
   {
-    "coin_name": "XCurrency",
+    "blockchain": "XCurrency",
     "ticker": "XC",
     "ver_id": "xcurrency--v3.0.05",
     "ver_name": "XCurrency",
@@ -1323,7 +1323,7 @@
     "wallet_conf": "xcurrency--v3.0.05.conf"
   },
   {
-    "coin_name": "ZCoin",
+    "blockchain": "ZCoin",
     "ticker": "XZC",
     "ver_id": "zcoin--v0.13.6.4",
     "ver_name": "ZCoin",
@@ -1338,7 +1338,7 @@
     "wallet_conf": "zcoin--v0.13.6.4.conf"
   },
   {
-    "coin_name": "Zoin",
+    "blockchain": "Zoin",
     "ticker": "ZOI",
     "ver_id": "zoin--v0.13.1.6",
     "ver_name": "Zoin",

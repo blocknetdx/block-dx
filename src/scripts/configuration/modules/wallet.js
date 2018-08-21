@@ -21,7 +21,7 @@ class Wallet {
 
     const { versions = [] } = w;
 
-    this.name = w.coin_name || '';
+    this.name = w.blockchain || '';
     this.abbr = w.ticker || '';
     this.versionId = w.ver_id || '';
     this.versionName = w.ver_name || '';
