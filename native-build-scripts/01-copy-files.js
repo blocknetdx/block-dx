@@ -17,7 +17,7 @@ co(function*() {
     yield fs.ensureDirAsync(buildDir);
 
     const filesToCopy = [
-      'data',
+      'blockchain-configuration-files',
       'dist',
       'index.js',
       'tos.txt',
