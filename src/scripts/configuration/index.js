@@ -111,8 +111,8 @@ const generateXBridgeConf = wallets => {
   for(const wallet of wallets) {
     conf.add(wallet);
   }
-  const confStr = conf.save();
-  console.log(confStr);
+  conf.save();
+  // console.log(confStr);
 };
 
 const saveConfs = wallets => {
@@ -545,7 +545,7 @@ $(document).ready(() => {
           }, (paths = []) => {
             const [ directoryPath ] = paths;
             if(directoryPath) {
-              console.log($('#' + removeNonWordCharacters(versionId)));
+              // console.log($('#' + removeNonWordCharacters(versionId)));
               $(`#${removeNonWordCharacters(versionId)}`).val(directoryPath);
               $(`#${removeNonWordCharacters(versionId)}-error`).css('display', 'none');
               const newWallets = [
