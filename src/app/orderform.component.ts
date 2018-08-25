@@ -134,22 +134,51 @@ export class OrderformComponent implements OnInit {
   amountChanged(e) {
     e.preventDefault();
     this.model.id = '';
-    const { value } = e.target;
-    const [ valid, skipPopper = false ] = this.validAmount(value);
+    let { value: amount } = e.target;
+    const { price = '' } = this.model;
+    const [ valid, skipPopper = false ] = this.validAmount(amount);
+    let fixed;
     if(!valid) {
+      fixed = this.fixAmount(amount);
       if(!skipPopper) this.showPopper('amount', 'You can only specify amounts with at most 0.000001 precision.', 5000);
-      e.target.value = this.fixAmount(value);
+      e.target.value = fixed;
+    }
+    if(!amount) {
+      this.model.totalPrice = '';
+      return;
+    }
+    amount = fixed ? fixed : amount;
+    if(price) {
+      const newTotalPrice = String(math.multiply(amount, price));
+      this.model.totalPrice = this.formatNumber(this.fixAmount(String(newTotalPrice)), 'BTC');
+    } else {
+      this.model.totalPrice = '';
     }
   }
 
-  totalPriceChanged(e) {
+  priceChanged(e) {
     e.preventDefault();
+    const type = this.tabView.activeIndex === 0 ? 'buy' : 'sell';
     this.model.id = '';
-    const { value } = e.target;
-    const [ valid, skipPopper = false ] = this.validAmount(value);
+    let { value: price } = e.target;
+    const { amount = '', totalPrice = '' } = this.model;
+    const [ valid, skipPopper = false ] = this.validAmount(price);
+    let fixed;
     if(!valid) {
-      if(!skipPopper) this.showPopper('amount', 'You can only specify amounts with at most 0.000001 precision.', 5000);
-      e.target.value = this.fixAmount(value);
+      fixed = this.fixAmount(price);
+      if(!skipPopper) this.showPopper('price', 'You can only specify prices with at most 0.000001 precision.', 5000);
+      e.target.value = fixed;
+    }
+    if(!price) {
+      this.model.totalPrice = '';
+      return;
+    }
+    price = fixed ? fixed : price;
+    if(amount) {
+      const newTotalPrice = String(math.multiply(amount, price));
+      this.model.totalPrice = this.formatNumber(this.fixAmount(String(newTotalPrice)), 'BTC');
+    } else {
+      this.model.totalPrice = '';
     }
   }
 
@@ -202,6 +231,7 @@ export class OrderformComponent implements OnInit {
     this.model = {
       id: '',
       amount: '',
+      price: '',
       totalPrice: '',
       makerAddress: this.addresses[this.symbols[0]] || '',
       takerAddress: this.addresses[this.symbols[1]] || ''
@@ -211,10 +241,6 @@ export class OrderformComponent implements OnInit {
   validateNumber(numStr = '') {
     numStr = numStr.trim();
     return /\d+/.test(numStr) && /^\d*\.?\d*$/.test(numStr) && Number(numStr) > 0;
-  }
-
-  textForBuySellState(a:string, b:string): string {
-    return (this.tabView.activeIndex === 0 ? a : b);
   }
 
   onOrderSubmit() {
