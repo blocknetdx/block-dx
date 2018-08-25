@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 module.exports.sortByVersion = arr => [...arr]
   .sort((a, b) => {
     const splitA = a.split('.');
@@ -33,12 +35,65 @@ module.exports.splitConf = (str = '') => {
     }, {});
 };
 
-module.exports.joinConf = obj => {
+const joinConf = obj => {
   return Object
     .keys(obj)
     .map(key => key + '=' + (obj[key] || ''))
     .join('\n')
     .concat('\n');
+};
+module.exports.joinConf = joinConf;
+
+module.exports.mergeWrite = (filePath, obj) => {
+  let fileExists;
+  try {
+    fs.statSync(filePath);
+    fileExists = true;
+  } catch(err) {
+    fileExists = false;
+  }
+  if(!fileExists) {
+    fs.writeFileSync(filePath, joinConf(obj), 'utf8');
+    return;
+  }
+  const newKeys = Object.keys(obj);
+  let usedKeys = new Set();
+  const contents = fs.readFileSync(filePath, 'utf8').trim();
+  const linePatt = /^(.+)=(.+)$/;
+  const splitContents = contents
+    .split('\n')
+    .map(l => l.trim())
+    .map(l => {
+      if(!l) { // if it is an empty line
+        return l;
+      } else if(/^#/.test(l)) { // if it is a comment
+        return l;
+      } else if(linePatt.test(l)) { // if it is a [key]=[value] line
+        const matches = l.match(linePatt);
+        const key = matches[1].trim();
+        const value = matches[2].trim();
+        if(usedKeys.has(key)) {
+          return '';
+        } else if(newKeys.includes(key)) {
+          usedKeys = usedKeys.add(key);
+          return `${key}=${obj[key]}`;
+        } else {
+          usedKeys = usedKeys.add(key);
+          return `${key}=${value}`;
+        }
+      } else { // if it is a bad line
+        return '';
+      }
+    });
+  for(const key of newKeys) {
+    if(usedKeys.has(key)) continue;
+    splitContents.push(`${key}=${obj[key]}`);
+  }
+  const newContents = splitContents
+    .join('\n')
+    .replace(/[\n\r]{3,}/g, '\n\n')
+    .trim();
+  fs.writeFileSync(filePath, newContents, 'utf8');
 };
 
 module.exports.removeNonWordCharacters = (str = '') => str.replace(/\W/g, '');

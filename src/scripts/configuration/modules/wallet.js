@@ -2,7 +2,7 @@ const fs = require('fs-extra-promise');
 const path = require('path');
 const { ipcRenderer } = require('electron');
 const uuid = require('uuid');
-const { splitConf, joinConf } = require('./util');
+const { splitConf, mergeWrite } = require('./util');
 
 const fileExists = p => {
   try {
@@ -85,8 +85,7 @@ class Wallet {
       rpcuser: this.username,
       rpcpassword: this.password
     });
-    const newContentsStr = joinConf(newContents);
-    fs.writeFileSync(filePath, newContentsStr, 'utf8');
+    mergeWrite(filePath, newContents);
     return newContents;
   }
 
