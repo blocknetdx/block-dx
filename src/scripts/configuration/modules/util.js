@@ -72,13 +72,12 @@ module.exports.mergeWrite = (filePath, obj) => {
         const matches = l.match(linePatt);
         const key = matches[1].trim();
         const value = matches[2].trim();
-        if(usedKeys.has(key)) {
+        if(newKeys.includes(key) && usedKeys.has(key)) {
           return '';
-        } else if(newKeys.includes(key)) {
+        } else if(newKeys.includes(key) && !usedKeys.has(key)) {
           usedKeys = usedKeys.add(key);
           return `${key}=${obj[key]}`;
         } else {
-          usedKeys = usedKeys.add(key);
           return `${key}=${value}`;
         }
       } else { // if it is a bad line
