@@ -77,11 +77,9 @@ class Wallet {
     fs.ensureFileSync(filePath);
     const defaultFile = filePath + '-default';
     if(!fileExists(defaultFile)) fs.copySync(filePath, defaultFile);
-    const contentsStr = fs.readFileSync(filePath, 'utf8');
-    const contents = splitConf(contentsStr);
     const baseConfStr = ipcRenderer.sendSync('getBaseConf', this.walletConf);
     const baseConf = splitConf(baseConfStr);
-    const newContents = Object.assign({}, contents, baseConf, {
+    const newContents = Object.assign({}, baseConf, {
       rpcuser: this.username,
       rpcpassword: this.password
     });
