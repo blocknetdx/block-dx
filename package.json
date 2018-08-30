@@ -3,6 +3,8 @@
   "version": "0.7.9",
   "license": "MIT",
   "author": "Blocknet <contact@blocknet.co>",
+  "homepage": "https://github.com/BlocknetDX/blockdx-ui",
+  "repository": "https://github.com/BlocknetDX/blockdx-ui.git",
   "description": "BLOCK DX",
   "contributors": [
     {
@@ -25,9 +27,9 @@
     "e2e": "ng e2e",
     "build-native": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --production && cd .. && electron-builder --dir",
     "build-native-all": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --no-audit --production && cd .. && electron-builder --dir -mwl",
-    "build-native-win": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --no-audit --production && cd .. && electron-builder --dir --x64 --win",
-    "build-native-mac": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --no-audit --production && cd .. && electron-builder --dir --x64 --mac",
-    "build-native-linux": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --no-audit --production && cd .. && electron-builder --dir --x64 --linux",
+    "build-native-win": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --no-audit --production && cd .. && electron-builder --dir --x64 --win nsis zip --publish never",
+    "build-native-mac": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --no-audit --production && cd .. && electron-builder --dir --x64 --mac zip --publish never",
+    "build-native-linux": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --no-audit --production && cd .. && electron-builder --dir --x64 --linux appImage deb tar.gz --publish never",
     "pack-native": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --production && cd .. && electron-builder",
     "publish-native": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --production && cd .. && electron-builder --publish always",
     "generate-docs": "jsdoc src-back/service-node-interface.js -d docs",
@@ -113,7 +115,8 @@
     "electronVersion": "1.8.4",
     "appId": "co.blocknet.blockdx",
     "productName": "BLOCK DX",
-    "copyright": "Copyright © 2018 The Blocknet",
+    "artifactName": "${name}-${env.GIT_BRANCH}-${os}.${ext}",
+    "copyright": "Copyright © 2018 Blocknet",
     "directories": {
       "app": "temp",
       "output": "dist-native"
@@ -126,7 +129,8 @@
             "x64",
             "ia32"
           ]
-        }
+        },
+        { "target": "zip" }
       ],
       "icon": "./src/assets/favicon_block.ico",
       "publish": {
@@ -136,7 +140,6 @@
     },
     "mac": {
       "target": [
-        "dmg",
         "zip"
       ],
       "category": "public.app-category.utilities",
@@ -147,10 +150,14 @@
       }
     },
     "linux": {
-      "target": "appImage",
+      "target": [
+        "appImage",
+        "deb",
+        "tar.gz"
+      ],
       "icon": "./src/assets/linux_icons/",
-      "synopsis": "Copyright © 2018 The Blocknet",
-      "description": "Copyright © 2018 The Blocknet",
+      "synopsis": "Copyright © 2018 Blocknet",
+      "description": "Copyright © 2018 Blocknet",
       "category": "Utility",
       "desktop": {
         "Name": "BLOCK DX"
