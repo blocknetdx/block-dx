@@ -770,7 +770,7 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
     if(!storage.getItem('tos')) {
       await onReady;
       openTOSWindow();
-      if(!isDev) autoUpdater.checkForUpdates();
+      // if(!isDev) autoUpdater.checkForUpdates();
       return;
     }
 
@@ -782,8 +782,7 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
     if(!user || !password) {
       await onReady;
       openConfigurationWindow();
-      // openSettingsWindow();
-      if(!isDev) autoUpdater.checkForUpdates();
+      // if(!isDev) autoUpdater.checkForUpdates();
       return;
     }
 
@@ -794,9 +793,7 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
     try {
       info = await sn.getinfo();
     } catch(err) {
-      // console.error(err);
       await onReady;
-      // openSettingsWindow({ error: err });
       openConfigurationWindow({ error: err });
       return;
     }
@@ -827,7 +824,7 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
 
     await onReady;
 
-    if(!isDev) autoUpdater.checkForUpdates();
+    // if(!isDev) autoUpdater.checkForUpdates();
 
     openAppWindow();
 
