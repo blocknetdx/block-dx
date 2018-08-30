@@ -47,17 +47,17 @@
   {
     "blockchain": "APR Coin",
     "ticker": "APR",
-    "ver_id": "aprcoin--1.0",
+    "ver_id": "aprcoin--v1.0",
     "ver_name": "APR Coin",
     "dir_name_linux": "aprcoin",
     "dir_name_mac": "",
     "dir_name_win": "AprCoin",
     "repo_url": "https://github.com/APRCoin/zenith-repository",
     "versions": [
-      "1.0"
+      "v1.0"
     ],
-    "xbridge_conf": "aprcoin--1.0.conf",
-    "wallet_conf": "aprcoin--1.0.conf"
+    "xbridge_conf": "aprcoin--v1.0.conf",
+    "wallet_conf": "aprcoin--v1.0.conf"
   },
   {
     "blockchain": "Banq",
@@ -132,7 +132,9 @@
     "versions": [
       "v3.9.16",
       "v3.9.20",
-      "v3.9.22"
+      "v3.9.22",
+      "3.10.1",
+      "3.10.1-redesign"
     ],
     "xbridge_conf": "blocknetdx--v3.9.16.conf",
     "wallet_conf": "blocknetdx--v3.9.16.conf"
@@ -155,7 +157,7 @@
   {
     "blockchain": "Carebit",
     "ticker": "CARE",
-    "ver_id": "carebit--v3.0.0.0",
+    "ver_id": "carebitcoin--v3.0.0.0",
     "ver_name": "Carebit",
     "dir_name_linux": "carebitcoin",
     "dir_name_mac": "CarebitCoin",
@@ -164,8 +166,8 @@
     "versions": [
       "v3.0.0.0"
     ],
-    "xbridge_conf": "carebit--v3.0.0.0.conf",
-    "wallet_conf": "carebit--v3.0.0.0.conf"
+    "xbridge_conf": "carebitcoin--v3.0.0.0.conf",
+    "wallet_conf": "carebitcoin--v3.0.0.0.conf"
   },
   {
     "blockchain": "Civitas",
@@ -468,10 +470,10 @@
     "wallet_conf": "gobyte--v0.12.2.4.conf"
   },
   {
-    "blockchain": "Hexx",
+    "blockchain": "HexxCoin",
     "ticker": "HXX",
     "ver_id": "hexxcoin--4.0.3.8",
-    "ver_name": "Hexx",
+    "ver_name": "HexxCoin",
     "dir_name_linux": "hexxcoin",
     "dir_name_mac": "hexxcoin",
     "dir_name_win": "hexxcoin",
@@ -665,7 +667,7 @@
   {
     "blockchain": "Magna Coin",
     "ticker": "MGN",
-    "ver_id": "magnacoin--v1.0.0",
+    "ver_id": "mgn--v1.0.0",
     "ver_name": "Magna Coin",
     "dir_name_linux": "MagnaCoin",
     "dir_name_mac": "MagnaCoin",
@@ -674,8 +676,8 @@
     "versions": [
       "v1.0.0"
     ],
-    "xbridge_conf": "magnacoin--v1.0.0.conf",
-    "wallet_conf": "magnacoin--v1.0.0.conf"
+    "xbridge_conf": "mgn--v1.0.0.conf",
+    "wallet_conf": "mgn--v1.0.0.conf"
   },
   {
     "blockchain": "MinexCoin",
@@ -815,7 +817,7 @@
   {
     "blockchain": "NyxCoin",
     "ticker": "NYX",
-    "ver_id": "nyxcoin--v2.0.0.0",
+    "ver_id": "nyx--v2.0.0.0",
     "ver_name": "NyxCoin",
     "dir_name_linux": "nyx",
     "dir_name_mac": "Nyx",
@@ -824,13 +826,13 @@
     "versions": [
       "v2.0.0.0"
     ],
-    "xbridge_conf": "nyxcoin--v2.0.0.0.conf",
-    "wallet_conf": "nyxcoin--v2.0.0.0.conf"
+    "xbridge_conf": "nyx--v2.0.0.0.conf",
+    "wallet_conf": "nyx--v2.0.0.0.conf"
   },
   {
     "blockchain": "Ohmcoin",
     "ticker": "OHM",
-    "ver_id": "ohmcoin--v2.3.0.0-gcbcb549",
+    "ver_id": "ohmc--v2.3.0.0-gcbcb549",
     "ver_name": "Ohmcoin",
     "dir_name_linux": "",
     "dir_name_mac": "OHMC",
@@ -839,8 +841,8 @@
     "versions": [
       "v2.3.0.0-gcbcb549"
     ],
-    "xbridge_conf": "ohmcoin--v2.3.0.0-gcbcb549.conf",
-    "wallet_conf": "ohmcoin--v2.3.0.0-gcbcb549.conf"
+    "xbridge_conf": "ohmc--v2.3.0.0-gcbcb549.conf",
+    "wallet_conf": "ohmc--v2.3.0.0-gcbcb549.conf"
   },
   {
     "blockchain": "Phore",
@@ -935,7 +937,7 @@
   {
     "blockchain": "Ravencoin",
     "ticker": "RVN",
-    "ver_id": "ravencoin--v0.15.99.0",
+    "ver_id": "raven--v0.15.99.0",
     "ver_name": "Ravencoin",
     "dir_name_linux": "raven",
     "dir_name_mac": "Raven",
@@ -944,8 +946,8 @@
     "versions": [
       "v0.15.99.0"
     ],
-    "xbridge_conf": "ravencoin--v0.15.99.0.conf",
-    "wallet_conf": "ravencoin--v0.15.99.0.conf"
+    "xbridge_conf": "raven--v0.15.99.0.conf",
+    "wallet_conf": "raven--v0.15.99.0.conf"
   },
   {
     "blockchain": "Shekel",
@@ -1055,7 +1057,7 @@
   {
     "blockchain": "Sucre",
     "ticker": "SUCR",
-    "ver_id": "sucre--v0.12.2.1",
+    "ver_id": "sucr--v0.12.2.1",
     "ver_name": "Sucre",
     "dir_name_linux": "",
     "dir_name_mac": "",
@@ -1064,8 +1066,8 @@
     "versions": [
       "v0.12.2.1"
     ],
-    "xbridge_conf": "sucre--v0.12.2.1.conf",
-    "wallet_conf": "sucre--v0.12.2.1.conf"
+    "xbridge_conf": "sucr--v0.12.2.1.conf",
+    "wallet_conf": "sucr--v0.12.2.1.conf"
   },
   {
     "blockchain": "Syndicate",
@@ -1143,10 +1145,10 @@
     "wallet_conf": "ultranatum--1.1.0.2.conf"
   },
   {
-    "blockchain": "Unbreakablecoin",
+    "blockchain": "UnbreakableCoin",
     "ticker": "UNB",
-    "ver_id": "unbreakable--v0.10.3.0",
-    "ver_name": "Unbreakablecoin",
+    "ver_id": "unbreakablecoin--v0.10.3.0",
+    "ver_name": "UnbreakableCoin",
     "dir_name_linux": "",
     "dir_name_mac": "Unbreakablecoin",
     "dir_name_win": "Unbreakablecoin",
@@ -1154,13 +1156,13 @@
     "versions": [
       "v0.10.3.0"
     ],
-    "xbridge_conf": "unbreakable--v0.10.3.0.conf",
-    "wallet_conf": "unbreakable--v0.10.3.0.conf"
+    "xbridge_conf": "unbreakablecoin--v0.10.3.0.conf",
+    "wallet_conf": "unbreakablecoin--v0.10.3.0.conf"
   },
   {
     "blockchain": "Uniform Fiscal Object",
     "ticker": "UFO",
-    "ver_id": "uniformfiscalobject--v0.16.1",
+    "ver_id": "ufocoin--v0.16.1",
     "ver_name": "Uniform Fiscal Object",
     "dir_name_linux": "ufo",
     "dir_name_mac": "UFO",
@@ -1169,8 +1171,8 @@
     "versions": [
       "v0.16.1"
     ],
-    "xbridge_conf": "uniformfiscalobject--v0.16.1.conf",
-    "wallet_conf": "uniformfiscalobject--v0.16.1.conf"
+    "xbridge_conf": "ufocoin--v0.16.1.conf",
+    "wallet_conf": "ufocoin--v0.16.1.conf"
   },
   {
     "blockchain": "United Crypto Community",
