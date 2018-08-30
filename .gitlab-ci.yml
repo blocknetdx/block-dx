@@ -21,9 +21,9 @@ build_linux:
 test_linux:
   stage: test
   script:
-    - "ls \"$CI_PROJECT_DIR/linux/*.tar.gz\" 1> /dev/null 2>&1"
-    - "ls \"$CI_PROJECT_DIR/linux/*.AppImage\" 1> /dev/null 2>&1"
-    - "ls \"$CI_PROJECT_DIR/linux/*.deb\" 1> /dev/null 2>&1"
+    - "[[ \"$CI_PROJECT_DIR/linux/*.tar.gz\" =~ \\.tar.gz$ ]]"
+    - "[[ \"$CI_PROJECT_DIR/linux/*.AppImage\" =~ \\.AppImage$ ]]"
+    - "[[ \"$CI_PROJECT_DIR/linux/*.deb\" =~ \\.deb$ ]]"
 
 build_win:
   stage: build
@@ -44,8 +44,8 @@ build_win:
 test_win:
   stage: test
   script:
-    - "ls \"$CI_PROJECT_DIR/win/*.exe\" 1> /dev/null 2>&1"
-    - "ls \"$CI_PROJECT_DIR/win/*.zip\" 1> /dev/null 2>&1"
+    - "[[ \"$CI_PROJECT_DIR/win/*.exe\" =~ \\.exe$ ]]"
+    - "[[ \"$CI_PROJECT_DIR/win/*.zip\" =~ \\.zip$ ]]"
 
 build_mac:
   stage: build
@@ -65,4 +65,4 @@ build_mac:
 test_mac:
   stage: test
   script:
-    - "ls \"$CI_PROJECT_DIR/mac/*.zip\" 1> /dev/null 2>&1"
+    - "[[ \"$CI_PROJECT_DIR/mac/*.zip\" =~ \\.zip$ ]]"
