@@ -133,8 +133,8 @@
       "v3.9.16",
       "v3.9.20",
       "v3.9.22",
-      "3.10.1",
-      "3.10.1-redesign"
+      "3.10.2",
+      "3.10.2-redesign"
     ],
     "xbridge_conf": "blocknetdx--v3.9.16.conf",
     "wallet_conf": "blocknetdx--v3.9.16.conf"
