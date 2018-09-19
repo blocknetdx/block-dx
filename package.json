@@ -130,7 +130,9 @@
             "ia32"
           ]
         },
-        { "target": "zip" }
+        {
+          "target": "zip"
+        }
       ],
       "icon": "./src/assets/favicon_block.ico",
       "publish": {

@@ -7,6 +7,7 @@ const SimpleStorage = require('./src-back/storage');
 const ServiceNodeInterface = require('./src-back/service-node-interface');
 const serve = require('electron-serve');
 const { autoUpdater } = require('electron-updater');
+const PricingInterface = require('./src-back/pricing-interface');
 
 const { app, BrowserWindow, Menu, ipcMain } = electron;
 
@@ -22,7 +23,7 @@ ipcMain.on('getAppVersion', e => {
   e.returnValue = version;
 });
 
-let appWindow, serverLocation, sn, keyPair, storage, user, password, port, info;
+let appWindow, serverLocation, sn, keyPair, storage, user, password, port, info, pricingSource, pricingUnit, apiKeys, pricingFrequency, enablePricing, sendPricingMultipliers, clearPricingInterval, setPricingInterval, sendMarketPricingEnabled;
 
 // General Error Handler
 const handleError = err => {
@@ -283,6 +284,29 @@ const openSettingsWindow = (options = {}) => {
 
 };
 
+const openGeneralSettingsWindow = () => {
+
+  const generalSettingsWindow = new BrowserWindow({
+    show: false,
+    width: 1000,
+    height: platform === 'win32' ? 708 : platform === 'darwin' ? 695 : 670,
+    parent: appWindow,
+    modal: platform === 'darwin' ? false : true
+  });
+
+  generalSettingsWindow.setMenu(null);
+
+  if(isDev) {
+    generalSettingsWindow.loadURL(`file://${path.join(__dirname, 'src', 'general-settings.html')}`);
+  } else {
+    generalSettingsWindow.loadURL(`file://${path.join(__dirname, 'dist', 'general-settings.html')}`);
+  }
+  generalSettingsWindow.once('ready-to-show', () => {
+    generalSettingsWindow.show();
+  });
+
+};
+
 const openTOSWindow = (alreadyAccepted = false) => {
 
   ipcMain.on('getTOS', e => {
@@ -351,6 +375,8 @@ const openAppWindow = () => {
     width: width - 100,
     height: height - 100
   });
+
+  // appWindow.toggleDevTools();
 
   const initialBounds = storage.getItem('bounds');
   if(initialBounds) {
@@ -694,7 +720,50 @@ const openAppWindow = () => {
   ipcMain.on('getBalances', () => sendBalances(true));
   setInterval(sendBalances, stdInterval);
 
+  sendPricingMultipliers = async function() {
+    try {
+      if(!enablePricing) {
+        appWindow.send('pricingMultipliers', []);
+        return;
+      }
+      const pricingInterface = new PricingInterface({
+        source: pricingSource,
+        apiKey: apiKeys[pricingSource]
+      });
+      const multipliers = await pricingInterface.compare([keyPair[1], keyPair[0]], pricingUnit);
+      appWindow.send('pricingMultipliers', multipliers);
+    } catch(err) {
+      handleError(err);
+    }
+  };
+
+  let pricingInterval;
+
+  clearPricingInterval = () => {
+    clearInterval(pricingInterval);
+  };
+  setPricingInterval = () => {
+    pricingInterval = setInterval(() => {
+      sendPricingMultipliers();
+    }, pricingFrequency);
+  };
+
+  setPricingInterval();
+
+  ipcMain.on('getPricing', () => {
+    sendPricingMultipliers();
+  });
+
+   sendMarketPricingEnabled = () => {
+    appWindow.send('marketPricingEnabled', enablePricing);
+  };
+
+  ipcMain.on('getMarketPricingEnabled', sendMarketPricingEnabled);
+
   ipcMain.on('setKeyPair', (e, pair) => {
+
+    clearPricingInterval();
+
     storage.setItem('keyPair', pair);
     keyPair = pair;
     sendKeyPair();
@@ -703,6 +772,10 @@ const openAppWindow = () => {
     sendMyOrders(true);
     sendOrderHistory(true);
     sendCurrentPrice(true);
+
+    sendPricingMultipliers();
+    setPricingInterval();
+
   });
 
   ipcMain.on('isFirstRun', e => {
@@ -713,6 +786,10 @@ const openAppWindow = () => {
     } else {
       e.returnValue = false;
     }
+  });
+
+  ipcMain.on('openGeneralSettings', () => {
+    openGeneralSettingsWindow();
   });
 
   ipcMain.on('openSettings', () => {
@@ -728,6 +805,41 @@ const openAppWindow = () => {
   });
 
 };
+
+ipcMain.on('getPricingSource', e => {
+  e.returnValue = pricingSource;
+});
+ipcMain.on('getAPIKeys', e => {
+  e.returnValue = apiKeys;
+});
+ipcMain.on('getPricingUnit', e => {
+  e.returnValue = pricingUnit;
+});
+ipcMain.on('getPricingFrequency', e => {
+  e.returnValue = pricingFrequency;
+});
+ipcMain.on('getPricingEnabled', e => {
+  e.returnValue = enablePricing;
+});
+ipcMain.on('saveGeneralSettings', (e, s) => {
+  // console.log(JSON.stringify(s, null, '  '));
+  enablePricing = s.pricingEnabled;
+  pricingSource = s.pricingSource;
+  apiKeys = s.apiKeys;
+  pricingUnit = s.pricingUnit;
+  pricingFrequency = s.pricingFrequency;
+  storage.setItems({
+    pricingEnabled: s.pricingEnabled,
+    pricingSource: s.pricingSource,
+    apiKeys: s.apiKeys,
+    pricingUnit: s.pricingUnit,
+    pricingFrequency: s.pricingFrequency
+  }, true);
+  clearPricingInterval();
+  sendPricingMultipliers();
+  setPricingInterval();
+  sendMarketPricingEnabled();
+});
 
 const onReady = new Promise(resolve => app.on('ready', resolve));
 
@@ -762,6 +874,32 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
     user = storage.getItem('user');
     password = storage.getItem('password');
     port = storage.getItem('port');
+
+    pricingSource = storage.getItem('pricingSource');
+    if(!pricingSource) {
+      pricingSource = 'COIN_MARKET_CAP';
+      storage.setItem('pricingSource', pricingSource);
+    }
+    apiKeys = storage.getItem('apiKeys');
+    if(!apiKeys) {
+      apiKeys = {};
+      storage.setItem('apiKeys', apiKeys);
+    }
+    pricingUnit = storage.getItem('pricingUnit');
+    if(!pricingUnit) {
+      pricingUnit = 'BTC';
+      storage.setItem('pricingUnit', pricingUnit);
+    }
+    pricingFrequency = storage.getItem('pricingFrequency');
+    if(!pricingFrequency) {
+      pricingFrequency = 300000;
+      storage.setItem('pricingFrequency', pricingFrequency);
+    }
+    enablePricing = storage.getItem('pricingEnabled');
+    if(!enablePricing && enablePricing !== false) {
+      enablePricing = false;
+      storage.setItem('pricingEnabled', enablePricing);
+    }
 
     if(!storage.getItem('addresses')) {
       storage.setItem('addresses', {});

@@ -14,24 +14,37 @@
     </ng-template>
   </bn-table-row-detail>
 
-  <app-table-column [prop]="'price'" [classList]="'col-4 col-sm-2'">
+  <app-table-column [prop]="'price'" [classList]="'col'">
     <ng-template columnHeader>Price ({{symbols[1]}})</ng-template>
     <ng-template let-row="row" columnCell>
       <span class="bn-number"
-        [class.color-red]="row.side == 'sell'"
-        [class.color-green]="row.side == 'buy'"
-        [innerHtml]="prepareNumber(row.price) | blockCurrency:symbols[1]:'6'"></span>
+            [class.color-red]="row.side == 'sell'"
+            [class.color-green]="row.side == 'buy'"
+            [innerHtml]="prepareNumber(row.price) | blockCurrency:symbols[1]:'6'"></span>
     </ng-template>
   </app-table-column>
 
-  <app-table-column [prop]="'size'" [classList]="'col-4 col-sm-2'">
+  <app-table-column *ngIf="pricingEnabled" [prop]="'price'" [classList]="'col'">
+    <ng-template columnHeader>Price ({{pricing ? pricing.in : ''}})</ng-template>
+    <ng-template let-row="row" columnCell>
+      <span *ngIf="!pricingAvailable" class="bn-number"
+            [class.color-red]="row.side == 'sell'"
+            [class.color-green]="row.side == 'buy'">N/A</span>
+      <span *ngIf="pricingAvailable" class="bn-number"
+            [class.color-red]="row.side == 'sell'"
+            [class.color-green]="row.side == 'buy'"
+            [innerHtml]="prepareNumber(pricing.getPrice(row.price, symbols[1])) | blockCurrency:symbols[1]:'6'"></span>
+    </ng-template>
+  </app-table-column>
+
+  <app-table-column [prop]="'size'" [classList]="'col'">
     <ng-template columnHeader>Size ({{symbols[0]}})</ng-template>
     <ng-template let-row="row" columnCell>
       <span class="bn-number" [innerHtml]="prepareNumber(row.size) | blockCurrency:symbols[0]:'6'"></span>
     </ng-template>
   </app-table-column>
 
-  <app-table-column [prop]="'price'" [classList]="'col-4 col-sm-2'">
+  <app-table-column [prop]="'price'" [classList]="'col'">
     <ng-template columnHeader>Total ({{symbols[1]}})</ng-template>
     <ng-template let-row="row" columnCell>
       <span class="bn-number" [innerHtml]="prepareNumber(row.total) | blockCurrency:symbols[1]:'6'"></span>
@@ -59,14 +72,14 @@
     </ng-template>
   </app-table-column> -->
 
-  <app-table-column [prop]="'created_at'" [classList]="'col-2 d-none d-sm-block'">
+  <app-table-column [prop]="'created_at'" [classList]="'col d-none d-sm-block'">
     <ng-template columnHeader>Date</ng-template>
     <ng-template let-row="row" columnCell>
       <span>{{row.created_at | timeAgo}}</span>
     </ng-template>
   </app-table-column>
 
-  <app-table-column [sortable]="false" [classList]="'col-2 d-none d-sm-block align-center'">
+  <app-table-column [sortable]="false" [classList]="'col d-none d-sm-block align-center'">
     <!-- <ng-template columnHeader>Status</ng-template> -->
     <ng-template let-row="row" columnCell>
       <!--<span *ngIf="row.canceled">Canceled</span>-->

@@ -47,6 +47,12 @@ export class NavBarComponent implements OnInit {
     this.navCollapsed = !this.navCollapsed;
   }
 
+  openGeneralSettings(e) {
+    e.preventDefault();
+    window.electron.ipcRenderer.send('openGeneralSettings');
+    this.toggleNav();
+  }
+
   openSettings(e) {
     e.preventDefault();
     window.electron.ipcRenderer.send('openSettings');
