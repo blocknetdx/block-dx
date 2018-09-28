@@ -530,28 +530,56 @@ const openAppWindow = () => {
 
   let orderHistory = [];
   const sendOrderHistory = force => {
-    const end = moment.utc().valueOf();
-    const start = moment(end).utc()
-      .subtract(1, 'd')
-      .valueOf();
-    sn.dxGetOrderHistory(keyPair[0], keyPair[1], start, end, 60)
-      .then(res => {
-        if(force === true || JSON.stringify(res) !== JSON.stringify(orderHistory)) {
-          orderHistory = res;
-          appWindow.send('orderHistory', orderHistory);
-        }
-      })
-      .catch(handleError);
+    const end = moment();
+    {
+      const start = moment(end.toDate())
+        .subtract(1, 'd');
+      sn.dxGetOrderHistory(keyPair[0], keyPair[1], start.valueOf(), end.valueOf(), 60)
+        .then(res => {
+          if(force === true || JSON.stringify(res) !== JSON.stringify(orderHistory)) {
+            orderHistory = res;
+            appWindow.send('orderHistory', orderHistory);
+            appWindow.send('orderHistoryByMinute', orderHistory);
+          }
+        })
+        .catch(handleError);
+    }
+    {
+      const start = moment(end.toDate())
+        .subtract(1, 'd');
+      sn.dxGetOrderHistory(keyPair[0], keyPair[1], start.valueOf(), end.valueOf(), 900)
+        .then(res => {
+          if(force === true || JSON.stringify(res) !== JSON.stringify(orderHistory)) {
+            orderHistory = res;
+            appWindow.send('orderHistoryBy15Minutes', orderHistory);
+          }
+        })
+        .catch(handleError);
+    }
+    {
+      const start = moment(end.toDate())
+        .subtract(1, 'd');
+      sn.dxGetOrderHistory(keyPair[0], keyPair[1], start.valueOf(), end.valueOf(), 1800)
+        .then(res => {
+          if(force === true || JSON.stringify(res) !== JSON.stringify(orderHistory)) {
+            orderHistory = res;
+            appWindow.send('orderHistoryBy30Minutes', orderHistory);
+          }
+        })
+        .catch(handleError);
+    }
   };
-  ipcMain.on('getOrderHistory', () => sendOrderHistory(true));
+  // ipcMain.on('getOrderHistory', () => sendOrderHistory(true));
+  ipcMain.on('getOrderHistoryByMinute', () => sendOrderHistory(true));
+  // ipcMain.on('getOrderHistoryBy15Minutes', () => sendOrderHistory(true));
+  // ipcMain.on('getOrderHistoryBy30Minutes', () => sendOrderHistory(true));
 
   let currentPrice = {};
   const sendCurrentPrice = force => {
-    const end = moment.utc().valueOf();
-    const start = moment(end).utc()
-      .subtract(1, 'd')
-      .valueOf();
-    sn.dxGetOrderHistory(keyPair[0], keyPair[1], start, end, 86400)
+    const end = moment();
+    const start = moment(end.toDate())
+      .subtract(1, 'd');
+    sn.dxGetOrderHistory(keyPair[0], keyPair[1], start.valueOf(), end.valueOf(), 86400)
       .then(res => {
         if(res.length === 0) return;
         const [ data ] = res;

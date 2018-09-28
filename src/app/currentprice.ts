@@ -19,12 +19,12 @@ export class Currentprice {
   public get priceDiff(): number {
     const last = parseFloat(this.last);
     const open = parseFloat(this.open);
-    // return (last / open) - 1;
-    return math
+    const res = math
       .chain(last)
       .divide(open)
       .subtract(1)
       .done();
+    return res || 0;
   }
 
   public get priceStatus(): string {

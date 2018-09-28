@@ -79,12 +79,12 @@ const Trade = data => ({
  * @constructor
  */
 const OrderHistory = data => ({
-  time: data.time || '',
-  low: data.low || 0,
-  high: data.high || 0,
-  open: data.open || 0,
-  close: data.close || 0,
-  volume: data.volume || 0
+  time: data[0] || '',
+  low: data[1] || 0,
+  high: data[2] || 0,
+  open: data[3] || 0,
+  close: data[4] || 0,
+  volume: data[5] || 0
 });
 
 /**
