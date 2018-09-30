@@ -48,6 +48,8 @@ app-table /deep/ {
 }
 
 .no-open-orders-message {
+  font-family: $roboto-mono;
+  font-size: 12px;
   margin-left: 10px;
   z-index:1000;
   position: absolute;
