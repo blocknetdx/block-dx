@@ -29,15 +29,14 @@ export class NavBarComponent implements OnInit {
 
     this.appService.marketPairChanges.subscribe((symbols) => {
       this.zone.run(() => {
-        // console.log('symbols', symbols);
         this.symbols = symbols;
-      });
-    });
 
-    this.currentpriceService.currentprice.subscribe((cp) => {
-      this.zone.run(() => {
-        // console.log('currentPrice', cp);
-        this.currentPrice = cp;
+        this.currentpriceService.currentprice.subscribe((cp) => {
+          this.zone.run(() => {
+            this.currentPrice = cp;
+          });
+        });
+
       });
     });
 
