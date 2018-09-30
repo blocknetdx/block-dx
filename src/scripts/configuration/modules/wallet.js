@@ -32,6 +32,7 @@ class Wallet {
     this.versions = versions;
     this.xBridgeConf = w.xbridge_conf || '';
     this.walletConf = w.wallet_conf || '';
+    this.confName = w.conf_name || '';
 
     this.error = false;
     this.username = '';

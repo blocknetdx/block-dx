@@ -94,12 +94,6 @@ class XBridgeConf {
     } catch(err) {
       confExists = false;
     }
-    if(confExists) {
-      const currentConf = fs.readFileSync(confPath, 'utf8');
-      if(data !== currentConf) {
-        fs.copySync(confPath, path.join(this._directory, `xbridge-${new Date().getTime()}.conf`));
-      }
-    }
     fs.writeFileSync(confPath, data, 'utf8');
     return data;
   }
