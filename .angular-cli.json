@@ -15,7 +15,8 @@
         "automation.html",
         "settings.html",
         "tos.html",
-        "update-available.html"
+        "update-available.html",
+        "general-settings.html"
       ],
       "index": "index.html",
       "main": "main.ts",

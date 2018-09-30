@@ -10,9 +10,10 @@
     <div class="collapse navbar-collapse" [class.active]="navCollapsed">
       <a (click)="toggleNav()" class="close"><i class="material-icons">close</i></a>
       <ul>
-        <li>Account</li>
+        <li>Settings</li>
         <!--<li><a href="#">My Balances</a></li>-->
         <!--<li><a href="#">Setup Wallet</a></li>-->
+        <li><a href="#" (click)="openGeneralSettings($event)">General Settings</a></li>
         <li><a href="#" (click)="openSettings($event)">RPC Settings</a></li>
         <li><a href="#" (click)="openConfigurationWizard($event)">Configuration Wizard</a></li>
       </ul>

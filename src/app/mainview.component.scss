@@ -74,13 +74,13 @@
     &.balances {
       @include screen(lg) {
         //height: calc(25vh);
-        max-height: calc(100vh - 505px - 106px);
+        max-height: calc(100vh - 553px - 106px);
       }
     }
     &.orderform {
       @include screen(lg) {
         //height: calc(75vh - 106px);
-        height: 505px;
+        height: 553px;
       }
     }
   }

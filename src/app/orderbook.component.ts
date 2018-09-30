@@ -8,6 +8,8 @@ import { OrderbookService } from './orderbook.service';
 import { TableComponent } from './table/table.component';
 import { AppService } from './app.service';
 import {NumberFormatPipe} from './pipes/decimal.pipe';
+import { PricingService } from './pricing.service';
+import { Pricing } from './pricing';
 // import {TradehistoryService} from './tradehistory.service';
 // import { Trade } from './trade';
 // import {CurrentpriceService} from './currentprice.service';
@@ -34,11 +36,15 @@ export class OrderbookComponent implements OnInit {
   public spread = '';
   private showSpread = false;
   public priceDecimal = '6';
+  public pricing: Pricing;
+  public pricingAvailable = false;
+  public pricingEnabled = false;
 
   constructor(
     private appService: AppService,
     private numberFormatPipe: NumberFormatPipe,
     private orderbookService: OrderbookService,
+    private pricingService: PricingService,
     // private tradehistoryService: TradehistoryService,
     // private currentpriceService: CurrentpriceService,
     private zone: NgZone
@@ -88,6 +94,18 @@ export class OrderbookComponent implements OnInit {
           this.priceDecimal = priceDecimal;
         });
       });
+
+    this.pricingService.getPricing().subscribe(pricing => {
+      zone.run(() => {
+        this.pricing = pricing;
+        this.pricingAvailable = pricing.enabled;
+      });
+    });
+    this.pricingService.getPricingEnabled().subscribe(enabled => {
+      zone.run(() => {
+        this.pricingEnabled = enabled;
+      });
+    });
 
     // this.currentpriceService.currentprice.subscribe((cp) => {
     //   zone.run(() => {

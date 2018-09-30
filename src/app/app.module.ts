@@ -63,6 +63,7 @@ import { TableRowDetailDirective } from './table/table-row-detail.directive';
 import { TableInfoDirective } from './table/table-info.directive';
 import { TableSectionDividerDirective } from './table/table-section-divider.directive';
 import { CardToolbarDirective } from './card/card-toolbar.directive';
+import { PricingService } from './pricing.service';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -134,6 +135,7 @@ const dev = environment.useMockAPI ? [
     CryptocurrencyService,
     TradehistoryService,
     BalancesService,
+    PricingService,
     {
       provide: PERFECT_SCROLLBAR_CONFIG,
       useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
