@@ -1,4 +1,7 @@
-<div>
+<div class="orderbook-container">
+
+  <div *ngIf="sections[0].rows.length === 0 && sections[1].rows.length === 0" class="no-open-orders-message">No open orders.</div>
+
   <app-table #orderbookTable
              [selectable]="true"
              [sections]="sections || [{}]"
@@ -56,7 +59,5 @@
     </app-table-column>
 
   </app-table>
-
-  <div *ngIf="sections[0].rows.length === 0 && sections[1].rows.length === 0" class="no-open-orders-message">No open orders.</div>
 
 </div>

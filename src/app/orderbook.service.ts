@@ -64,6 +64,14 @@ export class OrderbookService {
 
           window.electron.ipcRenderer.on('orderBook', (e, orderBook) => {
 
+            // Test Data Generator
+            // const getRandom = (min, max) => Math.random() * (max - min) + min;
+            // orderBook = {asks: [], bids: []};
+            // for(let i = 0; i < 30; i++) {
+            //   orderBook.asks.push([getRandom(1, 4), getRandom(1, 4), `ask${i}`]);
+            //   orderBook.bids.push([getRandom(1, 4), getRandom(1, 4), `bid${i}`]);
+            // }
+
             orderBook = Object.assign({}, orderBook, {
               asks: orderBook.asks.map(a => {
                 return [a.price, a.size, a.orderId];
