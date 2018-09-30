@@ -79,10 +79,10 @@ export class NavBarComponent implements OnInit {
         openExternal('https://twitter.com/The_Blocknet/');
         break;
       case 'faq':
-        openExternal('https://blocknetsupport.cayzu.com/KnowledgeBase/Folder/4472');
+        openExternal('https://www.blocknet.co/blockdx-faq/');
         break;
       case 'fees':
-        openExternal('https://docs.google.com/document/d/1FOtlZN9cITzRKIDSOaPuVRyB4-lVXVw4VUJjCuDSzYU/preview');
+        openExternal('https://www.blocknet.co/blockdx-fees/');
         break;
       case 'help':
         openExternal('https://sites.google.com/view/blocknet/blockdx');
