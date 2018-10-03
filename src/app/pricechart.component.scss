@@ -1,4 +1,12 @@
+@import '../styles/utils/variables';
+
 #tv_chart_container {
   position: relative;
   height: 100%;
+}
+.no-historical-data-message {
+  font-family: $roboto-mono;
+  padding-left:10px;
+  padding-top:10px;
+  font-size:12px;
 }
