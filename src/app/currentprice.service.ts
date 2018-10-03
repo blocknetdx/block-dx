@@ -69,8 +69,8 @@ export class CurrentpriceService {
             .map(d => Object.assign({}, d, {
               last: d.close
             }))
-            .map(d => Currentprice.fromObject(d))
-            .filter(d => d.high && d.low);
+            .map(d => Currentprice.fromObject(d));
+            // .filter(d => d.high && d.low);
 
           observer.next(preppedData);
         });
@@ -112,8 +112,8 @@ export class CurrentpriceService {
             .map(d => Object.assign({}, d, {
               last: d.close
             }))
-            .map(d => Currentprice.fromObject(d))
-            .filter(d => d.high && d.low);
+            .map(d => Currentprice.fromObject(d));
+            // .filter(d => d.high && d.low);
 
           observer.next(preppedData);
         });
@@ -155,8 +155,8 @@ export class CurrentpriceService {
             .map(d => Object.assign({}, d, {
               last: d.close
             }))
-            .map(d => Currentprice.fromObject(d))
-            .filter(d => d.high && d.low);
+            .map(d => Currentprice.fromObject(d));
+            // .filter(d => d.high && d.low);
 
           observer.next(preppedData);
         });

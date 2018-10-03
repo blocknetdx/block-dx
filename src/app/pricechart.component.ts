@@ -18,7 +18,7 @@ export class PricechartComponent implements AfterViewInit {
   public container: ElementRef;
 
   private widget: any;
-  private granularity = 1; // 1: minute, 2: 15 minutes, 3: 30 minutes
+  private granularity = 2; // 1: minute, 2: 15 minutes, 3: 30 minutes
   private chart: any;
   private model = { 1: [], 2: [], 3: [] };
 
@@ -47,7 +47,11 @@ export class PricechartComponent implements AfterViewInit {
     this.currentpriceService.getOrderHistoryBy15Minutes()
       .subscribe(items => {
         this.model['2'] = prepData(items);
-        if(this.granularity === 2) this.updatePriceChart();
+        if(!this.chart && items.length > 0) {
+          this.renderPriceChart();
+        } else if(this.chart && this.granularity === 2) {
+          this.updatePriceChart();
+        }
       });
 
     this.currentpriceService.getOrderHistoryBy30Minutes()
@@ -71,9 +75,9 @@ export class PricechartComponent implements AfterViewInit {
         'valueAxes': [{
           'position': 'left'
         }],
+        zoomOutOnDataUpdate: true,
         mouseWhellScrollEnabled: false,
-        mouseWheelZoomEnabled: true,
-        zoomOutOnDataUpdate: false,
+        mouseWheelZoomEnabled: false,
         parseDates: true,
         'graphs': [ {
           'id': 'g1',
@@ -92,14 +96,14 @@ export class PricechartComponent implements AfterViewInit {
           'type': 'candlestick',
           'valueField': 'close'
         } ],
-        'chartScrollbar': {
-          // dragIcon: 'dragIconRoundSmallBlack',
-          'graph': 'g1',
-          'graphType': 'line',
-          'scrollbarHeight': 30,
-          graphFillAlpha: .1,
-          selectedGraphFillAlpha: .1
-        },
+        // 'chartScrollbar': {
+        //   // dragIcon: 'dragIconRoundSmallBlack',
+        //   'graph': 'g1',
+        //   'graphType': 'line',
+        //   'scrollbarHeight': 30,
+        //   graphFillAlpha: .1,
+        //   selectedGraphFillAlpha: .1
+        // },
         'chartCursor': {
           'valueLineEnabled': true,
           'valueLineBalloonEnabled': true
@@ -127,49 +131,49 @@ export class PricechartComponent implements AfterViewInit {
 
       this.chart = chart;
 
-      chart.addListener( 'rendered', () => {
-        zoomChart();
-      });
+      // chart.addListener( 'rendered', () => {
+      //   zoomChart();
+      // });
 
       setTimeout(() => {
 
-        chart.addListener('zoomed', e => {
-
-          if ( chart.ignoreZoomEvent ) {
-            chart.ignoreZoomEvent = false;
-            return;
-          }
-
-          const { startDate, endDate } = e;
-          const diff = endDate.getTime() - startDate.getTime();
-          const { granularity } = this;
-          console.log(granularity);
-          console.log((diff / 60000).toFixed(0));
-          let minPeriod;
-          if(diff < 7200000) {
-            this.granularity = 1;
-            minPeriod = 'mm';
-          } else if(diff < 72000000) {
-            this.granularity = 2;
-            minPeriod = '15mm';
-          } else { // >= 72000000
-            this.granularity = 3;
-            minPeriod = '30mm';
-          }
-
-          chart.ignoreZoomEvent = true;
-          chart.categoryAxis.minPeriod = minPeriod;
-          chart.lastZoomEvent = event;
-
-          this.updatePriceChart();
-
-        });
-        chart.addListener('dataUpdated', e => {
-          if ( chart.lastZoomEvent !== undefined ) {
-            chart.ignoreZoomEvent = true;
-            chart.zoomToDates( chart.lastZoomEvent.startDate, chart.lastZoomEvent.endDate );
-          }
-        });
+        // chart.addListener('zoomed', e => {
+        //
+        //   if ( chart.ignoreZoomEvent ) {
+        //     chart.ignoreZoomEvent = false;
+        //     return;
+        //   }
+        //
+        //   const { startDate, endDate } = e;
+        //   const diff = endDate.getTime() - startDate.getTime();
+        //   const { granularity } = this;
+        //   console.log(granularity);
+        //   console.log((diff / 60000).toFixed(0));
+        //   let minPeriod;
+        //   if(diff < 7200000) {
+        //     this.granularity = 1;
+        //     minPeriod = 'mm';
+        //   } else if(diff < 72000000) {
+        //     this.granularity = 2;
+        //     minPeriod = '15mm';
+        //   } else { // >= 72000000
+        //     this.granularity = 3;
+        //     minPeriod = '30mm';
+        //   }
+        //
+        //   chart.ignoreZoomEvent = true;
+        //   chart.categoryAxis.minPeriod = minPeriod;
+        //   chart.lastZoomEvent = event;
+        //
+        //   this.updatePriceChart();
+        //
+        // });
+        // chart.addListener('dataUpdated', e => {
+        //   if ( chart.lastZoomEvent !== undefined ) {
+        //     chart.ignoreZoomEvent = true;
+        //     chart.zoomToDates( chart.lastZoomEvent.startDate, chart.lastZoomEvent.endDate );
+        //   }
+        // });
 
       }, 100);
 

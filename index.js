@@ -481,6 +481,7 @@ const openAppWindow = () => {
         if(res.id) { // success
           appWindow.send('orderDone', 'success');
           sendOrderBook();
+          sendOrderHistory();
         } else {
           appWindow.send('orderDone', 'failed');
         }
@@ -554,7 +555,9 @@ const openAppWindow = () => {
   ipcMain.on('getMyOrders', () => sendMyOrders(true));
   setInterval(sendMyOrders, stdInterval);
 
-  let orderHistory = [];
+  let orderHistoryByMinute = [];
+  let orderHistoryByFifteenMinutes = [];
+  let orderHistoryByThirtyMinutes = [];
   const sendOrderHistory = force => {
     const end = moment();
     {
@@ -562,10 +565,10 @@ const openAppWindow = () => {
         .subtract(1, 'd');
       sn.dxGetOrderHistory(keyPair[0], keyPair[1], start.valueOf(), end.valueOf(), 60)
         .then(res => {
-          if(force === true || JSON.stringify(res) !== JSON.stringify(orderHistory)) {
-            orderHistory = res;
-            appWindow.send('orderHistory', orderHistory);
-            appWindow.send('orderHistoryByMinute', orderHistory);
+          if(force === true || JSON.stringify(res) !== JSON.stringify(orderHistoryByMinute)) {
+            orderHistoryByMinute = res;
+            appWindow.send('orderHistory', orderHistoryByMinute);
+            appWindow.send('orderHistoryByMinute', orderHistoryByMinute);
           }
         })
         .catch(handleError);
@@ -575,9 +578,9 @@ const openAppWindow = () => {
         .subtract(1, 'd');
       sn.dxGetOrderHistory(keyPair[0], keyPair[1], start.valueOf(), end.valueOf(), 900)
         .then(res => {
-          if(force === true || JSON.stringify(res) !== JSON.stringify(orderHistory)) {
-            orderHistory = res;
-            appWindow.send('orderHistoryBy15Minutes', orderHistory);
+          if(force === true || JSON.stringify(res) !== JSON.stringify(orderHistoryByFifteenMinutes)) {
+            orderHistoryByFifteenMinutes = res;
+            appWindow.send('orderHistoryBy15Minutes', orderHistoryByFifteenMinutes);
           }
         })
         .catch(handleError);
@@ -587,9 +590,9 @@ const openAppWindow = () => {
         .subtract(1, 'd');
       sn.dxGetOrderHistory(keyPair[0], keyPair[1], start.valueOf(), end.valueOf(), 1800)
         .then(res => {
-          if(force === true || JSON.stringify(res) !== JSON.stringify(orderHistory)) {
-            orderHistory = res;
-            appWindow.send('orderHistoryBy30Minutes', orderHistory);
+          if(force === true || JSON.stringify(res) !== JSON.stringify(orderHistoryByThirtyMinutes)) {
+            orderHistoryByThirtyMinutes = res;
+            appWindow.send('orderHistoryBy30Minutes', orderHistoryByThirtyMinutes);
           }
         })
         .catch(handleError);
@@ -599,6 +602,8 @@ const openAppWindow = () => {
   ipcMain.on('getOrderHistoryByMinute', () => sendOrderHistory(true));
   // ipcMain.on('getOrderHistoryBy15Minutes', () => sendOrderHistory(true));
   // ipcMain.on('getOrderHistoryBy30Minutes', () => sendOrderHistory(true));
+
+  setInterval(sendOrderHistory, stdInterval);
 
   let currentPrice = {};
   const sendCurrentPrice = force => {
