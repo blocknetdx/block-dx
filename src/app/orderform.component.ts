@@ -237,11 +237,20 @@ export class OrderformComponent implements OnInit {
   makerAddressChanged(e) {
     e.preventDefault();
     this.model.makerAddress = e.target.value;
+    this.updateStoredAddresses(this.model.makerAddress.trim(), null);
   }
 
   takerAddressChanged(e) {
     e.preventDefault();
     this.model.takerAddress = e.target.value;
+    this.updateStoredAddresses(null, this.model.takerAddress.trim());
+  }
+
+  updateStoredAddresses(makerAddress, takerAddress) {
+    this.addresses = Object.assign({}, this.addresses, {
+      [this.symbols[0]]: makerAddress ? makerAddress : this.model.makerAddress.trim(),
+      [this.symbols[1]]: takerAddress ? takerAddress : this.model.takerAddress.trim()
+    });
   }
 
   onNumberInputBlur(e, field) {
@@ -325,10 +334,7 @@ export class OrderformComponent implements OnInit {
       !this.validateNumber(totalPrice)
     ) return;
 
-    this.addresses = Object.assign({}, this.addresses, {
-      [this.symbols[0]]: makerAddress,
-      [this.symbols[1]]: takerAddress
-    });
+    this.updateStoredAddresses(makerAddress, takerAddress);
 
     ipcRenderer.once('orderDone', (e, state) => {
       this.zone.run(() => {
