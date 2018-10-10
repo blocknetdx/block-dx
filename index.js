@@ -1007,8 +1007,8 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
 
 // check for version number. Minimum supported blocknet client version
 function versionCheck(version) {
-  if (version < 3090400) {
-    return {name: 'Unsupported Version', message: 'BLOCK DX requires Blocknet wallet version 3.9.04 or greater.'};
+  if (version < 3100500) {
+    return {name: 'Unsupported Version', message: 'BLOCK DX requires Blocknet wallet version 3.10.5 or greater.'};
   }
   return null;
 }
