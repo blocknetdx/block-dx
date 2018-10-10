@@ -8,6 +8,7 @@ export class TabDirective {
   content: TemplateRef<any>;
 
   @Input() public label: string;
+  @Input() public barColor: string;
 
   constructor() {}
 }
