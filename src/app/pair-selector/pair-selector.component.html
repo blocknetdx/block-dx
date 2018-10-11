@@ -65,8 +65,8 @@
         <ng-template #tableInfo>
           <div class="row first-coin-info">
             <div class="col-4 align-left uppercase"><b>{{formatRow(model.coinA)}}</b></div>
-            <div class="col-3"><b>{{model.coinA.last}}</b></div>
-            <div class="col-5">
+            <div class="col-4"><b>{{model.coinA.last}}</b></div>
+            <div class="col-4">
               <span [class.color-red]="model.coinA.change < 0" [class.color-green]="model.coinA.change > 0">{{model.coinA.change | percent:'1.2-2'}}</span>
               <img *ngIf="model.coinA.change > 0" class="my-icon" aria-label="My icon" src="assets/icons/arrow-diagonal-up.svg">
               <img *ngIf="model.coinA.change < 0" class="my-icon" aria-label="My icon" src="assets/icons/arrow-diagonal-down.svg">
@@ -76,7 +76,7 @@
         </ng-template>
       </bn-table-info>
 
-      <app-table-column [prop]="'symbol'" [classList]="'col-2 align-left'">
+      <app-table-column [prop]="'symbol'" [classList]="'col-3 align-left'">
         <ng-template columnHeader>Coin</ng-template>
         <ng-template let-row="row" columnCell>
           <span class="coin-cell">
@@ -92,14 +92,14 @@
         </ng-template>
       </app-table-column>
 
-      <app-table-column [prop]="'last'" [classList]="'col-5 col-md-3'">
+      <app-table-column [prop]="'last'" [classList]="'col-2 col-md-3'">
         <ng-template columnHeader>Last Price</ng-template>
         <ng-template let-row="row" columnCell>
           <span>{{row.last}}</span>
         </ng-template>
       </app-table-column>
 
-      <app-table-column [prop]="'volume'" [classList]="'col-3 d-none d-md-block'">
+      <app-table-column [prop]="'volume'" [classList]="'col-2 d-none d-md-block'">
         <ng-template columnHeader>Volume</ng-template>
         <ng-template let-row="row" columnCell>
           <span>{{row.volume}}</span>
