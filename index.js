@@ -501,14 +501,15 @@ const openAppWindow = () => {
     asks: []
   };
   const sendOrderBook = force => {
-    sn.dxGetOrderBook3(keyPair[0], keyPair[1])
-      .then(res => {
-        if(force === true || JSON.stringify(res) !== JSON.stringify(orderBook)) {
-          orderBook = res;
-          appWindow.send('orderBook', orderBook);
-        }
-      })
-      .catch(handleError);
+    if (keyPair && keyPair.length === 2 && keyPair[0] !== '' && keyPair[1] !== '')
+      sn.dxGetOrderBook3(keyPair[0], keyPair[1])
+        .then(res => {
+          if(force === true || JSON.stringify(res) !== JSON.stringify(orderBook)) {
+            orderBook = res;
+            appWindow.send('orderBook', orderBook);
+          }
+        })
+        .catch(handleError);
   };
   ipcMain.on('getOrderBook', () => sendOrderBook(true));
   setInterval(sendOrderBook, stdInterval);
