@@ -150,7 +150,7 @@ export class TableComponent {
       }
       this.sections = this.sections.map((sec) => {
         const arr = [...sec.rows];
-        arr.sort((a, b) => a[column.prop].localeCompare(b[column.prop]);
+        arr.sort((a, b) => a[column.prop].localeCompare(b[column.prop]));
         if (column.desc) {
           arr.reverse();
         }
