@@ -49,15 +49,13 @@ export class PairSelectorComponent implements OnInit, AfterViewInit {
       case 'stage1' :
         arr = [
           {title: 'My Wallet', rows: this._userWallet},
-          // TODO enable when network tokens api is ready
-          // {title: 'All Coins', rows: this._allCoins}
+          {title: 'All Coins', rows: PairSelectorComponent.uniqueCoinsNotIn(this._allCoins, this._userWallet)}
         ];
         break;
       case 'stage2' :
       case 'stage3' :
         arr = [{
-          rows: this._allCoins
-            .filter(c => c.symbol !== this.model.coinA.symbol)
+          rows: PairSelectorComponent.uniqueCoins(this._allCoins.filter(c => c.symbol !== this.model.coinA.symbol))
         }];
         break;
     }
@@ -96,6 +94,47 @@ export class PairSelectorComponent implements OnInit, AfterViewInit {
       this.resetModel('coinA');
     }
     this.onActiveStatus.emit(val);
+  }
+
+  /**
+   * All unique coins (prefer local).
+   * @param coins
+   */
+  private static uniqueCoins(coins: any[]): any[] {
+    const hash = {};
+    coins.forEach(coin => {
+      if (hash[coin.symbol] && !coin.local)
+        return;
+      hash[coin.symbol] = coin;
+    });
+    const arr = [];
+    Object.keys(hash).forEach(key => {
+      arr.push(hash[key]);
+    });
+    return arr;
+  }
+
+  /**
+   * All unique coins not in the specified collection. (prefer local)
+   * @param coins
+   * @param notIn
+   */
+  private static uniqueCoinsNotIn(coins: any[], notIn: any[]): any[] {
+    const hashNotIn = {};
+    notIn.forEach(coin => {
+      hashNotIn[coin.symbol] = coin;
+    });
+    const hash = {};
+    coins.forEach(coin => {
+      if ((hash[coin.symbol] && !coin.local) && !hashNotIn[coin.symbol])
+        return;
+      hash[coin.symbol] = coin;
+    });
+    const arr = [];
+    Object.keys(hash).forEach(key => {
+      arr.push(hash[key]);
+    });
+    return arr;
   }
 
   constructor(
@@ -195,7 +234,8 @@ export class PairSelectorComponent implements OnInit, AfterViewInit {
   }
 
   currencyComparisons(symbol) {
-    return this._allCoins.filter(coin => coin.symbol !== symbol);
+    return PairSelectorComponent.uniqueCoinsNotIn(this._allCoins
+      .filter(coin => coin.symbol !== symbol), this._userWallet);
   }
 
   formatRow(row) {

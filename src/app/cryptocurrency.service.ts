@@ -73,7 +73,7 @@ export class CryptocurrencyService {
   }
 
   /**
-   * Returns local tokens.
+   * Returns All tokens both local and network.
    * @returns {Observable<Cryptocurrency[]>}
    */
   public getTokens(): Observable<Cryptocurrency[]> {
@@ -81,8 +81,18 @@ export class CryptocurrencyService {
     if (!this.tokensObservable) {
       this.tokensObservable = Observable.create(observer => {
         try {
+          let localTokens = null;
+          let networkTokens = null;
+          const checkDone = () => {
+            if (!localTokens || !networkTokens)
+              return;
+            const tokens = localTokens.concat(networkTokens)
+              .sort((a, b) => a.symbol.localeCompare(b.symbol));
+            observer.next(tokens);
+          };
+
           ipcRenderer.on('localTokens', (e, tokens) => {
-            const preppedTokens = tokens
+            localTokens = tokens
               .map(token => {
                 const preppedToken = Cryptocurrency.fromObject({
                   symbol: token,
@@ -92,11 +102,27 @@ export class CryptocurrencyService {
                   local: true
                 });
                 return preppedToken;
-              })
-              .sort((a, b) => a.symbol.localeCompare(b.symbol));
-            observer.next(preppedTokens);
+              });
+            checkDone();
           });
+
+          ipcRenderer.on('networkTokens', (e, tokens) => {
+            networkTokens = tokens
+              .map(token => {
+                const preppedToken = Cryptocurrency.fromObject({
+                  symbol: token,
+                  name: token,
+                  last: 0,
+                  change: 0,
+                  local: false
+                });
+                return preppedToken;
+              });
+            checkDone();
+          });
+
           ipcRenderer.send('getLocalTokens');
+          ipcRenderer.send('getNetworkTokens');
         } catch(err) {
           console.error(err);
         }
