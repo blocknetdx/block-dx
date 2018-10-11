@@ -77,7 +77,7 @@
       </bn-table-info>
 
       <app-table-column [prop]="'symbol'" [classList]="'col-3 align-left'">
-        <ng-template columnHeader>Coin</ng-template>
+        <ng-template columnHeader>Asset</ng-template>
         <ng-template let-row="row" columnCell>
           <span class="coin-cell">
             <b><span *ngIf="coinAValid">{{model.coinA.symbol}}/</span>{{row.symbol}}</b>

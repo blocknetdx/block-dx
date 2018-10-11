@@ -11,7 +11,7 @@ import {NumberFormatPipe} from './pipes/decimal.pipe';
 })
 export class BalancesComponent implements OnInit {
 
-  public title = 'My Balances';
+  public title = 'Wallets';
   public sections: {rows: Balance[]}[] = [];
 
   constructor(
