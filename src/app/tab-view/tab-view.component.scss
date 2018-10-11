@@ -47,7 +47,7 @@ a.tab {
   position: absolute;
   bottom: 0;
   left: 0;
-  transition: left 0.26s ease-in-out, width 0.26s ease-in-out;
+  transition: left 0.26s ease-in-out, width 0.26s ease-in-out, background 0.26s ease-in-out;
 }
 
 .tab-view__body {

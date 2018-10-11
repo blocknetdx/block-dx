@@ -1,10 +1,10 @@
 <app-bn-tab-view #tabView>
-  <bn-tab label="Buy">
+  <bn-tab label="{{'Buy ' + symbols[0] }}" barColor="#4BF5C6">
     <ng-template #content>
       <ng-container *ngTemplateOutlet="formTemplate; context: {type: 'buy'}"></ng-container>
     </ng-template>
   </bn-tab>
-  <bn-tab label="Sell">
+  <bn-tab label="{{'Sell ' + symbols[0]}}" barColor="#FB7F70">
     <ng-template #content>
       <ng-container *ngTemplateOutlet="formTemplate; context: {type: 'sell'}"></ng-container>
     </ng-template>
@@ -94,7 +94,7 @@
       <label class="col-4 col-form-label" for="total_calc">Total</label>
       <div class="col-8">
         <input #totalInput
-          class="form-control"
+          class="form-control order-form-total-input"
           name="total" id="total_calc" type="text"
           step="0.000001" pattern="\d+" inputmode="numeric"
           placeholder="{{formatNumber('0',symbols[1])}}"
@@ -155,17 +155,19 @@
       <button
         *ngIf="type == 'buy'"
         type="submit"
+        class="order-form-button order-form-buy-button"
         [disabled]="(disableSubmit) ? true : (model.amount && Number(model.amount) !== NaN && Number(model.amount !== 0) && model.totalPrice && Number(model.totalPrice) !== Nan && Number(model.totalPrice) !== 0 && model.makerAddress && model.takerAddress) ? false : true">
         <i class="material-icons">add</i>
-        {{model.id ? 'Accept' : 'Make'}} Order
+        {{model.id ? 'Accept' : 'Place'}} Buy Order
       </button>
 
       <button
         *ngIf="type == 'sell'"
         type="submit"
+        class="order-form-button order-form-sell-button"
         [disabled]="(disableSubmit) ? true : (model.amount && Number(model.amount) !== NaN && Number(model.amount !== 0) && model.totalPrice && Number(model.totalPrice) !== Nan && Number(model.totalPrice) !== 0 && model.makerAddress && model.takerAddress) ? false : true">
         <i class="material-icons">remove</i>
-        {{model.id ? 'Accept' : 'Make'}} Order
+        {{model.id ? 'Accept' : 'Place'}} Sell Order
       </button>
 
     </div>
