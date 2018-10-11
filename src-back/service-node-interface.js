@@ -503,7 +503,8 @@ class ServiceNodeInterface {
         Math.floor(startTime/1000), // convert to unix time seconds
         Math.floor(endTime/1000), // convert to unix time seconds
         granularity,
-        orderIds
+        orderIds,
+        true
       ]
     });
     if(error) throw new Error(error);
