@@ -97,6 +97,12 @@
       opacity: .8;
       cursor: default;
     }
+    .version {
+      font-size: 14px;
+      color: #fff;
+      text-align: right;
+      justify-content: flex-end;
+    }
 
   </style>
 
@@ -106,7 +112,7 @@
   <div style="width:100%; padding: 20px 0 20px 0; text-align:center;"><img style="max-width:300px;" src="assets/logo_full.svg" alt="Blocknet Logo"></div>
   <h3>SETTINGS</h3>
   <form class="container">
-    <div class="label">In order to conduct peer-to-peer trades BLOCK DX requires RPC access to The Blocknet blockchain. BLOCK DX requires Blocknet wallet version 3.9.04 or greater.</div>
+    <div class="label">In order to conduct peer-to-peer trades, Block DX requires RPC access to the Blocknet wallet. Block DX requires the latest Blocknet wallet version.</div>
 
     <div class="input-group">
       <label>Blocknet RPC Port</label>
@@ -123,7 +129,13 @@
       <input type="password" id="js-password" />
     </div>
 
-    <button type="submit">SAVE CHANGES</button>
+    <div class="input-group">
+      <button type="submit">SAVE CHANGES</button>
+    </div>
+
+    <div class="input-group version">
+      <span id="js-versionSpan"></span>
+    </div>
 
   </form>
 
@@ -145,6 +157,7 @@
 
       const port = ipcRenderer.sendSync('getPort');
       const user = ipcRenderer.sendSync('getUser');
+      const version = ipcRenderer.sendSync('getAppVersion');
 
       console.log(port);
       console.log(user);
@@ -155,6 +168,7 @@
 
       $port.val(port);
       $user.val(user);
+      $('#js-versionSpan').text(`BLOCK DX v${version}`);
 
       if(!port) {
         $port[0].focus();

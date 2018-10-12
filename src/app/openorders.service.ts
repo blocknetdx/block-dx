@@ -41,6 +41,35 @@ export class OpenordersService {
           window.electron.ipcRenderer.on('myOrders', (e, orders, symbols) => {
             // console.log('myOrders', orders);
             const firstPair = symbols[0];
+
+            // Test Data Generator
+            // const getRandom = (min, max) => Math.random() * (max - min) + min;
+            // const newOrders = [];
+            // for(let i = 0; i < 30; i++) {
+            //   const price = getRandom(1, 4);
+            //   const size = getRandom(1, 4);
+            //   const status = i % 2 === 0 ? 'open' : 'finished';
+            //   newOrders.push(Openorder.createOpenOrder({
+            //       id: `order${i}`,
+            //       price,
+            //       size,
+            //       total: String(math.multiply(price, Number(size))),
+            //       product_id: '',
+            //       side: i % 2 === 0 ? 'sell' : 'buy',
+            //       stp: '',
+            //       type: 'exact',
+            //       time_in_force: '',
+            //       post_only: '',
+            //       created_at: new Date().toISOString(),
+            //       fill_fees: '',
+            //       filledSize: '',
+            //       executed_value: '',
+            //       status,
+            //       settled: status === 'finished',
+            //       canceled: false
+            //     }));
+            // }
+
             const newOrders = orders
               .map(order => {
 

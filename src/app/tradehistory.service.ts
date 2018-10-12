@@ -26,6 +26,38 @@ export class TradehistoryService {
     // this.tradehistoryUrl = 'api/tradehistory_' + symbols.join('_');
 
     return rx.Observable.create(observer => {
+
+      // Test Data Generator
+      // try {
+      //   const getRandom = (min, max) => Math.random() * (max - min) + min;
+      //   let p = [];
+      //   for (let i = 0; i < 30; i++) {
+      //     p.push({
+      //       time: new Date().toISOString(),
+      //       trade_id: `trade${i}`,
+      //       price: getRandom(1, 4),
+      //       size: getRandom(1, 4),
+      //       side: i % 2 === 0 ? 'buy' : 'sell'
+      //     });
+      //   }
+      //   p = p.map(t => Trade.fromObject(t));
+      //   const totalTradeSize = p.reduce((acc, curr) => {
+      //     // return acc + parseFloat(curr.size);
+      //     return math.add(acc, parseFloat(curr.size));
+      //   }, 0);
+      //   for (const trade of p) {
+      //     // trade.percent = (parseFloat(trade.size) / totalTradeSize) * 100;
+      //     trade.percent = math
+      //       .chain(parseFloat(trade.size))
+      //       .divide(totalTradeSize)
+      //       .multiply(100)
+      //       .done();
+      //   }
+      //   observer.next(p);
+      // } catch(err) {
+      //   console.error(err);
+      // }
+
       try {
 
         electron.ipcRenderer.on('tradeHistory', (e, tradeHistory, keyPair) => {
@@ -70,6 +102,7 @@ export class TradehistoryService {
       } catch(err) {
         console.error(err);
       }
+
     });
 
     // return this.http.get(this.tradehistoryUrl)

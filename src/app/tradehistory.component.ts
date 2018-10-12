@@ -3,6 +3,8 @@ import { Component, OnInit, Input, NgZone } from '@angular/core';
 import { AppService } from './app.service';
 import { Trade } from './trade';
 import { TradehistoryService } from './tradehistory.service';
+import { PricingService } from './pricing.service';
+import { Pricing } from './pricing';
 
 @Component({
   selector: 'app-tradehistory',
@@ -14,10 +16,14 @@ export class TradehistoryComponent implements OnInit {
   public tradehistory: Trade[];
 
   public symbols:string[] = [];
+  public pricing: Pricing;
+  public pricingEnabled = false;
+  public pricingAvailable = false;
 
   constructor(
     private appService: AppService,
     private tradehistoryService: TradehistoryService,
+    private pricingService: PricingService,
     private zone: NgZone
   ) {}
 
@@ -48,5 +54,17 @@ export class TradehistoryComponent implements OnInit {
           this.tradehistory = tradehistory;
         });
       });
+
+    this.pricingService.getPricing().subscribe(pricing => {
+      zone.run(() => {
+        this.pricing = pricing;
+        this.pricingAvailable = pricing.enabled;
+      });
+    });
+    this.pricingService.getPricingEnabled().subscribe(enabled => {
+      zone.run(() => {
+        this.pricingEnabled = enabled;
+      });
+    });
   }
 }

@@ -20,7 +20,7 @@ import { TableSectionDividerDirective } from './table-section-divider.directive'
       (keydown.ArrowDown)="focusNextRow($event)">
       <div class="bn-table__header">
         <div (click)="sort(col)"
-          [class]="col.classList"
+          [class]="col.classList + ' no-highlight'"
           [class.sortable]="col.sortable"
           [class.active]="col.active"
           [class.sort-up]="col.active && !col.desc"
@@ -149,8 +149,8 @@ export class TableComponent {
         column.desc = !column.desc;
       }
       this.sections = this.sections.map((sec) => {
-        let arr = [...sec.rows];
-        naturalSort(arr, column.prop);
+        const arr = [...sec.rows];
+        arr.sort((a, b) => a[column.prop].localeCompare(b[column.prop]));
         if (column.desc) {
           arr.reverse();
         }

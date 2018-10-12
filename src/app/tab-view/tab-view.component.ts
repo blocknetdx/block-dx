@@ -8,6 +8,7 @@ import { TabDirective } from './tab.directive';
   template: `
     <div #buttonContainer class="tabs">
       <a class="tab" #button *ngFor="let tab of tabs; let i = index"
+        [style.color]="(activeTab === tab && tab.barColor) ? tab.barColor : ''"
         (click)="activeTab = tab"
         [class.active]="activeTab === tab">
         {{tab.label}}
@@ -68,10 +69,15 @@ export class TabViewComponent implements AfterContentInit {
     const rect = this.buttons.toArray()[this.activeIndex].nativeElement.getBoundingClientRect();
     const parentRect = this.buttonContainer.nativeElement.getBoundingClientRect();
 
-    return {
+    const newStyles: any = {
       'width': `${Math.ceil(rect.width)}px`,
       'left': `${Math.floor(rect.left - parentRect.left)}px`
     };
+
+    const barColor = this.tabs[this.activeIndex].barColor;
+    if(barColor) newStyles.background = barColor;
+
+    return newStyles;
   }
 
 }

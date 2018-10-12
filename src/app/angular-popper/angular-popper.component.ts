@@ -59,9 +59,9 @@ export class PopperComponent implements AfterViewInit, OnChanges, OnDestroy {
         {
           placement: this.placement,
           modifiers: {
-            flip: {
-              enabled: false
-            }
+            // flip: {
+            //   enabled: false
+            // }
           }
         });
     });
@@ -78,6 +78,7 @@ export class PopperComponent implements AfterViewInit, OnChanges, OnDestroy {
   }
 
   private getTargetNode(): Element {
+    console.log(this.target);
     if (this.target) {
       if (typeof this.target === 'string') {
         return document.querySelector(this.target);

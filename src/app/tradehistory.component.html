@@ -1,5 +1,5 @@
 <app-table [rows]="tradehistory">
-  <app-table-column [sortable]="false" [classList]="'col-3'">
+  <app-table-column [sortable]="false" [classList]="'col'">
     <ng-template columnHeader>Size ({{symbols[0]}})</ng-template>
     <ng-template let-row="row" columnCell>
       <!--<div class="percentBar {{row.percentbarClasses}}" [style.width]="row.percent + '%'"></div>-->
@@ -7,8 +7,18 @@
     </ng-template>
   </app-table-column>
 
-  <app-table-column [sortable]="false" [classList]="'col-4'">
-    <ng-template columnHeader>Price ({{symbols[1]}})</ng-template>
+  <app-table-column *ngIf="pricingEnabled" [sortable]="false" [classList]="'col'">
+    <ng-template columnHeader>Price ({{pricing ? pricing.in : ''}})</ng-template>
+    <ng-template let-row="row" columnCell>
+      <span>
+        <span *ngIf="!pricingAvailable" class="bn-number">N/A</span>
+        <span *ngIf="pricingAvailable" class="bn-number" [innerHtml]="pricing.getPrice(row.price, symbols[1]) | blockCurrency:symbols[1]"></span>
+      </span>
+    </ng-template>
+  </app-table-column>
+
+  <app-table-column [sortable]="false" [classList]="'col'">
+    <ng-template columnHeader>Size ({{symbols[1]}})</ng-template>
     <ng-template let-row="row" columnCell>
 
       <span>
@@ -24,7 +34,7 @@
     </ng-template>
   </app-table-column>
 
-  <app-table-column [sortable]="false" [classList]="'col-5'">
+  <app-table-column [sortable]="false" [classList]="'col'">
     <ng-template columnHeader>Time</ng-template>
     <ng-template let-row="row" columnCell>
       <span>{{row.time | date:'HH:mm:ss:SSS' }}</span>

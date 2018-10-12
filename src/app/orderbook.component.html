@@ -1,45 +1,63 @@
-<app-table #orderbookTable
-  [selectable]="true"
-  [sections]="sections"
-  (onRowSelect)="onRowSelect($event)">
+<div class="orderbook-container">
 
-  <bn-table-section-divider>
-    <ng-template #sectionDivider>
-      <div class="divider" *ngIf="showSpread">
-        <span [innerHtml]="spread | blockCurrency:symbols[1]:priceDecimal"></span>
-      </div>
-    </ng-template>
-  </bn-table-section-divider>
+  <div *ngIf="sections[0].rows.length === 0 && sections[1].rows.length === 0" class="no-open-orders-message">No open orders.</div>
 
-  <app-table-column [sortable]="false" [classList]="'col-4'">
-    <ng-template columnHeader>Total ({{symbols[1]}})</ng-template>
-    <ng-template let-row="row" columnCell>
-      <div class="percentBar asks bg-red"
-        [class.bg-red]="row[4] == 'ask'"
-        [class.bg-green]="row[4] == 'bid'"
-        [ngStyle]="{'width.%': row[3]}"></div>
-      <span>
+  <app-table #orderbookTable
+             [selectable]="true"
+             [sections]="sections || [{}]"
+             (onRowSelect)="onRowSelect($event)">
+
+    <bn-table-section-divider>
+      <ng-template #sectionDivider>
+        <div class="divider" *ngIf="showSpread">
+          <span [innerHtml]="spread | blockCurrency:symbols[1]:priceDecimal"></span>
+        </div>
+      </ng-template>
+    </bn-table-section-divider>
+
+    <app-table-column [sortable]="false" [classList]="'col'" *ngIf="sections && sections.length > 0">
+      <ng-template columnHeader>Total ({{symbols[1]}})</ng-template>
+      <ng-template let-row="row" columnCell>
+        <div class="percentBar asks bg-red"
+             [class.bg-red]="row[4] == 'ask'"
+             [class.bg-green]="row[4] == 'bid'"
+             [ngStyle]="{'width.%': row[3]}"></div>
+        <span>
         <span class="bn-number" [innerHtml]="calculateTotal(row) | blockCurrency:symbols[1]:'6'"></span>
       </span>
-    </ng-template>
-  </app-table-column>
+      </ng-template>
+    </app-table-column>
 
-  <app-table-column [sortable]="false" [classList]="'col-4'">
-    <ng-template columnHeader>Size ({{symbols[0]}})</ng-template>
-    <ng-template let-row="row" columnCell>
-      <span class="bn-number" [innerHtml]="row[1] | blockCurrency:symbols[0]:'6'"></span>
-    </ng-template>
-  </app-table-column>
+    <app-table-column [sortable]="false" [classList]="'col'" *ngIf="sections && sections.length > 0">
+      <ng-template columnHeader>Size ({{symbols[0]}})</ng-template>
+      <ng-template let-row="row" columnCell>
+        <span class="bn-number" [innerHtml]="row[1] | blockCurrency:symbols[0]:'6'"></span>
+      </ng-template>
+    </app-table-column>
 
-  <app-table-column [sortable]="false" [classList]="'col-4'">
-    <ng-template columnHeader>Price ({{symbols[1]}})</ng-template>
-    <ng-template let-row="row" columnCell>
+    <app-table-column [sortable]="false" [classList]="'col'" *ngIf="sections && sections.length > 0 && pricingEnabled">
+      <ng-template columnHeader>Price ({{pricing ? pricing.in : ''}})</ng-template>
+      <ng-template let-row="row" columnCell>
+      <span
+        [class.color-red]="row[4] == 'ask'"
+        [class.color-green]="row[4] == 'bid'">
+        <span *ngIf="!pricingAvailable" class="bn-number">N/A</span>
+        <span *ngIf="pricingAvailable" class="bn-number" [innerHtml]="pricing.getPrice(row[0], symbols[1]) | blockCurrency:symbols[1]:priceDecimal"></span>
+      </span>
+      </ng-template>
+    </app-table-column>
+
+    <app-table-column [sortable]="false" [classList]="'col'" *ngIf="sections && sections.length > 0">
+      <ng-template columnHeader>Price ({{symbols[1]}})</ng-template>
+      <ng-template let-row="row" columnCell>
       <span
         [class.color-red]="row[4] == 'ask'"
         [class.color-green]="row[4] == 'bid'">
         <span class="bn-number" [innerHtml]="row[0] | blockCurrency:symbols[1]:priceDecimal"></span>
       </span>
-    </ng-template>
-  </app-table-column>
+      </ng-template>
+    </app-table-column>
 
-</app-table>
+  </app-table>
+
+</div>

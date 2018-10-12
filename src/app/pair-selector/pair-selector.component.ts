@@ -40,8 +40,8 @@ export class PairSelectorComponent implements OnInit, AfterViewInit {
   public coinASuggest: string;
   public coinBSuggest: string;
 
-  private coinAValid = false;
-  private coinBValid = false;
+  public coinAValid = false;
+  public coinBValid = false;
 
   public get sections(): any[] {
     let arr;
@@ -49,14 +49,13 @@ export class PairSelectorComponent implements OnInit, AfterViewInit {
       case 'stage1' :
         arr = [
           {title: 'My Wallet', rows: this._userWallet},
-          {title: 'All Coins', rows: this._allCoins}
+          {title: 'All Coins', rows: PairSelectorComponent.uniqueCoinsNotIn(this._allCoins, this._userWallet)}
         ];
         break;
       case 'stage2' :
       case 'stage3' :
         arr = [{
-          rows: this._allCoins
-            .filter(c => c.symbol !== this.model.coinA.symbol)
+          rows: PairSelectorComponent.uniqueCoins(this._allCoins.filter(c => c.symbol !== this.model.coinA.symbol))
         }];
         break;
     }
@@ -84,7 +83,7 @@ export class PairSelectorComponent implements OnInit, AfterViewInit {
     this.model = {};
     if (val) {
       setTimeout(() => {
-        this.pairTable.sort(this.pairTable.columns[3]);
+        // this.pairTable.sort(this.pairTable.columns[3]);
         this.inputs.first.nativeElement.focus();
       }, 0);
     } else {
@@ -95,6 +94,47 @@ export class PairSelectorComponent implements OnInit, AfterViewInit {
       this.resetModel('coinA');
     }
     this.onActiveStatus.emit(val);
+  }
+
+  /**
+   * All unique coins (prefer local).
+   * @param coins
+   */
+  private static uniqueCoins(coins: any[]): any[] {
+    const hash = {};
+    coins.forEach(coin => {
+      if (hash[coin.symbol] && !coin.local)
+        return;
+      hash[coin.symbol] = coin;
+    });
+    const arr = [];
+    Object.keys(hash).forEach(key => {
+      arr.push(hash[key]);
+    });
+    return arr;
+  }
+
+  /**
+   * All unique coins not in the specified collection. (prefer local)
+   * @param coins
+   * @param notIn
+   */
+  private static uniqueCoinsNotIn(coins: any[], notIn: any[]): any[] {
+    const hashNotIn = {};
+    notIn.forEach(coin => {
+      hashNotIn[coin.symbol] = coin;
+    });
+    const hash = {};
+    coins.forEach(coin => {
+      if ((hash[coin.symbol] && !coin.local) && !hashNotIn[coin.symbol])
+        return;
+      hash[coin.symbol] = coin;
+    });
+    const arr = [];
+    Object.keys(hash).forEach(key => {
+      arr.push(hash[key]);
+    });
+    return arr;
   }
 
   constructor(
@@ -109,7 +149,7 @@ export class PairSelectorComponent implements OnInit, AfterViewInit {
         this._loadedSymbols = symbols;
       });
     });
-    this.cryptoService.getCurrencies()
+    this.cryptoService.getTokens()
       .subscribe((data) => {
         this.zone.run(() => {
           this._userWallet = data
@@ -122,10 +162,8 @@ export class PairSelectorComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    setTimeout(() => {
-      const isFirstRun = window.electron.ipcRenderer.sendSync('isFirstRun');
-      if(isFirstRun) this.active = true;
-    }, 0);
+    const isFirstRun = window.electron.ipcRenderer.sendSync('isFirstRun');
+    if(isFirstRun) this.active = true;
   }
 
   filterCoins(key: string, val: string) {
@@ -167,18 +205,12 @@ export class PairSelectorComponent implements OnInit, AfterViewInit {
       this[activeInputKey + 'Valid'] = true;
       if(activeInputKey === 'coinA') {
         this.activeInputKey = 'coinB';
-        this.cryptoService.getCurrencyComparisons(row.symbol)
-          // .first()
-          .subscribe(data => {
-            this.zone.run(() => {
-              this.comparisons = [{rows: data}];
-              this.filteredComparisons = this.comparisons;
-              setTimeout(() => {
-                // this.inputs.last.nativeElement.click();
-                setTimeout(() => this.inputs.last.nativeElement.focus(), 0);
-              }, 0);
-            });
-          });
+        const data = this.currencyComparisons(row.symbol);
+        this.zone.run(() => {
+          this.comparisons = [{rows: data}];
+          this.filteredComparisons = this.comparisons;
+          setTimeout(() => this.inputs.last.nativeElement.focus(), 0);
+        });
       }
     }
   }
@@ -199,6 +231,11 @@ export class PairSelectorComponent implements OnInit, AfterViewInit {
     }
     this.filteredRows = this.sections;
     this.pairTable.rowSelected(null);
+  }
+
+  currencyComparisons(symbol) {
+    return PairSelectorComponent.uniqueCoinsNotIn(this._allCoins
+      .filter(coin => coin.symbol !== symbol), this._userWallet);
   }
 
   formatRow(row) {

@@ -8,6 +8,7 @@ import { Cryptocurrency } from './cryptocurrency';
 export class CryptocurrencyService {
 
   private currenciesObservable: Observable<Cryptocurrency[]>;
+  private tokensObservable: Observable<Cryptocurrency[]>;
 
   constructor(private http: Http) { }
 
@@ -69,6 +70,65 @@ export class CryptocurrencyService {
     // });
 
 
+  }
+
+  /**
+   * Returns All tokens both local and network.
+   * @returns {Observable<Cryptocurrency[]>}
+   */
+  public getTokens(): Observable<Cryptocurrency[]> {
+    const { ipcRenderer } = window.electron;
+    if (!this.tokensObservable) {
+      this.tokensObservable = Observable.create(observer => {
+        try {
+          let localTokens = null;
+          let networkTokens = null;
+          const checkDone = () => {
+            if (!localTokens || !networkTokens)
+              return;
+            const tokens = localTokens.concat(networkTokens)
+              .sort((a, b) => a.symbol.localeCompare(b.symbol));
+            observer.next(tokens);
+          };
+
+          ipcRenderer.on('localTokens', (e, tokens) => {
+            localTokens = tokens
+              .map(token => {
+                const preppedToken = Cryptocurrency.fromObject({
+                  symbol: token,
+                  name: token,
+                  last: 0,
+                  change: 0,
+                  local: true
+                });
+                return preppedToken;
+              });
+            checkDone();
+          });
+
+          ipcRenderer.on('networkTokens', (e, tokens) => {
+            networkTokens = tokens
+              .map(token => {
+                const preppedToken = Cryptocurrency.fromObject({
+                  symbol: token,
+                  name: token,
+                  last: 0,
+                  change: 0,
+                  local: false
+                });
+                return preppedToken;
+              });
+            checkDone();
+          });
+
+          ipcRenderer.send('getLocalTokens');
+          ipcRenderer.send('getNetworkTokens');
+        } catch(err) {
+          console.error(err);
+        }
+      });
+    }
+    return this.tokensObservable;
   }
 
 }

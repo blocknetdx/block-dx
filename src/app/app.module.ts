@@ -47,7 +47,6 @@ import { TableColumnDirective } from './table/table-column.directive';
 import { TableColumnHeaderDirective } from './table/table-column-header.directive';
 import { TableColumnCellDirective } from './table/table-column-cell.directive';
 import { PairSelectorComponent } from './pair-selector/pair-selector.component';
-// import { ValidCoinDirective } from './pair-selector/valid-coin.directive';
 import { CryptocurrencyService } from './cryptocurrency.service';
 import { SelectComponent } from './select/select.component';
 import { OrderbookService } from './orderbook.service';
@@ -64,6 +63,7 @@ import { TableRowDetailDirective } from './table/table-row-detail.directive';
 import { TableInfoDirective } from './table/table-info.directive';
 import { TableSectionDividerDirective } from './table/table-section-divider.directive';
 import { CardToolbarDirective } from './card/card-toolbar.directive';
+import { PricingService } from './pricing.service';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -96,7 +96,6 @@ const dev = environment.useMockAPI ? [
     TableColumnHeaderDirective,
     TableColumnCellDirective,
     PairSelectorComponent,
-    // ValidCoinDirective,
     SelectComponent,
     TimeAgoPipe,
     CardComponent,
@@ -136,6 +135,7 @@ const dev = environment.useMockAPI ? [
     CryptocurrencyService,
     TradehistoryService,
     BalancesService,
+    PricingService,
     {
       provide: PERFECT_SCROLLBAR_CONFIG,
       useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG

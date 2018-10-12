@@ -6,10 +6,24 @@ const path = require('path');
 const SimpleStorage = require('./src-back/storage');
 const ServiceNodeInterface = require('./src-back/service-node-interface');
 const serve = require('electron-serve');
+const { autoUpdater } = require('electron-updater');
+const PricingInterface = require('./src-back/pricing-interface');
+
+const { app, BrowserWindow, Menu, ipcMain } = electron;
+
+// Properly close the application
+app.on('window-all-closed', () => {
+  app.quit();
+});
 
 const { platform } = process;
 
-let appWindow, serverLocation, sn, keyPair, storage, user, password, port, info;
+const { name, version } = fs.readJSONSync(path.join(__dirname, 'package.json'));
+ipcMain.on('getAppVersion', e => {
+  e.returnValue = version;
+});
+
+let appWindow, serverLocation, sn, keyPair, storage, user, password, port, info, pricingSource, pricingUnit, apiKeys, pricingFrequency, enablePricing, sendPricingMultipliers, clearPricingInterval, setPricingInterval, sendMarketPricingEnabled;
 
 // General Error Handler
 const handleError = err => {
@@ -29,13 +43,177 @@ if(!isDev) {
   loadURL = serve({directory: 'dist'});
 }
 
-const { app, BrowserWindow, Menu, ipcMain } = electron;
-
 require('electron-context-menu')();
 
 // Only allow one application instance to be open at a time
 const isSecondInstance = app.makeSingleInstance(() => {});
 if(isSecondInstance) app.quit();
+
+const openUpdateAvailableWindow = version => new Promise(resolve => {
+  const updateAvailableWindow = new BrowserWindow({
+    show: false,
+    width: 550,
+    height: platform === 'win32' ? 355 : 330,
+    parent: appWindow
+  });
+  if(isDev) {
+    updateAvailableWindow.loadURL(`file://${path.join(__dirname, 'src', 'update-available.html')}`);
+  } else {
+    updateAvailableWindow.loadURL(`file://${path.join(__dirname, 'dist', 'update-available.html')}`);
+  }
+  updateAvailableWindow.once('ready-to-show', () => {
+    updateAvailableWindow.show();
+  });
+  updateAvailableWindow.on('close', () => {
+    resolve();
+  });
+  ipcMain.on('getUpdateVersion', e => {
+    e.returnValue = version;
+  });
+  ipcMain.on('cancel', () => {
+    resolve();
+    setTimeout(() => {
+      updateAvailableWindow.close();
+    }, 0);
+  });
+  ipcMain.on('accept', () => {
+    autoUpdater.quitAndInstall();
+  });
+
+});
+
+autoUpdater.on('update-downloaded', ({ version }) => {
+  openUpdateAvailableWindow(version);
+});
+autoUpdater.on('error', err => {
+  handleError(err);
+});
+
+const openConfigurationWindow = (options = {}) => {
+
+  const { error } = options;
+
+  // const errorMessage = error ? 'There was a problem connecting to the Blocknet RPC server. What would you like to do?' : '';
+  let errorTitle, errorMessage;
+  if(error) {
+    console.log(error);
+    switch(error.status) {
+      case 401:
+        errorTitle = 'Authorization Problem';
+        errorMessage = 'There was an authorization problem. Please check your Blocknet RPC username and/or password.';
+        break;
+      default:
+        errorTitle = 'Connection Problem';
+        errorMessage = 'There was a problem connecting to the Blocknet RPC server. What would you like to do?';
+    }
+    console.log(errorMessage);
+  } else {
+    errorMessage = '';
+  }
+
+  const configurationWindow = new BrowserWindow({
+    show: false,
+    width: 1000,
+    height: platform === 'win32' ? 708 : platform === 'darwin' ? 695 : 670,
+    parent: appWindow
+  });
+  if(isDev) {
+    configurationWindow.loadURL(`file://${path.join(__dirname, 'src', 'automation.html')}`);
+  } else {
+    configurationWindow.setMenu(null);
+    configurationWindow.loadURL(`file://${path.join(__dirname, 'dist', 'automation.html')}`);
+  }
+  configurationWindow.once('ready-to-show', () => {
+    configurationWindow.show();
+
+    setTimeout(() => {
+      if(error) configurationWindow.send('errorMessage', errorTitle, errorMessage);
+    }, 200);
+
+  });
+
+  if(isDev) {
+    const menuTemplate = [];
+    menuTemplate.push({
+      label: 'Window',
+      submenu: [
+        { label: 'Show Dev Tools', role: 'toggledevtools' }
+      ]
+    });
+    const windowMenu = Menu.buildFromTemplate(menuTemplate);
+    configurationWindow.setMenu(windowMenu);
+  }
+
+  ipcMain.on('openSettingsWindow', () => {
+    try {
+      openSettingsWindow();
+      configurationWindow.close();
+    } catch(err) {
+      handleError(err);
+    }
+  });
+
+  const configurationFilesDirectory = path.join(__dirname, 'blockchain-configuration-files');
+
+  ipcMain.on('getManifest', async function(e) {
+    try {
+      const filePath = path.join(configurationFilesDirectory, 'manifest.json');
+      const data = await fs.readJsonAsync(filePath);
+      e.returnValue = data;
+    } catch(err) {
+      handleError(err);
+    }
+  });
+  ipcMain.on('getBaseConf', function(e, walletConf) {
+    try {
+      const filePath = path.join(configurationFilesDirectory, 'wallet-confs', walletConf);
+      const contents = fs.readFileSync(filePath, 'utf8');
+      e.returnValue = contents;
+    } catch(err) {
+      handleError(err);
+    }
+  });
+  ipcMain.on('getBridgeConf', (e, bridgeConf) => {
+    try {
+      const filePath = path.join(configurationFilesDirectory, 'xbridge-confs', bridgeConf);
+      const contents = fs.readFileSync(filePath, 'utf8');
+      e.returnValue = contents;
+    } catch(err) {
+      handleError(err);
+    }
+  });
+  ipcMain.on('saveDXData', (e, dxUser, dxPassword, dxPort) => {
+    storage.setItems({
+      user: dxUser,
+      password: dxPassword,
+      port: dxPort
+    }, true);
+    e.returnValue = true;
+  });
+  ipcMain.on('getHomePath', e => {
+    e.returnValue = app.getPath('home');
+  });
+  ipcMain.on('getDataPath', e => {
+    e.returnValue = app.getPath('appData');
+  });
+  ipcMain.on('getSelected', e => {
+    const selectedWallets = storage.getItem('selectedWallets') || [];
+    e.returnValue = selectedWallets;
+  });
+  ipcMain.on('saveSelected', (e, selectedArr) => {
+    storage.setItem('selectedWallets', selectedArr, true);
+    e.returnValue = selectedArr;
+  });
+
+};
+
+ipcMain.on('quit', () => {
+  app.quit();
+});
+ipcMain.on('restart', () => {
+  app.relaunch();
+  app.quit();
+});
 
 const openSettingsWindow = (options = {}) => {
 
@@ -72,20 +250,17 @@ const openSettingsWindow = (options = {}) => {
       handleError(err);
     }
   });
-  ipcMain.on('restart', () => {
-    app.relaunch();
-    app.quit();
-  });
 
   const settingsWindow = new BrowserWindow({
     show: false,
     width: 500,
-    height: platform === 'win32' ? 520 : 530,
+    height: platform === 'win32' ? 575 : platform === 'darwin' ? 560 : 535,
     parent: appWindow
   });
   if(isDev) {
     settingsWindow.loadURL(`file://${path.join(__dirname, 'src', 'settings.html')}`);
   } else {
+    settingsWindow.setMenu(null);
     settingsWindow.loadURL(`file://${path.join(__dirname, 'dist', 'settings.html')}`);
   }
   settingsWindow.once('ready-to-show', () => {
@@ -106,6 +281,29 @@ const openSettingsWindow = (options = {}) => {
     const windowMenu = Menu.buildFromTemplate(menuTemplate);
     settingsWindow.setMenu(windowMenu);
   }
+
+};
+
+const openGeneralSettingsWindow = () => {
+
+  const generalSettingsWindow = new BrowserWindow({
+    show: false,
+    width: 1000,
+    height: platform === 'win32' ? 708 : platform === 'darwin' ? 695 : 670,
+    parent: appWindow,
+    modal: platform === 'darwin' ? false : true
+  });
+
+  generalSettingsWindow.setMenu(null);
+
+  if(isDev) {
+    generalSettingsWindow.loadURL(`file://${path.join(__dirname, 'src', 'general-settings.html')}`);
+  } else {
+    generalSettingsWindow.loadURL(`file://${path.join(__dirname, 'dist', 'general-settings.html')}`);
+  }
+  generalSettingsWindow.once('ready-to-show', () => {
+    generalSettingsWindow.show();
+  });
 
 };
 
@@ -134,8 +332,10 @@ const openTOSWindow = (alreadyAccepted = false) => {
   let height;
   if(process.platform === 'win32') {
     height = alreadyAccepted ? 660 : 735;
-  } else {
+  } else if(process.platform === 'darwin') {
     height = alreadyAccepted ? 645 : 720;
+  } else {
+    height = alreadyAccepted ? 645 : 690;
   }
 
   const tosWindow = new BrowserWindow({
@@ -176,7 +376,18 @@ const openAppWindow = () => {
     height: height - 100
   });
 
-  appWindow.maximize();
+  // appWindow.toggleDevTools();
+
+  const initialBounds = storage.getItem('bounds');
+  if(initialBounds) {
+    try {
+      appWindow.setBounds(initialBounds);
+    } catch(err) {
+      appWindow.maximize();
+    }
+  } else {
+    appWindow.maximize();
+  }
 
   if(isDev) {
     appWindow.loadURL(serverLocation);
@@ -190,10 +401,19 @@ const openAppWindow = () => {
 
   appWindow.once('show', () => {
     // version check
-    const err = versionCheck(info["version"]);
+    const err = versionCheck(info['version']);
     if (err) {
       handleError(err);
       app.quit();
+    }
+  });
+
+  appWindow.on('close', () => {
+    try {
+      const bounds = appWindow.getBounds();
+      storage.setItem('bounds', bounds);
+    } catch(err) {
+      console.error(err);
     }
   });
 
@@ -249,9 +469,9 @@ const openAppWindow = () => {
           appWindow.send('orderDone', 'failed');
         }
       })
-      .catch(e => {
+      .catch(err => {
         appWindow.send('orderDone', 'server error');
-        handleError(e);
+        handleError(err);
       });
   });
 
@@ -261,13 +481,14 @@ const openAppWindow = () => {
         if(res.id) { // success
           appWindow.send('orderDone', 'success');
           sendOrderBook();
+          sendOrderHistory();
         } else {
           appWindow.send('orderDone', 'failed');
         }
       })
-      .catch(e => {
+      .catch(err => {
         appWindow.send('orderDone', 'server error');
-        handleError(e);
+        handleError(err);
       });
   });
 
@@ -280,14 +501,15 @@ const openAppWindow = () => {
     asks: []
   };
   const sendOrderBook = force => {
-    sn.dxGetOrderBook3(keyPair[0], keyPair[1])
-      .then(res => {
-        if(force === true || JSON.stringify(res) !== JSON.stringify(orderBook)) {
-          orderBook = res;
-          appWindow.send('orderBook', orderBook);
-        }
-      })
-      .catch(handleError);
+    if (keyPair && keyPair.length === 2 && keyPair[0] !== '' && keyPair[1] !== '')
+      sn.dxGetOrderBook3(keyPair[0], keyPair[1])
+        .then(res => {
+          if(force === true || JSON.stringify(res) !== JSON.stringify(orderBook)) {
+            orderBook = res;
+            appWindow.send('orderBook', orderBook);
+          }
+        })
+        .catch(handleError);
   };
   ipcMain.on('getOrderBook', () => sendOrderBook(true));
   setInterval(sendOrderBook, stdInterval);
@@ -334,30 +556,62 @@ const openAppWindow = () => {
   ipcMain.on('getMyOrders', () => sendMyOrders(true));
   setInterval(sendMyOrders, stdInterval);
 
-  let orderHistory = [];
+  let orderHistoryByMinute = [];
+  let orderHistoryByFifteenMinutes = [];
+  let orderHistoryByThirtyMinutes = [];
   const sendOrderHistory = force => {
-    const end = moment.utc().valueOf();
-    const start = moment(end).utc()
-      .subtract(1, 'd')
-      .valueOf();
-    sn.dxGetOrderHistory(keyPair[0], keyPair[1], start, end, 60)
-      .then(res => {
-        if(force === true || JSON.stringify(res) !== JSON.stringify(orderHistory)) {
-          orderHistory = res;
-          appWindow.send('orderHistory', orderHistory);
-        }
-      })
-      .catch(handleError);
+    const end = moment();
+    {
+      const start = moment(end.toDate())
+        .subtract(1, 'd');
+      sn.dxGetOrderHistory(keyPair[0], keyPair[1], start.valueOf(), end.valueOf(), 60)
+        .then(res => {
+          if(force === true || JSON.stringify(res) !== JSON.stringify(orderHistoryByMinute)) {
+            orderHistoryByMinute = res;
+            appWindow.send('orderHistory', orderHistoryByMinute);
+            appWindow.send('orderHistoryByMinute', orderHistoryByMinute);
+          }
+        })
+        .catch(handleError);
+    }
+    {
+      const start = moment(end.toDate())
+        .subtract(1, 'd');
+      sn.dxGetOrderHistory(keyPair[0], keyPair[1], start.valueOf(), end.valueOf(), 900)
+        .then(res => {
+          if(force === true || JSON.stringify(res) !== JSON.stringify(orderHistoryByFifteenMinutes)) {
+            orderHistoryByFifteenMinutes = res;
+            appWindow.send('orderHistoryBy15Minutes', orderHistoryByFifteenMinutes);
+          }
+        })
+        .catch(handleError);
+    }
+    {
+      const start = moment(end.toDate())
+        .subtract(1, 'd');
+      sn.dxGetOrderHistory(keyPair[0], keyPair[1], start.valueOf(), end.valueOf(), 1800)
+        .then(res => {
+          if(force === true || JSON.stringify(res) !== JSON.stringify(orderHistoryByThirtyMinutes)) {
+            orderHistoryByThirtyMinutes = res;
+            appWindow.send('orderHistoryBy30Minutes', orderHistoryByThirtyMinutes);
+          }
+        })
+        .catch(handleError);
+    }
   };
-  ipcMain.on('getOrderHistory', () => sendOrderHistory(true));
+  // ipcMain.on('getOrderHistory', () => sendOrderHistory(true));
+  ipcMain.on('getOrderHistoryByMinute', () => sendOrderHistory(true));
+  // ipcMain.on('getOrderHistoryBy15Minutes', () => sendOrderHistory(true));
+  // ipcMain.on('getOrderHistoryBy30Minutes', () => sendOrderHistory(true));
+
+  setInterval(sendOrderHistory, stdInterval);
 
   let currentPrice = {};
   const sendCurrentPrice = force => {
-    const end = moment.utc().valueOf();
-    const start = moment(end).utc()
-      .subtract(1, 'd')
-      .valueOf();
-    sn.dxGetOrderHistory(keyPair[0], keyPair[1], start, end, 86400)
+    const end = moment();
+    const start = moment(end.toDate())
+      .subtract(1, 'd');
+    sn.dxGetOrderHistory(keyPair[0], keyPair[1], start.valueOf(), end.valueOf(), 86400)
       .then(res => {
         if(res.length === 0) return;
         const [ data ] = res;
@@ -371,6 +625,7 @@ const openAppWindow = () => {
   ipcMain.on('getCurrentPrice', () => sendCurrentPrice(true));
   setInterval(sendCurrentPrice, stdInterval);
 
+  // TODO This is too aggressive to be called as frequently as it is...
   const sendCurrencies = async function() {
     try {
       const [ localTokens, networkTokens ] = await Promise.all([
@@ -499,7 +754,50 @@ const openAppWindow = () => {
   ipcMain.on('getBalances', () => sendBalances(true));
   setInterval(sendBalances, stdInterval);
 
+  sendPricingMultipliers = async function() {
+    try {
+      if(!enablePricing) {
+        appWindow.send('pricingMultipliers', []);
+        return;
+      }
+      const pricingInterface = new PricingInterface({
+        source: pricingSource,
+        apiKey: apiKeys[pricingSource]
+      });
+      const multipliers = await pricingInterface.compare([keyPair[1], keyPair[0]], pricingUnit);
+      appWindow.send('pricingMultipliers', multipliers);
+    } catch(err) {
+      handleError(err);
+    }
+  };
+
+  let pricingInterval;
+
+  clearPricingInterval = () => {
+    clearInterval(pricingInterval);
+  };
+  setPricingInterval = () => {
+    pricingInterval = setInterval(() => {
+      sendPricingMultipliers();
+    }, pricingFrequency);
+  };
+
+  setPricingInterval();
+
+  ipcMain.on('getPricing', () => {
+    sendPricingMultipliers();
+  });
+
+   sendMarketPricingEnabled = () => {
+    appWindow.send('marketPricingEnabled', enablePricing);
+  };
+
+  ipcMain.on('getMarketPricingEnabled', sendMarketPricingEnabled);
+
   ipcMain.on('setKeyPair', (e, pair) => {
+
+    clearPricingInterval();
+
     storage.setItem('keyPair', pair);
     keyPair = pair;
     sendKeyPair();
@@ -508,6 +806,10 @@ const openAppWindow = () => {
     sendMyOrders(true);
     sendOrderHistory(true);
     sendCurrentPrice(true);
+
+    sendPricingMultipliers();
+    setPricingInterval();
+
   });
 
   ipcMain.on('isFirstRun', e => {
@@ -520,8 +822,16 @@ const openAppWindow = () => {
     }
   });
 
+  ipcMain.on('openGeneralSettings', () => {
+    openGeneralSettingsWindow();
+  });
+
   ipcMain.on('openSettings', () => {
     openSettingsWindow();
+  });
+
+  ipcMain.on('openConfigurationWizard', () => {
+    openConfigurationWindow();
   });
 
   ipcMain.on('openTOS', () => {
@@ -530,12 +840,46 @@ const openAppWindow = () => {
 
 };
 
+ipcMain.on('getPricingSource', e => {
+  e.returnValue = pricingSource;
+});
+ipcMain.on('getAPIKeys', e => {
+  e.returnValue = apiKeys;
+});
+ipcMain.on('getPricingUnit', e => {
+  e.returnValue = pricingUnit;
+});
+ipcMain.on('getPricingFrequency', e => {
+  e.returnValue = pricingFrequency;
+});
+ipcMain.on('getPricingEnabled', e => {
+  e.returnValue = enablePricing;
+});
+ipcMain.on('saveGeneralSettings', (e, s) => {
+  // console.log(JSON.stringify(s, null, '  '));
+  enablePricing = s.pricingEnabled;
+  pricingSource = s.pricingSource;
+  apiKeys = s.apiKeys;
+  pricingUnit = s.pricingUnit;
+  pricingFrequency = s.pricingFrequency;
+  storage.setItems({
+    pricingEnabled: s.pricingEnabled,
+    pricingSource: s.pricingSource,
+    apiKeys: s.apiKeys,
+    pricingUnit: s.pricingUnit,
+    pricingFrequency: s.pricingFrequency
+  }, true);
+  clearPricingInterval();
+  sendPricingMultipliers();
+  setPricingInterval();
+  sendMarketPricingEnabled();
+});
+
 const onReady = new Promise(resolve => app.on('ready', resolve));
 
 // Run the application within async function for flow control
 (async function() {
   try {
-    const { name } = fs.readJSONSync(path.join(__dirname, 'package.json'));
     let dataPath;
     if(process.platform === 'win32') {
       dataPath = path.join(process.env.LOCALAPPDATA, name);
@@ -544,10 +888,52 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
       dataPath = app.getPath('userData');
     }
 
-    storage = new SimpleStorage(path.join(dataPath, 'meta.json'));
+    const fileExists = p => {
+      try {
+        fs.statSync(p);
+        return true;
+      } catch(err) {
+        return false;
+      }
+    };
+
+    const previousMetaPath = path.join(dataPath, 'meta.json');
+    const metaPath = path.join(dataPath, 'app-meta.json');
+
+    if(!fileExists(metaPath) && fileExists(previousMetaPath)) {
+      fs.moveSync(previousMetaPath, metaPath);
+    }
+
+    storage = new SimpleStorage(metaPath);
     user = storage.getItem('user');
     password = storage.getItem('password');
     port = storage.getItem('port');
+
+    pricingSource = storage.getItem('pricingSource');
+    if(!pricingSource) {
+      pricingSource = 'COIN_MARKET_CAP';
+      storage.setItem('pricingSource', pricingSource);
+    }
+    apiKeys = storage.getItem('apiKeys');
+    if(!apiKeys) {
+      apiKeys = {};
+      storage.setItem('apiKeys', apiKeys);
+    }
+    pricingUnit = storage.getItem('pricingUnit');
+    if(!pricingUnit) {
+      pricingUnit = 'BTC';
+      storage.setItem('pricingUnit', pricingUnit);
+    }
+    pricingFrequency = storage.getItem('pricingFrequency');
+    if(!pricingFrequency) {
+      pricingFrequency = 300000;
+      storage.setItem('pricingFrequency', pricingFrequency);
+    }
+    enablePricing = storage.getItem('pricingEnabled');
+    if(!enablePricing && enablePricing !== false) {
+      enablePricing = false;
+      storage.setItem('pricingEnabled', enablePricing);
+    }
 
     if(!storage.getItem('addresses')) {
       storage.setItem('addresses', {});
@@ -556,6 +942,7 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
     if(!storage.getItem('tos')) {
       await onReady;
       openTOSWindow();
+      // if(!isDev) autoUpdater.checkForUpdates();
       return;
     }
 
@@ -566,20 +953,20 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
 
     if(!user || !password) {
       await onReady;
-      openSettingsWindow();
+      openConfigurationWindow();
+      // if(!isDev) autoUpdater.checkForUpdates();
       return;
     }
 
-    sn = new ServiceNodeInterface(user, password, `http://localhost:${port}`);
+    sn = new ServiceNodeInterface(user, password, `http://${platform === 'linux' ? '127.0.0.1' : 'localhost'}:${port}`);
 
     await new Promise(resolve => setTimeout(resolve, 2000));
 
     try {
       info = await sn.getinfo();
     } catch(err) {
-      // console.error(err);
       await onReady;
-      openSettingsWindow({ error: err });
+      openConfigurationWindow({ error: err });
       return;
     }
 
@@ -609,6 +996,8 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
 
     await onReady;
 
+    // if(!isDev) autoUpdater.checkForUpdates();
+
     openAppWindow();
 
   } catch(err) {
@@ -617,15 +1006,10 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
 
 })();
 
-// Properly close the application
-app.on('window-all-closed', () => {
-  app.quit();
-});
-
 // check for version number. Minimum supported blocknet client version
 function versionCheck(version) {
-  if (version < 3090400) {
-    return {name:"Unsupported Version", message:"BLOCK DX requires Blocknet wallet version 3.9.04 or greater."};
+  if (version < 3100500) {
+    return {name: 'Unsupported Version', message: 'BLOCK DX requires Blocknet wallet version 3.10.5 or greater.'};
   }
   return null;
 }

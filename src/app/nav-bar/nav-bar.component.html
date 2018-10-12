@@ -10,10 +10,12 @@
     <div class="collapse navbar-collapse" [class.active]="navCollapsed">
       <a (click)="toggleNav()" class="close"><i class="material-icons">close</i></a>
       <ul>
-        <li>Account</li>
+        <li>Settings</li>
         <!--<li><a href="#">My Balances</a></li>-->
         <!--<li><a href="#">Setup Wallet</a></li>-->
-        <li><a href="#" (click)="openSettings($event)">Settings</a></li>
+        <li><a href="#" (click)="openGeneralSettings($event)">General Settings</a></li>
+        <li><a href="#" (click)="openSettings($event)">RPC Settings</a></li>
+        <li><a href="#" (click)="openConfigurationWizard($event)">Configuration Wizard</a></li>
       </ul>
       <ul>
         <li>Support</li>
@@ -22,12 +24,14 @@
         <li><a href="#" (click)="openLink($event, 'fees')">Fees</a></li>
         <li><a href="#" (click)="openLink($event, 'help')">Help articles</a></li>
         <li><a href="#" (click)="openLink($event, 'community')">Community Forum</a></li>
+        <li><a href="#" (click)="openLink($event, 'supportTicket')">Support Ticket</a></li>
       </ul>
       <ul>
         <li>Contact Us</li>
         <li><a href="#" (click)="openLink($event, 'email')">Email</a></li>
         <li><a href="#" (click)="openLink($event, 'reddit')">Reddit</a></li>
         <li><a href="#" (click)="openLink($event, 'twitter')">Twitter</a></li>
+        <li><a href="#" (click)="openLink($event, 'discord')">Discord</a></li>
       </ul>
     </div>
     <a (click)="toggleNav()" class="navbar-toggler">

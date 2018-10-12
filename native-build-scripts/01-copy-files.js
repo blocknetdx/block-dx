@@ -10,13 +10,14 @@ co(function*() {
     const buildDir = 'dist-native';
     const tempDir = 'temp';
 
-    yield rmrf(buildDir);
+    // yield rmrf(buildDir);
     yield rmrf(tempDir);
 
     yield fs.ensureDirAsync(tempDir);
     yield fs.ensureDirAsync(buildDir);
 
     const filesToCopy = [
+      'blockchain-configuration-files',
       'dist',
       'index.js',
       'tos.txt',

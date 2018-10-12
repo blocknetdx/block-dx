@@ -30,6 +30,10 @@ app-table /deep/ {
   }
 }
 
+.orderbook-container {
+  height:100%;
+}
+
 .divider {
   padding: 0 17px;
   line-height: 24px;
@@ -41,4 +45,13 @@ app-table /deep/ {
     opacity: 0.4;
     font-weight: bold;
   }
+}
+
+.no-open-orders-message {
+  font-family: $roboto-mono;
+  font-size: 12px;
+  margin-left: 10px;
+  z-index:1000;
+  position: absolute;
+  margin-top:38px;
 }

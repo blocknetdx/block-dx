@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>General Settings</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0">
+  <meta name="format-detection" content="telephone=no">
+
+  <link rel="shortcut icon" href="assets/favicon_block.png"  />
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700|Roboto+Mono:300,400,700" rel="stylesheet">
+  <link href="./assets/vendor/css/fontawesome-all.min.css" rel="stylesheet">
+  <link href="./assets/vendor/css/sweetalert2.css" rel="stylesheet">
+  <!--<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">-->
+
+  <style>
+
+    body {
+      background-color: #0e2742;
+      font-family: "Open Sans", sans-serif;
+      margin-left: 0;
+      margin-right: 0;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+    h1, h2, h3, h4 {
+      color: #fff;
+      margin-top: 0;
+      margin-bottom: 0;
+      padding: 10px 15px;
+      background-color: #172e48;
+      letter-spacing: 1px;
+    }
+    .container {
+      padding: 20px;
+      padding-bottom: 10px;
+    }
+    .input-group {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      margin-bottom: 15px;
+    }
+    .input-group label {
+      width: 40%;
+      max-width: 40%;
+      min-width: 40%;
+      background-color: #213d54;
+      color: #fff;
+      padding: 15px 15px;
+      font-weight: 300;
+      /*font-size: 14px;*/
+    }
+    .input-group input {
+      flex-grow: 1;
+      background-color: #123149;
+      color: #fff;
+      padding: 15px 20px;
+      font-weight: 300;
+      /*font-size: 14px;*/
+      border-width: 1px;
+      border-color: #123149;
+      border-style: solid;
+      outline-width: 0;
+    }
+    .input-group input:focus {
+      outline-width: 0;
+      border-width: 1px;
+      border-color: #4b6275;
+      border-style: solid;
+    }
+    .dropdown-button {
+      position: relative;
+      opacity: 1;
+      flex-grow: 1;
+      background-color: #123149;
+      color: #fff;
+      padding: 15px 20px;
+      font-weight: 300;
+      /*font-size: 14px;*/
+      border-width: 1px;
+      border-color: #123149;
+      border-style: solid;
+      outline-width: 0;
+      cursor: pointer;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: space-between;
+    }
+    .dropdown-button:hover {
+      background-color: rgba(18, 49, 73, .8);
+    }
+    input {
+      flex-grow: 1;
+      background-color: #123149;
+      color: #fff;
+      padding: 15px 20px;
+      font-weight: 300;
+      font-size: 14px;
+      border-width: 1px;
+      border-color: #123149;
+      border-style: solid;
+      outline-width: 0;
+    }
+    input:focus {
+      outline-width: 0;
+      border-width: 1px;
+      border-color: #4b6275;
+      border-style: solid;
+    }
+    button {
+      display: block;
+      flex-grow: 1;
+      flex-basis: 0;
+      /*flex-basis: 1;*/
+      /*width: 100%;*/
+      margin: 10px;
+      margin-bottom: 0;
+      background-color: #0069ff;
+      color: #fff;
+      padding: 15px 20px;
+      font-size: 14px;
+      border-top-width: 0;
+      border-bottom-width: 0;
+      border-left-width: 0;
+      border-right-width: 0;
+      outline-width: 0;
+      cursor: pointer;
+      transition: background-color .5s;
+    }
+    button:hover {
+      background-color: #0054cc;
+    }
+    button:active {
+      outline-width: 0;
+    }
+    button:disabled {
+      background-color: #0054cc;
+      opacity: .8;
+      cursor: default;
+    }
+    button.gray-button {
+      background-color: #ddd;
+      color: #0069ff;
+      opacity: 1;
+      transition: opacity .5s;
+    }
+    button.gray-button:hover {
+      opacity: .7;
+    }
+    div.button-container {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      margin-top: 10px;
+      height: 56px;
+      min-height: 56px;
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+    .flex-container {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+    }
+    .col1 {
+      width: 300px;
+      min-width: 300px;
+      height: 465px;
+      margin-top: 0;
+      margin-bottom: 0;
+      margin-left: 0;
+      margin-right: 10px;
+      padding-left: 20px;
+      padding-right: 20px;
+      padding-top: 10px;
+      background-color: #172e48;
+    }
+    .col2 {
+      flex-grow: 1;
+      margin-left: 10px;
+      height: 475px;
+      max-height: 475px;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+    }
+    .sidebar-item {
+      margin-top: 10px;
+      margin-bottom: 10px;
+      color: #fff;
+      cursor: default;
+      cursor: pointer;
+    }
+    .sidebar-item:hover {
+      /*opacity: .8;*/
+    }
+    .radio-icon {
+      color: #339CFF;
+      margin-right: 10px;
+    }
+    .main-area {
+      flex-grow: 1;
+      background-color: #243b55;
+      padding: 10px;
+      overflow-x: hidden;
+      /*overflow-y: scroll;*/
+    }
+    .main-area-item {
+      padding: 10px;
+      cursor: pointer;
+    }
+    .main-area-item:hover {
+      opacity: .8;
+    }
+    .main-area-item2 {
+      background-color: #0e2742;
+      margin: 10px;
+      padding: 20px;
+    }
+    .text-danger {
+      color: #ed1c24;
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+      border: 0;
+    }
+
+    ::-webkit-scrollbar-track {
+      -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background-color: rgba(248, 248, 248, 0.5);
+      border: 0;
+      border-radius: 3px;
+    }
+    a.blocknet-link {
+      color: #006afe;
+    }
+    a.blocknet-link:hover {
+      color: #66d0ff;
+    }
+    input[type="number"] {
+      position: relative;
+      /*margin: 0 0 1rem;*/
+      /*border: 1px solid #BBB;*/
+      /*border-color: #BBB #ECECEC #ECECEC #BBB;*/
+      /*padding: .2rem;*/
+    }
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      background: url("./assets/number_input_buttons.png") no-repeat center center;
+      background-size: 54px 54px;
+      width: 54px;
+      opacity: 1;
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      cursor: pointer;
+    }
+    .color-toggle-container {
+      position: relative;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      margin-top: 10px;
+    }
+    .color-toggle-container a.toggle1 {
+      background-color: #123149;
+      flex-basis: 0;
+      flex-grow: 1;
+      font-size: 16px;
+      padding: 15px;
+      transition: color .1s linear;
+      text-align: center;
+    }
+    .color-toggle-container a {
+      color: #fff;
+      text-decoration: none;
+    }
+    /*.color-toggle-container a.active:hover {*/
+      /*opacity: 1;*/
+    /*}*/
+    /*.color-toggle-container a:hover {*/
+      /*opacity: .8;*/
+    /*}*/
+    .color-toggle-container a.toggle1.active {
+      color: #00f4c5;
+    }
+    .color-toggle-container a.toggle2 {
+      color: #fff;
+      background-color: #123149;
+      flex-basis: 0;
+      flex-grow: 1;
+      font-size: 16px;
+      padding: 15px;
+      transition: color .1s linear;
+      text-align: center;
+    }
+    .color-toggle-container a.toggle2.active {
+      color: #ff725e;
+    }
+    .color-toggle-container .color-bar {
+      position: absolute;
+      bottom: 0;
+      height: 2px;
+      width: 50%;
+      transition: margin .1s linear;
+    }
+    .color-toggle-container .color-bar.color-bar-left {
+      left: 0;
+      background-color: #00f4c5;
+      margin-left: 0;
+    }
+    .color-toggle-container .color-bar.color-bar-right {
+      /*right: 0;*/
+      margin-left: 50%;
+      background-color: #ff725e;
+    }
+
+  </style>
+
+</head>
+<body>
+<div style="width:100%; padding: 20px 0 20px 0; text-align:center;"><img style="max-width:300px;" src="assets/logo_full.svg" alt="Blocknet Logo"></div>
+
+<div id="js-main"></div>
+
+  <script type="text/javascript">
+    window.electron = require('electron');
+  </script>
+
+  <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+
+  <script type="text/javascript" src="assets/vendor/jquery.min.js"></script>
+
+  <script>if (window.module) module = window.module;</script>
+
+  <script type="text/javascript" src="assets/vendor/sweetalert2.js"></script>
+
+  <script type="text/javascript">
+    require('./scripts/general-settings');
+  </script>
+
+</body>
+</html>

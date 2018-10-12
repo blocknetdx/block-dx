@@ -6,6 +6,8 @@ import { Openorder } from './openorder';
 import { OpenordersService } from './openorders.service';
 import { BreakpointService } from './breakpoint.service';
 import * as math from 'mathjs';
+import { PricingService } from './pricing.service';
+import { Pricing } from './pricing';
 
 math.config({
   number: 'BigNumber',
@@ -20,6 +22,9 @@ math.config({
 export class OpenordersComponent extends BaseComponent implements OnInit {
   public openorders: Openorder[];
   public selectable: boolean;
+  public pricing: Pricing;
+  public pricingEnabled = false;
+  public pricingAvailable = false;
 
   private _symbols: string[] = [];
   public get symbols(): string[] { return this._symbols; }
@@ -31,6 +36,7 @@ export class OpenordersComponent extends BaseComponent implements OnInit {
     private appService: AppService,
     private openorderService: OpenordersService,
     private breakpointService: BreakpointService,
+    private pricingService: PricingService,
     private zone: NgZone
   ) { super(); }
 
@@ -64,6 +70,19 @@ export class OpenordersComponent extends BaseComponent implements OnInit {
           this.selectable = ['xs', 'sm'].includes(bp);
         });
       });
+
+    this.pricingService.getPricing().subscribe(pricing => {
+      this.zone.run(() => {
+        this.pricing = pricing;
+        this.pricingAvailable = pricing.enabled;
+      });
+    });
+    this.pricingService.getPricingEnabled().subscribe(enabled => {
+      this.zone.run(() => {
+        this.pricingEnabled = enabled;
+      });
+    });
+
   }
 
   cancelOrder(order) {

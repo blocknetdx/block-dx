@@ -4,6 +4,8 @@ import { BaseComponent } from '../base.component';
 import { AppService } from '../app.service';
 import { Openorder } from '../openorder';
 import { OpenordersService } from '../openorders.service';
+import { PricingService } from '../pricing.service';
+import { Pricing } from '../pricing';
 
 @Component({
   selector: 'bn-filled-orders',
@@ -13,10 +15,14 @@ import { OpenordersService } from '../openorders.service';
 export class FilledOrdersComponent extends BaseComponent implements OnInit {
   public symbols: string[] = [];
   public filledorders: Openorder[];
+  public pricing: Pricing;
+  public pricingEnabled = false;
+  public pricingAvailable = false;
 
   constructor(
     private appService: AppService,
     private openorderService: OpenordersService,
+    private pricingService: PricingService,
     private zone: NgZone
   ) { super(); }
 
@@ -47,5 +53,18 @@ export class FilledOrdersComponent extends BaseComponent implements OnInit {
           // console.log('filledorders', this.filledorders);
         });
       });
+
+    this.pricingService.getPricing().subscribe(pricing => {
+      this.zone.run(() => {
+        this.pricing = pricing;
+        this.pricingAvailable = pricing.enabled;
+      });
+    });
+    this.pricingService.getPricingEnabled().subscribe(enabled => {
+      this.zone.run(() => {
+        this.pricingEnabled = enabled;
+      });
+    });
+
   }
 }

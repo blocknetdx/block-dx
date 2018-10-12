@@ -29,15 +29,14 @@ export class NavBarComponent implements OnInit {
 
     this.appService.marketPairChanges.subscribe((symbols) => {
       this.zone.run(() => {
-        // console.log('symbols', symbols);
         this.symbols = symbols;
-      });
-    });
 
-    this.currentpriceService.currentprice.subscribe((cp) => {
-      this.zone.run(() => {
-        // console.log('currentPrice', cp);
-        this.currentPrice = cp;
+        this.currentpriceService.currentprice.subscribe((cp) => {
+          this.zone.run(() => {
+            this.currentPrice = cp;
+          });
+        });
+
       });
     });
 
@@ -47,9 +46,21 @@ export class NavBarComponent implements OnInit {
     this.navCollapsed = !this.navCollapsed;
   }
 
+  openGeneralSettings(e) {
+    e.preventDefault();
+    window.electron.ipcRenderer.send('openGeneralSettings');
+    this.toggleNav();
+  }
+
   openSettings(e) {
     e.preventDefault();
     window.electron.ipcRenderer.send('openSettings');
+    this.toggleNav();
+  }
+
+  openConfigurationWizard(e) {
+    e.preventDefault();
+    window.electron.ipcRenderer.send('openConfigurationWizard');
     this.toggleNav();
   }
 
@@ -73,15 +84,21 @@ export class NavBarComponent implements OnInit {
         openExternal('https://twitter.com/The_Blocknet/');
         break;
       case 'faq':
-        openExternal('https://blocknetsupport.cayzu.com/KnowledgeBase/Folder/4472');
+        openExternal('https://www.blocknet.co/blockdx-faq/');
         break;
       case 'fees':
-        openExternal('https://blocknetsupport.cayzu.com/KnowledgeBase/Details/?id=1-What-are-the-fees-on-Block-DX?');
+        openExternal('https://www.blocknet.co/blockdx-fees/');
         break;
       case 'help':
-        openExternal('https://blocknetsupport.cayzu.com/');
+        openExternal('https://sites.google.com/view/blocknet/blockdx');
         break;
       case 'community':
+        openExternal('https://discord.gg/7RHfBdY');
+        break;
+      case 'supportTicket':
+        openExternal('https://blocknetsupport.cayzu.com/Tickets/Create');
+        break;
+      case 'discord':
         openExternal('https://discord.gg/2e6s7H8');
         break;
     }

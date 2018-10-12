@@ -1,10 +1,10 @@
 <app-bn-tab-view #tabView>
-  <bn-tab label="Buy">
+  <bn-tab label="{{'Buy ' + symbols[0] }}" barColor="#4BF5C6">
     <ng-template #content>
       <ng-container *ngTemplateOutlet="formTemplate; context: {type: 'buy'}"></ng-container>
     </ng-template>
   </bn-tab>
-  <bn-tab label="Sell">
+  <bn-tab label="{{'Sell ' + symbols[0]}}" barColor="#FB7F70">
     <ng-template #content>
       <ng-container *ngTemplateOutlet="formTemplate; context: {type: 'sell'}"></ng-container>
     </ng-template>
@@ -16,27 +16,28 @@
 
     <span class="spacer"></span>
 
-    <div class="input-group row">
-      <label class="col-4 col-form-label">Type</label>
-      <div class="col-8">
-        <bn-select [options]="orderTypes" #typeSelect
-          [initialSelectedIndex]="0"
-          (onSelectChange)="selectedOrderType = $event"
-          placeholder="Choose a type"></bn-select>
-      </div>
-    </div>
-    <span class="spacer"></span>
+    <!--<div class="input-group row">-->
+      <!--<label class="col-4 col-form-label">Type</label>-->
+      <!--<div class="col-8">-->
+        <!--<bn-select [options]="orderTypes" #typeSelect-->
+          <!--[initialSelectedIndex]="0"-->
+          <!--(onSelectChange)="selectedOrderType = $event"-->
+          <!--placeholder="Choose a type"></bn-select>-->
+      <!--</div>-->
+    <!--</div>-->
+    <!--<span class="spacer"></span>-->
+
 
     <div class="input-group row">
-      <label class="col-4 col-form-label" for="amount">{{textForBuySellState('Receive', 'Send')}}</label>
+      <label class="col-4 col-form-label" for="amount">Amount</label>
       <div class="col-8">
         <input #amountInput
           (keyup)="amountChanged($event)"
           (onchange)="amountChanged($event)"
-          (blur)="onNumberInputBlur('amount')"
+          (blur)="onNumberInputBlur($event, 'amount')"
           [value]="model.amount"
           class="form-control" name="amount" id="amount"
-          type="number" step="0.000001" pattern="\d+" inputmode="numeric"
+          type="text" pattern="\d+" inputmode="numeric"
           placeholder="{{formatNumber('0',symbols[0])}}" />
         <span class="input-group-addon">{{symbols[0]}}</span>
       </div>
@@ -54,17 +55,50 @@
     </div>
 
     <div class="input-group row">
-      <label class="col-4 col-form-label" for="total_calc">{{textForBuySellState('Send', 'Receive')}}</label>
+      <label class="col-4 col-form-label" for="amount">Price</label>
+      <div class="col-8">
+        <input #amountInput
+               (keyup)="priceChanged($event)"
+               (onchange)="priceChanged($event)"
+               (blur)="onNumberInputBlur($event, 'price')"
+               [value]="model.price"
+               class="form-control" name="amount" id="price"
+               type="text" pattern="\d+" inputmode="numeric"
+               placeholder="{{formatNumber('0',symbols[1])}}" />
+        <span class="input-group-addon">{{symbols[1]}}</span>
+      </div>
+    </div>
+
+    <div class="input-group row" *ngIf="pricingEnabled">
+      <label class="col-4 col-form-label" for="amount">Price</label>
+      <div class="col-8">
+        <input readonly
+               *ngIf="!pricingAvailable"
+               class="form-control"
+               type="text" pattern="\d+"
+               placeholder="N/A" />
+        <input #amountInput
+               *ngIf="pricingAvailable"
+               (keyup)="secondPriceChanged($event)"
+               (onchange)="secondPriceChanged($event)"
+               (blur)="onNumberInputBlur($event, 'secondPrice')"
+               [value]="pricingAvailable ? model.secondPrice : ''"
+               class="form-control" name="amount" id="price2"
+               type="text" pattern="\d+" inputmode="numeric"
+               [placeholder]="formatNumber('0', symbols[1])" />
+        <span class="input-group-addon">{{pricing ? pricing.in : ''}}</span>
+      </div>
+    </div>
+
+    <div class="input-group row">
+      <label class="col-4 col-form-label" for="total_calc">Total</label>
       <div class="col-8">
         <input #totalInput
-          class="form-control"
-          name="total" id="total_calc" type="number"
-          (keyup)="totalPriceChanged($event)"
-          (onchange)="totalPriceChanged($event)"
-          (blur)="onNumberInputBlur('totalPrice')"
+          class="form-control order-form-total-input"
+          name="total" id="total_calc" type="text"
           step="0.000001" pattern="\d+" inputmode="numeric"
           placeholder="{{formatNumber('0',symbols[1])}}"
-          [value]="model.totalPrice" />
+          [value]="model.totalPrice" readonly />
         <span class="input-group-addon">{{symbols[1]}}</span>
       </div>
     </div>
@@ -118,14 +152,22 @@
         <!--{{selectedOrderType}} {{type}}-->
       <!--</button>-->
 
-      <button *ngIf="type == 'buy'" type="submit" [disabled]="(disableSubmit) ? true : (model.amount && model.totalPrice && model.makerAddress && model.takerAddress) ? false : true">
+      <button
+        *ngIf="type == 'buy'"
+        type="submit"
+        class="order-form-button order-form-buy-button"
+        [disabled]="(disableSubmit) ? true : (model.amount && Number(model.amount) !== NaN && Number(model.amount !== 0) && model.totalPrice && Number(model.totalPrice) !== Nan && Number(model.totalPrice) !== 0 && model.makerAddress && model.takerAddress) ? false : true">
         <i class="material-icons">add</i>
-        {{model.id ? 'Accept' : 'Make'}} Order
+        {{model.id ? 'Accept' : 'Place'}} Buy Order
       </button>
 
-      <button *ngIf="type == 'sell'" type="submit" [disabled]="(disableSubmit) ? true : (model.amount && model.totalPrice && model.makerAddress && model.takerAddress) ? false : true">
+      <button
+        *ngIf="type == 'sell'"
+        type="submit"
+        class="order-form-button order-form-sell-button"
+        [disabled]="(disableSubmit) ? true : (model.amount && Number(model.amount) !== NaN && Number(model.amount !== 0) && model.totalPrice && Number(model.totalPrice) !== Nan && Number(model.totalPrice) !== 0 && model.makerAddress && model.takerAddress) ? false : true">
         <i class="material-icons">remove</i>
-        {{model.id ? 'Accept' : 'Make'}} Order
+        {{model.id ? 'Accept' : 'Place'}} Sell Order
       </button>
 
     </div>

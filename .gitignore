@@ -47,3 +47,5 @@ Thumbs.db
 /temp
 /dist-native
 /docs
+/docker-builds
+package-lock.json
