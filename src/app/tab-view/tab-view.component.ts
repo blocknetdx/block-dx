@@ -8,7 +8,7 @@ import { TabDirective } from './tab.directive';
   template: `
     <div #buttonContainer class="tabs">
       <a class="tab" #button *ngFor="let tab of tabs; let i = index"
-        [style.color]="(activeTab === tab && tab.barColor) ? tab.barColor : ''"
+        [style.color]="tab.barColor ? tab.barColor : ''"
         (click)="activeTab = tab"
         [class.active]="activeTab === tab">
         {{tab.label}}
