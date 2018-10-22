@@ -28,7 +28,7 @@ const renderConfiguration3 = ({ state }) => {
     }, 0);
 
   const html = `
-          <p style="margin-top:0;padding-top:0;padding-left:10px;padding-right:10px;margin-bottom:5px;">Please review the locations of each wallet's data directory.</p>
+          <p style="margin-top:0;padding-top:0;padding-left:10px;padding-right:10px;margin-bottom:5px;">Configuration files will be installed to these default data directories. To accept the default locations, select 'Continue'. To change the location, select 'Browse'.</p>
           <p id="js-errors" class="text-danger" style="display:${missingDirectories > 0 ? 'block' : 'none'};margin-top:0;padding-top:0;padding-left:10px;padding-right:10px;margin-bottom:10px;"><span id="js-errorCount">${missingDirectories}</span> error(s) exist; continue to skip wallets with errors.</p>
           <div id="js-mainConfigurationArea" class="main-area">
             ${items}
