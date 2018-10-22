@@ -74,9 +74,6 @@ export class NavBarComponent implements OnInit {
     e.preventDefault();
     const { openExternal } = window.electron.remote.shell;
     switch(name) {
-      case 'email':
-        openExternal('mailto:contact@blocknet.co');
-        break;
       case 'reddit':
         openExternal('https://www.reddit.com/r/theblocknet/');
         break;
