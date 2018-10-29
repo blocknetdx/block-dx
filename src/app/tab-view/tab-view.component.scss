@@ -59,6 +59,19 @@ a.tab {
   @include screen(lg) {
     height: calc(100% - 30px);
   }
+
+  /deep/ {
+    .ps-content {
+      padding: 5px 0;
+    }
+
+    .ps.ps--scrolling-y > .ps__rail-y,
+    .ps__rail-y:focus,
+    .ps__rail-y:hover {
+      background: none;
+    }
+  }
+
 }
 
 // Card Theme
