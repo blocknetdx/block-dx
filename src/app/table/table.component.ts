@@ -25,6 +25,7 @@ import { TableSectionDividerDirective } from './table-section-divider.directive'
           [class.active]="col.active"
           [class.sort-up]="col.active && !col.desc"
           [class.sort-down]="col.active && col.desc"
+          [style.maxWidth]="col.maxWidth ? col.maxWidth : ''"
           *ngFor="let col of columns">
           <ng-template *ngTemplateOutlet="col.headerTemplate"></ng-template>
         </div>
@@ -53,7 +54,10 @@ import { TableSectionDividerDirective } from './table-section-divider.directive'
               (click)="rowSelected(row, $event)"
               *ngFor="let row of section.rows">
               <ng-container *ngIf="row.constructor.name !== 'TableRowDivider'">
-                <div class="bn-table__cell {{col.classList}}" *ngFor="let col of columns">
+                <div 
+                  class="bn-table__cell {{col.classList}}"
+                  *ngFor="let col of columns"
+                  [style.maxWidth]="col.maxWidth ? col.maxWidth : ''">
                   <ng-template *ngTemplateOutlet="col.cellTemplate; context: {row: row}"></ng-template>
                 </div>
               </ng-container>

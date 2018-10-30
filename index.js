@@ -89,6 +89,13 @@ autoUpdater.on('error', err => {
   handleError(err);
 });
 
+const configurationFilesDirectory = path.join(__dirname, 'blockchain-configuration-files');
+const getManifest = () => {
+  const filePath = path.join(configurationFilesDirectory, 'manifest.json');
+  const data = fs.readJsonSync(filePath);
+  return data;
+};
+
 const openConfigurationWindow = (options = {}) => {
 
   const { error } = options;
@@ -153,13 +160,9 @@ const openConfigurationWindow = (options = {}) => {
     }
   });
 
-  const configurationFilesDirectory = path.join(__dirname, 'blockchain-configuration-files');
-
   ipcMain.on('getManifest', async function(e) {
     try {
-      const filePath = path.join(configurationFilesDirectory, 'manifest.json');
-      const data = await fs.readJsonAsync(filePath);
-      e.returnValue = data;
+      e.returnValue = getManifest();
     } catch(err) {
       handleError(err);
     }
@@ -528,19 +531,25 @@ const openAppWindow = () => {
   ipcMain.on('sendTradeHistory', () => sendTradeHistory(true));
   setInterval(sendTradeHistory, stdInterval);
 
-  const sendLocalTokens = () => {
-    sn.dxGetLocalTokens()
-      .then(res => appWindow.send('localTokens', res))
-      .catch(handleError);
+  const sendLocalTokens = async function() {
+    const localTokens = await sn.dxGetLocalTokens();
+    appWindow.send('localTokens', localTokens);
   };
   ipcMain.on('getLocalTokens', sendLocalTokens);
 
-  const sendNetworkTokens = () => {
-    sn.dxGetNetworkTokens()
-      .then(res => appWindow.send('networkTokens', res))
-      .catch(handleError);
+  const manifestData = getManifest();
+  const availableTokens = new Set(manifestData.map(d => d.ticker));
+
+  const sendNetworkTokens = async function() {
+    const networkTokens = await sn.dxGetNetworkTokens();
+    const filteredTokens = networkTokens.filter(t => availableTokens.has(t));
+    appWindow.send('networkTokens', filteredTokens);
   };
   ipcMain.on('getNetworkTokens', sendNetworkTokens);
+  setInterval(() => {
+    sendNetworkTokens();
+    sendLocalTokens();
+  }, 60000);
 
   let myOrders = [];
   const sendMyOrders = force => {
