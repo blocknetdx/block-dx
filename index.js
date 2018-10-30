@@ -120,7 +120,7 @@ const openConfigurationWindow = (options = {}) => {
 
   const configurationWindow = new BrowserWindow({
     show: false,
-    width: 1000,
+    width: 1050,
     height: platform === 'win32' ? 708 : platform === 'darwin' ? 695 : 670,
     parent: appWindow
   });
