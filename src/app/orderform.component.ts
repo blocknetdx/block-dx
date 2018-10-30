@@ -1,5 +1,6 @@
 import { Component, Input, ViewChild, OnInit, NgZone } from '@angular/core';
 import * as math from 'mathjs';
+import { PerfectScrollbarComponent, PerfectScrollbarDirective } from 'ngx-perfect-scrollbar';
 
 import { AppService } from './app.service';
 import { Currentprice } from './currentprice';
@@ -25,6 +26,9 @@ export class OrderformComponent implements OnInit {
   @ViewChild('tabView') public tabView: TabViewComponent;
   @ViewChild('typeSelect') public typeSelect: SelectComponent;
 
+  @ViewChild('scrollbar')
+
+  public scrollbar: PerfectScrollbarDirective;
   public symbols:string[] = [];
   public currentPrice: Currentprice;
   public totalPrice = 0;
