@@ -31,7 +31,8 @@ export class PricechartComponent implements AfterViewInit {
 
     const prepData = arr => arr
       .map(i => Object.assign({}, i, {
-        date: moment(i.time).toDate()
+        date: moment(i.time).toDate(),
+        formattedTime: moment(i.time).format('HH:mm')
       }));
 
     this.currentpriceService.getOrderHistoryByMinute()
@@ -81,7 +82,7 @@ export class PricechartComponent implements AfterViewInit {
         parseDates: true,
         'graphs': [ {
           'id': 'g1',
-          'balloonText': 'Open:<b>[[open]]</b><br>Low:<b>[[low]]</b><br>High:<b>[[high]]</b><br>Close:<b>[[close]]</b><br>',
+          'balloonText': 'Open:<b>[[open]]</b><br>Low:<b>[[low]]</b><br>High:<b>[[high]]</b><br>Close:<b>[[close]]</b><br>Time:<b>[[formattedTime]]</b><br>',
           'closeField': 'close',
           'fillColors': '#4bf5c6',
           'highField': 'high',
