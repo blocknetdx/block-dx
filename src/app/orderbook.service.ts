@@ -31,7 +31,7 @@ export class OrderbookService {
 
   constructor(private http: Http) { }
 
-  requestOrder(order: Order) {
+  requestOrder(order: any) {
     this.requestedOrder.next(order);
   }
 
