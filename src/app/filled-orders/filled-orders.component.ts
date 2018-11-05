@@ -94,4 +94,14 @@ export class FilledOrdersComponent extends BaseComponent implements OnInit {
     return token;
   }
 
+  getStatusDotColor(status) {
+    if(['finished'].includes(status)) {
+      return '#0f0';
+    } else if(['canceled'].includes(status)) {
+      return '#000';
+    } else {
+      return '#fff';
+    }
+  }
+
 }

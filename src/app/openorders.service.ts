@@ -99,7 +99,7 @@ export class OpenordersService {
                   type: order.type,
                   time_in_force: '',
                   post_only: '',
-                  created_at: order.updatedAt ? order.updatedAt : order.createdAt,
+                  created_at: order.createdAt,
                   fill_fees: '',
                   filledSize: '',
                   executed_value: '',
@@ -107,7 +107,8 @@ export class OpenordersService {
                   settled: order.status === 'finished',
                   canceled: order.status === 'canceled'
                 });
-              });
+              })
+              .sort((a, b) => b.created_at.localeCompare(a.created_at));
 
             // console.log('myOrders', newOrders);
             observer.next(newOrders);
