@@ -3,39 +3,31 @@
   <app-table-column [prop]="'price'" [classList]="'col-1'">
     <ng-template columnHeader>Type</ng-template>
     <ng-template let-row="row" columnCell>
-      <span class="bn-number"
+      <span class="bn-number filled-order-table-font"
             [class.color-red]="row.side == 'sell'"
             [class.color-green]="row.side == 'buy'"
             [innerHtml]="row.side === 'buy' ? 'BUY' : 'SELL'"></span>
     </ng-template>
   </app-table-column>
 
-  <app-table-column [classList]="'col d-none d-sm-block align-center'">
+  <app-table-column [classList]="'col d-none d-sm-block'">
     <ng-template columnHeader>Market</ng-template>
     <ng-template let-row="row" columnCell>
-      {{row.taker}}/{{row.maker}}
+      <span class="filled-order-table-font">{{row.taker}}/{{row.maker}}</span>
     </ng-template>
   </app-table-column>
 
   <app-table-column [prop]="'size'" [classList]="'col'">
     <ng-template columnHeader>Amount</ng-template>
     <ng-template let-row="row" columnCell>
-      <span class="bn-number" [innerHtml]="row.size | blockCurrency:symbols[0]:'6'"></span> <span class="padded-token" [innerHTML]="padToken(row.taker)"></span>
+      <span class="bn-number filled-order-table-font" [innerHtml]="row.size | blockCurrency:symbols[0]:'6'"></span> <span class="padded-token filled-order-table-font" [innerHTML]="padToken(row.taker)"></span>
     </ng-template>
   </app-table-column>
 
   <app-table-column [prop]="'price'" [classList]="'col'">
     <ng-template columnHeader>Price</ng-template>
     <ng-template let-row="row" columnCell>
-      <span class="bn-number" [innerHtml]="row.price | blockCurrency:symbols[1]:'6'"></span> <span class="padded-token" [innerHTML]="padToken(row.maker)"></span>
-    </ng-template>
-  </app-table-column>
-
-  <app-table-column *ngIf="pricingEnabled" [prop]="'price'" [classList]="'col'">
-    <ng-template columnHeader>Price ({{pricing ? pricing.in : ''}})</ng-template>
-    <ng-template let-row="row" columnCell>
-      <span *ngIf="!pricingAvailable || pricing.getPrice(row.price, row.maker) === 0" class="bn-number">N/A</span>
-      <span *ngIf="pricingAvailable && pricing.getPrice(row.price, row.maker) !== 0" class="bn-number" [innerHtml]="pricing.getPrice(row.price, row.maker) | blockCurrency:symbols[1]:'6'"></span>
+      <span class="bn-number filled-order-table-font" [innerHtml]="row.price | blockCurrency:symbols[1]:'6'"></span> <span class="padded-token filled-order-table-font" [innerHTML]="padToken(row.maker)"></span>
     </ng-template>
   </app-table-column>
 
@@ -49,14 +41,22 @@
   <app-table-column [prop]="'price'" [classList]="'col'">
     <ng-template columnHeader>Total</ng-template>
     <ng-template let-row="row" columnCell>
-      <span class="bn-number" [innerHtml]="row.total | blockCurrency:symbols[1]:'6'"></span> <span class="padded-token" [innerHTML]="padToken(row.maker)"></span>
+      <span class="bn-number filled-order-table-font" [innerHtml]="row.total | blockCurrency:symbols[1]:'6'"></span> <span class="padded-token filled-order-table-font" [innerHTML]="padToken(row.maker)"></span>
     </ng-template>
   </app-table-column>
 
   <app-table-column [prop]="'created_at'" [classList]="'col'">
     <ng-template columnHeader>Date</ng-template>
     <ng-template let-row="row" columnCell>
-      <span>{{row.formattedDate()}}</span>
+      <span class="filled-order-table-font">{{row.formattedDate()}}</span>
+    </ng-template>
+  </app-table-column>
+
+  <app-table-column [prop]="'status'" [classList]="'d-none d-sm-block col'" maxWidth="40px">
+    <ng-template columnHeader>Status</ng-template>
+    <ng-template let-row="row" columnCell>
+      <!--<span class="open-order-table-font">{{row.status}}</span>-->
+      <div class="filled-order-status-dot" [title]="row.status" [style.background-color]="getStatusDotColor(row.status)"></div>
     </ng-template>
   </app-table-column>
 

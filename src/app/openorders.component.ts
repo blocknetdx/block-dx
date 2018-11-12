@@ -123,4 +123,22 @@ export class OpenordersComponent extends BaseComponent implements OnInit {
     return token;
   }
 
+  getStatusDotColor(status) {
+    if(['new'].includes(status)) {
+      return '#888';
+    } else if(['accepting', 'hold', 'initialized', 'created', 'commited'].includes(status)) {
+      return '#ff0';
+    } else if(['finished'].includes(status)) {
+      return '#0f0';
+    } else if(['expired', 'offline', 'invalid', 'rolled back'].includes(status)) {
+      return '#c00';
+    } else if(['rollback failed'].includes(status)) {
+      return '#ea00ff';
+    } else if(['canceled'].includes(status)) {
+      return '#000';
+    } else { // open
+      return '#fff';
+    }
+  }
+
 }
