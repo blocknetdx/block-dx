@@ -110,8 +110,8 @@ const openConfigurationWindow = (options = {}) => {
         errorMessage = 'There was an authorization problem. Please check your Blocknet RPC username and/or password.';
         break;
       default:
-        errorTitle = 'Connection Problem';
-        errorMessage = 'There was a problem connecting to the Blocknet RPC server. What would you like to do?';
+        errorTitle = 'Connection Error';
+        errorMessage = 'There was a problem connecting to the Blocknet wallet. What would you like to do?';
     }
     console.log(errorMessage);
   } else {

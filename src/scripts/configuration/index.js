@@ -31,9 +31,9 @@ ipcRenderer.on('errorMessage', async function(e, title, message) {
       html: message,
       type: 'warning',
       showConfirmButton: true,
-      confirmButtonText: 'Run Configuration Wizard',
+      confirmButtonText: 'Start Basic Setup',
       showCancelButton: true,
-      cancelButtonText: 'Open RPC Settings Window',
+      cancelButtonText: 'Open RPC Settings',
       reverseButtons: true,
       allowEscapeKey: false,
       allowOutsideClick: false
