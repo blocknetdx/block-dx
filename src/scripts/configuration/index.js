@@ -406,7 +406,7 @@ $(document).ready(() => {
                 }
                 const { dismiss } = await swal({
                   title: 'Missing Credentials',
-                  html: `Credentials for the coins listed below have not been entered. Select 'Cancel' to add credentials for these coins. If 'Continue' is selected, these coins will not be setup for trading.<br><br>${incomplete.map(w => w.name).join('<br>')}`,
+                  html: `Credentials for the wallet(s) listed have not been entered. If 'Continue' is selected, the token(s) will not be setup for trading.<br><br>${incomplete.map(w => w.name).join('<br>')}`,
                   type: 'warning',
                   showConfirmButton: true,
                   confirmButtonText: 'Continue',
