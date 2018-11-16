@@ -8,6 +8,7 @@ const ServiceNodeInterface = require('./src-back/service-node-interface');
 const serve = require('electron-serve');
 const { autoUpdater } = require('electron-updater');
 const PricingInterface = require('./src-back/pricing-interface');
+const confController = require('./src-back/conf-controller');
 
 const { app, BrowserWindow, Menu, ipcMain } = electron;
 
@@ -89,11 +90,8 @@ autoUpdater.on('error', err => {
   handleError(err);
 });
 
-const configurationFilesDirectory = path.join(__dirname, 'blockchain-configuration-files');
 const getManifest = () => {
-  const filePath = path.join(configurationFilesDirectory, 'manifest.json');
-  const data = fs.readJsonSync(filePath);
-  return data;
+  return storage.getItem('manifest');
 };
 
 const openConfigurationWindow = (options = {}) => {
@@ -169,18 +167,16 @@ const openConfigurationWindow = (options = {}) => {
   });
   ipcMain.on('getBaseConf', function(e, walletConf) {
     try {
-      const filePath = path.join(configurationFilesDirectory, 'wallet-confs', walletConf);
-      const contents = fs.readFileSync(filePath, 'utf8');
-      e.returnValue = contents;
+      const walletConfs = storage.getItem('walletConfs');
+      e.returnValue = walletConfs[walletConf];
     } catch(err) {
       handleError(err);
     }
   });
   ipcMain.on('getBridgeConf', (e, bridgeConf) => {
     try {
-      const filePath = path.join(configurationFilesDirectory, 'xbridge-confs', bridgeConf);
-      const contents = fs.readFileSync(filePath, 'utf8');
-      e.returnValue = contents;
+      const xbridgeConfs = storage.getItem('xbridgeConfs');
+      e.returnValue = xbridgeConfs[bridgeConf];
     } catch(err) {
       handleError(err);
     }
@@ -958,6 +954,26 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
     if(!port) {
       port = '41414';
       storage.setItem('port', port);
+    }
+
+    try {
+      const sha = await confController.getSha();
+      const oldSha = storage.getItem('confRepoSha') || '';
+      if(sha !== oldSha) {
+        const [ manifest, walletConfs, xbridgeConfs ] = await Promise.all([
+          confController.getManifest(),
+          confController.getWalletConfs(),
+          confController.getXbridgeConfs()
+        ]);
+        storage.setItems({
+          confRepoSha: sha,
+          manifest,
+          walletConfs,
+          xbridgeConfs
+        }, true);
+      }
+    } catch(err) {
+      console.error(err);
     }
 
     if(!user || !password) {
