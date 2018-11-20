@@ -158,7 +158,7 @@
                 *ngIf="type == 'buy'"
                 type="submit"
                 class="order-form-button order-form-buy-button"
-                [disabled]="(disableSubmit) ? true : (model.amount && Number(model.amount) !== NaN && Number(model.amount !== 0) && model.totalPrice && Number(model.totalPrice) !== Nan && Number(model.totalPrice) !== 0 && model.makerAddress && model.takerAddress) ? false : true">
+                [disabled]="disableSubmit ? true : false">
                 <i class="material-icons">add</i>
                 {{model.id ? 'Accept' : 'Place'}} Buy Order
               </button>
@@ -167,7 +167,7 @@
                 *ngIf="type == 'sell'"
                 type="submit"
                 class="order-form-button order-form-sell-button"
-                [disabled]="(disableSubmit) ? true : (model.amount && Number(model.amount) !== NaN && Number(model.amount !== 0) && model.totalPrice && Number(model.totalPrice) !== Nan && Number(model.totalPrice) !== 0 && model.makerAddress && model.takerAddress) ? false : true">
+                [disabled]="disableSubmit ? true : false">
                 <i class="material-icons">remove</i>
                 {{model.id ? 'Accept' : 'Place'}} Sell Order
               </button>
