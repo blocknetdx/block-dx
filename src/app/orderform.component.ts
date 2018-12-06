@@ -313,12 +313,29 @@ export class OrderformComponent implements OnInit {
 
     let { makerAddress = '', takerAddress = '', amount = '', totalPrice = '' } = this.model;
 
-    if(makerAddress === takerAddress) {
+    if(!amount) {
+      alert('Oops! You must enter an amount.');
+      return;
+    } else if(!totalPrice) {
+      alert('Oops! You must enter a price.');
+      return;
+    } else if(!makerAddress) {
+      alert(`Oops! You must enter a ${this.symbols[0]} address.`);
+      return;
+    } else if(!takerAddress) {
+      alert(`Oops! You must enter a ${this.symbols[1]} address.`);
+      return;
+    } else if(makerAddress === takerAddress) {
       alert(`Oops! You have the same address entered for both ${this.symbols[0]} and ${this.symbols[1]}.`);
       return;
     }
 
     this.disableSubmit = true;
+    setTimeout(() => {
+      this.zone.run(() => {
+        this.disableSubmit = false;
+      });
+    }, 1000);
 
     const { ipcRenderer } = window.electron;
     const type = this.tabView.activeIndex === 0 ? 'buy' : 'sell';
@@ -341,9 +358,6 @@ export class OrderformComponent implements OnInit {
     this.updateStoredAddresses(makerAddress, takerAddress);
 
     ipcRenderer.once('orderDone', (e, state) => {
-      this.zone.run(() => {
-        this.disableSubmit = false;
-      });
       if(state === 'success') {
         ipcRenderer.send('saveAddress', this.symbols[0], makerAddress);
         ipcRenderer.send('saveAddress', this.symbols[1], takerAddress);
