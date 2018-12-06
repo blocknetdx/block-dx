@@ -20,7 +20,8 @@ co(function*() {
       'dist',
       'index.js',
       'tos.txt',
-      'src-back'
+      'src-back',
+      'blockchain-configuration-files'
     ];
 
     for(const file of filesToCopy) {

@@ -26,6 +26,17 @@ ipcMain.on('getAppVersion', e => {
 
 let appWindow, serverLocation, sn, keyPair, storage, user, password, port, info, pricingSource, pricingUnit, apiKeys, pricingFrequency, enablePricing, sendPricingMultipliers, clearPricingInterval, setPricingInterval, sendMarketPricingEnabled;
 
+const configurationFilesDirectory = path.join(__dirname, 'blockchain-configuration-files');
+
+const getManifest = () => {
+  let manifest = storage.getItem('manifest');
+  if(!manifest) {
+    const filePath = path.join(configurationFilesDirectory, 'manifest-latest.json');
+    manifest = fs.readJsonSync(filePath);
+  }
+  return manifest;
+};
+
 // General Error Handler
 const handleError = err => {
   console.error(err);
@@ -89,10 +100,6 @@ autoUpdater.on('update-downloaded', ({ version }) => {
 autoUpdater.on('error', err => {
   handleError(err);
 });
-
-const getManifest = () => {
-  return storage.getItem('manifest');
-};
 
 const openConfigurationWindow = (options = {}) => {
 
@@ -167,16 +174,26 @@ const openConfigurationWindow = (options = {}) => {
   });
   ipcMain.on('getBaseConf', function(e, walletConf) {
     try {
-      const walletConfs = storage.getItem('walletConfs');
-      e.returnValue = walletConfs[walletConf];
+      const walletConfs = storage.getItem('walletConfs') || {};
+      let contents = walletConfs[walletConf];
+      if(!contents) {
+        const filePath = path.join(configurationFilesDirectory, 'wallet-confs', walletConf);
+        contents = fs.readFileSync(filePath, 'utf8');
+      }
+      e.returnValue = contents;
     } catch(err) {
       handleError(err);
     }
   });
   ipcMain.on('getBridgeConf', (e, bridgeConf) => {
     try {
-      const xbridgeConfs = storage.getItem('xbridgeConfs');
-      e.returnValue = xbridgeConfs[bridgeConf];
+      const xbridgeConfs = storage.getItem('xbridgeConfs') || {};
+      let contents = xbridgeConfs[bridgeConf];
+      if(!contents) {
+        const filePath = path.join(configurationFilesDirectory, 'xbridge-confs', bridgeConf);
+        contents = fs.readFileSync(filePath, 'utf8');
+      }
+      e.returnValue = contents;
     } catch(err) {
       handleError(err);
     }
