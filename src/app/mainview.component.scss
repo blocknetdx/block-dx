@@ -82,10 +82,32 @@
         height: 130px;
       }
     }
+    &.balances.alternate-pricing {
+      @include screen(lg) {
+        min-height: 130px;
+        max-height: calc(100vh - 553px - 106px + 40px + 48px);
+      }
+      @media(max-height: 700px) {
+        min-height: 130px;
+        max-height: 130px;
+        height: 130px;
+      }
+    }
     &.orderform {
       @include screen(lg) {
         min-height: 416px;
         max-height: 416px;
+      }
+      @media(max-height: 700px) {
+        max-height: calc(100vh - 236px);
+        min-height: calc(100vh - 236px);
+        height: calc(100vh - 236px);
+      }
+    }
+    &.orderform.alternate-pricing {
+      @include screen(lg) {
+        min-height: 416px + 48px;
+        max-height: 416px + 48px;
       }
       @media(max-height: 700px) {
         max-height: calc(100vh - 236px);
