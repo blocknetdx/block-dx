@@ -1,4 +1,5 @@
 import { Component, OnInit, NgZone } from '@angular/core';
+import * as math from 'mathjs';
 
 import { BaseComponent } from '../base.component';
 import { AppService } from '../app.service';
@@ -6,6 +7,11 @@ import { Openorder } from '../openorder';
 import { OpenordersService } from '../openorders.service';
 import { PricingService } from '../pricing.service';
 import { Pricing } from '../pricing';
+
+math.config({
+  number: 'BigNumber',
+  precision: 64
+});
 
 @Component({
   selector: 'bn-filled-orders',
@@ -18,6 +24,7 @@ export class FilledOrdersComponent extends BaseComponent implements OnInit {
   public pricing: Pricing;
   public pricingEnabled = false;
   public pricingAvailable = false;
+  public longestTokenLength: number;
 
   constructor(
     private appService: AppService,
@@ -42,6 +49,7 @@ export class FilledOrdersComponent extends BaseComponent implements OnInit {
     //       });
     //   });
     this.openorderService.getOpenorders()
+      .takeUntil(this.$destroy)
       .subscribe(openorders => {
         this.zone.run(() => {
           this.filledorders = openorders
@@ -50,21 +58,50 @@ export class FilledOrdersComponent extends BaseComponent implements OnInit {
               o['row_class'] = o.side;
               return o;
             });
+          const tokens = openorders
+            .reduce((arr, o) => {
+              return [...arr, o.maker, o.taker];
+            }, [])
+            .sort((a, b) => a.length === b.length ? 0 : a.length > b.length ? -1 : 1);
+          this.longestTokenLength = tokens.length > 0 ? tokens[0].length : 0;
           // console.log('filledorders', this.filledorders);
         });
       });
 
-    this.pricingService.getPricing().subscribe(pricing => {
-      this.zone.run(() => {
-        this.pricing = pricing;
-        this.pricingAvailable = pricing.enabled;
-      });
+    this.pricingService.getPricing()
+      .takeUntil(this.$destroy)
+      .subscribe(pricing => {
+        this.zone.run(() => {
+          this.pricing = pricing;
+          this.pricingAvailable = pricing.enabled;
+        });
     });
-    this.pricingService.getPricingEnabled().subscribe(enabled => {
-      this.zone.run(() => {
-        this.pricingEnabled = enabled;
-      });
+    this.pricingService.getPricingEnabled()
+      .takeUntil(this.$destroy)
+      .subscribe(enabled => {
+        this.zone.run(() => {
+          this.pricingEnabled = enabled;
+        });
     });
 
   }
+
+  padToken(token) {
+    const diff = this.longestTokenLength - token.length;
+    for(let i = 0; i < diff; i++) {
+      token += ' ';
+    }
+    return token;
+  }
+
+  getStatusDotColor(status) {
+    if(['finished'].includes(status)) {
+      return '#0f0';
+    } else if(['canceled'].includes(status)) {
+      return '#000';
+    } else {
+      return '#fff';
+    }
+  }
+
 }

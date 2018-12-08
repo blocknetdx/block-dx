@@ -21,15 +21,10 @@ export class OpenordersService {
 
   private ordersObservable: Observable<Openorder[]>;
 
-  private calculatePrice(order, symbols) {
-    const firstPair = symbols[0];
+  private calculatePrice(order) {
     const makerSize = Number(order.makerSize);
     const takerSize = Number(order.takerSize);
-    if(firstPair === order.maker) {
-      return math.divide(takerSize, makerSize);
-    } else {
-      return math.divide(makerSize, takerSize);
-    }
+    return math.divide(takerSize, makerSize);
   }
 
   getOpenorders(): Observable<Openorder[]> {
@@ -40,7 +35,6 @@ export class OpenordersService {
 
           window.electron.ipcRenderer.on('myOrders', (e, orders, symbols) => {
             // console.log('myOrders', orders);
-            const firstPair = symbols[0];
 
             // Test Data Generator
             // const getRandom = (min, max) => Math.random() * (max - min) + min;
@@ -49,13 +43,16 @@ export class OpenordersService {
             //   const price = getRandom(1, 4);
             //   const size = getRandom(1, 4);
             //   const status = i % 2 === 0 ? 'open' : 'finished';
+            //   const side = i % 3 === 0 ? 'sell' : 'buy';
             //   newOrders.push(Openorder.createOpenOrder({
             //       id: `order${i}`,
+            //       maker: side === 'buy' ? symbols[0] : symbols[1],
+            //       taker: side === 'buy' ? symbols[1] : symbols[0],
             //       price,
             //       size,
             //       total: String(math.multiply(price, Number(size))),
             //       product_id: '',
-            //       side: i % 2 === 0 ? 'sell' : 'buy',
+            //       side,
             //       stp: '',
             //       type: 'exact',
             //       time_in_force: '',
@@ -73,21 +70,36 @@ export class OpenordersService {
             const newOrders = orders
               .map(order => {
 
-                const price = this.calculatePrice(order, symbols);
-                const size = firstPair === order.maker ? order.makerSize : order.takerSize;
+                const side = order.maker === symbols[0] && order.taker === symbols[1] ? 'sell' : 'buy';
+
+                let size, total, maker, taker;
+                if(side === 'sell') {
+                  maker = order.taker;
+                  taker = order.maker;
+                  size = order.makerSize;
+                  total = order.takerSize;
+                } else {
+                  maker = order.maker;
+                  taker = order.taker;
+                  size = order.takerSize;
+                  total = order.makerSize;
+                }
+                const price = math.divide(Number(total), Number(size));
 
                 return Openorder.createOpenOrder({
                   id: order.id,
+                  maker,
+                  taker,
                   price,
                   size,
-                  total: String(math.multiply(price, Number(size))),
+                  total,
                   product_id: '',
-                  side: firstPair === order.maker ? 'sell' : 'buy',
+                  side,
                   stp: '',
                   type: order.type,
                   time_in_force: '',
                   post_only: '',
-                  created_at: order.updatedAt ? order.updatedAt : order.createdAt,
+                  created_at: order.createdAt,
                   fill_fees: '',
                   filledSize: '',
                   executed_value: '',
@@ -95,7 +107,9 @@ export class OpenordersService {
                   settled: order.status === 'finished',
                   canceled: order.status === 'canceled'
                 });
-              });
+              })
+              .sort((a, b) => b.created_at.localeCompare(a.created_at));
+
             // console.log('myOrders', newOrders);
             observer.next(newOrders);
           });

@@ -17,11 +17,11 @@ co(function*() {
     yield fs.ensureDirAsync(buildDir);
 
     const filesToCopy = [
-      'blockchain-configuration-files',
       'dist',
       'index.js',
       'tos.txt',
-      'src-back'
+      'src-back',
+      'blockchain-configuration-files'
     ];
 
     for(const file of filesToCopy) {

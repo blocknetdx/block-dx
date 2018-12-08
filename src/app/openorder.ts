@@ -1,3 +1,5 @@
+import * as moment from 'moment';
+
 export class Openorder {
   id: string;
   price: number;
@@ -16,6 +18,12 @@ export class Openorder {
   status: string;
   settled: boolean;
   canceled: boolean;
+  maker: string;
+  taker: string;
+
+  public formattedDate() {
+    return moment(this.created_at).format('MMM DD HH:mm');
+  }
 
   static createOpenOrder(props: any): Openorder {
     const instance = new Openorder();

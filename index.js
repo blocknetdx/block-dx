@@ -8,6 +8,7 @@ const ServiceNodeInterface = require('./src-back/service-node-interface');
 const serve = require('electron-serve');
 const { autoUpdater } = require('electron-updater');
 const PricingInterface = require('./src-back/pricing-interface');
+const confController = require('./src-back/conf-controller');
 
 const { app, BrowserWindow, Menu, ipcMain } = electron;
 
@@ -24,6 +25,17 @@ ipcMain.on('getAppVersion', e => {
 });
 
 let appWindow, serverLocation, sn, keyPair, storage, user, password, port, info, pricingSource, pricingUnit, apiKeys, pricingFrequency, enablePricing, sendPricingMultipliers, clearPricingInterval, setPricingInterval, sendMarketPricingEnabled;
+
+const configurationFilesDirectory = path.join(__dirname, 'blockchain-configuration-files');
+
+const getManifest = () => {
+  let manifest = storage.getItem('manifest');
+  if(!manifest) {
+    const filePath = path.join(configurationFilesDirectory, 'manifest-latest.json');
+    manifest = fs.readJsonSync(filePath);
+  }
+  return manifest;
+};
 
 // General Error Handler
 const handleError = err => {
@@ -103,8 +115,8 @@ const openConfigurationWindow = (options = {}) => {
         errorMessage = 'There was an authorization problem. Please check your Blocknet RPC username and/or password.';
         break;
       default:
-        errorTitle = 'Connection Problem';
-        errorMessage = 'There was a problem connecting to the Blocknet RPC server. What would you like to do?';
+        errorTitle = 'Connection Error';
+        errorMessage = 'There was a problem connecting to the Blocknet wallet. What would you like to do?';
     }
     console.log(errorMessage);
   } else {
@@ -113,7 +125,7 @@ const openConfigurationWindow = (options = {}) => {
 
   const configurationWindow = new BrowserWindow({
     show: false,
-    width: 1000,
+    width: 1050,
     height: platform === 'win32' ? 708 : platform === 'darwin' ? 695 : 670,
     parent: appWindow
   });
@@ -153,21 +165,21 @@ const openConfigurationWindow = (options = {}) => {
     }
   });
 
-  const configurationFilesDirectory = path.join(__dirname, 'blockchain-configuration-files');
-
   ipcMain.on('getManifest', async function(e) {
     try {
-      const filePath = path.join(configurationFilesDirectory, 'manifest.json');
-      const data = await fs.readJsonAsync(filePath);
-      e.returnValue = data;
+      e.returnValue = getManifest();
     } catch(err) {
       handleError(err);
     }
   });
   ipcMain.on('getBaseConf', function(e, walletConf) {
     try {
-      const filePath = path.join(configurationFilesDirectory, 'wallet-confs', walletConf);
-      const contents = fs.readFileSync(filePath, 'utf8');
+      const walletConfs = storage.getItem('walletConfs') || {};
+      let contents = walletConfs[walletConf];
+      if(!contents) {
+        const filePath = path.join(configurationFilesDirectory, 'wallet-confs', walletConf);
+        contents = fs.readFileSync(filePath, 'utf8');
+      }
       e.returnValue = contents;
     } catch(err) {
       handleError(err);
@@ -175,8 +187,12 @@ const openConfigurationWindow = (options = {}) => {
   });
   ipcMain.on('getBridgeConf', (e, bridgeConf) => {
     try {
-      const filePath = path.join(configurationFilesDirectory, 'xbridge-confs', bridgeConf);
-      const contents = fs.readFileSync(filePath, 'utf8');
+      const xbridgeConfs = storage.getItem('xbridgeConfs') || {};
+      let contents = xbridgeConfs[bridgeConf];
+      if(!contents) {
+        const filePath = path.join(configurationFilesDirectory, 'xbridge-confs', bridgeConf);
+        contents = fs.readFileSync(filePath, 'utf8');
+      }
       e.returnValue = contents;
     } catch(err) {
       handleError(err);
@@ -528,19 +544,25 @@ const openAppWindow = () => {
   ipcMain.on('sendTradeHistory', () => sendTradeHistory(true));
   setInterval(sendTradeHistory, stdInterval);
 
-  const sendLocalTokens = () => {
-    sn.dxGetLocalTokens()
-      .then(res => appWindow.send('localTokens', res))
-      .catch(handleError);
+  const sendLocalTokens = async function() {
+    const localTokens = await sn.dxGetLocalTokens();
+    appWindow.send('localTokens', localTokens);
   };
   ipcMain.on('getLocalTokens', sendLocalTokens);
 
-  const sendNetworkTokens = () => {
-    sn.dxGetNetworkTokens()
-      .then(res => appWindow.send('networkTokens', res))
-      .catch(handleError);
+  const manifestData = getManifest();
+  const availableTokens = new Set(manifestData.map(d => d.ticker));
+
+  const sendNetworkTokens = async function() {
+    const networkTokens = await sn.dxGetNetworkTokens();
+    const filteredTokens = networkTokens.filter(t => availableTokens.has(t));
+    appWindow.send('networkTokens', filteredTokens);
   };
   ipcMain.on('getNetworkTokens', sendNetworkTokens);
+  setInterval(() => {
+    sendNetworkTokens();
+    sendLocalTokens();
+  }, 60000);
 
   let myOrders = [];
   const sendMyOrders = force => {
@@ -949,6 +971,26 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
     if(!port) {
       port = '41414';
       storage.setItem('port', port);
+    }
+
+    try {
+      const sha = await confController.getSha();
+      const oldSha = storage.getItem('confRepoSha') || '';
+      if(sha !== oldSha) {
+        const [ manifest, walletConfs, xbridgeConfs ] = await Promise.all([
+          confController.getManifest(),
+          confController.getWalletConfs(),
+          confController.getXbridgeConfs()
+        ]);
+        storage.setItems({
+          confRepoSha: sha,
+          manifest,
+          walletConfs,
+          xbridgeConfs
+        }, true);
+      }
+    } catch(err) {
+      console.error(err);
     }
 
     if(!user || !password) {

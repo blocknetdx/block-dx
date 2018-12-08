@@ -5,6 +5,7 @@ import * as math from 'mathjs';
 import { naturalSort } from './util';
 import { Order } from './order';
 import { OrderbookService } from './orderbook.service';
+import { OpenordersService } from './openorders.service';
 import { TableComponent } from './table/table.component';
 import { AppService } from './app.service';
 import {NumberFormatPipe} from './pipes/decimal.pipe';
@@ -40,10 +41,13 @@ export class OrderbookComponent implements OnInit {
   public pricingAvailable = false;
   public pricingEnabled = false;
 
+  public ownOrders = new Set();
+
   constructor(
     private appService: AppService,
     private numberFormatPipe: NumberFormatPipe,
     private orderbookService: OrderbookService,
+    private openorderService: OpenordersService,
     private pricingService: PricingService,
     // private tradehistoryService: TradehistoryService,
     // private currentpriceService: CurrentpriceService,
@@ -107,6 +111,12 @@ export class OrderbookComponent implements OnInit {
       });
     });
 
+    this.openorderService.getOpenorders().subscribe(openorders => {
+      zone.run(() => {
+        this.ownOrders = new Set(openorders.map(o => o.id));
+      });
+    });
+
     // this.currentpriceService.currentprice.subscribe((cp) => {
     //   zone.run(() => {
     //     this.lastTradePrice = cp.last;
@@ -117,7 +127,16 @@ export class OrderbookComponent implements OnInit {
 
   onRowSelect(row) {
     if (row) {
-      this.orderbookService.requestOrder(row);
+      if(this.ownOrders.has(row[2])) {
+        const newRow = [...row];
+        newRow[2] = '';
+        this.orderbookService.requestOrder(newRow);
+        setTimeout(() => {
+          alert('You are unable to take your own order.');
+        }, 100);
+      } else {
+        this.orderbookService.requestOrder(row);
+      }
     }
   }
 

@@ -1,0 +1,16 @@
+.padded-token {
+  //white-space: pre; // enable if we want to pad tokens so the numbers line up
+}
+
+.filled-order-table-font {
+  font-size: 11px;
+}
+
+.filled-order-status-dot {
+  display: block;
+  margin: auto;
+  margin-top: 7px;
+  width: 8px;
+  height: 8px;
+  border-radius:50%;
+}

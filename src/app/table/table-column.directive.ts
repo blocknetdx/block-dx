@@ -8,16 +8,17 @@ import { TableColumnCellDirective } from './table-column-cell.directive';
 })
 export class TableColumnDirective {
   @Input() classList: string;
-  @Input() sortable: boolean = true;
+  @Input() sortable: true;
   @Input() prop: string;
+  @Input() maxWidth: string;
 
   active: boolean;
-  desc: boolean = true;
+  desc = true;
 
   @ContentChild(TableColumnHeaderDirective, {read: TemplateRef})
-  headerTemplate: TemplateRef<any>
+  headerTemplate: TemplateRef<any>;
 
   @ContentChild(TableColumnCellDirective, {read: TemplateRef})
-  cellTemplate: TemplateRef<any>
+  cellTemplate: TemplateRef<any>;
 
 }

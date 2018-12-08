@@ -16,6 +16,7 @@ bn-tab-view {
 
 form {
   padding: 0 4px;
+  overflow: hidden;
 }
 
 .order-form-total-input {
@@ -32,6 +33,11 @@ form {
 .order-form-sell-button {
   background-color: rgba(255, 255, 255, 0.06);
   color: #FB7F70;
+}
+
+.button-spacer {
+  height: 8px;
+  display: block;
 }
 
 //$popper-color: #f33;

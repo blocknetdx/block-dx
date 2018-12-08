@@ -25,6 +25,7 @@ export class OpenordersComponent extends BaseComponent implements OnInit {
   public pricing: Pricing;
   public pricingEnabled = false;
   public pricingAvailable = false;
+  public longestTokenLength: number;
 
   private _symbols: string[] = [];
   public get symbols(): string[] { return this._symbols; }
@@ -43,45 +44,58 @@ export class OpenordersComponent extends BaseComponent implements OnInit {
   ngOnInit() {
 
     this.appService.marketPairChanges
-      // .takeUntil(this.$destroy)
+      .takeUntil(this.$destroy)
       .subscribe((symbols) => {
         this.zone.run(() => {
           if(symbols) {
             this.symbols = symbols;
           }
         });
-    });
+      });
 
     this.openorderService.getOpenorders()
+      .takeUntil(this.$destroy)
       .subscribe(openorders => {
         this.zone.run(() => {
-          this.openorders = openorders
+          const orders = openorders
             .filter(o => o.status !== 'finished' && o.status !== 'canceled')
             .map((o) => {
               o['row_class'] = o.side;
               return o;
             });
+          this.openorders = orders;
+          const tokens = openorders
+            .reduce((arr, o) => {
+              return [...arr, o.maker, o.taker];
+            }, [])
+            .sort((a, b) => a.length === b.length ? 0 : a.length > b.length ? -1 : 1);
+          this.longestTokenLength = tokens.length > 0 ? tokens[0].length : 0;
         });
       });
 
     this.breakpointService.breakpointChanges.first()
+      .takeUntil(this.$destroy)
       .subscribe((bp) => {
         this.zone.run(() => {
           this.selectable = ['xs', 'sm'].includes(bp);
         });
       });
 
-    this.pricingService.getPricing().subscribe(pricing => {
-      this.zone.run(() => {
-        this.pricing = pricing;
-        this.pricingAvailable = pricing.enabled;
+    this.pricingService.getPricing()
+      .takeUntil(this.$destroy)
+      .subscribe(pricing => {
+        this.zone.run(() => {
+          this.pricing = pricing;
+          this.pricingAvailable = pricing.enabled;
+        });
       });
-    });
-    this.pricingService.getPricingEnabled().subscribe(enabled => {
-      this.zone.run(() => {
-        this.pricingEnabled = enabled;
+    this.pricingService.getPricingEnabled()
+      .takeUntil(this.$destroy)
+      .subscribe(enabled => {
+        this.zone.run(() => {
+          this.pricingEnabled = enabled;
+        });
       });
-    });
 
   }
 
@@ -100,4 +114,31 @@ export class OpenordersComponent extends BaseComponent implements OnInit {
   cancelable(state) {
     return state !== 'finished' && state !== 'canceled' && state !== 'created';
   }
+
+  padToken(token) {
+    const diff = this.longestTokenLength - token.length;
+    for(let i = 0; i < diff; i++) {
+      token += ' ';
+    }
+    return token;
+  }
+
+  getStatusDotColor(status) {
+    if(['new'].includes(status)) {
+      return '#888';
+    } else if(['accepting', 'hold', 'initialized', 'created', 'commited'].includes(status)) {
+      return '#ff0';
+    } else if(['finished'].includes(status)) {
+      return '#0f0';
+    } else if(['expired', 'offline', 'invalid', 'rolled back'].includes(status)) {
+      return '#c00';
+    } else if(['rollback failed'].includes(status)) {
+      return '#ea00ff';
+    } else if(['canceled'].includes(status)) {
+      return '#000';
+    } else { // open
+      return '#fff';
+    }
+  }
+
 }

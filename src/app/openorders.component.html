@@ -14,40 +14,59 @@
     </ng-template>
   </bn-table-row-detail>
 
-  <app-table-column [prop]="'price'" [classList]="'col'">
-    <ng-template columnHeader>Price ({{symbols[1]}})</ng-template>
+  <app-table-column [prop]="'price'" [classList]="'col'" maxWidth="36px">
+    <ng-template columnHeader>Type</ng-template>
     <ng-template let-row="row" columnCell>
-      <span class="bn-number"
+      <span class="bn-number" class="open-order-table-font"
             [class.color-red]="row.side == 'sell'"
             [class.color-green]="row.side == 'buy'"
-            [innerHtml]="prepareNumber(row.price) | blockCurrency:symbols[1]:'6'"></span>
+            [innerHtml]="row.side === 'buy' ? 'BUY' : 'SELL'"></span>
     </ng-template>
   </app-table-column>
 
-  <app-table-column *ngIf="pricingEnabled" [prop]="'price'" [classList]="'col'">
-    <ng-template columnHeader>Price ({{pricing ? pricing.in : ''}})</ng-template>
+  <app-table-column [prop]="'price'" [classList]="'col'" maxWidth="80px">
+    <ng-template columnHeader>Market</ng-template>
     <ng-template let-row="row" columnCell>
-      <span *ngIf="!pricingAvailable" class="bn-number"
-            [class.color-red]="row.side == 'sell'"
-            [class.color-green]="row.side == 'buy'">N/A</span>
-      <span *ngIf="pricingAvailable" class="bn-number"
-            [class.color-red]="row.side == 'sell'"
-            [class.color-green]="row.side == 'buy'"
-            [innerHtml]="prepareNumber(pricing.getPrice(row.price, symbols[1])) | blockCurrency:symbols[1]:'6'"></span>
+      <span class="bn-number open-order-table-font"
+            [innerHtml]="row.taker + '/' + row.maker"></span>
     </ng-template>
   </app-table-column>
 
   <app-table-column [prop]="'size'" [classList]="'col'">
-    <ng-template columnHeader>Size ({{symbols[0]}})</ng-template>
+    <ng-template columnHeader>Amount</ng-template>
     <ng-template let-row="row" columnCell>
-      <span class="bn-number" [innerHtml]="prepareNumber(row.size) | blockCurrency:symbols[0]:'6'"></span>
+      <span class="bn-number open-order-table-font" [innerHtml]="prepareNumber(row.size) | blockCurrency:symbols[0]:'6'"></span> <span class="padded-token open-order-table-font" [innerHTML]="padToken(row.taker)"></span>
     </ng-template>
   </app-table-column>
 
   <app-table-column [prop]="'price'" [classList]="'col'">
-    <ng-template columnHeader>Total ({{symbols[1]}})</ng-template>
+    <ng-template columnHeader>Price</ng-template>
     <ng-template let-row="row" columnCell>
-      <span class="bn-number" [innerHtml]="prepareNumber(row.total) | blockCurrency:symbols[1]:'6'"></span>
+      <span class="bn-number open-order-table-font"
+            [innerHtml]="prepareNumber(row.price) | blockCurrency:symbols[1]:'6'"></span> <span class="padded-token open-order-table-font" [innerHTML]="padToken(row.maker)"></span>
+    </ng-template>
+  </app-table-column>
+
+  <app-table-column *ngIf="pricingEnabled" [prop]="'price'" [classList]="'col'" maxWidth="74px">
+    <ng-template columnHeader>Price ({{pricing ? pricing.in : ''}})</ng-template>
+    <ng-template let-row="row" columnCell>
+      <span *ngIf="!pricingAvailable || pricing.getPrice(row.price, row.maker) === 0" class="bn-number open-order-table-font">N/A</span>
+      <span *ngIf="pricingAvailable && pricing.getPrice(row.price, row.maker) !== 0" class="bn-number open-order-table-font"
+            [innerHtml]="prepareNumber(pricing.getPrice(row.price, row.maker)) | blockCurrency:symbols[1]:'6'"></span>
+    </ng-template>
+  </app-table-column>
+
+  <app-table-column [prop]="'price'" [classList]="'col'">
+    <ng-template columnHeader>Total</ng-template>
+    <ng-template let-row="row" columnCell>
+      <span class="bn-number open-order-table-font" [innerHtml]="prepareNumber(row.total) | blockCurrency:symbols[1]:'6'"></span> <span class="padded-token open-order-table-font" [innerHTML]="padToken(row.maker)"></span>
+    </ng-template>
+  </app-table-column>
+
+  <app-table-column [prop]="'created_at'" [classList]="'col d-none d-sm-block'">
+    <ng-template columnHeader>Date</ng-template>
+    <ng-template let-row="row" columnCell>
+      <span class="open-order-table-font">{{row.formattedDate()}}</span>
     </ng-template>
   </app-table-column>
 
@@ -58,10 +77,11 @@
     <!--</ng-template>-->
   <!--</app-table-column>-->
 
-  <app-table-column [prop]="'status'" [classList]="'d-none d-sm-block col-1 col-sm-2'">
+  <app-table-column [prop]="'status'" [classList]="'d-none d-sm-block col'" maxWidth="40px">
     <ng-template columnHeader>Status</ng-template>
     <ng-template let-row="row" columnCell>
-      <span>{{row.status}}</span>
+      <!--<span class="open-order-table-font">{{row.status}}</span>-->
+      <div class="open-order-status-dot" [title]="row.status" [style.background-color]="getStatusDotColor(row.status)"></div>
     </ng-template>
   </app-table-column>
 
@@ -72,19 +92,12 @@
     </ng-template>
   </app-table-column> -->
 
-  <app-table-column [prop]="'created_at'" [classList]="'col d-none d-sm-block'">
-    <ng-template columnHeader>Date</ng-template>
-    <ng-template let-row="row" columnCell>
-      <span>{{row.created_at | timeAgo}}</span>
-    </ng-template>
-  </app-table-column>
-
-  <app-table-column [sortable]="false" [classList]="'col d-none d-sm-block align-center'">
+  <app-table-column [sortable]="false" [classList]="'col d-none d-sm-block align-center'" maxWidth="15px">
     <!-- <ng-template columnHeader>Status</ng-template> -->
     <ng-template let-row="row" columnCell>
       <!--<span *ngIf="row.canceled">Canceled</span>-->
       <a *ngIf="cancelable(row.status)" (click)="cancelOrder(row)" class="close" title="Cancel Order">
-        <i class="material-icons">close</i>
+        <i class="material-icons open-order-table-font">close</i>
       </a>
     </ng-template>
   </app-table-column>
