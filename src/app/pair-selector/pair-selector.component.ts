@@ -48,8 +48,8 @@ export class PairSelectorComponent implements OnInit, AfterViewInit {
     switch(this.state) {
       case 'stage1' :
         arr = [
-          {title: 'My Wallet', rows: this._userWallet},
-          {title: 'All Coins', rows: PairSelectorComponent.uniqueCoinsNotIn(this._allCoins, this._userWallet)}
+          {title: 'Connected Tokens', rows: this._userWallet},
+          {title: 'All Tokens', rows: PairSelectorComponent.uniqueCoinsNotIn(this._allCoins, this._userWallet)}
         ];
         break;
       case 'stage2' :
