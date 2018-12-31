@@ -112,7 +112,7 @@ export class OpenordersComponent extends BaseComponent implements OnInit {
   }
 
   cancelable(state) {
-    return state !== 'finished' && state !== 'canceled' && state !== 'created';
+    return state !== 'finished' && state !== 'canceled';
   }
 
   padToken(token) {
