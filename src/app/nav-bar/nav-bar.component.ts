@@ -18,12 +18,18 @@ export class NavBarComponent implements OnInit {
   public navCollapsed: boolean;
   public pairSelectorActiveState: boolean;
 
+  public appName: string;
+  public appVersion: string;
+
   constructor(
     private appService: AppService,
     private currentpriceService: CurrentpriceService,
     private numberFormatPipe: NumberFormatPipe,
     private zone: NgZone
-  ) { }
+  ) {
+    this.appName = window.electron.ipcRenderer.sendSync('getAppName');
+    this.appVersion = window.electron.ipcRenderer.sendSync('getAppVersion');
+  }
 
   ngOnInit() {
 
@@ -62,6 +68,29 @@ export class NavBarComponent implements OnInit {
     e.preventDefault();
     window.electron.ipcRenderer.send('openConfigurationWizard');
     this.toggleNav();
+  }
+
+  checkForUpdates(e) {
+    e.preventDefault();
+    if(window.electron.ipcRenderer.sendSync('updateError')) {
+      const { openExternal } = window.electron.remote.shell;
+      openExternal('https://github.com/BlocknetDX/blockdx-ui/releases/latest');
+    } else {
+      const status = window.electron.ipcRenderer.sendSync('checkForUpdates');
+      switch(status) {
+        case 'available':
+          break;
+        case 'downloading':
+          alert('An update is currently being downloaded. A prompt will appear when complete.');
+          break;
+        case 'downloaded':
+          // alert('Update has been downloaded and will be installed once you restart the application.');
+          break;
+        default:
+          alert('There are no Block DX updates available at this time.');
+      }
+      this.toggleNav();
+    }
   }
 
   openNotices(e) {

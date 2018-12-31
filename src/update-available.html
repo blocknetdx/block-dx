@@ -9,6 +9,7 @@
 
   <link rel="shortcut icon" href="assets/favicon_block.png"  />
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700|Roboto+Mono:300,400,700" rel="stylesheet">
+  <link href="./assets/vendor/css/fontawesome-all.min.css" rel="stylesheet">
   <!--<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">-->
 
   <style>
@@ -32,13 +33,13 @@
     .container {
       padding: 0 20px;
     }
-    .input-group {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: nowrap;
-      justify-content: flex-start;
-      margin-bottom: 15px;
-    }
+    /*.input-group {*/
+      /*display: flex;*/
+      /*flex-direction: row;*/
+      /*flex-wrap: nowrap;*/
+      /*justify-content: flex-start;*/
+      /*margin-bottom: 15px;*/
+    /*}*/
     .input-group label {
       width: 35%;
       background-color: #213d54;
@@ -60,14 +61,17 @@
       outline-width: 0;
     }
     .input-group input:focus {
-      outline-width: 0px;
+      outline-width: 0;
       border-width: 1px;
       border-color: #4b6275;
       border-style: solid;
     }
     .label {
       color: #fff;
-      padding: 30px 0;
+      padding-top: 30px;
+      padding-bottom: 0;
+      padding-left: 0;
+      padding-right: 0;
       font-weight: 300;
       font-size: 14px;
       min-height: 16px;
@@ -117,6 +121,21 @@
       justify-content: flex-start;
       margin-left: -10px;
       margin-right: -10px;
+      padding-top: 15px;
+    }
+    .ask-again-container {
+      padding-top: 20px;
+      color: #888;
+    }
+    .ask-again-container a {
+      opacity: 1;
+      color: #aaa;
+      text-decoration: none;
+    }
+    .ask-again-container a:hover {
+      opacity: .8;
+      color: #aaa;
+      text-decoration: none;
     }
 
   </style>
@@ -125,14 +144,18 @@
 <body>
 
   <div style="width:100%; padding: 20px 0 20px 0; text-align:center;"><img style="max-width:300px;" src="assets/logo_full.svg" alt="Blocknet Logo"></div>
-  <h3>Update Available!</h3>
+  <h3 id="js-header"></h3>
   <form class="container">
 
-    <div class="label"></div>
+    <div id="js-label" class="label"></div>
+
+    <div class="ask-again-container">
+      <a id="js-notAskAgain" style="visibility:hidden;" href="#"><small><i class="far"></i> <span>Do not ask again (you can manually update later from the sidebar menu)</span></small></a>
+    </div>
 
     <div id="js-buttonContainer" class="button-container">
-      <button id="js-cancelBtn" type="button" class="gray-button">CANCEL</button>
-      <button id="js-acceptBtn" type="button">Install Update</button>
+      <button id="js-cancelBtn" type="button" class="gray-button"></button>
+      <button id="js-acceptBtn" type="button"></button>
     </div>
 
   </form>
@@ -153,17 +176,61 @@
 
       const { ipcRenderer } = require('electron');
 
-      const version = ipcRenderer.sendSync('getUpdateVersion');
+      let notAskAgain = false;
+      const notAskAgainIcon = $('#js-notAskAgain').find('i').addClass(notAskAgain ? 'fa-check-square' : 'fa-square');
 
-      $('.label').text(`BLOCK DX version ${version} has been downloaded! Would you like to install it now?`);
+      const version = ipcRenderer.sendSync('getUpdateVersion');
+      const windowType = ipcRenderer.sendSync('getUpdateWindowType'); // updateAvailable|updateDownloaded
+
+      let windowHeader, windowText, confirmButtonText, cancelButtonText;
+
+      switch(windowType) {
+        case 'updateAvailable':
+          windowHeader = 'Update Available!';
+          windowText = `Block DX version ${version} is available! Would you like to download it now?`;
+          confirmButtonText = 'Download Update';
+          cancelButtonText = 'Not Now';
+          break;
+        case 'updateDownloaded':
+          $('#js-notAskAgain').css('display', 'none');
+          windowHeader = `Block DX ${version} Is Ready!`;
+          windowText = `Block DX ${version} is almost ready to use! To complete the update, a restart is required.`;
+          confirmButtonText = 'Restart Now';
+          cancelButtonText = 'Cancel';
+      }
+
+      $('#js-header').text(windowHeader);
+      $('#js-label').text(windowText);
+      $('#js-acceptBtn').text(confirmButtonText);
+      $('#js-cancelBtn').text(cancelButtonText);
+
+      const hideCheckbox = ipcRenderer.sendSync('hideCheckbox');
+      const visibility = hideCheckbox ? 'hidden' : 'visible';
+      $('#js-notAskAgain').css('visibility', visibility);
+
+      $('#js-notAskAgain').on('click', e => {
+        e.preventDefault();
+        const icon = $('#js-notAskAgain').find('i');
+        if(notAskAgain) {
+          icon.addClass('fa-square');
+          icon.removeClass('fa-check-square');
+          notAskAgain = false;
+        } else {
+          icon.addClass('fa-check-square');
+          icon.removeClass('fa-square');
+          notAskAgain = true;
+        }
+      });
 
       $('#js-acceptBtn').on('click', e => {
         e.preventDefault();
+        if(windowType === 'updateAvailable') alert('The update is currently being downloaded. A prompt will appear when complete.');
         ipcRenderer.send('accept');
       });
       $('#js-cancelBtn').on('click', e => {
         e.preventDefault();
-        ipcRenderer.send('cancel');
+        const icon = $('#js-notAskAgain').find('i');
+        ipcRenderer.send('cancel', notAskAgain);
       });
 
     });

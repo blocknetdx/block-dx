@@ -26,10 +26,12 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "build-native": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --production && cd .. && electron-builder --dir",
-    "build-native-all": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --no-audit --production && cd .. && electron-builder --dir -mwl",
-    "build-native-win": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --no-audit --production && cd .. && electron-builder --dir --x64 --win nsis zip --publish never",
-    "build-native-mac": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --no-audit --production && cd .. && electron-builder --dir --x64 --mac zip --publish never",
-    "build-native-linux": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --no-audit --production && cd .. && electron-builder --dir --x64 --linux appImage deb tar.gz --publish never",
+    "build-native-win": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --no-audit --production && cd .. && electron-builder --dir --x64 --ia32 --config.artifactName=\"${name}-${env.GIT_BRANCH}-${os}-${arch}.${ext}\" --win nsis zip --publish never",
+    "build-native-mac": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --no-audit --production && cd .. && electron-builder --dir --x64 --config.artifactName=\"${name}-${env.GIT_BRANCH}-${os}.${ext}\" --mac zip --publish never",
+    "build-native-linux": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --no-audit --production && cd .. && electron-builder --dir --x64 --config.artifactName=\"${name}-${env.GIT_BRANCH}-${os}.${ext}\" --linux appImage deb tar.gz --publish never",
+    "publish-native-win": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --no-audit --production && cd .. && electron-builder --win --publish always",
+    "publish-native-mac": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --no-audit --production && cd .. && electron-builder --publish always",
+    "publish-native-linux": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --no-audit --production && cd .. && electron-builder --publish always",
     "pack-native": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --production && cd .. && electron-builder",
     "publish-native": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --production && cd .. && electron-builder --publish always",
     "generate-docs": "jsdoc src-back/service-node-interface.js -d docs",
@@ -58,7 +60,7 @@
     "electron-context-menu": "^0.9.1",
     "electron-is-dev": "^0.3.0",
     "electron-serve": "^0.1.0",
-    "electron-updater": "^2.21.4",
+    "electron-updater": "^4.0.5",
     "font-awesome": "^4.7.0",
     "fs-extra-promise": "^1.0.1",
     "hammerjs": "^2.0.8",
@@ -88,8 +90,8 @@
     "@types/jquery": "^3.2.16",
     "@types/node": "^8.0.57",
     "codelyzer": "^4.0.2",
-    "electron": "^1.8.4",
-    "electron-builder": "^19.56.0",
+    "electron": "^3.0.11",
+    "electron-builder": "^20.38.3",
     "electron-publisher-s3": "^20.8.1",
     "eslint": "^4.17.0",
     "jasmine-core": "^2.8.0",
@@ -112,26 +114,32 @@
   },
   "main": "index.js",
   "build": {
-    "electronVersion": "1.8.4",
+    "electronVersion": "3.0.11",
     "appId": "co.blocknet.blockdx",
     "productName": "BLOCK DX",
-    "artifactName": "${name}-${env.GIT_BRANCH}-${os}.${ext}",
+    "artifactName": "${name}-${version}-${os}.${ext}",
     "copyright": "Copyright © 2018 Blocknet",
     "directories": {
       "app": "temp",
       "output": "dist-native"
     },
     "win": {
+      "artifactName": "${name}-${version}-${os}-${arch}.${ext}",
+      "verifyUpdateCodeSignature": false,
       "target": [
         {
-          "target": "nsis",
+          "target": "zip",
           "arch": [
             "x64",
             "ia32"
           ]
         },
         {
-          "target": "zip"
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
         }
       ],
       "icon": "./src/assets/favicon_block.ico",
@@ -142,6 +150,7 @@
     },
     "mac": {
       "target": [
+        "dmg",
         "zip"
       ],
       "category": "public.app-category.utilities",
@@ -154,8 +163,8 @@
     "linux": {
       "target": [
         "appImage",
-        "deb",
-        "tar.gz"
+        "tar.gz",
+        "deb"
       ],
       "icon": "./src/assets/linux_icons/",
       "synopsis": "Copyright © 2018 Blocknet",
