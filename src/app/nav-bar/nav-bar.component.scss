@@ -222,3 +222,15 @@ app-pair-selector {
     @extend .type3;
   }
 }
+
+.version {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  margin-bottom: 15px;
+  
+  font-size: 14px;
+  color: #fff;
+  text-align: right;
+  justify-content: flex-end;
+}
