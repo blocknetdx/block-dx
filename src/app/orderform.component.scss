@@ -22,7 +22,9 @@ form {
 .order-form-total-input {
   opacity: .5;
 }
-
+#js-order-id {
+  opacity: .5;
+}
 .order-form-button:enabled:hover {
   opacity: .9;
 }

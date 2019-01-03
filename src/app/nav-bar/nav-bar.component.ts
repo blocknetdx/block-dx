@@ -109,6 +109,12 @@ export class NavBarComponent implements OnInit {
       case 'twitter':
         openExternal('https://twitter.com/The_Blocknet/');
         break;
+      case 'api':
+        openExternal('https://api.blocknet.co/#xbridge-api');
+        break;
+      case 'exchanges':
+        openExternal('https://docs.google.com/document/d/1kIjXjQfoANGkSywGLKH4F6H8HtGesgIoP-_3AuZuuQI/preview');
+        break;
       case 'faq':
         openExternal('https://www.blocknet.co/blockdx-faq/');
         break;
