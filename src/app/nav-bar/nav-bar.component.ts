@@ -71,6 +71,7 @@ export class NavBarComponent implements OnInit {
   }
 
   checkForUpdates(e) {
+    return; // TODO Enable auto-updater when ready
     e.preventDefault();
     if(window.electron.ipcRenderer.sendSync('updateError')) {
       const { openExternal } = window.electron.remote.shell;

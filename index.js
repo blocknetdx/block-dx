@@ -964,7 +964,7 @@ ipcMain.on('saveGeneralSettings', (e, s) => {
 
 const checkForUpdates = () => {
   // if(!isDev) setTimeout(() => autoUpdater.checkForUpdates(), 3000);
-  setTimeout(() => autoUpdater.checkForUpdates(), 3000);
+  // setTimeout(() => autoUpdater.checkForUpdates(), 3000); // TODO Enable auto-updater when ready
 };
 
 const onReady = new Promise(resolve => app.on('ready', resolve));
