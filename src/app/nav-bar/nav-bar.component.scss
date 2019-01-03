@@ -206,10 +206,10 @@ app-pair-selector {
 
     .price_down {
       color: $bn-red;
-      &::before {
-        content: "-";
-        margin-right: -0.2em;
-      }
+//      &::before {
+//        content: "-";
+//        margin-right: -0.2em;
+//      }
     }
   }
 

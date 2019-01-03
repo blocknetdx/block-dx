@@ -16,7 +16,7 @@
           <div class="col-6 col-md-4">
             <div class="input-group">
               <input name="coinA" type="text"
-              required placeholder="Select first coin"
+              required placeholder="Select token"
               tabindex="1" autocomplete="off"
               (keyup.ArrowDown)="onArrowDown($event)"
               #coinA="ngModel" #input
@@ -32,7 +32,7 @@
           <div class="col-6 col-md-4">
             <div class="input-group">
               <input name="coinB" type="text"
-              required placeholder="second coin"
+              required placeholder="Priced in"
               tabindex="2" autocomplete="off"
               (keyup.ArrowDown)="onArrowDown($event)"
               [disabled]="!coinAValid"
@@ -77,7 +77,7 @@
       </bn-table-info>
 
       <app-table-column [prop]="'symbol'" [classList]="'col-3 align-left'">
-        <ng-template columnHeader>Asset</ng-template>
+        <ng-template columnHeader>Ticker</ng-template>
         <ng-template let-row="row" columnCell>
           <span class="coin-cell">
             <b><span *ngIf="coinAValid">{{model.coinA.symbol}}/</span>{{row.symbol}}</b>
@@ -86,7 +86,7 @@
       </app-table-column>
 
       <app-table-column [prop]="'name'" [classList]="'col-2 align-left d-none d-md-block'">
-        <ng-template columnHeader>Currency</ng-template>
+        <ng-template columnHeader>Token</ng-template>
         <ng-template let-row="row" columnCell>
           <span class="capitalize currency-cell">{{row.name}}</span>
         </ng-template>

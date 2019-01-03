@@ -57,12 +57,12 @@
         </bn-card>
 
         <app-bn-tab-view class="trade_table__cell card orders col-lg-8">
-          <bn-tab label="Open Orders">
+          <bn-tab label="Active Orders">
             <ng-template #content>
               <app-openorders></app-openorders>
             </ng-template>
           </bn-tab>
-          <bn-tab label="Filled Orders">
+          <bn-tab label="Inactive Orders">
             <ng-template #content>
               <bn-filled-orders></bn-filled-orders>
             </ng-template>
@@ -108,12 +108,12 @@
 
       <div #orders>
         <app-bn-tab-view>
-          <bn-tab label="Open Orders">
+          <bn-tab label="Active Orders">
             <ng-template #content>
               <app-openorders></app-openorders>
             </ng-template>
           </bn-tab>
-          <bn-tab label="Filled Orders">
+          <bn-tab label="Inactive Orders">
             <ng-template #content>
               <bn-filled-orders></bn-filled-orders>
             </ng-template>
