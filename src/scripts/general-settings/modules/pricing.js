@@ -13,7 +13,7 @@ const textInput = ({ id, label, value }) => {
   return `
     <div class="input-group" style="margin-bottom:0;margin-top:10px;">
       <label>${label}</label>
-      <input ${id ? `id="${id}"` : ''} type="text" value="${value}" />
+      <input ${id ? `id="${id}"` : ''} class="inputError" type="text" value="${value}" placeholder="Enter API key" />
     </div>
   `;
 };
@@ -44,8 +44,9 @@ const renderPricing = ({ state }) => {
   const pricingSourceText = pricingSourceObj.text;
   const apiKeys = state.get('apiKeys');
   const html = `
-    <p style="margin-top:0;padding-top:0;padding-left:10px;padding-right:10px;margin-bottom:10px;">Allows orders to be viewed and placed in BTC for any market pair. This feature is limited by the pricing data available from each API source. The selected API source must have BTC pricing for the selected market. An API key may be required from the source to access their pricing data. When selecting the pricing update frequency, keep in mind the API rate-limit if applicable.</p>
+    <p style="margin-top:0;padding-top:0;padding-left:10px;padding-right:10px;margin-bottom:0px;">Allows orders to be viewed and placed in BTC for any market pair. This feature is limited by the pricing data available from each API source. The selected API source must have BTC pricing for the selected market. An API key may be required from the source to access their pricing data. When selecting the pricing update frequency, keep in mind the API rate-limit if applicable.</p>
     <div id="js-mainConfigurationArea" class="main-area" style="overflow:hidden;position:relative;background-color:inherit;">
+    <p id="js-inputError" class="text-danger" style="text-align:left;">&nbsp;</p>
       ${dropdown({ id: 'js-pricingUnitDropdown', label: 'Pricing Unit', value: state.get('pricingUnit') })}
       ${dropdown({ id: 'js-pricingSourceDropdown', label: 'Price Source', value: pricingSourceText })}
       ${textInput({  id: 'js-apiKeyInput', label: 'API Key', value: apiKeys[pricingSource] ? apiKeys[pricingSource] : '' })}
