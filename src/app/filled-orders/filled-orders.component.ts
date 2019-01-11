@@ -54,7 +54,12 @@ export class FilledOrdersComponent extends BaseComponent implements OnInit {
       .subscribe(openorders => {
         this.zone.run(() => {
           this.filledorders = openorders
-            .filter(o => o.status === OrderStates.Finished || o.status === OrderStates.Canceled)
+            .filter(o => o.status === OrderStates.Finished || 
+                        o.status === OrderStates.Canceled || 
+                        o.status === OrderStates.Expired || 
+                        o.status === OrderStates.Offline || 
+                        o.status === OrderStates.Invalid || 
+                        o.status === OrderStates.RolledBack)
             .map((o) => {
               o['row_class'] = o.side;
               return o;

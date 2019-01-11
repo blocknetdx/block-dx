@@ -2,7 +2,7 @@
 
   <bn-table-row-detail *isBp="['xs','sm','md']">
     <ng-template #rowDetail let-row="row">
-      <div class="row-detail">
+      <div class="row-detail" [title]="row.getStatus()">
         <div>
           <span>Fee: <span [innerHtml]="0 | blockCurrency:symbols[1]:'6'"></span></span>
         </div>
@@ -17,7 +17,7 @@
   <app-table-column [prop]="'price'" [classList]="'col'" maxWidth="36px">
     <ng-template columnHeader>Type</ng-template>
     <ng-template let-row="row" columnCell>
-      <span class="bn-number" class="open-order-table-font"
+      <span class="bn-number" class="open-order-table-font" [title]="row.getStatus()"
             [class.color-red]="row.side == 'sell'"
             [class.color-green]="row.side == 'buy'"
             [innerHtml]="row.side === 'buy' ? 'BUY' : 'SELL'"></span>
@@ -27,7 +27,7 @@
   <app-table-column [prop]="'price'" [classList]="'col'" maxWidth="80px">
     <ng-template columnHeader>Market</ng-template>
     <ng-template let-row="row" columnCell>
-      <span class="bn-number open-order-table-font"
+      <span class="bn-number open-order-table-font" [title]="row.getStatus()"
             [innerHtml]="row.taker + '/' + row.maker"></span>
     </ng-template>
   </app-table-column>
@@ -35,23 +35,23 @@
   <app-table-column [prop]="'size'" [classList]="'col'">
     <ng-template columnHeader>Amount</ng-template>
     <ng-template let-row="row" columnCell>
-      <span class="bn-number open-order-table-font" [innerHtml]="prepareNumber(row.size) | blockCurrency:symbols[0]:'6'"></span> <span class="padded-token open-order-table-font" [innerHTML]="padToken(row.taker)"></span>
+      <span class="bn-number open-order-table-font" [title]="row.getStatus()" [innerHtml]="prepareNumber(row.size) | blockCurrency:symbols[0]:'6'"></span> <span class="padded-token open-order-table-font" [title]="row.getStatus()" [innerHTML]="padToken(row.taker)"></span>
     </ng-template>
   </app-table-column>
 
   <app-table-column [prop]="'price'" [classList]="'col'">
     <ng-template columnHeader>Price</ng-template>
     <ng-template let-row="row" columnCell>
-      <span class="bn-number open-order-table-font"
-            [innerHtml]="prepareNumber(row.price) | blockCurrency:symbols[1]:'6'"></span> <span class="padded-token open-order-table-font" [innerHTML]="padToken(row.maker)"></span>
+      <span class="bn-number open-order-table-font" [title]="row.getStatus()"
+            [innerHtml]="prepareNumber(row.price) | blockCurrency:symbols[1]:'6'"></span> <span class="padded-token open-order-table-font" [title]="row.getStatus()" [innerHTML]="padToken(row.maker)"></span>
     </ng-template>
   </app-table-column>
 
   <app-table-column *ngIf="pricingEnabled" [prop]="'price'" [classList]="'col'" maxWidth="74px">
     <ng-template columnHeader>Price ({{pricing ? pricing.in : ''}})</ng-template>
     <ng-template let-row="row" columnCell>
-      <span *ngIf="!pricingAvailable || pricing.getPrice(row.price, row.maker) === 0" class="bn-number open-order-table-font">N/A</span>
-      <span *ngIf="pricingAvailable && pricing.getPrice(row.price, row.maker) !== 0" class="bn-number open-order-table-font"
+      <span *ngIf="!pricingAvailable || pricing.getPrice(row.price, row.maker) === 0" class="bn-number open-order-table-font" [title]="row.getStatus()">N/A</span>
+      <span *ngIf="pricingAvailable && pricing.getPrice(row.price, row.maker) !== 0" class="bn-number open-order-table-font" [title]="row.getStatus()"
             [innerHtml]="prepareNumber(pricing.getPrice(row.price, row.maker)) | blockCurrency:symbols[1]:'6'"></span>
     </ng-template>
   </app-table-column>
@@ -59,14 +59,14 @@
   <app-table-column [prop]="'price'" [classList]="'col'">
     <ng-template columnHeader>Total</ng-template>
     <ng-template let-row="row" columnCell>
-      <span class="bn-number open-order-table-font" [innerHtml]="prepareNumber(row.total) | blockCurrency:symbols[1]:'6'"></span> <span class="padded-token open-order-table-font" [innerHTML]="padToken(row.maker)"></span>
+      <span class="bn-number open-order-table-font" [title]="row.getStatus()" [innerHtml]="prepareNumber(row.total) | blockCurrency:symbols[1]:'6'"></span> <span class="padded-token open-order-table-font" [title]="row.getStatus()" [innerHTML]="padToken(row.maker)"></span>
     </ng-template>
   </app-table-column>
 
   <app-table-column [prop]="'created_at'" [classList]="'col d-none d-sm-block'">
-    <ng-template columnHeader>Date</ng-template>
+    <ng-template columnHeader>Created</ng-template>
     <ng-template let-row="row" columnCell>
-      <span class="open-order-table-font">{{row.formattedDate()}}</span>
+      <span class="open-order-table-font" [title]="row.getStatus()">{{row.datetimeFormat()}}</span>
     </ng-template>
   </app-table-column>
 
@@ -81,7 +81,7 @@
     <ng-template columnHeader>Status</ng-template>
     <ng-template let-row="row" columnCell>
       <!--<span class="open-order-table-font">{{row.status}}</span>-->
-      <div class="open-order-status-dot" [title]="row.status" [style.background-color]="getStatusDotColor(row.status)"></div>
+      <div class="open-order-status-dot" [title]="row.getStatus()" [style.background-color]="getStatusDotColor(row.status)"></div>
     </ng-template>
   </app-table-column>
 
@@ -96,7 +96,7 @@
     <!-- <ng-template columnHeader>Status</ng-template> -->
     <ng-template let-row="row" columnCell>
       <!--<span *ngIf="row.canceled">Canceled</span>-->
-      <a *ngIf="cancelable(row.status)" (click)="cancelOrder(row)" class="close" title="Cancel Order">
+      <a *ngIf="cancelable(row.status)" (click)="cancelOrder(row)" class="close" title="Cancel order">
         <i class="material-icons open-order-table-font">close</i>
       </a>
     </ng-template>
