@@ -114,22 +114,19 @@ export class NavBarComponent implements OnInit {
         openExternal('https://api.blocknet.co/#xbridge-api');
         break;
       case 'exchanges':
-        openExternal('https://docs.google.com/document/d/1kIjXjQfoANGkSywGLKH4F6H8HtGesgIoP-_3AuZuuQI/preview');
+        openExternal('https://docs.blocknet.co/project/exchanges/');
         break;
       case 'faq':
-        openExternal('https://www.blocknet.co/blockdx-faq/');
+        openExternal('https://docs.blocknet.co/blockdx/faq/');
         break;
       case 'fees':
-        openExternal('https://www.blocknet.co/blockdx-fees/');
+        openExternal('https://docs.blocknet.co/blockdx/fees/');
         break;
-      case 'help':
-        openExternal('https://sites.google.com/view/blocknet/blockdx');
+      case 'resources':
+        openExternal('https://docs.blocknet.co/');
         break;
       case 'community':
         openExternal('https://discord.gg/7RHfBdY');
-        break;
-      case 'supportTicket':
-        openExternal('https://blocknetsupport.cayzu.com/Tickets/Create');
         break;
       case 'discord':
         openExternal('https://discord.gg/2e6s7H8');
