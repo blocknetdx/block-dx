@@ -32,28 +32,80 @@ app-table /deep/ {
 
 .orderbook-container {
   height:100%;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
 }
 
-.divider {
-  padding: 0 17px;
-  line-height: 24px;
+.orderbook-table-outer-container-top {
+  flex-grow: 1;
+  flex-basis: 0;
+  overflow-y: hidden;
+  position: relative;
+}
+.orderbook-table-outer-container-bottom {
+  height: calc(50% - 22px);
+  min-height: calc(50% - 22px);
+  max-height: calc(50% - 22px);
+  overflow-y: hidden;
+  position: relative;
+}
+.orderbook-table-container {
+  height: 100%;
+}
+
+.orderbook-divider {
+  font-family: $roboto-mono;
+  //padding: 0 17px;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 13px;
+  padding-right: 13px;
+  line-height: 20px;
   background-color: rgba(1,27,54,0.6);
-  @include screen(lg) {
-    line-height: 20px;
-  }
-  span {
-    opacity: 0.4;
-    font-weight: bold;
+  //text-align: right;
+  font-size: 12px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  min-height: 20px;
+
+  .spread-container {
+    padding-left: 4px;
+    padding-right: 4px;
+    //width: 92px;
+    text-align: right;
+    display: inline-block;
+    flex-grow: 1;
+    flex-basis: 0;
+
+    span {
+      opacity: 0.4;
+      font-weight: bold;
+    }
+
   }
 }
 
-.no-open-orders-message {
+.no-open-orders-message-top {
   font-family: $roboto-mono;
   font-size: 12px;
   margin-left: 10px;
   z-index:1000;
   position: absolute;
-  margin-top:38px;
+  margin-bottom: 4px;
+  top: 28px;
+}
+.no-open-orders-message-bottom {
+  font-family: $roboto-mono;
+  font-size: 12px;
+  margin-left: 10px;
+  z-index:1000;
+  position: absolute;
+  margin-top: 4px;
+  top: 0;
 }
 
 .orderbook-own-order {

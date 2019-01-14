@@ -47,7 +47,7 @@ export class MainviewComponent implements OnInit {
 
   onNavChange(list) {
     if (list.contains('book')) {
-      this.orderbook.orderbookTable.scrollToMiddle();
+      this.orderbook.orderbookTopTable.scrollToBottom();
     }
   }
 
