@@ -56,6 +56,9 @@ const handleError = err => {
 process.on('uncaughtException', err => {
   handleError(err);
 });
+process.on('unhandledRejection', err => {
+  handleError(err);
+});
 
 let loadURL;
 if(!isDev) {
@@ -962,9 +965,13 @@ ipcMain.on('saveGeneralSettings', (e, s) => {
   sendMarketPricingEnabled();
 });
 
-const checkForUpdates = () => {
-  // if(!isDev) setTimeout(() => autoUpdater.checkForUpdates(), 3000);
-  // setTimeout(() => autoUpdater.checkForUpdates(), 3000); // TODO Enable auto-updater when ready
+const checkForUpdates = async function() {
+  try {
+    await new Promise(resolve => setTimeout(resolve, 3000));
+    await autoUpdater.checkForUpdates();
+  } catch(err) {
+    updateError = true;
+  }
 };
 
 const onReady = new Promise(resolve => app.on('ready', resolve));
