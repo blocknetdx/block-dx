@@ -53,6 +53,10 @@ export class PairSelectorComponent implements OnInit, AfterViewInit {
         ];
         break;
       case 'stage2' :
+        arr = [{
+          rows: this._userWallet.filter(c => c.symbol !== this.model.coinA.symbol)
+        }];
+        break;
       case 'stage3' :
         arr = [{
           rows: this._userWallet.filter(c => c.symbol !== this.model.coinA.symbol)
