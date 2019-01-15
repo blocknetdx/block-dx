@@ -55,7 +55,7 @@ export class PairSelectorComponent implements OnInit, AfterViewInit {
       case 'stage2' :
       case 'stage3' :
         arr = [{
-          rows: PairSelectorComponent.uniqueCoins(this._userWallet.filter(c => c.symbol !== this.model.coinA.symbol))
+          rows: this._userWallet.filter(c => c.symbol !== this.model.coinA.symbol)
         }];
         break;
     }
