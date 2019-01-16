@@ -16,7 +16,7 @@ export class CurrentpriceService {
   public orderHistory: Observable<Currentprice[]>;
   public orderHistoryByMinute: Observable<Currentprice[]>;
   public orderHistoryBy15Minutes: Observable<Currentprice[]>;
-  public orderHistoryBy30Minutes: Observable<Currentprice[]>;
+  public orderHistoryBy1Hour: Observable<Currentprice[]>;
 
   constructor(private http: Http, private appService: AppService) {
     this.currentprice = this.getCurrentprice();
@@ -123,10 +123,10 @@ export class CurrentpriceService {
     return this.orderHistoryBy15Minutes;
   }
 
-  getOrderHistoryBy30Minutes() {
-    if(!this.orderHistoryBy30Minutes) {
-      this.orderHistoryBy30Minutes = Observable.create(observer => {
-        window.electron.ipcRenderer.on('orderHistoryBy30Minutes', (e, data) => {
+  getOrderHistoryBy1Hour() {
+    if(!this.orderHistoryBy1Hour) {
+      this.orderHistoryBy1Hour = Observable.create(observer => {
+        window.electron.ipcRenderer.on('orderHistoryBy1Hour', (e, data) => {
 
           // Generate test data
           // data = [];
@@ -160,10 +160,10 @@ export class CurrentpriceService {
 
           observer.next(preppedData);
         });
-        window.electron.ipcRenderer.send('getOrderHistoryBy30Minutes');
+        window.electron.ipcRenderer.send('getOrderHistoryBy1Hour');
       });
     }
-    return this.orderHistoryBy30Minutes;
+    return this.orderHistoryBy1Hour;
   }
 
   getOrderHistory() {

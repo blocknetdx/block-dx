@@ -30,7 +30,9 @@ ipcMain.on('getAppVersion', e => {
   e.returnValue = version;
 });
 
-let appWindow, serverLocation, sn, keyPair, storage, user, password, port, info, pricingSource, pricingUnit, apiKeys, pricingFrequency, enablePricing, sendPricingMultipliers, clearPricingInterval, setPricingInterval, sendMarketPricingEnabled, metaPath, macMetaBackupPath, availableUpdate;
+let appWindow, serverLocation, sn, keyPair, storage, user, password, port, info, pricingSource, pricingUnit, apiKeys,
+  pricingFrequency, enablePricing, sendPricingMultipliers, clearPricingInterval, setPricingInterval,
+  sendMarketPricingEnabled, metaPath, macMetaBackupPath, availableUpdate;
 let updateError = false;
 
 const configurationFilesDirectory = path.join(__dirname, 'blockchain-configuration-files');
@@ -646,74 +648,113 @@ const openAppWindow = () => {
   ipcMain.on('getMyOrders', () => sendMyOrders(true));
   setInterval(sendMyOrders, stdInterval);
 
-  let orderHistoryByMinute = [];
-  let orderHistoryByFifteenMinutes = [];
-  let orderHistoryByThirtyMinutes = [];
-  const sendOrderHistory = force => {
-    const end = moment();
+  const calculatePricingData = orderHistory => {
+    if (!orderHistory || orderHistory.length === 0)
+      return { time: moment.utc().toISOString(), open: 0, close: 0, high: 0, low: 0, volume: 0 };
+    let vol = 0, open = 0, close = 0, high = 0, low = null;
+    for (let i = 0; i < orderHistory.length; i++) {
+      let r = orderHistory[i];
+      vol += r.volume;
+      if (r.high > high)
+        high = r.high;
+      if (r.low !== 0 && (r.low < low || low === null))
+        low = r.low;
+      if (open === 0 && r.open !== 0)
+        open = r.open;
+      if (r.close !== 0)
+        close = r.close;
+    }
+    if (low === null)
+      low = 0;
+    const last = orderHistory[orderHistory.length - 1];
+    return { time: last.time, open: open, close: close, high: high, low: low, volume: vol };
+  };
+
+  const orderKey = (sym1, sym2) => sym1 + sym2;
+  let orderHistoryDict = new Map();
+
+  const sendOrderHistory = () => {
+    const key = orderKey(keyPair[0], keyPair[1]);
+    const shouldUpdate = !orderHistoryDict.has(key) ||
+      (moment.utc().diff(orderHistoryDict[key]['orderHistoryLastUpdate'], 'seconds', true) >= 15);
+    if (!shouldUpdate)
+      return;
+
+    // Make sure storage has key
+    if (!orderHistoryDict.has(key))
+      orderHistoryDict[key] = {
+        'orderHistory': [],
+        'orderHistoryByMinute': [],
+        'orderHistoryBy15Minutes': [],
+        'orderHistoryBy1Hour': [],
+        'currentPrice': { time: moment.utc().toISOString(), open: 0, close: 0, high: 0, low: 0, volume: 0 },
+        'orderHistoryLastUpdate': moment.utc()
+      };
+    else
+      orderHistoryDict[key]['orderHistoryLastUpdate'] = moment.utc();
+
+    const end = moment().utc();
+    const start = end.clone().subtract(1, 'day');
+
     {
-      const start = moment(end.toDate())
-        .subtract(1, 'd');
-      sn.dxGetOrderHistory(keyPair[0], keyPair[1], start.valueOf(), end.valueOf(), 60)
+      sn.dxGetOrderHistory(keyPair[0], keyPair[1], start.unix(), end.unix(), 60)
         .then(res => {
-          if(force === true || JSON.stringify(res) !== JSON.stringify(orderHistoryByMinute)) {
-            orderHistoryByMinute = res;
-            appWindow.send('orderHistory', orderHistoryByMinute);
-            appWindow.send('orderHistoryByMinute', orderHistoryByMinute);
-          }
+          orderHistoryDict[key]['orderHistory'] = res;
+          orderHistoryDict[key]['orderHistoryByMinute'] = res;
+          orderHistoryDict[key]['currentPrice'] = calculatePricingData(res);
+          appWindow.send('orderHistory', res);
+          appWindow.send('orderHistoryByMinute', res);
+          appWindow.send('currentPrice', orderHistoryDict[key]['currentPrice']);
         })
         .catch(handleError);
     }
     {
-      const start = moment(end.toDate())
-        .subtract(1, 'd');
-      sn.dxGetOrderHistory(keyPair[0], keyPair[1], start.valueOf(), end.valueOf(), 900)
+      sn.dxGetOrderHistory(keyPair[0], keyPair[1], start.unix(), end.unix(), 900)
         .then(res => {
-          if(force === true || JSON.stringify(res) !== JSON.stringify(orderHistoryByFifteenMinutes)) {
-            orderHistoryByFifteenMinutes = res;
-            appWindow.send('orderHistoryBy15Minutes', orderHistoryByFifteenMinutes);
-          }
+          orderHistoryDict[key]['orderHistoryBy15Minutes'] = res;
+          appWindow.send('orderHistoryBy15Minutes', res);
         })
         .catch(handleError);
     }
     {
-      const start = moment(end.toDate())
-        .subtract(1, 'd');
-      sn.dxGetOrderHistory(keyPair[0], keyPair[1], start.valueOf(), end.valueOf(), 1800)
+      sn.dxGetOrderHistory(keyPair[0], keyPair[1], start.unix(), end.unix(), 3600)
         .then(res => {
-          if(force === true || JSON.stringify(res) !== JSON.stringify(orderHistoryByThirtyMinutes)) {
-            orderHistoryByThirtyMinutes = res;
-            appWindow.send('orderHistoryBy30Minutes', orderHistoryByThirtyMinutes);
-          }
+          orderHistoryDict[key]['orderHistoryBy1Hour'] = res;
+          appWindow.send('orderHistoryBy1Hour', res);
         })
         .catch(handleError);
     }
   };
-  // ipcMain.on('getOrderHistory', () => sendOrderHistory(true));
-  ipcMain.on('getOrderHistoryByMinute', () => sendOrderHistory(true));
-  // ipcMain.on('getOrderHistoryBy15Minutes', () => sendOrderHistory(true));
-  // ipcMain.on('getOrderHistoryBy30Minutes', () => sendOrderHistory(true));
 
-  setInterval(sendOrderHistory, stdInterval);
+  ipcMain.on('getOrderHistory', () => {
+    const key = orderKey(keyPair[0], keyPair[1]);
+    const data = orderHistoryDict.has(key) ? orderHistoryDict[key]['orderHistory'] : [];
+    appWindow.send('orderHistory', data);
+  });
+  ipcMain.on('getOrderHistoryByMinute', async function() {
+    const key = orderKey(keyPair[0], keyPair[1]);
+    const data = orderHistoryDict.has(key) ? orderHistoryDict[key]['orderHistoryByMinute'] : [];
+    appWindow.send('orderHistoryByMinute', data);
+  });
+  ipcMain.on('getOrderHistoryBy15Minutes', () => {
+    const key = orderKey(keyPair[0], keyPair[1]);
+    const data = orderHistoryDict.has(key) ? orderHistoryDict[key]['orderHistoryBy15Minutes'] : [];
+    appWindow.send('orderHistoryBy15Minutes', data);
+  });
+  ipcMain.on('getOrderHistoryBy1Hour', () => {
+    const key = orderKey(keyPair[0], keyPair[1]);
+    const data = orderHistoryDict.has(key) ? orderHistoryDict[key]['orderHistoryBy1Hour'] : [];
+    appWindow.send('orderHistoryBy1Hour', data);
+  });
+  ipcMain.on('getCurrentPrice', () => {
+    const key = orderKey(keyPair[0], keyPair[1]);
+    const data = orderHistoryDict.has(key) ? orderHistoryDict[key]['currentPrice'] :
+      { time: moment.utc().toISOString(), open: 0, close: 0, high: 0, low: 0, volume: 0 };
+    appWindow.send('currentPrice', data);
+  });
 
-  let currentPrice = {};
-  const sendCurrentPrice = force => {
-    const end = moment();
-    const start = moment(end.toDate())
-      .subtract(1, 'd');
-    sn.dxGetOrderHistory(keyPair[0], keyPair[1], start.valueOf(), end.valueOf(), 86400)
-      .then(res => {
-        if(res.length === 0) return;
-        const [ data ] = res;
-        if(force === true || JSON.stringify(data) !== JSON.stringify(currentPrice)) {
-          currentPrice = data;
-          appWindow.send('currentPrice', data);
-        }
-      })
-      .catch(handleError);
-  };
-  ipcMain.on('getCurrentPrice', () => sendCurrentPrice(true));
-  setInterval(sendCurrentPrice, stdInterval);
+  setTimeout(sendOrderHistory, 4500); // TODO Improve w/ possible loader
+  setInterval(sendOrderHistory, 30000);
 
   // TODO This is too aggressive to be called as frequently as it is...
   const sendCurrencies = async function() {
@@ -725,14 +766,12 @@ const openAppWindow = () => {
       const localTokensSet = new Set(localTokens);
       const comparator = networkTokens.includes('BTC') ? 'BTC' : networkTokens.includes('LTC') ? 'LTC' : networkTokens[0];
       const currencies = [];
-      const end = moment.utc().valueOf();
-      const start = moment(end).utc()
-        .subtract(1, 'd')
-        .valueOf();
+      const end = moment.utc();
+      const start = end.clone().subtract(1, 'day');
 
       for(const token of networkTokens) {
         const second = token === comparator ? networkTokens.find(t => t !== comparator) : comparator;
-        const res = await sn.dxGetOrderHistory(token, second, start, end, 86400);
+        const res = await sn.dxGetOrderHistory(token, second, start.unix(), end.unix(), 86400);
         if(res.length === 0) {
           currencies.push({
             symbol: token,
@@ -768,14 +807,12 @@ const openAppWindow = () => {
       ]);
       const localTokensSet = new Set(localTokens);
       const currencies = [];
-      const end = moment.utc().valueOf();
-      const start = moment(end).utc()
-        .subtract(1, 'd')
-        .valueOf();
+      const end = moment.utc();
+      const start = end.clone().subtract(1, 'day');
 
       for(const second of networkTokens) {
         if(second === primary) continue;
-        const res = await sn.dxGetOrderHistory(primary, second, start, end, 86400);
+        const res = await sn.dxGetOrderHistory(primary, second, start.unix(), end.unix(), 86400);
         if(res.length === 0) {
           currencies.push({
             symbol: second,
@@ -894,8 +931,7 @@ const openAppWindow = () => {
     sendOrderBook(true);
     sendTradeHistory(true);
     sendMyOrders(true);
-    sendOrderHistory(true);
-    sendCurrentPrice(true);
+    sendOrderHistory();
 
     sendPricingMultipliers();
     setPricingInterval();

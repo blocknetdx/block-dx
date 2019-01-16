@@ -528,8 +528,8 @@ class ServiceNodeInterface {
       params: [
         maker,
         taker,
-        Math.floor(startTime/1000), // convert to unix time seconds
-        Math.floor(endTime/1000), // convert to unix time seconds
+        startTime, // unix time seconds
+        endTime, // unix time seconds
         granularity,
         orderIds,
         true

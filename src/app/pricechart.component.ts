@@ -1,7 +1,6 @@
 import { Component, NgZone, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import * as moment from 'moment';
 
-import * as jQuery from 'jquery';
 import {CurrentpriceService} from './currentprice.service';
 
 declare var AmCharts;
@@ -25,45 +24,102 @@ export class PricechartComponent implements AfterViewInit {
   constructor(
     private currentpriceService: CurrentpriceService,
     private zone: NgZone
-  ) {}
+  ) {
+    this.chart = AmCharts.makeChart( 'tv_chart_container', {
+      'type': 'serial',
+      'theme': 'dark',
+      'valueAxes': [{
+        'position': 'left'
+      }],
+      zoomOutOnDataUpdate: false, // when true this causes chart to jump around unexpectedly
+      mouseWhellScrollEnabled: false,
+      mouseWheelZoomEnabled: false,
+      parseDates: true,
+      'graphs': [ {
+        'id': 'g1',
+        'balloonText': 'Open:<b>[[open]]</b><br>Low:<b>[[low]]</b><br>High:<b>[[high]]</b><br>Close:<b>[[close]]</b><br>Time:<b>[[formattedTime]]</b><br>',
+        'closeField': 'close',
+        'fillColors': '#4bf5c6',
+        'highField': 'high',
+        'lineColor': '#4bf5c6',
+        'lineAlpha': 1,
+        'lowField': 'low',
+        'fillAlphas': 1,
+        'negativeFillColors': '#ff7e70',
+        'negativeLineColor': '#ff7e70',
+        'openField': 'open',
+        'title': 'Price:',
+        'type': 'candlestick',
+        'valueField': 'close'
+      } ],
+      // 'chartScrollbar': {
+      //   // dragIcon: 'dragIconRoundSmallBlack',
+      //   'graph': 'g1',
+      //   'graphType': 'line',
+      //   'scrollbarHeight': 30,
+      //   graphFillAlpha: .1,
+      //   selectedGraphFillAlpha: .1
+      // },
+      'chartCursor': {
+        'valueLineEnabled': true,
+        'valueLineBalloonEnabled': true
+      },
+      'categoryField': 'date',
+      'categoryAxis': {
+        dateFormats: [
+          {'period':'fff','format':'JJ:NN:SS'},
+          {'period':'ss','format':'JJ:NN:SS'},
+          {'period':'mm','format':'JJ:NN'},
+          {'period':'hh','format':'JJ:NN'},
+          {'period':'DD','format':'MMM DD'},
+          {'period':'WW','format':'MMM DD'},
+          {'period':'MM','format':'MMM'},
+          {'period':'YYYY','format':'YYYY'}],
+        parseDates: true,
+        minPeriod: 'mm'
+      },
+      'export': {
+        'enabled': false,
+        'position': 'bottom-right'
+      }
+    });
+  }
 
   ngAfterViewInit() {
+
+    const { model, granularity } = this;
 
     const prepData = arr => arr
       .map(i => Object.assign({}, i, {
         date: moment(i.time).toDate(),
-        formattedTime: moment(i.time).format('HH:mm')
-      }));
+        formattedTime: moment(i.time).format('LT')
+      }))
+      .filter(i => i.high !== 0);
 
     this.currentpriceService.getOrderHistoryByMinute()
       .subscribe(items => {
-        this.model['1'] = prepData(items);
-        if(!this.chart && items.length > 0) {
-          this.renderPriceChart();
-        } else if(this.chart && this.granularity === 1) {
+        model['1'] = prepData(items);
+        if (granularity === 1)
           this.updatePriceChart();
-        }
       });
 
     this.currentpriceService.getOrderHistoryBy15Minutes()
       .subscribe(items => {
-        this.model['2'] = prepData(items);
-        if(!this.chart && items.length > 0) {
-          this.renderPriceChart();
-        } else if(this.chart && this.granularity === 2) {
+        model['2'] = prepData(items);
+        if (granularity === 2)
           this.updatePriceChart();
-        }
       });
 
-    this.currentpriceService.getOrderHistoryBy30Minutes()
+    this.currentpriceService.getOrderHistoryBy1Hour()
       .subscribe(items => {
-        this.model['3'] = prepData(items);
-        if(this.granularity === 3) this.updatePriceChart();
+        model['3'] = prepData(items);
+        if (granularity === 3)
+          this.updatePriceChart();
       });
 
   }
 
-  renderPriceChart() {
+  /*renderPriceChart() {
 
     const items = this.model[this.granularity];
 
@@ -184,7 +240,7 @@ export class PricechartComponent implements AfterViewInit {
         chart.zoomToIndexes( chart.dataProvider.length - 60, chart.dataProvider.length - 1 );
       }
     });
-  }
+  }*/
 
   updatePriceChart() {
     const items = this.model[this.granularity];
