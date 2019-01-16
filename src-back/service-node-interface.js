@@ -1,5 +1,33 @@
 const request = require('superagent');
 
+// Errors
+const ErrorMsg = (name, code) => {
+  if (Errors[name][code])
+    return Errors[name][code];
+  else return '';
+};
+
+const Errors = new Map();
+Errors['dxMakeOrder'] = new Map();
+Errors['dxCancelOrder'] = new Map();
+Errors['dxFlushCancelledOrders'] = new Map();
+Errors['dxGetLocalTokens'] = new Map();
+Errors['dxGetLockedUtxos'] = new Map();
+Errors['dxGetMyOrders'] = new Map();
+Errors['dxGetNetworkTokens'] = new Map();
+Errors['dxGetOrder'] = new Map();
+Errors['dxGetOrderBook'] = new Map();
+Errors['dxGetOrderFills'] = new Map();
+Errors['dxGetOrderHistory'] = new Map();
+Errors['dxGetOrders'] = new Map();
+Errors['dxGetTokenBalances'] = new Map();
+Errors['dxLoadXBridgeConf'] = new Map();
+Errors['dxMakeOrder'] = new Map();
+Errors['dxTakeOrder'] = new Map();
+
+// Messages: Errors['dxGetOrderHistory'][1025] = 'Message here';
+Errors['dxMakeOrder'][1018] = 'Please make sure the Blocknet wallet and the wallets of the tokens being traded are unlocked.';
+
 /**
  * @typedef {Object} OrderObject
  * @property {string} id
@@ -250,9 +278,9 @@ class ServiceNodeInterface {
       const { message = '', code = '', status: httpStatus = '' } = err;
       throw new Error(`${message}\n\n` + (code ? `Code:\n${code}\n\n` : '') + (httpStatus ? `HTTP Status:\n${httpStatus}\n\n` : '') + `RPC Endpoint:\n${method}`);
     }
-    if(body.error) {
-      const { code = '', name = '', message = '' } = body.error;
-      throw new Error(`Name:\n${name}\n\nCode: ${code}\n\nMessage: ${message}`);
+    if(body.result.error) {
+      const { code = 1025, name = '', error = '' } = body.result;
+      throw new Error(`API\n${name}\n\n${ErrorMsg(name, code)}\n\n${error}\n\nCode: ${code}`);
     }
     if(status !== 200)
       throw new Error(`Response code ${status}`);
