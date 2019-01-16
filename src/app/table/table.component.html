@@ -1,0 +1,66 @@
+<div class="bn-table"
+     (keydown.ArrowUp)="focusNextRow($event)"
+     (keydown.ArrowDown)="focusNextRow($event)">
+  <div class="bn-table__header"
+       [style.display]="hideHeader ? 'none' : 'flex'">
+    <div (click)="sort(col)"
+         [class]="col.classList + ' no-highlight'"
+         [class.sortable]="col.sortable"
+         [class.active]="col.active"
+         [class.sort-up]="col.active && !col.desc"
+         [class.sort-down]="col.active && col.desc"
+         [style.maxWidth]="col.maxWidth ? col.maxWidth : ''"
+         *ngFor="let col of columns">
+      <ng-template *ngTemplateOutlet="col.headerTemplate"></ng-template>
+    </div>
+  </div>
+  <div #tableBody
+       class="scrollableContainer"
+       [class.bn-table__body]="!hideHeader && !noPadding ? true : false"
+       [class.bn-table__body_no_padding]="noPadding ? true : false"
+       [class.bn-table__body_no_header]="hideHeader ? true : false"
+       (click)="deselect($event)">
+
+    <perfect-scrollbar #scrollbar>
+
+      <div class="bn-table__section" *ngFor="let section of sections; first as isFirst">
+        <ng-container *ngIf="sectionDivider && !isFirst">
+          <div class="bn-table__section-divider">
+            <ng-template *ngTemplateOutlet="sectionDivider.template"></ng-template>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="tableInfo">
+          <div class="bn-table__info">
+            <ng-template *ngTemplateOutlet="tableInfo.template"></ng-template>
+          </div>
+        </ng-container>
+        <div class="bn-table__section-title" *ngIf="section.title && section.title != 'undefined'">
+          <div class="col-12">{{section.title}}</div>
+        </div>
+        <div class="bn-table__row {{row.row_class}}" #rowRef
+             tabindex="-1"
+             [class.selectable]="selectable"
+             [class.selected]="selectedRow == row"
+             (keyup.enter)="rowSelected(row, $event)"
+             (click)="rowSelected(row, $event)"
+             *ngFor="let row of section.rows">
+          <ng-container *ngIf="row.constructor.name !== 'TableRowDivider'">
+            <div
+              class="bn-table__cell {{col.classList}}"
+              *ngFor="let col of columns"
+              [style.maxWidth]="col.maxWidth ? col.maxWidth : ''">
+              <ng-template *ngTemplateOutlet="col.cellTemplate; context: {row: row}"></ng-template>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="rowDetail">
+            <div *ngIf="selectedRow == row" class="bn-table__row-detail">
+              <ng-template *ngTemplateOutlet="rowDetail.template; context: {row: row}"></ng-template>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+
+    </perfect-scrollbar>
+
+  </div>
+</div>
