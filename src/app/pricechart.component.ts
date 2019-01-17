@@ -19,6 +19,7 @@ export class PricechartComponent implements AfterViewInit {
   public model = { 1: [], 2: [], 3: [] };
 
   private chart: any;
+  private pairUpdated = true;
 
   constructor(
     private currentpriceService: CurrentpriceService,
@@ -220,11 +221,23 @@ export class PricechartComponent implements AfterViewInit {
           this.updatePriceChart();
       });
 
+    this.currentpriceService.onPair()
+      .subscribe(pair => {
+        // TODO Figure out zoom out
+        // this.chart.AmSerialChart.zoomOut();
+        this.pairUpdated = true;
+      });
+
   }
 
   updatePriceChart() {
     const items = this.model[this.granularity];
+    // Workaround for zooming chart out after switching trading pairs
+    if (this.pairUpdated)
+      this.chart.zoomOutOnDataUpdate = true;
     this.chart.dataProvider = items;
     this.chart.validateData();
+    this.chart.zoomOutOnDataUpdate = false;
+    this.pairUpdated = false;
   }
 }

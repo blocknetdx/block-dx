@@ -17,6 +17,7 @@ export class CurrentpriceService {
   public orderHistoryByMinute: Observable<Currentprice[]>;
   public orderHistoryBy15Minutes: Observable<Currentprice[]>;
   public orderHistoryBy1Hour: Observable<Currentprice[]>;
+  private _onPair: Observable<any>;
 
   constructor(private http: Http, private appService: AppService) {
     this.currentprice = this.getCurrentprice();
@@ -207,6 +208,17 @@ export class CurrentpriceService {
       });
     }
     return this.orderHistory;
+  }
+
+  onPair() {
+    if(!this._onPair) {
+      this._onPair = Observable.create(observer => {
+        window.electron.ipcRenderer.on('keyPair', (e, pair) => {
+          observer.next(pair);
+        });
+      });
+    }
+    return this._onPair;
   }
 
   private handleError(error: any): Promise<any> {
