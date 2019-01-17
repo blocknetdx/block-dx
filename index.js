@@ -673,12 +673,15 @@ const openAppWindow = () => {
   const orderKey = (sym1, sym2) => sym1 + sym2;
   let orderHistoryDict = new Map();
 
-  const sendOrderHistory = () => {
+  const sendOrderHistory = (which) => {
     const key = orderKey(keyPair[0], keyPair[1]);
     const shouldUpdate = !orderHistoryDict.has(key) ||
       (moment.utc().diff(orderHistoryDict[key]['orderHistoryLastUpdate'], 'seconds', true) >= 15);
-    if (!shouldUpdate)
+    if (!shouldUpdate) {
+      if (orderHistoryDict.has(key) && which)
+        appWindow.send(which, orderHistoryDict[key][which]);
       return;
+    }
 
     // Make sure storage has key
     if (!orderHistoryDict.has(key))
@@ -726,34 +729,12 @@ const openAppWindow = () => {
     }
   };
 
-  ipcMain.on('getOrderHistory', () => {
-    const key = orderKey(keyPair[0], keyPair[1]);
-    const data = orderHistoryDict.has(key) ? orderHistoryDict[key]['orderHistory'] : [];
-    appWindow.send('orderHistory', data);
-  });
-  ipcMain.on('getOrderHistoryByMinute', async function() {
-    const key = orderKey(keyPair[0], keyPair[1]);
-    const data = orderHistoryDict.has(key) ? orderHistoryDict[key]['orderHistoryByMinute'] : [];
-    appWindow.send('orderHistoryByMinute', data);
-  });
-  ipcMain.on('getOrderHistoryBy15Minutes', () => {
-    const key = orderKey(keyPair[0], keyPair[1]);
-    const data = orderHistoryDict.has(key) ? orderHistoryDict[key]['orderHistoryBy15Minutes'] : [];
-    appWindow.send('orderHistoryBy15Minutes', data);
-  });
-  ipcMain.on('getOrderHistoryBy1Hour', () => {
-    const key = orderKey(keyPair[0], keyPair[1]);
-    const data = orderHistoryDict.has(key) ? orderHistoryDict[key]['orderHistoryBy1Hour'] : [];
-    appWindow.send('orderHistoryBy1Hour', data);
-  });
-  ipcMain.on('getCurrentPrice', () => {
-    const key = orderKey(keyPair[0], keyPair[1]);
-    const data = orderHistoryDict.has(key) ? orderHistoryDict[key]['currentPrice'] :
-      { time: moment.utc().toISOString(), open: 0, close: 0, high: 0, low: 0, volume: 0 };
-    appWindow.send('currentPrice', data);
-  });
+  ipcMain.on('getOrderHistory', () => sendOrderHistory('orderHistory'));
+  ipcMain.on('getOrderHistoryByMinute', () => sendOrderHistory('orderHistoryByMinute'));
+  ipcMain.on('getOrderHistoryBy15Minutes', () => sendOrderHistory('orderHistoryBy15Minutes'));
+  ipcMain.on('getOrderHistoryBy1Hour', () => sendOrderHistory('orderHistoryBy1Hour'));
+  ipcMain.on('getCurrentPrice', () => sendOrderHistory('currentPrice'));
 
-  setTimeout(sendOrderHistory, 4500); // TODO Improve w/ possible loader
   setInterval(sendOrderHistory, 30000);
 
   // TODO This is too aggressive to be called as frequently as it is...
