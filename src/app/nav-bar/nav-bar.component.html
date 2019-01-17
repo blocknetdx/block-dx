@@ -64,7 +64,7 @@
     </div>
 
     <div class="navbar-pricing__cell twentyfourvol--">
-      <div class="navbar-pricing__upper">{{currentPrice.volume | numberFormat : "1.0-0"}}<span class="d-none d-sm-inline"> {{symbols[0]}}</span></div>
+      <div class="navbar-pricing__upper">{{currentPrice._volume < 1 ? currentPrice.volume : (currentPrice.volume | numberFormat : "1.0-0")}}<span class="d-none d-sm-inline"> {{symbols[0]}}</span></div>
       <div class="navbar-pricing__lower">24 hour vol<span class="d-none d-sm-inline">ume</span></div>
     </div>
   </div>

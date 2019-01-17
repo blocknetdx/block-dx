@@ -14,6 +14,12 @@ export class Currentprice {
   public volume_30day: string;
   public time: string;
 
+  public _volume = 0;
+  public _open = 0;
+  public _close = 0;
+  public _low = 0;
+  public _high = 0;
+
   constructor() {}
 
   public get priceDiff(): number {
@@ -33,6 +39,11 @@ export class Currentprice {
 
   public static fromObject(obj: any): Currentprice {
     const inst = new Currentprice();
+    inst._volume = obj.volume;
+    inst._open = obj.open;
+    inst._close = obj.close;
+    inst._low = obj.low;
+    inst._high = obj.high;
     return Object.assign(inst, obj);
   }
 }
