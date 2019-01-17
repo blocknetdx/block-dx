@@ -37,7 +37,7 @@ export class PricechartComponent implements AfterViewInit {
           'valueText': '[[value]]',
           'periodValueText': '[[value.open]]'
         },
-        zoomOutOnDataUpdate: true,
+        zoomOutOnDataUpdate: false,
         mouseWheelScrollEnabled: false,
         mouseWheelZoomEnabled: false,
         parseDates: true,
