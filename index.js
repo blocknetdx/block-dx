@@ -151,7 +151,15 @@ autoUpdater.on('update-available', res => {
 });
 autoUpdater.on('error', err => {
   updateError = true;
-  if(!/update\.yml/.test(err.message) && !/latest\.yml/.test(err.message)) {
+  const patternsToIgnore = [
+    /update\.yml/,
+    /latest\.yml/,
+    /update-mac\.yml/,
+    /latest-mac\.yml/,
+    /update-linux\.yml/,
+    /latest-linux\.yml/
+  ];
+  if(patternsToIgnore.every(p => !p.test(err.message))) {
     handleError(err);
   }
 });
