@@ -15,144 +15,138 @@ declare var Datafeeds;
 export class PricechartComponent implements AfterViewInit {
   @ViewChild('container')
   public container: ElementRef;
+  public granularity = 2; // 1: minute, 2: 15 minutes, 3: 30 minutes
+  public model = { 1: [], 2: [], 3: [] };
 
-  private widget: any;
-  private granularity = 2; // 1: minute, 2: 15 minutes, 3: 30 minutes
   private chart: any;
-  private model = { 1: [], 2: [], 3: [] };
 
   constructor(
     private currentpriceService: CurrentpriceService,
     private zone: NgZone
   ) {
     this.chart = AmCharts.makeChart( 'tv_chart_container', {
-      'type': 'serial',
-      'theme': 'dark',
-      'valueAxes': [{
-        'position': 'left'
-      }],
-      zoomOutOnDataUpdate: false, // when true this causes chart to jump around unexpectedly
-      mouseWhellScrollEnabled: false,
-      mouseWheelZoomEnabled: false,
-      parseDates: true,
-      'graphs': [ {
-        'id': 'g1',
-        'balloonText': 'Open:<b>[[open]]</b><br>Low:<b>[[low]]</b><br>High:<b>[[high]]</b><br>Close:<b>[[close]]</b><br>Time:<b>[[formattedTime]]</b><br>',
-        'closeField': 'close',
-        'fillColors': '#4bf5c6',
-        'highField': 'high',
-        'lineColor': '#4bf5c6',
-        'lineAlpha': 1,
-        'lowField': 'low',
-        'fillAlphas': 1,
-        'negativeFillColors': '#ff7e70',
-        'negativeLineColor': '#ff7e70',
-        'openField': 'open',
-        'title': 'Price:',
-        'type': 'candlestick',
-        'valueField': 'close'
-      } ],
-      // 'chartScrollbar': {
-      //   // dragIcon: 'dragIconRoundSmallBlack',
-      //   'graph': 'g1',
-      //   'graphType': 'line',
-      //   'scrollbarHeight': 30,
-      //   graphFillAlpha: .1,
-      //   selectedGraphFillAlpha: .1
-      // },
-      'chartCursor': {
-        'valueLineEnabled': true,
-        'valueLineBalloonEnabled': true
-      },
-      'categoryField': 'date',
-      'categoryAxis': {
-        dateFormats: [
-          {'period':'fff','format':'JJ:NN:SS'},
-          {'period':'ss','format':'JJ:NN:SS'},
-          {'period':'mm','format':'JJ:NN'},
-          {'period':'hh','format':'JJ:NN'},
-          {'period':'DD','format':'MMM DD'},
-          {'period':'WW','format':'MMM DD'},
-          {'period':'MM','format':'MMM'},
-          {'period':'YYYY','format':'YYYY'}],
-        parseDates: true,
-        minPeriod: 'mm'
-      },
-      'export': {
-        'enabled': false,
-        'position': 'bottom-right'
-      }
-    });
-  }
-
-  ngAfterViewInit() {
-
-    const { model, granularity } = this;
-
-    const prepData = arr => arr
-      .map(i => Object.assign({}, i, {
-        date: moment(i.time).toDate(),
-        formattedTime: moment(i.time).format('LT')
-      }))
-      .filter(i => i.high !== 0);
-
-    this.currentpriceService.getOrderHistoryByMinute()
-      .subscribe(items => {
-        model['1'] = prepData(items);
-        if (granularity === 1)
-          this.updatePriceChart();
-      });
-
-    this.currentpriceService.getOrderHistoryBy15Minutes()
-      .subscribe(items => {
-        model['2'] = prepData(items);
-        if (granularity === 2)
-          this.updatePriceChart();
-      });
-
-    this.currentpriceService.getOrderHistoryBy1Hour()
-      .subscribe(items => {
-        model['3'] = prepData(items);
-        if (granularity === 3)
-          this.updatePriceChart();
-      });
-
-  }
-
-  /*renderPriceChart() {
-
-    const items = this.model[this.granularity];
-
-    const end = new Date();
-
-    this.zone.runOutsideAngular(() => {
-      const chart = AmCharts.makeChart( 'tv_chart_container', {
         'type': 'serial',
         'theme': 'dark',
-        'valueAxes': [{
-          'position': 'left'
-        }],
+        'legend': {
+          'equalWidths': false,
+          'useGraphSettings': true,
+          'textClickEnabled': true,
+          'valueAlign': 'left',
+          'markerType': 'none',
+          'valueWidth': 100,
+          'valueText': '[[value]]',
+          'periodValueText': '[[value.open]]'
+        },
         zoomOutOnDataUpdate: true,
-        mouseWhellScrollEnabled: false,
+        mouseWheelScrollEnabled: false,
         mouseWheelZoomEnabled: false,
         parseDates: true,
         'graphs': [ {
           'id': 'g1',
-          'balloonText': 'Open:<b>[[open]]</b><br>Low:<b>[[low]]</b><br>High:<b>[[high]]</b><br>Close:<b>[[close]]</b><br>Time:<b>[[formattedTime]]</b><br>',
+          //'balloonText': 'Open:<b>[[open]]</b><br>Volume:<b>[[volume]]</b><br>Low:<b>[[low]]</b><br>High:<b>[[high]]</b><br>Close:<b>[[close]]</b><br>Time:<b>[[formattedTime]]</b><br>',
           'closeField': 'close',
-          'fillColors': '#4bf5c6',
+          //'legendValueText': '[[volume]] volume',
+          //'legendPeriodValueText': 'total: [[volume]]',
+          'fillColors': '#4bf5c5',
           'highField': 'high',
-          'lineColor': '#4bf5c6',
+          'lineColor': '#4bf5c5',
           'lineAlpha': 1,
           'lowField': 'low',
           'fillAlphas': 1,
-          'negativeFillColors': '#ff7e70',
-          'negativeLineColor': '#ff7e70',
+          'negativeFillColors': '#ff7e71',
+          'negativeLineColor': '#ff7e71',
           'openField': 'open',
           'title': 'Price:',
           'type': 'candlestick',
+          'connect': true,
+          'columnWidth': 7,
+          'showBalloon': false,
+          'markerType': 'none',
+          'proCandlesticks': true,
           'valueField': 'close'
-        } ],
+        }, {
+          'type': 'column',
+          'title': 'High:',
+          'columnWidth': 0,
+          'valueField': 'high',
+          'openField': 'high',
+          'lineThickness': 0,
+          'showBalloon': false,
+          'markerType': 'none',
+          'clustered': false
+        }, {
+          'type': 'column',
+          'title': 'Open:',
+          'columnWidth': 0,
+          'valueField': 'open',
+          'openField': 'open',
+          'lineThickness': 0,
+          'showBalloon': false,
+          'markerType': 'none',
+          'clustered': false
+        }, {
+          'type': 'column',
+          'title': 'Close:',
+          'columnWidth': 0,
+          'valueField': 'close',
+          'openField': 'close',
+          'lineThickness': 0,
+          'showBalloon': false,
+          'markerType': 'none',
+          'clustered': false
+        }, {
+          'type': 'column',
+          'columnWidth': 0,
+          'title': 'Low:',
+          'valueField': 'low',
+          'openField': 'low',
+          'showBalloon': false,
+          'lineThickness': 0,
+          'markerType': 'none',
+          'clustered': false
+        }, {
+            'id': 'g2',
+            'valueAxis': 'v2',
+            'bullet': 'round',
+            'bulletBorderAlpha': 1,
+            'bulletColor': '#FFFFFF',
+            'bulletSize': 0,
+            'hideBulletsCount': 1,
+            'columnWidth': 7,
+            'lineColor': '#20acd4',
+            'type': 'column',
+            'title': 'Volume:',
+            'useLineColorForBulletBorder': true,
+            'valueField': 'volume',
+            'fillAlphas': 0.050,
+            'markerType': 'none',
+            'clustered': false,
+            'showBalloon': false
+            //'balloonText': '[[title]]<br /><b style='font-size: 130%'>[[value]]</b>'
+          } ],
+        'valueAxes': [{
+          'precision': 2,
+          'title': 'Price',
+          'lineThickness': 1,
+          'columnWidth': 25,
+          'strictMinMax': false,
+          'reversed': false,
+          'axisAlpha': 1,
+          'position': 'left',
+          'integersOnly': false,
+          'guides': [{
+            'value': 1,
+            'label': '1'
+            }]}, {
+          'id': 'v2',
+          'title': 'Volume',
+          'gridAlpha': 0,
+          'position': 'right',
+          'axisAlpha': 0.15,
+          'minimum': 0,
+          'minMaxMultiplier': 5,
+          'autoGridCount': false
+        }],
         // 'chartScrollbar': {
         //   // dragIcon: 'dragIconRoundSmallBlack',
         //   'graph': 'g1',
@@ -163,7 +157,9 @@ export class PricechartComponent implements AfterViewInit {
         // },
         'chartCursor': {
           'valueLineEnabled': true,
-          'valueLineBalloonEnabled': true
+          'categoryBalloonDateFormat': 'MMM DD JJ:NN',
+          'cursorPosition': 'mouse',
+          'valueLineBalloonEnabled': false
         },
         'categoryField': 'date',
         'categoryAxis': {
@@ -179,73 +175,56 @@ export class PricechartComponent implements AfterViewInit {
           parseDates: true,
           minPeriod: 'mm'
         },
-        dataProvider: items,
         'export': {
           'enabled': false,
           'position': 'bottom-right'
-        }
-      });
-
-      this.chart = chart;
-
-      // chart.addListener( 'rendered', () => {
-      //   zoomChart();
-      // });
-
-      setTimeout(() => {
-
-        // chart.addListener('zoomed', e => {
-        //
-        //   if ( chart.ignoreZoomEvent ) {
-        //     chart.ignoreZoomEvent = false;
-        //     return;
-        //   }
-        //
-        //   const { startDate, endDate } = e;
-        //   const diff = endDate.getTime() - startDate.getTime();
-        //   const { granularity } = this;
-        //   console.log(granularity);
-        //   console.log((diff / 60000).toFixed(0));
-        //   let minPeriod;
-        //   if(diff < 7200000) {
-        //     this.granularity = 1;
-        //     minPeriod = 'mm';
-        //   } else if(diff < 72000000) {
-        //     this.granularity = 2;
-        //     minPeriod = '15mm';
-        //   } else { // >= 72000000
-        //     this.granularity = 3;
-        //     minPeriod = '30mm';
-        //   }
-        //
-        //   chart.ignoreZoomEvent = true;
-        //   chart.categoryAxis.minPeriod = minPeriod;
-        //   chart.lastZoomEvent = event;
-        //
-        //   this.updatePriceChart();
-        //
-        // });
-        // chart.addListener('dataUpdated', e => {
-        //   if ( chart.lastZoomEvent !== undefined ) {
-        //     chart.ignoreZoomEvent = true;
-        //     chart.zoomToDates( chart.lastZoomEvent.startDate, chart.lastZoomEvent.endDate );
-        //   }
-        // });
-
-      }, 100);
-
-      // this method is called when chart is first inited as we listen for 'dataUpdated' event
-      function zoomChart() {
-        // different zoom methods can be used - zoomToIndexes, zoomToDates, zoomToCategoryValues
-        chart.zoomToIndexes( chart.dataProvider.length - 60, chart.dataProvider.length - 1 );
       }
     });
-  }*/
+  }
+
+  ngAfterViewInit() {
+
+    const { model, granularity, zone } = this;
+
+    const prepData = arr => arr
+      .map(i => Object.assign({}, i, {
+        date: moment(i.time).toDate(),
+        formattedTime: moment(i.time).format('LT')
+      }))
+      .filter(i => i.high !== 0);
+
+    this.currentpriceService.getOrderHistoryByMinute()
+      .subscribe(items => {
+        zone.run(() => {
+          model['1'] = prepData(items);
+        });
+        if (granularity === 1)
+          this.updatePriceChart();
+      });
+
+    this.currentpriceService.getOrderHistoryBy15Minutes()
+      .subscribe(items => {
+        zone.run(() => {
+          model['2'] = prepData(items);
+        });
+        if (granularity === 2)
+          this.updatePriceChart();
+      });
+
+    this.currentpriceService.getOrderHistoryBy1Hour()
+      .subscribe(items => {
+        zone.run(() => {
+          model['3'] = prepData(items);
+        });
+        if (granularity === 3)
+          this.updatePriceChart();
+      });
+
+  }
 
   updatePriceChart() {
     const items = this.model[this.granularity];
     this.chart.dataProvider = items;
     this.chart.validateData();
   }
-
 }
