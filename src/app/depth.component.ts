@@ -94,8 +94,8 @@ export class DepthComponent implements OnInit, AfterViewInit, OnChanges {
 
         // Init
         const res = [];
-        processData(orderbook.bids, 'bids', true);
-        processData(orderbook.asks, 'asks', false);
+        processData(orderbook.asks, 'asks', true);
+        processData(orderbook.bids, 'bids', false);
 
         // console.log('res', res);
 
@@ -137,16 +137,6 @@ export class DepthComponent implements OnInit, AfterViewInit, OnChanges {
         'dataProvider': data,
         'graphs': [
           {
-            'id': 'bids',
-            'fillAlphas': 0.1,
-            'lineAlpha': 1,
-            'lineThickness': 2,
-            'lineColor': '#4BF5C6',
-            'type': 'step',
-            'valueField': 'bidstotalvolume',
-            'balloonFunction': balloon
-          },
-          {
             'id': 'asks',
             'fillAlphas': 0.1,
             'lineAlpha': 1,
@@ -154,6 +144,16 @@ export class DepthComponent implements OnInit, AfterViewInit, OnChanges {
             'lineColor': '#FF7E70',
             'type': 'step',
             'valueField': 'askstotalvolume',
+            'balloonFunction': balloon
+          },
+          {
+            'id': 'bids',
+            'fillAlphas': 0.1,
+            'lineAlpha': 1,
+            'lineThickness': 2,
+            'lineColor': '#4BF5C6',
+            'type': 'step',
+            'valueField': 'bidstotalvolume',
             'balloonFunction': balloon
           }
           // {
