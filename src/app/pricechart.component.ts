@@ -190,9 +190,12 @@ export class PricechartComponent implements AfterViewInit {
     const prepData = arr => arr
       .map(i => Object.assign({}, i, {
         date: moment(i.time).toDate(),
-        formattedTime: moment(i.time).format('LT')
-      }))
-      .filter(i => i.high !== 0);
+        formattedTime: moment(i.time).format('LT'),
+        low: i.low === 0 ? null : i.low,
+        high: i.high === 0 ? null : i.high,
+        open: i.open === 0 ? null : i.open,
+        close: i.close === 0 ? null : i.close,
+      }));
 
     this.currentpriceService.getOrderHistoryByMinute()
       .subscribe(items => {
