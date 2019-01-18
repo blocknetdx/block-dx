@@ -23,7 +23,7 @@ window.electron.ipcRenderer.on('error', (e, { name, message }) => {
     alert(name + ': ' + message);
     alertTimeout = setTimeout(() => {
       count = 0;
-    }, 60000);
+    }, 15000);
   } else if(count === 1) {
     count++;
     alert(name + ': ' + message);
