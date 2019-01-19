@@ -23,11 +23,9 @@ export class Currentprice {
   constructor() {}
 
   public get priceDiff(): number {
-    const last = parseFloat(this.last);
-    const open = parseFloat(this.open);
     const res = math
-      .chain(last)
-      .divide(open)
+      .chain(this._close)
+      .divide(this._open)
       .subtract(1)
       .done();
     return res || 0;
@@ -39,6 +37,7 @@ export class Currentprice {
 
   public static fromObject(obj: any): Currentprice {
     const inst = new Currentprice();
+    inst.last = obj.close.toString();
     inst._volume = obj.volume;
     inst._open = obj.open;
     inst._close = obj.close;

@@ -36,13 +36,12 @@ export class NavBarComponent implements OnInit {
     this.appService.marketPairChanges.subscribe((symbols) => {
       this.zone.run(() => {
         this.symbols = symbols;
+      });
+    });
 
-        this.currentpriceService.currentprice.subscribe((cp) => {
-          this.zone.run(() => {
-            this.currentPrice = cp;
-          });
-        });
-
+    this.currentpriceService.currentprice.subscribe((cp) => {
+      this.zone.run(() => {
+        this.currentPrice = cp;
       });
     });
 

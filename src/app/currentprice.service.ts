@@ -27,10 +27,7 @@ export class CurrentpriceService {
 
     return Observable.create(observer => {
       window.electron.ipcRenderer.on('currentPrice', (e, order) => {
-        const preppedOrder = Object.assign({}, order, {
-          last: order.close
-        });
-        observer.next(Currentprice.fromObject(preppedOrder));
+        observer.next(Currentprice.fromObject(order));
       });
       window.electron.ipcRenderer.send('getCurrentPrice');
 
@@ -67,11 +64,7 @@ export class CurrentpriceService {
           // }
 
           const preppedData = data
-            .map(d => Object.assign({}, d, {
-              last: d.close
-            }))
             .map(d => Currentprice.fromObject(d));
-            // .filter(d => d.high && d.low);
 
           observer.next(preppedData);
         });
@@ -110,11 +103,7 @@ export class CurrentpriceService {
           // }
 
           const preppedData = data
-            .map(d => Object.assign({}, d, {
-              last: d.close
-            }))
             .map(d => Currentprice.fromObject(d));
-            // .filter(d => d.high && d.low);
 
           observer.next(preppedData);
         });
@@ -153,11 +142,7 @@ export class CurrentpriceService {
           // }
 
           const preppedData = data
-            .map(d => Object.assign({}, d, {
-              last: d.close
-            }))
             .map(d => Currentprice.fromObject(d));
-            // .filter(d => d.high && d.low);
 
           observer.next(preppedData);
         });
@@ -196,11 +181,8 @@ export class CurrentpriceService {
           // }
 
           const preppedData = data
-            .map(d => Object.assign({}, d, {
-              last: d.close
-            }))
-            .map(d => Currentprice.fromObject(d))
-            .filter(d => d.high && d.low);
+            .filter(d => d.high > 0 && d.low > 0)
+            .map(d => Currentprice.fromObject(d));
 
           observer.next(preppedData);
         });
