@@ -28,20 +28,37 @@ export class Pricing {
     this.in = preppedItems.length > 0 ? preppedItems[0].base: '';
   }
 
+  public canGetPrice(token: string): boolean {
+    try {
+      const item = this.items.find(i => i.coin === token);
+      return item.multiplier === undefined ? false: true;
+    } catch(err) {
+      return false;
+    }
+  }
+
   public getPrice(amount: number, token: string): any {
-    const item = this.items.find(i => i.coin === token);
-    if(item) {
-      return math.multiply(amount, item.multiplier);
-    } else {
+    try {
+      const item = this.items.find(i => i.coin === token);
+      if(item) {
+        return math.multiply(amount, item.multiplier);
+      } else {
+        return 0;
+      }
+    } catch(err) {
       return 0;
     }
   }
 
   public getFromBasePrice(amount: number, token: string): any {
-    const item = this.items.find(i => i.coin === token);
-    if(item) {
-      return math.divide(amount, item.multiplier);
-    } else {
+    try {
+      const item = this.items.find(i => i.coin === token);
+      if(item) {
+        return math.divide(amount, item.multiplier);
+      } else {
+        return 0;
+      }
+    } catch(err) {
       return 0;
     }
   }
