@@ -73,7 +73,7 @@ class Wallet {
 
   saveWalletConf() {
     const { directory } = this;
-    const conf = this.walletConf.replace(/--.*$/, '') + '.conf';
+    const conf = this.confName ? this.confName : this.walletConf.replace(/--.*$/, '') + '.conf';
     const filePath = path.join(directory, conf);
     fs.ensureFileSync(filePath);
     const defaultFile = filePath + '-default';
