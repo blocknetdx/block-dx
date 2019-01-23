@@ -15,6 +15,7 @@ import { Pricing } from './pricing';
 // import { Trade } from './trade';
 // import {CurrentpriceService} from './currentprice.service';
 
+
 math.config({
   number: 'BigNumber',
   precision: 64
@@ -25,6 +26,8 @@ math.config({
   templateUrl: './orderbook.component.html',
   styleUrls: ['./order-book.component.scss']
 })
+
+
 export class OrderbookComponent implements OnInit {
   @ViewChild('orderbookTopTable') public orderbookTopTable: TableComponent;
   @ViewChild('orderbookBottomTable') public orderbookBottomTable: TableComponent;
@@ -159,6 +162,19 @@ export class OrderbookComponent implements OnInit {
 
   calculateTotal(row) {
     return math.round(math.multiply(row[1], row[0]), 6);
+  }
+
+  scalePercentBar(size) {
+    var maxWidth = 100; // percentBar CSS max-width %
+    var scale = 0.4; // ratio of max width to limit to
+    var multiplier = maxWidth * scale;
+    if (size <= 1) {
+      return ( 0.01 * multiplier );
+    } else if (size <= 2.75) {
+      return ( Math.log(size) * 0.09 * multiplier );
+    } else {
+      return ( (1 - 1 / Math.log(size)) * multiplier );
+    }
   }
 
 }

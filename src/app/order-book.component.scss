@@ -22,9 +22,32 @@ app-table /deep/ {
     min-width: 2px;
     z-index: 0;
     padding: 0;
-    opacity: 0.3;
+    opacity: 0.30;
   }
-
+  .orderbook-own-order-highlight {
+    display: block;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    min-width: 2px;
+    z-index: 0;
+    padding: 0;
+    //background-color: rgba(133, 153, 0, 0.15) !important;
+    //opacity: 0.075;
+  }
+  .orderbook-own-order-dot {
+    display: inline-block;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 6px;
+    float: left;
+    width: 8px;
+    height: 8px;
+    border-radius:50%;
+    background-color: #fff;
+  }
   .bn-table__section + .bn-table__section {
     margin-top: 0;
   }
@@ -108,7 +131,32 @@ app-table /deep/ {
   top: 0;
 }
 
-.orderbook-own-order {
-  background-color: rgba(133, 153, 0, 0.35);
-//  opacity: .5;
+.spread {
+  font-weight: bold;
+  opacity: .4;
 }
+.orderbook-own-order {
+  //color: rgba(133, 153, 0, 1); // gold hue
+}
+.red-bar {
+  background-image: linear-gradient(to right, $bn-red, $bn-blue2);
+  border-bottom: 1px solid rgba(23, 46, 72, 0.5);
+}
+.green-bar {
+  background-image: linear-gradient(to right, $bn-green, $bn-blue2);
+  border-bottom: 1px solid rgba(23, 46, 72, 0.5);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
