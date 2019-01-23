@@ -1,5 +1,6 @@
 // from xbridge api
 export const New            = 'new';
+export const Open      		= 'open';
 export const Accepting      = 'accepting';
 export const Hold           = 'hold';
 export const Initialized    = 'initialized';
