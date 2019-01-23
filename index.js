@@ -678,11 +678,11 @@ const openAppWindow = () => {
     return { time: last.time, open: open, close: close, high: high, low: low, volume: vol };
   };
 
-  const orderKey = (sym1, sym2) => sym1 + sym2;
+  const orderKey = (pair) => pair[0] + pair[1];
   let orderHistoryDict = new Map();
 
   const sendOrderHistory = (which) => {
-    const key = orderKey(keyPair[0], keyPair[1]);
+    const key = orderKey(keyPair);
     const shouldUpdate = !orderHistoryDict.has(key) ||
       (moment.utc().diff(orderHistoryDict[key]['orderHistoryLastUpdate'], 'seconds', true) >= 15);
     if (!shouldUpdate) {
@@ -713,9 +713,11 @@ const openAppWindow = () => {
           orderHistoryDict[key]['orderHistory'] = res;
           orderHistoryDict[key]['orderHistoryByMinute'] = res;
           orderHistoryDict[key]['currentPrice'] = calculatePricingData(res);
-          appWindow.send('orderHistory', res);
-          appWindow.send('orderHistoryByMinute', res);
-          appWindow.send('currentPrice', orderHistoryDict[key]['currentPrice']);
+          if (key === orderKey(keyPair)) {
+            appWindow.send('orderHistory', res);
+            appWindow.send('orderHistoryByMinute', res);
+            appWindow.send('currentPrice', orderHistoryDict[key]['currentPrice']);
+          }
         })
         .catch(handleError);
     }
@@ -723,7 +725,8 @@ const openAppWindow = () => {
       sn.dxGetOrderHistory(keyPair[0], keyPair[1], start.unix(), end.unix(), 900)
         .then(res => {
           orderHistoryDict[key]['orderHistoryBy15Minutes'] = res;
-          appWindow.send('orderHistoryBy15Minutes', res);
+          if (key === orderKey(keyPair))
+            appWindow.send('orderHistoryBy15Minutes', res);
         })
         .catch(handleError);
     }
@@ -731,7 +734,8 @@ const openAppWindow = () => {
       sn.dxGetOrderHistory(keyPair[0], keyPair[1], start.unix(), end.unix(), 3600)
         .then(res => {
           orderHistoryDict[key]['orderHistoryBy1Hour'] = res;
-          appWindow.send('orderHistoryBy1Hour', res);
+          if (key === orderKey(keyPair))
+            appWindow.send('orderHistoryBy1Hour', res);
         })
         .catch(handleError);
     }
