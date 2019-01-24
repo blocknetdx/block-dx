@@ -997,7 +997,11 @@ ipcMain.on('saveGeneralSettings', (e, s) => {
 const checkForUpdates = async function() {
   try {
     await new Promise(resolve => setTimeout(resolve, 3000));
-    await autoUpdater.checkForUpdates();
+    if(!isDev) {
+      await autoUpdater.checkForUpdates();
+    } else {
+      updateError = true;
+    }
   } catch(err) {
     updateError = true;
   }
