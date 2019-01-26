@@ -100,6 +100,12 @@ export class FilledOrdersComponent extends BaseComponent implements OnInit {
     return token;
   }
 
+  calculatePairPrice(total, size) {
+    //return math.round(math.divide(total, size),6);
+    return math.divide(total, size).toFixed(6);
+  }
+
+
   getStatusDotColor(status) {
     if([OrderStates.Finished].includes(status)) {
       return '#0f0';
