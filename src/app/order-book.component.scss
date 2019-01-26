@@ -22,7 +22,7 @@ app-table /deep/ {
     min-width: 2px;
     z-index: 0;
     padding: 0;
-    opacity: 0.30;
+    //opacity: 0.30;
   }
   .orderbook-own-order-highlight {
     display: block;
@@ -139,11 +139,11 @@ app-table /deep/ {
   //color: rgba(133, 153, 0, 1); // gold hue
 }
 .red-bar {
-  background-image: linear-gradient(to right, $bn-red, $bn-blue2);
+  background-image: linear-gradient(to right, rgba(255,127,113,0.3), $bn-blue3);
   border-bottom: 1px solid rgba(23, 46, 72, 0.5);
 }
 .green-bar {
-  background-image: linear-gradient(to right, $bn-green, $bn-blue2);
+  background-image: linear-gradient(to right, rgba(0,244,197,0.3), $bn-blue3);
   border-bottom: 1px solid rgba(23, 46, 72, 0.5);
 }
 
