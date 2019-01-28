@@ -1046,7 +1046,7 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
 
     pricingSource = storage.getItem('pricingSource');
     if(!pricingSource) {
-      pricingSource = 'COIN_MARKET_CAP';
+      pricingSource = 'CRYPTO_COMPARE';
       storage.setItem('pricingSource', pricingSource);
     }
     apiKeys = storage.getItem('apiKeys');
@@ -1061,7 +1061,7 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
     }
     pricingFrequency = storage.getItem('pricingFrequency');
     if(!pricingFrequency) {
-      pricingFrequency = 300000;
+      pricingFrequency = 15000;
       storage.setItem('pricingFrequency', pricingFrequency);
     }
     enablePricing = storage.getItem('pricingEnabled');

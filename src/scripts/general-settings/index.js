@@ -35,8 +35,8 @@ state.set('pricingUnits', [
   'BTC'
 ]);
 state.set('pricingSources', [
-  {id: 'COIN_MARKET_CAP', text: 'CoinMarketCap'},
-  {id: 'CRYPTO_COMPARE', text: 'CryptoCompare'}
+  {id: 'CRYPTO_COMPARE', text: 'CryptoCompare', apiKeyNeeded: false},
+  {id: 'COIN_MARKET_CAP', text: 'CoinMarketCap', apiKeyNeeded: true}
 ]);
 
 const saveSettings = () => {
@@ -59,6 +59,12 @@ $(document).ready(() => {
       .addClass('fa-angle-down')
       .removeClass('fa-angle-up');
   };
+
+  const apiKeyError = (bool) => {
+    const msg = bool ? "An API key is required for this data source." : "&nbsp;";
+    $('#js-inputError').html(msg);
+    bool ? $('#js-apiKeyInput').addClass('inputError') : $('#js-apiKeyInput').removeClass('inputError');
+  }
 
   const render = () => {
 
@@ -88,6 +94,7 @@ $(document).ready(() => {
         `;
 
     $('#js-main').html(html);
+
     setTimeout(() => {
 
       $('#js-main')
@@ -160,8 +167,12 @@ $(document).ready(() => {
                 ee.preventDefault();
                 const source = $(ee.currentTarget).attr('data-source');
                 const pricingSourceObj = pricingSources.find(p => p.id === source);
+                const $toggle1 = $('.js-toggle1');
+                const $toggle2 = $('.js-toggle2');
+                const $colorBar = $('.js-colorBar');
                 $($target.find('div')[0]).text(pricingSourceObj.text);
                 state.set('pricingSource', source);
+                $('#js-apiKeyInput').attr("placeholder", "Enter API key");
                 const apiKeys = state.get('apiKeys');
                 let key;
                 if(apiKeys[source]) {
@@ -174,15 +185,34 @@ $(document).ready(() => {
                   state.set('apiKeys', newAPIKeys);
                 }
                 $('#js-apiKeyInput').val(key);
+                if(!pricingSourceObj.apiKeyNeeded) {
+                  // api key not needed
+                  $('#js-apiKeyInput').prop("disabled", true); 
+                  $('#js-apiKeyInput').attr("placeholder", "API key not needed").val('');
+                  apiKeyError(false);
+                } else {
+                  // api key needed
+                  $('#js-apiKeyInput').prop("disabled", false);
+                  if (pricingSourceObj.apiKeyNeeded && $('#js-apiKeyInput').val() == '') {
+                    apiKeyError(true);
+                    state.set('pricingEnabled', false);
+                    $toggle2.addClass('active');
+                    $toggle1.removeClass('active');
+                    $colorBar.addClass('color-bar-right');
+                    $colorBar.removeClass('color-bar-left');
+                  }
+                }
                 saveSettings();
               });
           }, 0);
         });
-
       $('.js-colorToggle')
         .off('click')
         .on('click', e => {
           e.preventDefault();
+          const pricingSource = state.get('pricingSource');
+          const pricingSources = state.get('pricingSources');
+          const pricingSourceObj = pricingSources.find(p => p.id === pricingSource);
           const $target = $(e.currentTarget);
           const $toggle1 = $target.find('.js-toggle1');
           const $toggle2 = $target.find('.js-toggle2');
@@ -194,11 +224,24 @@ $(document).ready(() => {
             $colorBar.addClass('color-bar-right');
             $colorBar.removeClass('color-bar-left');
           } else {
-            state.set('pricingEnabled', true);
-            $toggle1.addClass('active');
-            $toggle2.removeClass('active');
-            $colorBar.addClass('color-bar-left');
-            $colorBar.removeClass('color-bar-right');
+            if ( pricingSourceObj.apiKeyNeeded && $('#js-apiKeyInput').val() == '') {
+              // api key needed, keep disbaled
+              console.log('make disabled');
+              apiKeyError(true);
+              state.set('pricingEnabled', false);
+              $toggle2.addClass('active');
+              $toggle1.removeClass('active');
+              $colorBar.addClass('color-bar-right');
+              $colorBar.removeClass('color-bar-left');
+            } else {
+              console.log('make enabled');
+              apiKeyError(false);
+              state.set('pricingEnabled', true);
+              $toggle1.addClass('active');
+              $toggle2.removeClass('active');
+              $colorBar.addClass('color-bar-left');
+              $colorBar.removeClass('color-bar-right');
+            }
           }
           saveSettings();
         });
@@ -209,11 +252,26 @@ $(document).ready(() => {
           e.preventDefault();
           const { value } = e.target;
           const pricingSource = state.get('pricingSource');
+          const pricingSources = state.get('pricingSources');
+          const pricingSourceObj = pricingSources.find(p => p.id === pricingSource);
           const apiKeys = state.get('apiKeys');
           const newAPIKeys = Object.assign({}, apiKeys, {
             [pricingSource]: value.trim()
           });
           state.set('apiKeys', newAPIKeys);
+          const $toggle1 = $('.js-toggle1');
+          const $toggle2 = $('.js-toggle2');
+          const $colorBar = $('.js-colorBar');
+          if (pricingSourceObj.apiKeyNeeded && $('#js-apiKeyInput').val().trim() == '') {
+            apiKeyError(true);
+            state.set('pricingEnabled', false);
+            $toggle2.addClass('active');
+            $toggle1.removeClass('active');
+            $colorBar.addClass('color-bar-right');
+            $colorBar.removeClass('color-bar-left');
+          } else {
+            apiKeyError(false);
+          }
           saveSettings();
         });
 
@@ -222,7 +280,7 @@ $(document).ready(() => {
         .on('change', e => {
           e.preventDefault();
           const { value } = e.target;
-          console.log('value', value);
+          // console.log('value', value);
           const preppedValue = Number(value) * 1000;
           state.set('pricingFrequency', preppedValue);
           saveSettings();
@@ -244,7 +302,24 @@ $(document).ready(() => {
       const pricingFrequency = ipcRenderer.sendSync('getPricingFrequency');
       state.set('pricingFrequency', pricingFrequency);
 
+
+
       render();
+
+      const pricingSources = state.get('pricingSources');
+      const pricingSourceObj = pricingSources.find(p => p.id === pricingSource);
+      apiKeyError(false);
+      if(!pricingSourceObj.apiKeyNeeded) {
+        $('#js-apiKeyInput').prop("disabled", true); 
+        $('#js-apiKeyInput').attr("placeholder", "API key not needed").val('');
+      } else {
+        $('#js-apiKeyInput').prop("disabled", false);
+        $('#js-apiKeyInput').attr("placeholder", "Enter API key");
+        if (pricingSourceObj.apiKeyNeeded && $('#js-apiKeyInput').val().trim() == '') {
+          apiKeyError(true);
+        }
+      }
+
     } catch(err) {
       handleError(err);
     }

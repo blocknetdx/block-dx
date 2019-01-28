@@ -70,6 +70,9 @@
       border-color: #4b6275;
       border-style: solid;
     }
+    input[type=text]:disabled {
+      opacity: .35;
+    }
     .dropdown-button {
       position: relative;
       opacity: 1;
@@ -325,7 +328,13 @@
       margin-left: 50%;
       background-color: #ff725e;
     }
-
+    .inputError {
+      border: 1px solid #ed1c24 !important;
+    }
+    #js-inputError {
+      margin-top: -6px;
+      margin-bottom: -7px;
+    }
   </style>
 
 </head>
