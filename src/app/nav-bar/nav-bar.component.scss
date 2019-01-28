@@ -51,7 +51,7 @@
 
 app-pair-selector {
   @include screen(lg) {
-    margin-left: 25px;
+    margin-left: 30px;
   }
 }
 
@@ -182,7 +182,7 @@ app-pair-selector {
     padding: 0;
     position: absolute;
     top: 0;
-    left: 290px;
+    left: 315px;
   }
 
   &__cell {
