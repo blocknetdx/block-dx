@@ -1,6 +1,8 @@
 <div class="chart-holder">
   <div id="chartdiv"></div>
-  <div class="midmarket-price" [style.display]="orderbook.length > 0 ? 'block' : 'none'" [style.top.%]="currentPriceCSSPercentage"  *ngIf="currentPrice">
-    <span class="bn-number" [innerHtml]="currentPrice.last | blockCurrency:symbols[1]"></span>
+  <div class="midmarket-price-container">
+    <div class="midmarket-price" [style.display]="orderbook.length > 0 ? 'block' : 'none'" [style.bottom.%]="currentPriceCSSPercentage"  *ngIf="currentPrice">
+      <span class="bn-number" [innerHtml]="currentPrice.last | blockCurrency:symbols[1]"></span>
+    </div>
   </div>
 </div>
