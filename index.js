@@ -403,6 +403,28 @@ const openGeneralSettingsWindow = () => {
 
 };
 
+const openInformationWindow = () => {
+  const informationWindow = new BrowserWindow({
+    show: false,
+    width: 1000,
+    height: platform === 'win32' ? 708 : platform === 'darwin' ? 695 : 670,
+    parent: appWindow,
+    modal: platform === 'darwin' ? false : true
+  });
+
+  informationWindow.setMenu(null);
+
+  if(isDev) {
+    informationWindow.loadURL(`file://${path.join(__dirname, 'src', 'information.html')}`);
+  } else {
+    informationWindow.loadURL(`file://${path.join(__dirname, 'dist', 'information.html')}`);
+  }
+  informationWindow.once('ready-to-show', () => {
+    informationWindow.show();
+  });
+
+};
+
 const openTOSWindow = (alreadyAccepted = false) => {
 
   ipcMain.on('getTOS', e => {
@@ -943,6 +965,10 @@ const openAppWindow = () => {
 
   ipcMain.on('openGeneralSettings', () => {
     openGeneralSettingsWindow();
+  });
+
+  ipcMain.on('openInformation', () => {
+    openInformationWindow();
   });
 
   ipcMain.on('openSettings', () => {
