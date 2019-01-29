@@ -1,6 +1,9 @@
 ![BLOCK DX](BLOCKDX.png)
 
-BLOCK DX is the first dapp built on top of the Blocknet Protocol. This repository is maintained by the Blocknet Core Team. We encourage the community to create dapps on top of Blocknet. Please connect with our community on discord. More information about Blocknet can be found at https://blocknet.co
+BLOCK DX is the first dApp built on top of the [Blocknet Protocol](https://api.blocknet.co). This repository is maintained by the Blocknet Core Team. We encourage the community to create dApps on top of Blocknet. Please connect with our community on [Discord](https://discord.gg/2e6s7H8). More information about Blocknet can be found on the [Blocknet website](https://blocknet.co) and [documentation portal](https://docs.blocknet.co).
+
+[Website](https://blocknet.co) | [API](https://api.blocknet.co) | [Documentation](https://docs.blocknet.co) | [Discord](https://discord.gg/2e6s7H8)
+-------------|-------------|-------------|-------------
 
 # Build and Run
 
