@@ -110,6 +110,22 @@ export class DepthComponent implements OnInit, AfterViewInit, OnChanges {
       });
   }
 
+  public formatMMP(val) {
+    var price = parseFloat(val);
+    var formattedPrice =  (
+        (price >= 100000000) ? price.toFixed(0) :
+        (price >= 10000000) ? price.toFixed(1) :
+        (price >= 1000000) ? price.toFixed(2) :
+        (price >= 100000) ? price.toFixed(3) :
+        (price >= 10000) ? price.toFixed(4) :
+        (price >= 1000) ? price.toFixed(5) :
+        (price >= 100) ? price.toFixed(6) :
+        (price >= 10) ? price.toFixed(7) :
+        (price < 10) ? price.toFixed(8) :
+        price);
+    return formattedPrice;
+  }
+
   ngAfterViewInit() {
     // this.runDepthChart();
   }
@@ -140,7 +156,7 @@ export class DepthComponent implements OnInit, AfterViewInit, OnChanges {
             'id': 'asks',
             'fillAlphas': 0.1,
             'lineAlpha': 1,
-            'lineThickness': 2,
+            'lineThickness': 1,
             'lineColor': '#FF7E70',
             'type': 'step',
             'valueField': 'askstotalvolume',
@@ -150,7 +166,7 @@ export class DepthComponent implements OnInit, AfterViewInit, OnChanges {
             'id': 'bids',
             'fillAlphas': 0.1,
             'lineAlpha': 1,
-            'lineThickness': 2,
+            'lineThickness': 1,
             'lineColor': '#4BF5C6',
             'type': 'step',
             'valueField': 'bidstotalvolume',
@@ -239,12 +255,12 @@ export class DepthComponent implements OnInit, AfterViewInit, OnChanges {
         let txt;
         if (graph.id === 'asks') {
           txt = 'Ask: <strong>' + formatNumber(item.dataContext.value, graph.chart, 4) + '</strong><br />'
-            + 'Total volume: <strong>' + formatNumber(item.dataContext.askstotalvolume, graph.chart, 4) + '</strong><br />'
-            + 'Volume: <strong>' + formatNumber(item.dataContext.asksvolume, graph.chart, 4) + '</strong>';
+            + 'Volume: <strong>' + formatNumber(item.dataContext.askstotalvolume, graph.chart, 4) + '</strong><br />'
+            + 'Sum: <strong>' + formatNumber(item.dataContext.asksvolume, graph.chart, 4) + '</strong>';
         } else {
           txt = 'Bid: <strong>' + formatNumber(item.dataContext.value, graph.chart, 4) + '</strong><br />'
-            + 'Total volume: <strong>' + formatNumber(item.dataContext.bidstotalvolume, graph.chart, 4) + '</strong><br />'
-            + 'Volume: <strong>' + formatNumber(item.dataContext.bidsvolume, graph.chart, 4) + '</strong>';
+            + 'Volume: <strong>' + formatNumber(item.dataContext.bidstotalvolume, graph.chart, 4) + '</strong><br />'
+            + 'Sum: <strong>' + formatNumber(item.dataContext.bidsvolume, graph.chart, 4) + '</strong>';
         }
         return txt;
       }
@@ -427,13 +443,13 @@ export class DepthComponent implements OnInit, AfterViewInit, OnChanges {
     //     var txt;
     //     if (graph.id == 'asks') {
     //       txt = 'Ask: <strong>' + formatNumber(item.dataContext.value, graph.chart, 4) + '</strong><br />'
-    //         + 'Total volume: <strong>' + formatNumber(item.dataContext.askstotalvolume, graph.chart, 4) + '</strong><br />'
-    //         + 'Volume: <strong>' + formatNumber(item.dataContext.asksvolume, graph.chart, 4) + '</strong>';
+    //         + 'Volume: <strong>' + formatNumber(item.dataContext.askstotalvolume, graph.chart, 4) + '</strong><br />'
+    //         + 'Sum: <strong>' + formatNumber(item.dataContext.asksvolume, graph.chart, 4) + '</strong>';
     //     }
     //     else {
     //       txt = 'Bid: <strong>' + formatNumber(item.dataContext.value, graph.chart, 4) + '</strong><br />'
-    //         + 'Total volume: <strong>' + formatNumber(item.dataContext.bidstotalvolume, graph.chart, 4) + '</strong><br />'
-    //         + 'Volume: <strong>' + formatNumber(item.dataContext.bidsvolume, graph.chart, 4) + '</strong>';
+    //         + 'Volume: <strong>' + formatNumber(item.dataContext.bidstotalvolume, graph.chart, 4) + '</strong><br />'
+    //         + 'Sum: <strong>' + formatNumber(item.dataContext.bidsvolume, graph.chart, 4) + '</strong>';
     //     }
     //     return txt;
     //   }
