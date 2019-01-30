@@ -26,25 +26,41 @@ export class Openorder {
     return moment(this.created_at).format('MMM DD HH:mm');
   }
 
-  public getStatus() {
-    var orderStatus = this.status;
-    var simpleStatus = orderStatus;
-    simpleStatus = (orderStatus == OrderStates.New)             ? 'Creating order'              : simpleStatus;
-    simpleStatus = (orderStatus == OrderStates.Open)            ? 'Open'                        : simpleStatus;
-    simpleStatus = (orderStatus == OrderStates.Accepting)       ? 'Exchange in progress (1/5)'  : simpleStatus;
-    simpleStatus = (orderStatus == OrderStates.Hold)            ? 'Exchange in progress (2/5)'  : simpleStatus;
-    simpleStatus = (orderStatus == OrderStates.Initialized)     ? 'Exchange in progress (3/5)'  : simpleStatus;
-    simpleStatus = (orderStatus == OrderStates.Created)         ? 'Exchange in progress (4/5)'  : simpleStatus;
-    simpleStatus = (orderStatus == OrderStates.Committed)       ? 'Exchange in progress (5/5)'  : simpleStatus;
-    simpleStatus = (orderStatus == OrderStates.Finished)        ? 'Complete'                    : simpleStatus;
-    simpleStatus = (orderStatus == OrderStates.Expired)         ? 'Expired'                     : simpleStatus;
-    simpleStatus = (orderStatus == OrderStates.Offline)         ? 'Offline'                     : simpleStatus;
-    simpleStatus = (orderStatus == OrderStates.Invalid)         ? 'Invalid'                     : simpleStatus;
-    simpleStatus = (orderStatus == OrderStates.RolledBack)      ? 'Order failed, refunded'      : simpleStatus;
-    simpleStatus = (orderStatus == OrderStates.RollbackFailed)  ? 'Order failed, not refunded'  : simpleStatus;
-    simpleStatus = (orderStatus == OrderStates.Canceled)        ? 'Cancelled'                   : simpleStatus;
-    return simpleStatus;
+  public simpleStatus() {
+    switch (this.status) {
+      case OrderStates.New:             return `Creating order`;
+      case OrderStates.Open:            return `Open`;
+      case OrderStates.Accepting:       return `Exchange in progress (1/5)`;
+      case OrderStates.Hold:            return `Exchange in progress (2/5)`;
+      case OrderStates.Initialized:     return `Exchange in progress (3/5)`;
+      case OrderStates.Created:         return `Exchange in progress (4/5)`;
+      case OrderStates.Committed:       return `Exchange in progress (5/5)`;
+      case OrderStates.Finished:        return `Complete`;
+      case OrderStates.Expired:         return `Expired`;
+      case OrderStates.Offline:         return `Offline`;
+      case OrderStates.Invalid:         return `Invalid`;
+      case OrderStates.RolledBack:      return `Order failed, refunding`;
+      case OrderStates.RollbackFailed:  return `Order failed, not refunded`;
+      case OrderStates.Canceled:        return `Cancelled`;
+      default:                          return this.status;
+    }
   }
+
+  public isNew()            { return this.status === OrderStates.New; }
+  public isOpen()           { return this.status === OrderStates.Open; }
+  public isAccepting()      { return this.status === OrderStates.Accepting; }
+  public isHold()           { return this.status === OrderStates.Hold; }
+  public isInitialized()    { return this.status === OrderStates.Initialized; }
+  public isCreated()        { return this.status === OrderStates.Created; }
+  public isCommitted()      { return this.status === OrderStates.Committed; }
+  public isFinished()       { return this.status === OrderStates.Finished; }
+  public isExpired()        { return this.status === OrderStates.Expired; }
+  public isOffline()        { return this.status === OrderStates.Offline; }
+  public isInvalid()        { return this.status === OrderStates.Invalid; }
+  public isRolledBack()     { return this.status === OrderStates.RolledBack; }
+  public isRollbackFailed() { return this.status === OrderStates.RollbackFailed; }
+  public isCanceled()       { return this.status === OrderStates.Canceled; }
+
   
   public datetimeFormat() {
     //datetime format: 2019-01-18T21:18:05.005537Z

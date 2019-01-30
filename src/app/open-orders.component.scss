@@ -60,11 +60,33 @@ app-table /deep/ {
   font-size: 11px;
 }
 
-.open-order-status-dot {
+
+// style filled order statuses in filled-orders/filled-orders.component.scss
+.order-status {
   display: block;
   margin: auto;
-  margin-top: 7px;
-  width: 8px;
-  height: 8px;
-  border-radius:50%;
+  margin-top: 2px;
+  width: 30px;
+  height: 17px;
+  line-height: 16px;
+  text-align: center;
+  border-radius: 4px;
+  font-size: 11px;
+  color: rgba(0, 0, 0, 0.7);
+}
+.status-open {
+  background-color: rgba(255, 255, 255, 1);
+}
+.status-process {
+  background-color: rgba(238, 238, 238, 0.8);
+}
+.status-finished {
+  font-size: 12px;
+  background-color: rgba(0, 245, 196, 0.7);
+}
+.status-alert {
+  background-color: rgba(235, 184, 66, 0.9);
+}
+.status-error {
+  background-color: #d65a62;
 }

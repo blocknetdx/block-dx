@@ -130,24 +130,24 @@ export class OpenordersComponent extends BaseComponent implements OnInit {
     return token;
   }
 
-  getStatusDotColor(status) {
-    if([OrderStates.New].includes(status)) {
-      return '#888';
-    } else if([OrderStates.Accepting, OrderStates.Hold, OrderStates.Initialized,
-      OrderStates.Created, OrderStates.Committed].includes(status)) {
-      return '#ff0';
-    } else if([OrderStates.Finished].includes(status)) {
-      return '#0f0';
-    } else if([OrderStates.Expired, OrderStates.Offline, OrderStates.Invalid,
-      OrderStates.RolledBack].includes(status)) {
-      return '#c00';
-    } else if([OrderStates.RollbackFailed].includes(status)) {
-      return '#ea00ff';
-    } else if([OrderStates.Canceled].includes(status)) {
-      return '#000';
-    } else { // open
-      return '#fff';
-    }
-  }
+  // getStatusDotColor(status) {
+  //   if([OrderStates.New].includes(status)) {
+  //     return '#888';
+  //   } else if([OrderStates.Accepting, OrderStates.Hold, OrderStates.Initialized,
+  //     OrderStates.Created, OrderStates.Committed].includes(status)) {
+  //     return '#ff0';
+  //   } else if([OrderStates.Finished].includes(status)) {
+  //     return '#0f0';
+  //   } else if([OrderStates.Expired, OrderStates.Offline, OrderStates.Invalid,
+  //     OrderStates.RolledBack].includes(status)) {
+  //     return '#c00';
+  //   } else if([OrderStates.RollbackFailed].includes(status)) {
+  //     return '#ea00ff';
+  //   } else if([OrderStates.Canceled].includes(status)) {
+  //     return '#000';
+  //   } else { // open
+  //     return '#fff';
+  //   }
+  // }
 
 }
