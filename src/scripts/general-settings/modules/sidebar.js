@@ -1,11 +1,13 @@
 const renderSidebar = ({ state }) => {
   const active = state.get('active');
-  const html = state.get('sidebarItems')
+  const header = `<div class=sidebar-header>Menu</div>`;
+  const links = state.get('sidebarItems')
     .map((item, idx) => {
-      const { text = '' } = item;
-      return `<div class="sidebar-item js-sidebarItem" data-sidebar-index="${idx}" ><i class="${active === idx ? 'fa fa-circle' : 'far fa-circle'} radio-icon"></i> ${text}</div>`;
+      const { sidebarText = '' } = item;
+      return `<div class="sidebar-item js-sidebarItem ${active === idx ? 'sidebar-active-link' : 'sidebar-inactive-link'}" data-sidebar-index="${idx}" > ${sidebarText}</div>`;
     })
     .join('\n');
+  const html = header + links;
   return html;
 };
 
