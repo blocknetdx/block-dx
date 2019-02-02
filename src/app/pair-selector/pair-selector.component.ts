@@ -163,7 +163,8 @@ export class PairSelectorComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     const isFirstRun = window.electron.ipcRenderer.sendSync('isFirstRun');
-    if(isFirstRun) this.active = true;
+    if(isFirstRun || !this._loadedSymbols || this._loadedSymbols[0] === null || /\s*/.test(this._loadedSymbols[0]))
+      this.active = true;
   }
 
   filterCoins(key: string, val: string) {
