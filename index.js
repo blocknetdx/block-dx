@@ -9,6 +9,7 @@ const serve = require('electron-serve');
 const { autoUpdater } = require('electron-updater');
 const PricingInterface = require('./src-back/pricing-interface');
 const confController = require('./src-back/conf-controller');
+const _ = require('lodash');
 
 const { app, BrowserWindow, Menu, ipcMain } = electron;
 
@@ -464,12 +465,13 @@ const openTOSWindow = (alreadyAccepted = false) => {
 
 const openAppWindow = () => {
 
-  const { width, height } = electron.screen.getPrimaryDisplay().workAreaSize;
-
+  let { height } = electron.screen.getPrimaryDisplay().workAreaSize;
+  height -= 300;
+  let width = Math.floor(height * 1.5);
   appWindow = new BrowserWindow({
     show: false,
-    width: width - 100,
-    height: height - 100
+    width: Math.max(width, 1050),
+    height: Math.max(height, 760)
   });
 
   const initialBounds = storage.getItem('bounds');
@@ -479,8 +481,6 @@ const openAppWindow = () => {
     } catch(err) {
       appWindow.maximize();
     }
-  } else {
-    appWindow.maximize();
   }
 
   if(isDev) {
@@ -595,7 +595,7 @@ const openAppWindow = () => {
     asks: []
   };
   const sendOrderBook = force => {
-    if (keyPair && keyPair.length === 2 && keyPair[0] !== '' && keyPair[1] !== '')
+    if (isTokenPairValid(keyPair))
       sn.dxGetOrderBook3(keyPair[0], keyPair[1])
         .then(res => {
           if(force === true || JSON.stringify(res) !== JSON.stringify(orderBook)) {
@@ -610,14 +610,15 @@ const openAppWindow = () => {
 
   let tradeHistory = [];
   const sendTradeHistory = force => {
-    sn.dxGetOrderFills(keyPair[0], keyPair[1])
-      .then(res => {
-        if(force === true || JSON.stringify(res) !== JSON.stringify(tradeHistory)) {
-          tradeHistory = res;
-          appWindow.send('tradeHistory', tradeHistory, keyPair);
-        }
-      })
-      .catch(handleError);
+    if (isTokenPairValid(keyPair))
+      sn.dxGetOrderFills(keyPair[0], keyPair[1])
+        .then(res => {
+          if(force === true || JSON.stringify(res) !== JSON.stringify(tradeHistory)) {
+            tradeHistory = res;
+            appWindow.send('tradeHistory', tradeHistory, keyPair);
+          }
+        })
+        .catch(handleError);
   };
   ipcMain.on('sendTradeHistory', () => sendTradeHistory(true));
   setInterval(sendTradeHistory, stdInterval);
@@ -637,10 +638,12 @@ const openAppWindow = () => {
     appWindow.send('networkTokens', filteredTokens);
   };
   ipcMain.on('getNetworkTokens', sendNetworkTokens);
+
+  // Token refresh interval
   setInterval(() => {
     sendNetworkTokens();
     sendLocalTokens();
-  }, 60000);
+  }, 15000);
 
   let myOrders = [];
   const sendMyOrders = force => {
@@ -682,6 +685,8 @@ const openAppWindow = () => {
   let orderHistoryDict = new Map();
 
   const sendOrderHistory = (which) => {
+    if (!isTokenPairValid(keyPair)) // need valid token pair
+      return;
     const key = orderKey(keyPair);
     const shouldUpdate = !orderHistoryDict.has(key) ||
       (moment.utc().diff(orderHistoryDict[key]['orderHistoryLastUpdate'], 'seconds', true) >= 15);
@@ -898,7 +903,8 @@ const openAppWindow = () => {
   };
   setPricingInterval = () => {
     pricingInterval = setInterval(() => {
-      sendPricingMultipliers();
+      if (isTokenPairValid(keyPair))
+        sendPricingMultipliers();
     }, pricingFrequency);
   };
 
@@ -939,6 +945,10 @@ const openAppWindow = () => {
     } else {
       e.returnValue = false;
     }
+  });
+
+  ipcMain.on('getTokenPair', e => {
+    e.returnValue = keyPair;
   });
 
   ipcMain.on('openGeneralSettings', () => {
@@ -1127,7 +1137,7 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
     }
 
     keyPair = storage.getItem('keyPair');
-    if(!keyPair) {
+    if(!isTokenPairValid(keyPair)) {
 
       const tokens = await sn.dxGetLocalTokens();
 
@@ -1139,7 +1149,9 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
           tokens.push(newToken);
         }
       }
+
       keyPair = tokens.slice(0, 2);
+      keyPair = keyPair.map(t => _.isNil(t) ? '' : t); // Sanitize tokens list
       storage.setItem('keyPair', keyPair);
     }
 
@@ -1162,10 +1174,16 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
 
 })();
 
+function isTokenPairValid(keyPair) {
+  return keyPair && keyPair.length === 2
+    && !_.isNil(keyPair[0]) && !_.isNil(keyPair[1])
+    && !_.isEmpty(keyPair[0]) && !_.isEmpty(keyPair[1]);
+}
+
 // check for version number. Minimum supported blocknet client version
 function versionCheck(version) {
-  if (version < 3100500) {
-    return {name: 'Unsupported Version', message: 'BLOCK DX requires Blocknet wallet version 3.10.5 or greater.'};
+  if (version < 3110100) {
+    return {name: 'Unsupported Version', message: 'BLOCK DX requires Blocknet wallet version 3.11.1 or greater.'};
   }
   return null;
 }
