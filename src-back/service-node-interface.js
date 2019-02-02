@@ -1,4 +1,5 @@
 const request = require('superagent');
+const _ = require('lodash');
 
 // Errors
 const ErrorMsg = (name, code) => {
@@ -262,21 +263,25 @@ class ServiceNodeInterface {
     // console.log(JSON.stringify({
     //   id, method, params
     // }));
-    let status, body;
+    let status, body, res;
     try {
-      const res = await request
+        res = await request
         .post(this._endpoint)
         .auth(this._user, this._password)
         .send(JSON.stringify({
-          id,
-          method,
-          params
-        }));
+            id,
+            method,
+            params
+          }));
         status = res.status || '';
         body = res.body;
     } catch(err) {
-      const { message = '', code = '', status: httpStatus = '' } = err;
-      throw new Error(`${message}\n\n` + (code ? `Code:\n${code}\n\n` : '') + (httpStatus ? `HTTP Status:\n${httpStatus}\n\n` : '') + `RPC Endpoint:\n${method}`);
+      if (res && res.body && res.body.error) {
+        const { code = 1025, message = '' } = res.body.error;
+        throw new Error(`API\n${method}\n\n${ErrorMsg(method, code)}\n\n${message}\n\nStatus Code: ${err.status}`);
+      } else {
+        throw new Error(`API\n${method}\n\n${ErrorMsg(method, err.status)}\n\n${err.message}\n\n${err.status ? err.status : 'Disconnected'}`);
+      }
     }
     if(body.result.error) {
       const { code = 1025, name = '', error = '' } = body.result;
