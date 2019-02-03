@@ -163,7 +163,8 @@ export class PairSelectorComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     const isFirstRun = window.electron.ipcRenderer.sendSync('isFirstRun');
-    if(isFirstRun || !this._loadedSymbols || this._loadedSymbols[0] === null || /\s*/.test(this._loadedSymbols[0]))
+    this._loadedSymbols = window.electron.ipcRenderer.sendSync('getTokenPair');
+    if(isFirstRun || !this._loadedSymbols || this._loadedSymbols[0] === null || /^\s*$/.test(this._loadedSymbols[0]))
       this.active = true;
   }
 
