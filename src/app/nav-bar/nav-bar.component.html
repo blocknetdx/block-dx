@@ -20,6 +20,7 @@
       </ul>
       <ul>
         <li>Information</li>
+        <li><a href="#" (click)="openInformation($event)">Getting Started</a></li>
         <li><a href="#" (click)="openLink($event, 'api')">API</a></li>
         <li><a href="#" (click)="openLink($event, 'exchanges')">Buy BLOCK</a></li>
         <li><a href="#" (click)="openLink($event, 'faq')">FAQ</a></li>
@@ -39,7 +40,7 @@
       </ul>
       <ul>
         <li class="app-version"></li>
-        <li class="app-version">v {{appVersion}}</li>
+        <li class="app-version">v{{appVersion}} | Powered by Blocknet</li>
       </ul>
     </div>
     <a (click)="toggleNav()" class="navbar-toggler">

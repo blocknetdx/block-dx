@@ -16,7 +16,8 @@
         "settings.html",
         "tos.html",
         "update-available.html",
-        "general-settings.html"
+        "general-settings.html",
+        "information.html"
       ],
       "index": "index.html",
       "main": "main.ts",
