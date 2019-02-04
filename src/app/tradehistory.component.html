@@ -27,12 +27,12 @@
   </app-table-column>
 
   <!-- Size of the 2nd market pair -->
-<!--   <app-table-column [sortable]="false" [classList]="'col'">
+  <app-table-column [sortable]="false" [classList]="'col'">
     <ng-template columnHeader>Total ({{symbols[1]}})</ng-template>
     <ng-template let-row="row" columnCell>
       <span>
         <span class="bn-number" [innerHtml]="prepareNumber(row.price) | blockCurrency:symbols[1]:'6'"></span>
       </span>
     </ng-template>
-  </app-table-column> -->
+  </app-table-column>
 </app-table>
