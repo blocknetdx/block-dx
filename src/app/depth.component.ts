@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, OnChanges, NgZone, Input } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnChanges, NgZone, Input, ElementRef, ViewChild } from '@angular/core';
 import * as $ from 'jquery';
 import * as math from 'mathjs';
 
@@ -15,12 +15,18 @@ declare var AmCharts;
   templateUrl: './depth.component.html',
   styleUrls: ['./depth.component.scss']
 })
-export class DepthComponent implements OnInit, AfterViewInit, OnChanges {
+export class DepthComponent implements AfterViewInit, OnChanges {
   public symbols:string[] = [];
   public currentPrice: Currentprice;
   public currentPriceCSSPercentage = 0;
   public chart: any;
   public orderbook:any[] = [];
+
+  @ViewChild('topChartContainer')
+  public topChartContainer: ElementRef;
+
+  @ViewChild('bottomChartContainer')
+  public bottomChartContainer: ElementRef;
 
   constructor(
     private zone: NgZone,
@@ -30,7 +36,27 @@ export class DepthComponent implements OnInit, AfterViewInit, OnChanges {
     private numberFormatPipe: NumberFormatPipe
   ) {}
 
-  ngOnInit() {
+  private calculateTotal(price, size) {
+    return math.round(math.multiply(price, size), 6);
+  }
+
+  public formatMMP(val) {
+    const price = parseFloat(val);
+    const formattedPrice =  (
+        (price >= 100000000) ? price.toFixed(0) :
+        (price >= 10000000) ? price.toFixed(1) :
+        (price >= 1000000) ? price.toFixed(2) :
+        (price >= 100000) ? price.toFixed(3) :
+        (price >= 10000) ? price.toFixed(4) :
+        (price >= 1000) ? price.toFixed(5) :
+        (price >= 100) ? price.toFixed(6) :
+        (price >= 10) ? price.toFixed(7) :
+        (price < 10) ? price.toFixed(8) :
+        price);
+    return formattedPrice;
+  }
+
+  ngAfterViewInit() {
     this.appService.marketPairChanges.subscribe((symbols) => {
       this.symbols = symbols;
     });
@@ -123,30 +149,6 @@ export class DepthComponent implements OnInit, AfterViewInit, OnChanges {
       });
   }
 
-  private calculateTotal(price, size) {
-    return math.round(math.multiply(price, size), 6);
-  }
-
-  public formatMMP(val) {
-    const price = parseFloat(val);
-    const formattedPrice =  (
-        (price >= 100000000) ? price.toFixed(0) :
-        (price >= 10000000) ? price.toFixed(1) :
-        (price >= 1000000) ? price.toFixed(2) :
-        (price >= 100000) ? price.toFixed(3) :
-        (price >= 10000) ? price.toFixed(4) :
-        (price >= 1000) ? price.toFixed(5) :
-        (price >= 100) ? price.toFixed(6) :
-        (price >= 10) ? price.toFixed(7) :
-        (price < 10) ? price.toFixed(8) :
-        price);
-    return formattedPrice;
-  }
-
-  ngAfterViewInit() {
-    // this.runDepthChart();
-  }
-
   ngOnChanges() {
     // this.runDepthChart();
   }
@@ -164,13 +166,15 @@ export class DepthComponent implements OnInit, AfterViewInit, OnChanges {
       //   items.css('display', 'none');
       // }, 0);
 
-      this.chart = AmCharts.makeChart('chartdiv', {
+      // Top chart
+
+      this.chart = AmCharts.makeChart(this.topChartContainer.nativeElement, {
         'responsive': {
           'enabled': true
         },
         'type': 'serial',
         'theme': 'dark',
-        'dataProvider': data,
+        'dataProvider': data.filter(obj => obj.askstotalvolume ? true : false),
         'graphs': [
           {
             'id': 'asks',
@@ -186,6 +190,117 @@ export class DepthComponent implements OnInit, AfterViewInit, OnChanges {
             'valueField': 'askstotalvolume',
             'balloonFunction': balloon
           },
+          // {
+          //   'id': 'bids',
+          //   'fillAlphas': .4,
+          //   'lineAlpha': 1,
+          //   'lineThickness': 1,
+          //   'lineColor': '#4BF5C6',
+          //   fillColors: [
+          //     '#4BF5C6',
+          //     '#172E48'
+          //   ],
+          //   'type': 'step',
+          //   'valueField': 'bidstotalvolume',
+          //   'balloonFunction': balloon
+          // }
+          // {
+          //   'lineAlpha': 0,
+          //   'fillAlphas': 0.2,
+          //   'lineColor': '#FFF',
+          //   'type': 'column',
+          //   'clustered': false,
+          //   'valueField': 'bidsvolume',
+          //   'showBalloon': false
+          // },
+          // {
+          //   'lineAlpha': 0,
+          //   'fillAlphas': 0.2,
+          //   'lineColor': '#FFF',
+          //   'type': 'column',
+          //   'clustered': false,
+          //   'valueField': 'asksvolume',
+          //   'showBalloon': false
+          // }
+        ],
+        'categoryField': 'value',
+        'chartCursor': {},
+        'balloon': {
+          'textAlign': 'left',
+          'disableMouseEvents': true,
+          'fixedPosition': false,
+          'fillAlpha': 1
+        },
+        'valueAxes': [
+          {
+            'showFirstLabel': false,
+            'showLastLabel': false,
+            'inside': true,
+            'gridAlpha': 0,
+            position: top
+          }
+        ],
+        'categoryAxis': {
+          'gridAlpha': 0,
+          'minVerticalGap': 100,
+          'startOnAxis': true,
+          'showFirstLabel': false,
+          'showLastLabel': false,
+          'inside': true,
+          'balloon': {
+            'fontSize': 0,
+            'color': '#FFFFFF'
+            // 'enabled' : false  // TODO: This isn't working for some reason.
+          }
+        },
+        'mouseWheelZoomEnabled': true,
+        'rotate': true,
+        'export': {
+          'enabled': false
+        },
+        'listeners': [
+          {
+            'event': 'rendered',
+            'method': function(event) {
+              // var chart = event.chart;
+              // var chartCursor = new AmCharts.ChartCursor();
+              // chart.addChartCursor(chartCursor);
+              // chartCursor.enabled=false;
+            }
+          },
+          // {
+          //   'event': 'clickGraphItem',
+          //   'method': e => {
+          //     console.log('Clicked!', e);
+          //   }
+          // }
+        ]
+      });
+
+      // Bottom Chart
+
+      this.chart = AmCharts.makeChart(this.bottomChartContainer.nativeElement, {
+        'responsive': {
+          'enabled': true
+        },
+        'type': 'serial',
+        'theme': 'dark',
+        'dataProvider': data.filter(obj => obj.bidstotalvolume ? true : false),
+        'graphs': [
+          // {
+          //   'id': 'asks',
+          //   'fillAlphas': .4,
+          //   'lineAlpha': 1,
+          //   'lineThickness': 1,
+          //   'lineColor': '#FF7E70',
+          //   fillColors: [
+          //     '#172E48',
+          //     '#FF7E70'
+          //   ],
+          //   'type': 'step',
+          //   'valueField': 'askstotalvolume',
+          //   'balloonFunction': balloon
+          // },
           {
             'id': 'bids',
             'fillAlphas': .4,
@@ -232,7 +347,8 @@ export class DepthComponent implements OnInit, AfterViewInit, OnChanges {
             'showFirstLabel': false,
             'showLastLabel': false,
             'inside': true,
-            'gridAlpha': 0
+            'gridAlpha': 0,
+            position: 'bottom'
           }
         ],
         'categoryAxis': {
