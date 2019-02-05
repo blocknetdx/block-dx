@@ -1,6 +1,6 @@
 #midmarket-dash {
   position: absolute;
-  left: 2px;
+  left: 0;
   border-bottom: 1px dashed white;
   min-width: calc(100% - 105px);
 }
@@ -8,7 +8,7 @@
   position: absolute;
   right: 0;
   width: 105px;
-  margin-bottom: -8px;
+  margin-top: -10px;
   display: inline;
   text-align: center;
 }
@@ -19,12 +19,6 @@
   font-weight: bold;
   text-align: center;
 }
-#midmarket-label {
-  display: block;
-  font-size: 10px;
-  text-align: center;
-}
-
 
 .chart-holder {
   width: 100%;
@@ -34,9 +28,30 @@
   margin-left: -10px;
   margin-top: -20px;
   margin-right: -20px;
+  position: relative;
 
-  #chartdiv {
+  .top-chart-container {
+    flex-grow: 1;
+    flex-basis: 0;
+    position: relative;
     width: calc(100% + 23px);
-    height: calc(100% + 20px);
+    height: calc(50% + 40px);
   }
+
+  .bottom-chart-container {
+    flex-grow: 1;
+    flex-basis: 0;
+    position: relative;
+    width: calc(100% + 23px);
+    height: calc(50% + 20px);
+    margin-top: -40px;
+  }
+
+  .midmarket-price-container {
+    position: absolute;
+    top: calc(50% + 19px);
+    left: 0;
+    right: 0;
+  }
+
 }
