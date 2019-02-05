@@ -1,5 +1,6 @@
 import { Component, OnInit, AfterViewInit, OnChanges, NgZone, Input } from '@angular/core';
 import * as $ from 'jquery';
+import * as math from 'mathjs';
 
 import { AppService } from './app.service';
 import { OrderbookService } from './orderbook.service';
@@ -40,21 +41,25 @@ export class DepthComponent implements OnInit, AfterViewInit, OnChanges {
       .subscribe(orderbook => {
 
         // Function to process (sort and calculate cummulative volume)
-        function processData(list, type, desc) {
+        const processData = (list, type, desc) => {
 
           // Convert to data points
           for(let i = 0; i < list.length; i++) {
+            const value = Number(list[i][0]);
+            const volume = Number(list[i][1]);
+            const total = this.calculateTotal(volume, value);
             list[i] = {
-              value: Number(list[i][0]),
-              volume: Number(list[i][1]),
+              value,
+              volume,
+              total
             };
           }
 
           // Sort list just in case
           list.sort(function(a, b) {
-            if (a.value > b.value) {
+            if (a.value < b.value) {
               return 1;
-            } else if (a.value < b.value) {
+            } else if (a.value > b.value) {
               return -1;
             } else {
               return 0;
@@ -66,11 +71,15 @@ export class DepthComponent implements OnInit, AfterViewInit, OnChanges {
             for(let i = list.length - 1; i >= 0; i--) {
               if (i < (list.length - 1)) {
                 list[i].totalvolume = list[i+1].totalvolume + list[i].volume;
+                list[i].sum = list[i+1].sum + list[i].total;
               } else {
                 list[i].totalvolume = list[i].volume;
+                list[i].sum = list[i].total;
               }
               const dp = {};
+              dp['total'] = list[i].total;
               dp['value'] = list[i].value;
+              dp['sum'] = list[i].sum;
               dp[type + 'volume'] = list[i].volume;
               dp[type + 'totalvolume'] = list[i].totalvolume;
               res.unshift(dp);
@@ -79,18 +88,22 @@ export class DepthComponent implements OnInit, AfterViewInit, OnChanges {
             for(let i = 0; i < list.length; i++) {
               if (i > 0) {
                 list[i].totalvolume = list[i-1].totalvolume + list[i].volume;
+                list[i].sum = list[i-1].sum + list[i].total;
               } else {
                 list[i].totalvolume = list[i].volume;
+                list[i].sum = list[i].total;
               }
               const dp = {};
+              dp['total'] = list[i].total;
               dp['value'] = list[i].value;
+              dp['sum'] = list[i].sum;
               dp[type + 'volume'] = list[i].volume;
               dp[type + 'totalvolume'] = list[i].totalvolume;
               res.push(dp);
             }
           }
 
-        }
+        };
 
         // Init
         const res = [];
@@ -110,9 +123,13 @@ export class DepthComponent implements OnInit, AfterViewInit, OnChanges {
       });
   }
 
+  private calculateTotal(price, size) {
+    return math.round(math.multiply(price, size), 6);
+  }
+
   public formatMMP(val) {
-    var price = parseFloat(val);
-    var formattedPrice =  (
+    const price = parseFloat(val);
+    const formattedPrice =  (
         (price >= 100000000) ? price.toFixed(0) :
         (price >= 10000000) ? price.toFixed(1) :
         (price >= 1000000) ? price.toFixed(2) :
@@ -135,7 +152,10 @@ export class DepthComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   runDepthChart(): void {
+
     const data = this.orderbook;
+    const { symbols } = this;
+
     this.zone.runOutsideAngular(() => {
 
       // setTimeout(() => {
@@ -154,20 +174,28 @@ export class DepthComponent implements OnInit, AfterViewInit, OnChanges {
         'graphs': [
           {
             'id': 'asks',
-            'fillAlphas': 0.1,
+            'fillAlphas': .4,
             'lineAlpha': 1,
             'lineThickness': 1,
             'lineColor': '#FF7E70',
+            fillColors: [
+              '#172E48',
+              '#FF7E70'
+            ],
             'type': 'step',
             'valueField': 'askstotalvolume',
             'balloonFunction': balloon
           },
           {
             'id': 'bids',
-            'fillAlphas': 0.1,
+            'fillAlphas': .4,
             'lineAlpha': 1,
             'lineThickness': 1,
             'lineColor': '#4BF5C6',
+            fillColors: [
+              '#4BF5C6',
+              '#172E48'
+            ],
             'type': 'step',
             'valueField': 'bidstotalvolume',
             'balloonFunction': balloon
@@ -254,13 +282,13 @@ export class DepthComponent implements OnInit, AfterViewInit, OnChanges {
       function balloon(item, graph) {
         let txt;
         if (graph.id === 'asks') {
-          txt = 'Ask: <strong>' + formatNumber(item.dataContext.value, graph.chart, 4) + '</strong><br />'
-            + 'Volume: <strong>' + formatNumber(item.dataContext.askstotalvolume, graph.chart, 4) + '</strong><br />'
-            + 'Sum: <strong>' + formatNumber(item.dataContext.asksvolume, graph.chart, 4) + '</strong>';
+          txt = 'Ask: <strong>' + formatNumber(item.dataContext.value, graph.chart, 4) + ' ' + symbols[1] + '</strong><br />'
+            + 'Volume: <strong>' + formatNumber(item.dataContext.askstotalvolume, graph.chart, 4) + ' ' + symbols[0] + '</strong><br />'
+            + 'Sum: <strong>' + formatNumber(item.dataContext.sum, graph.chart, 4) + ' ' + symbols[1] + '</strong>';
         } else {
-          txt = 'Bid: <strong>' + formatNumber(item.dataContext.value, graph.chart, 4) + '</strong><br />'
-            + 'Volume: <strong>' + formatNumber(item.dataContext.bidstotalvolume, graph.chart, 4) + '</strong><br />'
-            + 'Sum: <strong>' + formatNumber(item.dataContext.bidsvolume, graph.chart, 4) + '</strong>';
+          txt = 'Bid: <strong>' + formatNumber(item.dataContext.value, graph.chart, 4) + ' ' + symbols[1] + '</strong><br />'
+            + 'Volume: <strong>' + formatNumber(item.dataContext.bidstotalvolume, graph.chart, 4) + ' ' + symbols[0] + '</strong><br />'
+            + 'Sum: <strong>' + formatNumber(item.dataContext.sum, graph.chart, 4) + ' ' + symbols[1] + '</strong>';
         }
         return txt;
       }
