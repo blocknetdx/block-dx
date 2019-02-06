@@ -20,6 +20,9 @@ autoUpdater.autoInstallOnAppQuit = true;
 app.on('window-all-closed', () => {
   app.quit();
 });
+ipcMain.on('quit', () => {
+  app.quit();
+});
 
 const { platform } = process;
 
@@ -520,7 +523,7 @@ const openAppWindow = () => {
     const err = versionCheck(info['version']);
     if (err) {
       handleError(err);
-      app.quit();
+      // setTimeout(() => app.quit(), 1);
     }
   });
 

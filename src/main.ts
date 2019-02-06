@@ -30,6 +30,8 @@ window.electron.ipcRenderer.on('error', (e, { name, message }) => {
     count++;
     alert(name + ': ' + message);
   }
+  if (name === 'Unsupported Version')
+    window.electron.ipcRenderer.send('quit');
 });
 
 window.document.addEventListener('drop', e => {
