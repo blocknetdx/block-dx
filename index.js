@@ -50,6 +50,47 @@ const getManifest = () => {
   return manifest;
 };
 
+const setAppMenu = () => {
+
+  const menuTemplate = [];
+
+  // File Menu
+  menuTemplate.push({
+    label: 'File',
+    submenu: [
+      { role: 'quit' }
+    ]
+  });
+
+  // Edit Menu
+  menuTemplate.push({
+    label: 'Edit',
+    submenu: [
+      { role: 'undo' },
+      { role: 'redo' },
+      { type: 'separator' },
+      { role: 'cut' },
+      { role: 'copy' },
+      { role: 'paste' },
+      { role: 'selectall' }
+    ]
+  });
+
+  // Window Menu
+  if(isDev) {
+    menuTemplate.push({
+      label: 'Window',
+      submenu: [
+        { label: 'Show Dev Tools', role: 'toggledevtools' }
+      ]
+    });
+  }
+
+  const appMenu = Menu.buildFromTemplate(menuTemplate);
+  Menu.setApplicationMenu(appMenu);
+
+};
+
 // General Error Handler
 const handleError = err => {
   console.error(err);
@@ -239,6 +280,8 @@ const openConfigurationWindow = (options = {}) => {
     });
     const windowMenu = Menu.buildFromTemplate(menuTemplate);
     configurationWindow.setMenu(windowMenu);
+  } else if(platform === 'darwin') {
+    setAppMenu();
   }
 
   ipcMain.on('openSettingsWindow', () => {
@@ -380,6 +423,8 @@ const openSettingsWindow = (options = {}) => {
     });
     const windowMenu = Menu.buildFromTemplate(menuTemplate);
     settingsWindow.setMenu(windowMenu);
+  } else if(platform === 'darwin') {
+    setAppMenu();
   }
 
 };
@@ -536,42 +581,7 @@ const openAppWindow = () => {
     }
   });
 
-  const menuTemplate = [];
-
-  // File Menu
-  menuTemplate.push({
-    label: 'File',
-    submenu: [
-      { role: 'quit' }
-    ]
-  });
-
-  // Edit Menu
-  menuTemplate.push({
-    label: 'Edit',
-    submenu: [
-      { role: 'undo' },
-      { role: 'redo' },
-      { type: 'separator' },
-      { role: 'cut' },
-      { role: 'copy' },
-      { role: 'paste' },
-      { role: 'selectall' }
-    ]
-  });
-
-  // Window Menu
-  if(isDev) {
-    menuTemplate.push({
-      label: 'Window',
-      submenu: [
-        { label: 'Show Dev Tools', role: 'toggledevtools' }
-      ]
-    });
-  }
-
-  const appMenu = Menu.buildFromTemplate(menuTemplate);
-  Menu.setApplicationMenu(appMenu);
+  setAppMenu();
 
   const sendKeyPair = () => {
     appWindow.send('keyPair', keyPair);
