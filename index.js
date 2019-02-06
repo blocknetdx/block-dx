@@ -20,9 +20,6 @@ autoUpdater.autoInstallOnAppQuit = true;
 app.on('window-all-closed', () => {
   app.quit();
 });
-ipcMain.on('quit', () => {
-  app.quit();
-});
 
 const { platform } = process;
 
@@ -38,6 +35,13 @@ let appWindow, serverLocation, sn, keyPair, storage, user, password, port, info,
   pricingFrequency, enablePricing, sendPricingMultipliers, clearPricingInterval, setPricingInterval,
   sendMarketPricingEnabled, metaPath, macMetaBackupPath, availableUpdate;
 let updateError = false;
+
+// Handle explicit quit
+ipcMain.on('quitResetFirstRun', () => {
+  if (storage)
+    storage.setItem('isFirstRun', true);
+  app.quit();
+});
 
 const configurationFilesDirectory = path.join(__dirname, 'blockchain-configuration-files');
 

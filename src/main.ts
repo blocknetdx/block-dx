@@ -31,7 +31,7 @@ window.electron.ipcRenderer.on('error', (e, { name, message }) => {
     alert(name + ': ' + message);
   }
   if (name === 'Unsupported Version')
-    window.electron.ipcRenderer.send('quit');
+    window.electron.ipcRenderer.send('quitResetFirstRun');
 });
 
 window.document.addEventListener('drop', e => {
