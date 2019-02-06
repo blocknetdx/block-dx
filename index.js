@@ -1208,8 +1208,8 @@ function isTokenPairValid(keyPair) {
 
 // check for version number. Minimum supported blocknet client version
 function versionCheck(version) {
-  if (version < 3110100) {
-    return {name: 'Unsupported Version', message: 'BLOCK DX requires Blocknet wallet version 3.11.1 or greater.'};
+  if (version < 3120100) {
+    return {name: 'Unsupported Version', message: 'BLOCK DX requires Blocknet wallet version 3.12.1 or greater.'};
   }
   return null;
 }
