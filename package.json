@@ -33,7 +33,7 @@
     "build-gitlab-mac": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --no-audit --production && cd .. && electron-builder --dir --x64 --mac zip --publish never",
     "build-gitlab-linux": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --no-audit --production && cd .. && electron-builder --dir --x64 --linux appImage deb tar.gz --publish never",
     "publish-native-win": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --no-audit --production && cd .. && electron-builder --win --publish always",
-    "publish-native-mac": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --no-audit --production && cd .. && electron-builder --publish never",
+    "publish-native-mac": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --no-audit --production && cd .. && electron-builder --publish always",
     "publish-native-linux": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --no-audit --production && cd .. && electron-builder --publish always",
     "pack-native": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --production && cd .. && electron-builder",
     "publish-native": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --production && cd .. && electron-builder --publish always",
