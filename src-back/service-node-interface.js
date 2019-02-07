@@ -1,4 +1,105 @@
 const request = require('superagent');
+const _ = require('lodash');
+
+// Errors
+const ErrorMsg = (name, code) => {
+  if (Errors[name][code])
+    return Errors[name][code];
+  else return '';
+};
+
+const Errors = new Map();
+Errors['dxMakeOrder'] = new Map();
+Errors['dxTakeOrder'] = new Map();
+Errors['dxCancelOrder'] = new Map();
+Errors['dxGetOrder'] = new Map();
+Errors['dxGetOrders'] = new Map();
+Errors['dxGetMyOrders'] = new Map();
+Errors['dxGetOrderBook'] = new Map();
+Errors['dxGetOrderHistory'] = new Map();
+Errors['dxGetOrderFills'] = new Map();
+Errors['dxGetLocalTokens'] = new Map();
+Errors['dxGetNetworkTokens'] = new Map();
+Errors['dxGetTokenBalances'] = new Map();
+Errors['dxFlushCancelledOrders'] = new Map();
+Errors['dxLoadXBridgeConf'] = new Map();
+Errors['dxGetLockedUtxos'] = new Map();
+
+// Full error code list found here: 
+// https://github.com/BlocknetDX/BlockDX/blob/master/src/xbridge/util/xbridgeerror.h
+
+// Messages: Errors['dxGetOrderHistory'][1025] = 'Message here';
+
+// dxMakeOrder
+Errors['dxMakeOrder'][1018] = 'Unable to connect to wallet. Please make sure the Blocknet wallet and the wallets of the tokens being traded are open, synced, and unlocked.';
+Errors['dxMakeOrder'][1019] = 'Unable to create order due to insufficient funds. Please make sure there is enough *available* funds (UTXOS/inputs) of the token being sold to cover the order amount. Funds (UTXOS/inputs) may be tied up/reserved by other orders.';
+Errors['dxMakeOrder'][1020] = 'Unable to create order due to unsigned transaction. Please try again or use a different address.';
+Errors['dxMakeOrder'][1026] = 'Unable to create order. Please make sure a valid address is being used and the wallets of the tokens being traded are open, synced, and unlocked.';
+Errors['dxMakeOrder'][1027] = 'Unable to create order due to invalid transaction signature.';
+Errors['dxMakeOrder'][1030] = 'Unable to create order due to the trade amount being too small (dust value). Please increase the order size and try again.';
+Errors['dxMakeOrder'][1032] = 'Unable to create order. Either the Blocknet wallet is still loading network data (takes a few minutes after syncing completes) or no nodes on the network are currently supporting this trade pair.';
+
+// dxTakeOrder
+Errors['dxTakeOrder'][1018] = 'Unable to connect to wallet. Please make sure the Blocknet wallet and the wallets of the tokens being traded are open, synced, and unlocked.';
+Errors['dxTakeOrder'][1019] = 'Unable to take order due to insufficient funds. Please make sure there is enough *available* funds (UTXOS/inputs) of the token being sold to cover the order amount. Funds (UTXOS/inputs) may be tied up/reserved by other orders.';
+Errors['dxTakeOrder'][1020] = 'Unable to take order due to unsigned transaction. Please try again or use a different address.';
+Errors['dxTakeOrder'][1021] = 'Unable to take order. Please make sure the order ID is valid.';
+Errors['dxTakeOrder'][1026] = 'Unable to take order. Please make sure a valid address is being used and the wallets of the tokens being traded are open, synced, and unlocked.';
+Errors['dxTakeOrder'][1027] = 'Unable to take order due to invalid transaction signature. Please try again or use a different address.';
+Errors['dxTakeOrder'][1031] = 'Unable to take order due to insufficient funds. Please make sure there is enough *available* BLOCK UTXOS/inputs to cover the fee amount.';
+
+// dxCancelOrder
+Errors['dxCancelOrder'][1018] = 'Unable to connect to the Blocknet wallet. Please make sure the wallet is open, synced, and unlocked.';
+Errors['dxCancelOrder'][1021] = 'Unable to cancel order. Please make sure the order ID is valid.';
+Errors['dxCancelOrder'][1028] = 'Unable to cancel order due to invalid order state. Order may already be cancelled or in another terminal state.';
+
+// dxGetOrder
+Errors['dxGetOrder'][1018] = 'Unable to connect to the Blocknet wallet. Please make sure the wallet is open, synced, and unlocked.';
+Errors['dxGetOrder'][1021] = 'Unable to find order. Please make sure the order ID is valid.';
+
+// dxGetOrders
+Errors['dxGetOrders'][1018] = 'Unable to connect to the Blocknet wallet. Please make sure the wallet is open, synced, and unlocked.';
+
+// dxGetMyOrders
+Errors['dxGetMyOrders'][1018] = 'Unable to connect to the Blocknet wallet. Please make sure the wallet is open, synced, and unlocked.';
+
+// dxGetOrderBook
+Errors['dxGetOrderBook'][1018] = 'Unable to connect to the Blocknet wallet. Please make sure the wallet is open, synced, and unlocked.';
+
+// dxGetOrderHistory
+Errors['dxGetOrderHistory'][1018] = 'Unable to connect to the Blocknet wallet. Please make sure the wallet is open, synced, and unlocked.';
+
+// dxGetOrderFills
+Errors['dxGetOrderFills'][1018] = 'Unable to connect to the Blocknet wallet. Please make sure the wallet is open, synced, and unlocked.';
+
+// dxGetLocalTokens
+Errors['dxGetLocalTokens'][1018] = 'Unable to connect to the Blocknet wallet. Please make sure the wallet is open, synced, and unlocked.';
+
+// dxGetNetworkTokens
+Errors['dxGetNetworkTokens'][1018] = 'Unable to connect to the Blocknet wallet. Please make sure the wallet is open, synced, and unlocked.';
+
+// dxGetTokenBalances
+Errors['dxGetTokenBalances'][1018] = 'Unable to connect to wallet. Please make sure the Blocknet wallet and the wallets of the tokens being traded are open, synced, and unlocked.';
+
+// dxFlushCancelledOrders
+Errors['dxFlushCancelledOrders'][1018] = 'Unable to connect to the Blocknet wallet. Please make sure the wallet is open, synced, and unlocked.';
+
+// dxLoadXBridgeConf
+Errors['dxLoadXBridgeConf'][1018] = 'Unable to connect to the Blocknet wallet. Please make sure the wallet is open, synced, and unlocked.';
+
+// dxGetLockedUtxos
+Errors['dxGetLockedUtxos'][1021] = 'Unable to find order. Please make sure the order ID is valid.';
+
+
+
+
+
+
+
+
+
+
+
 
 /**
  * @typedef {Object} OrderObject
@@ -234,25 +335,33 @@ class ServiceNodeInterface {
     // console.log(JSON.stringify({
     //   id, method, params
     // }));
-    let status, body;
+    let status, body, res;
     try {
-      const res = await request
+        res = await request
         .post(this._endpoint)
         .auth(this._user, this._password)
         .send(JSON.stringify({
-          id,
-          method,
-          params
-        }));
+            id,
+            method,
+            params
+          }));
         status = res.status || '';
         body = res.body;
     } catch(err) {
-      const { message = '', code = '', status: httpStatus = '' } = err;
-      throw new Error(`${message}\n\n` + (code ? `Code:\n${code}\n\n` : '') + (httpStatus ? `HTTP Status:\n${httpStatus}\n\n` : '') + `RPC Endpoint:\n${method}`);
+      if (res && res.body && res.body.error) {
+        const { code = 1025, message = '' } = res.body.error;
+        throw new Error(`API\n${method}\n\n${ErrorMsg(method, code)}\n\n${message}\n\nStatus Code: ${err.status}`);
+      } else {
+        throw new Error(`API\n${method}\n\n${ErrorMsg(method, err.status)}\n\n${err.message}\n\n${err.status ? err.status : 'Disconnected'}`);
+      }
     }
-    if(body.error) {
-      const { code = '', name = '', message = '' } = body.error;
-      throw new Error(`Name:\n${name}\n\nCode: ${code}\n\nMessage: ${message}`);
+    if(body.result.error) {
+      const { code = 1025, name = '', error = '' } = body.result;
+      if (ErrorMsg(name, code)) {
+        throw new Error(`${ErrorMsg(name, code)}\n\nAPI:\t\t${name}\nCode:\t${code}\n\n${error}`);
+      } else {
+        throw new Error(`${error}\n\nAPI:\t\t${name}\nCode:\t${code}`);
+      }
     }
     if(status !== 200)
       throw new Error(`Response code ${status}`);
@@ -500,8 +609,8 @@ class ServiceNodeInterface {
       params: [
         maker,
         taker,
-        Math.floor(startTime/1000), // convert to unix time seconds
-        Math.floor(endTime/1000), // convert to unix time seconds
+        startTime, // unix time seconds
+        endTime, // unix time seconds
         granularity,
         orderIds,
         true

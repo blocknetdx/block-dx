@@ -12,6 +12,7 @@ math.config({
 });
 
 import { Openorder } from './openorder';
+import * as OrderStates from '../orderstates';
 
 @Injectable()
 export class OpenordersService {
@@ -42,7 +43,7 @@ export class OpenordersService {
             // for(let i = 0; i < 30; i++) {
             //   const price = getRandom(1, 4);
             //   const size = getRandom(1, 4);
-            //   const status = i % 2 === 0 ? 'open' : 'finished';
+            //   const status = i % 2 === 0 ? 'open' : OrderStates.Finished;
             //   const side = i % 3 === 0 ? 'sell' : 'buy';
             //   newOrders.push(Openorder.createOpenOrder({
             //       id: `order${i}`,
@@ -62,7 +63,7 @@ export class OpenordersService {
             //       filledSize: '',
             //       executed_value: '',
             //       status,
-            //       settled: status === 'finished',
+            //       settled: status === OrderStates.Finished,
             //       canceled: false
             //     }));
             // }
@@ -104,8 +105,8 @@ export class OpenordersService {
                   filledSize: '',
                   executed_value: '',
                   status: order.status,
-                  settled: order.status === 'finished',
-                  canceled: order.status === 'canceled'
+                  settled: order.status === OrderStates.Finished,
+                  canceled: order.status === OrderStates.Canceled
                 });
               })
               .sort((a, b) => b.created_at.localeCompare(a.created_at));

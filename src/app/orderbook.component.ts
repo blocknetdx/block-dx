@@ -15,6 +15,7 @@ import { Pricing } from './pricing';
 // import { Trade } from './trade';
 // import {CurrentpriceService} from './currentprice.service';
 
+
 math.config({
   number: 'BigNumber',
   precision: 64
@@ -25,8 +26,11 @@ math.config({
   templateUrl: './orderbook.component.html',
   styleUrls: ['./order-book.component.scss']
 })
+
+
 export class OrderbookComponent implements OnInit {
-  @ViewChild('orderbookTable') public orderbookTable: TableComponent;
+  @ViewChild('orderbookTopTable') public orderbookTopTable: TableComponent;
+  @ViewChild('orderbookBottomTable') public orderbookBottomTable: TableComponent;
 
   public sections: any[] = [
     {rows: []},
@@ -35,7 +39,8 @@ export class OrderbookComponent implements OnInit {
   public symbols:string[] = [];
   // public lastTradePrice = '';
   public spread = '';
-  private showSpread = false;
+  public pricingSpread = '';
+  public showSpread = false;
   public priceDecimal = '6';
   public pricing: Pricing;
   public pricingAvailable = false;
@@ -88,7 +93,7 @@ export class OrderbookComponent implements OnInit {
           }
           this.spread = spread;
 
-          this.orderbookTable.scrollToMiddle();
+          this.orderbookTopTable.scrollToBottom();
         });
       });
 
@@ -125,6 +130,21 @@ export class OrderbookComponent implements OnInit {
 
   }
 
+  getPricingSpread() {
+    const { pricingEnabled, pricingAvailable, pricing, symbols } = this;
+    const [ section1, section2 ] = this.sections;
+    const { rows: asks } = section1;
+    const { rows: bids } = section2;
+    if(asks.length > 0 && bids.length > 0 && pricingEnabled && pricingAvailable && pricing) {
+      const askPrice = pricing.getPrice(asks[asks.length - 1][0], symbols[1]);
+      const bidPrice = pricing.getPrice(bids[0][0], symbols[1]);
+      const spread = String(math.subtract(askPrice, bidPrice));
+      return spread;
+    } else {
+      return '';
+    }
+  }
+
   onRowSelect(row) {
     if (row) {
       if(this.ownOrders.has(row[2])) {
@@ -142,6 +162,19 @@ export class OrderbookComponent implements OnInit {
 
   calculateTotal(row) {
     return math.round(math.multiply(row[1], row[0]), 6);
+  }
+
+  scalePercentBar(size) {
+    var maxWidth = 100; // percentBar CSS max-width %
+    var scale = 0.4; // ratio of max width to limit to
+    var multiplier = maxWidth * scale;
+    if (size <= 1) {
+      return ( 0.01 * multiplier );
+    } else if (size <= 2.75) {
+      return ( Math.log(size) * 0.09 * multiplier );
+    } else {
+      return ( (1 - 1 / Math.log(size)) * multiplier );
+    }
   }
 
 }

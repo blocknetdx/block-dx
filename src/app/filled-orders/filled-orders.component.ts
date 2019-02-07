@@ -7,6 +7,7 @@ import { Openorder } from '../openorder';
 import { OpenordersService } from '../openorders.service';
 import { PricingService } from '../pricing.service';
 import { Pricing } from '../pricing';
+import * as OrderStates from '../../orderstates';
 
 math.config({
   number: 'BigNumber',
@@ -53,7 +54,12 @@ export class FilledOrdersComponent extends BaseComponent implements OnInit {
       .subscribe(openorders => {
         this.zone.run(() => {
           this.filledorders = openorders
-            .filter(o => o.status === 'finished' || o.status === 'canceled')
+            .filter(o => o.status === OrderStates.Finished || 
+                        o.status === OrderStates.Canceled || 
+                        o.status === OrderStates.Expired || 
+                        o.status === OrderStates.Offline || 
+                        o.status === OrderStates.Invalid || 
+                        o.status === OrderStates.RolledBack)
             .map((o) => {
               o['row_class'] = o.side;
               return o;
@@ -94,10 +100,16 @@ export class FilledOrdersComponent extends BaseComponent implements OnInit {
     return token;
   }
 
+  calculatePairPrice(total, size) {
+    //return math.round(math.divide(total, size),6);
+    return math.divide(total, size).toFixed(6);
+  }
+
+
   getStatusDotColor(status) {
-    if(['finished'].includes(status)) {
+    if([OrderStates.Finished].includes(status)) {
       return '#0f0';
-    } else if(['canceled'].includes(status)) {
+    } else if([OrderStates.Canceled].includes(status)) {
       return '#000';
     } else {
       return '#fff';

@@ -3,7 +3,7 @@ const renderSettings3 = ({ state }) => {
   const skipSetup = state.get('skipSetup');
   const block = wallets.find(w => w.abbr === 'BLOCK');
   const html = `
-          <p style="margin-top:0;padding-top:0;padding-left:10px;padding-right:10px;margin-bottom:5px;">In order to conduct peer-to-peer trades, Block DX requires RPC access to the Blocknet wallet. Block DX requires Blocknet wallet version 3.9.16 or greater.</p>
+          <p style="margin-top:0;padding-top:0;padding-left:10px;padding-right:10px;margin-bottom:5px;">In order to conduct peer-to-peer trades, Block DX requires access to the <a href="#" class="blocknet-link js-blocknetWalletLink">Blocknet wallet</a>. Please enter the RPC credentials found in <em>blocknetdx.conf</em>.</p>
           <div class="main-area" style="background-color:#0e2742;overflow-y:auto;">
             <div class="input-group">
               <label>Blocknet RPC Port</label>

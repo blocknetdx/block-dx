@@ -4,6 +4,8 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
 
+window.electron.ipcRenderer.setMaxListeners(0);
+
 String.prototype['capitalize'] = function() {
   return this.charAt(0).toUpperCase() + this.slice(1);
 };
@@ -23,11 +25,13 @@ window.electron.ipcRenderer.on('error', (e, { name, message }) => {
     alert(name + ': ' + message);
     alertTimeout = setTimeout(() => {
       count = 0;
-    }, 60000);
+    }, 15000);
   } else if(count === 1) {
     count++;
     alert(name + ': ' + message);
   }
+  if (name === 'Unsupported Version')
+    window.electron.ipcRenderer.send('quitResetFirstRun');
 });
 
 window.document.addEventListener('drop', e => {

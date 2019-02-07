@@ -9,8 +9,12 @@ const serve = require('electron-serve');
 const { autoUpdater } = require('electron-updater');
 const PricingInterface = require('./src-back/pricing-interface');
 const confController = require('./src-back/conf-controller');
+const _ = require('lodash');
 
 const { app, BrowserWindow, Menu, ipcMain } = electron;
+
+autoUpdater.autoDownload = false;
+autoUpdater.autoInstallOnAppQuit = true;
 
 // Properly close the application
 app.on('window-all-closed', () => {
@@ -20,11 +24,24 @@ app.on('window-all-closed', () => {
 const { platform } = process;
 
 const { name, version } = fs.readJSONSync(path.join(__dirname, 'package.json'));
+ipcMain.on('getAppName', e => {
+  e.returnValue = name;
+});
 ipcMain.on('getAppVersion', e => {
   e.returnValue = version;
 });
 
-let appWindow, serverLocation, sn, keyPair, storage, user, password, port, info, pricingSource, pricingUnit, apiKeys, pricingFrequency, enablePricing, sendPricingMultipliers, clearPricingInterval, setPricingInterval, sendMarketPricingEnabled;
+let appWindow, serverLocation, sn, keyPair, storage, user, password, port, info, pricingSource, pricingUnit, apiKeys,
+  pricingFrequency, enablePricing, sendPricingMultipliers, clearPricingInterval, setPricingInterval,
+  sendMarketPricingEnabled, metaPath, macMetaBackupPath, availableUpdate;
+let updateError = false;
+
+// Handle explicit quit
+ipcMain.on('quitResetFirstRun', () => {
+  if (storage)
+    storage.setItem('isFirstRun', true);
+  app.quit();
+});
 
 const configurationFilesDirectory = path.join(__dirname, 'blockchain-configuration-files');
 
@@ -49,6 +66,9 @@ const handleError = err => {
 process.on('uncaughtException', err => {
   handleError(err);
 });
+process.on('unhandledRejection', err => {
+  handleError(err);
+});
 
 let loadURL;
 if(!isDev) {
@@ -61,13 +81,19 @@ require('electron-context-menu')();
 const isSecondInstance = app.makeSingleInstance(() => {});
 if(isSecondInstance) app.quit();
 
-const openUpdateAvailableWindow = version => new Promise(resolve => {
+let updateAvailableWindowOpen = false;
+
+const openUpdateAvailableWindow = (v, windowType, hideCheckbox = false) => new Promise(resolve => { // windowType: updateAvailable|updateDownloaded
+
+  updateAvailableWindowOpen = true;
+
   const updateAvailableWindow = new BrowserWindow({
     show: false,
-    width: 550,
-    height: platform === 'win32' ? 355 : 330,
+    width: 580,
+    height: platform === 'win32' ? 375 : platform === 'darwin' ? 355 : 340,
     parent: appWindow
   });
+  if(platform !== 'darwin') updateAvailableWindow.setMenu(null);
   if(isDev) {
     updateAvailableWindow.loadURL(`file://${path.join(__dirname, 'src', 'update-available.html')}`);
   } else {
@@ -76,29 +102,92 @@ const openUpdateAvailableWindow = version => new Promise(resolve => {
   updateAvailableWindow.once('ready-to-show', () => {
     updateAvailableWindow.show();
   });
-  updateAvailableWindow.on('close', () => {
+  updateAvailableWindow.once('close', () => {
+    updateAvailableWindowOpen = false;
     resolve();
   });
-  ipcMain.on('getUpdateVersion', e => {
-    e.returnValue = version;
+  ipcMain.removeAllListeners('getUpdatedVersion');
+  ipcMain.once('getUpdateVersion', e => {
+    e.returnValue = v;
   });
-  ipcMain.on('cancel', () => {
+  ipcMain.removeAllListeners('cancel');
+  ipcMain.once('cancel', async function(e, notAskAgain) {
+    if(!hideCheckbox) storage.setItem('ignoreUpdates', notAskAgain ? v : '', true);
     resolve();
     setTimeout(() => {
       updateAvailableWindow.close();
     }, 0);
   });
-  ipcMain.on('accept', () => {
-    autoUpdater.quitAndInstall();
+  ipcMain.removeAllListeners('accept');
+  ipcMain.once('accept', () => {
+    if(windowType === 'updateAvailable') {
+      storage.setItem('ignoreUpdates', '', true);
+      autoUpdater.downloadUpdate();
+      downloadingUpdate = true;
+      updateAvailableWindow.close();
+    } else if(windowType === 'updateDownloaded') {
+      if(platform === 'darwin') fs.copySync(metaPath, macMetaBackupPath);
+      autoUpdater.quitAndInstall();
+    }
+  });
+  ipcMain.removeAllListeners('getUpdatedWindowType');
+  ipcMain.once('getUpdateWindowType', e => {
+    e.returnValue = windowType;
+  });
+  ipcMain.removeAllListeners('hideCheckbox');
+  ipcMain.once('hideCheckbox', e => {
+    e.returnValue = hideCheckbox;
   });
 
 });
 
-autoUpdater.on('update-downloaded', ({ version }) => {
-  openUpdateAvailableWindow(version);
+let downloadingUpdate = false;
+let updateDownloaded = false;
+
+let downloadedUpdateVersion = '';
+
+autoUpdater.on('update-downloaded', ({ version: v }) => {
+  downloadedUpdateVersion = v;
+  downloadingUpdate = false;
+  updateDownloaded = true;
+  openUpdateAvailableWindow(v, 'updateDownloaded');
+});
+autoUpdater.on('update-available', res => {
+  availableUpdate = res;
+  const { version: v } = availableUpdate;
+  const ignoreUpdates = storage.getItem('ignoreUpdates') || '';
+  if(ignoreUpdates && ignoreUpdates === v) return;
+  openUpdateAvailableWindow(v, 'updateAvailable');
 });
 autoUpdater.on('error', err => {
-  handleError(err);
+  updateError = true;
+  const patternsToIgnore = [
+    /update\.yml/,
+    /latest\.yml/,
+    /update-mac\.yml/,
+    /latest-mac\.yml/,
+    /update-linux\.yml/,
+    /latest-linux\.yml/
+  ];
+  if(patternsToIgnore.every(p => !p.test(err.message))) {
+    handleError(err);
+  }
+});
+ipcMain.on('updateError', e => {
+  e.returnValue = updateError;
+});
+ipcMain.on('checkForUpdates', e => {
+  if(downloadingUpdate) {
+    e.returnValue = 'downloading';
+  } else if(updateDownloaded) {
+    if(!updateAvailableWindowOpen) openUpdateAvailableWindow(downloadedUpdateVersion, 'updateDownloaded');
+    e.returnValue = 'downloaded';
+  } else if(availableUpdate) {
+    if(!updateAvailableWindowOpen) openUpdateAvailableWindow(availableUpdate.version, 'updateAvailable', true);
+    e.returnValue = 'available';
+  } else {
+    e.returnValue = 'none';
+  }
 });
 
 const openConfigurationWindow = (options = {}) => {
@@ -164,7 +253,6 @@ const openConfigurationWindow = (options = {}) => {
       handleError(err);
     }
   });
-
   ipcMain.on('getManifest', async function(e) {
     try {
       e.returnValue = getManifest();
@@ -323,6 +411,28 @@ const openGeneralSettingsWindow = () => {
 
 };
 
+const openInformationWindow = () => {
+  const informationWindow = new BrowserWindow({
+    show: false,
+    width: 1000,
+    height: platform === 'win32' ? 708 : platform === 'darwin' ? 695 : 670,
+    parent: appWindow,
+    modal: platform === 'darwin' ? false : true
+  });
+
+  informationWindow.setMenu(null);
+
+  if(isDev) {
+    informationWindow.loadURL(`file://${path.join(__dirname, 'src', 'information.html')}`);
+  } else {
+    informationWindow.loadURL(`file://${path.join(__dirname, 'dist', 'information.html')}`);
+  }
+  informationWindow.once('ready-to-show', () => {
+    informationWindow.show();
+  });
+
+};
+
 const openTOSWindow = (alreadyAccepted = false) => {
 
   ipcMain.on('getTOS', e => {
@@ -384,15 +494,14 @@ const openTOSWindow = (alreadyAccepted = false) => {
 
 const openAppWindow = () => {
 
-  const { width, height } = electron.screen.getPrimaryDisplay().workAreaSize;
-
+  let { height } = electron.screen.getPrimaryDisplay().workAreaSize;
+  height -= 300;
+  let width = Math.floor(height * 1.5);
   appWindow = new BrowserWindow({
     show: false,
-    width: width - 100,
-    height: height - 100
+    width: Math.max(width, 1050),
+    height: Math.max(height, 760)
   });
-
-  // appWindow.toggleDevTools();
 
   const initialBounds = storage.getItem('bounds');
   if(initialBounds) {
@@ -401,8 +510,6 @@ const openAppWindow = () => {
     } catch(err) {
       appWindow.maximize();
     }
-  } else {
-    appWindow.maximize();
   }
 
   if(isDev) {
@@ -420,7 +527,7 @@ const openAppWindow = () => {
     const err = versionCheck(info['version']);
     if (err) {
       handleError(err);
-      app.quit();
+      // setTimeout(() => app.quit(), 1);
     }
   });
 
@@ -517,7 +624,7 @@ const openAppWindow = () => {
     asks: []
   };
   const sendOrderBook = force => {
-    if (keyPair && keyPair.length === 2 && keyPair[0] !== '' && keyPair[1] !== '')
+    if (isTokenPairValid(keyPair))
       sn.dxGetOrderBook3(keyPair[0], keyPair[1])
         .then(res => {
           if(force === true || JSON.stringify(res) !== JSON.stringify(orderBook)) {
@@ -532,14 +639,15 @@ const openAppWindow = () => {
 
   let tradeHistory = [];
   const sendTradeHistory = force => {
-    sn.dxGetOrderFills(keyPair[0], keyPair[1])
-      .then(res => {
-        if(force === true || JSON.stringify(res) !== JSON.stringify(tradeHistory)) {
-          tradeHistory = res;
-          appWindow.send('tradeHistory', tradeHistory, keyPair);
-        }
-      })
-      .catch(handleError);
+    if (isTokenPairValid(keyPair))
+      sn.dxGetOrderFills(keyPair[0], keyPair[1])
+        .then(res => {
+          if(force === true || JSON.stringify(res) !== JSON.stringify(tradeHistory)) {
+            tradeHistory = res;
+            appWindow.send('tradeHistory', tradeHistory, keyPair);
+          }
+        })
+        .catch(handleError);
   };
   ipcMain.on('sendTradeHistory', () => sendTradeHistory(true));
   setInterval(sendTradeHistory, stdInterval);
@@ -559,10 +667,12 @@ const openAppWindow = () => {
     appWindow.send('networkTokens', filteredTokens);
   };
   ipcMain.on('getNetworkTokens', sendNetworkTokens);
+
+  // Token refresh interval
   setInterval(() => {
     sendNetworkTokens();
     sendLocalTokens();
-  }, 60000);
+  }, 15000);
 
   let myOrders = [];
   const sendMyOrders = force => {
@@ -578,74 +688,100 @@ const openAppWindow = () => {
   ipcMain.on('getMyOrders', () => sendMyOrders(true));
   setInterval(sendMyOrders, stdInterval);
 
-  let orderHistoryByMinute = [];
-  let orderHistoryByFifteenMinutes = [];
-  let orderHistoryByThirtyMinutes = [];
-  const sendOrderHistory = force => {
-    const end = moment();
+  const calculatePricingData = orderHistory => {
+    if (!orderHistory || orderHistory.length === 0)
+      return { time: moment.utc().toISOString(), open: 0, close: 0, high: 0, low: 0, volume: 0 };
+    let vol = 0, open = 0, close = 0, high = 0, low = null;
+    for (let i = 0; i < orderHistory.length; i++) {
+      let r = orderHistory[i];
+      vol += r.volume;
+      if (r.high > high)
+        high = r.high;
+      if (r.low !== 0 && (r.low < low || low === null))
+        low = r.low;
+      if (open === 0 && r.open !== 0)
+        open = r.open;
+      if (r.close !== 0)
+        close = r.close;
+    }
+    if (low === null)
+      low = 0;
+    const last = orderHistory[orderHistory.length - 1];
+    return { time: last.time, open: open, close: close, high: high, low: low, volume: vol };
+  };
+
+  const orderKey = (pair) => pair[0] + pair[1];
+  let orderHistoryDict = new Map();
+
+  const sendOrderHistory = (which) => {
+    if (!isTokenPairValid(keyPair)) // need valid token pair
+      return;
+    const key = orderKey(keyPair);
+    const shouldUpdate = !orderHistoryDict.has(key) ||
+      (moment.utc().diff(orderHistoryDict[key]['orderHistoryLastUpdate'], 'seconds', true) >= 15);
+    if (!shouldUpdate) {
+      if (orderHistoryDict.has(key) && which)
+        appWindow.send(which, orderHistoryDict[key][which]);
+      return;
+    }
+
+    // Make sure storage has key
+    if (!orderHistoryDict.has(key))
+      orderHistoryDict[key] = {
+        'orderHistory': [],
+        'orderHistoryByMinute': [],
+        'orderHistoryBy15Minutes': [],
+        'orderHistoryBy1Hour': [],
+        'currentPrice': { time: moment.utc().toISOString(), open: 0, close: 0, high: 0, low: 0, volume: 0 },
+        'orderHistoryLastUpdate': moment.utc()
+      };
+    else
+      orderHistoryDict[key]['orderHistoryLastUpdate'] = moment.utc();
+
+    const end = moment().utc();
+    const start = end.clone().subtract(1, 'day');
+
     {
-      const start = moment(end.toDate())
-        .subtract(1, 'd');
-      sn.dxGetOrderHistory(keyPair[0], keyPair[1], start.valueOf(), end.valueOf(), 60)
+      sn.dxGetOrderHistory(keyPair[0], keyPair[1], start.unix(), end.unix(), 60)
         .then(res => {
-          if(force === true || JSON.stringify(res) !== JSON.stringify(orderHistoryByMinute)) {
-            orderHistoryByMinute = res;
-            appWindow.send('orderHistory', orderHistoryByMinute);
-            appWindow.send('orderHistoryByMinute', orderHistoryByMinute);
+          orderHistoryDict[key]['orderHistory'] = res;
+          orderHistoryDict[key]['orderHistoryByMinute'] = res;
+          orderHistoryDict[key]['currentPrice'] = calculatePricingData(res);
+          if (key === orderKey(keyPair)) {
+            appWindow.send('orderHistory', res);
+            appWindow.send('orderHistoryByMinute', res);
+            appWindow.send('currentPrice', orderHistoryDict[key]['currentPrice']);
           }
         })
         .catch(handleError);
     }
     {
-      const start = moment(end.toDate())
-        .subtract(1, 'd');
-      sn.dxGetOrderHistory(keyPair[0], keyPair[1], start.valueOf(), end.valueOf(), 900)
+      sn.dxGetOrderHistory(keyPair[0], keyPair[1], start.unix(), end.unix(), 900)
         .then(res => {
-          if(force === true || JSON.stringify(res) !== JSON.stringify(orderHistoryByFifteenMinutes)) {
-            orderHistoryByFifteenMinutes = res;
-            appWindow.send('orderHistoryBy15Minutes', orderHistoryByFifteenMinutes);
-          }
+          orderHistoryDict[key]['orderHistoryBy15Minutes'] = res;
+          if (key === orderKey(keyPair))
+            appWindow.send('orderHistoryBy15Minutes', res);
         })
         .catch(handleError);
     }
     {
-      const start = moment(end.toDate())
-        .subtract(1, 'd');
-      sn.dxGetOrderHistory(keyPair[0], keyPair[1], start.valueOf(), end.valueOf(), 1800)
+      sn.dxGetOrderHistory(keyPair[0], keyPair[1], start.unix(), end.unix(), 3600)
         .then(res => {
-          if(force === true || JSON.stringify(res) !== JSON.stringify(orderHistoryByThirtyMinutes)) {
-            orderHistoryByThirtyMinutes = res;
-            appWindow.send('orderHistoryBy30Minutes', orderHistoryByThirtyMinutes);
-          }
+          orderHistoryDict[key]['orderHistoryBy1Hour'] = res;
+          if (key === orderKey(keyPair))
+            appWindow.send('orderHistoryBy1Hour', res);
         })
         .catch(handleError);
     }
   };
-  // ipcMain.on('getOrderHistory', () => sendOrderHistory(true));
-  ipcMain.on('getOrderHistoryByMinute', () => sendOrderHistory(true));
-  // ipcMain.on('getOrderHistoryBy15Minutes', () => sendOrderHistory(true));
-  // ipcMain.on('getOrderHistoryBy30Minutes', () => sendOrderHistory(true));
 
-  setInterval(sendOrderHistory, stdInterval);
+  ipcMain.on('getOrderHistory', () => sendOrderHistory('orderHistory'));
+  ipcMain.on('getOrderHistoryByMinute', () => sendOrderHistory('orderHistoryByMinute'));
+  ipcMain.on('getOrderHistoryBy15Minutes', () => sendOrderHistory('orderHistoryBy15Minutes'));
+  ipcMain.on('getOrderHistoryBy1Hour', () => sendOrderHistory('orderHistoryBy1Hour'));
+  ipcMain.on('getCurrentPrice', () => sendOrderHistory('currentPrice'));
 
-  let currentPrice = {};
-  const sendCurrentPrice = force => {
-    const end = moment();
-    const start = moment(end.toDate())
-      .subtract(1, 'd');
-    sn.dxGetOrderHistory(keyPair[0], keyPair[1], start.valueOf(), end.valueOf(), 86400)
-      .then(res => {
-        if(res.length === 0) return;
-        const [ data ] = res;
-        if(force === true || JSON.stringify(data) !== JSON.stringify(currentPrice)) {
-          currentPrice = data;
-          appWindow.send('currentPrice', data);
-        }
-      })
-      .catch(handleError);
-  };
-  ipcMain.on('getCurrentPrice', () => sendCurrentPrice(true));
-  setInterval(sendCurrentPrice, stdInterval);
+  setInterval(sendOrderHistory, 30000);
 
   // TODO This is too aggressive to be called as frequently as it is...
   const sendCurrencies = async function() {
@@ -657,14 +793,12 @@ const openAppWindow = () => {
       const localTokensSet = new Set(localTokens);
       const comparator = networkTokens.includes('BTC') ? 'BTC' : networkTokens.includes('LTC') ? 'LTC' : networkTokens[0];
       const currencies = [];
-      const end = moment.utc().valueOf();
-      const start = moment(end).utc()
-        .subtract(1, 'd')
-        .valueOf();
+      const end = moment.utc();
+      const start = end.clone().subtract(1, 'day');
 
       for(const token of networkTokens) {
         const second = token === comparator ? networkTokens.find(t => t !== comparator) : comparator;
-        const res = await sn.dxGetOrderHistory(token, second, start, end, 86400);
+        const res = await sn.dxGetOrderHistory(token, second, start.unix(), end.unix(), 86400);
         if(res.length === 0) {
           currencies.push({
             symbol: token,
@@ -700,14 +834,12 @@ const openAppWindow = () => {
       ]);
       const localTokensSet = new Set(localTokens);
       const currencies = [];
-      const end = moment.utc().valueOf();
-      const start = moment(end).utc()
-        .subtract(1, 'd')
-        .valueOf();
+      const end = moment.utc();
+      const start = end.clone().subtract(1, 'day');
 
       for(const second of networkTokens) {
         if(second === primary) continue;
-        const res = await sn.dxGetOrderHistory(primary, second, start, end, 86400);
+        const res = await sn.dxGetOrderHistory(primary, second, start.unix(), end.unix(), 86400);
         if(res.length === 0) {
           currencies.push({
             symbol: second,
@@ -800,7 +932,8 @@ const openAppWindow = () => {
   };
   setPricingInterval = () => {
     pricingInterval = setInterval(() => {
-      sendPricingMultipliers();
+      if (isTokenPairValid(keyPair))
+        sendPricingMultipliers();
     }, pricingFrequency);
   };
 
@@ -826,8 +959,7 @@ const openAppWindow = () => {
     sendOrderBook(true);
     sendTradeHistory(true);
     sendMyOrders(true);
-    sendOrderHistory(true);
-    sendCurrentPrice(true);
+    sendOrderHistory();
 
     sendPricingMultipliers();
     setPricingInterval();
@@ -844,8 +976,16 @@ const openAppWindow = () => {
     }
   });
 
+  ipcMain.on('getTokenPair', e => {
+    e.returnValue = keyPair;
+  });
+
   ipcMain.on('openGeneralSettings', () => {
     openGeneralSettingsWindow();
+  });
+
+  ipcMain.on('openInformation', () => {
+    openInformationWindow();
   });
 
   ipcMain.on('openSettings', () => {
@@ -897,6 +1037,19 @@ ipcMain.on('saveGeneralSettings', (e, s) => {
   sendMarketPricingEnabled();
 });
 
+const checkForUpdates = async function() {
+  try {
+    await new Promise(resolve => setTimeout(resolve, 3000));
+    if(!isDev) {
+      await autoUpdater.checkForUpdates();
+    } else {
+      updateError = true;
+    }
+  } catch(err) {
+    updateError = true;
+  }
+};
+
 const onReady = new Promise(resolve => app.on('ready', resolve));
 
 // Run the application within async function for flow control
@@ -920,9 +1073,12 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
     };
 
     const previousMetaPath = path.join(dataPath, 'meta.json');
-    const metaPath = path.join(dataPath, 'app-meta.json');
+    metaPath = path.join(dataPath, 'app-meta.json');
+    macMetaBackupPath = metaPath + '-backup';
 
-    if(!fileExists(metaPath) && fileExists(previousMetaPath)) {
+    if(fileExists(macMetaBackupPath)) {
+      fs.moveSync(macMetaBackupPath, metaPath, {overwrite: true});
+    } else if(!fileExists(metaPath) && fileExists(previousMetaPath)) {
       fs.moveSync(previousMetaPath, metaPath);
     }
 
@@ -933,7 +1089,7 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
 
     pricingSource = storage.getItem('pricingSource');
     if(!pricingSource) {
-      pricingSource = 'COIN_MARKET_CAP';
+      pricingSource = 'CRYPTO_COMPARE';
       storage.setItem('pricingSource', pricingSource);
     }
     apiKeys = storage.getItem('apiKeys');
@@ -948,7 +1104,7 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
     }
     pricingFrequency = storage.getItem('pricingFrequency');
     if(!pricingFrequency) {
-      pricingFrequency = 300000;
+      pricingFrequency = 15000;
       storage.setItem('pricingFrequency', pricingFrequency);
     }
     enablePricing = storage.getItem('pricingEnabled');
@@ -964,7 +1120,6 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
     if(!storage.getItem('tos')) {
       await onReady;
       openTOSWindow();
-      // if(!isDev) autoUpdater.checkForUpdates();
       return;
     }
 
@@ -996,7 +1151,7 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
     if(!user || !password) {
       await onReady;
       openConfigurationWindow();
-      // if(!isDev) autoUpdater.checkForUpdates();
+      checkForUpdates();
       return;
     }
 
@@ -1008,12 +1163,14 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
       info = await sn.getinfo();
     } catch(err) {
       await onReady;
+
+      checkForUpdates();
       openConfigurationWindow({ error: err });
       return;
     }
 
     keyPair = storage.getItem('keyPair');
-    if(!keyPair) {
+    if(!isTokenPairValid(keyPair)) {
 
       const tokens = await sn.dxGetLocalTokens();
 
@@ -1025,7 +1182,9 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
           tokens.push(newToken);
         }
       }
+
       keyPair = tokens.slice(0, 2);
+      keyPair = keyPair.map(t => _.isNil(t) ? '' : t); // Sanitize tokens list
       storage.setItem('keyPair', keyPair);
     }
 
@@ -1038,7 +1197,7 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
 
     await onReady;
 
-    // if(!isDev) autoUpdater.checkForUpdates();
+    checkForUpdates();
 
     openAppWindow();
 
@@ -1048,10 +1207,16 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
 
 })();
 
+function isTokenPairValid(keyPair) {
+  return keyPair && keyPair.length === 2
+    && !_.isNil(keyPair[0]) && !_.isNil(keyPair[1])
+    && !_.isEmpty(keyPair[0]) && !_.isEmpty(keyPair[1]);
+}
+
 // check for version number. Minimum supported blocknet client version
 function versionCheck(version) {
-  if (version < 3100500) {
-    return {name: 'Unsupported Version', message: 'BLOCK DX requires Blocknet wallet version 3.10.5 or greater.'};
+  if (version < 3120100) {
+    return {name: 'Unsupported Version', message: 'BLOCK DX requires Blocknet wallet version 3.12.1 or greater.'};
   }
   return null;
 }

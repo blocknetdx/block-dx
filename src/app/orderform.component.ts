@@ -82,12 +82,13 @@ export class OrderformComponent implements OnInit {
           const tabIndex = order[4] === 'ask' ? 0 : 1;
           this.tabView.activeTab = this.tabView.tabs[tabIndex];
           this.resetModel();
+          const secondPrice = this.pricing.canGetPrice(this.symbols[1]) ? this.formatNumber(this.fixAmount(String(this.pricing.getPrice(order[0], this.symbols[1]))), 'BTC') : 0;
           this.model = Object.assign(this.model, {
             id: order[2],
             amount: this.formatNumber(String(order[1]), this.symbols[0]),
             totalPrice: this.formatNumber(String(math.multiply(order[0], order[1])), this.symbols[1]),
             price: this.formatNumber(String(order[0]), this.symbols[1]),
-            secondPrice: this.formatNumber(this.fixAmount(String(this.pricing.getPrice(order[0], this.symbols[1]))), 'BTC')
+            secondPrice
             // totalPrice: this.formatNumber(String(order[0] * order[1]), this.symbols[1])
           });
         });
@@ -160,6 +161,7 @@ export class OrderformComponent implements OnInit {
     e.preventDefault();
     this.model.id = '';
     let { value: amount } = e.target;
+    amount = amount === '.' ? '0.' : amount;
     const { price = '' } = this.model;
     const [ valid, skipPopper = false ] = this.validAmount(amount);
     let fixed;
@@ -186,6 +188,7 @@ export class OrderformComponent implements OnInit {
     const type = this.tabView.activeIndex === 0 ? 'buy' : 'sell';
     this.model.id = '';
     let { value: price } = e.target;
+    price = price === '.' ? '0.' : price;
     const { amount = '', totalPrice = '' } = this.model;
     const [ valid, skipPopper = false ] = this.validAmount(price);
     let fixed;
@@ -200,7 +203,7 @@ export class OrderformComponent implements OnInit {
       return;
     }
     price = fixed ? fixed : price;
-    this.model.secondPrice = this.formatNumber(this.fixAmount(String(this.pricing.getPrice(price, this.symbols[1]))), 'BTC');
+    this.model.secondPrice = this.pricing.canGetPrice(this.symbols[1]) ? this.formatNumber(this.fixAmount(String(this.pricing.getPrice(price, this.symbols[1]))), 'BTC') : '0';
     if(amount) {
       const newTotalPrice = String(math.multiply(amount, price));
       this.model.totalPrice = this.formatNumber(this.fixAmount(String(newTotalPrice)), 'BTC');
@@ -214,6 +217,7 @@ export class OrderformComponent implements OnInit {
     const type = this.tabView.activeIndex === 0 ? 'buy' : 'sell';
     this.model.id = '';
     let { value: secondPrice } = e.target;
+    secondPrice = secondPrice === '.' ? '0.' : secondPrice;
     const { amount = '', totalPrice = '' } = this.model;
     const [ valid, skipPopper = false ] = this.validAmount(secondPrice);
     let fixed;

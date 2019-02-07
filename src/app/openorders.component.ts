@@ -8,6 +8,7 @@ import { BreakpointService } from './breakpoint.service';
 import * as math from 'mathjs';
 import { PricingService } from './pricing.service';
 import { Pricing } from './pricing';
+import * as OrderStates from '../orderstates';
 
 math.config({
   number: 'BigNumber',
@@ -58,7 +59,12 @@ export class OpenordersComponent extends BaseComponent implements OnInit {
       .subscribe(openorders => {
         this.zone.run(() => {
           const orders = openorders
-            .filter(o => o.status !== 'finished' && o.status !== 'canceled')
+            .filter(o => o.status !== OrderStates.Finished && 
+                        o.status !== OrderStates.Canceled && 
+                        o.status !== OrderStates.Expired && 
+                        o.status !== OrderStates.Offline && 
+                        o.status !== OrderStates.Invalid && 
+                        o.status !== OrderStates.RolledBack)
             .map((o) => {
               o['row_class'] = o.side;
               return o;
@@ -112,7 +118,8 @@ export class OpenordersComponent extends BaseComponent implements OnInit {
   }
 
   cancelable(state) {
-    return state !== 'finished' && state !== 'canceled' && state !== 'created';
+    return ![OrderStates.Finished, OrderStates.Canceled, OrderStates.Created,
+      OrderStates.RollbackFailed, OrderStates.RolledBack].includes(state);
   }
 
   padToken(token) {
@@ -123,22 +130,24 @@ export class OpenordersComponent extends BaseComponent implements OnInit {
     return token;
   }
 
-  getStatusDotColor(status) {
-    if(['new'].includes(status)) {
-      return '#888';
-    } else if(['accepting', 'hold', 'initialized', 'created', 'commited'].includes(status)) {
-      return '#ff0';
-    } else if(['finished'].includes(status)) {
-      return '#0f0';
-    } else if(['expired', 'offline', 'invalid', 'rolled back'].includes(status)) {
-      return '#c00';
-    } else if(['rollback failed'].includes(status)) {
-      return '#ea00ff';
-    } else if(['canceled'].includes(status)) {
-      return '#000';
-    } else { // open
-      return '#fff';
-    }
-  }
+  // getStatusDotColor(status) {
+  //   if([OrderStates.New].includes(status)) {
+  //     return '#888';
+  //   } else if([OrderStates.Accepting, OrderStates.Hold, OrderStates.Initialized,
+  //     OrderStates.Created, OrderStates.Committed].includes(status)) {
+  //     return '#ff0';
+  //   } else if([OrderStates.Finished].includes(status)) {
+  //     return '#0f0';
+  //   } else if([OrderStates.Expired, OrderStates.Offline, OrderStates.Invalid,
+  //     OrderStates.RolledBack].includes(status)) {
+  //     return '#c00';
+  //   } else if([OrderStates.RollbackFailed].includes(status)) {
+  //     return '#ea00ff';
+  //   } else if([OrderStates.Canceled].includes(status)) {
+  //     return '#000';
+  //   } else { // open
+  //     return '#fff';
+  //   }
+  // }
 
 }

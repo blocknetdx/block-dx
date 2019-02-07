@@ -74,20 +74,22 @@
             <div class="input-group row" *ngIf="pricingEnabled">
               <label class="col-4 col-form-label" for="amount">Price</label>
               <div class="col-8">
-                <input readonly
+                <input disabled
                        *ngIf="!pricingAvailable"
                        class="form-control"
                        type="text" pattern="\d+"
                        placeholder="N/A" />
                 <input #amountInput
                        *ngIf="pricingAvailable"
+                       [disabled]="!pricing.canGetPrice(symbols[1])"
                        (keyup)="secondPriceChanged($event)"
                        (onchange)="secondPriceChanged($event)"
                        (blur)="onNumberInputBlur($event, 'secondPrice')"
-                       [value]="pricingAvailable ? model.secondPrice : ''"
+                       [value]="pricingAvailable && pricing.canGetPrice(symbols[1]) ? model.secondPrice : ''"
+                       [class.order-form-total-input]="!pricing.canGetPrice(symbols[1])"
                        class="form-control" name="amount" id="price2"
                        type="text" pattern="\d+" inputmode="numeric"
-                       [placeholder]="formatNumber('0', symbols[1])" />
+                       [placeholder]="!pricing.canGetPrice(symbols[1]) ? 'N/A' : formatNumber('0', symbols[1])" />
                 <span class="input-group-addon">{{pricing ? pricing.in : ''}}</span>
               </div>
             </div>
@@ -160,7 +162,7 @@
                 class="order-form-button order-form-buy-button"
                 [disabled]="disableSubmit ? true : false">
                 <i class="material-icons">add</i>
-                {{model.id ? 'Accept' : 'Place'}} Buy Order
+                {{model.id ? 'Accept' : 'Place Buy'}} Order
               </button>
 
               <button
@@ -169,7 +171,7 @@
                 class="order-form-button order-form-sell-button"
                 [disabled]="disableSubmit ? true : false">
                 <i class="material-icons">remove</i>
-                {{model.id ? 'Accept' : 'Place'}} Sell Order
+                {{model.id ? 'Accept' : 'Place Sell'}} Order
               </button>
 
             </div>

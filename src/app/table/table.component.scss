@@ -73,6 +73,37 @@
     }
   }
 
+  &__body_no_padding {
+    font-family: $roboto-mono;
+    padding: 0;
+    overflow: hidden;
+    -webkit-overflow-scrolling: touch;
+    height: calc(100% - 43px);
+
+    @include screen(lg) {
+      height: calc(100% - 24px);
+    }
+
+    perfect-scrollbar div.ps {
+      display: flex;
+      flex-direction: column;
+
+      .ps-content {
+        margin-top: auto;
+      }
+
+    }
+
+  }
+
+  &__body_no_header {
+    font-family: $roboto-mono;
+    padding: 0;
+    overflow: hidden;
+    -webkit-overflow-scrolling: touch;
+    height: 100%;
+  }
+
   &__info {
     padding: 0 4px;
     cursor: default;

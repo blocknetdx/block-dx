@@ -48,8 +48,8 @@ export class PairSelectorComponent implements OnInit, AfterViewInit {
     switch(this.state) {
       case 'stage1' :
         arr = [
-          {title: 'My Wallet', rows: this._userWallet},
-          {title: 'All Coins', rows: PairSelectorComponent.uniqueCoinsNotIn(this._allCoins, this._userWallet)}
+          {title: 'Connected Tokens', rows: this._userWallet},
+          {title: 'All Tokens', rows: PairSelectorComponent.uniqueCoinsNotIn(this._allCoins, this._userWallet)}
         ];
         break;
       case 'stage2' :
@@ -163,7 +163,10 @@ export class PairSelectorComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     const isFirstRun = window.electron.ipcRenderer.sendSync('isFirstRun');
-    if(isFirstRun) this.active = true;
+    this._loadedSymbols = window.electron.ipcRenderer.sendSync('getTokenPair');
+    if(isFirstRun)  window.electron.ipcRenderer.send('openInformation');
+    if(isFirstRun || !this._loadedSymbols || this._loadedSymbols[0] === null || /^\s*$/.test(this._loadedSymbols[0]))
+      this.active = true;
   }
 
   filterCoins(key: string, val: string) {

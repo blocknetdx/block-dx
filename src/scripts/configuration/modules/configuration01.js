@@ -9,7 +9,7 @@ const renderConfiguration1 = ({ state }) => {
     }, []);
   const skip = state.get('skipSetup');
   const html = `
-          <p style="margin-top:0;padding-top:0;padding-left:10px;padding-right:10px;margin-bottom:10px;">In order to conduct peer-to-peer trades, Block DX requires RPC access to the wallets of each token that will be traded. Select the blockchains of the wallets that are installed.</p>
+          <p style="margin-top:0;padding-top:0;padding-left:10px;padding-right:10px;margin-bottom:10px;">In order to conduct peer-to-peer trades, Block DX requires the <a href="#" class="blocknet-link js-blocknetWalletLink">Blocknet wallet</a> and the wallets of any tokens you want to trade with. Select the wallets that are installed to begin setup.</p>
           <div id="js-mainConfigurationArea" class="main-area" style="position:relative;${skip ? 'opacity:.6;overflow-y:hidden;' : 'opacity:1;overflow-y:scroll;'}">
             ${items
               .map(i => {
