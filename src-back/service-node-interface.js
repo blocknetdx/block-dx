@@ -3,7 +3,7 @@ const _ = require('lodash');
 
 // Errors
 const ErrorMsg = (name, code) => {
-  if (Errors[name][code])
+  if (Errors.has(name) && Errors[name].has(code))
     return Errors[name][code];
   else return '';
 };
