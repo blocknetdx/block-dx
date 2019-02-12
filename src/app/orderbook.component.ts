@@ -165,9 +165,9 @@ export class OrderbookComponent implements OnInit {
   }
 
   scalePercentBar(size) {
-    var maxWidth = 100; // percentBar CSS max-width %
-    var scale = 0.4; // ratio of max width to limit to
-    var multiplier = maxWidth * scale;
+    const maxWidth = 100; // percentBar CSS max-width %
+    const scale = 0.4; // ratio of max width to limit to
+    const multiplier = maxWidth * scale;
     if (size <= 1) {
       return ( 0.01 * multiplier );
     } else if (size <= 2.75) {
@@ -175,6 +175,54 @@ export class OrderbookComponent implements OnInit {
     } else {
       return ( (1 - 1 / Math.log(size)) * multiplier );
     }
+  }
+
+  onCancelOrder(orderId) {
+    const { electron } = window;
+    electron.ipcRenderer
+      .send('cancelOrder', orderId);
+  }
+
+  onRowContextMenu({ row, clientX, clientY }) {
+    const { Menu } = window.electron.remote;
+    const { clipboard, ipcRenderer } = window.electron;
+
+    const orderId = row[2];
+
+    const ownOrder = this.ownOrders.has(orderId);
+    const menuTemplate = [];
+
+    if(ownOrder) {
+      menuTemplate.push({
+        label: 'Cancel Order',
+        click: () => {
+          const confirmed = confirm('Are you sure that you want to cancel this order?');
+          if(confirmed) this.onCancelOrder(orderId);
+        }
+      });
+    } else {
+      menuTemplate.push({
+        label: 'Take Order',
+        click: () => {
+          this.onRowSelect(row);
+        }
+      });
+    }
+    menuTemplate.push({
+      label: 'Copy Order ID',
+      click: () => {
+        clipboard.writeText(orderId);
+      }
+    });
+    menuTemplate.push({
+      label: 'View Details',
+      click: () => {
+        ipcRenderer.send('openOrderDetailsWindow', orderId);
+      }
+    });
+
+    const menu = Menu.buildFromTemplate(menuTemplate);
+    menu.popup({x: clientX, y: clientY});
   }
 
 }

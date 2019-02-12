@@ -59,11 +59,11 @@ export class OpenordersComponent extends BaseComponent implements OnInit {
       .subscribe(openorders => {
         this.zone.run(() => {
           const orders = openorders
-            .filter(o => o.status !== OrderStates.Finished && 
-                        o.status !== OrderStates.Canceled && 
-                        o.status !== OrderStates.Expired && 
-                        o.status !== OrderStates.Offline && 
-                        o.status !== OrderStates.Invalid && 
+            .filter(o => o.status !== OrderStates.Finished &&
+                        o.status !== OrderStates.Canceled &&
+                        o.status !== OrderStates.Expired &&
+                        o.status !== OrderStates.Offline &&
+                        o.status !== OrderStates.Invalid &&
                         o.status !== OrderStates.RolledBack)
             .map((o) => {
               o['row_class'] = o.side;
@@ -128,6 +128,48 @@ export class OpenordersComponent extends BaseComponent implements OnInit {
       token += ' ';
     }
     return token;
+  }
+
+  onRowContextMenu({ row, clientX, clientY }) {
+
+    const order = row;
+
+    const { Menu } = window.electron.remote;
+    const { clipboard, ipcRenderer } = window.electron;
+
+    const menuTemplate = [];
+
+    if(this.cancelable(order.status)) {
+      menuTemplate.push({
+        label: 'Cancel Order',
+        click: () => {
+          const confirmed = confirm('Are you sure that you want to cancel this order?');
+          if(confirmed) this.cancelOrder(order);
+        }
+      });
+    }
+
+    const { symbols } = this;
+    const { maker, taker } = order;
+
+    if(!symbols.includes(maker) || !symbols.includes(taker)) {
+      menuTemplate.push({
+        label: 'View Market',
+        click: () => {
+          ipcRenderer.send('setKeyPair', [maker, taker]);
+        }
+      });
+    }
+
+    menuTemplate.push({
+      label: 'View Details',
+      click: () => {
+        ipcRenderer.send('openMyOrderDetailsWindow', order.id);
+      }
+    });
+
+    const menu = Menu.buildFromTemplate(menuTemplate);
+    menu.popup({x: clientX, y: clientY});
   }
 
   // getStatusDotColor(status) {

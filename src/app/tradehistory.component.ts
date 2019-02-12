@@ -78,7 +78,7 @@ export class TradehistoryComponent implements OnInit {
   }
 
   calculatePairPrice(total, size) {
-    //return math.round(math.divide(total, size),6);
+    // return math.round(math.divide(total, size),6);
     return math.divide(total, size).toFixed(6);
   }
 
@@ -87,7 +87,7 @@ export class TradehistoryComponent implements OnInit {
   }
 
   datetimeFormat(datetime) {
-    //datetime format: 2019-01-18T21:18:05.005537Z
+    // datetime format: 2019-01-18T21:18:05.005537Z
     if (moment(new Date()).format('MMM DD')==moment(datetime).format('MMM DD')) {
       // if today, show hr:min:s:ms format
       return moment(datetime).format('HH:mm:ss');
@@ -96,4 +96,29 @@ export class TradehistoryComponent implements OnInit {
       return moment(datetime).format('MMM DD HH:mm');
     }
   }
+
+  onRowContextMenu({ row, clientX, clientY }) {
+    const { Menu } = window.electron.remote;
+    const { clipboard, ipcRenderer } = window.electron;
+
+    const orderId = row.trade_id;
+    const menuTemplate = [];
+
+    menuTemplate.push({
+      label: 'Copy Order ID',
+      click: () => {
+        clipboard.writeText(orderId);
+      }
+    });
+    menuTemplate.push({
+      label: 'View Details',
+      click: () => {
+        ipcRenderer.send('openOrderHistoryDetailsWindow', orderId);
+      }
+    });
+
+    const menu = Menu.buildFromTemplate(menuTemplate);
+    menu.popup({x: clientX, y: clientY});
+  }
+
 }

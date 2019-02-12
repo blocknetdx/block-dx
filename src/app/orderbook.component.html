@@ -8,13 +8,14 @@
                [noPadding]="true"
                [selectable]="true"
                [sections]="sections ? [sections[0]] : [{}]"
-               (onRowSelect)="onRowSelect($event)">
+               (onRowSelect)="onRowSelect($event)"
+               (onRowContextMenu)="onRowContextMenu($event)">
 
       <app-table-column [sortable]="false" [classList]="'col'">
         <ng-template columnHeader>Size ({{symbols[0]}})</ng-template>
         <ng-template let-row="row" columnCell>
-          <span class="bn-number" 
-           [class.orderbook-own-order]="ownOrders.has(row[2])" 
+          <span class="bn-number no-highlight"
+           [class.orderbook-own-order]="ownOrders.has(row[2])"
            [innerHtml]="row[1] | blockCurrency:symbols[0]:'6'"
            [title]="ownOrders.has(row[2]) ? 'Your order' : ''">
           </span>
@@ -24,7 +25,7 @@
       <app-table-column [sortable]="false" [classList]="'col'" *ngIf="pricingEnabled">
         <ng-template columnHeader>Price ({{pricing ? pricing.in : ''}})</ng-template>
         <ng-template let-row="row" columnCell>
-          <span
+          <span class="no-highlight"
            [class.orderbook-own-order]="ownOrders.has(row[2])"
            [class.color-red]="row[4] == 'ask'"
            [class.color-green]="row[4] == 'bid'"
@@ -38,7 +39,7 @@
       <app-table-column [sortable]="false" [classList]="'col'">
         <ng-template columnHeader>Price ({{symbols[1]}})</ng-template>
         <ng-template let-row="row" columnCell>
-          <span
+          <span class="no-highlight"
            [class.orderbook-own-order]="ownOrders.has(row[2])"
            [class.color-red]="row[4] == 'ask'"
            [class.color-green]="row[4] == 'bid'"
@@ -52,15 +53,15 @@
         <ng-template columnHeader>Total ({{symbols[1]}})</ng-template>
         <ng-template let-row="row" columnCell>
           <div class="percentBar red-bar"
-             [ngStyle]="{'width.%': scalePercentBar(row[3])}">   
+             [ngStyle]="{'width.%': scalePercentBar(row[3])}">
           </div>
           <div *ngIf="ownOrders.has(row[2]) == true" class="orderbook-own-order-highlight" title="Your order"
              [ngStyle]="{'width.%': 100}">
             <span class="orderbook-own-order-dot"></span>
           </div>
           <span>
-            <span class="bn-number" 
-             [class.orderbook-own-order]="ownOrders.has(row[2])" 
+            <span class="bn-number no-highlight"
+             [class.orderbook-own-order]="ownOrders.has(row[2])"
              [innerHtml]="calculateTotal(row) | blockCurrency:symbols[1]:'6'"
              [title]="ownOrders.has(row[2]) ? 'Your order' : ''">
             </span>
@@ -96,13 +97,14 @@
                  [hideHeader]="true"
                  [selectable]="true"
                  [sections]="sections ? [sections[1]] : [{}]"
-                 (onRowSelect)="onRowSelect($event)">
+                 (onRowSelect)="onRowSelect($event)"
+                 (onRowContextMenu)="onRowContextMenu($event)">
 
 
         <app-table-column [sortable]="false" [classList]="'col'">
           <!--<ng-template columnHeader>Size ({{symbols[0]}})</ng-template>-->
           <ng-template let-row="row" columnCell>
-            <span class="bn-number" 
+            <span class="bn-number no-highlight"
              [class.orderbook-own-order]="ownOrders.has(row[2])"
              [innerHtml]="row[1] | blockCurrency:symbols[0]:'6'"
              [title]="ownOrders.has(row[2]) ? 'Your order' : ''">
@@ -113,7 +115,7 @@
         <app-table-column [sortable]="false" [classList]="'col'" *ngIf="pricingEnabled">
           <!--<ng-template columnHeader>Price ({{pricing ? pricing.in : ''}})</ng-template>-->
           <ng-template let-row="row" columnCell>
-            <span
+            <span class="no-highlight"
              [class.orderbook-own-order]="ownOrders.has(row[2])"
              [class.color-red]="row[4] == 'ask'"
              [class.color-green]="row[4] == 'bid'"
@@ -127,7 +129,7 @@
         <app-table-column [sortable]="false" [classList]="'col'">
           <!--<ng-template columnHeader>Price ({{symbols[1]}})</ng-template>-->
           <ng-template let-row="row" columnCell>
-            <span
+            <span class="no-highlight"
              [class.orderbook-own-order]="ownOrders.has(row[2])"
              [class.color-red]="row[4] == 'ask'"
              [class.color-green]="row[4] == 'bid'"
@@ -141,15 +143,15 @@
           <!--<ng-template columnHeader>Total ({{symbols[1]}})</ng-template>-->
           <ng-template let-row="row" columnCell>
             <div class="percentBar green-bar"
-               [ngStyle]="{'width.%': scalePercentBar(row[3])}">   
+               [ngStyle]="{'width.%': scalePercentBar(row[3])}">
             </div>
             <div *ngIf="ownOrders.has(row[2]) == true" class="orderbook-own-order-highlight" title="Your order"
              [ngStyle]="{'width.%': 100}">
               <span class="orderbook-own-order-dot"></span>
             </div>
             <span>
-              <span class="bn-number" 
-               [class.orderbook-own-order]="ownOrders.has(row[2])" 
+              <span class="bn-number no-highlight"
+               [class.orderbook-own-order]="ownOrders.has(row[2])"
                [innerHtml]="calculateTotal(row) | blockCurrency:symbols[1]:'6'"
                [title]="ownOrders.has(row[2]) ? 'Your order' : ''">
               </span>

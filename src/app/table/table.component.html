@@ -43,6 +43,7 @@
              [class.selected]="selectedRow == row"
              (keyup.enter)="rowSelected(row, $event)"
              (click)="rowSelected(row, $event)"
+             (contextmenu)="rowContextMenu(row, $event)"
              *ngFor="let row of section.rows">
           <ng-container *ngIf="row.constructor.name !== 'TableRowDivider'">
             <div
