@@ -9,6 +9,11 @@ import { Currentprice } from './currentprice';
 import { CurrentpriceService } from './currentprice.service';
 import {NumberFormatPipe} from './pipes/decimal.pipe';
 
+math.config({
+  number: 'BigNumber',
+  precision: 64
+});
+
 declare var AmCharts;
 
 @Component({
@@ -19,11 +24,11 @@ declare var AmCharts;
 export class DepthComponent implements AfterViewInit, OnChanges, OnDestroy {
   public symbols:string[] = [];
   public currentPrice: Currentprice;
+  public midMarketPrice = '';
   public currentPriceCSSPercentage = 0;
   public topChart: any;
   public bottomChart: any;
   public orderbook:any[] = [];
-  public lastPrice: string;
 
   @ViewChild('topChartContainer')
   public topChartContainer: ElementRef;
@@ -38,7 +43,7 @@ export class DepthComponent implements AfterViewInit, OnChanges, OnDestroy {
     private appService: AppService,
     private currentpriceService: CurrentpriceService,
     private orderbookService: OrderbookService,
-    private numberFormatPipe: NumberFormatPipe,
+    private numberFormatPipe: NumberFormatPipe
   ) {}
 
   static formatMMP(val): string {
@@ -70,7 +75,6 @@ export class DepthComponent implements AfterViewInit, OnChanges, OnDestroy {
     this.subscriptions.push(this.currentpriceService.currentprice.subscribe((cp) => {
       zone.run(() => {
         this.currentPrice = cp;
-        this.lastPrice = DepthComponent.formatMMP(this.currentPrice.last);
       });
     }));
     this.subscriptions.push(this.orderbookService.getOrderbook()
@@ -78,6 +82,10 @@ export class DepthComponent implements AfterViewInit, OnChanges, OnDestroy {
 
         // Function to process (sort and calculate cummulative volume)
         const processData = (list, type, desc) => {
+
+          list = [...list];
+
+          const res = [];
 
           // Convert to data points
           for(let i = 0; i < list.length; i++) {
@@ -102,61 +110,60 @@ export class DepthComponent implements AfterViewInit, OnChanges, OnDestroy {
             }
           });
 
+          if(desc) list.reverse();
+
           // Calculate cummulative volume
-          if (desc) {
-            for(let i = list.length - 1; i >= 0; i--) {
-              if (i < (list.length - 1)) {
-                list[i].totalvolume = list[i+1].totalvolume + list[i].volume;
-                list[i].sum = list[i+1].sum + list[i].total;
-              } else {
-                list[i].totalvolume = list[i].volume;
-                list[i].sum = list[i].total;
-              }
-              const dp = {};
-              dp['total'] = list[i].total;
-              dp['value'] = list[i].value;
-              dp['sum'] = list[i].sum;
-              dp[type + 'volume'] = list[i].volume;
-              dp[type + 'totalvolume'] = list[i].totalvolume;
-              res.unshift(dp);
+          for(let i = 0; i < list.length; i++) {
+            if (i > 0) {
+              list[i].totalvolume = list[i-1].totalvolume + list[i].volume;
+              list[i].sum = list[i-1].sum + list[i].total;
+            } else {
+              list[i].totalvolume = list[i].volume;
+              list[i].sum = list[i].total;
             }
-          } else {
-            for(let i = 0; i < list.length; i++) {
-              if (i > 0) {
-                list[i].totalvolume = list[i-1].totalvolume + list[i].volume;
-                list[i].sum = list[i-1].sum + list[i].total;
-              } else {
-                list[i].totalvolume = list[i].volume;
-                list[i].sum = list[i].total;
-              }
-              const dp = {};
-              dp['total'] = list[i].total;
-              dp['value'] = list[i].value;
-              dp['sum'] = list[i].sum;
-              dp[type + 'volume'] = list[i].volume;
-              dp[type + 'totalvolume'] = list[i].totalvolume;
-              res.push(dp);
-            }
+            const dp = {};
+            dp['total'] = list[i].total;
+            dp['value'] = list[i].value;
+            dp['sum'] = list[i].sum;
+            dp[type + 'volume'] = list[i].volume;
+            dp[type + 'totalvolume'] = list[i].totalvolume;
+            res.push(dp);
           }
+
+          const totalVolumeMap = new Map();
+
+          const totalVolumeKey = type + 'totalvolume';
+
+          for(const obj of res) {
+            const totalVolume = obj[totalVolumeKey];
+            totalVolumeMap.set(obj.value, totalVolume);
+          }
+
+          for(const obj of res) {
+            obj[totalVolumeKey] = totalVolumeMap.get(obj.value);
+          }
+
+          if(desc) res.reverse();
+
+          return res;
 
         };
 
         // Init
-        const res = [];
-        processData(orderbook.asks, 'asks', true);
-        processData(orderbook.bids, 'bids', false);
+        const asks = processData(orderbook.asks, 'asks', true);
+        const bids = processData(orderbook.bids, 'bids', false);
 
-        // console.log('res', res);
+        const combined = [...asks, ...bids];
+        this.orderbook = combined;
 
-        this.orderbook = res;
-
-        const bidCount = res
+        const bidCount = combined
           .reduce((count, obj) => Object.keys(obj).includes('bidstotalvolume') ? count + 1 : count, 0);
-        this.currentPriceCSSPercentage = (bidCount / res.length) * 100;
+        this.currentPriceCSSPercentage = (bidCount / combined.length) * 100;
 
         this.updateDepthChart();
 
-      }));
+        })
+    );
 
     this.makeChart();
   }
@@ -177,12 +184,43 @@ export class DepthComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   updateDepthChart() {
     const data = this.orderbook;
+
+    const topChartData = data.filter(obj => obj.askstotalvolume ? true : false);
+    const bottomChartData = data.filter(obj => obj.bidstotalvolume ? true : false);
+
+    const topTotalVolume = topChartData.length > 0 ? topChartData[0].askstotalvolume : 0;
+    const bottomTotalVolume = bottomChartData.length > 0 ? bottomChartData[bottomChartData.length - 1].bidstotalvolume : 0;
+
+    const highestVolume = topTotalVolume > bottomTotalVolume ? topTotalVolume : bottomTotalVolume;
+
+    const volumeAxisMax = (Math.floor(highestVolume / 50) + 1) * 50;
+
+    let midMarketPrice;
+
+    if(topChartData.length === 0 && bottomChartData.length === 0) {
+      midMarketPrice = 0;
+    } else if(topChartData.length > 0 && bottomChartData.length > 0) {
+      midMarketPrice = math.divide(topChartData[topChartData.length - 1].value + bottomChartData[0].value, 2);
+    } else if(topChartData.length > 0) {
+      midMarketPrice = topChartData[0].value;
+    } else {
+      midMarketPrice = bottomChartData[bottomChartData.length - 1].value;
+    }
+
+    this.midMarketPrice = DepthComponent.formatMMP(midMarketPrice);
+
     if (this.topChart) {
-      this.topChart.dataProvider = data.filter(obj => obj.askstotalvolume);
+      // set a uniform x axis maximum value so the charts match
+      this.topChart.valueAxes[0].maximum = volumeAxisMax;
+      // update the chart dataset
+      this.topChart.dataProvider = topChartData;
       this.topChart.validateData();
     }
     if (this.bottomChart) {
-      this.bottomChart.dataProvider = data.filter(obj => obj.bidstotalvolume);
+      // set a uniform x axis maximum value so the charts match
+      this.bottomChart.valueAxes[0].maximum = volumeAxisMax;
+      // update the chart dataset
+      this.bottomChart.dataProvider = bottomChartData;
       this.bottomChart.validateData();
     }
   }
@@ -249,38 +287,6 @@ export class DepthComponent implements AfterViewInit, OnChanges, OnDestroy {
             'valueField': 'askstotalvolume',
             'balloonFunction': balloon
           },
-          // {
-          //   'id': 'bids',
-          //   'fillAlphas': .4,
-          //   'lineAlpha': 1,
-          //   'lineThickness': 1,
-          //   'lineColor': '#4BF5C6',
-          //   fillColors: [
-          //     '#4BF5C6',
-          //     '#172E48'
-          //   ],
-          //   'type': 'step',
-          //   'valueField': 'bidstotalvolume',
-          //   'balloonFunction': balloon
-          // }
-          // {
-          //   'lineAlpha': 0,
-          //   'fillAlphas': 0.2,
-          //   'lineColor': '#FFF',
-          //   'type': 'column',
-          //   'clustered': false,
-          //   'valueField': 'bidsvolume',
-          //   'showBalloon': false
-          // },
-          // {
-          //   'lineAlpha': 0,
-          //   'fillAlphas': 0.2,
-          //   'lineColor': '#FFF',
-          //   'type': 'column',
-          //   'clustered': false,
-          //   'valueField': 'asksvolume',
-          //   'showBalloon': false
-          // }
         ],
         'categoryField': 'value',
         'chartCursor': {},
@@ -292,11 +298,18 @@ export class DepthComponent implements AfterViewInit, OnChanges, OnDestroy {
         },
         'valueAxes': [
           {
-            'showFirstLabel': false,
-            'showLastLabel': false,
-            'inside': true,
-            'gridAlpha': 0,
-            position: top
+            showFirstLabel: false,
+            showLastLabel: false,
+            inside: true,
+            gridAlpha: 0,
+            position: top,
+            axisAlpha: 0,
+            color: 'rgba(0, 0, 0, 0)',
+
+            // The following two properties are for if we want to force a certain number of axis labels.
+            // Changing these values leads to unpredictable behavior and is not recommended without further testing.
+            // autoGridCount: false,
+            // gridCount: 3
           }
         ],
         'categoryAxis': {
@@ -310,7 +323,12 @@ export class DepthComponent implements AfterViewInit, OnChanges, OnDestroy {
             'fontSize': 0,
             'color': '#FFFFFF'
             // 'enabled' : false  // TODO: This isn't working for some reason.
-          }
+          },
+
+          // The following two properties are for if we want to force a certain number of axis labels.
+          // Changing these values leads to unpredictable behavior and is not recommended without further testing.
+          // autoGridCount: false,
+          // gridCount: 4
         },
         'mouseWheelZoomEnabled': true,
         'rotate': true,
@@ -348,20 +366,6 @@ export class DepthComponent implements AfterViewInit, OnChanges, OnDestroy {
         'theme': 'dark',
         'dataProvider': [],
         'graphs': [
-          // {
-          //   'id': 'asks',
-          //   'fillAlphas': .4,
-          //   'lineAlpha': 1,
-          //   'lineThickness': 1,
-          //   'lineColor': '#FF7E70',
-          //   fillColors: [
-          //     '#172E48',
-          //     '#FF7E70'
-          //   ],
-          //   'type': 'step',
-          //   'valueField': 'askstotalvolume',
-          //   'balloonFunction': balloon
-          // },
           {
             'id': 'bids',
             'fillAlphas': .4,
@@ -376,24 +380,6 @@ export class DepthComponent implements AfterViewInit, OnChanges, OnDestroy {
             'valueField': 'bidstotalvolume',
             'balloonFunction': balloon
           }
-          // {
-          //   'lineAlpha': 0,
-          //   'fillAlphas': 0.2,
-          //   'lineColor': '#FFF',
-          //   'type': 'column',
-          //   'clustered': false,
-          //   'valueField': 'bidsvolume',
-          //   'showBalloon': false
-          // },
-          // {
-          //   'lineAlpha': 0,
-          //   'fillAlphas': 0.2,
-          //   'lineColor': '#FFF',
-          //   'type': 'column',
-          //   'clustered': false,
-          //   'valueField': 'asksvolume',
-          //   'showBalloon': false
-          // }
         ],
         'categoryField': 'value',
         'chartCursor': {},
@@ -409,7 +395,12 @@ export class DepthComponent implements AfterViewInit, OnChanges, OnDestroy {
             'showLastLabel': false,
             'inside': true,
             'gridAlpha': 0,
-            position: 'bottom'
+            position: 'bottom',
+
+            // The following two properties are for if we want to force a certain number of axis labels.
+            // Changing these values leads to unpredictable behavior and is not recommended without further testing.
+            // autoGridCount: false,
+            // gridCount: 3
           }
         ],
         'categoryAxis': {
@@ -423,7 +414,12 @@ export class DepthComponent implements AfterViewInit, OnChanges, OnDestroy {
             'fontSize': 0,
             'color': '#FFFFFF'
             // 'enabled' : false  // TODO: This isn't working for some reason.
-          }
+          },
+
+          // The following two properties are for if we want to force a certain number of axis labels.
+          // Changing these values leads to unpredictable behavior and is not recommended without further testing.
+          // autoGridCount: false,
+          // gridCount: 4
         },
         'mouseWheelZoomEnabled': true,
         'rotate': true,
