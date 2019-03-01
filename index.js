@@ -288,6 +288,7 @@ const openConfigurationWindow = (options = {}) => {
     setAppMenu();
   }
 
+  ipcMain.removeAllListeners('openSettingsWindow');
   ipcMain.on('openSettingsWindow', () => {
     try {
       openSettingsWindow();
@@ -296,6 +297,8 @@ const openConfigurationWindow = (options = {}) => {
       handleError(err);
     }
   });
+
+  ipcMain.removeAllListeners('getManifest');
   ipcMain.on('getManifest', async function(e) {
     try {
       e.returnValue = getManifest();
@@ -303,6 +306,8 @@ const openConfigurationWindow = (options = {}) => {
       handleError(err);
     }
   });
+
+  ipcMain.removeAllListeners('getBaseConf');
   ipcMain.on('getBaseConf', function(e, walletConf) {
     try {
       const walletConfs = storage.getItem('walletConfs') || {};
@@ -316,6 +321,8 @@ const openConfigurationWindow = (options = {}) => {
       handleError(err);
     }
   });
+
+  ipcMain.removeAllListeners('getBridgeConf');
   ipcMain.on('getBridgeConf', (e, bridgeConf) => {
     try {
       const xbridgeConfs = storage.getItem('xbridgeConfs') || {};
@@ -329,6 +336,8 @@ const openConfigurationWindow = (options = {}) => {
       handleError(err);
     }
   });
+
+  ipcMain.removeAllListeners('saveDXData');
   ipcMain.on('saveDXData', (e, dxUser, dxPassword, dxPort) => {
     storage.setItems({
       user: dxUser,
@@ -337,19 +346,36 @@ const openConfigurationWindow = (options = {}) => {
     }, true);
     e.returnValue = true;
   });
+
+  ipcMain.removeAllListeners('getHomePath');
   ipcMain.on('getHomePath', e => {
     e.returnValue = app.getPath('home');
   });
+
+  ipcMain.removeAllListeners('getDataPath');
   ipcMain.on('getDataPath', e => {
     e.returnValue = app.getPath('appData');
   });
+
+  ipcMain.removeAllListeners('getSelected');
   ipcMain.on('getSelected', e => {
     const selectedWallets = storage.getItem('selectedWallets') || [];
     e.returnValue = selectedWallets;
   });
+
+  ipcMain.removeAllListeners('saveSelected');
   ipcMain.on('saveSelected', (e, selectedArr) => {
     storage.setItem('selectedWallets', selectedArr, true);
     e.returnValue = selectedArr;
+  });
+
+  ipcMain.removeAllListeners('configurationWindowCancel');
+  ipcMain.on('configurationWindowCancel', () => {
+    if(appWindow) {
+      configurationWindow.close();
+    } else {
+      app.quit();
+    }
   });
 
 };

@@ -483,7 +483,7 @@ $(document).ready(() => {
           const skipSetup = state.get('skipSetup');
           switch(active) {
             case 'configuration1':
-              ipcRenderer.send('quit');
+              ipcRenderer.send('configurationWindowCancel');
               return;
             case 'configuration2':
               state.set('active', 'configuration1');
