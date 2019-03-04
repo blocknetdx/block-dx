@@ -160,7 +160,12 @@ export class OrderformComponent implements OnInit {
   amountChanged(e) {
     e.preventDefault();
     this.model.id = '';
-    let { value: amount } = e.target;
+    let amount;
+    if(e.type === 'paste') {
+      amount = window.electron.clipboard.readText();
+    } else {
+      amount = e.target.value;
+    }
     amount = amount === '.' ? '0.' : amount;
     const { price = '' } = this.model;
     const [ valid, skipPopper = false ] = this.validAmount(amount);
@@ -169,6 +174,8 @@ export class OrderformComponent implements OnInit {
       fixed = this.fixAmount(amount);
       if(!skipPopper) this.showPopper('amount', 'You can only specify amounts with at most 0.000001 precision.', 5000);
       e.target.value = fixed;
+    } else if(e.type === 'paste') {
+      e.target.value = amount;
     }
     if(!amount) {
       this.model.totalPrice = '';
@@ -187,7 +194,12 @@ export class OrderformComponent implements OnInit {
     e.preventDefault();
     const type = this.tabView.activeIndex === 0 ? 'buy' : 'sell';
     this.model.id = '';
-    let { value: price } = e.target;
+    let price;
+    if(e.type === 'paste') {
+      price = window.electron.clipboard.readText();
+    } else {
+      price = e.target.value;
+    }
     price = price === '.' ? '0.' : price;
     const { amount = '', totalPrice = '' } = this.model;
     const [ valid, skipPopper = false ] = this.validAmount(price);
@@ -196,6 +208,8 @@ export class OrderformComponent implements OnInit {
       fixed = this.fixAmount(price);
       if(!skipPopper) this.showPopper('price', 'You can only specify prices with at most 0.000001 precision.', 5000);
       e.target.value = fixed;
+    } else if(e.type === 'paste') {
+      e.target.value = price;
     }
     if(!price) {
       this.model.totalPrice = '';
@@ -216,7 +230,12 @@ export class OrderformComponent implements OnInit {
     e.preventDefault();
     const type = this.tabView.activeIndex === 0 ? 'buy' : 'sell';
     this.model.id = '';
-    let { value: secondPrice } = e.target;
+    let secondPrice;
+    if(e.type === 'paste') {
+      secondPrice = window.electron.clipboard.readText();
+    } else {
+      secondPrice = e.target.value;
+    }
     secondPrice = secondPrice === '.' ? '0.' : secondPrice;
     const { amount = '', totalPrice = '' } = this.model;
     const [ valid, skipPopper = false ] = this.validAmount(secondPrice);
@@ -225,6 +244,8 @@ export class OrderformComponent implements OnInit {
       fixed = this.fixAmount(secondPrice);
       if(!skipPopper) this.showPopper('price', 'You can only specify prices with at most 0.000001 precision.', 5000);
       e.target.value = fixed;
+    } else if(e.type === 'paste') {
+      e.target.value = secondPrice;
     }
     if(!secondPrice) {
       this.model.totalPrice = '';
