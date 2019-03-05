@@ -1,4 +1,4 @@
-import { Component, ContentChildren, QueryList, ViewChildren, ElementRef, ViewChild, AfterContentInit } from '@angular/core';
+import { Component, ContentChildren, QueryList, ViewChildren, ElementRef, ViewChild, AfterContentInit, EventEmitter, Output } from '@angular/core';
 
 import { TabDirective } from './tab.directive';
 
@@ -9,7 +9,7 @@ import { TabDirective } from './tab.directive';
     <div #buttonContainer class="tabs">
       <a class="tab" #button *ngFor="let tab of tabs; let i = index"
         [style.color]="tab.barColor ? tab.barColor : ''"
-        (click)="activeTab = tab"
+        (click)="onClick(tab, i)"
         [class.active]="activeTab === tab">
         {{tab.label}}
       </a>
@@ -36,6 +36,9 @@ export class TabViewComponent implements AfterContentInit {
   set tabTemplates(val: QueryList<TabDirective>) {
     this.tabs = val.toArray();
   }
+
+  @Output('onTabChange')
+  public tabChangeEmitter: EventEmitter<any> = new EventEmitter();
 
   public tabs: TabDirective[];
   public contentInit: boolean;
@@ -78,6 +81,11 @@ export class TabViewComponent implements AfterContentInit {
     if(barColor) newStyles.background = barColor;
 
     return newStyles;
+  }
+
+  onClick(tab, idx) {
+    this.activeTab = tab;
+    this.tabChangeEmitter.emit(idx);
   }
 
 }

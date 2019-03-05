@@ -1,4 +1,5 @@
-<app-bn-tab-view #tabView>
+<app-bn-tab-view #tabView
+  (onTabChange)="onTabChange($event)">
   <bn-tab label="{{'Buy ' + symbols[0] }}" barColor="#4BF5C6">
     <ng-template #content>
       <ng-container *ngTemplateOutlet="formTemplate; context: {type: 'buy'}"></ng-container>
