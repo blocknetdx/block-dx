@@ -54,12 +54,12 @@ export class FilledOrdersComponent extends BaseComponent implements OnInit {
       .subscribe(openorders => {
         this.zone.run(() => {
           this.filledorders = openorders
-            .filter(o => o.status === OrderStates.Finished || 
-                        o.status === OrderStates.Canceled || 
-                        o.status === OrderStates.Expired || 
-                        o.status === OrderStates.Offline || 
-                        o.status === OrderStates.Invalid || 
-                        o.status === OrderStates.RolledBack)
+            .filter(o => o.status === OrderStates.Finished ||
+              o.status === OrderStates.Canceled ||
+              o.status === OrderStates.Expired ||
+              o.status === OrderStates.Offline ||
+              o.status === OrderStates.Invalid ||
+              o.status === OrderStates.RolledBack)
             .map((o) => {
               o['row_class'] = o.side;
               return o;
@@ -101,7 +101,7 @@ export class FilledOrdersComponent extends BaseComponent implements OnInit {
   }
 
   calculatePairPrice(total, size) {
-    //return math.round(math.divide(total, size),6);
+    // return math.round(math.divide(total, size),6);
     return math.divide(total, size).toFixed(6);
   }
 
@@ -114,6 +114,38 @@ export class FilledOrdersComponent extends BaseComponent implements OnInit {
     } else {
       return '#fff';
     }
+  }
+
+  onRowContextMenu({ row, clientX, clientY }) {
+
+    const order = row;
+
+    const { Menu } = window.electron.remote;
+    const { clipboard, ipcRenderer } = window.electron;
+
+    const menuTemplate = [];
+
+    const { symbols } = this;
+    const { maker, taker } = order;
+
+    if(!symbols.includes(maker) || !symbols.includes(taker)) {
+      menuTemplate.push({
+        label: 'View Market',
+        click: () => {
+          ipcRenderer.send('setKeyPair', [maker, taker]);
+        }
+      });
+    }
+
+    menuTemplate.push({
+      label: 'View Details',
+      click: () => {
+        ipcRenderer.send('openMyOrderDetailsWindow', order.id);
+      }
+    });
+
+    const menu = Menu.buildFromTemplate(menuTemplate);
+    menu.popup({x: clientX, y: clientY});
   }
 
 }

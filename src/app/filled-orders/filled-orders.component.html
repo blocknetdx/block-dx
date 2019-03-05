@@ -1,9 +1,12 @@
-<app-table [rows]="filledorders">
+<app-table
+  [rows]="filledorders"
+  [selectable]="true"
+  (onRowContextMenu)="onRowContextMenu($event)">
 
   <app-table-column [prop]="'price'" [classList]="'col'" maxWidth="36px">
     <ng-template columnHeader>Type</ng-template>
     <ng-template let-row="row" columnCell>
-      <span class="bn-number filled-order-table-font" 
+      <span class="bn-number filled-order-table-font no-highlight"
             [title]="row.simpleStatus()"
             [class.color-red]="row.side == 'sell'"
             [class.color-green]="row.side == 'buy'"
@@ -14,21 +17,21 @@
   <app-table-column [classList]="'col d-none d-sm-block'" maxWidth="80px">
     <ng-template columnHeader>Market</ng-template>
     <ng-template let-row="row" columnCell>
-      <span class="filled-order-table-font" [title]="row.simpleStatus()">{{row.taker}}/{{row.maker}}</span>
+      <span class="filled-order-table-font no-highlight" [title]="row.simpleStatus()">{{row.taker}}/{{row.maker}}</span>
     </ng-template>
   </app-table-column>
 
   <app-table-column [prop]="'size'" [classList]="'col'">
     <ng-template columnHeader>Amount</ng-template>
     <ng-template let-row="row" columnCell>
-      <span class="bn-number filled-order-table-font" [title]="row.simpleStatus()" [innerHtml]="row.size | blockCurrency:symbols[0]:'6'"></span> <span class="padded-token filled-order-table-font" [title]="row.simpleStatus()" [innerHTML]="padToken(row.taker)"></span>
+      <span class="bn-number filled-order-table-font no-highlight" [title]="row.simpleStatus()" [innerHtml]="row.size | blockCurrency:symbols[0]:'6'"></span> <span class="padded-token filled-order-table-font no-highlight" [title]="row.simpleStatus()" [innerHTML]="padToken(row.taker)"></span>
     </ng-template>
   </app-table-column>
 
   <app-table-column [prop]="'price'" [classList]="'col'">
     <ng-template columnHeader>Price</ng-template>
     <ng-template let-row="row" columnCell>
-      <span class="bn-number filled-order-table-font" [title]="row.simpleStatus()" [innerHtml]="calculatePairPrice(row.total, row.size) | blockCurrency:symbols[1]:'6'"></span> <span class="padded-token filled-order-table-font" [title]="row.simpleStatus()" [innerHTML]="padToken(row.maker)"></span>
+      <span class="bn-number filled-order-table-font no-highlight" [title]="row.simpleStatus()" [innerHtml]="calculatePairPrice(row.total, row.size) | blockCurrency:symbols[1]:'6'"></span> <span class="padded-token filled-order-table-font no-highlight" [title]="row.simpleStatus()" [innerHTML]="padToken(row.maker)"></span>
     </ng-template>
   </app-table-column>
 
@@ -42,14 +45,14 @@
   <app-table-column [prop]="'price'" [classList]="'col'">
     <ng-template columnHeader>Total</ng-template>
     <ng-template let-row="row" columnCell>
-      <span class="bn-number filled-order-table-font" [title]="row.simpleStatus()" [innerHtml]="row.total | blockCurrency:symbols[1]:'6'"></span> <span class="padded-token filled-order-table-font" [title]="row.simpleStatus()" [innerHTML]="padToken(row.maker)"></span>
+      <span class="bn-number filled-order-table-font no-highlight" [title]="row.simpleStatus()" [innerHtml]="row.total | blockCurrency:symbols[1]:'6'"></span> <span class="padded-token filled-order-table-font no-highlight" [title]="row.simpleStatus()" [innerHTML]="padToken(row.maker)"></span>
     </ng-template>
   </app-table-column>
 
   <app-table-column [prop]="'created_at'" [classList]="'col d-none d-sm-block'">
     <ng-template columnHeader>Created</ng-template>
     <ng-template let-row="row" columnCell>
-      <span class="filled-order-table-font" [title]="row.simpleStatus()">{{row.datetimeFormat()}}</span>
+      <span class="filled-order-table-font no-highlight" [title]="row.simpleStatus()">{{row.datetimeFormat()}}</span>
     </ng-template>
   </app-table-column>
 

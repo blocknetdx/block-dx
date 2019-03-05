@@ -33,7 +33,7 @@ ipcMain.on('getAppVersion', e => {
 
 let appWindow, serverLocation, sn, keyPair, storage, user, password, port, info, pricingSource, pricingUnit, apiKeys,
   pricingFrequency, enablePricing, sendPricingMultipliers, clearPricingInterval, setPricingInterval,
-  sendMarketPricingEnabled, metaPath, macMetaBackupPath, availableUpdate;
+  sendMarketPricingEnabled, metaPath, macMetaBackupPath, availableUpdate, tradeHistory, myOrders;
 let updateError = false;
 
 // Handle explicit quit
@@ -121,6 +121,96 @@ require('electron-context-menu')();
 // Only allow one application instance to be open at a time
 const isSecondInstance = app.makeSingleInstance(() => {});
 if(isSecondInstance) app.quit();
+
+const openOrderDetailsWindow = details => {
+
+  let height;
+  if(process.platform === 'win32') {
+    height = isDev ? 680 : 662;
+  } else if(process.platform === 'darwin') {
+    height = 645;
+  } else { // Linux
+    height = 645;
+  }
+
+  const detailsWindow = new BrowserWindow({
+    show: false,
+    width: 800,
+    height,
+    parent: appWindow
+  });
+  if(isDev) {
+    detailsWindow.loadURL(`file://${path.join(__dirname, 'src', 'order-details.html')}`);
+  } else {
+    detailsWindow.loadURL(`file://${path.join(__dirname, 'dist', 'order-details.html')}`);
+  }
+  detailsWindow.once('ready-to-show', () => {
+    detailsWindow.show();
+  });
+
+  if(isDev) {
+    const menuTemplate = [];
+    menuTemplate.push({
+      label: 'Window',
+      submenu: [
+        { label: 'Show Dev Tools', role: 'toggledevtools' }
+      ]
+    });
+    const windowMenu = Menu.buildFromTemplate(menuTemplate);
+    detailsWindow.setMenu(windowMenu);
+  } else if(platform === 'win32') {
+    detailsWindow.setMenu(null);
+  }
+
+  ipcMain.once('getOrderDetails', async function(e) {
+    e.returnValue = details;
+  });
+
+};
+
+const formatDate = isoStr => moment(isoStr).format('HH:mm:ss MMM D, YYYY');
+
+ipcMain.on('openOrderDetailsWindow', async function(e, orderId) {
+  const order = await sn.dxGetOrder(orderId);
+  openOrderDetailsWindow([
+    ['ID', order.id],
+    ['Maker', order.maker],
+    ['Maker Size', order.makerSize],
+    ['Taker', order.taker],
+    ['Taker Size', order.takerSize],
+    ['Updated At', formatDate(order.updatedAt)],
+    ['Created At', formatDate(order.createdAt)],
+    ['Status', order.status]
+  ]);
+});
+ipcMain.on('openMyOrderDetailsWindow', async function(e, orderId) {
+  const order = myOrders.find(o => o.id === orderId) || {};
+  const details = [
+    ['ID', order.id],
+    ['Maker', order.maker],
+    ['Maker Size', order.makerSize],
+    ['Maker Address', order.makerAddress],
+    ['Taker', order.taker],
+    ['Taker Size', order.takerSize],
+    ['Taker Address', order.takerAddress],
+    ['Updated At', formatDate(order.updatedAt)],
+    ['Created At', formatDate(order.createdAt)],
+    ['Status', order.status]
+  ];
+  openOrderDetailsWindow(details);
+});
+ipcMain.on('openOrderHistoryDetailsWindow', async function(e, orderId) {
+  const order = tradeHistory.find(o => o.id === orderId) || {};
+  const details = [
+    ['ID', order.id],
+    ['Time', formatDate(order.time)],
+    ['Maker', order.maker],
+    ['Maker Size', order.makerSize],
+    ['Taker', order.taker],
+    ['Taker Size', order.takerSize]
+  ];
+  openOrderDetailsWindow(details);
+});
 
 let updateAvailableWindowOpen = false;
 
@@ -647,7 +737,7 @@ const openAppWindow = () => {
   ipcMain.on('getOrderBook', () => sendOrderBook(true));
   setInterval(sendOrderBook, stdInterval);
 
-  let tradeHistory = [];
+  tradeHistory = [];
   const sendTradeHistory = force => {
     if (isTokenPairValid(keyPair))
       sn.dxGetOrderFills(keyPair[0], keyPair[1])
@@ -659,7 +749,7 @@ const openAppWindow = () => {
         })
         .catch(handleError);
   };
-  ipcMain.on('sendTradeHistory', () => sendTradeHistory(true));
+  ipcMain.on('getTradeHistory', () => sendTradeHistory(true));
   setInterval(sendTradeHistory, stdInterval);
 
   const sendLocalTokens = async function() {
@@ -684,7 +774,7 @@ const openAppWindow = () => {
     sendLocalTokens();
   }, 15000);
 
-  let myOrders = [];
+  myOrders = [];
   const sendMyOrders = force => {
     sn.dxGetMyOrders()
       .then(res => {

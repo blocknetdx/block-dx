@@ -60,3 +60,7 @@ body {
 .notransition {
   transition: none !important;
 }
+
+.no-highlight::selection {
+  background-color: inherit;
+}
