@@ -41,7 +41,8 @@
                        [value]="model.amount"
                        class="form-control" name="amount" id="amount"
                        type="text" pattern="\d+" inputmode="numeric"
-                       placeholder="{{formatNumber('0',symbols[0])}}" />
+                       placeholder="{{formatNumberSymbol0}}"
+                       tabindex="0" />
                 <span class="input-group-addon">{{symbols[0]}}</span>
               </div>
             </div>
@@ -52,7 +53,7 @@
                 <input (keyup)="calcPrice($event)"
                        class="form-control" name="limit" id="limit"
                        type="number" step="0.000001" pattern="\d+" inputmode="numeric"
-                       placeholder="{{formatNumber('0',symbols[1])}}" />
+                       placeholder="{{formatNumberSymbol1}}" />
                 <span class="input-group-addon">{{symbols[1]}}</span>
               </div>
             </div>
@@ -67,7 +68,8 @@
                        [value]="model.price"
                        class="form-control" name="amount" id="price"
                        type="text" pattern="\d+" inputmode="numeric"
-                       placeholder="{{formatNumber('0',symbols[1])}}" />
+                       placeholder="{{formatNumberSymbol1}}"
+                       tabindex="0" />
                 <span class="input-group-addon">{{symbols[1]}}</span>
               </div>
             </div>
@@ -82,15 +84,16 @@
                        placeholder="N/A" />
                 <input #amountInput
                        *ngIf="pricingAvailable"
-                       [disabled]="!pricing.canGetPrice(symbols[1])"
+                       [disabled]="!pricingAvailable"
                        (keyup)="secondPriceChanged($event)"
                        (onchange)="secondPriceChanged($event)"
                        (blur)="onNumberInputBlur($event, 'secondPrice')"
-                       [value]="pricingAvailable && pricing.canGetPrice(symbols[1]) ? model.secondPrice : ''"
-                       [class.order-form-total-input]="!pricing.canGetPrice(symbols[1])"
+                       [value]="pricingAvailable ? model.secondPrice : ''"
+                       [class.order-form-total-input]="!pricingAvailable"
                        class="form-control" name="amount" id="price2"
                        type="text" pattern="\d+" inputmode="numeric"
-                       [placeholder]="!pricing.canGetPrice(symbols[1]) ? 'N/A' : formatNumber('0', symbols[1])" />
+                       [placeholder]="!pricingAvailable ? 'N/A' : formatNumberSymbol1"
+                       tabindex="0" />
                 <span class="input-group-addon">{{pricing ? pricing.in : ''}}</span>
               </div>
             </div>
@@ -102,8 +105,10 @@
                        class="form-control order-form-total-input"
                        name="total" id="total_calc" type="text"
                        step="0.000001" pattern="\d+" inputmode="numeric"
-                       placeholder="{{formatNumber('0',symbols[1])}}"
-                       [value]="model.totalPrice" readonly />
+                       placeholder="{{formatNumberSymbol1}}"
+                       [value]="model.totalPrice"
+                       tabindex="-1"
+                       readonly />
                 <span class="input-group-addon">{{symbols[1]}}</span>
               </div>
             </div>
@@ -118,6 +123,7 @@
                        (onchange)="makerAddressChanged($event)"
                        [value]="model.makerAddress"
                        pattern="\w+"
+                       tabindex="0"
                        required />
               </div>
             </div>
@@ -132,6 +138,7 @@
                        (onchange)="takerAddressChanged($event)"
                        [value]="model.takerAddress"
                        pattern="\w+"
+                       tabindex="0"
                        required />
               </div>
             </div>
@@ -143,7 +150,7 @@
                        style="padding-right:16px;"
                        name="total" id="js-order-id" type="text"
                        [value]="model.id || 'N/A'"
-                       readonly />
+                       tabindex="-1" readonly />
               </div>
             </div>
 
@@ -161,7 +168,7 @@
                 *ngIf="type == 'buy'"
                 type="submit"
                 class="order-form-button order-form-buy-button"
-                [disabled]="disableSubmit ? true : false">
+                [disabled]="disableSubmit">
                 <i class="material-icons">add</i>
                 {{model.id ? 'Accept' : 'Place Buy'}} Order
               </button>
@@ -170,7 +177,7 @@
                 *ngIf="type == 'sell'"
                 type="submit"
                 class="order-form-button order-form-sell-button"
-                [disabled]="disableSubmit ? true : false">
+                [disabled]="disableSubmit">
                 <i class="material-icons">remove</i>
                 {{model.id ? 'Accept' : 'Place Sell'}} Order
               </button>

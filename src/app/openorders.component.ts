@@ -21,12 +21,17 @@ math.config({
   styleUrls: ['./open-orders.component.scss']
 })
 export class OpenordersComponent extends BaseComponent implements OnInit {
+  OrderStates: typeof OrderStates = OrderStates;
+
   public openorders: Openorder[];
   public selectable: boolean;
   public pricing: Pricing;
   public pricingEnabled = false;
   public pricingAvailable = false;
   public longestTokenLength: number;
+
+  private _hashPadToken = {};
+  public get hashPadToken(): object { return this._hashPadToken; }
 
   private _symbols: string[] = [];
   public get symbols(): string[] { return this._symbols; }
@@ -48,9 +53,9 @@ export class OpenordersComponent extends BaseComponent implements OnInit {
       .takeUntil(this.$destroy)
       .subscribe((symbols) => {
         this.zone.run(() => {
-          if(symbols) {
+          if (symbols)
             this.symbols = symbols;
-          }
+          this.updatePricingAvailable(this.pricing ? this.pricing.enabled : false);
         });
       });
 
@@ -76,6 +81,11 @@ export class OpenordersComponent extends BaseComponent implements OnInit {
             }, [])
             .sort((a, b) => a.length === b.length ? 0 : a.length > b.length ? -1 : 1);
           this.longestTokenLength = tokens.length > 0 ? tokens[0].length : 0;
+          // Calc padding
+          orders.forEach(order => {
+            this._hashPadToken[order.maker] = this.padToken(order.maker);
+            this._hashPadToken[order.taker] = this.padToken(order.taker);
+          });
         });
       });
 
@@ -92,7 +102,7 @@ export class OpenordersComponent extends BaseComponent implements OnInit {
       .subscribe(pricing => {
         this.zone.run(() => {
           this.pricing = pricing;
-          this.pricingAvailable = pricing.enabled;
+          this.updatePricingAvailable(pricing.enabled);
         });
       });
     this.pricingService.getPricingEnabled()
@@ -105,21 +115,20 @@ export class OpenordersComponent extends BaseComponent implements OnInit {
 
   }
 
+  updatePricingAvailable(enabled: boolean) {
+    this.pricingAvailable = enabled;
+    if (this.openorders && this.openorders.length > 0 && this.pricing)
+      this.openorders.forEach(order => {
+        order.updatePricingAvailable(enabled, this.pricing);
+      });
+  }
+
   cancelOrder(order) {
     const { electron } = window;
     order.canceled = true;
     order['row_class'] = 'canceled';
     electron.ipcRenderer
       .send('cancelOrder', order.id);
-  }
-
-  prepareNumber(num) {
-    return math.round(num, 6);
-  }
-
-  cancelable(state) {
-    return ![OrderStates.Finished, OrderStates.Canceled, OrderStates.Created,
-      OrderStates.RollbackFailed, OrderStates.RolledBack].includes(state);
   }
 
   padToken(token) {
@@ -139,7 +148,7 @@ export class OpenordersComponent extends BaseComponent implements OnInit {
 
     const menuTemplate = [];
 
-    if(this.cancelable(order.status)) {
+    if (order.cancelable) {
       menuTemplate.push({
         label: 'Cancel Order',
         click: () => {

@@ -69,15 +69,14 @@ export class TradehistoryService {
 
               const side = h.maker === keyPair[0] ? 'buy' : 'sell';
 
-              return {
+              return Trade.fromObject({
                 time: h.time || new Date().toISOString(),
                 trade_id: h.id,
                 price: side === 'buy' ? h.takerSize : h.makerSize,
                 size: side === 'buy' ? h.makerSize : h.takerSize,
                 side
-              };
-            })
-            .map(t => Trade.fromObject(t));
+              });
+            });
 
           const totalTradeSize = p.reduce((acc, curr) => {
             // return acc + parseFloat(curr.size);

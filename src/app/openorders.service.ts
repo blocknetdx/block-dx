@@ -16,17 +16,10 @@ import * as OrderStates from '../orderstates';
 
 @Injectable()
 export class OpenordersService {
-  private openordersUrl = '';
 
   constructor(private http: Http) { }
 
   private ordersObservable: Observable<Openorder[]>;
-
-  private calculatePrice(order) {
-    const makerSize = Number(order.makerSize);
-    const takerSize = Number(order.takerSize);
-    return math.divide(takerSize, makerSize);
-  }
 
   getOpenorders(): Observable<Openorder[]> {
 
@@ -35,37 +28,25 @@ export class OpenordersService {
         try {
 
           window.electron.ipcRenderer.on('myOrders', (e, orders, symbols) => {
-            // console.log('myOrders', orders);
-
-            // Test Data Generator
+            // // Test Data Generator
+            // orders = [];
             // const getRandom = (min, max) => Math.random() * (max - min) + min;
-            // const newOrders = [];
             // for(let i = 0; i < 30; i++) {
             //   const price = getRandom(1, 4);
             //   const size = getRandom(1, 4);
             //   const status = i % 2 === 0 ? 'open' : OrderStates.Finished;
             //   const side = i % 3 === 0 ? 'sell' : 'buy';
-            //   newOrders.push(Openorder.createOpenOrder({
+            //   orders.push({
             //       id: `order${i}`,
             //       maker: side === 'buy' ? symbols[0] : symbols[1],
             //       taker: side === 'buy' ? symbols[1] : symbols[0],
             //       price,
-            //       size,
-            //       total: String(math.multiply(price, Number(size))),
-            //       product_id: '',
-            //       side,
-            //       stp: '',
+            //       makerSize: String(size),
+            //       takerSize: String(math.multiply(price, size)),
             //       type: 'exact',
-            //       time_in_force: '',
-            //       post_only: '',
-            //       created_at: new Date().toISOString(),
-            //       fill_fees: '',
-            //       filledSize: '',
-            //       executed_value: '',
+            //       createdAt: new Date().toISOString(),
             //       status,
-            //       settled: status === OrderStates.Finished,
-            //       canceled: false
-            //     }));
+            //     });
             // }
 
             const newOrders = orders

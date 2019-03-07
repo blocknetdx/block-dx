@@ -20,12 +20,17 @@ math.config({
   styleUrls: ['./filled-orders.component.scss']
 })
 export class FilledOrdersComponent extends BaseComponent implements OnInit {
+  OrderStates: typeof OrderStates = OrderStates;
+
   public symbols: string[] = [];
   public filledorders: Openorder[];
   public pricing: Pricing;
   public pricingEnabled = false;
   public pricingAvailable = false;
   public longestTokenLength: number;
+
+  private _hashPadToken = {};
+  public get hashPadToken(): object { return this._hashPadToken; }
 
   constructor(
     private appService: AppService,
@@ -38,7 +43,11 @@ export class FilledOrdersComponent extends BaseComponent implements OnInit {
     this.appService.marketPairChanges
       .takeUntil(this.$destroy)
       .subscribe((symbols) => {
-        this.symbols = symbols;
+        this.zone.run(() => {
+          if (symbols)
+            this.symbols = symbols;
+          this.updatePricingAvailable(this.pricing ? this.pricing.enabled : false);
+        });
     });
     // this.openorderService.getOpenorders()
     //   .then((filledorders) => {
@@ -70,7 +79,11 @@ export class FilledOrdersComponent extends BaseComponent implements OnInit {
             }, [])
             .sort((a, b) => a.length === b.length ? 0 : a.length > b.length ? -1 : 1);
           this.longestTokenLength = tokens.length > 0 ? tokens[0].length : 0;
-          // console.log('filledorders', this.filledorders);
+          // Calc padding
+          this.filledorders.forEach(order => {
+            this._hashPadToken[order.maker] = this.padToken(order.maker);
+            this._hashPadToken[order.taker] = this.padToken(order.taker);
+          });
         });
       });
 
@@ -90,6 +103,14 @@ export class FilledOrdersComponent extends BaseComponent implements OnInit {
         });
     });
 
+  }
+
+  updatePricingAvailable(enabled: boolean) {
+    this.pricingAvailable = enabled;
+    if (this.filledorders && this.filledorders.length > 0 && this.pricing)
+      this.filledorders.forEach(order => {
+        order.updatePricingAvailable(enabled, this.pricing);
+      });
   }
 
   padToken(token) {

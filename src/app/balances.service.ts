@@ -18,16 +18,19 @@ export class BalancesService {
       this.balancesObservable = Observable.create(observer => {
         ipcRenderer.on('balances', (e, balances) => {
           let wallet;
-          const preppedBalances = balances
-            .filter(e => {
-              if (e.coin === 'Wallet')
-                wallet = e;
-              return e.coin !== 'Wallet';
+          let preppedBalances = balances
+            .filter(c => {
+              if (c.coin === 'Wallet')
+                wallet = c;
+              return c.coin !== 'Wallet';
             })
-            .sort((a, b) => a.coin.localeCompare(b.coin))
-            .map(b => Balance.fromObject(b));
+            .sort((a, b) => a.coin.localeCompare(b.coin));
+
           if (wallet)
             preppedBalances.splice(0, 0, wallet);
+
+          // Instantiate Balance obj
+          preppedBalances = preppedBalances.map(b => Balance.fromObject(b));
           observer.next(preppedBalances);
         });
         ipcRenderer.send('getBalances');

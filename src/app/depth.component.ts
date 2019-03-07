@@ -23,6 +23,7 @@ export class DepthComponent implements AfterViewInit, OnChanges, OnDestroy {
   public topChart: any;
   public bottomChart: any;
   public orderbook:any[] = [];
+  public lastPrice: string;
 
   @ViewChild('topChartContainer')
   public topChartContainer: ElementRef;
@@ -40,11 +41,7 @@ export class DepthComponent implements AfterViewInit, OnChanges, OnDestroy {
     private numberFormatPipe: NumberFormatPipe,
   ) {}
 
-  private calculateTotal(price, size) {
-    return math.round(math.multiply(price, size), 6);
-  }
-
-  public formatMMP(val) {
+  static formatMMP(val): string {
     const price = parseFloat(val);
     const formattedPrice =  (
         (price >= 100000000) ? price.toFixed(0) :
@@ -56,16 +53,25 @@ export class DepthComponent implements AfterViewInit, OnChanges, OnDestroy {
         (price >= 100) ? price.toFixed(6) :
         (price >= 10) ? price.toFixed(7) :
         (price < 10) ? price.toFixed(8) :
-        price);
+        String(price));
     return formattedPrice;
   }
 
+  private calculateTotal(price, size) {
+    return math.round(math.multiply(price, size), 6);
+  }
+
   ngAfterViewInit() {
+    const { zone } = this;
+
     this.subscriptions.push(this.appService.marketPairChanges.subscribe((symbols) => {
       this.symbols = symbols;
     }));
     this.subscriptions.push(this.currentpriceService.currentprice.subscribe((cp) => {
-      this.currentPrice = cp;
+      zone.run(() => {
+        this.currentPrice = cp;
+        this.lastPrice = DepthComponent.formatMMP(this.currentPrice.last);
+      });
     }));
     this.subscriptions.push(this.orderbookService.getOrderbook()
       .subscribe(orderbook => {

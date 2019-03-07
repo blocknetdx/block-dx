@@ -51,8 +51,8 @@
   <div class="navbar-pricing" *ngIf="currentPrice">
 
     <div class="navbar-pricing__cell">
-      <div class="navbar-pricing__upper"
-        innerHtml="{{currentPrice.last | blockCurrency:symbols[1]:8}}<span class='d-none d-sm-inline'> {{symbols[1]}}</span>">
+      <div class="navbar-pricing__upper">
+        {{currentPrice.last | blockCurrency:symbols[1]:8}}<span class='d-none d-sm-inline'> {{symbols[1]}}</span>
       </div>
       <div class="navbar-pricing__lower">Last trade <span class="d-none d-sm-inline">price</span></div>
     </div>

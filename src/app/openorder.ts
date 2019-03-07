@@ -1,5 +1,8 @@
-import * as moment from 'moment';
 import * as OrderStates from '../orderstates';
+import { Pricing } from './pricing';
+
+import * as moment from 'moment';
+import * as math from 'mathjs';
 
 export class Openorder {
   id: string;
@@ -21,9 +24,49 @@ export class Openorder {
   canceled: boolean;
   maker: string;
   taker: string;
+  pricingAvailable: boolean;
+  formattedDate: string;
+  formattedDateDay: string;
+  formattedDateToday: string;
+  displayDate: string;
+  displaySize: number;
+  displayPrice: number;
+  displayAPIPrice: number;
+  displayTotal: number;
+  displayStatus: string;
+  cancelable: boolean;
 
-  public formattedDate() {
-    return moment(this.created_at).format('MMM DD HH:mm');
+  constructor(props: any) {
+    Object.assign(this, props);
+    if (this.created_at) {
+      this.formattedDate = moment(this.created_at).format('MMM DD HH:mm');
+      this.formattedDateDay = moment(this.created_at).format('MMM DD');
+      this.formattedDateToday = moment(this.created_at).format('HH:mm:ss');
+      this.displayDate = this.datetimeFormat();
+    }
+    this.displaySize = Openorder.prepareNumber(parseFloat(this.size));
+    this.displayPrice = Openorder.prepareNumber(this.price);
+    this.displayTotal = Openorder.prepareNumber(parseFloat(this.total));
+    this.displayStatus = this.simpleStatus();
+    this.cancelable = Openorder.cancelable(this.status);
+  }
+
+  static createOpenOrder(props: any): Openorder {
+    return new Openorder(props);
+  }
+
+  static prepareNumber(num: number): number {
+    return math.round(num, 6);
+  }
+
+  static cancelable(state) {
+    return ![OrderStates.Finished, OrderStates.Canceled, OrderStates.Created,
+      OrderStates.RollbackFailed, OrderStates.RolledBack].includes(state);
+  }
+
+  public updatePricingAvailable(available: boolean, pricing: Pricing) {
+    this.pricingAvailable = available && pricing.canGetPrice(this.maker);
+    this.displayAPIPrice = Openorder.prepareNumber(pricing.getPrice(this.price, this.maker));
   }
 
   public simpleStatus() {
@@ -61,22 +104,16 @@ export class Openorder {
   public isRollbackFailed() { return this.status === OrderStates.RollbackFailed; }
   public isCanceled()       { return this.status === OrderStates.Canceled; }
 
-  
+
   public datetimeFormat() {
-    //datetime format: 2019-01-18T21:18:05.005537Z
-    var datetime = this.created_at;
-    if (moment(new Date()).format('MMM DD')==moment(datetime).format('MMM DD')) {
+    // datetime format: 2019-01-18T21:18:05.005537Z
+    if (moment(new Date()).format('MMM DD') === this.formattedDateDay) {
       // if today, show hr:min:s:ms format
-      return moment(datetime).format('HH:mm:ss');
+      return this.formattedDateToday;
     } else {
       // if not today, show month-day-hr:min format
-      return moment(datetime).format('MMM DD HH:mm');
+      return this.formattedDate;
     }
-  }
-
-  static createOpenOrder(props: any): Openorder {
-    const instance = new Openorder();
-    return Object.assign(instance, props);
   }
 
 }
