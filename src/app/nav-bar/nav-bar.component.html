@@ -52,9 +52,9 @@
 
     <div class="navbar-pricing__cell">
       <div class="navbar-pricing__upper">
-        {{currentPrice.last | blockCurrency:symbols[1]:8}}<span class='d-none d-sm-inline'> {{symbols[1]}}</span>
+        <span class="d-none d-sm-inline" [innerHTML]="currentPrice.last | blockCurrency:symbols[1]:'8'"></span><span class="d-none d-sm-inline"> {{symbols[1]}}</span>
       </div>
-      <div class="navbar-pricing__lower">Last trade <span class="d-none d-sm-inline">price</span></div>
+      <div class="navbar-pricing__lower">Last trade price</div>
     </div>
 
     <div class="navbar-pricing__cell twentyfourprice--">
@@ -66,7 +66,7 @@
 
     <div class="navbar-pricing__cell twentyfourvol--">
       <div class="navbar-pricing__upper">{{currentPrice._volume < 1 ? (currentPrice.volume | numberFormat : "1.8-8") : (currentPrice.volume | numberFormat : "1.0-0")}}<span class="d-none d-sm-inline"> {{symbols[0]}}</span></div>
-      <div class="navbar-pricing__lower">24 hour vol<span class="d-none d-sm-inline">ume</span></div>
+      <div class="navbar-pricing__lower">24 hour volume</div>
     </div>
   </div>
 
