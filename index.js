@@ -725,7 +725,7 @@ const openAppWindow = () => {
   };
   const sendOrderBook = force => {
     if (isTokenPairValid(keyPair))
-      sn.dxGetOrderBook3(keyPair[0], keyPair[1])
+      sn.dxGetOrderBook3(keyPair[0], keyPair[1], 250)
         .then(res => {
           if(force === true || JSON.stringify(res) !== JSON.stringify(orderBook)) {
             orderBook = res;
