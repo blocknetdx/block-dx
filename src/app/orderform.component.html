@@ -36,7 +36,7 @@
               <div class="col-8">
                 <input #amountInput
                        (keyup)="amountChanged($event)"
-                       (onchange)="amountChanged($event)"
+                       (paste)="amountChanged($event)"
                        (blur)="onNumberInputBlur($event, 'amount')"
                        [value]="model.amount"
                        class="form-control" name="amount" id="amount"
@@ -62,7 +62,7 @@
               <div class="col-8">
                 <input #amountInput
                        (keyup)="priceChanged($event)"
-                       (onchange)="priceChanged($event)"
+                       (paste)="priceChanged($event)"
                        (blur)="onNumberInputBlur($event, 'price')"
                        [value]="model.price"
                        class="form-control" name="amount" id="price"
@@ -84,7 +84,7 @@
                        *ngIf="pricingAvailable"
                        [disabled]="!pricing.canGetPrice(symbols[1])"
                        (keyup)="secondPriceChanged($event)"
-                       (onchange)="secondPriceChanged($event)"
+                       (paste)="secondPriceChanged($event)"
                        (blur)="onNumberInputBlur($event, 'secondPrice')"
                        [value]="pricingAvailable && pricing.canGetPrice(symbols[1]) ? model.secondPrice : ''"
                        [class.order-form-total-input]="!pricing.canGetPrice(symbols[1])"
@@ -115,7 +115,7 @@
                        style="padding-right:16px;"
                        name="total" id="js-maker-address" type="text"
                        (keyup)="makerAddressChanged($event)"
-                       (onchange)="makerAddressChanged($event)"
+                       (change)="makerAddressChanged($event)"
                        [value]="model.makerAddress"
                        pattern="\w+"
                        required />
@@ -129,7 +129,7 @@
                        style="padding-right:16px;"
                        name="total" id="js-taker-address" type="text"
                        (keyup)="takerAddressChanged($event)"
-                       (onchange)="takerAddressChanged($event)"
+                       (change)="takerAddressChanged($event)"
                        [value]="model.takerAddress"
                        pattern="\w+"
                        required />
