@@ -2,70 +2,28 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
-import { WebSocketService } from './web-socket.service';
-
 @Injectable()
 export class AppService {
 
-  public marketPairChanges: BehaviorSubject<string[]> = new BehaviorSubject(null);
+  public marketPairChanges: BehaviorSubject<string[]>;
 
-  constructor(private wsService: WebSocketService) {
+  constructor() {
 
-    this.marketPairChanges = Observable.create(observer => {
-      try {
+    const { ipcRenderer } = window.electron;
 
-        window.electron.ipcRenderer.on('keyPair', (e, pair) => {
-          observer.next(pair);
-        });
+    const initialPair = ipcRenderer.sendSync('getKeyPairSync');
+    this.marketPairChanges = new BehaviorSubject(initialPair);
 
-        window.electron.ipcRenderer.send('getKeyPair');
-
-      } catch(err) {
-        console.error(err);
-      }
+    ipcRenderer.on('keyPair', (e, pair) => {
+      this.marketPairChanges.next(pair);
     });
 
-    // this.wsService.connect('wss://ws-feed.gdax.com')
-    //   .subscribe((data) => {
-    //     if (data.type) {
-    //       if (data.type === 'open') {
-    //         this.wsService.socket.next({
-    //           type: "subscribe",
-    //           product_ids: [
-    //             "ETH-USD",
-    //           ],
-    //           "channels": [
-    //             "level2",
-    //             "heartbeat",
-    //           ]
-    //         });
-    //
-    //         setTimeout(() => {
-    //           this.wsService.socket.next({
-    //             type: "unsubscribe",
-    //             product_ids: [
-    //               "ETH-USD",
-    //             ],
-    //             "channels": [
-    //               "level2",
-    //               "heartbeat",
-    //             ]
-    //           });
-    //         }, 1000);
-    //
-    //       } else if (data.type === 'message') {
-    //         const d = JSON.parse(data.data);
-    //         // console.log(d.type);
-    //         if (d.type === 'subscriptions') {
-    //           console.log(d);
-    //         }
-    //       }
-    //     }
-    //   }, (e) => console.log('error', e));
+    ipcRenderer.send('getKeyPair');
   }
 
   public updateMarketPair(pair: string[]) {
-    window.electron.ipcRenderer.send('setKeyPair', pair);
-    // this.marketPairChanges.next(pair);
+    const { ipcRenderer } = window.electron;
+    ipcRenderer.send('setKeyPair', pair);
   }
+
 }

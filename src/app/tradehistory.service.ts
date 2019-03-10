@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Headers, Http } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
-import * as rx from 'rxjs/Rx';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import * as math from 'mathjs';
 
 math.config({
@@ -17,15 +16,16 @@ declare var electron: any;
 
 @Injectable()
 export class TradehistoryService {
-  // private tradehistoryUrl = '';  // URL to web api
-  // private tradehistoryUrl = 'https://api-public.sandbox.gdax.com/products/BTC-USD/trades';
 
-  constructor(private http: Http) { }
+  private tradeHistoryObservable: BehaviorSubject<Trade[]>;
+
+  constructor() { }
 
   getTradehistory(): Observable<Trade[]> {
-    // this.tradehistoryUrl = 'api/tradehistory_' + symbols.join('_');
 
-    return rx.Observable.create(observer => {
+    if(!this.tradeHistoryObservable) {
+
+      this.tradeHistoryObservable = new BehaviorSubject([]);
 
       // Test Data Generator
       // try {
@@ -53,71 +53,49 @@ export class TradehistoryService {
       //       .multiply(100)
       //       .done();
       //   }
-      //   observer.next(p);
+      //   this.tradeHistoryObservable.next(p);
       // } catch(err) {
       //   console.error(err);
       // }
 
-      try {
+      electron.ipcRenderer.on('tradeHistory', (e, tradeHistory, keyPair) => {
 
-        electron.ipcRenderer.on('tradeHistory', (e, tradeHistory, keyPair) => {
+        const p = tradeHistory
+          .map(h => {
 
-          // console.log('tradehistory', tradeHistory);
+            const side = h.maker === keyPair[0] ? 'buy' : 'sell';
 
-          const p = tradeHistory
-            .map(h => {
-
-              const side = h.maker === keyPair[0] ? 'buy' : 'sell';
-
-              return Trade.fromObject({
-                time: h.time || new Date().toISOString(),
-                trade_id: h.id,
-                price: side === 'buy' ? h.takerSize : h.makerSize,
-                size: side === 'buy' ? h.makerSize : h.takerSize,
-                side
-              });
+            return Trade.fromObject({
+              time: h.time || new Date().toISOString(),
+              trade_id: h.id,
+              price: side === 'buy' ? h.takerSize : h.makerSize,
+              size: side === 'buy' ? h.makerSize : h.takerSize,
+              side
             });
+          });
 
-          const totalTradeSize = p.reduce((acc, curr) => {
-            // return acc + parseFloat(curr.size);
-            return math.add(acc, parseFloat(curr.size));
-          }, 0);
+        const totalTradeSize = p.reduce((acc, curr) => {
+          // return acc + parseFloat(curr.size);
+          return math.add(acc, parseFloat(curr.size));
+        }, 0);
 
-          for(const trade of p) {
-            // trade.percent = (parseFloat(trade.size) / totalTradeSize) * 100;
-            trade.percent = math
-              .chain(parseFloat(trade.size))
-              .divide(totalTradeSize)
-              .multiply(100)
-              .done();
-          }
+        for(const trade of p) {
+          // trade.percent = (parseFloat(trade.size) / totalTradeSize) * 100;
+          trade.percent = math
+            .chain(parseFloat(trade.size))
+            .divide(totalTradeSize)
+            .multiply(100)
+            .done();
+        }
 
-          observer.next(p);
+        this.tradeHistoryObservable.next(p);
 
-        });
+      });
 
-        electron.ipcRenderer.send('getTradeHistory');
+      electron.ipcRenderer.send('getTradeHistory');
+    }
+    return this.tradeHistoryObservable;
 
-      } catch(err) {
-        console.error(err);
-      }
-
-    });
-
-    // return this.http.get(this.tradehistoryUrl)
-    //   .map((res) => {
-    //     let p = res.json().map(data => Trade.fromObject(data));
-    //
-    //     const totalTradeSize = p.reduce((acc, curr) => {
-    //       return acc + parseFloat(curr.size);
-    //     }, 0);
-    //
-    //     p.forEach(trade => {
-    //       trade.percent = (parseFloat(trade.size)/totalTradeSize)*100;
-    //     });
-    //
-    //     return p;
-    //   });
   }
 
   private handleError(error: any): Promise<any> {
