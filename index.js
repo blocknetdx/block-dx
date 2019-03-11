@@ -428,11 +428,13 @@ const openConfigurationWindow = (options = {}) => {
   });
 
   ipcMain.removeAllListeners('saveDXData');
-  ipcMain.on('saveDXData', (e, dxUser, dxPassword, dxPort) => {
+  ipcMain.on('saveDXData', (e, dxUser, dxPassword, dxPort, dxIP) => {
+    console.log('dxIP', dxIP);
     storage.setItems({
       user: dxUser,
       password: dxPassword,
-      port: dxPort
+      port: dxPort,
+      blocknetIP: dxIP
     }, true);
     e.returnValue = true;
   });
@@ -498,6 +500,9 @@ const openSettingsWindow = (options = {}) => {
   ipcMain.on('getPort', e => {
     e.returnValue = storage.getItem('port') || '';
   });
+  ipcMain.on('getBlocknetIP', e => {
+    e.returnValue = storage.getItem('blocknetIP') || '';
+  });
   ipcMain.on('getUser', e => {
     e.returnValue = storage.getItem('user') || '';
   });
@@ -517,7 +522,7 @@ const openSettingsWindow = (options = {}) => {
   const settingsWindow = new BrowserWindow({
     show: false,
     width: 500,
-    height: platform === 'win32' ? 575 : platform === 'darwin' ? 560 : 535,
+    height: platform === 'win32' ? 640 : platform === 'darwin' ? 625 : 600,
     parent: appWindow
   });
   if(isDev) {
@@ -1212,6 +1217,7 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
     user = storage.getItem('user');
     password = storage.getItem('password');
     port = storage.getItem('port');
+    let ip = storage.getItem('blocknetIP');
 
     pricingSource = storage.getItem('pricingSource');
     if(!pricingSource) {
@@ -1254,6 +1260,11 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
       storage.setItem('port', port);
     }
 
+    if(!ip) {
+      ip = '127.0.0.1';
+      storage.setItem('blocknetIP', ip);
+    }
+
     try {
       const sha = await confController.getSha();
       const oldSha = storage.getItem('confRepoSha') || '';
@@ -1281,7 +1292,7 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
       return;
     }
 
-    sn = new ServiceNodeInterface(user, password, `http://${platform === 'linux' ? '127.0.0.1' : 'localhost'}:${port}`);
+    sn = new ServiceNodeInterface(user, password, `http://${ip}:${port}`);
 
     await new Promise(resolve => setTimeout(resolve, 2000));
 
