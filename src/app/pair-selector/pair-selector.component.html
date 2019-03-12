@@ -61,21 +61,6 @@
       [deselectOnBlur]="false"
       (onRowSelect)="onRowSelect($event)">
 
-      <bn-table-info *ngIf="coinAValid">
-        <ng-template #tableInfo>
-          <div class="row first-coin-info">
-            <div class="col-4 align-left uppercase"><b>{{formatRow(model.coinA)}}</b></div>
-            <div class="col-4"><b>{{model.coinA.last}}</b></div>
-            <div class="col-4">
-              <span [class.color-red]="model.coinA.change < 0" [class.color-green]="model.coinA.change > 0">{{model.coinA.change | percent:'1.2-2'}}</span>
-              <img *ngIf="model.coinA.change > 0" class="my-icon" aria-label="My icon" src="assets/icons/arrow-diagonal-up.svg">
-              <img *ngIf="model.coinA.change < 0" class="my-icon" aria-label="My icon" src="assets/icons/arrow-diagonal-down.svg">
-            </div>
-          </div>
-          <hr>
-        </ng-template>
-      </bn-table-info>
-
       <app-table-column [prop]="'symbol'" [classList]="'col-3 align-left'">
         <ng-template columnHeader>Ticker</ng-template>
         <ng-template let-row="row" columnCell>
