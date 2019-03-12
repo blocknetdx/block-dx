@@ -1076,7 +1076,7 @@ const openAppWindow = () => {
     }
   });
 
-  ipcMain.on('getTokenPair', e => {
+  ipcMain.on('getKeyPairSync', e => {
     e.returnValue = keyPair;
   });
 
