@@ -37,13 +37,15 @@ export class OrderformComponent implements OnInit {
   public model: any;
   public addresses: {};
   public disableSubmit = false;
-  public Number = Number;
 
   public amountPopperText: string;
   public amountPopperShow = false;
 
   public totalPopperText: string;
   public totalPopperShow = false;
+
+  public formatNumberSymbol0: string; // defaults for gui (see resetModel)
+  public formatNumberSymbol1: string;
 
   // number limits for order amount and total in order form
   private upperLimit = 9;
@@ -69,7 +71,6 @@ export class OrderformComponent implements OnInit {
 
     this.appService.marketPairChanges.subscribe((symbols) => {
       this.symbols = symbols;
-      // this.model = {};
       this.resetModel();
     });
     this.currentpriceService.currentprice.subscribe((cp) => {
@@ -97,7 +98,7 @@ export class OrderformComponent implements OnInit {
     this.pricingService.getPricing().subscribe(pricing => {
       this.zone.run(() => {
         this.pricing = pricing;
-        this.pricingAvailable = pricing.enabled;
+        this.updatePricingAvailable(pricing.enabled);
       });
     });
     this.pricingService.getPricingEnabled().subscribe(enabled => {
@@ -109,6 +110,10 @@ export class OrderformComponent implements OnInit {
     this.orderTypes = [
       { value: 'exact', viewValue: 'Exact Order'}
     ];
+  }
+
+  updatePricingAvailable(enabled: boolean) {
+    this.pricingAvailable = enabled && this.pricing.canGetPrice(this.symbols[1]);
   }
 
   fixAmount(numStr: string): string {
@@ -327,6 +332,8 @@ export class OrderformComponent implements OnInit {
       makerAddress: this.addresses[this.symbols[0]] || '',
       takerAddress: this.addresses[this.symbols[1]] || ''
     };
+    this.formatNumberSymbol0 = this.formatNumber('0', this.symbols[0]);
+    this.formatNumberSymbol1 = this.formatNumber('0', this.symbols[1]);
   }
 
   validateNumber(numStr = '') {

@@ -1,11 +1,9 @@
 import { Component, OnInit, Input, NgZone } from '@angular/core';
 import * as math from 'mathjs';
-import * as moment from 'moment';
 
 import { AppService } from './app.service';
 import { Trade } from './trade';
 import { TradehistoryService } from './tradehistory.service';
-import { NumberFormatPipe } from './pipes/decimal.pipe';
 import { PricingService } from './pricing.service';
 import { Pricing } from './pricing';
 
@@ -75,26 +73,6 @@ export class TradehistoryComponent implements OnInit {
         this.pricingEnabled = enabled;
       });
     });
-  }
-
-  calculatePairPrice(total, size) {
-    // return math.round(math.divide(total, size),6);
-    return math.divide(total, size).toFixed(6);
-  }
-
-  prepareNumber(num) {
-    return math.round(num, 6);
-  }
-
-  datetimeFormat(datetime) {
-    // datetime format: 2019-01-18T21:18:05.005537Z
-    if (moment(new Date()).format('MMM DD')==moment(datetime).format('MMM DD')) {
-      // if today, show hr:min:s:ms format
-      return moment(datetime).format('HH:mm:ss');
-    } else {
-      // if not today, show month-day-hr:min format
-      return moment(datetime).format('MMM DD HH:mm');
-    }
   }
 
   onRowContextMenu({ row, clientX, clientY }) {

@@ -5,7 +5,8 @@ export class NumberFormatPipe implements PipeTransform {
   transform(num: string = '0', format: string): string {
     num = String(num);
     const formatPatt = /(\d+)\.(\d+)-(\d+)/;
-    if(!formatPatt.test(format)) throw new Error('Invalid format sent to decimal pipe.');
+    if(!formatPatt.test(format))
+      throw new Error('Invalid format sent to decimal pipe.');
     const matches = format.match(formatPatt);
     const intMin = parseInt(matches[1], 10);
     const decMin = parseInt(matches[2], 10);

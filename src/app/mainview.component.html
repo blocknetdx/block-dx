@@ -6,14 +6,14 @@
     <div class="sidebar col-lg">
       <div class="trade_table row">
 
-          <bn-card class="trade_table__cell balances col-lg-12" [class.alternate-pricing]="pricingEnabled ? true : false" [allowFullscreen]="false">
+          <bn-card class="trade_table__cell balances col-lg-12" [class.alternate-pricing]="pricingEnabled" [allowFullscreen]="false">
             <bn-card-title>Balances</bn-card-title>
             <bn-card-body>
               <app-balances></app-balances>
             </bn-card-body>
           </bn-card>
 
-          <bn-card class="trade_table__cell orderform col-lg-12" [class.alternate-pricing]="pricingEnabled ? true : false" [allowFullscreen]="false">
+          <bn-card class="trade_table__cell orderform col-lg-12" [class.alternate-pricing]="pricingEnabled" [allowFullscreen]="false">
             <bn-card-title>Order Form</bn-card-title>
             <bn-card-body>
               <app-orderform></app-orderform>

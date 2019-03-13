@@ -1,4 +1,5 @@
 import * as math from 'mathjs';
+import * as _ from 'lodash';
 import { PricingItem } from './pricing-item';
 
 math.config({
@@ -8,10 +9,10 @@ math.config({
 
 export class Pricing {
 
-  private items: PricingItem[] = [];
-
   public enabled: boolean;
   public in: string;
+
+  private readonly hash: Map<string, PricingItem>;
 
   constructor(items: PricingItem[]) {
     const preppedItems = items
@@ -23,44 +24,37 @@ export class Pricing {
         });
         return pricing;
       });
-    this.items = preppedItems;
-    this.enabled = preppedItems.length > 0 ? true : false;
+    this.enabled = preppedItems.length > 0;
     this.in = preppedItems.length > 0 ? preppedItems[0].base: '';
+
+    // Build hash lookup
+    this.hash = new Map();
+    preppedItems.forEach(item => { this.hash.set(item.coin, item); });
   }
 
   public canGetPrice(token: string): boolean {
-    try {
-      const item = this.items.find(i => i.coin === token);
-      return item.multiplier === undefined ? false: true;
-    } catch(err) {
+    if (!this.hash.has(token))
       return false;
-    }
+    const item = this.hash.get(token);
+    return !_.isNil(item.multiplier);
   }
 
-  public getPrice(amount: number, token: string): any {
-    try {
-      const item = this.items.find(i => i.coin === token);
-      if(item) {
-        return math.multiply(amount, item.multiplier);
-      } else {
-        return 0;
-      }
-    } catch(err) {
+  public getPrice(amount: number, token: string): number {
+    if (!this.hash.has(token))
       return 0;
-    }
+    const item = this.hash.get(token);
+    if (_.isNil(item.multiplier))
+      return 0;
+    return math.multiply(amount, item.multiplier);
   }
 
-  public getFromBasePrice(amount: number, token: string): any {
-    try {
-      const item = this.items.find(i => i.coin === token);
-      if(item) {
-        return math.divide(amount, item.multiplier);
-      } else {
-        return 0;
-      }
-    } catch(err) {
+  public getFromBasePrice(amount: number, token: string): number {
+    if (!this.hash.has(token))
       return 0;
-    }
+    const item = this.hash.get(token);
+    if (_.isNil(item.multiplier))
+      return 0;
+    return math.divide(amount, item.multiplier);
   }
 
 }

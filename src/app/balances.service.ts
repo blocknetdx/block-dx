@@ -1,40 +1,42 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { Balance } from './balance';
 
 @Injectable()
 export class BalancesService {
 
-  private balancesObservable: Observable<Balance[]>;
+  private balancesObservable: BehaviorSubject<Balance[]>;
 
   constructor() { }
 
-  public getBalances(): Observable<Balance[]> {
-
-    const { ipcRenderer } = window.electron;
-
+  public getBalances(): BehaviorSubject<Balance[]> {
     if(!this.balancesObservable) {
-      this.balancesObservable = Observable.create(observer => {
-        ipcRenderer.on('balances', (e, balances) => {
-          let wallet;
-          const preppedBalances = balances
-            .filter(e => {
-              if (e.coin === 'Wallet')
-                wallet = e;
-              return e.coin !== 'Wallet';
-            })
-            .sort((a, b) => a.coin.localeCompare(b.coin))
-            .map(b => Balance.fromObject(b));
-          if (wallet)
-            preppedBalances.splice(0, 0, wallet);
-          observer.next(preppedBalances);
-        });
-        ipcRenderer.send('getBalances');
+
+      const { ipcRenderer } = window.electron;
+
+      this.balancesObservable = new BehaviorSubject([]);
+
+      ipcRenderer.on('balances', (e, balances) => {
+        let wallet;
+        let preppedBalances = balances
+          .filter(c => {
+            if (c.coin === 'Wallet')
+              wallet = c;
+            return c.coin !== 'Wallet';
+          })
+          .sort((a, b) => a.coin.localeCompare(b.coin));
+
+        if (wallet)
+          preppedBalances.splice(0, 0, wallet);
+
+        // Instantiate Balance obj
+        preppedBalances = preppedBalances.map(b => Balance.fromObject(b));
+        this.balancesObservable.next(preppedBalances);
       });
+      ipcRenderer.send('getBalances');
     }
     return this.balancesObservable;
-
   }
 
 }

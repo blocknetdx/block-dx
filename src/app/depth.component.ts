@@ -1,6 +1,7 @@
-import { Component, OnInit, AfterViewInit, OnChanges, NgZone, Input, ElementRef, ViewChild } from '@angular/core';
-import * as $ from 'jquery';
+import { Component, OnInit, AfterViewInit, OnChanges, NgZone, Input, ElementRef, ViewChild, OnDestroy } from '@angular/core';
+
 import * as math from 'mathjs';
+import * as _ from 'lodash';
 
 import { AppService } from './app.service';
 import { OrderbookService } from './orderbook.service';
@@ -15,12 +16,14 @@ declare var AmCharts;
   templateUrl: './depth.component.html',
   styleUrls: ['./depth.component.scss']
 })
-export class DepthComponent implements AfterViewInit, OnChanges {
+export class DepthComponent implements AfterViewInit, OnChanges, OnDestroy {
   public symbols:string[] = [];
   public currentPrice: Currentprice;
   public currentPriceCSSPercentage = 0;
-  public chart: any;
+  public topChart: any;
+  public bottomChart: any;
   public orderbook:any[] = [];
+  public lastPrice: string;
 
   @ViewChild('topChartContainer')
   public topChartContainer: ElementRef;
@@ -28,19 +31,17 @@ export class DepthComponent implements AfterViewInit, OnChanges {
   @ViewChild('bottomChartContainer')
   public bottomChartContainer: ElementRef;
 
+  private subscriptions = [];
+
   constructor(
     private zone: NgZone,
     private appService: AppService,
     private currentpriceService: CurrentpriceService,
     private orderbookService: OrderbookService,
-    private numberFormatPipe: NumberFormatPipe
+    private numberFormatPipe: NumberFormatPipe,
   ) {}
 
-  private calculateTotal(price, size) {
-    return math.round(math.multiply(price, size), 6);
-  }
-
-  public formatMMP(val) {
+  static formatMMP(val): string {
     const price = parseFloat(val);
     const formattedPrice =  (
         (price >= 100000000) ? price.toFixed(0) :
@@ -52,18 +53,27 @@ export class DepthComponent implements AfterViewInit, OnChanges {
         (price >= 100) ? price.toFixed(6) :
         (price >= 10) ? price.toFixed(7) :
         (price < 10) ? price.toFixed(8) :
-        price);
+        String(price));
     return formattedPrice;
   }
 
+  private calculateTotal(price, size) {
+    return math.round(math.multiply(price, size), 6);
+  }
+
   ngAfterViewInit() {
-    this.appService.marketPairChanges.subscribe((symbols) => {
+    const { zone } = this;
+
+    this.subscriptions.push(this.appService.marketPairChanges.subscribe((symbols) => {
       this.symbols = symbols;
-    });
-    this.currentpriceService.currentprice.subscribe((cp) => {
-      this.currentPrice = cp;
-    });
-    this.orderbookService.getOrderbook()
+    }));
+    this.subscriptions.push(this.currentpriceService.currentprice.subscribe((cp) => {
+      zone.run(() => {
+        this.currentPrice = cp;
+        this.lastPrice = DepthComponent.formatMMP(this.currentPrice.last);
+      });
+    }));
+    this.subscriptions.push(this.orderbookService.getOrderbook()
       .subscribe(orderbook => {
 
         // Function to process (sort and calculate cummulative volume)
@@ -144,19 +154,66 @@ export class DepthComponent implements AfterViewInit, OnChanges {
           .reduce((count, obj) => Object.keys(obj).includes('bidstotalvolume') ? count + 1 : count, 0);
         this.currentPriceCSSPercentage = (bidCount / res.length) * 100;
 
-        this.runDepthChart();
+        this.updateDepthChart();
 
-      });
+      }));
+
+    this.makeChart();
   }
 
   ngOnChanges() {
     // this.runDepthChart();
   }
 
-  runDepthChart(): void {
+  ngOnDestroy() {
+    this.subscriptions
+      .forEach(subscription => subscription.unsubscribe());
 
+    if (this.topChart)
+      this.topChart.clear();
+    if (this.bottomChart)
+      this.bottomChart.clear();
+  }
+
+  updateDepthChart() {
     const data = this.orderbook;
-    const { symbols } = this;
+    if (this.topChart) {
+      this.topChart.dataProvider = data.filter(obj => obj.askstotalvolume);
+      this.topChart.validateData();
+    }
+    if (this.bottomChart) {
+      this.bottomChart.dataProvider = data.filter(obj => obj.bidstotalvolume);
+      this.bottomChart.validateData();
+    }
+  }
+
+  makeChart(): void {
+
+    const balloon = (item, graph) => {
+      const { symbols } = this;
+      let txt;
+      if (graph.id === 'asks') {
+        txt = 'Ask: <strong>' + formatNumber(item.dataContext.value, graph.chart, 4) + ' ' + symbols[1] + '</strong><br />'
+          + 'Volume: <strong>' + formatNumber(item.dataContext.askstotalvolume, graph.chart, 4) + ' ' + symbols[0] + '</strong><br />'
+          + 'Sum: <strong>' + formatNumber(item.dataContext.sum, graph.chart, 4) + ' ' + symbols[1] + '</strong>';
+      } else {
+        txt = 'Bid: <strong>' + formatNumber(item.dataContext.value, graph.chart, 4) + ' ' + symbols[1] + '</strong><br />'
+          + 'Volume: <strong>' + formatNumber(item.dataContext.bidstotalvolume, graph.chart, 4) + ' ' + symbols[0] + '</strong><br />'
+          + 'Sum: <strong>' + formatNumber(item.dataContext.sum, graph.chart, 4) + ' ' + symbols[1] + '</strong>';
+      }
+      return txt;
+    };
+
+    const formatNumber = (val, chart, precision) => {
+      return AmCharts.formatNumber(
+        val,
+        {
+          precision: precision ? precision : chart.precision,
+          decimalSeparator: chart.decimalSeparator,
+          thousandsSeparator: chart.thousandsSeparator
+        }
+      );
+    };
 
     this.zone.runOutsideAngular(() => {
 
@@ -167,14 +224,16 @@ export class DepthComponent implements AfterViewInit, OnChanges {
       // }, 0);
 
       // Top chart
+      if (this.topChart)
+        this.topChart.clear();
 
-      this.chart = AmCharts.makeChart(this.topChartContainer.nativeElement, {
+      this.topChart = AmCharts.makeChart(this.topChartContainer.nativeElement, {
         'responsive': {
           'enabled': true
         },
         'type': 'serial',
         'theme': 'dark',
-        'dataProvider': data.filter(obj => obj.askstotalvolume ? true : false),
+        'dataProvider': [],
         'graphs': [
           {
             'id': 'asks',
@@ -278,14 +337,16 @@ export class DepthComponent implements AfterViewInit, OnChanges {
       });
 
       // Bottom Chart
+      if (this.bottomChart)
+        this.bottomChart.clear();
 
-      this.chart = AmCharts.makeChart(this.bottomChartContainer.nativeElement, {
+      this.bottomChart = AmCharts.makeChart(this.bottomChartContainer.nativeElement, {
         'responsive': {
           'enabled': true
         },
         'type': 'serial',
         'theme': 'dark',
-        'dataProvider': data.filter(obj => obj.bidstotalvolume ? true : false),
+        'dataProvider': [],
         'graphs': [
           // {
           //   'id': 'asks',
@@ -395,30 +456,6 @@ export class DepthComponent implements AfterViewInit, OnChanges {
 
       // console.log(this.chart);
 
-      function balloon(item, graph) {
-        let txt;
-        if (graph.id === 'asks') {
-          txt = 'Ask: <strong>' + formatNumber(item.dataContext.value, graph.chart, 4) + ' ' + symbols[1] + '</strong><br />'
-            + 'Volume: <strong>' + formatNumber(item.dataContext.askstotalvolume, graph.chart, 4) + ' ' + symbols[0] + '</strong><br />'
-            + 'Sum: <strong>' + formatNumber(item.dataContext.sum, graph.chart, 4) + ' ' + symbols[1] + '</strong>';
-        } else {
-          txt = 'Bid: <strong>' + formatNumber(item.dataContext.value, graph.chart, 4) + ' ' + symbols[1] + '</strong><br />'
-            + 'Volume: <strong>' + formatNumber(item.dataContext.bidstotalvolume, graph.chart, 4) + ' ' + symbols[0] + '</strong><br />'
-            + 'Sum: <strong>' + formatNumber(item.dataContext.sum, graph.chart, 4) + ' ' + symbols[1] + '</strong>';
-        }
-        return txt;
-      }
-
-      function formatNumber(val, chart, precision) {
-        return AmCharts.formatNumber(
-          val,
-          {
-            precision: precision ? precision : chart.precision,
-            decimalSeparator: chart.decimalSeparator,
-            thousandsSeparator: chart.thousandsSeparator
-          }
-        );
-      }
     });
 
     // this.zone.runOutsideAngular(() => {
