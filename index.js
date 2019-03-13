@@ -786,6 +786,14 @@ const openAppWindow = () => {
 
   const manifestData = getManifest();
   const availableTokens = new Set(manifestData.map(d => d.ticker));
+  const tokenNames = manifestData
+    .reduce((map, d) => {
+      return map.set(d.ticker, d.blockchain);
+    }, new Map());
+
+  ipcMain.on('getTokenName', (e, ticker) => {
+    e.returnValue = tokenNames.get(ticker) || ticker;
+  });
 
   const sendNetworkTokens = async function() {
     const networkTokens = await sn.dxGetNetworkTokens();
