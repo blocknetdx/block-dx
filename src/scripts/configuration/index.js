@@ -157,6 +157,7 @@ $(document).ready(() => {
   state.set('active', 'configuration1');
   state.set('generateCredentials', true);
   state.set('rpcPort', '41414');
+  state.set('rpcIP', '127.0.0.1');
 
   const checkForDataFolders = () => {
     const allWallets = state.get('wallets');
@@ -463,7 +464,9 @@ $(document).ready(() => {
                 .find(w => w.abbr === 'BLOCK');
               const { username, password } = block;
               const port = state.get('rpcPort');
-              ipcRenderer.sendSync('saveDXData', username, password, port);
+              const rpcIP = state.get('rpcIP');
+              alert(rpcIP);
+              ipcRenderer.sendSync('saveDXData', username, password, port, rpcIP);
               ipcRenderer.sendSync('saveSelected', [...selectedWalletsSet]);
               state.set('active', 'finalInstructions');
               state.set('sidebarSelected', 1);
@@ -618,6 +621,12 @@ $(document).ready(() => {
         .on('change', e => {
           const value = e.target.value.trim();
           state.set('rpcPort', value);
+        });
+      $('#js-rpcIP')
+        .off('change')
+        .on('change', e => {
+          const value = e.target.value.trim();
+          state.set('rpcIP', value);
         });
       $('#js-rpcUser')
         .off('change')

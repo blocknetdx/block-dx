@@ -17,6 +17,10 @@ const renderSettings3 = ({ state }) => {
               <label>Blocknet RPC Password</label>
               <input id="js-rpcPassword" type="text" value="${block.password}" />
             </div>
+            <div class="input-group">
+              <label>Blocknet IP</label>
+              <input id="js-rpcIP" type="text" value="${state.get('rpcIP')}" />
+            </div>
           </div>
           <div id="js-buttonContainer" class="button-container">
             <button id="js-backBtn" type="button" class="gray-button">BACK</button>
