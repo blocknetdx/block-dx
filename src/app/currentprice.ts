@@ -30,11 +30,13 @@ export class Currentprice {
     this._close = props.close;
     this._low = props.low;
     this._high = props.high;
-    this.priceDiff = math
-      .chain(this._close)
-      .divide(this._open)
-      .subtract(1)
-      .done();
+    if(this._close && this._open) {
+      this.priceDiff = math
+        .chain(this._close)
+        .divide(this._open)
+        .subtract(1)
+        .done();
+    }
     this.priceStatus = (this.priceDiff * 100) > 0 ? 'up' : 'down';
   }
 
