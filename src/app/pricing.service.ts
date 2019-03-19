@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
-import { Subject } from 'rxjs/Subject';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { Pricing } from './pricing';
 
 @Injectable()
 export class PricingService {
 
-  private pricingEnabledObservable: Subject<boolean>;
-  private pricingObservable: Subject<Pricing>;
+  private pricingEnabledObservable: BehaviorSubject<boolean>;
+  private pricingObservable: BehaviorSubject<Pricing>;
 
   constructor(private http: Http) { }
 
@@ -16,12 +16,12 @@ export class PricingService {
    * Returns if pricing is enabled or not
    * @returns {Observable<boolean>}
    */
-  public getPricingEnabled(): Subject<boolean> {
+  public getPricingEnabled(): BehaviorSubject<boolean> {
     if(!this.pricingEnabledObservable) {
 
       const { ipcRenderer } = window.electron;
 
-      this.pricingEnabledObservable = new Subject();
+      this.pricingEnabledObservable = new BehaviorSubject(false);
 
       ipcRenderer.on('marketPricingEnabled', (e, enabled) => {
         this.pricingEnabledObservable.next(enabled);
@@ -35,12 +35,12 @@ export class PricingService {
    * Returns pricing objects
    * @returns {Observable<Pricing[]>}
    */
-  public getPricing(): Subject<Pricing> {
+  public getPricing(): BehaviorSubject<Pricing> {
     if(!this.pricingObservable) {
 
       const { ipcRenderer } = window.electron;
 
-      this.pricingObservable = new Subject();
+      this.pricingObservable = new BehaviorSubject(new Pricing([]));
 
       ipcRenderer.on('pricingMultipliers', (e, items) => {
         const pricing = new Pricing(items);
