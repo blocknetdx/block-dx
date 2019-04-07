@@ -193,8 +193,7 @@
       $('.js-blocknetWalletLink').on('click', e => {
         e.preventDefault();
         const { openExternal } = window.electron.remote.shell;
-        // ToDo Add link location
-        // openExternal();
+        openExternal('https://github.com/BlocknetDX/blocknet/releases/latest');
       });
 
       $('form').on('submit', e => {

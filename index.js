@@ -321,9 +321,11 @@ ipcMain.on('checkForUpdates', e => {
   }
 });
 
+let configurationWindow;
+
 const openConfigurationWindow = (options = {}) => {
 
-  const { error } = options;
+  const { isFirstRun = false, error } = options;
 
   // const errorMessage = error ? 'There was a problem connecting to the Blocknet RPC server. What would you like to do?' : '';
   let errorTitle, errorMessage;
@@ -336,14 +338,14 @@ const openConfigurationWindow = (options = {}) => {
         break;
       default:
         errorTitle = 'Connection Error';
-        errorMessage = 'There was a problem connecting to the Blocknet wallet. What would you like to do?';
+        errorMessage = 'There was a problem connecting to the Blocknet wallet. Make sure the wallet has been configured, restarted, and is open and unlocked.';
     }
     console.log(errorMessage);
   } else {
     errorMessage = '';
   }
 
-  const configurationWindow = new BrowserWindow({
+  configurationWindow = new BrowserWindow({
     show: false,
     width: 1050,
     height: platform === 'win32' ? 708 : platform === 'darwin' ? 695 : 670,
@@ -377,6 +379,10 @@ const openConfigurationWindow = (options = {}) => {
   } else if(platform === 'darwin') {
     setAppMenu();
   }
+
+  ipcMain.on('isFirstRun', e => {
+    e.returnValue = isFirstRun;
+  });
 
   ipcMain.removeAllListeners('openSettingsWindow');
   ipcMain.on('openSettingsWindow', () => {
@@ -471,6 +477,9 @@ const openConfigurationWindow = (options = {}) => {
 
 };
 
+ipcMain.on('closeConfigurationWindow', e => {
+  configurationWindow.close();
+});
 ipcMain.on('quit', () => {
   app.quit();
 });
@@ -535,6 +544,13 @@ const openSettingsWindow = (options = {}) => {
     if(errorMessage) {
       settingsWindow.send('errorMessage', errorMessage);
     }
+    if(configurationWindow) {
+      try {
+        configurationWindow.close();
+      } catch(err) {
+        console.error(err);
+      }
+    }
   });
 
   if(isDev) {
@@ -552,6 +568,25 @@ const openSettingsWindow = (options = {}) => {
   }
 
 };
+
+ipcMain.on('setXbridgeConfPath', (e, p = '') => {
+  storage.setItem('xbridgeConfPath', p);
+});
+ipcMain.on('getXbridgeConfPath', (e) => {
+  e.returnValue = storage.getItem('xbridgeConfPath') || '';
+});
+ipcMain.on('getUser', e => {
+  e.returnValue = storage.getItem('user') || '';
+});
+ipcMain.on('getPassword', e => {
+  e.returnValue = storage.getItem('password') || '';
+});
+ipcMain.on('getPort', e => {
+  e.returnValue = storage.getItem('port') || '';
+});
+ipcMain.on('getBlocknetIP', e => {
+  e.returnValue = storage.getItem('blocknetIP') || '';
+});
 
 const openGeneralSettingsWindow = () => {
 
@@ -622,11 +657,11 @@ const openTOSWindow = (alreadyAccepted = false) => {
 
   let height;
   if(process.platform === 'win32') {
-    height = alreadyAccepted ? 660 : 735;
+    height = alreadyAccepted ? 670 : 745;
   } else if(process.platform === 'darwin') {
-    height = alreadyAccepted ? 645 : 720;
+    height = alreadyAccepted ? 655 : 730;
   } else {
-    height = alreadyAccepted ? 645 : 690;
+    height = alreadyAccepted ? 645 : 700;
   }
 
   const tosWindow = new BrowserWindow({
@@ -644,17 +679,7 @@ const openTOSWindow = (alreadyAccepted = false) => {
     tosWindow.show();
   });
 
-  if(isDev) {
-    const menuTemplate = [];
-    menuTemplate.push({
-      label: 'Window',
-      submenu: [
-        { label: 'Show Dev Tools', role: 'toggledevtools' }
-      ]
-    });
-    const windowMenu = Menu.buildFromTemplate(menuTemplate);
-    tosWindow.setMenu(windowMenu);
-  }
+  tosWindow.setMenu(null);
 };
 
 const openAppWindow = () => {
@@ -1126,10 +1151,6 @@ const openAppWindow = () => {
     openInformationWindow();
   });
 
-  ipcMain.on('openSettings', () => {
-    openSettingsWindow();
-  });
-
   ipcMain.on('openConfigurationWizard', () => {
     openConfigurationWindow();
   });
@@ -1139,6 +1160,10 @@ const openAppWindow = () => {
   });
 
 };
+
+ipcMain.on('openSettings', () => {
+  openSettingsWindow();
+});
 
 ipcMain.on('getPricingSource', e => {
   e.returnValue = pricingSource;
@@ -1173,6 +1198,14 @@ ipcMain.on('saveGeneralSettings', (e, s) => {
   sendPricingMultipliers();
   setPricingInterval();
   sendMarketPricingEnabled();
+});
+
+ipcMain.on('loadXBridgeConf', async function() {
+  try {
+    await sn.dxLoadXBridgeConf();
+  } catch(err) {
+    console.error(err);
+  }
 });
 
 const checkForUpdates = async function() {
@@ -1281,7 +1314,7 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
 
     if(!user || !password) {
       await onReady;
-      openConfigurationWindow();
+      openConfigurationWindow({isFirstRun: true});
       checkForUpdates();
       return;
     }
@@ -1346,8 +1379,8 @@ function isTokenPairValid(keyPair) {
 
 // check for version number. Minimum supported blocknet client version
 function versionCheck(version) {
-  if (version < 3120100) {
-    return {name: 'Unsupported Version', message: 'BLOCK DX requires Blocknet wallet version 3.12.1 or greater.'};
+  if (version < 3130000) {
+    return {name: 'Unsupported Version', message: 'BLOCK DX requires Blocknet wallet version 3.13.0 or greater.'};
   }
   return null;
 }

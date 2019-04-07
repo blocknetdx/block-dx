@@ -43,8 +43,8 @@ export class PairSelectorComponent implements OnInit, AfterViewInit {
   public coinAValid = false;
   public coinBValid = false;
 
-  private connectedTokensLabel = 'Connected Tokens';
-  private allTokensLabel = 'All Tokens';
+  private connectedTokensLabel = 'Connected Assets';
+  private allTokensLabel = 'All Assets';
 
   public get sections(): any[] {
     let arr;
