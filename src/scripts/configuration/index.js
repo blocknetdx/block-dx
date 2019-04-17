@@ -465,7 +465,6 @@ $(document).ready(() => {
               const { username, password } = block;
               const port = state.get('rpcPort');
               const rpcIP = state.get('rpcIP');
-              alert(rpcIP);
               ipcRenderer.sendSync('saveDXData', username, password, port, rpcIP);
               ipcRenderer.sendSync('saveSelected', [...selectedWalletsSet]);
               state.set('active', 'finalInstructions');

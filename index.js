@@ -8,7 +8,7 @@ const ServiceNodeInterface = require('./src-back/service-node-interface');
 const serve = require('electron-serve');
 const { autoUpdater } = require('electron-updater');
 const PricingInterface = require('./src-back/pricing-interface');
-const confController = require('./src-back/conf-controller');
+const ConfController = require('./src-back/conf-controller');
 const _ = require('lodash');
 
 const { app, BrowserWindow, Menu, ipcMain } = electron;
@@ -429,7 +429,6 @@ const openConfigurationWindow = (options = {}) => {
 
   ipcMain.removeAllListeners('saveDXData');
   ipcMain.on('saveDXData', (e, dxUser, dxPassword, dxPort, dxIP) => {
-    console.log('dxIP', dxIP);
     storage.setItems({
       user: dxUser,
       password: dxPassword,
@@ -1274,21 +1273,8 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
     }
 
     try {
-      const sha = await confController.getSha();
-      const oldSha = storage.getItem('confRepoSha') || '';
-      if(sha !== oldSha) {
-        const [ manifest, walletConfs, xbridgeConfs ] = await Promise.all([
-          confController.getManifest(),
-          confController.getWalletConfs(),
-          confController.getXbridgeConfs()
-        ]);
-        storage.setItems({
-          confRepoSha: sha,
-          manifest,
-          walletConfs,
-          xbridgeConfs
-        }, true);
-      }
+      const confController = new ConfController({ storage });
+      await confController.update();
     } catch(err) {
       console.error(err);
     }
