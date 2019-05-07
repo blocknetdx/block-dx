@@ -7,6 +7,8 @@ math.config({
   precision: 64
 });
 
+const { bignumber } = math;
+
 export class Pricing {
 
   public enabled: boolean;
@@ -45,7 +47,7 @@ export class Pricing {
     const item = this.hash.get(token);
     if (_.isNil(item.multiplier))
       return 0;
-    return math.multiply(amount, item.multiplier);
+    return math.multiply(bignumber(amount), bignumber(item.multiplier));
   }
 
   public getFromBasePrice(amount: number, token: string): number {
@@ -54,7 +56,7 @@ export class Pricing {
     const item = this.hash.get(token);
     if (_.isNil(item.multiplier))
       return 0;
-    return math.divide(amount, item.multiplier);
+    return math.divide(bignumber(amount), bignumber(item.multiplier));
   }
 
 }

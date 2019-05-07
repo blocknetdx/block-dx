@@ -14,6 +14,8 @@ math.config({
   precision: 64
 });
 
+const { bignumber } = math;
+
 declare var AmCharts;
 
 @Component({
@@ -63,7 +65,7 @@ export class DepthComponent implements AfterViewInit, OnChanges, OnDestroy {
   }
 
   private calculateTotal(price, size) {
-    return math.round(math.multiply(price, size), 6);
+    return math.round(math.multiply(bignumber(price), bignumber(size)), 6);
   }
 
   ngAfterViewInit() {
@@ -200,7 +202,7 @@ export class DepthComponent implements AfterViewInit, OnChanges, OnDestroy {
     if(topChartData.length === 0 && bottomChartData.length === 0) {
       midMarketPrice = 0;
     } else if(topChartData.length > 0 && bottomChartData.length > 0) {
-      midMarketPrice = math.divide(topChartData[topChartData.length - 1].value + bottomChartData[0].value, 2);
+      midMarketPrice = math.divide(bignumber(topChartData[topChartData.length - 1].value + bottomChartData[0].value), 2);
     } else if(topChartData.length > 0) {
       midMarketPrice = topChartData[0].value;
     } else {

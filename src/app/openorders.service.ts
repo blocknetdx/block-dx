@@ -10,6 +10,8 @@ math.config({
   precision: 64
 });
 
+const { bignumber } = math;
+
 import { Openorder } from './openorder';
 import * as OrderStates from '../orderstates';
 
@@ -66,7 +68,7 @@ export class OpenordersService {
               size = order.takerSize;
               total = order.makerSize;
             }
-            const price = math.divide(Number(total), Number(size));
+            const price = math.divide(bignumber(total), bignumber(size));
 
             return Openorder.createOpenOrder({
               id: order.id,

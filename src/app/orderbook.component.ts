@@ -17,6 +17,8 @@ math.config({
   precision: 64
 });
 
+const { bignumber } = math;
+
 @Component({
   selector: 'app-orderbook',
   templateUrl: './orderbook.component.html',
@@ -56,7 +58,7 @@ export class OrderbookComponent implements OnInit {
   ) { }
 
   static calculateTotal(row) {
-    return math.round(math.multiply(row[1], row[0]), 6);
+    return math.round(math.multiply(bignumber(row[1]), bignumber(row[0])), 6);
   }
 
   static scalePercentBar(size) {
@@ -104,8 +106,8 @@ export class OrderbookComponent implements OnInit {
 
           let spread;
           if(asks.length > 0 && bids.length > 0) {
-            const bestAsk = Number(asks[asks.length - 1][0]);
-            const bestBid = Number(bids[0][0]);
+            const bestAsk = bignumber(asks[asks.length - 1][0]);
+            const bestBid = bignumber(bids[0][0]);
             spread = String(math.subtract(bestAsk, bestBid));
           } else {
             spread = '';
@@ -165,7 +167,8 @@ export class OrderbookComponent implements OnInit {
     if(asks.length > 0 && bids.length > 0 && pricingEnabled && pricingAvailable && pricing) {
       const askPrice = pricing.getPrice(asks[asks.length - 1][0], symbols[1]);
       const bidPrice = pricing.getPrice(bids[0][0], symbols[1]);
-      this.pricingSpread = String(math.subtract(askPrice, bidPrice));
+      this.pricingSpread = String(math.subtract(bignumber(askPrice), bignumber(bidPrice)));
+      // console.log('pricingSpread', this.pricingSpread);
     } else {
       this.pricingSpread = '';
     }

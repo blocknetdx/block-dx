@@ -14,6 +14,8 @@ math.config({
   precision: 64
 });
 
+const { bignumber } = math;
+
 declare var electron: any;
 
 @Injectable()
@@ -89,8 +91,8 @@ export class OrderbookService {
         for(const ask of asks) {
           // ask.push((parseFloat(ask[1]) / totalAskSize) * 100);
           ask.push(math
-            .chain(parseFloat(ask[1]))
-            .divide(totalAskSize)
+            .chain(bignumber(ask[1]))
+            .divide(bignumber(totalAskSize))
             .multiply(100)
             .done()
           );
@@ -105,8 +107,8 @@ export class OrderbookService {
         for(const bid of bids) {
           // bid.push((parseFloat(bid[1]) / totalBidSize) * 100);
           bid.push(math
-            .chain(parseFloat(bid[1]))
-            .divide(totalBidSize)
+            .chain(bignumber(bid[1]))
+            .divide(bignumber(totalBidSize))
             .multiply(100)
             .done()
           );
