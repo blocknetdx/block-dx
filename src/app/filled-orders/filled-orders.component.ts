@@ -14,6 +14,8 @@ math.config({
   precision: 64
 });
 
+const { bignumber } = math;
+
 @Component({
   selector: 'bn-filled-orders',
   templateUrl: './filled-orders.component.html',
@@ -122,10 +124,8 @@ export class FilledOrdersComponent extends BaseComponent implements OnInit {
   }
 
   calculatePairPrice(total, size) {
-    // return math.round(math.divide(total, size),6);
-    return math.divide(total, size).toFixed(6);
+    return math.divide(bignumber(total), bignumber(size)).toFixed(6);
   }
-
 
   getStatusDotColor(status) {
     if([OrderStates.Finished].includes(status)) {

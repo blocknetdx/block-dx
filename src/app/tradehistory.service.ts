@@ -8,6 +8,8 @@ math.config({
   precision: 64
 });
 
+const { bignumber } = math;
+
 import 'rxjs/add/operator/toPromise';
 
 import { Trade } from './trade';
@@ -76,7 +78,7 @@ export class TradehistoryService {
 
         const totalTradeSize = p.reduce((acc, curr) => {
           // return acc + parseFloat(curr.size);
-          return math.add(acc, parseFloat(curr.size));
+          return math.add(bignumber(acc), bignumber(curr.size));
         }, 0);
 
         for(const trade of p) {
