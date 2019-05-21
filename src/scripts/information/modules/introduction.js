@@ -15,7 +15,7 @@ const renderIntroduction = () => {
           <div class="section-header-text">Connected Wallets</div><div class="section-header-line"></div>
         </div>
         <p>
-          Since trading is peer-to-peer, you must have the wallet of each token being traded installed, synced, and configured. Configuration was done when starting Block DX the first time, but you can reconfigure to add new wallets for trading using the Basic Setup menu link.
+          Since trading is peer-to-peer, you must have the wallet of each asset being traded installed, synced, and configured. Configuration was done when starting Block DX the first time, but you can reconfigure to add new wallets for trading using the Basic Setup menu link.
         </p>
       </div>
       <div class="section">
@@ -50,7 +50,7 @@ const renderIntroduction = () => {
           <div class="section-header-text">Inputs</div><div class="section-header-line"></div>
         </div>
         <p>
-          If you are taking an order where you are selling BLOCK, you need at least 1 or more inputs (UTXOs) to cover the amount of BLOCK being sold and 1 or more inputs (UTXOs) to cover the BLOCK trade fee. If placing multiple orders, you will need a separate set of inputs (UTXOs) that are not used in the previous orders placed. Splitting of tokens (creating inputs) can be done using the Coin Control functionality within the respective wallet.
+          If you are taking an order where you are selling BLOCK, you need at least 1 or more inputs (UTXOs) to cover the amount of BLOCK being sold and 1 or more inputs (UTXOs) to cover the BLOCK trade fee. If placing multiple orders, you will need a separate set of inputs (UTXOs) that are not used in the previous orders placed. Splitting of assets (creating inputs) can be done using the Coin Control functionality within the respective wallet.
         </p>
       </div>
       <div class="section">
@@ -66,7 +66,7 @@ const renderIntroduction = () => {
           <div class="section-header-text">Unlocked Wallet & Closing Wallet</div><div class="section-header-line"></div>
         </div>
         <p>
-          Since trading utilizes the Blocknet wallet and the wallet of the tokens being traded, these wallets must remain open and unlocked when trading. If the Blocknet wallet is closed, all orders will be canceled. If the Blocknet wallet is locked, all orders will fail. If the wallet of a token being traded is closed or locked, all orders for that token will fail. It is important to keep all wallets online until trades are fully completed.
+          Since trading utilizes the Blocknet wallet and the wallet of the assets being traded, these wallets must remain open and unlocked when trading. If the Blocknet wallet is closed, all orders will be canceled. If the Blocknet wallet is locked, all orders will fail. If the wallet of an asset being traded is closed or locked, all orders for that asset will fail. It is important to keep all wallets online until trades are fully completed.
         </p>
       </div>
       <div class="section">

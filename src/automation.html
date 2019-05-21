@@ -34,6 +34,8 @@
     .container {
       padding: 20px;
       padding-bottom: 10px;
+      display: flex;
+      flex-grow: 1;
     }
     .input-group {
       display: flex;
@@ -164,11 +166,12 @@
       flex-direction: row;
       flex-wrap: nowrap;
       justify-content: flex-start;
+      min-width: 100%;
     }
     .col1 {
       width: 300px;
       min-width: 300px;
-      height: 465px;
+      /*height: 465px;*/
       margin-top: 0;
       margin-bottom: 0;
       margin-left: 0;
@@ -181,8 +184,16 @@
     .col2 {
       flex-grow: 1;
       margin-left: 10px;
-      height: 475px;
-      max-height: 475px;
+      /*height: 475px;*/
+      /*max-height: 475px;*/
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+    }
+    .col2-no-margin {
+      flex-grow: 1;
+      /*height: 475px;*/
+      /*max-height: 475px;*/
       color: #fff;
       display: flex;
       flex-direction: column;
@@ -200,6 +211,38 @@
     .radio-icon {
       color: #339CFF;
       margin-right: 10px;
+    }
+    .check-icon {
+      color: #339CFF;
+      margin-right: 5px;
+    }
+    .select-all-outer-container {
+      margin-top: 0;
+      min-height: 25px;
+      margin-bottom: 10px;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: space-between;
+    }
+    .select-all-outer-container .text-danger {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+    .select-all-container {
+      margin-top: 0;
+      margin-bottom: 10px;
+      text-align: right;
+    }
+    .select-all-outer-container .select-all-container {
+      flex-grow: 1;
+      margin-top: 0;
+      margin-bottom: 0;
+      text-align: right;
+    }
+    .select-all-link {
+      color: #339CFF;
+      text-decoration: none;
     }
     .main-area {
       flex-grow: 1;
@@ -237,20 +280,35 @@
       border: 0;
       border-radius: 3px;
     }
-    a.blocknet-link {
-      color: #00C6FD;
+    a.text-link {
+      color: #0ce3ff;
+      opacity: 1;
     }
-    a.blocknet-link:hover {
-      color: #006afe;
+    a.text-link:hover {
+      color: #0ce3ff;
+      opacity: .8;
+    }
+    .tippy-tooltip.block-theme {
+      background-color: #eee;
+      color: #000;
+    }
+    .tippy-tooltip.block-theme a {
+      color: #0398a8;
+    }
+    .tippy-tooltip.block-theme[data-animatefill] {
+      background-color: transparent;
+    }
+    .tippy-tooltip.block-theme .tippy-backdrop {
+      background-color: #eee;
     }
 
   </style>
 
 </head>
 <body>
-<div style="width:100%; padding: 20px 0 20px 0; text-align:center;"><img style="max-width:300px;" src="assets/logo_full.svg" alt="Blocknet Logo"></div>
 
-<div id="js-main"></div>
+  <div id="js-mainHeaderContainer" style="width:100%; padding: 20px 0 20px 0; text-align:center;"><img style="max-width:300px;" src="assets/logo_full.svg" alt="Blocknet Logo"></div>
+  <div id="js-main" style="display:flex;flex-direction:column;flex-wrap:nowrap;justify-content:flex-start;overflow-y:hidden;"></div>
 
   <script type="text/javascript">
     window.electron = require('electron');
@@ -263,8 +321,12 @@
   <script>if (window.module) module = window.module;</script>
 
   <script type="text/javascript" src="assets/vendor/sweetalert2.js"></script>
+  <script src="https://unpkg.com/popper.js@1/dist/umd/popper.min.js"></script>
+  <script src="https://unpkg.com/tippy.js@4"></script>
 
-  <script type="text/javascript" src="./scripts/configuration/index.js"></script>
+  <script type="text/javascript">
+    require('./scripts/configuration/index');
+  </script>
 
 </body>
 </html>
