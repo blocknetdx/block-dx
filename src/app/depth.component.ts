@@ -295,7 +295,12 @@ export class DepthComponent implements AfterViewInit, OnChanges, OnDestroy {
         'balloon': {
           'textAlign': 'left',
           'disableMouseEvents': true,
-          'fixedPosition': false,
+          'fixedPosition': true,
+          'horizontalPadding': 5,
+          'verticalPadding': 2,
+          'borderThickness': 1,
+          'pointerWidth': 6,
+          'fontSize': 10,
           'fillAlpha': 1
         },
         'valueAxes': [
@@ -388,7 +393,12 @@ export class DepthComponent implements AfterViewInit, OnChanges, OnDestroy {
         'balloon': {
           'textAlign': 'left',
           'disableMouseEvents': true,
-          'fixedPosition': false,
+          'fixedPosition': true,
+          'horizontalPadding': 5,
+          'verticalPadding': 2,
+          'borderThickness': 1,
+          'pointerWidth': 3,
+          'fontSize': 10,
           'fillAlpha': 1
         },
         'valueAxes': [
