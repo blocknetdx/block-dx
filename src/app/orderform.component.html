@@ -32,8 +32,8 @@
 
 
             <div class="input-group row">
-              <label class="col-4 col-form-label" for="amount">Amount</label>
-              <div class="col-8">
+              <label class="col-5 col-form-label" for="amount">Amount</label>
+              <div class="col-7">
                 <input #amountInput
                        (keyup)="amountChanged($event)"
                        (paste)="amountChanged($event)"
@@ -48,8 +48,8 @@
             </div>
 
             <div class="input-group row" *ngIf="selectedOrderType == 'limit'">
-              <label class="col-4 col-form-label" for="limit">Limit Price</label>
-              <div class="col-8">
+              <label class="col-5 col-form-label" for="limit">Limit Price</label>
+              <div class="col-7">
                 <input (keyup)="calcPrice($event)"
                        class="form-control" name="limit" id="limit"
                        type="number" step="0.000001" pattern="\d+" inputmode="numeric"
@@ -59,8 +59,8 @@
             </div>
 
             <div class="input-group row">
-              <label class="col-4 col-form-label" for="amount">Price</label>
-              <div class="col-8">
+              <label class="col-5 col-form-label" for="amount">Price</label>
+              <div class="col-7">
                 <input #amountInput
                        (keyup)="priceChanged($event)"
                        (paste)="priceChanged($event)"
@@ -75,8 +75,8 @@
             </div>
 
             <div class="input-group row" *ngIf="pricingEnabled">
-              <label class="col-4 col-form-label" for="amount">Price</label>
-              <div class="col-8">
+              <label class="col-5 col-form-label" for="amount">Price</label>
+              <div class="col-7">
                 <input disabled
                        *ngIf="!pricingAvailable"
                        class="form-control"
@@ -99,8 +99,8 @@
             </div>
 
             <div class="input-group row">
-              <label class="col-4 col-form-label" for="total_calc">Total</label>
-              <div class="col-8">
+              <label class="col-5 col-form-label" for="total_calc">Total</label>
+              <div class="col-7">
                 <input #totalInput
                        class="form-control order-form-total-input"
                        name="total" id="total_calc" type="text"
@@ -114,8 +114,8 @@
             </div>
 
             <div class="input-group row">
-              <label class="col-4 col-form-label" for="js-maker-address">{{symbols[0]}} Address</label>
-              <div class="col-8">
+              <label class="col-5 col-form-label" for="js-maker-address">{{symbols[0]}} Address</label>
+              <div class="col-7">
                 <input class="form-control"
                        style="padding-right:16px;"
                        name="total" id="js-maker-address" type="text"
@@ -129,8 +129,8 @@
             </div>
 
             <div class="input-group row">
-              <label class="col-4 col-form-label" for="js-taker-address">{{symbols[1]}} Address</label>
-              <div class="col-8">
+              <label class="col-5 col-form-label" for="js-taker-address">{{symbols[1]}} Address</label>
+              <div class="col-7">
                 <input class="form-control"
                        style="padding-right:16px;"
                        name="total" id="js-taker-address" type="text"
@@ -144,8 +144,8 @@
             </div>
 
             <div class="input-group row">
-              <label class="col-4 col-form-label" for="js-order-id">Order ID</label>
-              <div class="col-8">
+              <label class="col-5 col-form-label" for="js-order-id">Order ID</label>
+              <div class="col-7">
                 <input class="form-control"
                        style="padding-right:16px;"
                        name="total" id="js-order-id" type="text"

@@ -26,6 +26,15 @@ app-table {
   }
 
   .arrow-icon {
-    padding-right: 5px;
+    padding-right: 8px;
+    margin-left: -6px;
+    margin-bottom: 2px;
+    font-size: 0.9rem;
+    width: auto;
+    height: 8px;
+
+    @media(max-width: 1255px) {
+      display:none;
+    }
   }
 }

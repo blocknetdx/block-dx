@@ -19,6 +19,15 @@ form {
   overflow: hidden;
 }
 
+#amount, #price, #total_calc {
+  padding-right: 52px !important;
+}
+.input-group-addon {
+  z-index: 1000;
+  background-color: $bn-blue-light4;
+  margin-top: 1px;
+  height: calc(100% - 2px);
+}
 .order-form-total-input {
   opacity: .5;
 }
