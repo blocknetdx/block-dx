@@ -251,7 +251,7 @@ export class PricechartComponent implements AfterViewInit, OnDestroy {
         'valueLineEnabled': true,
         'categoryBalloonDateFormat': 'MMM DD JJ:NN',
         'cursorPosition': 'mouse',
-        'valueLineBalloonEnabled': false
+        'valueLineBalloonEnabled': true
       },
       'categoryField': 'date',
       'categoryAxis': {
