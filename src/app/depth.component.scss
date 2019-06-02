@@ -41,6 +41,15 @@
     position: relative;
     width: calc(100% + 23px);
     height: calc(50% + 40px);
+
+    /*@media(max-height: 601px) {
+      top: 10px;
+      height: calc(50% + 22px);
+    }
+    @media(max-height: 328px) {
+      top: 20px;
+      height: calc(50% + 5px);
+    }*/
   }
 
   .bottom-chart-container {
@@ -50,6 +59,23 @@
     width: calc(100% + 23px);
     height: calc(50% + 20px);
     margin-top: -40px;
+
+    /*top: -40px;
+
+    @media(max-height: 669px) {
+      top: -30px;
+    }
+    @media(max-height: 601px) {
+      top: -13px;
+    }
+    @media(max-height: 335px) {
+      top: -5px;
+      height: calc(50% + 30px);
+    }
+    @media(max-height: 328px) {
+      top: 0px;
+      height: calc(50% + 30px);
+    }*/
   }
 
   .midmarket-price-container {

@@ -233,13 +233,13 @@ export class DepthComponent implements AfterViewInit, OnChanges, OnDestroy {
       const { symbols } = this;
       let txt;
       if (graph.id === 'asks') {
-        txt = 'Ask: <strong>' + formatNumber(item.dataContext.value, graph.chart, 4) + ' ' + symbols[1] + '</strong><br />'
-          + 'Volume: <strong>' + formatNumber(item.dataContext.askstotalvolume, graph.chart, 4) + ' ' + symbols[0] + '</strong><br />'
-          + 'Sum: <strong>' + formatNumber(item.dataContext.sum, graph.chart, 4) + ' ' + symbols[1] + '</strong>';
+        txt = 'Ask: <strong>' + formatNumber(item.dataContext.value, graph.chart, 6) + ' ' + symbols[1] + '</strong><br />'
+          + 'Volume: <strong>' + formatNumber(item.dataContext.askstotalvolume, graph.chart, 2) + ' ' + symbols[0] + '</strong><br />'
+          + 'Sum: <strong>' + formatNumber(item.dataContext.sum, graph.chart, 2) + ' ' + symbols[1] + '</strong>';
       } else {
-        txt = 'Bid: <strong>' + formatNumber(item.dataContext.value, graph.chart, 4) + ' ' + symbols[1] + '</strong><br />'
-          + 'Volume: <strong>' + formatNumber(item.dataContext.bidstotalvolume, graph.chart, 4) + ' ' + symbols[0] + '</strong><br />'
-          + 'Sum: <strong>' + formatNumber(item.dataContext.sum, graph.chart, 4) + ' ' + symbols[1] + '</strong>';
+        txt = 'Bid: <strong>' + formatNumber(item.dataContext.value, graph.chart, 6) + ' ' + symbols[1] + '</strong><br />'
+          + 'Volume: <strong>' + formatNumber(item.dataContext.bidstotalvolume, graph.chart, 2) + ' ' + symbols[0] + '</strong><br />'
+          + 'Sum: <strong>' + formatNumber(item.dataContext.sum, graph.chart, 2) + ' ' + symbols[1] + '</strong>';
       }
       return txt;
     };
