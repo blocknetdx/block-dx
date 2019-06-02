@@ -61,7 +61,7 @@
       [deselectOnBlur]="false"
       (onRowSelect)="onRowSelect($event)">
 
-      <app-table-column [prop]="'symbol'" [classList]="'col-3 align-left'">
+      <app-table-column [prop]="'symbol'" [classList]="'col-6 col-sm-3 align-left'">
         <ng-template columnHeader>Ticker</ng-template>
         <ng-template let-row="row" columnCell>
           <span class="coin-cell">
@@ -70,7 +70,7 @@
         </ng-template>
       </app-table-column>
 
-      <app-table-column [prop]="'name'" [classList]="'col-3 align-left d-none d-md-block'">
+      <app-table-column [prop]="'name'" [classList]="'col-6 col-sm-3 align-left d-md-block'">
         <ng-template columnHeader>Asset</ng-template>
         <ng-template let-row="row" columnCell>
           <span class="capitalize currency-cell">{{row.name}}</span>
