@@ -146,8 +146,9 @@ export class PricechartComponent implements AfterViewInit, OnDestroy {
         'negativeFillColors': '#FF7F71',
         'negativeLineColor': '#FF7F71',
         'openField': 'open',
-        'title': 'Price:',
         'type': 'candlestick',
+        'title': 'Price:',
+        'precision': 6,
         'connect': true,
         'columnWidth': 7,
         'showBalloon': false,
@@ -157,6 +158,7 @@ export class PricechartComponent implements AfterViewInit, OnDestroy {
       }, {
         'type': 'column',
         'title': 'High:',
+        'precision': 6,
         'columnWidth': 0,
         'valueField': 'high',
         'openField': 'high',
@@ -167,6 +169,7 @@ export class PricechartComponent implements AfterViewInit, OnDestroy {
       }, {
         'type': 'column',
         'title': 'Open:',
+        'precision': 6,
         'columnWidth': 0,
         'valueField': 'open',
         'openField': 'open',
@@ -177,6 +180,7 @@ export class PricechartComponent implements AfterViewInit, OnDestroy {
       }, {
         'type': 'column',
         'title': 'Close:',
+        'precision': 6,
         'columnWidth': 0,
         'valueField': 'close',
         'openField': 'close',
@@ -187,6 +191,7 @@ export class PricechartComponent implements AfterViewInit, OnDestroy {
       }, {
         'type': 'column',
         'title': 'Low:',
+        'precision': 6,
         'columnWidth': 0,
         'valueField': 'low',
         'openField': 'low',
@@ -207,6 +212,7 @@ export class PricechartComponent implements AfterViewInit, OnDestroy {
         'lineColor': '#66666f',
         'type': 'column',
         'title': 'Volume:',
+        'precision': 0,
         'useLineColorForBulletBorder': true,
         'valueField': 'volume',
         'fillAlphas': 0.05,
@@ -215,10 +221,10 @@ export class PricechartComponent implements AfterViewInit, OnDestroy {
         // 'balloonText': '[[title]]<br /><b style='font-size: 130%'>[[value]]</b>'
       } ],
       'valueAxes': [{
-        'precision': 3,
         'title': 'Price',
+        'precision': 3,
         'labelOffset': 0,
-        'boldLabels': true,
+        'boldLabels': false,
         'lineThickness': 1,
         'strictMinMax': false,
         'reversed': false,
@@ -231,7 +237,9 @@ export class PricechartComponent implements AfterViewInit, OnDestroy {
         }]}, {
         'id': 'v2',
         'title': 'Volume',
-        'boldLabels': true,
+        'precision': 0,
+        'boldLabels': false,
+        'labelOffset': 0,
         'gridAlpha': 0,
         'position': 'right',
         'axisAlpha': 1,
