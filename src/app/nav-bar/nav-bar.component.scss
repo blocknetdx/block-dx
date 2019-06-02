@@ -59,6 +59,11 @@ app-pair-selector {
   display: inline-block;
   cursor: pointer;
 
+  border: solid 1px rgba(255,255,255,0.5);
+  padding: 4px 15px;
+  font-size: 0.9rem;
+  font-weight: bold;
+
   &:hover {
     .material-icons {
       color: $bn-blue-light6;
@@ -74,6 +79,10 @@ app-pair-selector {
     background-color: #FFF;
     margin: 5px 0;
   }
+}
+.navbar-toggler:hover {
+  color: $bn-blue-light6 !important;
+  border-color: $bn-blue-light6;
 }
 
 .navbar-collapse__overlay {
