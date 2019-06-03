@@ -14,18 +14,25 @@ math.config({
   precision: 64
 });
 
+const { bignumber } = math;
+
 @Component({
   selector: 'bn-filled-orders',
   templateUrl: './filled-orders.component.html',
   styleUrls: ['./filled-orders.component.scss']
 })
 export class FilledOrdersComponent extends BaseComponent implements OnInit {
+  OrderStates: typeof OrderStates = OrderStates;
+
   public symbols: string[] = [];
   public filledorders: Openorder[];
   public pricing: Pricing;
   public pricingEnabled = false;
   public pricingAvailable = false;
   public longestTokenLength: number;
+
+  private _hashPadToken = {};
+  public get hashPadToken(): object { return this._hashPadToken; }
 
   constructor(
     private appService: AppService,
@@ -38,7 +45,11 @@ export class FilledOrdersComponent extends BaseComponent implements OnInit {
     this.appService.marketPairChanges
       .takeUntil(this.$destroy)
       .subscribe((symbols) => {
-        this.symbols = symbols;
+        this.zone.run(() => {
+          if (symbols)
+            this.symbols = symbols;
+          this.updatePricingAvailable(this.pricing ? this.pricing.enabled : false);
+        });
     });
     // this.openorderService.getOpenorders()
     //   .then((filledorders) => {
@@ -54,12 +65,12 @@ export class FilledOrdersComponent extends BaseComponent implements OnInit {
       .subscribe(openorders => {
         this.zone.run(() => {
           this.filledorders = openorders
-            .filter(o => o.status === OrderStates.Finished || 
-                        o.status === OrderStates.Canceled || 
-                        o.status === OrderStates.Expired || 
-                        o.status === OrderStates.Offline || 
-                        o.status === OrderStates.Invalid || 
-                        o.status === OrderStates.RolledBack)
+            .filter(o => o.status === OrderStates.Finished ||
+              o.status === OrderStates.Canceled ||
+              o.status === OrderStates.Expired ||
+              o.status === OrderStates.Offline ||
+              o.status === OrderStates.Invalid ||
+              o.status === OrderStates.RolledBack)
             .map((o) => {
               o['row_class'] = o.side;
               return o;
@@ -70,7 +81,11 @@ export class FilledOrdersComponent extends BaseComponent implements OnInit {
             }, [])
             .sort((a, b) => a.length === b.length ? 0 : a.length > b.length ? -1 : 1);
           this.longestTokenLength = tokens.length > 0 ? tokens[0].length : 0;
-          // console.log('filledorders', this.filledorders);
+          // Calc padding
+          this.filledorders.forEach(order => {
+            this._hashPadToken[order.maker] = this.padToken(order.maker);
+            this._hashPadToken[order.taker] = this.padToken(order.taker);
+          });
         });
       });
 
@@ -92,6 +107,14 @@ export class FilledOrdersComponent extends BaseComponent implements OnInit {
 
   }
 
+  updatePricingAvailable(enabled: boolean) {
+    this.pricingAvailable = enabled;
+    if (this.filledorders && this.filledorders.length > 0 && this.pricing)
+      this.filledorders.forEach(order => {
+        order.updatePricingAvailable(enabled, this.pricing);
+      });
+  }
+
   padToken(token) {
     const diff = this.longestTokenLength - token.length;
     for(let i = 0; i < diff; i++) {
@@ -101,10 +124,8 @@ export class FilledOrdersComponent extends BaseComponent implements OnInit {
   }
 
   calculatePairPrice(total, size) {
-    //return math.round(math.divide(total, size),6);
-    return math.divide(total, size).toFixed(6);
+    return math.divide(bignumber(total), bignumber(size)).toFixed(6);
   }
-
 
   getStatusDotColor(status) {
     if([OrderStates.Finished].includes(status)) {
@@ -114,6 +135,38 @@ export class FilledOrdersComponent extends BaseComponent implements OnInit {
     } else {
       return '#fff';
     }
+  }
+
+  onRowContextMenu({ row, clientX, clientY }) {
+
+    const order = row;
+
+    const { Menu } = window.electron.remote;
+    const { clipboard, ipcRenderer } = window.electron;
+
+    const menuTemplate = [];
+
+    const { symbols } = this;
+    const { maker, taker } = order;
+
+    if(!symbols.includes(maker) || !symbols.includes(taker)) {
+      menuTemplate.push({
+        label: 'View Market',
+        click: () => {
+          ipcRenderer.send('setKeyPair', [maker, taker]);
+        }
+      });
+    }
+
+    menuTemplate.push({
+      label: 'View Details',
+      click: () => {
+        ipcRenderer.send('openMyOrderDetailsWindow', order.id);
+      }
+    });
+
+    const menu = Menu.buildFromTemplate(menuTemplate);
+    menu.popup({x: clientX, y: clientY});
   }
 
 }

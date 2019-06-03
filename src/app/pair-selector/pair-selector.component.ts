@@ -24,7 +24,7 @@ export class PairSelectorComponent implements OnInit, AfterViewInit {
   @ViewChild('pairForm') public pairForm: NgForm;
   @ViewChildren('input') public inputs: QueryList<ElementRef>;
 
-  @Output('onActiveStatus')
+  @Output()
   public onActiveStatus: EventEmitter<boolean> = new EventEmitter();
 
   public get symbols(): string[] {
@@ -43,20 +43,24 @@ export class PairSelectorComponent implements OnInit, AfterViewInit {
   public coinAValid = false;
   public coinBValid = false;
 
+  private connectedTokensLabel = 'Connected Assets';
+  private allTokensLabel = 'All Assets';
+
   public get sections(): any[] {
     let arr;
     switch(this.state) {
       case 'stage1' :
         arr = [
-          {title: 'Connected Tokens', rows: this._userWallet},
-          {title: 'All Tokens', rows: PairSelectorComponent.uniqueCoinsNotIn(this._allCoins, this._userWallet)}
+          {title: this.connectedTokensLabel, rows: this._userWallet},
+          {title: this.allTokensLabel, rows: PairSelectorComponent.uniqueCoinsNotIn(this._allCoins, this._userWallet)}
         ];
         break;
       case 'stage2' :
       case 'stage3' :
-        arr = [{
-          rows: PairSelectorComponent.uniqueCoins(this._allCoins.filter(c => c.symbol !== this.model.coinA.symbol))
-        }];
+        arr = [
+          {title: this.connectedTokensLabel, rows: this._userWallet.filter(c => c.symbol !== this.model.coinA.symbol)},
+          {title: this.allTokensLabel, rows: PairSelectorComponent.uniqueCoins(this._allCoins.filter(c => c.symbol !== this.model.coinA.symbol))}
+        ];
         break;
     }
     return arr;
@@ -162,11 +166,13 @@ export class PairSelectorComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    const isFirstRun = window.electron.ipcRenderer.sendSync('isFirstRun');
-    this._loadedSymbols = window.electron.ipcRenderer.sendSync('getTokenPair');
-    if(isFirstRun)  window.electron.ipcRenderer.send('openInformation');
-    if(isFirstRun || !this._loadedSymbols || this._loadedSymbols[0] === null || /^\s*$/.test(this._loadedSymbols[0]))
-      this.active = true;
+    setTimeout(() => {
+      const isFirstRun = window.electron.ipcRenderer.sendSync('isFirstRun');
+      this._loadedSymbols = window.electron.ipcRenderer.sendSync('getKeyPairSync');
+      if(isFirstRun)  window.electron.ipcRenderer.send('openInformation');
+      if(isFirstRun || !this._loadedSymbols || this._loadedSymbols[0] === null || /^\s*$/.test(this._loadedSymbols[0]))
+        this.active = true;
+    }, 0);
   }
 
   filterCoins(key: string, val: string) {
@@ -210,7 +216,20 @@ export class PairSelectorComponent implements OnInit, AfterViewInit {
         this.activeInputKey = 'coinB';
         const data = this.currencyComparisons(row.symbol);
         this.zone.run(() => {
-          this.comparisons = [{rows: data}];
+          const userTokens = new Set(this._userWallet.map(t => t.symbol));
+          const connectedTokens = [];
+          const otherTokens = [];
+          for(const t of data) {
+            if(userTokens.has(t.symbol)) {
+              connectedTokens.push(t);
+            } else {
+              otherTokens.push(t);
+            }
+          }
+          this.comparisons = [
+            {title: this.connectedTokensLabel, rows: connectedTokens},
+            {title: this.allTokensLabel, rows: otherTokens}
+          ];
           this.filteredComparisons = this.comparisons;
           setTimeout(() => this.inputs.last.nativeElement.focus(), 0);
         });

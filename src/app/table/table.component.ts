@@ -30,6 +30,9 @@ export class TableComponent {
   @Output('onRowSelect')
   public onRowSelect: EventEmitter<any> = new EventEmitter();
 
+  @Output('onRowContextMenu')
+  public onRowContextMenu: EventEmitter<any> = new EventEmitter();
+
   @Input() public selectable: boolean;
   @Input() public hideHeader = false;
   @Input() public noPadding = false;
@@ -157,6 +160,17 @@ export class TableComponent {
       if (e) e.stopPropagation();
       this.selectedRow = row;
       this.onRowSelect.emit(row);
+    }
+  }
+
+  rowContextMenu(row, e:any) {
+    if (this.selectable) {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      const { clientX, clientY } = e;
+      this.onRowContextMenu.emit({row, clientX, clientY});
     }
   }
 

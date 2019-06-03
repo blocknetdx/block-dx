@@ -4,17 +4,17 @@ import { Observable } from 'rxjs/Observable';
 import { Observer } from 'rxjs/Observer';
 import { Subject } from 'rxjs/Subject';
 import * as math from 'mathjs';
+import 'rxjs/add/operator/toPromise';
+import 'rxjs/add/operator/map';
+import { Order } from './order';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 
 math.config({
   number: 'BigNumber',
   precision: 64
 });
 
-import 'rxjs/add/operator/toPromise';
-import 'rxjs/add/operator/map';
-
-import { Order } from './order';
-// import { ORDERS } from './mock-orderbook';
+const { bignumber } = math;
 
 declare var electron: any;
 
@@ -22,9 +22,9 @@ declare var electron: any;
 export class OrderbookService {
   public requestedOrder: Subject<Order> = new Subject();
 
-  private orderbookObservable: Observable<Order>;
-  private priceDecimalObservable: Observable<string>;
-  public priceDecimalObserver: Observer<string>;
+  private orderbookObservable: BehaviorSubject<Order>;
+  private priceDecimalObservable: BehaviorSubject<string>;
+  public priceDecimalObserver: BehaviorSubject<string>;
 
   private orderbookUrl = '';
   // private orderbookUrl = 'https://api-public.sandbox.gdax.com/products/ETH-BTC/book?level=2';
@@ -55,130 +55,77 @@ export class OrderbookService {
     return this.priceDecimalObservable;
   }
 
-  getOrderbook(): Observable<Order> {
+  getOrderbook(): BehaviorSubject<Order> {
     // this.orderbookUrl = 'api/orderbook_' + symbolsolejoin('_');
 
     if(!this.orderbookObservable) {
-      this.orderbookObservable = Observable.create(observer => {
-        try {
 
-          window.electron.ipcRenderer.on('orderBook', (e, orderBook) => {
+      this.orderbookObservable = new BehaviorSubject(new Order());
 
-            // Test Data Generator
-            // const getRandom = (min, max) => Math.random() * (max - min) + min;
-            // orderBook = {asks: [], bids: []};
-            // for(let i = 0; i < 30; i++) {
-            //   orderBook.asks.push([getRandom(1, 4), getRandom(1, 4), `ask${i}`]);
-            //   orderBook.bids.push([getRandom(1, 4), getRandom(1, 4), `bid${i}`]);
-            // }
+      window.electron.ipcRenderer.on('orderBook', (e, orderBook) => {
 
-            orderBook = Object.assign({}, orderBook, {
-              asks: orderBook.asks.map(a => {
-                return [a.price, a.size, a.orderId];
-              }),
-              bids: orderBook.bids.map(a => {
-                return [a.price, a.size, a.orderId];
-              }),
-            });
+        // Test Data Generator
+        // const getRandom = (min, max) => Math.random() * (max - min) + min;
+        // orderBook = {asks: [], bids: []};
+        // for(let i = 0; i < 30; i++) {
+        //   orderBook.asks.push([getRandom(1, 4), getRandom(1, 4), `ask${i}`]);
+        //   orderBook.bids.push([getRandom(1, 4), getRandom(1, 4), `bid${i}`]);
+        // }
 
-            const p = Order.fromObject(orderBook);
+        orderBook = Object.assign({}, orderBook, {
+          asks: orderBook.asks.map(a => {
+            return [a.price, a.size, a.orderId];
+          }),
+          bids: orderBook.bids.map(a => {
+            return [a.price, a.size, a.orderId];
+          }),
+        });
 
-            const asks = p.asks;
-            const totalAskSize: number = asks.reduce((acc, curr) => {
-              return acc + parseFloat(curr[1]);
-            }, 0);
-
-            for(const ask of asks) {
-              // ask.push((parseFloat(ask[1]) / totalAskSize) * 100);
-              ask.push(math
-                .chain(parseFloat(ask[1]))
-                .divide(totalAskSize)
-                .multiply(100)
-                .done()
-              );
-              ask.push('ask');
-            }
-
-            const bids = p.bids;
-            const totalBidSize = asks.reduce((acc, curr) => {
-              return acc + parseFloat(curr[1]);
-            }, 0);
-
-            for(const bid of bids) {
-              // bid.push((parseFloat(bid[1]) / totalBidSize) * 100);
-              bid.push(math
-                .chain(parseFloat(bid[1]))
-                .divide(totalBidSize)
-                .multiply(100)
-                .done()
-              );
-              bid.push('bid');
-            }
-
-            // console.log(p);
-
-            observer.next(p);
-
-          });
-
-          electron.ipcRenderer.send('getOrderBook');
-
-        } catch(err) {
-          console.error(err);
-        }
-      });
-
-    }
-    return this.orderbookObservable;
-
-    /*return this.http.get(this.orderbookUrl)
-      .map((res) => {
-
-        ////////////////////////////////////////////////////////////////////////
-        // THIS IS NOT ELEGANT - FIX THIS!!! HAHA ~rsmith
-        ////////////////////////////////////////////////////////////////////////
-
-        const raw = res.json()[0];
-        const p = Order.fromObject(raw);
+        const p = Order.fromObject(orderBook);
 
         const asks = p.asks;
-        const totalAskSize = asks.reduce((acc, curr) => {
+        const totalAskSize: number = asks.reduce((acc, curr) => {
           return acc + parseFloat(curr[1]);
         }, 0);
 
-        asks.forEach((ask) => {
-          ask.push((parseFloat(ask[1])/totalAskSize)*100);
+        for(const ask of asks) {
+          // ask.push((parseFloat(ask[1]) / totalAskSize) * 100);
+          ask.push(math
+            .chain(bignumber(ask[1]))
+            .divide(bignumber(totalAskSize))
+            .multiply(100)
+            .done()
+          );
           ask.push('ask');
-        });
-
-        ////////////////////////////////////////////////////////////////////////
+        }
 
         const bids = p.bids;
         const totalBidSize = asks.reduce((acc, curr) => {
           return acc + parseFloat(curr[1]);
         }, 0);
 
-        bids.forEach((bid) => {
-          bid.push((parseFloat(bid[1])/totalBidSize)*100);
+        for(const bid of bids) {
+          // bid.push((parseFloat(bid[1]) / totalBidSize) * 100);
+          bid.push(math
+            .chain(bignumber(bid[1]))
+            .divide(bignumber(totalBidSize))
+            .multiply(100)
+            .done()
+          );
           bid.push('bid');
-        });
+        }
 
-        ////////////////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////////////
+        // console.log(p);
 
+        this.orderbookObservable.next(p);
 
-        return p;
-      });*/
-    //  .toPromise()
-    //  .then(response => response.json() as Order[])
-    //  .catch(this.handleError);
+      });
+
+      electron.ipcRenderer.send('getOrderBook');
+
+    }
+    return this.orderbookObservable;
   }
-
-  // getOrderbook(): Observable<Order[]> {
-  //   return this.http
-  //     .get(this.orderbookUrl)
-  //     .map((response) => response.json() as Order[]);
-  // }
 
   private handleError(error: any): Promise<any> {
     console.error('An error occurred', error); // for demo purposes only

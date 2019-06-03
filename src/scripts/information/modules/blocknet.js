@@ -6,7 +6,7 @@ const renderBlocknet = () => {
           <div class="section-header-text">Block DX is powered by the Blocknet Protocol</div>
         </div>
         <p>
-          In addition to the information below, you can learn more about Blocknet <a href="#" class="blocknet-link" data-link="https://docs.blocknet.co/">here</a>.
+          In addition to the information below, you can learn more about Blocknet <a href="#" class="text-link js-blocknetWalletLink" data-link="https://docs.blocknet.co/">here</a>.
         </p>
       </div>
 
@@ -20,9 +20,9 @@ const renderBlocknet = () => {
         <p>
           Subscribe to the following email lists for the latest features, updates, and news!
           <ul>
-            <li><a href="#" class="blocknet-link" data-link="http://eepurl.com/c5OJMj">General Newsletter</a></li>
-            <li><a href="#" class="blocknet-link" data-link="http://eepurl.com/dq-ElD">Service Node Newsletter</a></li>
-            <li><a href="#" class="blocknet-link" data-link="http://eepurl.com/dDjhYH">Developer Newsletter</a></li>
+            <li><a href="#" class="text-link js-blocknetWalletLink" data-link="http://eepurl.com/c5OJMj">General Newsletter</a></li>
+            <li><a href="#" class="text-link js-blocknetWalletLink" data-link="http://eepurl.com/dq-ElD">Service Node Newsletter</a></li>
+            <li><a href="#" class="text-link js-blocknetWalletLink" data-link="http://eepurl.com/dDjhYH">Developer Newsletter</a></li>
           </ul>
         </p>
       </div>
@@ -32,7 +32,7 @@ const renderBlocknet = () => {
           <div class="section-header-text">Technical Overview</div><div class="section-header-line"></div>
         </div>
         <p>
-          Blocknet is a Proof-of-Stake (PoS) blockchain with a utility token called <a href="#" class="blocknet-link" data-link="https://docs.blocknet.co/blockchain/introduction">BLOCK</a>. Unlike other currency-focused blockchains, Blocknet is a service-based blockchain comprised of 3 main components:
+          Blocknet is a Proof-of-Stake (PoS) blockchain with a utility token called <a href="#" class="text-link js-blocknetWalletLink" data-link="https://docs.blocknet.co/blockchain/introduction">BLOCK</a>. Unlike other currency-focused blockchains, Blocknet is a service-based blockchain comprised of 3 main components:
         </p>
         <p>
           <ul>
@@ -85,7 +85,7 @@ const renderBlocknet = () => {
           <div class="section-header-text">Tokenomics</div><div class="section-header-line"></div>
         </div>
         <p>
-          <a href="#" class="blocknet-link" data-link="https://docs.blocknet.co/blockchain/introduction">BLOCK</a> is the utility token that powers the Blocknet. Fees are paid in BLOCK when using the network and 100% of those fees are distributed to Service Nodes for supporting the network and infrastructure. Normal transaction fees on the network are also paid in BLOCK, but those fees are burned. If seeking to acquire BLOCK, <a href="#" class="blocknet-link" data-link="https://docs.blocknet.co/project/exchanges">there are various options available</a>.
+          <a href="#" class="text-link js-blocknetWalletLink" data-link="https://docs.blocknet.co/blockchain/introduction">BLOCK</a> is the utility token that powers the Blocknet. Fees are paid in BLOCK when using the network and 100% of those fees are distributed to Service Nodes for supporting the network and infrastructure. Normal transaction fees on the network are also paid in BLOCK, but those fees are burned. If seeking to acquire BLOCK, <a href="#" class="text-link js-blocknetWalletLink" data-link="https://docs.blocknet.co/project/exchanges">there are various options available</a>.
         </p>
         <p>
           Blocknet involves multiple economic models with respect to the use of the BLOCK token:

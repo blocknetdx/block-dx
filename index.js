@@ -8,7 +8,7 @@ const ServiceNodeInterface = require('./src-back/service-node-interface');
 const serve = require('electron-serve');
 const { autoUpdater } = require('electron-updater');
 const PricingInterface = require('./src-back/pricing-interface');
-const confController = require('./src-back/conf-controller');
+const ConfController = require('./src-back/conf-controller');
 const _ = require('lodash');
 
 const { app, BrowserWindow, Menu, ipcMain } = electron;
@@ -33,7 +33,7 @@ ipcMain.on('getAppVersion', e => {
 
 let appWindow, serverLocation, sn, keyPair, storage, user, password, port, info, pricingSource, pricingUnit, apiKeys,
   pricingFrequency, enablePricing, sendPricingMultipliers, clearPricingInterval, setPricingInterval,
-  sendMarketPricingEnabled, metaPath, macMetaBackupPath, availableUpdate;
+  sendMarketPricingEnabled, metaPath, macMetaBackupPath, availableUpdate, tradeHistory, myOrders;
 let updateError = false;
 
 // Handle explicit quit
@@ -121,6 +121,96 @@ require('electron-context-menu')();
 // Only allow one application instance to be open at a time
 const isSecondInstance = app.makeSingleInstance(() => {});
 if(isSecondInstance) app.quit();
+
+const openOrderDetailsWindow = details => {
+
+  let height;
+  if(process.platform === 'win32') {
+    height = isDev ? 680 : 662;
+  } else if(process.platform === 'darwin') {
+    height = 645;
+  } else { // Linux
+    height = 645;
+  }
+
+  const detailsWindow = new BrowserWindow({
+    show: false,
+    width: 800,
+    height,
+    parent: appWindow
+  });
+  if(isDev) {
+    detailsWindow.loadURL(`file://${path.join(__dirname, 'src', 'order-details.html')}`);
+  } else {
+    detailsWindow.loadURL(`file://${path.join(__dirname, 'dist', 'order-details.html')}`);
+  }
+  detailsWindow.once('ready-to-show', () => {
+    detailsWindow.show();
+  });
+
+  if(isDev) {
+    const menuTemplate = [];
+    menuTemplate.push({
+      label: 'Window',
+      submenu: [
+        { label: 'Show Dev Tools', role: 'toggledevtools' }
+      ]
+    });
+    const windowMenu = Menu.buildFromTemplate(menuTemplate);
+    detailsWindow.setMenu(windowMenu);
+  } else if(platform === 'win32') {
+    detailsWindow.setMenu(null);
+  }
+
+  ipcMain.once('getOrderDetails', async function(e) {
+    e.returnValue = details;
+  });
+
+};
+
+const formatDate = isoStr => moment(isoStr).format('HH:mm:ss MMM D, YYYY');
+
+ipcMain.on('openOrderDetailsWindow', async function(e, orderId) {
+  const order = await sn.dxGetOrder(orderId);
+  openOrderDetailsWindow([
+    ['ID', order.id],
+    ['Maker', order.maker],
+    ['Maker Size', order.makerSize],
+    ['Taker', order.taker],
+    ['Taker Size', order.takerSize],
+    ['Updated At', formatDate(order.updatedAt)],
+    ['Created At', formatDate(order.createdAt)],
+    ['Status', order.status]
+  ]);
+});
+ipcMain.on('openMyOrderDetailsWindow', async function(e, orderId) {
+  const order = myOrders.find(o => o.id === orderId) || {};
+  const details = [
+    ['ID', order.id],
+    ['Maker', order.maker],
+    ['Maker Size', order.makerSize],
+    ['Maker Address', order.makerAddress],
+    ['Taker', order.taker],
+    ['Taker Size', order.takerSize],
+    ['Taker Address', order.takerAddress],
+    ['Updated At', formatDate(order.updatedAt)],
+    ['Created At', formatDate(order.createdAt)],
+    ['Status', order.status]
+  ];
+  openOrderDetailsWindow(details);
+});
+ipcMain.on('openOrderHistoryDetailsWindow', async function(e, orderId) {
+  const order = tradeHistory.find(o => o.id === orderId) || {};
+  const details = [
+    ['ID', order.id],
+    ['Time', formatDate(order.time)],
+    ['Maker', order.maker],
+    ['Maker Size', order.makerSize],
+    ['Taker', order.taker],
+    ['Taker Size', order.takerSize]
+  ];
+  openOrderDetailsWindow(details);
+});
 
 let updateAvailableWindowOpen = false;
 
@@ -231,9 +321,11 @@ ipcMain.on('checkForUpdates', e => {
   }
 });
 
+let configurationWindow;
+
 const openConfigurationWindow = (options = {}) => {
 
-  const { error } = options;
+  const { isFirstRun = false, error } = options;
 
   // const errorMessage = error ? 'There was a problem connecting to the Blocknet RPC server. What would you like to do?' : '';
   let errorTitle, errorMessage;
@@ -246,14 +338,14 @@ const openConfigurationWindow = (options = {}) => {
         break;
       default:
         errorTitle = 'Connection Error';
-        errorMessage = 'There was a problem connecting to the Blocknet wallet. What would you like to do?';
+        errorMessage = 'There was a problem connecting to the Blocknet wallet. Make sure the wallet has been configured, restarted, and is open and unlocked.';
     }
     console.log(errorMessage);
   } else {
     errorMessage = '';
   }
 
-  const configurationWindow = new BrowserWindow({
+  configurationWindow = new BrowserWindow({
     show: false,
     width: 1050,
     height: platform === 'win32' ? 708 : platform === 'darwin' ? 695 : 670,
@@ -288,6 +380,11 @@ const openConfigurationWindow = (options = {}) => {
     setAppMenu();
   }
 
+  ipcMain.on('isFirstRun', e => {
+    e.returnValue = isFirstRun;
+  });
+
+  ipcMain.removeAllListeners('openSettingsWindow');
   ipcMain.on('openSettingsWindow', () => {
     try {
       openSettingsWindow();
@@ -296,6 +393,8 @@ const openConfigurationWindow = (options = {}) => {
       handleError(err);
     }
   });
+
+  ipcMain.removeAllListeners('getManifest');
   ipcMain.on('getManifest', async function(e) {
     try {
       e.returnValue = getManifest();
@@ -303,6 +402,8 @@ const openConfigurationWindow = (options = {}) => {
       handleError(err);
     }
   });
+
+  ipcMain.removeAllListeners('getBaseConf');
   ipcMain.on('getBaseConf', function(e, walletConf) {
     try {
       const walletConfs = storage.getItem('walletConfs') || {};
@@ -316,6 +417,8 @@ const openConfigurationWindow = (options = {}) => {
       handleError(err);
     }
   });
+
+  ipcMain.removeAllListeners('getBridgeConf');
   ipcMain.on('getBridgeConf', (e, bridgeConf) => {
     try {
       const xbridgeConfs = storage.getItem('xbridgeConfs') || {};
@@ -329,31 +432,54 @@ const openConfigurationWindow = (options = {}) => {
       handleError(err);
     }
   });
-  ipcMain.on('saveDXData', (e, dxUser, dxPassword, dxPort) => {
+
+  ipcMain.removeAllListeners('saveDXData');
+  ipcMain.on('saveDXData', (e, dxUser, dxPassword, dxPort, dxIP) => {
     storage.setItems({
       user: dxUser,
       password: dxPassword,
-      port: dxPort
+      port: dxPort,
+      blocknetIP: dxIP
     }, true);
     e.returnValue = true;
   });
+
+  ipcMain.removeAllListeners('getHomePath');
   ipcMain.on('getHomePath', e => {
     e.returnValue = app.getPath('home');
   });
+
+  ipcMain.removeAllListeners('getDataPath');
   ipcMain.on('getDataPath', e => {
     e.returnValue = app.getPath('appData');
   });
+
+  ipcMain.removeAllListeners('getSelected');
   ipcMain.on('getSelected', e => {
     const selectedWallets = storage.getItem('selectedWallets') || [];
     e.returnValue = selectedWallets;
   });
+
+  ipcMain.removeAllListeners('saveSelected');
   ipcMain.on('saveSelected', (e, selectedArr) => {
     storage.setItem('selectedWallets', selectedArr, true);
     e.returnValue = selectedArr;
   });
 
+  ipcMain.removeAllListeners('configurationWindowCancel');
+  ipcMain.on('configurationWindowCancel', () => {
+    if(appWindow) {
+      configurationWindow.close();
+    } else {
+      app.quit();
+    }
+  });
+
 };
 
+ipcMain.on('closeConfigurationWindow', e => {
+  configurationWindow.close();
+});
 ipcMain.on('quit', () => {
   app.quit();
 });
@@ -382,6 +508,9 @@ const openSettingsWindow = (options = {}) => {
   ipcMain.on('getPort', e => {
     e.returnValue = storage.getItem('port') || '';
   });
+  ipcMain.on('getBlocknetIP', e => {
+    e.returnValue = storage.getItem('blocknetIP') || '';
+  });
   ipcMain.on('getUser', e => {
     e.returnValue = storage.getItem('user') || '';
   });
@@ -401,7 +530,7 @@ const openSettingsWindow = (options = {}) => {
   const settingsWindow = new BrowserWindow({
     show: false,
     width: 500,
-    height: platform === 'win32' ? 575 : platform === 'darwin' ? 560 : 535,
+    height: platform === 'win32' ? 640 : platform === 'darwin' ? 625 : 600,
     parent: appWindow
   });
   if(isDev) {
@@ -414,6 +543,13 @@ const openSettingsWindow = (options = {}) => {
     settingsWindow.show();
     if(errorMessage) {
       settingsWindow.send('errorMessage', errorMessage);
+    }
+    if(configurationWindow) {
+      try {
+        configurationWindow.close();
+      } catch(err) {
+        console.error(err);
+      }
     }
   });
 
@@ -432,6 +568,25 @@ const openSettingsWindow = (options = {}) => {
   }
 
 };
+
+ipcMain.on('setXbridgeConfPath', (e, p = '') => {
+  storage.setItem('xbridgeConfPath', p);
+});
+ipcMain.on('getXbridgeConfPath', (e) => {
+  e.returnValue = storage.getItem('xbridgeConfPath') || '';
+});
+ipcMain.on('getUser', e => {
+  e.returnValue = storage.getItem('user') || '';
+});
+ipcMain.on('getPassword', e => {
+  e.returnValue = storage.getItem('password') || '';
+});
+ipcMain.on('getPort', e => {
+  e.returnValue = storage.getItem('port') || '';
+});
+ipcMain.on('getBlocknetIP', e => {
+  e.returnValue = storage.getItem('blocknetIP') || '';
+});
 
 const openGeneralSettingsWindow = () => {
 
@@ -502,11 +657,11 @@ const openTOSWindow = (alreadyAccepted = false) => {
 
   let height;
   if(process.platform === 'win32') {
-    height = alreadyAccepted ? 660 : 735;
+    height = alreadyAccepted ? 670 : 745;
   } else if(process.platform === 'darwin') {
-    height = alreadyAccepted ? 645 : 720;
+    height = alreadyAccepted ? 655 : 730;
   } else {
-    height = alreadyAccepted ? 645 : 690;
+    height = alreadyAccepted ? 645 : 700;
   }
 
   const tosWindow = new BrowserWindow({
@@ -524,17 +679,7 @@ const openTOSWindow = (alreadyAccepted = false) => {
     tosWindow.show();
   });
 
-  if(isDev) {
-    const menuTemplate = [];
-    menuTemplate.push({
-      label: 'Window',
-      submenu: [
-        { label: 'Show Dev Tools', role: 'toggledevtools' }
-      ]
-    });
-    const windowMenu = Menu.buildFromTemplate(menuTemplate);
-    tosWindow.setMenu(windowMenu);
-  }
+  tosWindow.setMenu(null);
 };
 
 const openAppWindow = () => {
@@ -635,7 +780,7 @@ const openAppWindow = () => {
   };
   const sendOrderBook = force => {
     if (isTokenPairValid(keyPair))
-      sn.dxGetOrderBook3(keyPair[0], keyPair[1])
+      sn.dxGetOrderBook3(keyPair[0], keyPair[1], 250)
         .then(res => {
           if(force === true || JSON.stringify(res) !== JSON.stringify(orderBook)) {
             orderBook = res;
@@ -647,7 +792,7 @@ const openAppWindow = () => {
   ipcMain.on('getOrderBook', () => sendOrderBook(true));
   setInterval(sendOrderBook, stdInterval);
 
-  let tradeHistory = [];
+  tradeHistory = [];
   const sendTradeHistory = force => {
     if (isTokenPairValid(keyPair))
       sn.dxGetOrderFills(keyPair[0], keyPair[1])
@@ -659,7 +804,7 @@ const openAppWindow = () => {
         })
         .catch(handleError);
   };
-  ipcMain.on('sendTradeHistory', () => sendTradeHistory(true));
+  ipcMain.on('getTradeHistory', () => sendTradeHistory(true));
   setInterval(sendTradeHistory, stdInterval);
 
   const sendLocalTokens = async function() {
@@ -670,6 +815,14 @@ const openAppWindow = () => {
 
   const manifestData = getManifest();
   const availableTokens = new Set(manifestData.map(d => d.ticker));
+  const tokenNames = manifestData
+    .reduce((map, d) => {
+      return map.set(d.ticker, d.blockchain);
+    }, new Map());
+
+  ipcMain.on('getTokenName', (e, ticker) => {
+    e.returnValue = tokenNames.get(ticker) || ticker;
+  });
 
   const sendNetworkTokens = async function() {
     const networkTokens = await sn.dxGetNetworkTokens();
@@ -684,7 +837,7 @@ const openAppWindow = () => {
     sendLocalTokens();
   }, 15000);
 
-  let myOrders = [];
+  myOrders = [];
   const sendMyOrders = force => {
     sn.dxGetMyOrders()
       .then(res => {
@@ -986,7 +1139,7 @@ const openAppWindow = () => {
     }
   });
 
-  ipcMain.on('getTokenPair', e => {
+  ipcMain.on('getKeyPairSync', e => {
     e.returnValue = keyPair;
   });
 
@@ -998,10 +1151,6 @@ const openAppWindow = () => {
     openInformationWindow();
   });
 
-  ipcMain.on('openSettings', () => {
-    openSettingsWindow();
-  });
-
   ipcMain.on('openConfigurationWizard', () => {
     openConfigurationWindow();
   });
@@ -1011,6 +1160,10 @@ const openAppWindow = () => {
   });
 
 };
+
+ipcMain.on('openSettings', () => {
+  openSettingsWindow();
+});
 
 ipcMain.on('getPricingSource', e => {
   e.returnValue = pricingSource;
@@ -1045,6 +1198,14 @@ ipcMain.on('saveGeneralSettings', (e, s) => {
   sendPricingMultipliers();
   setPricingInterval();
   sendMarketPricingEnabled();
+});
+
+ipcMain.on('loadXBridgeConf', async function() {
+  try {
+    await sn.dxLoadXBridgeConf();
+  } catch(err) {
+    console.error(err);
+  }
 });
 
 const checkForUpdates = async function() {
@@ -1096,6 +1257,7 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
     user = storage.getItem('user');
     password = storage.getItem('password');
     port = storage.getItem('port');
+    let ip = storage.getItem('blocknetIP');
 
     pricingSource = storage.getItem('pricingSource');
     if(!pricingSource) {
@@ -1138,34 +1300,26 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
       storage.setItem('port', port);
     }
 
+    if(!ip) {
+      ip = '127.0.0.1';
+      storage.setItem('blocknetIP', ip);
+    }
+
     try {
-      const sha = await confController.getSha();
-      const oldSha = storage.getItem('confRepoSha') || '';
-      if(sha !== oldSha) {
-        const [ manifest, walletConfs, xbridgeConfs ] = await Promise.all([
-          confController.getManifest(),
-          confController.getWalletConfs(),
-          confController.getXbridgeConfs()
-        ]);
-        storage.setItems({
-          confRepoSha: sha,
-          manifest,
-          walletConfs,
-          xbridgeConfs
-        }, true);
-      }
+      const confController = new ConfController({ storage });
+      await confController.update();
     } catch(err) {
       console.error(err);
     }
 
     if(!user || !password) {
       await onReady;
-      openConfigurationWindow();
+      openConfigurationWindow({isFirstRun: true});
       checkForUpdates();
       return;
     }
 
-    sn = new ServiceNodeInterface(user, password, `http://${platform === 'linux' ? '127.0.0.1' : 'localhost'}:${port}`);
+    sn = new ServiceNodeInterface(user, password, `http://${ip}:${port}`);
 
     await new Promise(resolve => setTimeout(resolve, 2000));
 
@@ -1225,8 +1379,8 @@ function isTokenPairValid(keyPair) {
 
 // check for version number. Minimum supported blocknet client version
 function versionCheck(version) {
-  if (version < 3120100) {
-    return {name: 'Unsupported Version', message: 'BLOCK DX requires Blocknet wallet version 3.12.1 or greater.'};
+  if (version < 3130000) {
+    return {name: 'Unsupported Version', message: 'BLOCK DX requires Blocknet wallet version 3.13.0 or greater.'};
   }
   return null;
 }

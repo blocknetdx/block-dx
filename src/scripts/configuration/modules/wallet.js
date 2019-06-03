@@ -2,7 +2,7 @@ const fs = require('fs-extra-promise');
 const path = require('path');
 const { ipcRenderer } = require('electron');
 const uuid = require('uuid');
-const { splitConf, mergeWrite } = require('./util');
+const { splitConf, mergeWrite } = require('../util');
 
 const fileExists = p => {
   try {
@@ -39,7 +39,7 @@ class Wallet {
     this.password = '';
     this.port = '';
     this.version = versions.length > 0 ? versions[versions.length - 1] : '';
-    this.directory = '';
+    this.directory = this.getDefaultDirectory();
 
   }
 
@@ -66,7 +66,7 @@ class Wallet {
   }
 
   getDefaultDirectory() {
-    const folder = platform === 'win32' ? this.dirNameWin : platform === 'darwin' ? this.dirNameMac : '.' + this.dirNameMac.toLowerCase();
+    const folder = platform === 'win32' ? this.dirNameWin : platform === 'darwin' ? this.dirNameMac : '.' + this.dirNameLinux;
     const basePath = (platform === 'win32' || platform === 'darwin') ? ipcRenderer.sendSync('getDataPath') : ipcRenderer.sendSync('getHomePath');
     return path.join(basePath, folder);
   }

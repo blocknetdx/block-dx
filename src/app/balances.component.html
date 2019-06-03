@@ -2,7 +2,7 @@
   [sections]="sections">
 
   <app-table-column [sortable]="false" [classList]="'col-2'">
-    <ng-template columnHeader>Token</ng-template>
+    <ng-template columnHeader>Asset</ng-template>
     <ng-template let-row="row" columnCell>
 
       <span class="bn-number">{{row.coin}}</span>
@@ -11,10 +11,10 @@
   </app-table-column>
 
   <app-table-column [sortable]="false" [classList]="'col-8'">
-    <ng-template columnHeader>Available</ng-template>
+    <ng-template columnHeader>Available Balance</ng-template>
     <ng-template let-row="row" columnCell>
       <span [class]="row.priceClasses">
-        <span class="bn-number" [innerHtml]="">{{formatNumber(row.amount, row.coin)}}</span>
+        <span class="bn-number" [innerHTML]="">{{row.amount | numberFormat:row.format}} </span>
       </span>
     </ng-template>
   </app-table-column>

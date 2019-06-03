@@ -17,6 +17,8 @@ math.config({
   precision: 64
 });
 
+const { bignumber } = math;
+
 @Component({
   selector: 'app-orderform',
   templateUrl: './orderform.component.html',
@@ -37,13 +39,15 @@ export class OrderformComponent implements OnInit {
   public model: any;
   public addresses: {};
   public disableSubmit = false;
-  public Number = Number;
 
   public amountPopperText: string;
   public amountPopperShow = false;
 
   public totalPopperText: string;
   public totalPopperShow = false;
+
+  public formatNumberSymbol0: string; // defaults for gui (see resetModel)
+  public formatNumberSymbol1: string;
 
   // number limits for order amount and total in order form
   private upperLimit = 9;
@@ -69,7 +73,6 @@ export class OrderformComponent implements OnInit {
 
     this.appService.marketPairChanges.subscribe((symbols) => {
       this.symbols = symbols;
-      // this.model = {};
       this.resetModel();
     });
     this.currentpriceService.currentprice.subscribe((cp) => {
@@ -86,7 +89,7 @@ export class OrderformComponent implements OnInit {
           this.model = Object.assign(this.model, {
             id: order[2],
             amount: this.formatNumber(String(order[1]), this.symbols[0]),
-            totalPrice: this.formatNumber(String(math.multiply(order[0], order[1])), this.symbols[1]),
+            totalPrice: this.formatNumber(String(math.multiply(bignumber(order[0]), bignumber(order[1]))), this.symbols[1]),
             price: this.formatNumber(String(order[0]), this.symbols[1]),
             secondPrice
             // totalPrice: this.formatNumber(String(order[0] * order[1]), this.symbols[1])
@@ -97,7 +100,7 @@ export class OrderformComponent implements OnInit {
     this.pricingService.getPricing().subscribe(pricing => {
       this.zone.run(() => {
         this.pricing = pricing;
-        this.pricingAvailable = pricing.enabled;
+        this.updatePricingAvailable(pricing.enabled);
       });
     });
     this.pricingService.getPricingEnabled().subscribe(enabled => {
@@ -109,6 +112,10 @@ export class OrderformComponent implements OnInit {
     this.orderTypes = [
       { value: 'exact', viewValue: 'Exact Order'}
     ];
+  }
+
+  updatePricingAvailable(enabled: boolean) {
+    this.pricingAvailable = enabled && this.pricing.canGetPrice(this.symbols[1]);
   }
 
   fixAmount(numStr: string): string {
@@ -160,7 +167,12 @@ export class OrderformComponent implements OnInit {
   amountChanged(e) {
     e.preventDefault();
     this.model.id = '';
-    let { value: amount } = e.target;
+    let amount;
+    if(e.type === 'paste') {
+      amount = window.electron.clipboard.readText();
+    } else {
+      amount = e.target.value;
+    }
     amount = amount === '.' ? '0.' : amount;
     const { price = '' } = this.model;
     const [ valid, skipPopper = false ] = this.validAmount(amount);
@@ -169,6 +181,8 @@ export class OrderformComponent implements OnInit {
       fixed = this.fixAmount(amount);
       if(!skipPopper) this.showPopper('amount', 'You can only specify amounts with at most 0.000001 precision.', 5000);
       e.target.value = fixed;
+    } else if(e.type === 'paste') {
+      e.target.value = amount;
     }
     if(!amount) {
       this.model.totalPrice = '';
@@ -176,7 +190,7 @@ export class OrderformComponent implements OnInit {
     }
     amount = fixed ? fixed : amount;
     if(price) {
-      const newTotalPrice = String(math.multiply(amount, price));
+      const newTotalPrice = String(math.multiply(bignumber(amount), bignumber(price)));
       this.model.totalPrice = this.formatNumber(this.fixAmount(String(newTotalPrice)), 'BTC');
     } else {
       this.model.totalPrice = '';
@@ -187,7 +201,12 @@ export class OrderformComponent implements OnInit {
     e.preventDefault();
     const type = this.tabView.activeIndex === 0 ? 'buy' : 'sell';
     this.model.id = '';
-    let { value: price } = e.target;
+    let price;
+    if(e.type === 'paste') {
+      price = window.electron.clipboard.readText();
+    } else {
+      price = e.target.value;
+    }
     price = price === '.' ? '0.' : price;
     const { amount = '', totalPrice = '' } = this.model;
     const [ valid, skipPopper = false ] = this.validAmount(price);
@@ -196,6 +215,8 @@ export class OrderformComponent implements OnInit {
       fixed = this.fixAmount(price);
       if(!skipPopper) this.showPopper('price', 'You can only specify prices with at most 0.000001 precision.', 5000);
       e.target.value = fixed;
+    } else if(e.type === 'paste') {
+      e.target.value = price;
     }
     if(!price) {
       this.model.totalPrice = '';
@@ -205,7 +226,7 @@ export class OrderformComponent implements OnInit {
     price = fixed ? fixed : price;
     this.model.secondPrice = this.pricing.canGetPrice(this.symbols[1]) ? this.formatNumber(this.fixAmount(String(this.pricing.getPrice(price, this.symbols[1]))), 'BTC') : '0';
     if(amount) {
-      const newTotalPrice = String(math.multiply(amount, price));
+      const newTotalPrice = String(math.multiply(bignumber(amount), bignumber(price)));
       this.model.totalPrice = this.formatNumber(this.fixAmount(String(newTotalPrice)), 'BTC');
     } else {
       this.model.totalPrice = '';
@@ -216,7 +237,12 @@ export class OrderformComponent implements OnInit {
     e.preventDefault();
     const type = this.tabView.activeIndex === 0 ? 'buy' : 'sell';
     this.model.id = '';
-    let { value: secondPrice } = e.target;
+    let secondPrice;
+    if(e.type === 'paste') {
+      secondPrice = window.electron.clipboard.readText();
+    } else {
+      secondPrice = e.target.value;
+    }
     secondPrice = secondPrice === '.' ? '0.' : secondPrice;
     const { amount = '', totalPrice = '' } = this.model;
     const [ valid, skipPopper = false ] = this.validAmount(secondPrice);
@@ -225,6 +251,8 @@ export class OrderformComponent implements OnInit {
       fixed = this.fixAmount(secondPrice);
       if(!skipPopper) this.showPopper('price', 'You can only specify prices with at most 0.000001 precision.', 5000);
       e.target.value = fixed;
+    } else if(e.type === 'paste') {
+      e.target.value = secondPrice;
     }
     if(!secondPrice) {
       this.model.totalPrice = '';
@@ -235,7 +263,7 @@ export class OrderformComponent implements OnInit {
     const price = this.formatNumber(this.fixAmount(String(this.pricing.getFromBasePrice(secondPrice, this.symbols[1]))), 'BTC');
     this.model.price = price;
     if(amount) {
-      const newTotalPrice = String(math.multiply(amount, price));
+      const newTotalPrice = String(math.multiply(bignumber(amount), bignumber(price)));
       this.model.totalPrice = this.formatNumber(this.fixAmount(String(newTotalPrice)), 'BTC');
     } else {
       this.model.totalPrice = '';
@@ -306,6 +334,8 @@ export class OrderformComponent implements OnInit {
       makerAddress: this.addresses[this.symbols[0]] || '',
       takerAddress: this.addresses[this.symbols[1]] || ''
     };
+    this.formatNumberSymbol0 = this.formatNumber('0', this.symbols[0]);
+    this.formatNumberSymbol1 = this.formatNumber('0', this.symbols[1]);
   }
 
   validateNumber(numStr = '') {
@@ -411,4 +441,9 @@ export class OrderformComponent implements OnInit {
       }
     // }, 0);
   }
+
+  onTabChange() {
+    this.model.id = '';
+  }
+
 }

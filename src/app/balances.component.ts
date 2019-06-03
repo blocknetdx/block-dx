@@ -45,9 +45,4 @@ export class BalancesComponent implements OnInit {
     });
   }
 
-  formatNumber(num:string, symbol:string): string {
-    const format = symbol !== 'USD' ? '1.8-8' : '1.2-2';
-    return this.numberFormatPipe.transform(num, format);
-  }
-
 }

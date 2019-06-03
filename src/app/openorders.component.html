@@ -1,8 +1,11 @@
-<app-table [rows]="openorders" [selectable]="selectable">
+<app-table
+  [rows]="openorders"
+  [selectable]="true"
+  (onRowContextMenu)="onRowContextMenu($event)">
 
   <bn-table-row-detail *isBp="['xs','sm','md']">
     <ng-template #rowDetail let-row="row">
-      <div class="row-detail" [title]="row.simpleStatus()">
+      <div class="row-detail" [title]="row.displayStatus">
         <div>
           <span>Fee: <span [innerHtml]="0 | blockCurrency:symbols[1]:'6'"></span></span>
         </div>
@@ -17,7 +20,7 @@
   <app-table-column [prop]="'price'" [classList]="'col'" maxWidth="36px">
     <ng-template columnHeader>Type</ng-template>
     <ng-template let-row="row" columnCell>
-      <span class="bn-number" class="open-order-table-font" [title]="row.simpleStatus()"
+      <span class="bn-number no-highlight open-order-table-font" [title]="row.displayStatus"
             [class.color-red]="row.side == 'sell'"
             [class.color-green]="row.side == 'buy'"
             [innerHtml]="row.side === 'buy' ? 'BUY' : 'SELL'"></span>
@@ -27,7 +30,7 @@
   <app-table-column [prop]="'price'" [classList]="'col'" maxWidth="80px">
     <ng-template columnHeader>Market</ng-template>
     <ng-template let-row="row" columnCell>
-      <span class="bn-number open-order-table-font" [title]="row.simpleStatus()"
+      <span class="bn-number open-order-table-font no-highlight" [title]="row.displayStatus"
             [innerHtml]="row.taker + '/' + row.maker"></span>
     </ng-template>
   </app-table-column>
@@ -35,38 +38,38 @@
   <app-table-column [prop]="'size'" [classList]="'col'">
     <ng-template columnHeader>Amount</ng-template>
     <ng-template let-row="row" columnCell>
-      <span class="bn-number open-order-table-font" [title]="row.simpleStatus()" [innerHtml]="prepareNumber(row.size) | blockCurrency:symbols[0]:'6'"></span> <span class="padded-token open-order-table-font" [title]="row.simpleStatus()" [innerHTML]="padToken(row.taker)"></span>
+      <span class="bn-number open-order-table-font no-highlight" [title]="row.displayStatus" [innerHTML]="row.displaySize | blockCurrency:symbols[0]:'6'"></span> <span class="padded-token open-order-table-font no-highlight" [title]="row.displayStatus" [innerHTML]="hashPadToken[row.taker]"></span>
     </ng-template>
   </app-table-column>
 
   <app-table-column [prop]="'price'" [classList]="'col'">
     <ng-template columnHeader>Price</ng-template>
     <ng-template let-row="row" columnCell>
-      <span class="bn-number open-order-table-font" [title]="row.simpleStatus()"
-            [innerHtml]="prepareNumber(row.price) | blockCurrency:symbols[1]:'6'"></span> <span class="padded-token open-order-table-font" [title]="row.simpleStatus()" [innerHTML]="padToken(row.maker)"></span>
+      <span class="bn-number open-order-table-font no-highlight" [title]="row.displayStatus"
+            [innerHTML]="row.displayPrice | blockCurrency:symbols[1]:'6'"></span> <span class="padded-token open-order-table-font no-highlight" [title]="row.displayStatus" [innerHTML]="hashPadToken[row.maker]"></span>
     </ng-template>
   </app-table-column>
 
   <app-table-column *ngIf="pricingEnabled" [prop]="'price'" [classList]="'col'" maxWidth="74px">
     <ng-template columnHeader>Price ({{pricing ? pricing.in : ''}})</ng-template>
     <ng-template let-row="row" columnCell>
-      <span *ngIf="!pricingAvailable || !pricing.canGetPrice(row.maker)" class="bn-number open-order-table-font" [title]="row.simpleStatus()">N/A</span>
-      <span *ngIf="pricingAvailable && pricing.canGetPrice(row.maker)" class="bn-number open-order-table-font"  [title]="row.simpleStatus()"
-            [innerHtml]="prepareNumber(pricing.getPrice(row.price, row.maker)) | blockCurrency:symbols[1]:'6'"></span>
+      <span *ngIf="!pricingAvailable || !row.pricingAvailable" class="bn-number open-order-table-font no-highlight" [title]="row.displayStatus">N/A</span>
+      <span *ngIf="pricingAvailable && row.pricingAvailable" class="bn-number open-order-table-font no-highlight"  [title]="row.displayStatus"
+            [innerHTML]="row.displayAPIPrice | blockCurrency:symbols[1]:'6'"></span>
     </ng-template>
   </app-table-column>
 
   <app-table-column [prop]="'price'" [classList]="'col'">
     <ng-template columnHeader>Total</ng-template>
     <ng-template let-row="row" columnCell>
-      <span class="bn-number open-order-table-font" [title]="row.simpleStatus()" [innerHtml]="prepareNumber(row.total) | blockCurrency:symbols[1]:'6'"></span> <span class="padded-token open-order-table-font" [title]="row.simpleStatus()" [innerHTML]="padToken(row.maker)"></span>
+      <span class="bn-number open-order-table-font no-highlight" [title]="row.displayStatus" [innerHTML]="row.displayTotal | blockCurrency:symbols[1]:'6'"></span> <span class="padded-token open-order-table-font no-highlight" [title]="row.displayStatus" [innerHTML]="hashPadToken[row.maker]"></span>
     </ng-template>
   </app-table-column>
 
   <app-table-column [prop]="'created_at'" [classList]="'col d-none d-sm-block'">
     <ng-template columnHeader>Created</ng-template>
     <ng-template let-row="row" columnCell>
-      <span class="open-order-table-font" [title]="row.simpleStatus()">{{row.datetimeFormat()}}</span>
+      <span class="open-order-table-font no-highlight" [title]="row.displayStatus">{{row.displayDate}}</span>
     </ng-template>
   </app-table-column>
 
@@ -80,7 +83,7 @@
   <app-table-column [prop]="'status'" [classList]="'d-none d-sm-block col'" maxWidth="40px">
     <ng-template columnHeader>Status</ng-template>
     <ng-template let-row="row" columnCell>
-      <div *ngIf="row.isNew()" class="order-status status-open" [title]="row.simpleStatus()">
+      <div *ngIf="row.status === OrderStates.New" class="order-status status-open" [title]="row.displayStatus">
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
           <g transform="translate(25 50)"><circle cx="0" cy="0" r="6" fill="rgba(0,0,0,0.7)" transform="scale(0.998675 0.998675)">
             <animateTransform attributeName="transform" type="scale" begin="-0.3333333333333333s" calcMode="spline" keySplines="0.3 0 0.7 1;0.3 0 0.7 1" values="0;1;0" keyTimes="0;0.5;1" dur="1s" repeatCount="indefinite"></animateTransform>
@@ -93,14 +96,14 @@
           </circle></g>
         </svg>
       </div>
-      <div *ngIf="row.isOpen()" class="order-status status-open" [title]="row.simpleStatus()">Open</div>
-      <div *ngIf="row.isAccepting()" class="order-status status-process" [title]="row.simpleStatus()">1/5</div>
-      <div *ngIf="row.isHold()" class="order-status status-process" [title]="row.simpleStatus()">2/5</div>
-      <div *ngIf="row.isInitialized()" class="order-status status-process" [title]="row.simpleStatus()">3/5</div>
-      <div *ngIf="row.isCreated()" class="order-status status-process" [title]="row.simpleStatus()">4/5</div>
-      <div *ngIf="row.isCommitted()" class="order-status status-process" [title]="row.simpleStatus()">5/5</div>
-      <div *ngIf="row.isFinished()" class="order-status status-finished" [title]="row.simpleStatus()">&#10003;</div>
-      <div *ngIf="row.isExpired()" class="order-status status-alert" [title]="row.simpleStatus()">
+      <div *ngIf="row.status === OrderStates.Open" class="order-status status-open" [title]="row.displayStatus">Open</div>
+      <div *ngIf="row.status === OrderStates.Accepting" class="order-status status-process" [title]="row.displayStatus">1/5</div>
+      <div *ngIf="row.status === OrderStates.Hold" class="order-status status-process" [title]="row.displayStatus">2/5</div>
+      <div *ngIf="row.status === OrderStates.Initialized" class="order-status status-process" [title]="row.displayStatus">3/5</div>
+      <div *ngIf="row.status === OrderStates.Created" class="order-status status-process" [title]="row.displayStatus">4/5</div>
+      <div *ngIf="row.status === OrderStates.Committed" class="order-status status-process" [title]="row.displayStatus">5/5</div>
+      <div *ngIf="row.status === OrderStates.Finished" class="order-status status-finished" [title]="row.displayStatus">&#10003;</div>
+      <div *ngIf="row.status === OrderStates.Expired" class="order-status status-alert" [title]="row.displayStatus">
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
           <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="-5px" viewBox="0 0 100 100" style="transform-origin: 50px 50px 0px; transform: scale(1);" xml:space="preserve">
             <path d="M81.1,77.5C73.7,85,63.6,88.9,53.5,88.9c-5.6,0-11.2-1.2-16.5-3.7c-4.1-1.9-7.8-4.5-11-7.7l7.7-7.7 c2.3,2.3,5,4.2,7.9,5.6c10.7,5,23.4,2.8,31.8-5.6c11-11,11-28.8,0-39.7c-11-11-28.8-11-39.7,0c-3.4,3.4-5.8,7.5-7.1,12.1l7.7,1.1 L17.7,64.6L7.5,39.6l8.2,1.1c1.7-6.9,5.2-13.2,10.3-18.2c15.2-15.2,39.9-15.2,55.1,0C96.3,37.6,96.3,62.4,81.1,77.5z" fill="rgba(0,0,0,0.6)" style="fill: rgba(0,0,0,0.6);"></path>
@@ -108,7 +111,7 @@
           </svg>
         </svg>
       </div>
-      <div *ngIf="row.isOffline()" class="order-status status-alert" [title]="row.simpleStatus()">
+      <div *ngIf="row.status === OrderStates.Offline" class="order-status status-alert" [title]="row.displayStatus">
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
           <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="-8px" viewBox="0 0 100 100" style="transform-origin: 50px 50px 0px; transform: scale(1);" xml:space="preserve">
             <path d="M56.4,75.4c-3.6-3.6-9.3-3.6-12.9,0l6.4,6.4L56.4,75.4z" fill="rgba(0,0,0,0.7)" style="fill: rgba(0, 0, 0, 0.3);"></path>
@@ -120,7 +123,7 @@
           </svg>
         </svg>
       </div>
-      <div *ngIf="row.isInvalid()" class="order-status status-error" [title]="row.simpleStatus()">
+      <div *ngIf="row.status === OrderStates.Invalid" class="order-status status-error" [title]="row.displayStatus">
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
           <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="-8px" viewBox="0 0 100 100" style="transform-origin: 50px 50px 0px; transform: scale(1);" xml:space="preserve">
             <path d="M50.5,25.1c-0.2-0.4-0.8-0.4-1,0L18.2,74.3c-0.1,0.2-0.1,0.5,0.1,0.7l0.1,0.2l62.8,0c0.1,0,0.4,0,0.5-0.3 c0.2-0.3,0-0.6,0-0.6L50.5,25.1z" fill="none" style="fill: none;"></path>
@@ -129,21 +132,21 @@
           </svg>
         </svg>
       </div>
-      <div *ngIf="row.isRolledBack()" class="order-status status-error" [title]="row.simpleStatus()">
+      <div *ngIf="row.status === OrderStates.RolledBack" class="order-status status-error" [title]="row.displayStatus">
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
           <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="-8px" viewBox="0 0 100 100" style="transform-origin: 50px 50px 0px; transform: scale(1);" xml:space="preserve">
             <path d="M28.29,30.481h34.1C78.168,30.481,90,41.403,90,54.828S78.168,79.175,62.39,79.175H12.008V67.127H62.39 c8.98,0,15.562-5.632,15.562-12.299S71.37,42.529,62.39,42.529h-34.1v9.654L10,36.506l18.29-15.681V30.481z" fill="rgba(0,0,0,0.7)" style="fill: rgba(0, 0, 0, 0.7);"></path>
           </svg>
         </svg>
       </div>
-      <div *ngIf="row.isRollbackFailed()" class="order-status status-error" [title]="row.simpleStatus()">
+      <div *ngIf="row.status === OrderStates.RollbackFailed" class="order-status status-error" [title]="row.displayStatus">
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
           <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="-8px" viewBox="0 0 100 100" style="transform-origin: 50px 50px 0px; transform: scale(1);" xml:space="preserve">
             <path d="M28.29,30.481h34.1C78.168,30.481,90,41.403,90,54.828S78.168,79.175,62.39,79.175H12.008V67.127H62.39 c8.98,0,15.562-5.632,15.562-12.299S71.37,42.529,62.39,42.529h-34.1v9.654L10,36.506l18.29-15.681V30.481z" fill="rgba(0,0,0,0.7)" style="fill: rgba(0, 0, 0, 0.7);"></path>
           </svg>
         </svg>
       </div>
-      <div *ngIf="row.isCanceled()" class="order-status status-process" [title]="row.simpleStatus()">
+      <div *ngIf="row.status === OrderStates.Canceled" class="order-status status-process" [title]="row.displayStatus">
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
           <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="-8px" viewBox="0 0 100 100" style="transform-origin: 50px 50px 0px; transform: scale(0.9);" xml:space="preserve">
             <path d="M78.3,21.7c-15.6-15.6-41-15.6-56.6,0c-15.6,15.6-15.6,41,0,56.6C29.5,86.1,39.8,90,50,90s20.5-3.9,28.3-11.7 C93.9,62.7,93.9,37.3,78.3,21.7z M28,28c6.1-6.1,14-9.1,22-9.1c6.1,0,12.3,1.8,17.5,5.4L24.3,67.5C16,55.4,17.3,38.7,28,28z M72,72 c-10.7,10.7-27.4,12-39.5,3.7l43.2-43.2C84,44.6,82.7,61.3,72,72z" fill="rgba(0,0,0,0.6)" style="fill: rgba(0, 0, 0, 0.6);"></path>
@@ -164,7 +167,7 @@
     <!-- <ng-template columnHeader>Status</ng-template> -->
     <ng-template let-row="row" columnCell>
       <!--<span *ngIf="row.canceled">Canceled</span>-->
-      <a *ngIf="cancelable(row.status)" (click)="cancelOrder(row)" class="close" title="Cancel order">
+      <a *ngIf="row.cancelable" (click)="cancelOrder(row)" class="close" title="Cancel order">
         <i class="material-icons open-order-table-font">close</i>
       </a>
     </ng-template>

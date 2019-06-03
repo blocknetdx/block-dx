@@ -16,7 +16,7 @@
           <div class="col-6 col-md-4">
             <div class="input-group">
               <input name="coinA" type="text"
-              required placeholder="Select token"
+              required placeholder="Select asset"
               tabindex="1" autocomplete="off"
               (keyup.ArrowDown)="onArrowDown($event)"
               #coinA="ngModel" #input
@@ -61,21 +61,6 @@
       [deselectOnBlur]="false"
       (onRowSelect)="onRowSelect($event)">
 
-      <bn-table-info *ngIf="coinAValid">
-        <ng-template #tableInfo>
-          <div class="row first-coin-info">
-            <div class="col-4 align-left uppercase"><b>{{formatRow(model.coinA)}}</b></div>
-            <div class="col-4"><b>{{model.coinA.last}}</b></div>
-            <div class="col-4">
-              <span [class.color-red]="model.coinA.change < 0" [class.color-green]="model.coinA.change > 0">{{model.coinA.change | percent:'1.2-2'}}</span>
-              <img *ngIf="model.coinA.change > 0" class="my-icon" aria-label="My icon" src="assets/icons/arrow-diagonal-up.svg">
-              <img *ngIf="model.coinA.change < 0" class="my-icon" aria-label="My icon" src="assets/icons/arrow-diagonal-down.svg">
-            </div>
-          </div>
-          <hr>
-        </ng-template>
-      </bn-table-info>
-
       <app-table-column [prop]="'symbol'" [classList]="'col-3 align-left'">
         <ng-template columnHeader>Ticker</ng-template>
         <ng-template let-row="row" columnCell>
@@ -86,7 +71,7 @@
       </app-table-column>
 
       <app-table-column [prop]="'name'" [classList]="'col-2 align-left d-none d-md-block'">
-        <ng-template columnHeader>Token</ng-template>
+        <ng-template columnHeader>Asset</ng-template>
         <ng-template let-row="row" columnCell>
           <span class="capitalize currency-cell">{{row.name}}</span>
         </ng-template>

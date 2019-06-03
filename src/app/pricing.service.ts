@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { Pricing } from './pricing';
 
 @Injectable()
 export class PricingService {
 
-  private pricingEnabledObservable: Observable<boolean>;
-  private pricingObservable: Observable<Pricing>;
+  private pricingEnabledObservable: BehaviorSubject<boolean>;
+  private pricingObservable: BehaviorSubject<Pricing>;
 
   constructor(private http: Http) { }
 
@@ -16,19 +16,17 @@ export class PricingService {
    * Returns if pricing is enabled or not
    * @returns {Observable<boolean>}
    */
-  public getPricingEnabled(): Observable<boolean> {
-    const { ipcRenderer } = window.electron;
-    if (!this.pricingEnabledObservable) {
-      this.pricingEnabledObservable = Observable.create(observer => {
-        try {
-          ipcRenderer.on('marketPricingEnabled', (e, enabled) => {
-            observer.next(enabled);
-          });
-          ipcRenderer.send('getMarketPricingEnabled');
-        } catch(err) {
-          console.error(err);
-        }
+  public getPricingEnabled(): BehaviorSubject<boolean> {
+    if(!this.pricingEnabledObservable) {
+
+      const { ipcRenderer } = window.electron;
+
+      this.pricingEnabledObservable = new BehaviorSubject(false);
+
+      ipcRenderer.on('marketPricingEnabled', (e, enabled) => {
+        this.pricingEnabledObservable.next(enabled);
       });
+      ipcRenderer.send('getMarketPricingEnabled');
     }
     return this.pricingEnabledObservable;
   }
@@ -37,20 +35,18 @@ export class PricingService {
    * Returns pricing objects
    * @returns {Observable<Pricing[]>}
    */
-  public getPricing(): Observable<Pricing> {
-    const { ipcRenderer } = window.electron;
-    if (!this.pricingObservable) {
-      this.pricingObservable = Observable.create(observer => {
-        try {
-          ipcRenderer.on('pricingMultipliers', (e, items) => {
-            const pricing = new Pricing(items);
-            observer.next(pricing);
-          });
-          ipcRenderer.send('getPricing');
-        } catch(err) {
-          console.error(err);
-        }
+  public getPricing(): BehaviorSubject<Pricing> {
+    if(!this.pricingObservable) {
+
+      const { ipcRenderer } = window.electron;
+
+      this.pricingObservable = new BehaviorSubject(new Pricing([]));
+
+      ipcRenderer.on('pricingMultipliers', (e, items) => {
+        const pricing = new Pricing(items);
+        this.pricingObservable.next(pricing);
       });
+      ipcRenderer.send('getPricing');
     }
     return this.pricingObservable;
   }

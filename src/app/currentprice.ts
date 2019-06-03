@@ -13,6 +13,8 @@ export class Currentprice {
   public last: string;
   public volume_30day: string;
   public time: string;
+  public priceDiff = 0;
+  public priceStatus: string;
 
   public _volume = 0;
   public _open = 0;
@@ -20,29 +22,25 @@ export class Currentprice {
   public _low = 0;
   public _high = 0;
 
-  constructor() {}
-
-  public get priceDiff(): number {
-    const res = math
-      .chain(this._close)
-      .divide(this._open)
-      .subtract(1)
-      .done();
-    return res || 0;
-  }
-
-  public get priceStatus(): string {
-    return (this.priceDiff * 100) > 0 ? 'up' : 'down';
+  constructor(props: any) {
+    Object.assign(this, props);
+    this.last = props.close.toString();
+    this._volume = props.volume;
+    this._open = props.open;
+    this._close = props.close;
+    this._low = props.low;
+    this._high = props.high;
+    if(this._close && this._open) {
+      this.priceDiff = math
+        .chain(this._close)
+        .divide(this._open)
+        .subtract(1)
+        .done();
+    }
+    this.priceStatus = (this.priceDiff * 100) > 0 ? 'up' : 'down';
   }
 
   public static fromObject(obj: any): Currentprice {
-    const inst = new Currentprice();
-    inst.last = obj.close.toString();
-    inst._volume = obj.volume;
-    inst._open = obj.open;
-    inst._close = obj.close;
-    inst._low = obj.low;
-    inst._high = obj.high;
-    return Object.assign(inst, obj);
+    return new Currentprice(obj);
   }
 }

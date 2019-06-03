@@ -100,6 +100,9 @@ export class PricechartComponent implements AfterViewInit, OnDestroy {
   }
 
   makeChart() {
+    if (this.chart)
+      this.chart.clear();
+    
     this.chart = AmCharts.makeChart(this.container.nativeElement, {
       'type': 'serial',
       'theme': 'dark',

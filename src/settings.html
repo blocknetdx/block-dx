@@ -136,6 +136,11 @@
     </div>
 
     <div class="input-group">
+      <label>Blocknet  IP</label>
+      <input type="text" pattern="^\d+\.\d+\.\d+\.\d+$" id="js-ip" />
+    </div>
+
+    <div class="input-group">
       <button type="submit">SAVE CHANGES</button>
     </div>
 
@@ -164,6 +169,7 @@
       const port = ipcRenderer.sendSync('getPort');
       const user = ipcRenderer.sendSync('getUser');
       const version = ipcRenderer.sendSync('getAppVersion');
+      const ip = ipcRenderer.sendSync('getBlocknetIP');
 
       console.log(port);
       console.log(user);
@@ -171,9 +177,11 @@
       const $port = $('#js-port');
       const $user = $('#js-user');
       const $password = $('#js-password');
+      const $ip = $('#js-ip');
 
       $port.val(port);
       $user.val(user);
+      $ip.val(ip);
       $('#js-versionSpan').text(`BLOCK DX v${version}`);
 
       if(!port) {
@@ -181,6 +189,12 @@
       } else if(!user) {
         $user[0].focus();
       }
+
+      $('.js-blocknetWalletLink').on('click', e => {
+        e.preventDefault();
+        const { openExternal } = window.electron.remote.shell;
+        openExternal('https://github.com/BlocknetDX/blocknet/releases/latest');
+      });
 
       $('form').on('submit', e => {
         e.preventDefault();
@@ -192,7 +206,8 @@
         const dataToSave = {
           port: $port.val(),
           user: $user.val(),
-          password: $password.val()
+          password: $password.val(),
+          blocknetIP: $ip.val()
         };
 
         console.log(dataToSave);

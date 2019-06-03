@@ -7,8 +7,11 @@ export class Cryptocurrency {
   public local: boolean;
 
   public static fromObject(obj: any): Cryptocurrency {
+    const { ipcRenderer } = window.electron;
     const inst = new Cryptocurrency();
-    Object.assign(inst, obj);
+    Object.assign(inst, obj, {
+      name: ipcRenderer.sendSync('getTokenName', obj.symbol)
+    });
     return inst;
   }
 

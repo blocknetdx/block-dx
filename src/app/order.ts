@@ -1,7 +1,7 @@
 export class Order {
   sequence: number;
-  bids: any[][];
-  asks: any[][];
+  bids: any[][] = [];
+  asks: any[][] = [];
 
   public static fromObject(obj: any): Order {
     const inst = new Order();
