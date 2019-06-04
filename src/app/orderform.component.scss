@@ -22,16 +22,20 @@ form {
 .order-form-total-input {
   opacity: .5;
 }
+
 #js-order-id {
   opacity: .5;
 }
+
 .order-form-button:enabled:hover {
   opacity: .9;
 }
+
 .order-form-buy-button {
   background-color: rgba(255, 255, 255, 0.06);
   color: #4BF5C6;
 }
+
 .order-form-sell-button {
   background-color: rgba(255, 255, 255, 0.06);
   color: #FB7F70;
@@ -41,6 +45,7 @@ form {
   height: 8px;
   display: block;
 }
+
 
 //$popper-color: #f33;
 //.popper {

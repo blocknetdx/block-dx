@@ -1,11 +1,15 @@
 :host .angular-popper {
   position: absolute;
-  background: #FFC107;
+  /*background: #FFC107;*/
+  background: #fff;
   color: black;
+  font-size: 0.8rem;
   width: 150px;
-  border-radius: 3px;
+  /*border-radius: 3px;*/
+  border-radius: 0;
   box-shadow: 0 0 2px rgba(0,0,0,0.5);
-  padding: 10px;
+  /*padding: 10px;*/
+  padding: 8px;
   text-align: center;
 }
 
@@ -13,7 +17,8 @@
   width: 0;
   height: 0;
   border-style: solid;
-  border-color: #FFC107;
+  /*border-color: #FFC107;*/
+  border-color: #fff;
   position: absolute;
   margin: 5px;
 }

@@ -61,7 +61,7 @@
             <div class="input-group row">
               <label class="col-4 col-form-label" for="amount">Price</label>
               <div class="col-8">
-                <input #amountInput
+                <input #priceInput
                        (keyup)="priceChanged($event)"
                        (paste)="priceChanged($event)"
                        (blur)="onNumberInputBlur($event, 'price')"
@@ -82,7 +82,7 @@
                        class="form-control"
                        type="text" pattern="\d+"
                        placeholder="N/A" />
-                <input #amountInput
+                <input #secondPriceInput
                        *ngIf="pricingAvailable"
                        [disabled]="!pricingAvailable"
                        (keyup)="secondPriceChanged($event)"
@@ -186,6 +186,14 @@
 
             <angular-popper *ngIf="amountPopperShow" [target]="amountInput" [placement]="'top'" [closeButton]="false">
               <span [textContent]="amountPopperText" content></span>
+            </angular-popper>
+
+            <angular-popper *ngIf="pricePopperShow" [target]="priceInput" [placement]="'top'" [closeButton]="false">
+              <span [textContent]="pricePopperText" content></span>
+            </angular-popper>
+
+            <angular-popper *ngIf="secondPricePopperShow" [target]="priceInput" [placement]="'top'" [closeButton]="false">
+              <span [textContent]="secondPricePopperText" content></span>
             </angular-popper>
 
             <angular-popper *ngIf="totalPopperShow" [target]="totalInput" [placement]="'top'" [closeButton]="false">
