@@ -21,6 +21,7 @@ declare var electron: any;
 @Injectable()
 export class OrderbookService {
   public requestedOrder: Subject<Order> = new Subject();
+  public takenOrder: Subject<Order> = new Subject();
 
   private orderbookObservable: BehaviorSubject<Order>;
   private priceDecimalObservable: BehaviorSubject<string>;
@@ -33,6 +34,10 @@ export class OrderbookService {
 
   requestOrder(order: any) {
     this.requestedOrder.next(order);
+  }
+
+  takeOrder(order: any) {
+    this.takenOrder.next(order);
   }
 
   public setPriceDecimal(num: string) {

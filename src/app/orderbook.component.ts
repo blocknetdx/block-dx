@@ -184,6 +184,16 @@ export class OrderbookComponent implements OnInit {
     }
   }
 
+  onTakeOrder(row) {
+    if (row) {
+      if(this.ownOrders.has(row[2])) {
+        alert('You are unable to take your own order.');
+      } else {
+        this.orderbookService.takeOrder(row);
+      }
+    }
+  }
+
   onRowSelect(row) {
     if (row) {
       if(this.ownOrders.has(row[2])) {
@@ -214,22 +224,6 @@ export class OrderbookComponent implements OnInit {
     const ownOrder = this.ownOrders.has(orderId);
     const menuTemplate = [];
 
-    if(ownOrder) {
-      menuTemplate.push({
-        label: 'Cancel Order',
-        click: () => {
-          const confirmed = confirm('Are you sure that you want to cancel this order?');
-          if(confirmed) this.onCancelOrder(orderId);
-        }
-      });
-    } else {
-      menuTemplate.push({
-        label: 'Take Order',
-        click: () => {
-          this.onRowSelect(row);
-        }
-      });
-    }
     menuTemplate.push({
       label: 'Copy Order ID',
       click: () => {
@@ -242,6 +236,25 @@ export class OrderbookComponent implements OnInit {
         ipcRenderer.send('openOrderDetailsWindow', orderId);
       }
     });
+    menuTemplate.push({
+      type: 'separator'
+    });
+    if(ownOrder) {
+      menuTemplate.push({
+        label: 'Cancel Order',
+        click: () => {
+          const confirmed = confirm('Are you sure that you want to cancel this order?');
+          if(confirmed) this.onCancelOrder(orderId);
+        }
+      });
+    } else {
+      menuTemplate.push({
+        label: 'Take Order',
+        click: () => {
+          this.onTakeOrder(row);
+        }
+      });
+    }
 
     const menu = Menu.buildFromTemplate(menuTemplate);
     menu.popup({x: clientX, y: clientY});
