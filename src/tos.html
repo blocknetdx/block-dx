@@ -31,7 +31,6 @@
     }
     .container {
       padding: 20px;
-      padding-bottom: 10px;
     }
     .input-group {
       display: flex;
@@ -109,18 +108,22 @@
       flex-direction: row;
       flex-wrap: nowrap;
       justify-content: flex-start;
+      position: absolute;
+      bottom: 10px;
+      width: calc(100% - 20px);
       margin-left: -10px;
-      margin-right: -10px;
     }
     div.tos-container {
+      position: absolute;
+      top: 177px;
+      bottom: 85px;
+      overflow-y: scroll;
+      padding: 15px 15px;
+      margin-right: 20px;
       background-color: #213d54;
       color: #fff;
-      padding: 15px 15px;
       font-weight: 300;
       font-size: 14px;
-      margin-bottom: 10px;
-      height: 395px;
-      overflow-y: scroll;
       white-space: pre-line;
     }
     ::-webkit-scrollbar {
@@ -142,8 +145,8 @@
 
 </head>
 <body>
-<div style="width:100%; padding: 20px 0 20px 0; text-align:center;"><img style="max-width:300px;" src="assets/logo_full.svg" alt="Blocknet Logo"></div>
-<h3>LICENSE AGREEMENT</h3>
+  <div style="width:100%; padding: 20px 0 20px 0; text-align:center;"><img style="max-width:300px;" src="assets/logo_full.svg" alt="Blocknet Logo"></div>
+  <h3>LICENSE AGREEMENT</h3>
   <div class="container">
 
     <div id="js-tosContainer" class="tos-container"></div>
@@ -176,6 +179,7 @@
 
       const alreadyAccepted = ipcRenderer.sendSync('alreadyAccepted');
       if(!alreadyAccepted) $('#js-buttonContainer').css('display', 'flex');
+      if(alreadyAccepted) $('#js-tosContainer').css('bottom', '20px');
 
       const $cancelBtn = $('#js-cancelBtn');
       $cancelBtn.on('click', () => {
