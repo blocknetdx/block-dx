@@ -278,4 +278,8 @@ export class PairSelectorComponent implements OnInit, AfterViewInit {
     this.active = false;
   }
 
+  refreshBalances() {
+    window.electron.ipcRenderer.send('refreshBalances');
+  }
+
 }

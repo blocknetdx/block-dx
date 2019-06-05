@@ -6,8 +6,8 @@
     <div class="sidebar col-lg">
       <div class="trade_table row">
 
-          <bn-card class="trade_table__cell balances col-lg-12" [class.alternate-pricing]="pricingEnabled" [allowFullscreen]="false">
-            <bn-card-title>Balances</bn-card-title>
+          <bn-card class="trade_table__cell balances col-lg-12" [class.alternate-pricing]="pricingEnabled" [allowFullscreen]="false" [showRefreshBalances]="true">
+            <bn-card-title><span>Balances <a class="balances-tooltip-link" (click)="$event.preventDefault();" href="#" title="{{balancesTooltipText}}"><i class="material-icons balances-tooltip-icon">help</i></a></span></bn-card-title>
             <bn-card-body>
               <app-balances></app-balances>
             </bn-card-body>

@@ -301,3 +301,31 @@ input {
     opacity: 0.4;
   }
 }
+
+.refresh-wallets-button {
+  opacity: .6;
+  //color: #fff;
+  display: block;
+  z-index: 1000;
+  height: 18px;
+  width: 18px;
+  position: absolute;
+  left: 140px;
+  bottom: -68px;
+
+  @include screen(lg) {
+    bottom: -50px;
+    left: 160px;
+  }
+
+  &:hover {
+    //opacity: 1;
+    .material-icons {
+      color: $bn-blue-light3;
+    }
+  }
+}
+
+.refresh-wallets-icon {
+  font-size: 18px;
+}

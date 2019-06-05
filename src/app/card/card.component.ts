@@ -16,6 +16,11 @@ import { CardToolbarDirective } from './card-toolbar.directive';
         <div *ngIf="toolbar" class="bn-card__toolbar">
           <ng-template *ngTemplateOutlet="toolbar.template"></ng-template>
         </div>
+        <a class="fullscreen" *ngIf="showRefreshBalances"
+           title="Refresh Balances"
+           (click)="refreshBalances()">
+          <i class="material-icons">refresh</i>
+        </a>
         <a class="fullscreen" *ngIf="allowFullscreen"
           (click)="goFullscreen()">
           <i *ngIf="!isFullscreen" class="material-icons">zoom_out_map</i>
@@ -32,6 +37,7 @@ export class CardComponent implements OnInit {
   @Input() cardClass: string;
   @Input() cardTitleClass: string;
   @Input() allowFullscreen: boolean = true;
+  @Input() showRefreshBalances = false;
 
   @ContentChild(CardToolbarDirective)
   public toolbar: CardToolbarDirective;
@@ -97,6 +103,10 @@ export class CardComponent implements OnInit {
     }
 
     // this.isFullscreen = !this.isFullscreen;
+  }
+
+  refreshBalances() {
+    window.electron.ipcRenderer.send('refreshBalances');
   }
 
 }

@@ -117,3 +117,17 @@
     }
   }
 }
+
+.balances-tooltip-link {
+  color: #fff;
+  opacity: .4;
+  width: 18px;
+  height:18px;
+  font-size: 16px;
+  &:hover {
+    color: #fff;
+  }
+}
+.balances-tooltip-icon {
+  font-size: 16px;
+}
