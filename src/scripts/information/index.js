@@ -89,13 +89,13 @@ $(document).ready(() => {
 
 
     const html = `
-          <h3 class="title">${sidebarItems[sidebarSelected]['title']}</h3>
           <div class="container">
             <div class="flex-container">
               <div class="col1">
                 ${sidebarHTML}
               </div>
               <div class="col2">
+                <h3 class="title">${sidebarItems[sidebarSelected]['title']}</h3>
                 ${mainHTML}
                 <div id="js-buttonContainer" class="button-container">
                   <button id="js-closeBtn" type="button">CLOSE</button>
