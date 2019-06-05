@@ -109,14 +109,14 @@
       flex-wrap: nowrap;
       justify-content: flex-start;
       position: absolute;
-      bottom: 10px;
+      bottom: 0px;
       width: calc(100% - 20px);
       margin-left: -10px;
     }
     div.tos-container {
       position: absolute;
       top: 177px;
-      bottom: 85px;
+      bottom: 75px;
       overflow-y: scroll;
       padding: 15px 15px;
       margin-right: 20px;
@@ -179,7 +179,7 @@
 
       const alreadyAccepted = ipcRenderer.sendSync('alreadyAccepted');
       if(!alreadyAccepted) $('#js-buttonContainer').css('display', 'flex');
-      if(alreadyAccepted) $('#js-tosContainer').css('bottom', '20px');
+      if(alreadyAccepted) $('#js-tosContainer').css('bottom', '10px');
 
       const $cancelBtn = $('#js-cancelBtn');
       $cancelBtn.on('click', () => {
