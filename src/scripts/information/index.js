@@ -97,6 +97,9 @@ $(document).ready(() => {
               </div>
               <div class="col2">
                 ${mainHTML}
+                <div id="js-buttonContainer" class="button-container">
+                  <button id="js-closeBtn" type="button" class="gray-button">CLOSE</button>
+                </div>
               </div>
             </div>
           </div>
@@ -106,6 +109,10 @@ $(document).ready(() => {
 
 
     setTimeout(() => {
+      $('#js-closeBtn').on('click', e => {
+        e.preventDefault();
+        ipcRenderer.send('closeInformationWindow');
+      });
 
       $('.js-sidebarItem')
         .off('click')

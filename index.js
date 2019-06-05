@@ -611,8 +611,10 @@ const openGeneralSettingsWindow = () => {
 
 };
 
+let informationWindow;
+
 const openInformationWindow = () => {
-  const informationWindow = new BrowserWindow({
+  informationWindow = new BrowserWindow({
     show: false,
     width: 1000,
     height: platform === 'win32' ? 708 : platform === 'darwin' ? 695 : 670,
@@ -632,6 +634,10 @@ const openInformationWindow = () => {
   });
 
 };
+
+ipcMain.on('closeInformationWindow', e => {
+  informationWindow.close();
+});
 
 const openTOSWindow = (alreadyAccepted = false) => {
 
