@@ -124,7 +124,7 @@ $(document).ready(() => {
           render();
       });
 
-      $('.js-blocknetWalletLink')
+      $('.js-externalLink')
         .off('click')
         .on('click', e => {
           e.preventDefault();
