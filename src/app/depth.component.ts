@@ -65,7 +65,7 @@ export class DepthComponent implements AfterViewInit, OnChanges, OnDestroy {
   }
 
   private calculateTotal(price, size) {
-    return math.round(math.multiply(bignumber(price), bignumber(size)), 6);
+    return math.round(math.multiply(bignumber(price), bignumber(size)), 6).toNumber();
   }
 
   ngAfterViewInit() {
