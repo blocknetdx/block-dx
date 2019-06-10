@@ -3,11 +3,29 @@
   <!-- Desktop -->
   <div class="row" *isBp="['lg', 'xl']">
 
+    <div id="tip-panel">
+      <div id="test-tooltip" class="tip-message">This is a tip message</div>
+      <div id="balances-tooltip" class="tip-message">
+        <h2>Balances</h2>
+        <ul>
+          <li><strong>Balances only show for connected wallets.</strong><p>If you did not yet connect the wallet, in the right sidebar menu select Configuration Setup > Add Wallet.</p></li>
+          <li><strong>Balances only show available funds.</strong><p>If UTXOs are locked in the wallet, or used in trades, then they will not count towards the balance.</p></li>
+          <li><strong>Balances only show funds in legacy addresses.</strong><p>If you are using a Segwit address, please create a new address to send the funds to. A legacy address will automatically be created when generating a new address.</p></li>
+          <li><strong>Balances do not show staked funds.</strong><p>If you have been staking, please send the funds to a new address for them to register.</p></li>
+        </ul>
+      </div>
+    </div>
+
+
     <div class="sidebar col-lg">
       <div class="trade_table row">
 
           <bn-card class="trade_table__cell balances col-lg-12" [class.alternate-pricing]="pricingEnabled" [allowFullscreen]="false" [showRefreshBalances]="true">
-            <bn-card-title><span>Balances <a class="balances-tooltip-link" (click)="$event.preventDefault();" href="#" title="{{balancesTooltipText}}"><i class="material-icons balances-tooltip-icon">help</i></a></span></bn-card-title>
+            <bn-card-title>
+              <span>Balances 
+                <i class="material-icons tooltip-icon" (mouseenter)="tooltip('balances-tooltip', 'block')" (mouseleave)="tooltip('balances-tooltip', 'none')">help</i>
+              </span>
+            </bn-card-title>
             <bn-card-body>
               <app-balances></app-balances>
             </bn-card-body>

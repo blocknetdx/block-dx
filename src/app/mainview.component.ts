@@ -20,13 +20,6 @@ export class MainviewComponent implements OnInit {
   public initialDecimalIdx: number;
   public pricingEnabled = false;
 
-  public balancesTooltipText = [
-    'Balances only show for connected wallets. If you did not yet connect the wallet, in the right sidebar menu select Configuration Setup > Add Wallet.',
-    'Balances only show available funds. If UTXOs are locked in the wallet, or used in trades, then they will not count towards the balance.',
-    'Balances only show funds in legacy addresses. If you are using a Segwit address, please create a new address to send the funds to. A legacy address will automatically be created when generating a new address.',
-    'Balances do not show staked funds. If you have been staking, please send the funds to a new address for them to register.'
-  ].map(s => '\u2022 ' + s).join('\n');
-
   constructor(
     private route: ActivatedRoute,
     private appService: AppService,
@@ -60,6 +53,11 @@ export class MainviewComponent implements OnInit {
 
   setPriceDecimal(num) {
     this.orderbookService.setPriceDecimal(num);
+  }
+
+  tooltip(id, displayType) {
+    document.getElementById('tip-panel').style.display = displayType;
+    document.getElementById(id).style.display = displayType;
   }
 
 }

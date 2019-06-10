@@ -106,7 +106,12 @@ export class CardComponent implements OnInit {
   }
 
   refreshBalances() {
+    let table = document.querySelector(".balances .bn-table__body") as HTMLElement;
+    table.style.display = 'none';
     window.electron.ipcRenderer.send('refreshBalances');
+    setTimeout(function () {
+      table.style.display = 'block';
+    }, 400);
   }
 
 }
