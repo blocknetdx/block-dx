@@ -20,9 +20,9 @@ const renderBlocknet = () => {
         <p>
           Subscribe to the following email lists for the latest features, updates, and news!
           <ul>
-            <li><a href="#" class="text-link js-externalLink" data-link="http://eepurl.com/c5OJMj">General Newsletter</a></li>
-            <li><a href="#" class="text-link js-externalLink" data-link="http://eepurl.com/dq-ElD">Service Node Newsletter</a></li>
-            <li><a href="#" class="text-link js-externalLink" data-link="http://eepurl.com/dDjhYH">Developer Newsletter</a></li>
+            <li><a href="#" class="text-link js-externalLink" data-link="https://blocknet.us16.list-manage.com/subscribe?u=5d0a376e982034a2ddd6edb98&id=6ae2c503df">General Newsletter</a></li>
+            <li><a href="#" class="text-link js-externalLink" data-link="https://blocknet.us16.list-manage.com/subscribe?u=5d0a376e982034a2ddd6edb98&id=d8349ac0b0">Service Node Newsletter</a></li>
+            <li><a href="#" class="text-link js-externalLink" data-link="https://blocknet.us16.list-manage.com/subscribe?u=5d0a376e982034a2ddd6edb98&id=e5efe39ee5">Developer Newsletter</a></li>
           </ul>
         </p>
       </div>
