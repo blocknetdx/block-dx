@@ -46,7 +46,7 @@ class SelectSetupType extends RouterView {
               <div class="col2-no-margin">
             
                 <p style="${styles.p}">Block DX is the fastest, most secure, most reliable, and most decentralized exchange, allowing for peer-to-peer trading directly from your wallet.</p>
-                <p style="${styles.p}"><strong>Prerequisites</strong>: Block DX requires the <a href="#" class="text-link js-blocknetWalletLink">latest Blocknet wallet</a> and the wallets of any assets you want to trade with.</p>
+                <p style="${styles.p}"><strong>Prerequisites</strong>: Block DX requires the <a href="#" class="text-link js-blocknetWalletLink">latest Blocknet wallet</a> and the wallets of any assets you want to trade with. These must be downloaded and installed before continuing. See the full list of <a href="#" class="text-link js-compatibleWalletsLink">compatible assets and wallet versions</a>.</p>
                 <div class="main-area" style="${styles.mainArea}">
                 
                   <div id="js-automaticCredentials" class="main-area-item" style="${styles.flexContainer}">
@@ -114,7 +114,11 @@ class SelectSetupType extends RouterView {
     };
     $('.js-blocknetWalletLink').on('click', e => {
       e.preventDefault();
-      remote.shell.openExternal('https://github.com/BlocknetDX/blocknet/releases/latest');
+      remote.shell.openExternal('https://github.com/blocknetdx/blocknet/releases/latest');
+    });
+    $('.js-compatibleWalletsLink').on('click', e => {
+      e.preventDefault();
+      remote.shell.openExternal('https://docs.blocknet.co/blockdx/listings/#listed-digital-assets');
     });
     $('#js-automaticCredentials').on('click', e => toggleCredentialGeneration(e, true));
     $('#js-manualCredentials').on('click', e => toggleCredentialGeneration(e, false));
