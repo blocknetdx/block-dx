@@ -1,7 +1,9 @@
 import {
   Component, OnInit, Input, ViewEncapsulation,
-  ElementRef, ViewChild, ContentChild
+  ElementRef, ViewChild, ContentChild, NgZone
 } from '@angular/core';
+import { AppConstants } from '../constants';
+import { briefTimeout } from '../util';
 
 import { CardToolbarDirective } from './card-toolbar.directive';
 
@@ -28,7 +30,7 @@ import { CardToolbarDirective } from './card-toolbar.directive';
         </a>
       </div>
       <div class="bn-card__body">
-        <ng-content select="bn-card-body"></ng-content>
+        <ng-content *ngIf="showBody" select="bn-card-body"></ng-content>
       </div>
     </div>
   `
@@ -39,6 +41,8 @@ export class CardComponent implements OnInit {
   @Input() allowFullscreen: boolean = true;
   @Input() showRefreshBalances = false;
 
+  public showBody = true;
+
   @ContentChild(CardToolbarDirective)
   public toolbar: CardToolbarDirective;
 
@@ -46,7 +50,9 @@ export class CardComponent implements OnInit {
 
   public isFullscreen: boolean;
 
-  constructor() { }
+  constructor(
+    private zone: NgZone
+  ) { }
 
   ngOnInit() {
     if (this.allowFullscreen && document.addEventListener) {
@@ -105,13 +111,13 @@ export class CardComponent implements OnInit {
     // this.isFullscreen = !this.isFullscreen;
   }
 
-  refreshBalances() {
-    let table = document.querySelector(".balances .bn-table__body") as HTMLElement;
-    table.style.display = 'none';
+  async refreshBalances() {
+    this.showBody = false;
     window.electron.ipcRenderer.send('refreshBalances');
-    setTimeout(function () {
-      table.style.display = 'block';
-    }, 400);
+    await briefTimeout(AppConstants.refreshBalancesTimeout);
+    this.zone.run(() => {
+      this.showBody = true;
+    });
   }
 
 }

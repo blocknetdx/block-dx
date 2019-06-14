@@ -33,3 +33,5 @@ export function debounce(func, wait, immediate?:boolean) {
     if (callNow) func.apply(context, args);
   };
 }
+
+export const briefTimeout = (timeout = 0) => new Promise(resolve => setTimeout(resolve, timeout));

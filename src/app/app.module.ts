@@ -12,6 +12,7 @@ import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { TradehistoryService } from './tradehistory.service';
 import { NumberFormatPipe } from './pipes/decimal.pipe';
 import { PopperComponent } from './angular-popper/angular-popper.component';
+import { BigTooltipComponent } from './big-tooltip/big-tooltip.component';
 // import { DecimalPipe } from '@angular/common';
 
 // Imports for loading & configuring the in-memory web api
@@ -110,7 +111,8 @@ const dev = environment.useMockAPI ? [
     TableSectionDividerDirective,
     CardToolbarDirective,
     NumberFormatPipe,
-    PopperComponent
+    PopperComponent,
+    BigTooltipComponent
   ],
   imports: [
     BrowserModule,

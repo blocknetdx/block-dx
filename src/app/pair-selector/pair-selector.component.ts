@@ -11,6 +11,8 @@ import { TableComponent } from '../table/table.component';
 import { TableColumnDirective } from '../table/table-column.directive';
 import { CryptocurrencyService } from '../cryptocurrency.service';
 import { Cryptocurrency } from '../cryptocurrency';
+import { AppConstants } from '../constants';
+import { briefTimeout } from '../util';
 
 @Component({
   selector: 'app-pair-selector',
@@ -46,19 +48,21 @@ export class PairSelectorComponent implements OnInit, AfterViewInit {
   private connectedTokensLabel = 'Connected Assets';
   private allTokensLabel = 'All Assets';
 
+  public showBody = true;
+
   public get sections(): any[] {
     let arr;
     switch(this.state) {
       case 'stage1' :
         arr = [
-          {title: this.connectedTokensLabel, rows: this._userWallet},
+          {title: this.connectedTokensLabel + ' ' + this.refreshButtonMarkup(), rows: this._userWallet},
           {title: this.allTokensLabel, rows: PairSelectorComponent.uniqueCoinsNotIn(this._allCoins, this._userWallet)}
         ];
         break;
       case 'stage2' :
       case 'stage3' :
         arr = [
-          {title: this.connectedTokensLabel, rows: this._userWallet.filter(c => c.symbol !== this.model.coinA.symbol)},
+          {title: this.connectedTokensLabel + ' ' + this.refreshButtonMarkup(), rows: this._userWallet.filter(c => c.symbol !== this.model.coinA.symbol)},
           {title: this.allTokensLabel, rows: PairSelectorComponent.uniqueCoins(this._allCoins.filter(c => c.symbol !== this.model.coinA.symbol))}
         ];
         break;
@@ -145,22 +149,27 @@ export class PairSelectorComponent implements OnInit, AfterViewInit {
     private appService: AppService,
     private cryptoService: CryptocurrencyService,
     private zone: NgZone
-  ) { }
+  ) {
+    this.onRefreshWalletsClick = this.onRefreshWalletsClick.bind(this);
+  }
 
   ngOnInit() {
     this.appService.marketPairChanges.subscribe((symbols) => {
       this.zone.run(() => {
+        console.log('market pair changes');
         this._loadedSymbols = symbols;
       });
     });
     this.cryptoService.getTokens()
       .subscribe((data) => {
         this.zone.run(() => {
+          console.log('get tokens');
           this._userWallet = data
             .filter(c => c.local);
           this._allCoins = data;
 
           this.filteredRows = this.sections;
+          this.registerRefreshClickEvent();
         });
       });
   }
@@ -173,6 +182,31 @@ export class PairSelectorComponent implements OnInit, AfterViewInit {
       if(isFirstRun || !this._loadedSymbols || this._loadedSymbols[0] === null || /^\s*$/.test(this._loadedSymbols[0]))
         this.active = true;
     }, 0);
+
+    this.onActiveStatus.subscribe(async function(active) {
+      // if pair selector is opening
+      if(active) {
+        await briefTimeout();
+        this.registerRefreshClickEvent();
+      }
+    }.bind(this));
+  }
+
+  refreshButtonMarkup(): String {
+    return '<a href="#" style="color:#8e98a4;" class="js-refreshWallets refresh-wallets-button" title="Refresh Wallets"><i class="material-icons refresh-wallets-icon">refresh</i></a>';
+  }
+
+  async registerRefreshClickEvent() {
+    await briefTimeout();
+    const element = document.querySelector('.js-refreshWallets');
+    if(!element) return;
+    element.removeEventListener('click', this.onRefreshWalletsClick);
+    element.addEventListener('click', this.onRefreshWalletsClick);
+  }
+
+  onRefreshWalletsClick(e) {
+    e.preventDefault();
+    this.refreshBalances();
   }
 
   filterCoins(key: string, val: string) {
@@ -245,6 +279,7 @@ export class PairSelectorComponent implements OnInit, AfterViewInit {
       this.coinAValid = false;
       this.coinBValid = false;
       this.inputs.first.nativeElement.focus();
+      this.registerRefreshClickEvent();
     } else if (coin === 'coinB') {
       this.model.coinB = '';
       this.coinBValid = false;
@@ -278,16 +313,14 @@ export class PairSelectorComponent implements OnInit, AfterViewInit {
     this.active = false;
   }
 
-  refreshBalances() {
-    let table = document.querySelector(".pair-container .ps-content") as HTMLElement;
-    let button = document.querySelector(".pair-container .refresh-wallets-button") as HTMLElement;
-    table.style.display = 'none';
-    button.style.display = 'none';
+  async refreshBalances() {
+    this.showBody = false;
     window.electron.ipcRenderer.send('refreshBalances');
-    setTimeout(function () {
-      table.style.display = 'block';
-      button.style.display = 'block';
-    }, 400);
+    await briefTimeout(AppConstants.refreshBalancesTimeout);
+    this.zone.run(() => {
+      this.showBody = true;
+      this.registerRefreshClickEvent();
+    });
   }
 
 }

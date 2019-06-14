@@ -7,12 +7,7 @@
   </div>
 
   <div [@fadeInOut] class="pair-container" *ngIf="active">
-    <header style="position:relative;">
-      <a class="refresh-wallets-button"
-        title="Refresh Wallets"
-        (click)="refreshBalances()">
-        <i class="material-icons refresh-wallets-icon">refresh</i>
-      </a>
+    <header>
       <form (ngSubmit)="onSubmit()" id="pairForm" #pairForm="ngForm" novalidate>
         <div class="row d-md-none">
           <p class="type2">SELECT MARKET PAIR</p>
@@ -59,6 +54,7 @@
     </header>
 
     <app-table
+      *ngIf="showBody"
       #pairTable
       [class.formValid]="pairForm.form.valid"
       [sections]="coinAValid ? filteredComparisons : filteredRows"
