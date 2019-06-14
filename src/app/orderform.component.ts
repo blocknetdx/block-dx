@@ -161,6 +161,14 @@ export class OrderformComponent implements OnInit {
         showProp = 'amountPopperShow';
         textProp = 'amountPopperText';
         break;
+      case 'price':
+        showProp = 'pricePopperShow';
+        textProp = 'pricePopperText';
+        break;
+      case 'secondPrice':
+        showProp = 'secondPricePopperShow';
+        textProp = 'secondPricePopperText';
+        break;
       case 'total':
         showProp = 'totalPopperShow';
         textProp = 'totalPopperText';
@@ -227,6 +235,8 @@ export class OrderformComponent implements OnInit {
     } else if(e.type === 'paste') {
       e.target.value = price;
     }
+    const numeric = new Set(['0','1','2','3','4','5','6','7','8','9','.','Decimal','Backspace']);
+    if (!numeric.has(e.key)) return; // do not calculate price if not a numeric key
     if(!price) {
       this.model.totalPrice = '';
       this.model.secondPrice = '';
@@ -258,11 +268,13 @@ export class OrderformComponent implements OnInit {
     let fixed;
     if(!valid) {
       fixed = this.fixAmount(secondPrice);
-      if(!skipPopper) this.showPopper('price', 'You can only specify prices with at most 0.000001 precision.', 5000);
+      if(!skipPopper) this.showPopper('secondPrice', 'You can only specify prices with at most 0.000001 precision.', 5000);
       e.target.value = fixed;
     } else if(e.type === 'paste') {
       e.target.value = secondPrice;
     }
+    const numeric = new Set(['0','1','2','3','4','5','6','7','8','9','.','Decimal','Backspace']);
+    if (!numeric.has(e.key)) return; // do not calculate price if not a numeric key
     if(!secondPrice) {
       this.model.totalPrice = '';
       this.model.price = '';
