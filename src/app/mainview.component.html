@@ -5,10 +5,28 @@
 
     <app-big-tooltip title="Balances" [show]="showBalancesTooltip">
       <ul>
-        <li><strong>Balances only show for connected wallets.</strong><p>If you did not yet connect the wallet, in the right sidebar menu select Configuration Setup > Add Wallet.</p></li>
-        <li><strong>Balances only show available funds.</strong><p>If UTXOs are locked in the wallet, or used in trades, then they will not count towards the balance.</p></li>
-        <li><strong>Balances only show funds in legacy addresses.</strong><p>If you are using a Segwit address, please create a new address to send the funds to. A legacy address will automatically be created when generating a new address.</p></li>
-        <li><strong>Balances do not show staked funds.</strong><p>If you have been staking, please send the funds to a new address for them to register.</p></li>
+        <li><strong>Balances only show for connected wallets.</strong><br>If you did not connect the wallet, in the right sidebar menu select the Add & Update Wallets link.</li>
+        <li><strong>Balances only show available funds.</strong><br>If UTXOs are locked in the wallet, or used in trades, then they will not count towards the balance.</li>
+        <li><strong>Balances only show funds in legacy addresses.</strong><br>If you are using a Segwit address, please create a new address to send the funds to. A legacy address will automatically be created when generating a new address.</li>
+        <li><strong>Balances do not show staked funds.</strong><br>If you have been staking, please send the funds to a new address for them to register.</li>
+      </ul>
+    </app-big-tooltip>
+    <app-big-tooltip title="Order Form" [show]="showOrderFormTooltip">
+      <ul>
+        <li><strong>Block DX uses "Exact" orders.</strong><br>At the moment Block DX only supports "Exact" orders, meaning that an order must be taken for the full amount. If you are a maker, you may want to place multiple smaller orders instead of one large order. If you are a taker, multiple orders cannot be combined and taken as a single order with this order type. Market and Limit orders will be supported in a future release.</li>
+        <li><strong>Only assets of connected wallets can be traded.</strong><br>If you did not connect the wallet, in the right sidebar menu select the Add & Update Wallets link.</li>
+        <li><strong>Trading wallets must remain online and unlocked.</strong><br>Since trading is peer-to-peer, you must have the wallet of each traded asset installed, open, synced, unlocked, and online for the duration of the trade. This also applies to the Blocknet wallet since it's used to facilitate the orders.</li>
+        <li><strong>Place orders using BTC pricing.</strong><br>You can place orders based off BTC pricing, which is more familiar. To enable this capability, from the sidebar menu select General Settings.</li>
+      </ul>
+    </app-big-tooltip>
+    <app-big-tooltip title="Order Book" [show]="showOrderBookTooltip">
+      <ul>
+        <!-- <li><strong>Block DX uses "Exact" orders.</strong><br>At the moment Block DX only supports "Exact" orders, meaning that an order must be taken for the full amount. Multiple orders also cannot be combined and taken as a single order with this order type. Market and Limit orders will be supported in a future release.</li> -->
+        <li><strong>Only assets of connected wallets can be traded.</strong><br>If you did not connect the wallet, in the right sidebar menu select the Add & Update Wallets link.</li>
+        <li><strong>Trading wallets must remain online and unlocked.</strong><br>Since trading is peer-to-peer, you must have the wallet of each traded asset installed, open, synced, unlocked, and online for the duration of the trade. This also applies to the Blocknet wallet since it's used to facilitate the orders.</li>
+        <li><strong>Orders take up to 10 min to populate.</strong><br>After initially opening the wallets of the assets traded, it can take up to 10 minutes for all the orders to load. After the initial load, orders arrive as they're created.</li>
+        <li><strong>View orders in BTC pricing.</strong><br>You can view orders based off BTC pricing, which is more familiar. To enable this capability, from the sidebar menu select General Settings.</li>
+        <li><strong>White dots indicate the order is yours.</strong><br>Some orders may have a white dot to the left of them. This indicates it's an order you created.</li>
       </ul>
     </app-big-tooltip>
 
@@ -27,7 +45,11 @@
           </bn-card>
 
           <bn-card class="trade_table__cell orderform col-lg-12" [class.alternate-pricing]="pricingEnabled" [allowFullscreen]="false">
-            <bn-card-title>Order Form</bn-card-title>
+            <bn-card-title>
+              <span>Order Form 
+                <i class="material-icons tooltip-icon" (mouseenter)="orderFormTooltip(true)" (mouseleave)="orderFormTooltip(false)">help</i>
+              </span>
+            </bn-card-title>
             <bn-card-body>
               <app-orderform></app-orderform>
             </bn-card-body>
@@ -63,7 +85,11 @@
               </bn-select>
             </ng-template>
           </bn-card-toolbar>
-          <bn-card-title>Order Book</bn-card-title>
+          <bn-card-title>
+            <span>Order Book 
+              <i class="material-icons tooltip-icon" (mouseenter)="orderBookTooltip(true)" (mouseleave)="orderBookTooltip(false)">help</i>
+            </span>
+          </bn-card-title>
           <bn-card-body>
             <app-orderbook></app-orderbook>
           </bn-card-body>
