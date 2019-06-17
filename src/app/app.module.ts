@@ -16,8 +16,6 @@ import { PopperComponent } from './angular-popper/angular-popper.component';
 
 // Imports for loading & configuring the in-memory web api
 import { environment } from '../environments/environment';
-import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
-import { InMemoryDataService } from './in-memory-data.service';
 
 import { AppComponent } from './app.component';
 import { AppService } from './app.service';
@@ -69,10 +67,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
 
-const dev = environment.useMockAPI ? [
-  InMemoryWebApiModule.forRoot(InMemoryDataService)
-] : [];
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -120,8 +114,7 @@ const dev = environment.useMockAPI ? [
     FormsModule,
     LayoutModule,
     PerfectScrollbarModule,
-    AppRoutingModule,
-    ...dev
+    AppRoutingModule
   ],
   providers: [
     NumberFormatPipe,

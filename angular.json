@@ -1,0 +1,181 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "blocknet": {
+      "root": "",
+      "sourceRoot": "src",
+      "projectType": "application",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist",
+            "index": "src/index.html",
+            "main": "src/main.ts",
+            "tsConfig": "src/tsconfig.app.json",
+            "polyfills": "src/polyfills.ts",
+            "assets": [
+              "src/amcharts",
+              "src/assets",
+              "src/favicon.ico",
+              "src/scripts",
+              "src/automation.html",
+              "src/settings.html",
+              "src/tos.html",
+              "src/update-available.html",
+              "src/general-settings.html",
+              "src/order-details.html",
+              "src/information.html"
+            ],
+            "styles": [
+              "src/styles/main.scss",
+              "src/amcharts/plugins/export/export.css"
+            ],
+            "scripts": [
+              "node_modules/jquery/dist/jquery.min.js",
+              "src/assets/charting_library/charting_library.min.js",
+              "src/assets/charting_library/datafeed/udf/datafeed.js",
+              "src/amcharts/amcharts.js",
+              "src/amcharts/serial.js",
+              "src/amcharts/plugins/dataloader/dataloader.min.js",
+              "src/amcharts/plugins/export/export.min.js",
+              "src/amcharts/themes/dark.js",
+              "src/amcharts/plugins/responsive/responsive.min.js",
+              "src/scripts/main.js"
+            ]
+          },
+          "configurations": {
+            "mock": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.mock.ts"
+                }
+              ]
+            },
+            "production": {
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "blocknet:build"
+          },
+          "configurations": {
+            "mock": {
+              "browserTarget": "blocknet:build:mock"
+            },
+            "production": {
+              "browserTarget": "blocknet:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "blocknet:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "src/test.ts",
+            "karmaConfig": "./karma.conf.js",
+            "polyfills": "src/polyfills.ts",
+            "tsConfig": "src/tsconfig.spec.json",
+            "scripts": [
+              "node_modules/jquery/dist/jquery.min.js",
+              "src/assets/charting_library/charting_library.min.js",
+              "src/assets/charting_library/datafeed/udf/datafeed.js",
+              "src/amcharts/amcharts.js",
+              "src/amcharts/serial.js",
+              "src/amcharts/plugins/dataloader/dataloader.min.js",
+              "src/amcharts/plugins/export/export.min.js",
+              "src/amcharts/themes/dark.js",
+              "src/amcharts/plugins/responsive/responsive.min.js",
+              "src/scripts/main.js"
+            ],
+            "styles": [
+              "src/styles/main.scss",
+              "src/amcharts/plugins/export/export.css"
+            ],
+            "assets": [
+              "src/amcharts",
+              "src/assets",
+              "src/favicon.ico",
+              "src/scripts",
+              "src/automation.html",
+              "src/settings.html",
+              "src/tos.html",
+              "src/update-available.html",
+              "src/general-settings.html",
+              "src/order-details.html",
+              "src/information.html"
+            ]
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "src/tsconfig.app.json",
+              "src/tsconfig.spec.json"
+            ],
+            "exclude": []
+          }
+        }
+      }
+    },
+    "blocknet-e2e": {
+      "root": "e2e",
+      "sourceRoot": "e2e",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "./protractor.conf.js",
+            "devServerTarget": "blocknet:serve"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "e2e/tsconfig.e2e.json"
+            ],
+            "exclude": []
+          }
+        }
+      }
+    }
+  },
+  "defaultProject": "blocknet",
+  "schematics": {
+    "@schematics/angular:component": {
+      "prefix": "bn",
+      "styleext": "scss"
+    },
+    "@schematics/angular:directive": {
+      "prefix": "bn"
+    }
+  }
+}
