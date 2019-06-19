@@ -54,6 +54,7 @@
     </header>
 
     <app-table
+      *ngIf="showBody"
       #pairTable
       [class.formValid]="pairForm.form.valid"
       [sections]="coinAValid ? filteredComparisons : filteredRows"

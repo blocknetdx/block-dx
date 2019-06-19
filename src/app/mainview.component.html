@@ -3,11 +3,24 @@
   <!-- Desktop -->
   <div class="row" *isBp="['lg', 'xl']">
 
+    <app-big-tooltip title="Balances" [show]="showBalancesTooltip">
+      <ul>
+        <li><strong>Balances only show for connected wallets.</strong><p>If you did not yet connect the wallet, in the right sidebar menu select Configuration Setup > Add Wallet.</p></li>
+        <li><strong>Balances only show available funds.</strong><p>If UTXOs are locked in the wallet, or used in trades, then they will not count towards the balance.</p></li>
+        <li><strong>Balances only show funds in legacy addresses.</strong><p>If you are using a Segwit address, please create a new address to send the funds to. A legacy address will automatically be created when generating a new address.</p></li>
+        <li><strong>Balances do not show staked funds.</strong><p>If you have been staking, please send the funds to a new address for them to register.</p></li>
+      </ul>
+    </app-big-tooltip>
+
     <div class="sidebar col-lg">
       <div class="trade_table row">
 
-          <bn-card class="trade_table__cell balances col-lg-12" [class.alternate-pricing]="pricingEnabled" [allowFullscreen]="false">
-            <bn-card-title>Balances</bn-card-title>
+          <bn-card class="trade_table__cell balances col-lg-12" [class.alternate-pricing]="pricingEnabled" [allowFullscreen]="false" [showRefreshBalances]="true">
+            <bn-card-title>
+              <span>Balances 
+                <i class="material-icons tooltip-icon" (mouseenter)="balancesTooltip(true)" (mouseleave)="balancesTooltip(false)">help</i>
+              </span>
+            </bn-card-title>
             <bn-card-body>
               <app-balances></app-balances>
             </bn-card-body>

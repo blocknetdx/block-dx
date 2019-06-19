@@ -1077,6 +1077,17 @@ const openAppWindow = () => {
   ipcMain.on('getBalances', () => sendBalances(true));
   setInterval(sendBalances, stdInterval);
 
+  ipcMain.on('refreshBalances', async function() {
+    try {
+      await loadXBridgeConf();
+      await sendNetworkTokens();
+      await sendLocalTokens();
+      await sendBalances(true);
+    } catch(err) {
+      console.error(err);
+    }
+  });
+
   sendPricingMultipliers = async function() {
     try {
       if(!enablePricing) {
@@ -1206,9 +1217,13 @@ ipcMain.on('saveGeneralSettings', (e, s) => {
   sendMarketPricingEnabled();
 });
 
+const loadXBridgeConf = async function() {
+  await sn.dxLoadXBridgeConf();
+};
+
 ipcMain.on('loadXBridgeConf', async function() {
   try {
-    await sn.dxLoadXBridgeConf();
+    await loadXBridgeConf();
   } catch(err) {
     console.error(err);
   }

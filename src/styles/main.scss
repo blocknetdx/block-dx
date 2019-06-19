@@ -12,6 +12,27 @@
   user-select: none;
 }
 
+.something {
+  font-size: 20px;
+  color: #f00;
+}
+
+a.refresh-wallets-button {
+  color: #fff;
+  line-height: 18px;
+  height: 18px;
+  width: 18px;
+
+  &:hover {
+    .material-icons {
+      color: $bn-blue-light3;
+    }
+  }
+}
+
+i.refresh-wallets-icon {
+  font-size: 18px;
+}
 /*
 .debug {
   &::after {
