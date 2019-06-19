@@ -124,3 +124,36 @@
   opacity: 0.5;
   cursor: help;
 }
+
+.order-book-view-wrapper {
+  height: 22px;
+}
+.showbuyorsell {
+  display: inline-block;
+  cursor: pointer;
+  padding: 2px 4px;
+  height: 22px;
+  border: 1px solid rgba(0,0,0,0.1);
+}
+.showbuyorsell.active {
+  background-color: #0f2742;
+  border: 1px solid transparent;
+}
+.showbuyorsell.view-all-orders {
+  transform: translateX(5px);
+}
+.showbuyorsell.view-buy-orders {
+  transform: translateX(-5px);
+}
+.showbuyorsell div {
+  width: 14px;
+  height: 1px;
+  background-color: rgba(255,255,255,0.5);
+  margin: 2px auto;
+}
+.showbuyorsell .sell {
+  background-color: $bn-red !important;
+}
+.showbuyorsell .buy {
+  background-color: $bn-green !important;
+}

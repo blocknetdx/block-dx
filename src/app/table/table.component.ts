@@ -129,7 +129,7 @@ export class TableComponent {
     }
   }
 
-  scrollToBottom() {
+  scrollToBottom(force = false) {
     if (this.scrollbar) {
       const el = this.scrollbar['elementRef'].nativeElement;
       const elRect = el.getBoundingClientRect();
@@ -140,9 +140,27 @@ export class TableComponent {
           clearInterval(interval);
           const bottom = Math.round((contentRect.height) + (elRect.height));
           const position = this.scrollbar['directiveRef'].position();
-          if(this.firstScroll || position.y === 'end') {
+          if(force || this.firstScroll || position.y === 'end' || !position.y) {
             this.firstScroll = false;
             this.scrollbar['directiveRef'].scrollToY(contentRect.height);
+          }
+        }
+      });
+    }
+  }
+
+  scrollToTop(force = false) {
+    if(this.scrollbar) {
+      const el = this.scrollbar['elementRef'].nativeElement;
+      const content = el.querySelector('.ps-content');
+      const interval = setInterval(() => {
+        const contentRect = content.getBoundingClientRect();
+        if (contentRect.height > 10) {
+          clearInterval(interval);
+          const position = this.scrollbar['directiveRef'].position();
+          if(force || this.firstScroll || position.y === 'start' || !position.y) {
+            this.firstScroll = false;
+            this.scrollbar['directiveRef'].scrollToY(0);
           }
         }
       });

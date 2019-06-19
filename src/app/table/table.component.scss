@@ -17,6 +17,8 @@
     background: $bn-blue2;
     box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
     padding: 13px;
+    flex-wrap: nowrap;
+    overflow-x: hidden;
 
     @include screen(lg) {
       padding: 2px 13px 6px;
