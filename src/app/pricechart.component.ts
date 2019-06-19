@@ -107,20 +107,25 @@ export class PricechartComponent implements AfterViewInit, OnDestroy {
       'type': 'serial',
       'theme': 'dark',
       'legend': {
-        'equalWidths': false,
-        'align': 'absolute',
-        'left': 0,
-        'useGraphSettings': true,
-        'textClickEnabled': false,
-        'valueAlign': 'left',
-        'markerType': 'none',
-        // 'valueWidth': 100,
-        'valueText': '[[value]]',
+        'autoMargins': false,       //default true, If true, margins of the legend are adjusted and made equal to chart's margins.
+        'fontSize': 11,             //default 11
+        'horizontalGap': 0,         //default 0, Horizontal space between legend item and left/right border.
+        'marginBottom': 20,         //default 0, Bottom margin.
+        'marginLeft': 20,           //default 20, Left margin. This property will be ignored if autoMargins property of the legend is true.
+        'marginRight': 20,          //default 20, Right margin. This property will be ignored if autoMargins property of the legend is true.
+        'markerType': 'none',       //default square, Shape of the legend marker (key). Possible values are: square, circle, diamond, triangleUp, triangleDown, triangleLeft, triangleDown, bubble, line, none.
+        //'maxColumns': 1,          //Maximum number of columns in the legend. If Legend's position is set to 'right' or 'left', maxColumns is automatically set to 1.
+        'periodValueText': '[[value.open]]',
+        'position': 'bottom',       //default bottom, Legend position. Possible values are: 'bottom', 'top', 'left', 'right' and 'absolute'.
         // 'rollOverColor': '4bf5c5',
-        'verticalGap': 0,
-        'horizontalGap': 0,
-        'switchable': false,
-        'periodValueText': '[[value.open]]'
+        'spacing': 1,               //default 10, Horizontal space between legend items, in pixels.
+        'switchable': false,        //default true, Whether showing/hiding of graphs by clicking on the legend marker is enabled or not.
+        'textClickEnabled': false,  //default false, If true, clicking on the text will show/hide balloon of the graph. Otherwise it will show/hide graph/slice.
+        'useGraphSettings': true,   //default false, Legend markers can mirror graph’s settings, displaying a line and bullet within the graph. 
+        'valueAlign': 'left',       //default right, Alignment of the value text. Possible values are 'left' and 'right'.
+        'valueText': '[[value]]',
+        'valueWidth': 50,           //default 50, Width of the value text.
+        'verticalGap': 0            //default 10, Vertical space between legend items also between legend border and first and last legend row.
       },
       zoomOutOnDataUpdate: false,
       mouseWheelScrollEnabled: false,
@@ -141,8 +146,9 @@ export class PricechartComponent implements AfterViewInit, OnDestroy {
         'negativeFillColors': '#FF7F71',
         'negativeLineColor': '#FF7F71',
         'openField': 'open',
-        'title': 'Price:',
         'type': 'candlestick',
+        'title': 'Price:',
+        'precision': 6,
         'connect': true,
         'columnWidth': 7,
         'showBalloon': false,
@@ -152,6 +158,7 @@ export class PricechartComponent implements AfterViewInit, OnDestroy {
       }, {
         'type': 'column',
         'title': 'High:',
+        'precision': 6,
         'columnWidth': 0,
         'valueField': 'high',
         'openField': 'high',
@@ -162,6 +169,7 @@ export class PricechartComponent implements AfterViewInit, OnDestroy {
       }, {
         'type': 'column',
         'title': 'Open:',
+        'precision': 6,
         'columnWidth': 0,
         'valueField': 'open',
         'openField': 'open',
@@ -172,6 +180,7 @@ export class PricechartComponent implements AfterViewInit, OnDestroy {
       }, {
         'type': 'column',
         'title': 'Close:',
+        'precision': 6,
         'columnWidth': 0,
         'valueField': 'close',
         'openField': 'close',
@@ -181,8 +190,9 @@ export class PricechartComponent implements AfterViewInit, OnDestroy {
         'clustered': false
       }, {
         'type': 'column',
-        'columnWidth': 0,
         'title': 'Low:',
+        'precision': 6,
+        'columnWidth': 0,
         'valueField': 'low',
         'openField': 'low',
         'showBalloon': false,
@@ -202,6 +212,7 @@ export class PricechartComponent implements AfterViewInit, OnDestroy {
         'lineColor': '#66666f',
         'type': 'column',
         'title': 'Volume:',
+        'precision': 0,
         'useLineColorForBulletBorder': true,
         'valueField': 'volume',
         'fillAlphas': 0.05,
@@ -210,10 +221,10 @@ export class PricechartComponent implements AfterViewInit, OnDestroy {
         // 'balloonText': '[[title]]<br /><b style='font-size: 130%'>[[value]]</b>'
       } ],
       'valueAxes': [{
-        'precision': 3,
         'title': 'Price',
+        'precision': 3,
         'labelOffset': 0,
-        'boldLabels': true,
+        'boldLabels': false,
         'lineThickness': 1,
         'strictMinMax': false,
         'reversed': false,
@@ -226,7 +237,9 @@ export class PricechartComponent implements AfterViewInit, OnDestroy {
         }]}, {
         'id': 'v2',
         'title': 'Volume',
-        'boldLabels': true,
+        'precision': 0,
+        'boldLabels': false,
+        'labelOffset': 0,
         'gridAlpha': 0,
         'position': 'right',
         'axisAlpha': 1,
@@ -246,7 +259,7 @@ export class PricechartComponent implements AfterViewInit, OnDestroy {
         'valueLineEnabled': true,
         'categoryBalloonDateFormat': 'MMM DD JJ:NN',
         'cursorPosition': 'mouse',
-        'valueLineBalloonEnabled': false
+        'valueLineBalloonEnabled': true
       },
       'categoryField': 'date',
       'categoryAxis': {
