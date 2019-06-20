@@ -22,6 +22,8 @@ export class MainviewComponent implements OnInit {
   public pricingEnabled = false;
 
   public showBalancesTooltip = false;
+  public showOrderFormTooltip = false;
+  public showOrderBookTooltip = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -60,6 +62,12 @@ export class MainviewComponent implements OnInit {
 
   balancesTooltip(show) {
     this.showBalancesTooltip = show;
+  }
+  orderFormTooltip(show) {
+    this.showOrderFormTooltip = show;
+  }
+  orderBookTooltip(show) {
+    this.showOrderBookTooltip = show;
   }
 
 }
