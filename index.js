@@ -33,7 +33,7 @@ ipcMain.on('getAppVersion', e => {
 
 let appWindow, serverLocation, sn, keyPair, storage, user, password, port, info, pricingSource, pricingUnit, apiKeys,
   pricingFrequency, enablePricing, sendPricingMultipliers, clearPricingInterval, setPricingInterval,
-  sendMarketPricingEnabled, metaPath, macMetaBackupPath, availableUpdate, tradeHistory, myOrders;
+  sendMarketPricingEnabled, metaPath, availableUpdate, tradeHistory, myOrders;
 let updateError = false;
 
 // Handle explicit quit
@@ -257,7 +257,6 @@ const openUpdateAvailableWindow = (v, windowType, hideCheckbox = false) => new P
       downloadingUpdate = true;
       updateAvailableWindow.close();
     } else if(windowType === 'updateDownloaded') {
-      if(platform === 'darwin') fs.copySync(metaPath, macMetaBackupPath);
       autoUpdater.quitAndInstall();
     }
   });
@@ -1264,16 +1263,7 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
       }
     };
 
-    const previousMetaPath = path.join(dataPath, 'meta.json');
     metaPath = path.join(dataPath, 'app-meta.json');
-    macMetaBackupPath = metaPath + '-backup';
-
-    if(fileExists(macMetaBackupPath)) {
-      fs.moveSync(macMetaBackupPath, metaPath, {overwrite: true});
-    } else if(!fileExists(metaPath) && fileExists(previousMetaPath)) {
-      fs.moveSync(previousMetaPath, metaPath);
-    }
-
     storage = new SimpleStorage(metaPath);
     user = storage.getItem('user');
     password = storage.getItem('password');
