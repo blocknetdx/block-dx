@@ -196,7 +196,7 @@ export class OrderformComponent implements OnInit {
     let fixed;
     if(!valid) {
       fixed = this.fixAmount(amount);
-      if(!skipPopper) this.showPopper('amount', 'You can only specify amounts with at most 0.000001 precision.', 5000);
+      if(!skipPopper) this.showPopper('amount', 'You can only specify amounts with at most 6 decimal places.', 5000);
       e.target.value = fixed;
     } else if(e.type === 'paste') {
       e.target.value = amount;
@@ -230,7 +230,7 @@ export class OrderformComponent implements OnInit {
     let fixed;
     if(!valid) {
       fixed = this.fixAmount(price);
-      if(!skipPopper) this.showPopper('price', 'You can only specify prices with at most 0.000001 precision.', 5000);
+      if(!skipPopper) this.showPopper('price', 'You can only specify amounts with at most 6 decimal places.', 5000);
       e.target.value = fixed;
     } else if(e.type === 'paste') {
       e.target.value = price;
@@ -268,7 +268,7 @@ export class OrderformComponent implements OnInit {
     let fixed;
     if(!valid) {
       fixed = this.fixAmount(secondPrice);
-      if(!skipPopper) this.showPopper('secondPrice', 'You can only specify prices with at most 0.000001 precision.', 5000);
+      if(!skipPopper) this.showPopper('secondPrice', 'You can only specify amounts with at most 6 decimal places.', 5000);
       e.target.value = fixed;
     } else if(e.type === 'paste') {
       e.target.value = secondPrice;
