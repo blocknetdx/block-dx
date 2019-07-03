@@ -114,7 +114,7 @@
     "appId": "co.blocknet.blockdx",
     "productName": "BLOCK DX",
     "artifactName": "${name}-${version}-${os}.${ext}",
-    "copyright": "Copyright © 2018 Blocknet",
+    "copyright": "Copyright © 2018-2019 Blocknet",
     "directories": {
       "app": "temp",
       "output": "dist-native"
@@ -163,8 +163,8 @@
         "deb"
       ],
       "icon": "./src/assets/linux_icons/",
-      "synopsis": "Copyright © 2018 Blocknet",
-      "description": "Copyright © 2018 Blocknet",
+      "synopsis": "Copyright © 2018-2019 Blocknet",
+      "description": "Copyright © 2018-2019 Blocknet",
       "category": "Utility",
       "desktop": {
         "Name": "BLOCK DX"
