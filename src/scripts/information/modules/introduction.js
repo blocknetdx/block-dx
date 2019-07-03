@@ -15,7 +15,7 @@ const renderIntroduction = () => {
           <div class="section-header-text">Connected Wallets</div><div class="section-header-line"></div>
         </div>
         <p>
-          Since trading is peer-to-peer, you must have the wallet of each asset being traded installed, synced, and configured. Configuration was done when starting Block DX the first time, but you can reconfigure to add new wallets for trading using the Basic Setup menu link.
+          Since trading is peer-to-peer, you must have the wallet of each asset being traded installed, synced, and configured. Configuration was done when starting Block DX the first time, but you can reconfigure to add new wallets for trading using the Add & Update Wallets menu link.
         </p>
       </div>
       <div class="section">
@@ -23,7 +23,7 @@ const renderIntroduction = () => {
           <div class="section-header-text">Balances</div><div class="section-header-line"></div>
         </div>
         <p>
-          In the top left panel there is a list of your connected wallets and the available balances for trading. If a value doesn't match the balance shown in the respective wallet, it may be due to funds in your wallet being immature funds (due to staking), funds being in a non-legacy address (<em>see below</em>), or the wallet losing connection. If a wallet you configure is not showing in Balances, it may be because the wallet is locked. If the wallet is unlocked, then try reconfiguring using the Basic Setup menu link.
+          In the top left panel there is a list of your connected wallets and the available balances for trading. If a value doesn't match the balance shown in the respective wallet, it may be due to funds in your wallet being immature funds (due to staking), funds being in a non-legacy address (<em>see below</em>), or the wallet losing connection. If a wallet you configure is not showing in Balances, it may be because the wallet is locked. If the wallet is unlocked, then try reconfiguring using the Add & Update Wallets menu link.
         </p>
       </div>
       <div class="section">
