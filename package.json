@@ -59,7 +59,7 @@
     "electron-context-menu": "0.12.1",
     "electron-is-dev": "1.1.0",
     "electron-serve": "0.3.0",
-    "electron-updater": "4.0.6",
+    "electron-updater": "4.0.14",
     "font-awesome": "4.7.0",
     "fs-extra-promise": "1.0.1",
     "immutable": "3.8.2",
