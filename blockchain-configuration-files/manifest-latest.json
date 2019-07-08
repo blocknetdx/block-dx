@@ -261,16 +261,16 @@
     "blockchain": "Blocknet",
     "ticker": "BLOCK",
     "ver_id": "blocknetdx--v3.9.16",
-    "ver_name": "Blocknet v3.10.5+",
+    "ver_name": "Blocknet v3.13.0+",
     "conf_name": "blocknetdx.conf",
     "dir_name_linux": "blocknetdx",
     "dir_name_mac": "BlocknetDX",
     "dir_name_win": "BlocknetDX",
-    "repo_url": "https://github.com/BlocknetDX/blocknet",
+    "repo_url": "https://github.com/blocknetdx/blocknet",
     "versions": [
-      "v3.12.1",
-      "v3.12.1-classic",
       "v3.13.0",
+      "v3.13.0-classic",
+      "v3.13.1",
       "v3.13.1-classic"
     ],
     "xbridge_conf": "blocknetdx--v3.9.16.conf",
@@ -551,7 +551,7 @@
     "dir_name_linux": "divi",
     "dir_name_mac": "DIVI",
     "dir_name_win": "DIVI",
-    "repo_url": "https://github.com/Divicoin/Divi",
+    "repo_url": "https://github.com/DiviProject/Divi",
     "versions": [
       "DESK-1.2.2"
     ],
@@ -1572,7 +1572,8 @@
     "dir_name_win": "SecureCloud",
     "repo_url": "https://github.com/securecloudnet/SecureCloud",
     "versions": [
-      "v2.4.3"
+      "v2.4.3",
+      "v2.5.1.1"
     ],
     "xbridge_conf": "securecloud--v2.4.3.conf",
     "wallet_conf": "securecloud--v2.4.3.conf"
