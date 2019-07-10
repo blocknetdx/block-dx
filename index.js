@@ -1300,6 +1300,11 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
       storage.setItem('addresses', {});
     }
 
+    // Flag used to disable the conf updater, default to false
+    const disableUpdater = storage.getItem('confUpdaterDisabled');
+    if (_.isNull(disableUpdater) || _.isUndefined(disableUpdater))
+      storage.setItem('confUpdaterDisabled', false);
+
     if(!storage.getItem('tos')) {
       await onReady;
       openTOSWindow();
@@ -1316,11 +1321,13 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
       storage.setItem('blocknetIP', ip);
     }
 
-    try {
-      const confController = new ConfController({ storage });
-      await confController.update();
-    } catch(err) {
-      console.error(err);
+    if (!storage.getItem('confUpdaterDisabled')) {
+      try {
+        const confController = new ConfController({ storage });
+        await confController.update();
+      } catch(err) {
+        console.error(err);
+      }
     }
 
     if(!user || !password) {
