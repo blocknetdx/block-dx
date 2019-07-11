@@ -104,7 +104,7 @@
     "dir_name_linux": "bitcloud",
     "dir_name_mac": "Bitcloud",
     "dir_name_win": "Bitcloud",
-    "repo_url": "https://github.com/LIMXTEC/Bitcloud/",
+    "repo_url": "https://github.com/LIMXTEC/Bitcloud",
     "versions": [
       "2.1.0.1.1"
     ],
@@ -341,8 +341,8 @@
     "versions": [
       "v1.2.1"
     ],
-    "xbridge_conf": "colossusxt--v1.0.5.1.conf",
-    "wallet_conf": "colossusxt--v1.0.5.1.conf"
+    "xbridge_conf": "colossusxt--v1.2.1.conf",
+    "wallet_conf": "colossusxt--v1.2.1.conf"
   },
   {
     "blockchain": "Crave",
@@ -650,22 +650,6 @@
     "wallet_conf": "flo--v0.15.0.3.conf"
   },
   {
-    "blockchain": "FujiCoin",
-    "ticker": "FJC",
-    "ver_id": "fujicoin--fujicoin-v0.16.1",
-    "ver_name": "FujiCoin",
-    "conf_name": "fujicoin.conf",
-    "dir_name_linux": "fujicoin",
-    "dir_name_mac": "Fujicoin",
-    "dir_name_win": "Fujicoin",
-    "repo_url": "https://github.com/fujicoin/fujicoin",
-    "versions": [
-      "v0.17.1.2"
-    ],
-    "xbridge_conf": "fujicoin--fujicoin-v0.16.1.conf",
-    "wallet_conf": "fujicoin--fujicoin-v0.16.1.conf"
-  },
-  {
     "blockchain": "Galactrum",
     "ticker": "ORE",
     "ver_id": "galactrum--v1.1.6",
@@ -754,7 +738,7 @@
     "dir_name_linux": "hash",
     "dir_name_mac": "Hash",
     "dir_name_win": "Hash",
-    "repo_url": "https://github.com/hashplatform/hash/",
+    "repo_url": "https://github.com/hashplatform/hash",
     "versions": [
       "1.1.0"
     ],
@@ -1006,7 +990,7 @@
   {
     "blockchain": "Luxcore",
     "ticker": "LUX",
-    "ver_id": "lux--v5.3.2.1",
+    "ver_id": "lux--v5.3.3",
     "ver_name": "Luxcore",
     "conf_name": "lux.conf",
     "dir_name_linux": "lux",
@@ -1014,10 +998,10 @@
     "dir_name_win": "LUX",
     "repo_url": "https://github.com/LUX-Core/lux",
     "versions": [
-      "v5.3.2.1"
+      "v5.3.3"
     ],
-    "xbridge_conf": "lux--v5.3.2.1.conf",
-    "wallet_conf": "lux--v5.3.2.1.conf"
+    "xbridge_conf": "lux--v5.3.3.conf",
+    "wallet_conf": "lux--v5.3.3.conf"
   },
   {
     "blockchain": "Lynx",
@@ -1390,18 +1374,18 @@
   {
     "blockchain": "Qbic",
     "ticker": "QBIC",
-    "ver_id": "qbic--v1.0",
+    "ver_id": "qbiccoin--v1.0.1.0",
     "ver_name": "Qbic",
-    "conf_name": "qbic.conf",
-    "dir_name_linux": "qbiccore",
-    "dir_name_mac": "QbicCore",
-    "dir_name_win": "QbicCore",
+    "conf_name": "qbiccoin.conf",
+    "dir_name_linux": "qbiccoin",
+    "dir_name_mac": "QBICcoin",
+    "dir_name_win": "QBICcoin",
     "repo_url": "https://github.com/qbic-platform/qbic",
     "versions": [
       "v1.0.1.0"
     ],
-    "xbridge_conf": "qbic--v1.0.conf",
-    "wallet_conf": "qbic--v1.0.conf"
+    "xbridge_conf": "qbiccoin--v1.0.1.0.conf",
+    "wallet_conf": "qbiccoin--v1.0.1.0.conf"
   },
   {
     "blockchain": "Qtum",
@@ -1494,7 +1478,7 @@
     "dir_name_win": "sequence",
     "repo_url": "https://github.com/duality-solutions/Sequence",
     "versions": [
-      "v1.3.0.0"
+      "v1.3.1.0"
     ],
     "xbridge_conf": "sequence--v1.3.0.0.conf",
     "wallet_conf": "sequence--v1.3.0.0.conf"
