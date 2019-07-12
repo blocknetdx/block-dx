@@ -64,6 +64,22 @@
     "wallet_conf": "aprcoin--v1.0.conf"
   },
   {
+    "blockchain": "ATBCoin",
+    "ticker": "ATB",
+    "ver_id": "atbcoin--v1.1.0",
+    "ver_name": "ATBCoin",
+    "conf_name": "atbcoin.conf",
+    "dir_name_linux": "ATBCoinWallet",
+    "dir_name_mac": "ATBCoinWallet",
+    "dir_name_win": "ATBCoinWallet",
+    "repo_url": "https://github.com/segwit/atbcoin",
+    "versions": [
+      "v1.1.0"
+    ],
+    "xbridge_conf": "atbcoin--v1.1.0.conf",
+    "wallet_conf": "atbcoin--v1.1.0.conf"
+  },
+  {
     "blockchain": "AustraliaCash",
     "ticker": "AUS",
     "ver_id": "australiacash--v0.17.4.0",
@@ -228,6 +244,22 @@
     ],
     "xbridge_conf": "bitcoinzero--5.0.0.5.conf",
     "wallet_conf": "bitcoinzero--5.0.0.5.conf"
+  },
+  {
+    "blockchain": "BitMoney",
+    "ticker": "BIT",
+    "ver_id": "BitMoney--2.2.0.2",
+    "ver_name": "BitMoney",
+    "conf_name": "BitMoney.conf",
+    "dir_name_linux": "BitMoney",
+    "dir_name_mac": "BitMoney",
+    "dir_name_win": "BitMoney",
+    "repo_url": "https://github.com/CryptVenture/BitMoneyV2",
+    "versions": [
+      "2.2.0.2"
+    ],
+    "xbridge_conf": "bitmoney--2.2.0.2.conf",
+    "wallet_conf": "bitmoney--2.2.0.2.conf"
   },
   {
     "blockchain": "BitSend",
@@ -682,6 +714,38 @@
     "wallet_conf": "galilel--v3.2.0.conf"
   },
   {
+    "blockchain": "GambleCoin",
+    "ticker": "GMCN",
+    "ver_id": "gamblecoin--1.1.4",
+    "ver_name": "GambleCoin",
+    "conf_name": "gamblecoin.conf",
+    "dir_name_linux": "gamblecoin",
+    "dir_name_mac": "GambleCoin",
+    "dir_name_win": "GambleCoin",
+    "repo_url": "https://github.com/GambleCoin-Project/GambleCoin",
+    "versions": [
+      "1.1.4"
+    ],
+    "xbridge_conf": "gamblecoin--1.1.4.conf",
+    "wallet_conf": "gamblecoin--1.1.4.conf"
+  },
+  {
+    "blockchain": "GeekCash",
+    "ticker": "GEEK",
+    "ver_id": "geekcash--v1.3.0.1",
+    "ver_name": "GeekCash",
+    "conf_name": "geekcash.conf",
+    "dir_name_linux": "geekcash",
+    "dir_name_mac": "GeekCash",
+    "dir_name_win": "GeekCash",
+    "repo_url": "https://github.com/GeekCash/geekcash",
+    "versions": [
+      "v1.3.0.1"
+    ],
+    "xbridge_conf": "geekcash--v1.3.0.1.conf",
+    "wallet_conf": "geekcash--v1.3.0.1.conf"
+  },
+  {
     "blockchain": "GINcoin",
     "ticker": "GIN",
     "ver_id": "gincoin--1.1.0.0",
@@ -744,6 +808,22 @@
     ],
     "xbridge_conf": "hash--v1.4.0.conf",
     "wallet_conf": "hash--v1.4.0.conf"
+  },
+  {
+    "blockchain": "Helium",
+    "ticker": "HLM",
+    "ver_id": "helium--v0.16.0",
+    "ver_name": "Helium",
+    "conf_name": "helium.conf",
+    "dir_name_linux": "helium",
+    "dir_name_mac": "Helium",
+    "dir_name_win": "Helium",
+    "repo_url": "https://github.com/heliumchain/helium",
+    "versions": [
+      "v0.16.0"
+    ],
+    "xbridge_conf": "helium--v0.16.0.conf",
+    "wallet_conf": "helium--v0.16.0.conf"
   },
   {
     "blockchain": "HTMLCoin",
@@ -1244,6 +1324,22 @@
     "wallet_conf": "northern--1.0.0.conf"
   },
   {
+    "blockchain": "Nyerium",
+    "ticker": "NYEX",
+    "ver_id": "nyerium--v1.0.3",
+    "ver_name": "Nyerium",
+    "conf_name": "nyerium.conf",
+    "dir_name_linux": "nyerium",
+    "dir_name_mac": "Nyerium",
+    "dir_name_win": "Nyerium",
+    "repo_url": "https://github.com/nyerium-core/nyerium",
+    "versions": [
+      "v1.0.3"
+    ],
+    "xbridge_conf": "nyerium--v1.0.3.conf",
+    "wallet_conf": "nyerium--v1.0.3.conf"
+  },
+  {
     "blockchain": "NyxCoin",
     "ticker": "NYX",
     "ver_id": "nyx--v2.0.0.0",
@@ -1418,6 +1514,22 @@
     ],
     "xbridge_conf": "rapids--v1.0.0.1.conf",
     "wallet_conf": "rapids--v1.0.0.1.conf"
+  },
+  {
+    "blockchain": "Rapture",
+    "ticker": "RAP",
+    "ver_id": "rapture--v1.1.2.2",
+    "ver_name": "Rapture",
+    "conf_name": "rapture.conf",
+    "dir_name_linux": "rapturecore",
+    "dir_name_mac": "RaptureCore",
+    "dir_name_win": "RaptureCore",
+    "repo_url": "https://github.com/RaptureCore/Rapture",
+    "versions": [
+      "v1.1.2.2"
+    ],
+    "xbridge_conf": "rapture--v1.1.2.2.conf",
+    "wallet_conf": "rapture--v1.1.2.2.conf"
   },
   {
     "blockchain": "Ravencoin",
