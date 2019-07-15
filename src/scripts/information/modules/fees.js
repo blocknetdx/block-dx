@@ -4,7 +4,7 @@ const renderFees = () => {
 
       <div class="section intro">
         <p class="no-header">
-          Using Block DX is cheaper than using centralized exchanges, especially since there are no withdrawal fees. Below is Block DX’s fee structure. For the most up-to-date information on fees, <a href="#" class="text-link js-blocknetWalletLink" data-link="https://docs.blocknet.co/blockdx/fees/">click here</a>.
+          Using Block DX is cheaper than using centralized exchanges, especially since there are no withdrawal fees. Below is Block DX’s fee structure. For the most up-to-date information on fees, <a href="#" class="text-link js-externalLink" data-link="https://docs.blocknet.co/blockdx/fees/">click here</a>.
         </p>
       </div>
 

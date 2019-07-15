@@ -35,7 +35,7 @@
           </div>
         </ng-container>
         <div class="bn-table__section-title" *ngIf="section.title && section.title != 'undefined'">
-          <div class="col-12">{{section.title}}</div>
+          <div class="col-12" [innerHTML]="section.title"></div>
         </div>
         <div class="bn-table__row {{row.row_class}}" #rowRef
              tabindex="-1"

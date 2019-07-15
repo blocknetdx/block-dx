@@ -6,3 +6,7 @@ interface NodeModule {
 interface Window {
   electron: any;
 }
+interface Document {
+  fullscreenElement: any;
+  webkitFullscreenElement: any;
+}

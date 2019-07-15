@@ -12,12 +12,11 @@ import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { TradehistoryService } from './tradehistory.service';
 import { NumberFormatPipe } from './pipes/decimal.pipe';
 import { PopperComponent } from './angular-popper/angular-popper.component';
+import { BigTooltipComponent } from './big-tooltip/big-tooltip.component';
 // import { DecimalPipe } from '@angular/common';
 
 // Imports for loading & configuring the in-memory web api
 import { environment } from '../environments/environment';
-import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
-import { InMemoryDataService } from './in-memory-data.service';
 
 import { AppComponent } from './app.component';
 import { AppService } from './app.service';
@@ -69,10 +68,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
 
-const dev = environment.useMockAPI ? [
-  InMemoryWebApiModule.forRoot(InMemoryDataService)
-] : [];
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -110,7 +105,8 @@ const dev = environment.useMockAPI ? [
     TableSectionDividerDirective,
     CardToolbarDirective,
     NumberFormatPipe,
-    PopperComponent
+    PopperComponent,
+    BigTooltipComponent
   ],
   imports: [
     BrowserModule,
@@ -120,8 +116,7 @@ const dev = environment.useMockAPI ? [
     FormsModule,
     LayoutModule,
     PerfectScrollbarModule,
-    AppRoutingModule,
-    ...dev
+    AppRoutingModule
   ],
   providers: [
     NumberFormatPipe,

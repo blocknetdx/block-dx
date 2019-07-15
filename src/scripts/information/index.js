@@ -37,13 +37,13 @@ const state = {
 state.set('active', 0);
 state.set('sidebarSelected', 0);
 state.set('sidebarItems', [
-  {text: 'Getting Started', title: 'GETTING STARTED'},
-  {text: 'Fees', title: 'FEES'},
-  // {text: 'Listings', title: 'LISTINGS'},
-  // {text: 'FAQ', title: 'FAQ'},
-  // {text: 'Tutorials', title: 'TUTORIALS'},
-  // {text: 'Troubleshooting', title: 'TROUBLESHOOTING'},
-  {text: 'Powered by Blocknet', title: 'BLOCKNET PROTOCOL'}
+  {sidebarText: 'Getting Started', title: 'GETTING STARTED'},
+  {sidebarText: 'Fees', title: 'FEES'},
+  // {sidebarText: 'Listings', title: 'LISTINGS'},
+  // {sidebarText: 'FAQ', title: 'FAQ'},
+  // {sidebarText: 'Tutorials', title: 'TUTORIALS'},
+  // {sidebarText: 'Troubleshooting', title: 'TROUBLESHOOTING'},
+  {sidebarText: 'Powered by Blocknet', title: 'BLOCKNET PROTOCOL'}
 ]);
 
 
@@ -89,14 +89,17 @@ $(document).ready(() => {
 
 
     const html = `
-          <h3 class="title">${sidebarItems[sidebarSelected]['title']}</h3>
           <div class="container">
             <div class="flex-container">
               <div class="col1">
                 ${sidebarHTML}
               </div>
               <div class="col2">
+                <h3 class="title">${sidebarItems[sidebarSelected]['title']}</h3>
                 ${mainHTML}
+                <div id="js-buttonContainer" class="button-container">
+                  <button id="js-closeBtn" type="button">CLOSE</button>
+                </div>
               </div>
             </div>
           </div>
@@ -106,6 +109,10 @@ $(document).ready(() => {
 
 
     setTimeout(() => {
+      $('#js-closeBtn').on('click', e => {
+        e.preventDefault();
+        ipcRenderer.send('closeInformationWindow');
+      });
 
       $('.js-sidebarItem')
         .off('click')
@@ -117,7 +124,7 @@ $(document).ready(() => {
           render();
       });
 
-      $('.js-blocknetWalletLink')
+      $('.js-externalLink')
         .off('click')
         .on('click', e => {
           e.preventDefault();

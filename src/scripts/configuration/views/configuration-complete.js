@@ -69,7 +69,7 @@ class ConfigurationComplete extends RouterView {
     const updatingWallets = configurationType === configurationTypes.UPDATE_WALLETS;
     $('.js-blocknetWalletLink').on('click', e => {
       e.preventDefault();
-      remote.shell.openExternal('https://github.com/BlocknetDX/blocknet/releases/latest');
+      remote.shell.openExternal('https://github.com/blocknetdx/blocknet/releases/latest');
     });
     $('#js-backBtn').on('click', e => {
       e.preventDefault();

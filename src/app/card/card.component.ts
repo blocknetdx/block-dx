@@ -1,7 +1,9 @@
 import {
   Component, OnInit, Input, ViewEncapsulation,
-  ElementRef, ViewChild, ContentChild
+  ElementRef, ViewChild, ContentChild, NgZone
 } from '@angular/core';
+import { AppConstants } from '../constants';
+import { briefTimeout } from '../util';
 
 import { CardToolbarDirective } from './card-toolbar.directive';
 
@@ -16,6 +18,11 @@ import { CardToolbarDirective } from './card-toolbar.directive';
         <div *ngIf="toolbar" class="bn-card__toolbar">
           <ng-template *ngTemplateOutlet="toolbar.template"></ng-template>
         </div>
+        <a class="fullscreen" *ngIf="showRefreshBalances"
+           title="Refresh Balances"
+           (click)="refreshBalances()">
+          <i class="material-icons">refresh</i>
+        </a>
         <a class="fullscreen" *ngIf="allowFullscreen"
           (click)="goFullscreen()">
           <i *ngIf="!isFullscreen" class="material-icons">zoom_out_map</i>
@@ -23,7 +30,7 @@ import { CardToolbarDirective } from './card-toolbar.directive';
         </a>
       </div>
       <div class="bn-card__body">
-        <ng-content select="bn-card-body"></ng-content>
+        <ng-content *ngIf="showBody" select="bn-card-body"></ng-content>
       </div>
     </div>
   `
@@ -32,6 +39,9 @@ export class CardComponent implements OnInit {
   @Input() cardClass: string;
   @Input() cardTitleClass: string;
   @Input() allowFullscreen: boolean = true;
+  @Input() showRefreshBalances = false;
+
+  public showBody = true;
 
   @ContentChild(CardToolbarDirective)
   public toolbar: CardToolbarDirective;
@@ -40,7 +50,9 @@ export class CardComponent implements OnInit {
 
   public isFullscreen: boolean;
 
-  constructor() { }
+  constructor(
+    private zone: NgZone
+  ) { }
 
   ngOnInit() {
     if (this.allowFullscreen && document.addEventListener) {
@@ -97,6 +109,15 @@ export class CardComponent implements OnInit {
     }
 
     // this.isFullscreen = !this.isFullscreen;
+  }
+
+  async refreshBalances() {
+    this.showBody = false;
+    window.electron.ipcRenderer.send('refreshBalances');
+    await briefTimeout(AppConstants.refreshBalancesTimeout);
+    this.zone.run(() => {
+      this.showBody = true;
+    });
   }
 
 }

@@ -5,6 +5,7 @@ import { AppService } from './app.service';
 import { PricingService } from './pricing.service';
 import { OrderbookService } from './orderbook.service';
 import { OrderbookComponent } from './orderbook.component';
+import { BigTooltipComponent } from './big-tooltip/big-tooltip.component';
 
 @Component({
   selector: 'app-mainview',
@@ -19,6 +20,10 @@ export class MainviewComponent implements OnInit {
   public decimalOptions: any[];
   public initialDecimalIdx: number;
   public pricingEnabled = false;
+
+  public showBalancesTooltip = false;
+  public showOrderFormTooltip = false;
+  public showOrderBookTooltip = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -53,6 +58,16 @@ export class MainviewComponent implements OnInit {
 
   setPriceDecimal(num) {
     this.orderbookService.setPriceDecimal(num);
+  }
+
+  balancesTooltip(show) {
+    this.showBalancesTooltip = show;
+  }
+  orderFormTooltip(show) {
+    this.showOrderFormTooltip = show;
+  }
+  orderBookTooltip(show) {
+    this.showOrderBookTooltip = show;
   }
 
 }

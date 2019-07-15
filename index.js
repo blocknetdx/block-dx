@@ -33,7 +33,7 @@ ipcMain.on('getAppVersion', e => {
 
 let appWindow, serverLocation, sn, keyPair, storage, user, password, port, info, pricingSource, pricingUnit, apiKeys,
   pricingFrequency, enablePricing, sendPricingMultipliers, clearPricingInterval, setPricingInterval,
-  sendMarketPricingEnabled, metaPath, macMetaBackupPath, availableUpdate, tradeHistory, myOrders;
+  sendMarketPricingEnabled, metaPath, availableUpdate, tradeHistory, myOrders;
 let updateError = false;
 
 // Handle explicit quit
@@ -257,7 +257,6 @@ const openUpdateAvailableWindow = (v, windowType, hideCheckbox = false) => new P
       downloadingUpdate = true;
       updateAvailableWindow.close();
     } else if(windowType === 'updateDownloaded') {
-      if(platform === 'darwin') fs.copySync(metaPath, macMetaBackupPath);
       autoUpdater.quitAndInstall();
     }
   });
@@ -611,8 +610,10 @@ const openGeneralSettingsWindow = () => {
 
 };
 
+let informationWindow;
+
 const openInformationWindow = () => {
-  const informationWindow = new BrowserWindow({
+  informationWindow = new BrowserWindow({
     show: false,
     width: 1000,
     height: platform === 'win32' ? 708 : platform === 'darwin' ? 695 : 670,
@@ -632,6 +633,10 @@ const openInformationWindow = () => {
   });
 
 };
+
+ipcMain.on('closeInformationWindow', e => {
+  informationWindow.close();
+});
 
 const openTOSWindow = (alreadyAccepted = false) => {
 
@@ -1071,6 +1076,17 @@ const openAppWindow = () => {
   ipcMain.on('getBalances', () => sendBalances(true));
   setInterval(sendBalances, stdInterval);
 
+  ipcMain.on('refreshBalances', async function() {
+    try {
+      await loadXBridgeConf();
+      await sendNetworkTokens();
+      await sendLocalTokens();
+      await sendBalances(true);
+    } catch(err) {
+      console.error(err);
+    }
+  });
+
   sendPricingMultipliers = async function() {
     try {
       if(!enablePricing) {
@@ -1200,9 +1216,13 @@ ipcMain.on('saveGeneralSettings', (e, s) => {
   sendMarketPricingEnabled();
 });
 
+const loadXBridgeConf = async function() {
+  await sn.dxLoadXBridgeConf();
+};
+
 ipcMain.on('loadXBridgeConf', async function() {
   try {
-    await sn.dxLoadXBridgeConf();
+    await loadXBridgeConf();
   } catch(err) {
     console.error(err);
   }
@@ -1243,16 +1263,7 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
       }
     };
 
-    const previousMetaPath = path.join(dataPath, 'meta.json');
     metaPath = path.join(dataPath, 'app-meta.json');
-    macMetaBackupPath = metaPath + '-backup';
-
-    if(fileExists(macMetaBackupPath)) {
-      fs.moveSync(macMetaBackupPath, metaPath, {overwrite: true});
-    } else if(!fileExists(metaPath) && fileExists(previousMetaPath)) {
-      fs.moveSync(previousMetaPath, metaPath);
-    }
-
     storage = new SimpleStorage(metaPath);
     user = storage.getItem('user');
     password = storage.getItem('password');
@@ -1289,6 +1300,11 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
       storage.setItem('addresses', {});
     }
 
+    // Flag used to disable the conf updater, default to false
+    const disableUpdater = storage.getItem('confUpdaterDisabled');
+    if (_.isNull(disableUpdater) || _.isUndefined(disableUpdater))
+      storage.setItem('confUpdaterDisabled', false);
+
     if(!storage.getItem('tos')) {
       await onReady;
       openTOSWindow();
@@ -1305,11 +1321,13 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
       storage.setItem('blocknetIP', ip);
     }
 
-    try {
-      const confController = new ConfController({ storage });
-      await confController.update();
-    } catch(err) {
-      console.error(err);
+    if (!storage.getItem('confUpdaterDisabled')) {
+      try {
+        const confController = new ConfController({ storage });
+        await confController.update();
+      } catch(err) {
+        console.error(err);
+      }
     }
 
     if(!user || !password) {

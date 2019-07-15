@@ -79,6 +79,15 @@ export class OrderformComponent implements OnInit {
       this.currentPrice = cp;
     });
 
+    this.orderbookService.takenOrder
+      .subscribe((order) => {
+        const id = order[2];
+        const amount = this.formatNumber(String(order[1]), this.symbols[0]);
+        const totalPrice = this.formatNumber(String(math.multiply(bignumber(order[0]), bignumber(order[1]))), this.symbols[1]);
+        const type = order[4] === 'ask' ? 'buy' : 'sell';
+        this.onOrderSubmit(id, amount, totalPrice, type);
+      });
+
     this.orderbookService.requestedOrder
       .subscribe((order) => {
         this.zone.run(() => {
@@ -152,6 +161,14 @@ export class OrderformComponent implements OnInit {
         showProp = 'amountPopperShow';
         textProp = 'amountPopperText';
         break;
+      case 'price':
+        showProp = 'pricePopperShow';
+        textProp = 'pricePopperText';
+        break;
+      case 'secondPrice':
+        showProp = 'secondPricePopperShow';
+        textProp = 'secondPricePopperText';
+        break;
       case 'total':
         showProp = 'totalPopperShow';
         textProp = 'totalPopperText';
@@ -179,7 +196,7 @@ export class OrderformComponent implements OnInit {
     let fixed;
     if(!valid) {
       fixed = this.fixAmount(amount);
-      if(!skipPopper) this.showPopper('amount', 'You can only specify amounts with at most 0.000001 precision.', 5000);
+      if(!skipPopper) this.showPopper('amount', 'You can only specify amounts with at most 6 decimal places.', 5000);
       e.target.value = fixed;
     } else if(e.type === 'paste') {
       e.target.value = amount;
@@ -213,11 +230,13 @@ export class OrderformComponent implements OnInit {
     let fixed;
     if(!valid) {
       fixed = this.fixAmount(price);
-      if(!skipPopper) this.showPopper('price', 'You can only specify prices with at most 0.000001 precision.', 5000);
+      if(!skipPopper) this.showPopper('price', 'You can only specify amounts with at most 6 decimal places.', 5000);
       e.target.value = fixed;
     } else if(e.type === 'paste') {
       e.target.value = price;
     }
+    const numeric = new Set(['0','1','2','3','4','5','6','7','8','9','.','Decimal','Backspace']);
+    if (!numeric.has(e.key)) return; // do not calculate price if not a numeric key
     if(!price) {
       this.model.totalPrice = '';
       this.model.secondPrice = '';
@@ -249,11 +268,13 @@ export class OrderformComponent implements OnInit {
     let fixed;
     if(!valid) {
       fixed = this.fixAmount(secondPrice);
-      if(!skipPopper) this.showPopper('price', 'You can only specify prices with at most 0.000001 precision.', 5000);
+      if(!skipPopper) this.showPopper('secondPrice', 'You can only specify amounts with at most 6 decimal places.', 5000);
       e.target.value = fixed;
     } else if(e.type === 'paste') {
       e.target.value = secondPrice;
     }
+    const numeric = new Set(['0','1','2','3','4','5','6','7','8','9','.','Decimal','Backspace']);
+    if (!numeric.has(e.key)) return; // do not calculate price if not a numeric key
     if(!secondPrice) {
       this.model.totalPrice = '';
       this.model.price = '';
@@ -343,9 +364,17 @@ export class OrderformComponent implements OnInit {
     return /\d+/.test(numStr) && /^\d*\.?\d*$/.test(numStr) && Number(numStr) > 0;
   }
 
-  onOrderSubmit() {
+  onOrderSubmit(id = '', amount = '', totalPrice = '', type = '') {
 
-    let { makerAddress = '', takerAddress = '', amount = '', totalPrice = '' } = this.model;
+    let { makerAddress = '', takerAddress = '' } = this.model;
+
+    const orderformOrder = id ? false : true;
+
+    if(orderformOrder) {
+      id = this.model.id || id;
+      amount = this.model.amount || amount;
+      totalPrice = this.model.totalPrice || totalPrice;
+    }
 
     if(!amount) {
       alert('Oops! You must enter an amount.');
@@ -364,17 +393,18 @@ export class OrderformComponent implements OnInit {
       return;
     }
 
-    this.disableSubmit = true;
-    setTimeout(() => {
-      this.zone.run(() => {
-        this.disableSubmit = false;
-      });
-    }, 1000);
+    if(orderformOrder) {
+      this.disableSubmit = true;
+      setTimeout(() => {
+        this.zone.run(() => {
+          this.disableSubmit = false;
+        });
+      }, 1000);
+      type = this.tabView.activeIndex === 0 ? 'buy' : 'sell';
+    }
 
     const { ipcRenderer } = window.electron;
-    const type = this.tabView.activeIndex === 0 ? 'buy' : 'sell';
     console.log('Submit order', type, this.model);
-    const { id } = this.model;
     makerAddress = makerAddress.trim();
     takerAddress = takerAddress.trim();
     amount = amount.trim();
@@ -395,51 +425,49 @@ export class OrderformComponent implements OnInit {
       if(state === 'success') {
         ipcRenderer.send('saveAddress', this.symbols[0], makerAddress);
         ipcRenderer.send('saveAddress', this.symbols[1], takerAddress);
-        this.resetModel();
+        if(orderformOrder) this.resetModel();
       } else if (state === 'failed') {
         alert('There was a problem with your order.');
       }
     });
 
-    // setTimeout(() => {
-      if(id) { // take order
-        if(type === 'buy') {
-          ipcRenderer.send('takeOrder', {
-            id,
-            sendAddress: takerAddress,
-            receiveAddress: makerAddress
-          });
-        } else if(type === 'sell') {
-          ipcRenderer.send('takeOrder', {
-            id,
-            sendAddress: makerAddress,
-            receiveAddress: takerAddress
-          });
-        }
-      } else { // make order
-        if(type === 'buy') {
-          ipcRenderer.send('makeOrder', {
-            maker: this.symbols[1],
-            makerSize: totalPrice,
-            makerAddress: takerAddress,
-            taker: this.symbols[0],
-            takerSize: amount,
-            takerAddress: makerAddress,
-            type: 'exact'
-          });
-        } else if(type === 'sell') {
-          ipcRenderer.send('makeOrder', {
-            maker: this.symbols[0],
-            makerSize: amount,
-            makerAddress: makerAddress,
-            taker: this.symbols[1],
-            takerSize: totalPrice,
-            takerAddress: takerAddress,
-            type: 'exact'
-          });
-        }
+    if(id) { // take order
+      if(type === 'buy') {
+        ipcRenderer.send('takeOrder', {
+          id,
+          sendAddress: takerAddress,
+          receiveAddress: makerAddress
+        });
+      } else if(type === 'sell') {
+        ipcRenderer.send('takeOrder', {
+          id,
+          sendAddress: makerAddress,
+          receiveAddress: takerAddress
+        });
       }
-    // }, 0);
+    } else { // make order
+      if(type === 'buy') {
+        ipcRenderer.send('makeOrder', {
+          maker: this.symbols[1],
+          makerSize: totalPrice,
+          makerAddress: takerAddress,
+          taker: this.symbols[0],
+          takerSize: amount,
+          takerAddress: makerAddress,
+          type: 'exact'
+        });
+      } else if(type === 'sell') {
+        ipcRenderer.send('makeOrder', {
+          maker: this.symbols[0],
+          makerSize: amount,
+          makerAddress: makerAddress,
+          taker: this.symbols[1],
+          takerSize: totalPrice,
+          takerAddress: takerAddress,
+          type: 'exact'
+        });
+      }
+    }
   }
 
   onTabChange() {
