@@ -783,13 +783,33 @@ const openAppWindow = () => {
     bids: [],
     asks: []
   };
+
+  const getOrders = async function() {
+    const orders = await sn.dxGetOrders();
+    return orders;
+  };
+
   const sendOrderBook = force => {
     if (isTokenPairValid(keyPair))
       sn.dxGetOrderBook3(keyPair[0], keyPair[1], 250)
-        .then(res => {
+        .then(async function(res) {
           if(force === true || JSON.stringify(res) !== JSON.stringify(orderBook)) {
             orderBook = res;
-            appWindow.send('orderBook', orderBook);
+            const allOrders = await getOrders();
+            const orderTotals = new Map(allOrders.map(({ id, makerSize, takerSize }) => [id, [makerSize, takerSize]]));
+            const orderBookWithTotals = Object.assign({}, res, {
+              asks: res.asks.map(a => {
+                const order = orderTotals.get(a.orderId);
+                const total = a.size === order[0] ? order[1] : order[0];
+                return Object.assign({}, a, {total});
+              }),
+              bids: res.bids.map(b => {
+                const order = orderTotals.get(b.orderId);
+                const total = b.size === order[0] ? order[1] : order[0];
+                return Object.assign({}, b, {total});
+              })
+            });
+            appWindow.send('orderBook', orderBookWithTotals);
           }
         })
         .catch(handleError);

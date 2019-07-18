@@ -97,10 +97,10 @@ export class OrderbookComponent implements OnInit {
           // Append the total, scalebar, pricing to the existing data provider
           this.sections = [
             {rows: asks.map(a => a.concat([
-              OrderbookComponent.calculateTotal(a), OrderbookComponent.scalePercentBar(a[3]), this.pricingAvailable ? this.pricing.getPrice(a[0], this.symbols[1]) : 0
+              OrderbookComponent.scalePercentBar(a[3]), this.pricingAvailable ? this.pricing.getPrice(a[0], this.symbols[1]) : 0
             ]))},
             {rows: bids.map(b => b.concat([
-              OrderbookComponent.calculateTotal(b), OrderbookComponent.scalePercentBar(b[3]), this.pricingAvailable ? this.pricing.getPrice(b[0], this.symbols[1]) : 0
+              OrderbookComponent.scalePercentBar(b[3]), this.pricingAvailable ? this.pricing.getPrice(b[0], this.symbols[1]) : 0
             ]))},
           ];
 

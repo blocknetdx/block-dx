@@ -83,7 +83,7 @@ export class OrderformComponent implements OnInit {
       .subscribe((order) => {
         const id = order[2];
         const amount = this.formatNumber(String(order[1]), this.symbols[0]);
-        const totalPrice = this.formatNumber(String(math.multiply(bignumber(order[0]), bignumber(order[1]))), this.symbols[1]);
+        const totalPrice = this.formatNumber(order[5], this.symbols[1]);
         const type = order[4] === 'ask' ? 'buy' : 'sell';
         this.onOrderSubmit(id, amount, totalPrice, type);
       });
@@ -98,7 +98,7 @@ export class OrderformComponent implements OnInit {
           this.model = Object.assign(this.model, {
             id: order[2],
             amount: this.formatNumber(String(order[1]), this.symbols[0]),
-            totalPrice: this.formatNumber(String(math.multiply(bignumber(order[0]), bignumber(order[1]))), this.symbols[1]),
+            totalPrice: this.formatNumber(order[5], this.symbols[1]),
             price: this.formatNumber(String(order[0]), this.symbols[1]),
             secondPrice
             // totalPrice: this.formatNumber(String(order[0] * order[1]), this.symbols[1])
@@ -208,7 +208,7 @@ export class OrderformComponent implements OnInit {
     amount = fixed ? fixed : amount;
     if(price) {
       const newTotalPrice = String(math.multiply(bignumber(amount), bignumber(price)));
-      this.model.totalPrice = this.formatNumber(this.fixAmount(String(newTotalPrice)), 'BTC');
+      this.model.totalPrice = this.formatNumber(String(newTotalPrice), 'BTC');
     } else {
       this.model.totalPrice = '';
     }
@@ -246,7 +246,7 @@ export class OrderformComponent implements OnInit {
     this.model.secondPrice = this.pricing.canGetPrice(this.symbols[1]) ? this.formatNumber(this.fixAmount(String(this.pricing.getPrice(price, this.symbols[1]))), 'BTC') : '0';
     if(amount) {
       const newTotalPrice = String(math.multiply(bignumber(amount), bignumber(price)));
-      this.model.totalPrice = this.formatNumber(this.fixAmount(String(newTotalPrice)), 'BTC');
+      this.model.totalPrice = this.formatNumber(String(newTotalPrice), 'BTC');
     } else {
       this.model.totalPrice = '';
     }
@@ -281,7 +281,7 @@ export class OrderformComponent implements OnInit {
       return;
     }
     secondPrice = fixed ? fixed : secondPrice;
-    const price = this.formatNumber(this.fixAmount(String(this.pricing.getFromBasePrice(secondPrice, this.symbols[1]))), 'BTC');
+    const price = this.formatNumber(String(this.pricing.getFromBasePrice(secondPrice, this.symbols[1])), 'BTC');
     this.model.price = price;
     if(amount) {
       const newTotalPrice = String(math.multiply(bignumber(amount), bignumber(price)));
