@@ -3,29 +3,29 @@ const _ = require('lodash');
 
 // Errors
 const ErrorMsg = (name, code) => {
-  if (Errors.has(name) && Errors[name].has(code))
+  if (Errors[name] && Errors[name][code])
     return Errors[name][code];
   else return '';
 };
 
-const Errors = new Map();
-Errors['dxMakeOrder'] = new Map();
-Errors['dxTakeOrder'] = new Map();
-Errors['dxCancelOrder'] = new Map();
-Errors['dxGetOrder'] = new Map();
-Errors['dxGetOrders'] = new Map();
-Errors['dxGetMyOrders'] = new Map();
-Errors['dxGetOrderBook'] = new Map();
-Errors['dxGetOrderHistory'] = new Map();
-Errors['dxGetOrderFills'] = new Map();
-Errors['dxGetLocalTokens'] = new Map();
-Errors['dxGetNetworkTokens'] = new Map();
-Errors['dxGetTokenBalances'] = new Map();
-Errors['dxFlushCancelledOrders'] = new Map();
-Errors['dxLoadXBridgeConf'] = new Map();
-Errors['dxGetLockedUtxos'] = new Map();
+const Errors = {};
+Errors['dxMakeOrder'] = {};
+Errors['dxTakeOrder'] = {};
+Errors['dxCancelOrder'] = {};
+Errors['dxGetOrder'] = {};
+Errors['dxGetOrders'] = {};
+Errors['dxGetMyOrders'] = {};
+Errors['dxGetOrderBook'] = {};
+Errors['dxGetOrderHistory'] = {};
+Errors['dxGetOrderFills'] = {};
+Errors['dxGetLocalTokens'] = {};
+Errors['dxGetNetworkTokens'] = {};
+Errors['dxGetTokenBalances'] = {};
+Errors['dxFlushCancelledOrders'] = {};
+Errors['dxLoadXBridgeConf'] = {};
+Errors['dxGetLockedUtxos'] = {};
 
-// Full error code list found here: 
+// Full error code list found here:
 // https://github.com/BlocknetDX/BlockDX/blob/master/src/xbridge/util/xbridgeerror.h
 
 // Messages: Errors['dxGetOrderHistory'][1025] = 'Message here';
