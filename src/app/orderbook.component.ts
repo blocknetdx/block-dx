@@ -178,7 +178,7 @@ export class OrderbookComponent implements OnInit {
     if(asks.length > 0 && bids.length > 0 && pricingEnabled && pricingAvailable && pricing) {
       const askPrice = pricing.getPrice(asks[asks.length - 1][0], symbols[1]);
       const bidPrice = pricing.getPrice(bids[0][0], symbols[1]);
-      this.pricingSpread = String(math.subtract(bignumber(askPrice), bignumber(bidPrice)));
+      this.pricingSpread = String(math.subtract(bignumber(askPrice), bignumber(bidPrice)).toNumber());
       // console.log('pricingSpread', this.pricingSpread);
     } else {
       this.pricingSpread = '';
@@ -269,10 +269,6 @@ export class OrderbookComponent implements OnInit {
 
     const menu = Menu.buildFromTemplate(menuTemplate);
     menu.popup({x: clientX, y: clientY});
-  }
-
-  openConfigurationWindow() {
-    window.electron.ipcRenderer.send('openConfigurationWizard');
   }
 
 }
