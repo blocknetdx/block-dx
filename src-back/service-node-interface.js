@@ -32,23 +32,23 @@ Errors['dxGetLockedUtxos'] = {};
 
 // dxMakeOrder
 Errors['dxMakeOrder'][1002] = 'Unable to connect to the Blocknet wallet. Please make sure the wallet is open, synced, and unlocked.';
-Errors['dxMakeOrder'][1018] = 'Unable to connect to wallet. Please make sure the Blocknet wallet and the wallets of the tokens being traded are open, synced, and unlocked.';
-Errors['dxMakeOrder'][1019] = 'Unable to create order due to insufficient funds. Please make sure there is enough *available* funds (UTXOS/inputs) of the token being sold to cover the order amount. Funds (UTXOS/inputs) may be tied up/reserved by other orders.';
+Errors['dxMakeOrder'][1018] = 'Unable to connect to wallet. Please make sure the Blocknet wallet and the wallets of the assets being traded are open, synced, and unlocked.';
+Errors['dxMakeOrder'][1019] = 'Unable to create order due to insufficient funds. Please make sure there are enough *available* funds (UTXOS/inputs) of the asset being sold to cover the order amount. Funds (UTXOS/inputs) may be tied up/reserved by other orders.';
 Errors['dxMakeOrder'][1020] = 'Unable to create order due to unsigned transaction. Please try again or use a different address.';
-Errors['dxMakeOrder'][1026] = 'Unable to create order. Please make sure a valid address is being used and the wallets of the tokens being traded are open, synced, and unlocked.';
+Errors['dxMakeOrder'][1026] = 'Unable to create order. Please make sure a valid address is being used and the wallets of the assets being traded are open, synced, and unlocked.';
 Errors['dxMakeOrder'][1027] = 'Unable to create order due to invalid transaction signature.';
 Errors['dxMakeOrder'][1030] = 'Unable to create order due to the trade amount being too small (dust value). Please increase the order size and try again.';
 Errors['dxMakeOrder'][1032] = 'Unable to create order. Either the Blocknet wallet is still loading network data (takes a few minutes after syncing completes) or no nodes on the network are currently supporting this trade pair.';
 
 // dxTakeOrder
 Errors['dxTakeOrder'][1002] = 'Unable to connect to the Blocknet wallet. Please make sure the wallet is open, synced, and unlocked.';
-Errors['dxTakeOrder'][1018] = 'Unable to connect to wallet. Please make sure the Blocknet wallet and the wallets of the tokens being traded are open, synced, and unlocked.';
-Errors['dxTakeOrder'][1019] = 'Unable to take order due to insufficient funds. Please make sure there is enough *available* funds (UTXOS/inputs) of the token being sold to cover the order amount. Funds (UTXOS/inputs) may be tied up/reserved by other orders.';
+Errors['dxTakeOrder'][1018] = 'Unable to connect to wallet. Please make sure the Blocknet wallet and the wallets of the assets being traded are open, synced, and unlocked.';
+Errors['dxTakeOrder'][1019] = 'Unable to take order due to insufficient funds. Please make sure there are enough *available* funds (UTXOS/inputs) of the asset being sold to cover the order amount. Funds (UTXOS/inputs) may be tied up/reserved by other orders.';
 Errors['dxTakeOrder'][1020] = 'Unable to take order due to unsigned transaction. Please try again or use a different address.';
 Errors['dxTakeOrder'][1021] = 'Unable to take order. Please make sure the order ID is valid.';
-Errors['dxTakeOrder'][1026] = 'Unable to take order. Please make sure a valid address is being used and the wallets of the tokens being traded are open, synced, and unlocked.';
+Errors['dxTakeOrder'][1026] = 'Unable to take order. Please make sure a valid address is being used and the wallets of the assets being traded are open, synced, and unlocked.';
 Errors['dxTakeOrder'][1027] = 'Unable to take order due to invalid transaction signature. Please try again or use a different address.';
-Errors['dxTakeOrder'][1031] = 'Unable to take order due to insufficient funds. Please make sure there is enough *available* BLOCK UTXOS/inputs to cover the fee amount.';
+Errors['dxTakeOrder'][1031] = 'Unable to take order due to insufficient funds. Please make sure there are enough *available* BLOCK UTXOS/inputs to cover the fee amount.';
 
 // dxCancelOrder
 Errors['dxCancelOrder'][1002] = 'Unable to connect to the Blocknet wallet. Please make sure the wallet is open, synced, and unlocked.';
@@ -91,7 +91,7 @@ Errors['dxGetNetworkTokens'][1018] = 'Unable to connect to the Blocknet wallet. 
 
 // dxGetTokenBalances
 Errors['dxGetTokenBalances'][1002] = 'Unable to connect to the Blocknet wallet. Please make sure the wallet is open, synced, and unlocked.';
-Errors['dxGetTokenBalances'][1018] = 'Unable to connect to wallet. Please make sure the Blocknet wallet and the wallets of the tokens being traded are open, synced, and unlocked.';
+Errors['dxGetTokenBalances'][1018] = 'Unable to connect to wallet. Please make sure the Blocknet wallet and the wallets of the assets being traded are open, synced, and unlocked.';
 
 // dxFlushCancelledOrders
 Errors['dxFlushCancelledOrders'][1002] = 'Unable to connect to the Blocknet wallet. Please make sure the wallet is open, synced, and unlocked.';
