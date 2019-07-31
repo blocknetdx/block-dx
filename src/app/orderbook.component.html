@@ -2,6 +2,7 @@
 
   <div class="orderbook-table-outer-container-top">
 
+
     <div *ngIf="sections[0].rows.length === 0" class="no-open-orders-message-top">No sell orders.</div>
 
     <app-table #orderbookTopTable
@@ -163,5 +164,9 @@
     </div>
   </div>
 
+  <div class="orderbook-configuration-message-overlay" *ngIf="showConfigurationOverlay">
+    <p>In order to trade this market, the wallets for both assets must be configured for trading, opened, and unlocked.</p>
+    <button class="orderbook-open-configuration-button" type="button" (click)="openConfigurationWindow()">Open Configuration</button>
+  </div>
 
 </div>

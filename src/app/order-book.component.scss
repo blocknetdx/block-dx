@@ -55,6 +55,7 @@ app-table /deep/ {
 
 .orderbook-container {
   height:100%;
+  position: relative;
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
@@ -147,9 +148,38 @@ app-table /deep/ {
   border-bottom: 1px solid rgba(23, 46, 72, 0.5);
 }
 
+.orderbook-configuration-message-overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 1000;
+  background-color: rgba(13,31,58, .5);
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+}
 
+.orderbook-configuration-message-overlay p {
+  z-index: 1000;
+  color: #fff;
+  text-align: center;
+  font-size: 25px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 0;
+  padding-bottom: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  font-weight: bold;
+}
 
-
+.orderbook-open-configuration-button {
+  margin-top: 10px;
+}
 
 
 

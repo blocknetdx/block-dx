@@ -15,7 +15,12 @@
 <ng-template #formTemplate let-type="type">
 
   <perfect-scrollbar #orderformscrollbar>
-      <form (ngSubmit)="onOrderSubmit()" #orderForm="ngForm" id="market_order">
+      <form class="order-form-form" (ngSubmit)="onOrderSubmit()" #orderForm="ngForm" id="market_order">
+
+        <div class="order-form-configuration-message-overlay" *ngIf="showConfigurationOverlay">
+          <p>In order to trade this market, the wallets for both assets must be configured for trading, opened, and unlocked.</p>
+          <button class="order-form-open-configuration-button" type="button" (click)="openConfigurationWindow()">Open Configuration</button>
+        </div>
 
             <span class="button-spacer"></span>
 
