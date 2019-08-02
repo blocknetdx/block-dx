@@ -22,13 +22,11 @@ export class NumberFormatPipe implements PipeTransform {
 
     if(decMax === 0) return int;
 
-    if(dec.length < decMin) {
-      for(let i = 0; i < decMin - decLen; i++) {
-        dec = dec + '0';
-      }
-    } else {
-      dec = dec.slice(0, decMax);
+    let multiplierStr = '1';
+    for(let i = 0; i < decMax; i++) {
+      multiplierStr += '0';
     }
-    return int + '.' + dec;
+    const multiplier = Number(multiplierStr);
+    return (Math.round(multiplier * Number(int + '.' + dec)) / multiplier).toFixed(decMax);
   }
 }

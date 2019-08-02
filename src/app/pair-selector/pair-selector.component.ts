@@ -156,14 +156,12 @@ export class PairSelectorComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.appService.marketPairChanges.subscribe((symbols) => {
       this.zone.run(() => {
-        console.log('market pair changes');
         this._loadedSymbols = symbols;
       });
     });
     this.cryptoService.getTokens()
       .subscribe((data) => {
         this.zone.run(() => {
-          console.log('get tokens');
           this._userWallet = data
             .filter(c => c.local);
           this._allCoins = data;
