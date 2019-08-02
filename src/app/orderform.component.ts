@@ -11,6 +11,7 @@ import { SelectComponent } from './select/select.component';
 import {NumberFormatPipe} from './pipes/decimal.pipe';
 import { PricingService } from './pricing.service';
 import { Pricing } from './pricing';
+import {ConfigurationOverlayService} from './configuration.overlay.service';
 
 math.config({
   number: 'BigNumber',
@@ -56,6 +57,7 @@ export class OrderformComponent implements OnInit {
   public pricing: Pricing;
   public pricingEnabled = false;
   public pricingAvailable = false;
+  public showConfigurationOverlay = false;
 
   constructor(
     private numberFormatPipe: NumberFormatPipe,
@@ -63,6 +65,7 @@ export class OrderformComponent implements OnInit {
     private currentpriceService: CurrentpriceService,
     private orderbookService: OrderbookService,
     private pricingService: PricingService,
+    private configurationOverlayService: ConfigurationOverlayService,
     private zone: NgZone
   ) { }
 
@@ -121,6 +124,14 @@ export class OrderformComponent implements OnInit {
     this.orderTypes = [
       { value: 'exact', viewValue: 'Exact Order'}
     ];
+
+    this.configurationOverlayService.showConfigurationOverlay()
+      .subscribe(show => {
+        this.zone.run(() => {
+          this.showConfigurationOverlay = show;
+        });
+      });
+
   }
 
   updatePricingAvailable(enabled: boolean) {
@@ -472,6 +483,10 @@ export class OrderformComponent implements OnInit {
 
   onTabChange() {
     this.model.id = '';
+  }
+
+  openConfigurationWindow() {
+    window.electron.ipcRenderer.send('openConfigurationWizard');
   }
 
 }

@@ -10,6 +10,7 @@ import { NumberFormatPipe } from './pipes/decimal.pipe';
 import { BlockCurrencyPipe } from './block-currency.pipe';
 import { PricingService } from './pricing.service';
 import { Pricing } from './pricing';
+import {ConfigurationOverlayService} from './configuration.overlay.service';
 
 
 math.config({
@@ -45,6 +46,8 @@ export class OrderbookComponent implements OnInit {
 
   public ownOrders = new Set();
 
+  public showConfigurationOverlay = false;
+
   constructor(
     private appService: AppService,
     private numberFormatPipe: NumberFormatPipe,
@@ -52,6 +55,7 @@ export class OrderbookComponent implements OnInit {
     private orderbookService: OrderbookService,
     private openorderService: OpenordersService,
     private pricingService: PricingService,
+    private configurationOverlayService: ConfigurationOverlayService,
     // private tradehistoryService: TradehistoryService,
     // private currentpriceService: CurrentpriceService,
     private zone: NgZone
@@ -145,6 +149,13 @@ export class OrderbookComponent implements OnInit {
         this.ownOrders = new Set(openorders.map(o => o.id));
       });
     });
+
+    this.configurationOverlayService.showConfigurationOverlay()
+      .subscribe(show => {
+        this.zone.run(() => {
+          this.showConfigurationOverlay = show;
+        });
+      });
 
     // this.currentpriceService.currentprice.subscribe((cp) => {
     //   zone.run(() => {
@@ -258,6 +269,10 @@ export class OrderbookComponent implements OnInit {
 
     const menu = Menu.buildFromTemplate(menuTemplate);
     menu.popup({x: clientX, y: clientY});
+  }
+
+  openConfigurationWindow() {
+    window.electron.ipcRenderer.send('openConfigurationWizard');
   }
 
 }
