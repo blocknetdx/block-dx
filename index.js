@@ -10,6 +10,12 @@ const { autoUpdater } = require('electron-updater');
 const PricingInterface = require('./src-back/pricing-interface');
 const ConfController = require('./src-back/conf-controller');
 const _ = require('lodash');
+const math = require('mathjs');
+
+math.config({
+  number: 'BigNumber',
+  precision: 64
+});
 
 const { app, BrowserWindow, Menu, ipcMain } = electron;
 
@@ -789,6 +795,8 @@ const openAppWindow = () => {
     return orders;
   };
 
+  const calculateBackupTotal = (price, size) => math.round(math.multiply(math.bignumber(price), math.bignumber(size)), 6).toNumber().toFixed(6);
+
   const sendOrderBook = force => {
     if (isTokenPairValid(keyPair))
       sn.dxGetOrderBook3(keyPair[0], keyPair[1], 250)
@@ -800,12 +808,12 @@ const openAppWindow = () => {
             const orderBookWithTotals = Object.assign({}, res, {
               asks: res.asks.map(a => {
                 const order = orderTotals.get(a.orderId);
-                const total = a.size === order[0] ? order[1] : order[0];
+                const total = !order ? calculateBackupTotal(a.price, a.size) : a.size === order[0] ? order[1] : order[0];
                 return Object.assign({}, a, {total});
               }),
               bids: res.bids.map(b => {
                 const order = orderTotals.get(b.orderId);
-                const total = b.size === order[0] ? order[1] : order[0];
+                const total = !order ? calculateBackupTotal(b.price, b.size) : b.size === order[0] ? order[1] : order[0];
                 return Object.assign({}, b, {total});
               })
             });
