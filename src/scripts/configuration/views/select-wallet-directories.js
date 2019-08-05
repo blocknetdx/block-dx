@@ -1,6 +1,7 @@
 const { ipcRenderer } = require('electron');
 const { dialog, app } = require('electron').remote;
 const fs = require('fs-extra-promise');
+const path = require('path');
 const { RouterView } = require('../../modules/router');
 const route = require('../constants/routes');
 const configurationTypes = require('../constants/configuration-types');
@@ -77,7 +78,7 @@ class SelectWalletDirectories extends RouterView {
                   <div id="${removeNonWordCharacters(w.versionId)}-error" class="text-danger" style="display:${w.error || !w.directory ? 'block' : 'none'};text-align:right;">Error: data directory not found</div>
                 </div>
                 <div style="margin-top:10px;display:flex;flex-direction:row;flex-wrap:nowrap;justify-content:flex-start;">
-                  <input id="${removeNonWordCharacters(w.versionId)}" type="text" value="${w.directory}" readonly />
+                  <input id="${removeNonWordCharacters(w.versionId)}" class="js-directoryInput" data-id="${w.versionId}" type="text" value="${w.directory}" />
                   <button class="js-browseBtn" type="button" data-id="${w.versionId}" style="margin-top:0;margin-right:0;width:100px;min-width:100px;">BROWSE</button>
                 </div>
               </div>
@@ -136,6 +137,7 @@ class SelectWalletDirectories extends RouterView {
 
     $('#js-continueBtn').on('click', e => {
       e.preventDefault();
+      console.log('Continue!');
       const wallets = state.get('wallets');
 
       const configurationType = state.get('configurationType');
@@ -164,6 +166,60 @@ class SelectWalletDirectories extends RouterView {
       router.goTo(route.EXPERT_SELECT_SETUP_TYPE);
     });
 
+    const validate = dirname => {
+      try {
+        const stats = fs.statSync(dirname);
+        return stats.isDirectory();
+      } catch(err) {
+        console.error(err);
+        return false;
+      }
+    };
+
+    const updateDirectory = (versionId, directoryPath = '') => {
+      const wallets = state.get('wallets');
+      const idx = wallets.findIndex(w => w.versionId === versionId);
+      directoryPath = directoryPath.trim();
+      if(directoryPath) directoryPath = path.normalize(directoryPath);
+      const validated = validate(directoryPath);
+
+      $(`#${removeNonWordCharacters(versionId)}-error`).css('display', validated ? 'none' : 'block');
+      $(`#${removeNonWordCharacters(versionId)}`).val(directoryPath);
+      const newWallets = [
+        ...wallets.slice(0, idx),
+        wallets[idx].set({directory: directoryPath, error: !validated}),
+        ...wallets.slice(idx + 1)
+      ];
+      state.set('wallets', newWallets);
+
+      const configurationType = state.get('configurationType');
+      const addingWallets = configurationType === configurationTypes.ADD_NEW_WALLETS;
+      const updatingWallets = configurationType === configurationTypes.UPDATE_WALLETS;
+      const selectedListName = addingWallets ? 'addWallets' : updatingWallets ? 'updateWallets' : 'selectedWallets';
+      const selectedWallets = state.get(selectedListName);
+
+      const filtered = newWallets
+        .filter(w => selectedWallets.has(w.versionId));
+      const errorCount = filtered.reduce((num, w) => (!w.error && w.directory) ? num : num + 1, 0);
+      if(errorCount < filtered.length) {
+        $('.js-allDirectoriesError').css('display', 'none');
+        $('.js-directoryError').css('display', 'block');
+        const $continueBtn = $('#js-continueBtn');
+        $continueBtn.prop('disabled', false);
+      }
+      if (errorCount === 0) {
+        $('#js-errors').css('display', 'none');
+      } else {
+        $('#js-errorCount').text(errorCount);
+        $('#js-errors').css('display', 'block');
+      }
+    };
+
+    $('.js-directoryInput').on('change', e => {
+      const versionId = $(e.currentTarget).attr('data-id');
+      updateDirectory(versionId, e.target.value);
+    });
+
     $('.js-browseBtn').on('click', e => {
       e.preventDefault();
       const versionId = $(e.currentTarget).attr('data-id');
@@ -175,38 +231,7 @@ class SelectWalletDirectories extends RouterView {
         properties: ['openDirectory']
       }, (paths = []) => {
         const [directoryPath] = paths;
-        if (directoryPath) {
-          $(`#${removeNonWordCharacters(versionId)}`).val(directoryPath);
-          $(`#${removeNonWordCharacters(versionId)}-error`).css('display', 'none');
-          const newWallets = [
-            ...wallets.slice(0, idx),
-            wallets[idx].set({directory: directoryPath, error: false}),
-            ...wallets.slice(idx + 1)
-          ];
-          state.set('wallets', newWallets);
-
-          const configurationType = state.get('configurationType');
-          const addingWallets = configurationType === configurationTypes.ADD_NEW_WALLETS;
-          const updatingWallets = configurationType === configurationTypes.UPDATE_WALLETS;
-          const selectedListName = addingWallets ? 'addWallets' : updatingWallets ? 'updateWallets' : 'selectedWallets';
-          const selectedWallets = state.get(selectedListName);
-
-          const filtered = newWallets
-            .filter(w => selectedWallets.has(w.versionId));
-          const errorCount = filtered.reduce((num, w) => (!w.error && w.directory) ? num : num + 1, 0);
-          if(errorCount < filtered.length) {
-            $('.js-allDirectoriesError').css('display', 'none');
-            $('.js-directoryError').css('display', 'block');
-            const $continueBtn = $('#js-continueBtn');
-            $continueBtn.prop('disabled', false);
-          }
-          if (errorCount === 0) {
-            $('#js-errors').css('display', 'none');
-          } else {
-            $('#js-errorCount').text(errorCount);
-            $('#js-errors').css('display', 'block');
-          }
-        }
+        if (directoryPath) updateDirectory(versionId, directoryPath);
       });
     });
   }

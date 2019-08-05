@@ -79,10 +79,10 @@ export class OrderbookService {
 
         orderBook = Object.assign({}, orderBook, {
           asks: orderBook.asks.map(a => {
-            return [a.price, a.size, a.orderId];
+            return [a.price, a.size, a.orderId, a.total];
           }),
           bids: orderBook.bids.map(a => {
-            return [a.price, a.size, a.orderId];
+            return [a.price, a.size, a.orderId, a.total];
           }),
         });
 
@@ -95,13 +95,13 @@ export class OrderbookService {
 
         for(const ask of asks) {
           // ask.push((parseFloat(ask[1]) / totalAskSize) * 100);
-          ask.push(math
+          ask.splice(-1, 0, math
             .chain(bignumber(ask[1]))
             .divide(bignumber(totalAskSize))
             .multiply(100)
             .done()
           );
-          ask.push('ask');
+          ask.splice(-1, 0, 'ask');
         }
 
         const bids = p.bids;
@@ -111,13 +111,13 @@ export class OrderbookService {
 
         for(const bid of bids) {
           // bid.push((parseFloat(bid[1]) / totalBidSize) * 100);
-          bid.push(math
+          bid.splice(-1, 0, math
             .chain(bignumber(bid[1]))
             .divide(bignumber(totalBidSize))
             .multiply(100)
             .done()
           );
-          bid.push('bid');
+          bid.splice(-1, 0, 'bid');
         }
 
         // console.log(p);

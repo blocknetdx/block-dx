@@ -93,7 +93,7 @@ export class DepthComponent implements AfterViewInit, OnChanges, OnDestroy {
           for(let i = 0; i < list.length; i++) {
             const value = Number(list[i][0]);
             const volume = Number(list[i][1]);
-            const total = this.calculateTotal(volume, value);
+            const total = Number(list[i][5]);
             list[i] = {
               value,
               volume,

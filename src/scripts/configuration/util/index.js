@@ -128,9 +128,7 @@ class XBridgeConf {
       [
         '[Main]',
         `ExchangeWallets=${[...this._data.keys()].join(',')}`,
-        'FullLog=true',
-        'LogPath=',
-        'ExchangeTax=300'
+        'FullLog=true'
       ].join('\n'),
       '\n',
       ...[...this._data.entries()]
