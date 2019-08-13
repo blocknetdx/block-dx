@@ -9,6 +9,7 @@ import * as math from 'mathjs';
 import { PricingService } from './pricing.service';
 import { Pricing } from './pricing';
 import * as OrderStates from '../orderstates';
+import { shouldHidePricing } from './util';
 
 math.config({
   number: 'BigNumber',
@@ -38,6 +39,8 @@ export class OpenordersComponent extends BaseComponent implements OnInit {
   public set symbols(val:string[]) {
     this._symbols = val;
   }
+
+  shouldHidePricing = shouldHidePricing;
 
   constructor(
     private appService: AppService,

@@ -23,7 +23,7 @@
         </ng-template>
       </app-table-column>
 
-      <app-table-column [sortable]="false" [classList]="'col'" *ngIf="pricingEnabled">
+      <app-table-column [sortable]="false" [classList]="'col'" *ngIf="pricingEnabled && !shouldHidePricing(symbols)">
         <ng-template columnHeader>Price ({{pricing ? pricing.in : ''}})</ng-template>
         <ng-template let-row="row" columnCell>
           <span class="no-highlight"
@@ -76,12 +76,12 @@
 
   <div class="orderbook-divider">
     <span class="spread-container spread">Spread</span>
-    <span class="spread-container" *ngIf="pricingAvailable && pricingEnabled">
+    <span class="spread-container" *ngIf="pricingAvailable && pricingEnabled && !shouldHidePricing(symbols)">
       <span *ngIf="showSpread && pricingAvailable" [title]="pricingSpread | blockCurrency:symbols[1]:8: true" [innerHtml]="pricingSpread | blockCurrency:symbols[1]:priceDecimal"></span>
       <span *ngIf="showSpread && !pricingAvailable">N/A</span>
       <span *ngIf="!showSpread" [innerHtml]="'0' | blockCurrency:symbols[1]:priceDecimal"></span>
     </span>
-    <span class="spread-container" *ngIf="!pricingAvailable && pricingEnabled"></span>
+    <span class="spread-container" *ngIf="!pricingAvailable && pricingEnabled && !shouldHidePricing(symbols)"></span>
     <span class="spread-container">
       <span *ngIf="showSpread" [innerHtml]="spread | blockCurrency:symbols[1]:priceDecimal"></span>
       <span *ngIf="!showSpread" [innerHtml]="'0' | blockCurrency:symbols[1]:priceDecimal"></span>
@@ -113,7 +113,7 @@
           </ng-template>
         </app-table-column>
 
-        <app-table-column [sortable]="false" [classList]="'col'" *ngIf="pricingEnabled">
+        <app-table-column [sortable]="false" [classList]="'col'" *ngIf="pricingEnabled && !shouldHidePricing(symbols)">
           <!--<ng-template columnHeader>Price ({{pricing ? pricing.in : ''}})</ng-template>-->
           <ng-template let-row="row" columnCell>
             <span class="no-highlight"

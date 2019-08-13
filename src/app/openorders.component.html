@@ -50,7 +50,7 @@
     </ng-template>
   </app-table-column>
 
-  <app-table-column *ngIf="pricingEnabled" [prop]="'price'" [classList]="'col'" maxWidth="74px">
+  <app-table-column *ngIf="pricingEnabled && !shouldHidePricing(symbols)" [prop]="'price'" [classList]="'col'" maxWidth="74px">
     <ng-template columnHeader>Price ({{pricing ? pricing.in : ''}})</ng-template>
     <ng-template let-row="row" columnCell>
       <span *ngIf="!pricingAvailable || !row.pricingAvailable" class="bn-number open-order-table-font no-highlight" [title]="row.displayStatus">N/A</span>
