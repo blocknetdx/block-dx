@@ -11,11 +11,14 @@ const PricingInterface = require('./src-back/pricing-interface');
 const ConfController = require('./src-back/conf-controller');
 const _ = require('lodash');
 const math = require('mathjs');
+const MarkdownIt = require('markdown-it');
 
 math.config({
   number: 'BigNumber',
   precision: 64
 });
+
+const md = new MarkdownIt();
 
 const { app, BrowserWindow, Menu, ipcMain } = electron;
 
@@ -39,7 +42,7 @@ ipcMain.on('getAppVersion', e => {
 
 let appWindow, serverLocation, sn, keyPair, storage, user, password, port, info, pricingSource, pricingUnit, apiKeys,
   pricingFrequency, enablePricing, sendPricingMultipliers, clearPricingInterval, setPricingInterval,
-  sendMarketPricingEnabled, metaPath, availableUpdate, tradeHistory, myOrders, showWallet;
+  sendMarketPricingEnabled, metaPath, availableUpdate, tradeHistory, myOrders, showWallet, tosWindow, releaseNotesWindow;
 let updateError = false;
 
 // Handle explicit quit
@@ -286,6 +289,7 @@ autoUpdater.on('update-downloaded', ({ version: v }) => {
   downloadedUpdateVersion = v;
   downloadingUpdate = false;
   updateDownloaded = true;
+  storage.setItem('showReleaseNotes', true, true);
   openUpdateAvailableWindow(v, 'updateDownloaded');
 });
 autoUpdater.on('update-available', res => {
@@ -648,6 +652,58 @@ ipcMain.on('closeInformationWindow', e => {
   informationWindow.close();
 });
 
+const openReleaseNotesWindow = () => {
+
+  storage.setItem('showReleaseNotes', false);
+
+  let height;
+  if(process.platform === 'win32') {
+    height = 670;
+  } else if(process.platform === 'darwin') {
+    height = 655;
+  } else {
+    height = 645;
+  }
+
+  releaseNotesWindow = new BrowserWindow({
+    show: false,
+    width: 500,
+    height: height,
+    parent: appWindow
+  });
+  if(isDev) {
+    releaseNotesWindow.loadURL(`file://${path.join(__dirname, 'src', 'release-notes.html')}`);
+  } else {
+    releaseNotesWindow.loadURL(`file://${path.join(__dirname, 'dist', 'release-notes.html')}`);
+  }
+  releaseNotesWindow.once('ready-to-show', () => {
+    releaseNotesWindow.show();
+  });
+
+  releaseNotesWindow.setMenu(null);
+};
+ipcMain.on('openReleaseNotesWindow', () => {
+  openReleaseNotesWindow();
+});
+ipcMain.on('closeReleaseNotesWindow', () => {
+  releaseNotesWindow.close();
+});
+
+ipcMain.on('getReleaseNotes', event => {
+  try {
+    const releaseNotesDir = path.join(__dirname, 'release-notes');
+    const noteFiles = fs.readdirSync(releaseNotesDir);
+    const filePattern = new RegExp(_.escapeRegExp(`${version}.md`), 'i');
+    const fileName = noteFiles.find(f => filePattern.test(f));
+    if(!fileName) return event.returnValue = '';
+    const contents = fs.readFileSync(path.join(releaseNotesDir, fileName), 'utf8');
+    event.returnValue = contents;
+  } catch(err) {
+    event.returnValue = '';
+    handleError(err);
+  }
+});
+
 const openTOSWindow = (alreadyAccepted = false) => {
 
   ipcMain.on('getTOS', e => {
@@ -679,7 +735,7 @@ const openTOSWindow = (alreadyAccepted = false) => {
     height = alreadyAccepted ? 645 : 700;
   }
 
-  const tosWindow = new BrowserWindow({
+  tosWindow = new BrowserWindow({
     show: false,
     width: 500,
     height: height,
@@ -696,6 +752,9 @@ const openTOSWindow = (alreadyAccepted = false) => {
 
   tosWindow.setMenu(null);
 };
+ipcMain.on('closeTOS', () => {
+  tosWindow.close();
+});
 
 const openAppWindow = () => {
 
@@ -734,6 +793,11 @@ const openAppWindow = () => {
       handleError(err);
       // setTimeout(() => app.quit(), 1);
     }
+
+    // Show release notes if newly updated
+    const showReleaseNotes = storage.getItem('showReleaseNotes');
+    if(showReleaseNotes) openReleaseNotesWindow();
+
   });
 
   appWindow.on('close', () => {

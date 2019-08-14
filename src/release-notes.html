@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>License Agreement</title>
+  <title>Release Notes</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0">
   <meta name="format-detection" content="telephone=no">
 
-  <link rel="shortcut icon" href="assets/favicon_block.png"  />
+  <link rel="shortcut icon" href="assets/favicon_block.png"/>
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700|Roboto+Mono:300,400,700" rel="stylesheet">
   <!--<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">-->
 
@@ -21,6 +21,7 @@
       margin-top: 0;
       margin-bottom: 0;
     }
+
     h1, h2, h3, h4 {
       color: #fff;
       margin-top: 0;
@@ -29,9 +30,12 @@
       background-color: #172e48;
       letter-spacing: 1px;
     }
+
     .container {
       padding: 20px;
+      flex-grow: 1;
     }
+
     .input-group {
       display: flex;
       flex-direction: row;
@@ -39,6 +43,7 @@
       justify-content: flex-start;
       margin-bottom: 15px;
     }
+
     .input-group label {
       width: 35%;
       background-color: #213d54;
@@ -47,6 +52,7 @@
       font-weight: 300;
       font-size: 14px;
     }
+
     .input-group input {
       flex-grow: 1;
       background-color: #123149;
@@ -59,18 +65,20 @@
       border-style: solid;
       outline-width: 0;
     }
+
     .input-group input:focus {
       outline-width: 0px;
       border-width: 1px;
       border-color: #4b6275;
       border-style: solid;
     }
+
     button {
       display: block;
       flex-grow: 1;
       flex-basis: 1px;
-      max-width: 50%;
-      margin: 0 7.5px 0 7.5px;
+      max-width: 100%;
+      margin: 0;
       background-color: #0069ff;
       color: #fff;
       padding: 15px 20px;
@@ -82,54 +90,66 @@
       outline-width: 0;
       cursor: pointer;
       transition: background-color .5s;
+      line-height: 14px;
     }
+
     button:hover {
       background-color: #0054cc;
     }
+
     button:active {
       outline-width: 0;
     }
+
     button:disabled {
       background-color: #0054cc;
       opacity: .8;
       cursor: default;
     }
+
     button.gray-button {
       background-color: #ddd;
       color: #0069ff;
       opacity: 1;
       transition: opacity .5s;
     }
+
     button.gray-button:hover {
       opacity: .7;
     }
+
     div.button-container {
-      display: none;
+      display: flex;
       flex-direction: row;
       flex-wrap: nowrap;
       justify-content: flex-end;
-      margin: 0 0 0 0;
-      padding: 0 7.5px 15px 7.5px;
+      margin: 0 15px 15px 15px;
+      padding: 0 0 0 0;
       min-height: 43px;
     }
-    div.tos-container {
+
+    div.notes-container {
       flex-grow: 1;
       overflow-y: auto;
       padding: 15px 15px;
-      margin: 15px 15px 15px 15px;
+      margin-top: 15px;
+      margin-bottom: 15px;
+      margin-left: 15px;
+      margin-right: 15px;
       background-color: #213d54;
       color: #fff;
       font-weight: 300;
       font-size: 14px;
       white-space: pre-line;
     }
+
     ::-webkit-scrollbar {
       width: 10px;
       border: 0;
     }
 
     ::-webkit-scrollbar-track {
-      -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
     }
 
     ::-webkit-scrollbar-thumb {
@@ -138,16 +158,29 @@
       border-radius: 5px;
     }
 
+    ul {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+
+    p {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+
+    a {
+      color: #837FFF;
+    }
+
     .outer-flex-container {
       display: flex;
       flex-direction: column;
       flex-wrap: nowrap;
       justify-content: flex-start;
     }
-    .close-button {
-      min-width: calc(100% - 15px);
+    .notes-container li {
+      margin-top: -5px !important;
     }
-
 
   </style>
 
@@ -155,36 +188,35 @@
 <body>
 
 <div id="js-outerFlexContainer" class="outer-flex-container">
+  <div style="width:100%; padding: 20px 0 20px 0; text-align:center;">
+    <img style="max-width:300px;" src="assets/logo_full.svg" alt="Blocknet Logo">
+  </div>
+  <h3 id="js-header"></h3>
 
-  <div style="width:100%; padding: 20px 0 20px 0; text-align:center;"><img style="max-width:300px;" src="assets/logo_full.svg" alt="Blocknet Logo"></div>
-  <h3>LICENSE AGREEMENT</h3>
-
-  <div id="js-tosContainer" class="tos-container"></div>
+  <div id="js-notesContainer" class="notes-container"></div>
 
   <div id="js-buttonContainer" class="button-container">
-    <button id="js-cancelBtn" type="button" class="gray-button">CANCEL</button>
-    <button id="js-acceptBtn" type="button">ACCEPT</button>
-  </div>
-
-  <div id="js-closeButtonContainer" class="button-container">
-    <button id="js-closeBtn" class="close-button" type="button">CLOSE</button>
+    <button id="js-closeBtn" type="button">CLOSE</button>
   </div>
 
 </div>
 
-  <script type="text/javascript">
-    window.electron = require('electron');
-  </script>
+<script type="text/javascript">
+  window.electron = require('electron');
+</script>
 
-  <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+<script>if (typeof module === 'object') {
+  window.module = module;
+  module = undefined;
+}</script>
 
-  <script type="text/javascript" src="assets/vendor/jquery.min.js"></script>
+<script type="text/javascript" src="assets/vendor/jquery.min.js"></script>
 
-  <script>if (window.module) module = window.module;</script>
+<script>if (window.module) module = window.module;</script>
 
-  <script type="text/javascript">
-    require('./scripts/tos-window');
-  </script>
+<script type="text/javascript">
+  require('./scripts/release-notes');
+</script>
 
 </body>
 </html>
