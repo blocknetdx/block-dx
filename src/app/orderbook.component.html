@@ -32,7 +32,7 @@
            [class.color-green]="row[4] == 'bid'"
            [title]="ownOrders.has(row[2]) ? 'Your order' : ''">
             <span *ngIf="!pricingAvailable" class="bn-number">N/A</span>
-            <span *ngIf="pricingAvailable" class="bn-number" [innerHtml]="row[8] | blockCurrency:symbols[1]:priceDecimal"></span>
+            <span *ngIf="pricingAvailable" class="bn-number" [title]="row[8] | blockCurrency:symbols[1]:8: true" [innerHtml]="row[8] | blockCurrency:symbols[1]:priceDecimal"></span>
           </span>
         </ng-template>
       </app-table-column>
@@ -77,7 +77,7 @@
   <div class="orderbook-divider">
     <span class="spread-container spread">Spread</span>
     <span class="spread-container" *ngIf="pricingAvailable && pricingEnabled">
-      <span *ngIf="showSpread && pricingAvailable" [innerHtml]="pricingSpread | blockCurrency:symbols[1]:priceDecimal"></span>
+      <span *ngIf="showSpread && pricingAvailable" [title]="pricingSpread | blockCurrency:symbols[1]:8: true" [innerHtml]="pricingSpread | blockCurrency:symbols[1]:priceDecimal"></span>
       <span *ngIf="showSpread && !pricingAvailable">N/A</span>
       <span *ngIf="!showSpread" [innerHtml]="'0' | blockCurrency:symbols[1]:priceDecimal"></span>
     </span>
@@ -122,7 +122,7 @@
              [class.color-green]="row[4] == 'bid'"
              [title]="ownOrders.has(row[2]) ? 'Your order' : ''">
               <span *ngIf="!pricingAvailable" class="bn-number">N/A</span>
-              <span *ngIf="pricingAvailable" class="bn-number" [innerHtml]="row[8] | blockCurrency:symbols[1]:priceDecimal"></span>
+              <span *ngIf="pricingAvailable" class="bn-number" [title]="row[8] | blockCurrency:symbols[1]:8: true" [innerHtml]="row[8] | blockCurrency:symbols[1]:priceDecimal"></span>
             </span>
           </ng-template>
         </app-table-column>

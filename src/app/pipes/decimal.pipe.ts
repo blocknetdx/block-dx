@@ -2,8 +2,15 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({ name: 'numberFormat' })
 export class NumberFormatPipe implements PipeTransform {
+
+  toNumberString(num: number|string) {
+    if(typeof num === 'string' && !/e/.test(num)) return num;
+    const newNum = typeof num === 'number' ? num : Number(num);
+    return newNum.toLocaleString('fullwide', {useGrouping: false, maximumFractionDigits: 20});
+  }
+
   transform(num: string = '0', format: string): string {
-    num = String(num);
+    num = this.toNumberString(num);
     const formatPatt = /(\d+)\.(\d+)-(\d+)/;
     if(!formatPatt.test(format))
       throw new Error('Invalid format sent to decimal pipe.');
