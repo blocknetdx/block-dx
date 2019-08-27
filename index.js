@@ -39,7 +39,7 @@ ipcMain.on('getAppVersion', e => {
 
 let appWindow, serverLocation, sn, keyPair, storage, user, password, port, info, pricingSource, pricingUnit, apiKeys,
   pricingFrequency, enablePricing, sendPricingMultipliers, clearPricingInterval, setPricingInterval,
-  sendMarketPricingEnabled, metaPath, availableUpdate, tradeHistory, myOrders;
+  sendMarketPricingEnabled, metaPath, availableUpdate, tradeHistory, myOrders, showWallet;
 let updateError = false;
 
 // Handle explicit quit
@@ -615,6 +615,10 @@ const openGeneralSettingsWindow = () => {
   });
 
 };
+
+ipcMain.on('getShowWallet', e => {
+  e.returnValue = showWallet;
+});
 
 let informationWindow;
 
@@ -1225,23 +1229,52 @@ ipcMain.on('getPricingEnabled', e => {
   e.returnValue = enablePricing;
 });
 ipcMain.on('saveGeneralSettings', (e, s) => {
-  // console.log(JSON.stringify(s, null, '  '));
-  enablePricing = s.pricingEnabled;
-  pricingSource = s.pricingSource;
-  apiKeys = s.apiKeys;
-  pricingUnit = s.pricingUnit;
-  pricingFrequency = s.pricingFrequency;
-  storage.setItems({
-    pricingEnabled: s.pricingEnabled,
-    pricingSource: s.pricingSource,
-    apiKeys: s.apiKeys,
-    pricingUnit: s.pricingUnit,
-    pricingFrequency: s.pricingFrequency
-  }, true);
-  clearPricingInterval();
-  sendPricingMultipliers();
-  setPricingInterval();
-  sendMarketPricingEnabled();
+  const changed = {};
+  if(enablePricing !== s.pricingEnabled) {
+    enablePricing = s.pricingEnabled;
+    changed.pricingEnabled = enablePricing;
+  }
+  if(pricingSource !== s.pricingSource) {
+    pricingSource = s.pricingSource;
+    changed.pricingSource = pricingSource;
+  }
+  if(apiKeys !== s.apiKeys) {
+    apiKeys = s.apiKeys;
+    changed.apiKeys = apiKeys;
+  }
+  if(pricingUnit !== s.pricingUnit) {
+    pricingUnit = s.pricingUnit;
+    changed.pricingUnit = pricingUnit;
+  }
+  if(pricingFrequency !== s.pricingFrequency) {
+    pricingFrequency = s.pricingFrequency;
+    changed.pricingFrequency = pricingFrequency;
+  }
+  if(showWallet !== s.showWallet) {
+    showWallet = s.showWallet;
+    changed.showWallet = showWallet;
+  }
+  if(['showWallet'].some(prop => Object.keys(changed).includes(prop))) {
+    sendGeneralSettings();
+  }
+  if(['enablePricing', 'pricingSource', 'apiKeys', 'pricingUnit', 'pricingFrequency'].some(prop => Object.keys(changed).includes(prop))) {
+    clearPricingInterval();
+    sendPricingMultipliers();
+    setPricingInterval();
+    sendMarketPricingEnabled();
+  }
+  storage.setItems(changed, true);
+});
+
+const sendGeneralSettings = () => {
+  appWindow.send('generalSettings', {
+    showWallet
+  });
+};
+ipcMain.on('getGeneralSettings', e => {
+  e.returnValue = {
+    showWallet
+  };
 });
 
 const loadXBridgeConf = async function() {
@@ -1322,6 +1355,11 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
     if(!enablePricing && enablePricing !== false) {
       enablePricing = false;
       storage.setItem('pricingEnabled', enablePricing);
+    }
+    showWallet = storage.getItem('showWallet');
+    if(!showWallet && showWallet !== false) {
+      showWallet = false;
+      storage.setItem('showWallet', showWallet);
     }
 
     if(!storage.getItem('addresses')) {
