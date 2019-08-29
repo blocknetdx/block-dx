@@ -12,6 +12,7 @@ import {NumberFormatPipe} from './pipes/decimal.pipe';
 import { PricingService } from './pricing.service';
 import { Pricing } from './pricing';
 import {ConfigurationOverlayService} from './configuration.overlay.service';
+import { shouldHidePricing } from './util';
 
 math.config({
   number: 'BigNumber',
@@ -58,6 +59,8 @@ export class OrderformComponent implements OnInit {
   public pricingEnabled = false;
   public pricingAvailable = false;
   public showConfigurationOverlay = false;
+
+  shouldHidePricing = shouldHidePricing;
 
   constructor(
     private numberFormatPipe: NumberFormatPipe,

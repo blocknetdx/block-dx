@@ -11,6 +11,7 @@ import { BlockCurrencyPipe } from './block-currency.pipe';
 import { PricingService } from './pricing.service';
 import { Pricing } from './pricing';
 import {ConfigurationOverlayService} from './configuration.overlay.service';
+import { shouldHidePricing } from './util';
 
 
 math.config({
@@ -47,6 +48,8 @@ export class OrderbookComponent implements OnInit {
   public ownOrders = new Set();
 
   public showConfigurationOverlay = false;
+
+  shouldHidePricing = shouldHidePricing;
 
   constructor(
     private appService: AppService,
