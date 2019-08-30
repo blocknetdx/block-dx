@@ -7,6 +7,8 @@ import { OrderbookService } from './orderbook.service';
 import { OrderbookComponent } from './orderbook.component';
 import { BigTooltipComponent } from './big-tooltip/big-tooltip.component';
 import { shouldHidePricing } from './util';
+import {OrderbookViewService} from './orderbook.view.service';
+import { OrderbookViews } from './enums';
 
 @Component({
   selector: 'app-mainview',
@@ -22,6 +24,7 @@ export class MainviewComponent implements OnInit {
   public initialDecimalIdx: number;
   public pricingEnabled = false;
   public symbols:string[] = [];
+  public OrderbookViews = OrderbookViews;
 
   public showBalancesTooltip = false;
   public showOrderFormTooltip = false;
@@ -34,6 +37,7 @@ export class MainviewComponent implements OnInit {
     private appService: AppService,
     private orderbookService: OrderbookService,
     private pricingService: PricingService,
+    private orderbookViewService: OrderbookViewService,
     private zone: NgZone
   ) {
     this.decimalOptions = [
@@ -75,6 +79,10 @@ export class MainviewComponent implements OnInit {
   }
   orderBookTooltip(show) {
     this.showOrderBookTooltip = show;
+  }
+
+  updateView(view) {
+    this.orderbookViewService.orderbookView().next(view);
   }
 
 }

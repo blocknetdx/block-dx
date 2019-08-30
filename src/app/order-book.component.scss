@@ -70,8 +70,8 @@ app-table /deep/ {
 }
 .orderbook-table-outer-container-bottom {
   height: calc(50% - 22px);
-  min-height: calc(50% - 22px);
-  max-height: calc(50% - 22px);
+  //min-height: calc(50% - 22px);
+  //max-height: calc(50% - 22px);
   overflow-y: hidden;
   position: relative;
 }

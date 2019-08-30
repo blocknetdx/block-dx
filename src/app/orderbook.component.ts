@@ -1,4 +1,4 @@
-import {Component, NgZone, OnInit, ViewChild} from '@angular/core';
+import {Component, NgZone, OnInit, OnDestroy, Input, ViewChild} from '@angular/core';
 import 'rxjs/add/operator/map';
 import * as math from 'mathjs';
 
@@ -12,6 +12,8 @@ import { PricingService } from './pricing.service';
 import { Pricing } from './pricing';
 import {ConfigurationOverlayService} from './configuration.overlay.service';
 import { shouldHidePricing } from './util';
+import {OrderbookViewService} from './orderbook.view.service';
+import { OrderbookViews } from './enums';
 
 
 math.config({
@@ -27,7 +29,7 @@ const { bignumber } = math;
   styleUrls: ['./order-book.component.scss']
 })
 
-export class OrderbookComponent implements OnInit {
+export class OrderbookComponent implements OnInit, OnDestroy {
   @ViewChild('orderbookTopTable') public orderbookTopTable: TableComponent;
   @ViewChild('orderbookBottomTable') public orderbookBottomTable: TableComponent;
 
@@ -51,6 +53,13 @@ export class OrderbookComponent implements OnInit {
 
   shouldHidePricing = shouldHidePricing;
 
+  public showAllOrders: boolean;
+  public showSellOrders: boolean;
+  public showBuyOrders: boolean;
+
+  private scrollTimeout: any;
+  private alertTimeout: any;
+
   constructor(
     private appService: AppService,
     private numberFormatPipe: NumberFormatPipe,
@@ -59,10 +68,22 @@ export class OrderbookComponent implements OnInit {
     private openorderService: OpenordersService,
     private pricingService: PricingService,
     private configurationOverlayService: ConfigurationOverlayService,
-    // private tradehistoryService: TradehistoryService,
-    // private currentpriceService: CurrentpriceService,
+    private orderbookViewService: OrderbookViewService,
     private zone: NgZone
-  ) { }
+  ) {
+    this.orderbookViewService.orderbookView()
+      .subscribe(view => {
+        if(!this.showAllOrders && !this.showSellOrders && !this.showBuyOrders) {
+          // First time
+          this.setView(view);
+        } else {
+          // Subsequent changes, after view has been rendered
+          this.zone.run(() => {
+            this.setView(view, true);
+          });
+        }
+      });
+  }
 
   static calculateTotal(row) {
     return math.round(math.multiply(bignumber(row[1]), bignumber(row[0])), 6);
@@ -78,6 +99,38 @@ export class OrderbookComponent implements OnInit {
       return ( Math.log(size) * 0.09 * multiplier );
     } else {
       return ( (1 - 1 / Math.log(size)) * multiplier );
+    }
+  }
+
+  private setView(view, scroll = false) {
+    switch(view) {
+      case OrderbookViews.SELLS:
+        Object.assign(this, {
+          showAllOrders: false,
+          showSellOrders: true,
+          showBuyOrders: false
+        });
+        break;
+      case OrderbookViews.BUYS:
+        Object.assign(this, {
+          showAllOrders: false,
+          showSellOrders: false,
+          showBuyOrders: true
+        });
+        break;
+      default:
+        Object.assign(this, {
+          showAllOrders: true,
+          showSellOrders: false,
+          showBuyOrders: false
+        });
+    }
+    if(scroll) {
+      if(this.scrollTimeout) clearTimeout(this.scrollTimeout);
+      this.scrollTimeout = setTimeout(() => {
+        this.orderbookTopTable.scrollToBottom(true);
+        this.orderbookBottomTable.scrollToTop(true);
+      }, 0);
     }
   }
 
@@ -168,6 +221,11 @@ export class OrderbookComponent implements OnInit {
 
   }
 
+  ngOnDestroy() {
+    if(this.scrollTimeout) clearTimeout(this.scrollTimeout);
+    if(this.alertTimeout) clearTimeout(this.alertTimeout);
+  }
+
   updatePricingAvailable(enabled: boolean) {
     this.pricingAvailable = enabled && this.pricing.canGetPrice(this.symbols[1]);
   }
@@ -214,7 +272,8 @@ export class OrderbookComponent implements OnInit {
         const newRow = [...row];
         newRow[2] = '';
         this.orderbookService.requestOrder(newRow);
-        setTimeout(() => {
+        if(this.alertTimeout) clearTimeout(this.alertTimeout);
+        this.alertTimeout = setTimeout(() => {
           alert('You are unable to take your own order.');
         }, 100);
       } else {
@@ -272,6 +331,10 @@ export class OrderbookComponent implements OnInit {
 
     const menu = Menu.buildFromTemplate(menuTemplate);
     menu.popup({x: clientX, y: clientY});
+  }
+
+  openConfigurationWindow() {
+    window.electron.ipcRenderer.send('openConfigurationWizard');
   }
 
 }

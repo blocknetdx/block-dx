@@ -1,6 +1,6 @@
 <div class="orderbook-container">
 
-  <div class="orderbook-table-outer-container-top">
+  <div class="orderbook-table-outer-container-top" [style.display]="showBuyOrders ? 'none' : 'block'">
 
 
     <div *ngIf="sections[0].rows.length === 0" class="no-open-orders-message-top">No sell orders.</div>
@@ -89,12 +89,12 @@
     <span class="spread-container"></span>
   </div>
 
-  <div class="orderbook-table-outer-container-bottom">
+  <div class="orderbook-table-outer-container-bottom" [style.display]="showSellOrders ? 'none' : 'block'" [style.height]="showBuyOrders ? 'calc(100% - 22px)' : 'calc(50% - 22px)'">
 
     <div *ngIf="sections[1].rows.length === 0" class="no-open-orders-message-bottom">No buy orders.</div>
 
     <div class="orderbook-table-container">
-      <app-table #orderbookTopTable
+      <app-table #orderbookBottomTable
                  [hideHeader]="true"
                  [selectable]="true"
                  [sections]="sections ? [sections[1]] : [{}]"
