@@ -4,6 +4,7 @@ import {BalancesService} from './balances.service';
 import {Balance} from './balance';
 import {AppService} from './app.service';
 import {NumberFormatPipe} from './pipes/decimal.pipe';
+import { GeneralSettingsService } from './general-settings.service';
 
 @Component({
   selector: 'app-balances',
@@ -13,11 +14,13 @@ export class BalancesComponent implements OnInit {
 
   public title = 'Balances';
   public sections: {rows: Balance[]}[] = [];
+  public showWallet: boolean;
 
   constructor(
     private numberFormatPipe: NumberFormatPipe,
     private appService: AppService,
     private balanceService: BalancesService,
+    private generalSettingsService: GeneralSettingsService,
     private zone: NgZone
   ) {
 
@@ -36,6 +39,12 @@ export class BalancesComponent implements OnInit {
 
   ngOnInit() {
     const { zone } = this;
+    this.generalSettingsService.generalSettings().subscribe(generalSettings => {
+      zone.run(() => {
+        console.log('generalSettings', generalSettings);
+        this.showWallet = generalSettings.showWallet;
+      });
+    });
     this.balanceService.getBalances().subscribe(balances => {
       zone.run(() => {
         this.sections = [{
