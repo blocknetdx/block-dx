@@ -139,4 +139,10 @@ export class NavBarComponent implements OnInit {
     this.toggleNav();
   }
 
+  openReleaseNotesWindow(e) {
+    e.preventDefault();
+    window.electron.ipcRenderer.send('openReleaseNotesWindow');
+    this.toggleNav();
+  }
+
 }

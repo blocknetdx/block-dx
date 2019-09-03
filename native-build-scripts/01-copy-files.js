@@ -21,7 +21,8 @@ co(function*() {
       'index.js',
       'tos.txt',
       'src-back',
-      'blockchain-configuration-files'
+      'blockchain-configuration-files',
+      'release-notes'
     ];
 
     for(const file of filesToCopy) {
