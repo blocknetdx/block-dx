@@ -3,8 +3,8 @@
   "version": "1.4.0",
   "license": "MIT",
   "author": "Blocknet <contact@blocknet.co>",
-  "homepage": "https://github.com/blocknetdx/blockdx-ui",
-  "repository": "https://github.com/blocknetdx/blockdx-ui.git",
+  "homepage": "https://github.com/blocknetdx/block-dx",
+  "repository": "https://github.com/blocknetdx/block-dx.git",
   "description": "BLOCK DX",
   "contributors": [
     {
