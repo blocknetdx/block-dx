@@ -21,6 +21,7 @@ export class PricechartComponent implements AfterViewInit, OnDestroy {
   private chart: any;
   private pairUpdated = true;
   private subscriptions = [];
+  private zoomedOut = true;
 
   constructor(
     private currentpriceService: CurrentpriceService,
@@ -75,8 +76,6 @@ export class PricechartComponent implements AfterViewInit, OnDestroy {
 
     this.subscriptions.push(this.currentpriceService.onPair()
       .subscribe(pair => {
-        // TODO Figure out zoom out
-        // this.chart.AmSerialChart.zoomOut();
         this.pairUpdated = true;
       })
     );
@@ -86,7 +85,7 @@ export class PricechartComponent implements AfterViewInit, OnDestroy {
   updatePriceChart() {
     const items = this.model[this.granularity];
     // Workaround for zooming chart out after switching trading pairs
-    if (this.pairUpdated)
+    if (this.pairUpdated || this.zoomedOut)
       this.chart.zoomOutOnDataUpdate = true;
     this.chart.dataProvider = items;
     this.chart.validateData();
@@ -102,7 +101,7 @@ export class PricechartComponent implements AfterViewInit, OnDestroy {
   makeChart() {
     if (this.chart)
       this.chart.clear();
-    
+
     this.chart = AmCharts.makeChart(this.container.nativeElement, {
       'type': 'serial',
       'theme': 'dark',
@@ -121,13 +120,15 @@ export class PricechartComponent implements AfterViewInit, OnDestroy {
         'spacing': 1,               //default 10, Horizontal space between legend items, in pixels.
         'switchable': false,        //default true, Whether showing/hiding of graphs by clicking on the legend marker is enabled or not.
         'textClickEnabled': false,  //default false, If true, clicking on the text will show/hide balloon of the graph. Otherwise it will show/hide graph/slice.
-        'useGraphSettings': true,   //default false, Legend markers can mirror graph’s settings, displaying a line and bullet within the graph. 
+        'useGraphSettings': true,   //default false, Legend markers can mirror graph’s settings, displaying a line and bullet within the graph.
         'valueAlign': 'left',       //default right, Alignment of the value text. Possible values are 'left' and 'right'.
         'valueText': '[[value]]',
         'valueWidth': 50,           //default 50, Width of the value text.
         'verticalGap': 0            //default 10, Vertical space between legend items also between legend border and first and last legend row.
       },
+
       zoomOutOnDataUpdate: false,
+
       mouseWheelScrollEnabled: false,
       mouseWheelZoomEnabled: false,
       parseDates: true,
@@ -278,6 +279,15 @@ export class PricechartComponent implements AfterViewInit, OnDestroy {
       'export': {
         'enabled': false,
         'position': 'bottom-right'
+      }
+    });
+
+    this.chart.addListener('zoomed', e => {
+      const { start, end, start0, end0 } = e.chart;
+      if((!start0 && start0 !== 0) || (!end0 && end0 !== 0) || (start === start0 && end === end0)) {
+        this.zoomedOut = true;
+      } else {
+        this.zoomedOut = false;
       }
     });
   }
