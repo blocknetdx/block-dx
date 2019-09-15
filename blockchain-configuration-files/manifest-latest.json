@@ -841,6 +841,22 @@
     "wallet_conf": "hash--v1.4.0.conf"
   },
   {
+    "blockchain": "Hatch",
+    "ticker": "HATCH",
+    "ver_id": "hatch--v0.14.0.3",
+    "ver_name": "Hatch",
+    "conf_name": "hatch.conf",
+    "dir_name_linux": "hatchcore",
+    "dir_name_mac": "HatchCore",
+    "dir_name_win": "HatchCore",
+    "repo_url": "https://github.com/hatchpay/hatch",
+    "versions": [
+      "v0.14.0.3"
+    ],
+    "xbridge_conf": "hatch--v0.14.0.3.conf",
+    "wallet_conf": "hatch--v0.14.0.3.conf"
+  },
+  {
     "blockchain": "Helium",
     "ticker": "HLM",
     "ver_id": "helium--v0.16.0",
