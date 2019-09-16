@@ -10,6 +10,15 @@ const { autoUpdater } = require('electron-updater');
 const PricingInterface = require('./src-back/pricing-interface');
 const ConfController = require('./src-back/conf-controller');
 const _ = require('lodash');
+const math = require('mathjs');
+const MarkdownIt = require('markdown-it');
+
+math.config({
+  number: 'BigNumber',
+  precision: 64
+});
+
+const md = new MarkdownIt();
 
 const { app, BrowserWindow, Menu, ipcMain } = electron;
 
@@ -33,7 +42,7 @@ ipcMain.on('getAppVersion', e => {
 
 let appWindow, serverLocation, sn, keyPair, storage, user, password, port, info, pricingSource, pricingUnit, apiKeys,
   pricingFrequency, enablePricing, sendPricingMultipliers, clearPricingInterval, setPricingInterval,
-  sendMarketPricingEnabled, metaPath, availableUpdate, tradeHistory, myOrders;
+  sendMarketPricingEnabled, metaPath, availableUpdate, tradeHistory, myOrders, showWallet, tosWindow, releaseNotesWindow;
 let updateError = false;
 
 // Handle explicit quit
@@ -280,6 +289,7 @@ autoUpdater.on('update-downloaded', ({ version: v }) => {
   downloadedUpdateVersion = v;
   downloadingUpdate = false;
   updateDownloaded = true;
+  storage.setItem('showReleaseNotes', true, true);
   openUpdateAvailableWindow(v, 'updateDownloaded');
 });
 autoUpdater.on('update-available', res => {
@@ -610,6 +620,10 @@ const openGeneralSettingsWindow = () => {
 
 };
 
+ipcMain.on('getShowWallet', e => {
+  e.returnValue = showWallet;
+});
+
 let informationWindow;
 
 const openInformationWindow = () => {
@@ -636,6 +650,58 @@ const openInformationWindow = () => {
 
 ipcMain.on('closeInformationWindow', e => {
   informationWindow.close();
+});
+
+const openReleaseNotesWindow = () => {
+
+  storage.setItem('showReleaseNotes', false);
+
+  let height;
+  if(process.platform === 'win32') {
+    height = 670;
+  } else if(process.platform === 'darwin') {
+    height = 655;
+  } else {
+    height = 645;
+  }
+
+  releaseNotesWindow = new BrowserWindow({
+    show: false,
+    width: 500,
+    height: height,
+    parent: appWindow
+  });
+  if(isDev) {
+    releaseNotesWindow.loadURL(`file://${path.join(__dirname, 'src', 'release-notes.html')}`);
+  } else {
+    releaseNotesWindow.loadURL(`file://${path.join(__dirname, 'dist', 'release-notes.html')}`);
+  }
+  releaseNotesWindow.once('ready-to-show', () => {
+    releaseNotesWindow.show();
+  });
+
+  releaseNotesWindow.setMenu(null);
+};
+ipcMain.on('openReleaseNotesWindow', () => {
+  openReleaseNotesWindow();
+});
+ipcMain.on('closeReleaseNotesWindow', () => {
+  releaseNotesWindow.close();
+});
+
+ipcMain.on('getReleaseNotes', event => {
+  try {
+    const releaseNotesDir = path.join(__dirname, 'release-notes');
+    const noteFiles = fs.readdirSync(releaseNotesDir);
+    const filePattern = new RegExp(_.escapeRegExp(`${version}.md`), 'i');
+    const fileName = noteFiles.find(f => filePattern.test(f));
+    if(!fileName) return event.returnValue = '';
+    const contents = fs.readFileSync(path.join(releaseNotesDir, fileName), 'utf8');
+    event.returnValue = contents;
+  } catch(err) {
+    event.returnValue = '';
+    handleError(err);
+  }
 });
 
 const openTOSWindow = (alreadyAccepted = false) => {
@@ -669,7 +735,7 @@ const openTOSWindow = (alreadyAccepted = false) => {
     height = alreadyAccepted ? 645 : 700;
   }
 
-  const tosWindow = new BrowserWindow({
+  tosWindow = new BrowserWindow({
     show: false,
     width: 500,
     height: height,
@@ -686,6 +752,9 @@ const openTOSWindow = (alreadyAccepted = false) => {
 
   tosWindow.setMenu(null);
 };
+ipcMain.on('closeTOS', () => {
+  tosWindow.close();
+});
 
 const openAppWindow = () => {
 
@@ -724,6 +793,11 @@ const openAppWindow = () => {
       handleError(err);
       // setTimeout(() => app.quit(), 1);
     }
+
+    // Show release notes if newly updated
+    const showReleaseNotes = storage.getItem('showReleaseNotes');
+    if(showReleaseNotes) openReleaseNotesWindow();
+
   });
 
   appWindow.on('close', () => {
@@ -789,6 +863,8 @@ const openAppWindow = () => {
     return orders;
   };
 
+  const calculateBackupTotal = (price, size) => math.round(math.multiply(math.bignumber(price), math.bignumber(size)), 6).toNumber().toFixed(6);
+
   const sendOrderBook = force => {
     if (isTokenPairValid(keyPair))
       sn.dxGetOrderBook3(keyPair[0], keyPair[1], 250)
@@ -800,12 +876,12 @@ const openAppWindow = () => {
             const orderBookWithTotals = Object.assign({}, res, {
               asks: res.asks.map(a => {
                 const order = orderTotals.get(a.orderId);
-                const total = a.size === order[0] ? order[1] : order[0];
+                const total = !order ? calculateBackupTotal(a.price, a.size) : a.size === order[0] ? order[1] : order[0];
                 return Object.assign({}, a, {total});
               }),
               bids: res.bids.map(b => {
                 const order = orderTotals.get(b.orderId);
-                const total = b.size === order[0] ? order[1] : order[0];
+                const total = !order ? calculateBackupTotal(b.price, b.size) : b.size === order[0] ? order[1] : order[0];
                 return Object.assign({}, b, {total});
               })
             });
@@ -1217,23 +1293,52 @@ ipcMain.on('getPricingEnabled', e => {
   e.returnValue = enablePricing;
 });
 ipcMain.on('saveGeneralSettings', (e, s) => {
-  // console.log(JSON.stringify(s, null, '  '));
-  enablePricing = s.pricingEnabled;
-  pricingSource = s.pricingSource;
-  apiKeys = s.apiKeys;
-  pricingUnit = s.pricingUnit;
-  pricingFrequency = s.pricingFrequency;
-  storage.setItems({
-    pricingEnabled: s.pricingEnabled,
-    pricingSource: s.pricingSource,
-    apiKeys: s.apiKeys,
-    pricingUnit: s.pricingUnit,
-    pricingFrequency: s.pricingFrequency
-  }, true);
-  clearPricingInterval();
-  sendPricingMultipliers();
-  setPricingInterval();
-  sendMarketPricingEnabled();
+  const changed = {};
+  if(enablePricing !== s.pricingEnabled) {
+    enablePricing = s.pricingEnabled;
+    changed.pricingEnabled = enablePricing;
+  }
+  if(pricingSource !== s.pricingSource) {
+    pricingSource = s.pricingSource;
+    changed.pricingSource = pricingSource;
+  }
+  if(apiKeys !== s.apiKeys) {
+    apiKeys = s.apiKeys;
+    changed.apiKeys = apiKeys;
+  }
+  if(pricingUnit !== s.pricingUnit) {
+    pricingUnit = s.pricingUnit;
+    changed.pricingUnit = pricingUnit;
+  }
+  if(pricingFrequency !== s.pricingFrequency) {
+    pricingFrequency = s.pricingFrequency;
+    changed.pricingFrequency = pricingFrequency;
+  }
+  if(showWallet !== s.showWallet) {
+    showWallet = s.showWallet;
+    changed.showWallet = showWallet;
+  }
+  if(['showWallet'].some(prop => Object.keys(changed).includes(prop))) {
+    sendGeneralSettings();
+  }
+  if(['enablePricing', 'pricingSource', 'apiKeys', 'pricingUnit', 'pricingFrequency'].some(prop => Object.keys(changed).includes(prop))) {
+    clearPricingInterval();
+    sendPricingMultipliers();
+    setPricingInterval();
+    sendMarketPricingEnabled();
+  }
+  storage.setItems(changed, true);
+});
+
+const sendGeneralSettings = () => {
+  appWindow.send('generalSettings', {
+    showWallet
+  });
+};
+ipcMain.on('getGeneralSettings', e => {
+  e.returnValue = {
+    showWallet
+  };
 });
 
 const loadXBridgeConf = async function() {
@@ -1314,6 +1419,11 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
     if(!enablePricing && enablePricing !== false) {
       enablePricing = false;
       storage.setItem('pricingEnabled', enablePricing);
+    }
+    showWallet = storage.getItem('showWallet');
+    if(!showWallet && showWallet !== false) {
+      showWallet = false;
+      storage.setItem('showWallet', showWallet);
     }
 
     if(!storage.getItem('addresses')) {

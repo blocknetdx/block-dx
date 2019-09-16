@@ -3,7 +3,7 @@
   <p>In order to trade this market, the wallets for both assets must be configured for trading, opened, and unlocked.</p>
   <button class="order-form-open-configuration-button" type="button" (click)="openConfigurationWindow()">Open Configuration</button>
 </div>
-  
+
 <app-bn-tab-view #tabView
   (onTabChange)="onTabChange($event)">
   <bn-tab label="{{'Buy ' + symbols[0] }}" barColor="#4BF5C6">
@@ -81,7 +81,7 @@
         </div>
       </div>
 
-      <div class="input-group row" *ngIf="pricingEnabled">
+      <div class="input-group row" *ngIf="pricingEnabled && !shouldHidePricing(symbols)">
         <label class="col-4 col-form-label" for="amount">Price</label>
         <div class="col-8">
           <input disabled

@@ -4,6 +4,7 @@ const { ipcRenderer } = require('electron');
 
 const renderSidebar = require('./modules/sidebar');
 const renderPricing = require('./modules/pricing');
+const renderBalances = require('./modules/balances');
 const renderLayout = require('./modules/layout');
 
 const handleError = err => {
@@ -17,9 +18,9 @@ const state = {
 
   set(key, val) {
     this._data.set(key, val);
-    console.log('state', [...this._data.entries()]
-      .reduce((obj, [ k, v ]) => Object.assign(obj, {[k]: v}), {})
-    );
+    // console.log('state', [...this._data.entries()]
+    //   .reduce((obj, [ k, v ]) => Object.assign(obj, {[k]: v}), {})
+    // );
   },
 
   get(key) {
@@ -32,7 +33,8 @@ const state = {
 state.set('active', 0);
 state.set('sidebarSelected', 0);
 state.set('sidebarItems', [
-  {sidebarText: 'Market Pricing', title: 'MARKET PRICING'}
+  {sidebarText: 'Market Pricing', title: 'MARKET PRICING'},
+  {sidebarText: 'Balances', title: 'BALANCES'}
   // {sidebarText: 'Layout Options', title: 'LAYOUT OPTIONS'}
 ]);
 
@@ -50,7 +52,8 @@ const saveSettings = () => {
     pricingSource: state.get('pricingSource'),
     apiKeys: state.get('apiKeys'),
     pricingUnit: state.get('pricingUnit'),
-    pricingFrequency: state.get('pricingFrequency')
+    pricingFrequency: state.get('pricingFrequency'),
+    showWallet: state.get('showWallet')
   });
 };
 
@@ -82,9 +85,9 @@ $(document).ready(() => {
       case 0:
         mainHTML = renderPricing({ state });
         break;
-      // case 1:
-      //   mainHTML = renderLayout({ state });
-      //   break;
+      case 1:
+        mainHTML = renderBalances({ state });
+        break;
       default:
         mainHTML = '';
     }
@@ -121,10 +124,10 @@ $(document).ready(() => {
         .off('click')
         .on('click', e => {
           e.preventDefault();
-          // var newActive = Number($(e.target).attr("data-sidebar-index"));
-          // state.set('active', newActive);
-          // state.set('sidebarSelected', newActive);
-          // render();
+          const newActive = Number($(e.target).attr('data-sidebar-index'));
+          state.set('active', newActive);
+          state.set('sidebarSelected', newActive);
+          render();
 
           // if ($('#js-apiKeyInput').val() !== undefined) {
           //   let pricingSource = state.get('pricingSource');
@@ -132,7 +135,7 @@ $(document).ready(() => {
           //   let pricingSourceObj = pricingSources.find(p => p.id === pricingSource);
           //   apiKeyError(false);
           //   if(!pricingSourceObj.apiKeyNeeded) {
-          //     $('#js-apiKeyInput').prop("disabled", true); 
+          //     $('#js-apiKeyInput').prop("disabled", true);
           //     $('#js-apiKeyInput').attr("placeholder", "API key not needed").val('');
           //   } else {
           //     $('#js-apiKeyInput').prop("disabled", false);
@@ -150,7 +153,6 @@ $(document).ready(() => {
         .off('click')
         .on('click', e => {
           e.preventDefault();
-          debugger;
           const $target = $(e.currentTarget);
           const $icon = $target.find('i');
           const pricingUnits = state.get('pricingUnits');
@@ -226,7 +228,7 @@ $(document).ready(() => {
                 $('#js-apiKeyInput').val(key);
                 if(!pricingSourceObj.apiKeyNeeded) {
                   // api key not needed
-                  $('#js-apiKeyInput').prop("disabled", true); 
+                  $('#js-apiKeyInput').prop("disabled", true);
                   $('#js-apiKeyInput').attr("placeholder", "API key not needed").val('');
                   apiKeyError(false);
                 } else {
@@ -330,7 +332,44 @@ $(document).ready(() => {
           saveSettings();
         });
 
-    }, 0);
+      $('#js-showWalletDropdown')
+        .off('click')
+        .on('click', e => {
+          e.preventDefault();
+          const $target = $(e.currentTarget);
+          const $icon = $target.find('i');
+          const showWallet = state.get('showWallet');
+          const height = $target.outerHeight();
+          const width = $target.outerWidth();
+          if ($icon.hasClass('fa-angle-up')) {
+            closeDropdowns();
+            return;
+          }
+          $icon.addClass('fa-angle-up');
+          $icon.removeClass('fa-angle-down');
+          $target.append(`
+            <div class="js-dropdownMenu" style="z-index:1000;position:absolute;top:${height}px;left:0;background-color:#ddd;width:${width}px;max-height:162px;overflow-y:auto;">
+              <div class="js-dropdownMenuItem dropdown-button" data-showWallet="true"><div>Yes</div></div>
+              <div class="js-dropdownMenuItem dropdown-button" data-showWallet="false"><div>No</div></div>
+            </div>
+          `);
+          setTimeout(() => {
+            $('.js-dropdownMenuItem')
+              .off('click')
+              .on('click', ee => {
+                ee.preventDefault();
+                const value = $(ee.currentTarget).attr('data-showWallet');
+                // console.log('value', value, typeof value);
+                const newShowWallet = value === 'true' ? true : false;
+                // console.log('newShowWallet', newShowWallet);
+                $($target.find('div')[0]).text(newShowWallet ? 'Yes' : 'No');
+                state.set('showWallet', newShowWallet);
+                saveSettings();
+              });
+          }, 0);
+        });
+
+        }, 0);
   };
 
   (async function() {
@@ -345,8 +384,8 @@ $(document).ready(() => {
       state.set('pricingUnit', pricingUnit);
       let pricingFrequency = ipcRenderer.sendSync('getPricingFrequency');
       state.set('pricingFrequency', pricingFrequency);
-
-
+      const showWallet = ipcRenderer.sendSync('getShowWallet');
+      state.set('showWallet', showWallet);
 
       render();
 
@@ -354,7 +393,7 @@ $(document).ready(() => {
       let pricingSourceObj = pricingSources.find(p => p.id === pricingSource);
       apiKeyError(false);
       if(!pricingSourceObj.apiKeyNeeded) {
-        $('#js-apiKeyInput').prop("disabled", true); 
+        $('#js-apiKeyInput').prop("disabled", true);
         $('#js-apiKeyInput').attr("placeholder", "API key not needed").val('');
       } else {
         $('#js-apiKeyInput').prop("disabled", false);

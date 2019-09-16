@@ -1,30 +1,39 @@
 ![BLOCK DX](BLOCKDX.png)
 
-BLOCK DX is the first dApp built on top of the [Blocknet Protocol](https://api.blocknet.co). This repository is maintained by the Blocknet Core Team. We encourage the community to create dApps on top of Blocknet. Please connect with our community on [Discord](https://discord.gg/2e6s7H8). More information about Blocknet can be found on the [Blocknet website](https://blocknet.co) and [documentation portal](https://docs.blocknet.co).
+[Download Block DX](https://github.com/blocknetdx/block-dx/releases/latest) |
+-------------|
+
+BLOCK DX is a decentralized exchange dApp built on top of the [Blocknet Protocol](https://api.blocknet.co). This repository is maintained by the Blocknet Core Team. We encourage the community to create dApps on top of Blocknet. Please connect with our community on [Discord](https://discord.gg/2e6s7H8). More information about Blocknet can be found on the [Blocknet website](https://blocknet.co) and [documentation portal](https://docs.blocknet.co).
 
 [Website](https://blocknet.co) | [API](https://api.blocknet.co) | [Documentation](https://docs.blocknet.co) | [Discord](https://discord.gg/2e6s7H8)
 -------------|-------------|-------------|-------------
 
-# Build and Run
+# Dev Instructions
+
+Block DX requires the [Blocknet wallet](https://github.com/blocknetdx/blocknet/releases/latest) and the wallets of the assets you want to view a market for to be setup and synced.
+
+## Build and run locally:
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.4.1.
 
-Start the dev server:
-`npm start`
+1. Install dependencies: `npm install`
+1. Start the dev server: `npm start`
+    * To start with the Mock (in-memory) API: `npm start -- -e="mock"`.
+1. In a new terminal window:
+    1. Build app: `npm run build`
+    1. Launch app: `npm run start-app`
 
-Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
-
-To run with the Mock (in-memory) API, run `npm start -- -e="mock"`.
-
-#### Run and test locally:
-
-`npm run start-app`
+The app will launch and automatically reload if you change any files within `src/`.
 
 #### Build native packages:
  
 `npm run pack-native`
 
-This will build the installer artifacts for the current system (Win, macOS, Linux).
+This will build the installer artifacts for the current system (Windows, MacOS, Linux).
+
+## Pull requests
+
+Please branch off of the branch titled after the next release. For example, if the [latest release](https://github.com/blocknetdx/block-dx/releases/latest) is version 1.4.0 then look for a branch titled 1.4.1, 1.5.0, or 2.0.0.
 
 ## Running unit tests
 

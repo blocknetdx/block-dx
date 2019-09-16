@@ -64,6 +64,8 @@ import { TableSectionDividerDirective } from './table/table-section-divider.dire
 import { CardToolbarDirective } from './card/card-toolbar.directive';
 import { PricingService } from './pricing.service';
 import {ConfigurationOverlayService} from './configuration.overlay.service';
+import {OrderbookViewService} from './orderbook.view.service';
+import { GeneralSettingsService } from './general-settings.service';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -133,6 +135,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     BalancesService,
     PricingService,
     ConfigurationOverlayService,
+    OrderbookViewService,
+    GeneralSettingsService,
     {
       provide: PERFECT_SCROLLBAR_CONFIG,
       useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG

@@ -8,10 +8,12 @@ export class BlockCurrencyPipe implements PipeTransform {
 
   constructor(private numberFormatPipe: NumberFormatPipe) {}
 
-  transform(value: any, symbol?: any, decimalMax = 8): any {
+  transform(value: any, symbol: any, decimalMax, ignoreRemainingZeroes = false): any {
     const format = symbol !== 'USD' ? `1.${decimalMax}-${decimalMax}` : '1.2-2';
     let v = this.numberFormatPipe.transform(value,format);
-    if (v) {
+
+    if(v && !ignoreRemainingZeroes) {
+      // Add remaining zeroes afte the decimal into separate span for display purposes
       v = v.replace(/(0{2,})$/, '<span>$1</span>');
     }
     return v;

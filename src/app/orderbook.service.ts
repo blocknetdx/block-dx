@@ -95,12 +95,13 @@ export class OrderbookService {
 
         for(const ask of asks) {
           // ask.push((parseFloat(ask[1]) / totalAskSize) * 100);
-          ask.splice(-1, 0, math
+          ask.splice(-1, 0, String(math
             .chain(bignumber(ask[1]))
             .divide(bignumber(totalAskSize))
             .multiply(100)
             .done()
-          );
+            .toNumber()
+          ));
           ask.splice(-1, 0, 'ask');
         }
 
@@ -111,12 +112,13 @@ export class OrderbookService {
 
         for(const bid of bids) {
           // bid.push((parseFloat(bid[1]) / totalBidSize) * 100);
-          bid.splice(-1, 0, math
+          bid.splice(-1, 0, String(math
             .chain(bignumber(bid[1]))
             .divide(bignumber(totalBidSize))
             .multiply(100)
             .done()
-          );
+            .toNumber()
+          ));
           bid.splice(-1, 0, 'bid');
         }
 

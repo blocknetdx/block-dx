@@ -35,3 +35,7 @@ export function debounce(func, wait, immediate?:boolean) {
 }
 
 export const briefTimeout = (timeout = 0) => new Promise(resolve => setTimeout(resolve, timeout));
+
+export const shouldHidePricing = (symbols: String[]): boolean => {
+  return symbols.includes('BTC');
+};

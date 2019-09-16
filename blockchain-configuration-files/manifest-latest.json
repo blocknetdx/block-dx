@@ -249,7 +249,7 @@
     "blockchain": "BitcoinZero",
     "ticker": "BZX",
     "ver_id": "bitcoinzero--5.0.1.0",
-    "ver_name": "BitcoinZero 5.0.1.0",
+    "ver_name": "BitcoinZero",
     "conf_name": "bitcoinzero.conf",
     "dir_name_linux": "bitcoinzero",
     "dir_name_mac": "bitcoinzero",
@@ -313,7 +313,7 @@
     "blockchain": "Blocknet",
     "ticker": "BLOCK",
     "ver_id": "blocknetdx--v3.9.16",
-    "ver_name": "Blocknet v3.13.0+",
+    "ver_name": "Blocknet",
     "conf_name": "blocknetdx.conf",
     "dir_name_linux": "blocknetdx",
     "dir_name_mac": "BlocknetDX",
@@ -321,7 +321,9 @@
     "repo_url": "https://github.com/blocknetdx/blocknet",
     "versions": [
       "v3.13.2",
-      "v3.13.2-classic"
+      "v3.13.2-classic",
+      "v3.14.0",
+      "v3.14.0-classic"
     ],
     "xbridge_conf": "blocknetdx--v3.9.16.conf",
     "wallet_conf": "blocknetdx--v3.9.16.conf"
@@ -1216,7 +1218,7 @@
     "blockchain": "MonaCoin",
     "ticker": "MONA",
     "ver_id": "monacoin--monacoin-0.17.1",
-    "ver_name": "MonaCoin v0.17.x",
+    "ver_name": "MonaCoin",
     "conf_name": "monacoin.conf",
     "dir_name_linux": "monacoin",
     "dir_name_mac": "Monacoin",
@@ -1264,7 +1266,7 @@
     "blockchain": "Myriad",
     "ticker": "XMY",
     "ver_id": "myriadcoin--v0.16.3.0",
-    "ver_name": "Myriad v0.16.3.x",
+    "ver_name": "Myriad",
     "conf_name": "myriadcoin.conf",
     "dir_name_linux": "myriadcoin",
     "dir_name_mac": "Myriadcoin",
@@ -1520,7 +1522,7 @@
     "blockchain": "Qtum",
     "ticker": "QTUM",
     "ver_id": "qtum--mainnet-ignition-v0.17.1",
-    "ver_name": "Qtum v0.17.x",
+    "ver_name": "Qtum",
     "conf_name": "qtum.conf",
     "dir_name_linux": "qtum",
     "dir_name_mac": "Qtum",
@@ -1741,22 +1743,6 @@
     "wallet_conf": "zsub1x--1.4.0.conf"
   },
   {
-    "blockchain": "Sucre",
-    "ticker": "SUCR",
-    "ver_id": "sucr--v0.12.2.1",
-    "ver_name": "Sucre",
-    "conf_name": "sucr.conf",
-    "dir_name_linux": "sucrcore",
-    "dir_name_mac": "SucrCore",
-    "dir_name_win": "SucrCore",
-    "repo_url": "https://github.com/sucremoneda/SucreCore",
-    "versions": [
-      "v0.12.2.1"
-    ],
-    "xbridge_conf": "sucr--v0.12.2.1.conf",
-    "wallet_conf": "sucr--v0.12.2.1.conf"
-  },
-  {
     "blockchain": "Syndicate",
     "ticker": "SYNX",
     "ver_id": "syndicate--v2.0.0",
@@ -1824,7 +1810,7 @@
     "blockchain": "Uniform Fiscal Object",
     "ticker": "UFO",
     "ver_id": "ufocoin--v0.17.0",
-    "ver_name": "Uniform Fiscal Object v0.17.x",
+    "ver_name": "Uniform Fiscal Object",
     "conf_name": "ufocoin.conf",
     "dir_name_linux": "ufo",
     "dir_name_mac": "UFO",
@@ -1856,7 +1842,7 @@
     "blockchain": "Viacoin",
     "ticker": "VIA",
     "ver_id": "viacoin--v0.16.3",
-    "ver_name": "Viacoin v0.16.x",
+    "ver_name": "Viacoin",
     "conf_name": "viacoin.conf",
     "dir_name_linux": "viacoin",
     "dir_name_mac": "Viacoin",
