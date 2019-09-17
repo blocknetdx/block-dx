@@ -29,6 +29,7 @@ export class MainviewComponent implements OnInit {
   public showBalancesTooltip = false;
   public showOrderFormTooltip = false;
   public showOrderBookTooltip = false;
+  public showActiveInactiveOrderTooltip = false;
 
   shouldHidePricing = shouldHidePricing;
 
@@ -79,6 +80,9 @@ export class MainviewComponent implements OnInit {
   }
   orderBookTooltip(show) {
     this.showOrderBookTooltip = show;
+  }
+  activeInactiveOrderTooltip(show) {
+    this.showActiveInactiveOrderTooltip = show;
   }
 
   updateView(view) {

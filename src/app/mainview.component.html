@@ -29,6 +29,11 @@
         <li><strong>White dots indicate the order is yours.</strong><br>Some orders may have a white dot to the left of them. This indicates it's an order you created.</li>
       </ul>
     </app-big-tooltip>
+    <app-big-tooltip title="Active/Inactive Orders" [show]="showActiveInactiveOrderTooltip">
+      <ul>
+        <li><strong>Lorem ipsum dolor sit amet</strong><br>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</li>
+      </ul>
+    </app-big-tooltip>
 
     <div class="sidebar col-lg">
       <div class="trade_table row">
@@ -122,6 +127,11 @@
           <bn-tab label="Inactive Orders">
             <ng-template #content>
               <bn-filled-orders></bn-filled-orders>
+            </ng-template>
+          </bn-tab>
+          <bn-tab label="" contentInHeader="true">
+            <ng-template #content>
+              <i class="material-icons tooltip-icon" (mouseenter)="activeInactiveOrderTooltip(true)" (mouseleave)="activeInactiveOrderTooltip(false)">help</i>
             </ng-template>
           </bn-tab>
         </app-bn-tab-view>
