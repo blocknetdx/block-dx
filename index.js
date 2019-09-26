@@ -1271,6 +1271,11 @@ const openAppWindow = () => {
     openTOSWindow(true);
   });
 
+  ipcMain.on('flushCancelledOrders', async function() {
+    await sn.dxFlushCancelledOrders();
+    sendMyOrders(true);
+  });
+
 };
 
 ipcMain.on('openSettings', () => {

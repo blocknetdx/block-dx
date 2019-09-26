@@ -10,6 +10,9 @@ export class TabDirective {
   @Input() public label: string;
   @Input() public barColor: string;
   @Input() public contentInHeader = false;
+  @Input() public float = '';
+  @Input() public hideLine = false;
+  @Input() public showOnIndex = -1;
 
   constructor() {}
 }

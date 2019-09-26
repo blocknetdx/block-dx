@@ -89,4 +89,9 @@ export class MainviewComponent implements OnInit {
     this.orderbookViewService.orderbookView().next(view);
   }
 
+  clearInactiveOrders(e) {
+    e.preventDefault();
+    window.electron.ipcRenderer.send('flushCancelledOrders');
+  }
+
 }
