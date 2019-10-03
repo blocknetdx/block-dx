@@ -14,6 +14,7 @@ import {ConfigurationOverlayService} from './configuration.overlay.service';
 import { shouldHidePricing } from './util';
 import {OrderbookViewService} from './orderbook.view.service';
 import { OrderbookViews } from './enums';
+import {Localize} from './localize/localize.component';
 
 
 math.config({
@@ -59,6 +60,8 @@ export class OrderbookComponent implements OnInit, OnDestroy {
 
   private scrollTimeout: any;
   private alertTimeout: any;
+
+  public Localize = Localize;
 
   constructor(
     private appService: AppService,
@@ -259,7 +262,7 @@ export class OrderbookComponent implements OnInit, OnDestroy {
   onTakeOrder(row) {
     if (row) {
       if(this.ownOrders.has(row[2])) {
-        alert('You are unable to take your own order.');
+        alert(Localize.text('You cannot take your own order.', 'orderbook'));
       } else {
         this.orderbookService.takeOrder(row);
       }
@@ -274,7 +277,7 @@ export class OrderbookComponent implements OnInit, OnDestroy {
         this.orderbookService.requestOrder(newRow);
         if(this.alertTimeout) clearTimeout(this.alertTimeout);
         this.alertTimeout = setTimeout(() => {
-          alert('You are unable to take your own order.');
+          alert(Localize.text('You cannot take your own order.', 'orderbook'));
         }, 100);
       } else {
         this.orderbookService.requestOrder(row);
@@ -298,13 +301,13 @@ export class OrderbookComponent implements OnInit, OnDestroy {
     const menuTemplate = [];
 
     menuTemplate.push({
-      label: 'Copy Order ID',
+      label: Localize.text('Copy Order ID', 'orderbook'),
       click: () => {
         clipboard.writeText(orderId);
       }
     });
     menuTemplate.push({
-      label: 'View Details',
+      label: Localize.text('View Details', 'orderbook'),
       click: () => {
         ipcRenderer.send('openOrderDetailsWindow', orderId);
       }
@@ -314,9 +317,9 @@ export class OrderbookComponent implements OnInit, OnDestroy {
     });
     if(ownOrder) {
       menuTemplate.push({
-        label: 'Cancel Order',
+        label: Localize.text('Cancel Order', 'orderbook'),
         click: () => {
-          const confirmed = confirm('Are you sure that you want to cancel this order?');
+          const confirmed = confirm(Localize.text('Are you sure that you want to cancel this order?', 'orderbook'));
           if(confirmed) this.onCancelOrder(orderId);
         }
       });

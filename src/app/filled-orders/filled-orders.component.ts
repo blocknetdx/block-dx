@@ -8,6 +8,7 @@ import { OpenordersService } from '../openorders.service';
 import { PricingService } from '../pricing.service';
 import { Pricing } from '../pricing';
 import * as OrderStates from '../../orderstates';
+import {Localize} from '../localize/localize.component';
 
 math.config({
   number: 'BigNumber',
@@ -33,6 +34,8 @@ export class FilledOrdersComponent extends BaseComponent implements OnInit {
 
   private _hashPadToken = {};
   public get hashPadToken(): object { return this._hashPadToken; }
+
+  public Localize = Localize;
 
   constructor(
     private appService: AppService,
@@ -139,6 +142,8 @@ export class FilledOrdersComponent extends BaseComponent implements OnInit {
 
   onRowContextMenu({ row, clientX, clientY }) {
 
+    const { Localize } = this;
+
     const order = row;
 
     const { Menu } = window.electron.remote;
@@ -151,7 +156,7 @@ export class FilledOrdersComponent extends BaseComponent implements OnInit {
 
     if(!symbols.includes(maker) || !symbols.includes(taker)) {
       menuTemplate.push({
-        label: 'View Market',
+        label: Localize.text('View Market', 'filledOrders'),
         click: () => {
           ipcRenderer.send('setKeyPair', [maker, taker]);
         }
@@ -159,7 +164,7 @@ export class FilledOrdersComponent extends BaseComponent implements OnInit {
     }
 
     menuTemplate.push({
-      label: 'View Details',
+      label: Localize.text('View Details', 'filledOrders'),
       click: () => {
         ipcRenderer.send('openMyOrderDetailsWindow', order.id);
       }

@@ -13,6 +13,7 @@ import { CryptocurrencyService } from '../cryptocurrency.service';
 import { Cryptocurrency } from '../cryptocurrency';
 import { AppConstants } from '../constants';
 import { briefTimeout } from '../util';
+import {Localize} from '../localize/localize.component';
 
 @Component({
   selector: 'app-pair-selector',
@@ -28,6 +29,8 @@ export class PairSelectorComponent implements OnInit, AfterViewInit {
 
   @Output()
   public onActiveStatus: EventEmitter<boolean> = new EventEmitter();
+
+  public Localize = Localize;
 
   public get symbols(): string[] {
     let _s = this._loadedSymbols;
@@ -45,8 +48,12 @@ export class PairSelectorComponent implements OnInit, AfterViewInit {
   public coinAValid = false;
   public coinBValid = false;
 
-  private connectedTokensLabel = 'Connected Assets';
-  private allTokensLabel = 'All Assets';
+  private get connectedTokensLabel() {
+    return Localize.text('Connected Assets', 'pairSelector');
+  }
+  private get allTokensLabel() {
+    return Localize.text('All Assets', 'pairSelector');
+  }
 
   public showBody = true;
 

@@ -1,3 +1,5 @@
+/* global Localize */
+
 const { RouterView } = require('../../modules/router');
 const route = require('../constants/routes');
 const titles = require('../constants/titles');
@@ -41,10 +43,10 @@ class ExpertSelectSetupType extends RouterView {
               </div>
               <div class="col2">
             
-                <p style="${styles.p}">Usernames and passwords must be generated for the wallet of each asset that will be traded.</p>
+                <p style="${styles.p}">${Localize.text('Usernames and passwords must be generated for the wallet of each asset that will be traded.','configurationWindowExpertSetup')}</p>
                 <div class="main-area" style="${styles.mainArea}">
-                  <div id="js-automaticCredentials" class="main-area-item"><i class="${generateCredentials ? 'fa' : 'far'} fa-circle radio-icon"></i> <strong>Quick Setup</strong> - Automatically generate credentials (recommended)</div>
-                  <div id="js-manualCredentials" class="main-area-item"><i class="${!generateCredentials ? 'fa' : 'far'} fa-circle radio-icon"></i> <strong>Expert Setup</strong> - Manually create RPC credentials (advanced users only)</div>
+                  <div id="js-automaticCredentials" class="main-area-item"><i class="${generateCredentials ? 'fa' : 'far'} fa-circle radio-icon"></i> <strong>${Localize.text('Quick Setup')}</strong> - ${Localize.text('Automatically generate credentials (recommended)','configurationWindowExpertSetup')}</div>
+                  <div id="js-manualCredentials" class="main-area-item"><i class="${!generateCredentials ? 'fa' : 'far'} fa-circle radio-icon"></i> <strong>${Localize.text('Expert Setup', 'configurationWindowExpertSetup')}</strong> - ${Localize.text('Manually create RPC credentials (advanced users only)','configurationWindowExpertSetup')}</div>
                 </div>
               
                 ${footerButtons()}

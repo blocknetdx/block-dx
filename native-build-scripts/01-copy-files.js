@@ -19,7 +19,8 @@ co(function*() {
     const filesToCopy = [
       'dist',
       'index.js',
-      'tos.txt',
+      'markdown',
+      'locales',
       'src-back',
       'blockchain-configuration-files',
       'release-notes'

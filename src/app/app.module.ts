@@ -66,6 +66,8 @@ import { PricingService } from './pricing.service';
 import {ConfigurationOverlayService} from './configuration.overlay.service';
 import {OrderbookViewService} from './orderbook.view.service';
 import { GeneralSettingsService } from './general-settings.service';
+import {Localize} from './localize/localize.component';
+import {LocalizeDecimalSeparatorPipe} from './localize/localize-decimal-separator.pipe';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -109,7 +111,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     CardToolbarDirective,
     NumberFormatPipe,
     PopperComponent,
-    BigTooltipComponent
+    BigTooltipComponent,
+    Localize,
+    LocalizeDecimalSeparatorPipe
   ],
   imports: [
     BrowserModule,

@@ -1,17 +1,17 @@
 
 <div class="order-form-configuration-message-overlay" *ngIf="showConfigurationOverlay">
-  <p>In order to trade this market, the wallets for both assets must be configured for trading, opened, and unlocked.</p>
-  <button class="order-form-open-configuration-button" type="button" (click)="openConfigurationWindow()">Open Configuration</button>
+  <p><Localize context="orderform" key="In order to trade this market, the wallets for both assets must be configured for trading, opened, and unlocked."></Localize></p>
+  <button class="order-form-open-configuration-button" type="button" (click)="openConfigurationWindow()"><Localize context="orderform" key="Open Configuration"></Localize></button>
 </div>
 
 <app-bn-tab-view #tabView
   (onTabChange)="onTabChange($event)">
-  <bn-tab label="{{'Buy ' + symbols[0] }}" barColor="#4BF5C6">
+  <bn-tab label="{{Localize.text('Buy {token}', 'orderform', {token: symbols[0]})}}" barColor="#4BF5C6">
     <ng-template #content>
       <ng-container *ngTemplateOutlet="formTemplate; context: {type: 'buy'}"></ng-container>
     </ng-template>
   </bn-tab>
-  <bn-tab label="{{'Sell ' + symbols[0]}}" barColor="#FB7F70">
+  <bn-tab label="{{Localize.text('Sell {token}', 'orderform', {token: symbols[0]})}}" barColor="#FB7F70">
     <ng-template #content>
       <ng-container *ngTemplateOutlet="formTemplate; context: {type: 'sell'}"></ng-container>
     </ng-template>
@@ -39,7 +39,7 @@
 
 
       <div class="input-group row">
-        <label class="col-4 col-form-label" for="amount">Amount</label>
+        <label class="col-4 col-form-label" for="amount"><Localize context="orderform" key="Amount"></Localize></label>
         <div class="col-8">
           <input #amountInput
                  (keyup)="amountChanged($event)"
@@ -55,7 +55,7 @@
       </div>
 
       <div class="input-group row" *ngIf="selectedOrderType == 'limit'">
-        <label class="col-4 col-form-label" for="limit">Limit Price</label>
+        <label class="col-4 col-form-label" for="limit"><Localize context="orderform" key="Limit Price"></Localize></label>
         <div class="col-8">
           <input (keyup)="calcPrice($event)"
                  class="form-control" name="limit" id="limit"
@@ -66,7 +66,7 @@
       </div>
 
       <div class="input-group row">
-        <label class="col-4 col-form-label" for="amount">Price</label>
+        <label class="col-4 col-form-label" for="amount"><Localize context="orderform" key="Price"></Localize></label>
         <div class="col-8">
           <input #priceInput
                  (keyup)="priceChanged($event)"
@@ -82,7 +82,7 @@
       </div>
 
       <div class="input-group row" *ngIf="pricingEnabled && !shouldHidePricing(symbols)">
-        <label class="col-4 col-form-label" for="amount">Price</label>
+        <label class="col-4 col-form-label" for="amount"><Localize context="orderform" key="Price"></Localize></label>
         <div class="col-8">
           <input disabled
                  *ngIf="!pricingAvailable"
@@ -106,7 +106,7 @@
       </div>
 
       <div class="input-group row">
-        <label class="col-4 col-form-label" for="total_calc">Total</label>
+        <label class="col-4 col-form-label" for="total_calc"><Localize context="orderform" key="Total"></Localize></label>
         <div class="col-8">
           <input #totalInput
                  class="form-control order-form-total-input"
@@ -121,7 +121,7 @@
       </div>
 
       <div class="input-group row">
-        <label class="col-4 col-form-label" for="js-maker-address">{{symbols[0]}} Address</label>
+        <label class="col-4 col-form-label" for="js-maker-address">{{Localize.text('{token} Address', 'orderform', {token: symbols[0]})}}</label>
         <div class="col-8">
           <input class="form-control"
                  style="padding-right:16px;"
@@ -136,7 +136,7 @@
       </div>
 
       <div class="input-group row">
-        <label class="col-4 col-form-label" for="js-taker-address">{{symbols[1]}} Address</label>
+        <label class="col-4 col-form-label" for="js-taker-address">{{Localize.text('{token} Address', 'orderform', {token: symbols[1]})}}</label>
         <div class="col-8">
           <input class="form-control"
                  style="padding-right:16px;"
@@ -151,7 +151,7 @@
       </div>
 
       <div class="input-group row">
-        <label class="col-4 col-form-label" for="js-order-id">Order ID</label>
+        <label class="col-4 col-form-label" for="js-order-id"><Localize context="orderform" key="Order ID"></Localize></label>
         <div class="col-8">
           <input class="form-control"
                  style="padding-right:16px;"
@@ -177,7 +177,7 @@
           class="order-form-button order-form-buy-button"
           [disabled]="disableSubmit">
           <i class="material-icons">add</i>
-          {{model.id ? 'Accept' : 'Place Buy'}} Order
+          {{model.id ? Localize.text('Accept Order', 'orderform') : Localize.text('Place Buy Order', 'orderform')}}
         </button>
 
         <button
@@ -186,7 +186,7 @@
           class="order-form-button order-form-sell-button"
           [disabled]="disableSubmit">
           <i class="material-icons">remove</i>
-          {{model.id ? 'Accept' : 'Place Sell'}} Order
+          {{model.id ? Localize.text('Accept Order', 'orderform') : Localize.text('Place Sell Order', 'orderform')}}
         </button>
 
       </div>

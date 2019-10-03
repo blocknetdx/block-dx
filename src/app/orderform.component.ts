@@ -13,6 +13,7 @@ import { PricingService } from './pricing.service';
 import { Pricing } from './pricing';
 import {ConfigurationOverlayService} from './configuration.overlay.service';
 import { shouldHidePricing } from './util';
+import {Localize} from './localize/localize.component';
 
 math.config({
   number: 'BigNumber',
@@ -71,6 +72,8 @@ export class OrderformComponent implements OnInit {
     private configurationOverlayService: ConfigurationOverlayService,
     private zone: NgZone
   ) { }
+
+  public Localize = Localize;
 
   ngOnInit() {
     this.model = {};
@@ -210,7 +213,7 @@ export class OrderformComponent implements OnInit {
     let fixed;
     if(!valid) {
       fixed = this.fixAmount(amount);
-      if(!skipPopper) this.showPopper('amount', 'You can only specify amounts with at most 6 decimal places.', 5000);
+      if(!skipPopper) this.showPopper('amount', Localize.text('You can only specify amounts with at most 6 decimal places.', 'orderform'), 5000);
       e.target.value = fixed;
     } else if(e.type === 'paste') {
       e.target.value = amount;
@@ -244,7 +247,7 @@ export class OrderformComponent implements OnInit {
     let fixed;
     if(!valid) {
       fixed = this.fixAmount(price);
-      if(!skipPopper) this.showPopper('price', 'You can only specify amounts with at most 6 decimal places.', 5000);
+      if(!skipPopper) this.showPopper('price', Localize.text('You can only specify amounts with at most 6 decimal places.', 'orderform'), 5000);
       e.target.value = fixed;
     } else if(e.type === 'paste') {
       e.target.value = price;
@@ -282,7 +285,7 @@ export class OrderformComponent implements OnInit {
     let fixed;
     if(!valid) {
       fixed = this.fixAmount(secondPrice);
-      if(!skipPopper) this.showPopper('secondPrice', 'You can only specify amounts with at most 6 decimal places.', 5000);
+      if(!skipPopper) this.showPopper('secondPrice', Localize.text('You can only specify amounts with at most 6 decimal places.', 'orderform'), 5000);
       e.target.value = fixed;
     } else if(e.type === 'paste') {
       e.target.value = secondPrice;
@@ -391,19 +394,19 @@ export class OrderformComponent implements OnInit {
     }
 
     if(!amount) {
-      alert('Oops! You must enter an amount.');
+      alert(Localize.text('Oops! You must enter an amount.', 'orderform'));
       return;
     } else if(!totalPrice) {
-      alert('Oops! You must enter a price.');
+      alert(Localize.text('Oops! You must enter a price.', 'orderform'));
       return;
     } else if(!makerAddress) {
-      alert(`Oops! You must enter a ${this.symbols[0]} address.`);
+      alert(Localize.text('Oops! You must enter a {token} address.', 'orderform', {token: this.symbols[0]}));
       return;
     } else if(!takerAddress) {
-      alert(`Oops! You must enter a ${this.symbols[1]} address.`);
+      alert(Localize.text('Oops! You must enter a {token} address.', 'orderform', {token: this.symbols[1]}));
       return;
     } else if(makerAddress === takerAddress) {
-      alert(`Oops! You have the same address entered for both ${this.symbols[0]} and ${this.symbols[1]}.`);
+      alert(Localize.text('Oops! You have the same address entered for both {token0} and {token1}.', 'orderform', {token0: this.symbols[0], token1: this.symbols[1]}));
       return;
     }
 

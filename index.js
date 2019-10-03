@@ -12,6 +12,18 @@ const ConfController = require('./src-back/conf-controller');
 const _ = require('lodash');
 const math = require('mathjs');
 const MarkdownIt = require('markdown-it');
+const { Localize } = require('./src-back/localize');
+
+const fileExists = p => {
+  try {
+    fs.statSync(p);
+    return true;
+  } catch(err) {
+    return false;
+  }
+};
+
+const defaultLocale = 'en';
 
 math.config({
   number: 'BigNumber',
@@ -342,12 +354,12 @@ const openConfigurationWindow = (options = {}) => {
     console.log(error);
     switch(error.status) {
       case 401:
-        errorTitle = 'Authorization Problem';
-        errorMessage = 'There was an authorization problem. Please check your Blocknet RPC username and/or password.';
+        errorTitle = Localize.text('Authorization Problem', 'configurationWindow');
+        errorMessage = Localize.text('There was an authorization problem. Please check your Blocknet RPC username and/or password.', 'configurationWindow');
         break;
       default:
-        errorTitle = 'Connection Error';
-        errorMessage = 'There was a problem connecting to the Blocknet wallet. Make sure the wallet has been configured, restarted, and is open and unlocked.';
+        errorTitle = Localize.text('Connection Error', 'configurationWindow');
+        errorMessage = Localize.text('There was a problem connecting to the Blocknet wallet. Make sure the wallet has been configured, restarted, and is open and unlocked.', 'configurationWindow');
     }
     console.log(errorMessage);
   } else {
@@ -508,10 +520,10 @@ const openSettingsWindow = (options = {}) => {
     console.log(error);
     switch(error.status) {
       case 401:
-        errorMessage = 'There was an authorization problem. Please correct your username and/or password.';
+        errorMessage = Localize.text('There was an authorization problem. Please correct your username and/or password.', 'settingsWindow');
         break;
       default:
-        errorMessage = 'There was a problem connecting to the Blocknet RPC server. Please check the RPC port.';
+        errorMessage = Localize.text('There was a problem connecting to the Blocknet RPC server. Please check the RPC port.', 'settingsWindow');
     }
     console.log(errorMessage);
   }
@@ -727,6 +739,7 @@ const openTOSWindow = (alreadyAccepted = false) => {
 
   ipcMain.on('getTOS', e => {
     try {
+      const locale = getUserLocale();
       const text = fs.readFileSync(path.join(__dirname, 'tos.txt'), 'utf8');
       e.returnValue = text;
     } catch(err) {
@@ -1378,6 +1391,50 @@ ipcMain.on('loadXBridgeConf', async function() {
   }
 });
 
+ipcMain.on('setUserLocale', (e, locale) => {
+  storage.setItem('locale', locale, true);
+  app.relaunch();
+  app.quit();
+});
+
+const getUserLocale = () => storage.getItem('locale');
+ipcMain.on('getUserLocale', e => {
+  e.returnValue = getUserLocale();
+});
+
+const getLocaleData = () => {
+  const locale = storage.getItem('locale');
+  const localesPath = path.join(__dirname, 'locales');
+  const files = fs.readdirSync(localesPath);
+  const localeFileName = `${locale}.json`;
+  let data;
+  if(files.includes(localeFileName)) {
+    data = fs.readJsonSync(path.join(localesPath, localeFileName));
+  } else {
+    data = fs.readJsonSync(path.join(localesPath, `${defaultLocale}.json`));
+  }
+  return data;
+};
+
+const getLocalizedTextBlock = textBlockName => {
+  const fileName = `${textBlockName}-${getUserLocale()}.md`;
+  const defaultFileName = `${textBlockName}-${defaultLocale}.md`;
+  let filePath = path.join(__dirname, 'markdown', fileName);
+  if(!fileExists(filePath)) filePath = path.join(__dirname, 'markdown', defaultFileName);
+  return fs.readFileSync(filePath, 'utf8');
+};
+ipcMain.on('getLocalizedTextBlock', (e, textBlockName) => {
+  try {
+    e.returnValue = getLocalizedTextBlock(textBlockName);
+  } catch(err) {
+    e.returnValue = err.message;
+  }
+});
+
+ipcMain.on('getLocaleData', e => {
+  e.returnValue = getLocaleData();
+});
+
 const checkForUpdates = async function() {
   try {
     await new Promise(resolve => setTimeout(resolve, 3000));
@@ -1390,6 +1447,29 @@ const checkForUpdates = async function() {
     updateError = true;
   }
 };
+
+const localeData = {};
+const debugging = false;
+ipcMain.on('localizeText', (e, key, context, replacers = {}) => {
+  try {
+    let text = localeData[key] && localeData[key][context] ? localeData[key][context].val : key;
+    const replacerKeys = Object.keys(replacers);
+    if(replacerKeys.length > 0) {
+      for(const replacer of Object.keys(replacers)) {
+        const val = replacers[replacer];
+        const patt = new RegExp(_.escapeRegExp('{' + replacer + '}'), 'g');
+        text = text.replace(patt, val);
+      }
+    }
+    if(debugging) {
+      e.returnValue = '***' + text + '***';
+    } else {
+      e.returnValue = text;
+    }
+  } catch(err) {
+    handleError(err);
+  }
+});
 
 const onReady = new Promise(resolve => app.on('ready', resolve));
 
@@ -1404,14 +1484,6 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
       dataPath = app.getPath('userData');
     }
 
-    const fileExists = p => {
-      try {
-        fs.statSync(p);
-        return true;
-      } catch(err) {
-        return false;
-      }
-    };
 
     metaPath = path.join(dataPath, 'app-meta.json');
     storage = new SimpleStorage(metaPath);
@@ -1419,6 +1491,14 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
     password = storage.getItem('password');
     port = storage.getItem('port');
     let ip = storage.getItem('blocknetIP');
+
+    let locale = storage.getItem('locale');
+    if(!locale) {
+      locale = 'en';
+      storage.setItem('locale', defaultLocale);
+    }
+
+    Localize.initialize(locale, getLocaleData());
 
     pricingSource = storage.getItem('pricingSource');
     if(!pricingSource) {
@@ -1540,6 +1620,8 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
 
   } catch(err) {
     handleError(err);
+    electron.dialog.showErrorBox(Localize.text('Oops! There was an error.', 'universal'), err.message + '\n' + err.stack);
+    app.quit();
   }
 
 })();
@@ -1553,7 +1635,7 @@ function isTokenPairValid(keyPair) {
 // check for version number. Minimum supported blocknet client version
 function versionCheck(version) {
   if (version < 3130200) {
-    return {name: 'Unsupported Version', message: 'BLOCK DX requires Blocknet wallet version 3.13.2 or greater.'};
+    return {name: Localize.text('Unsupported Version', 'universal'), message: Localize.text('BLOCK DX requires Blocknet wallet version 3.13.2 or greater.', 'universal')};
   }
   return null;
 }
