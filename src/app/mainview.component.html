@@ -30,9 +30,150 @@
       </ul>
     </app-big-tooltip>
     <app-big-tooltip title="Active/Inactive Orders" [show]="showActiveInactiveOrderTooltip">
-      <ul>
-        <li><strong>Lorem ipsum dolor sit amet</strong><br>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</li>
+      <ul >
+        <li><strong>Clear Inactive Button</strong><br>The Clear Inactive button on the Inactive Orders tab removes canccelled orders.</li>
+        <li><strong>Refunding failed trades</strong><br>For failed in-progress trades, the funds will be automatically returned in 30 minutes for the taker and 2 hours for the maker.</li>
       </ul>
+      <table>
+        <tr>
+          <th>Status</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+        <tr>
+          <td>
+            <div class="order-status status-open">
+              <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
+                <g transform="translate(25 50)"><circle cx="0" cy="0" r="6" fill="rgba(0,0,0,0.7)" transform="scale(0.998675 0.998675)">
+                  <animateTransform attributeName="transform" type="scale" begin="-0.3333333333333333s" calcMode="spline" keySplines="0.3 0 0.7 1;0.3 0 0.7 1" values="0;1;0" keyTimes="0;0.5;1" dur="1s" repeatCount="indefinite"></animateTransform>
+                </circle></g>
+                <g transform="translate(50 50)"><circle cx="0" cy="0" r="6" fill="rgba(0,0,0,0.7)" transform="scale(0.703242 0.703242)">
+                  <animateTransform attributeName="transform" type="scale" begin="-0.16666666666666666s" calcMode="spline" keySplines="0.3 0 0.7 1;0.3 0 0.7 1" values="0;1;0" keyTimes="0;0.5;1" dur="1s" repeatCount="indefinite"></animateTransform>
+                </circle></g>
+                <g transform="translate(75 50)"><circle cx="0" cy="0" r="6" fill="rgba(0,0,0,0.7)" transform="scale(0.241675 0.241675)">
+                  <animateTransform attributeName="transform" type="scale" begin="0s" calcMode="spline" keySplines="0.3 0 0.7 1;0.3 0 0.7 1" values="0;1;0" keyTimes="0;0.5;1" dur="1s" repeatCount="indefinite"></animateTransform>
+                </circle></g>
+              </svg>
+            </div></td>
+          <td>Active</td>
+          <td><em>Creating</em> - The order is being broadcasted to the network.</td>
+        </tr>
+        <tr>
+          <td><div class="order-status status-open">Open</div></td>
+          <td>Active</td>
+          <td><em>Open</em> - The order is live and open (not taken).</td>
+        </tr>
+        <tr>
+          <td><div class="order-status status-process">1/5</div></td>
+          <td>Active</td>
+          <td><em>Accepting</em> - Attempting to take the order and connecting to the counter party.</td>
+        </tr>
+        <tr>
+          <td><div class="order-status status-process">2/5</div></td>
+          <td>Active</td>
+          <td><em>Hold</em> -  Waiting for the counter party to respond.</td>
+        </tr>
+        <tr>
+          <td><div class="order-status status-process">3/5</div></td>
+          <td>Active</td>
+          <td><em>Accepted</em> - The counter party has agreed to trade.</td>
+        </tr>
+        <tr>
+          <td><div class="order-status status-process">4/5</div></td>
+          <td>Active</td>
+          <td><em>Exchanging</em> - The funds are in the process of being exchanged.</td>
+        </tr>
+        <tr>
+          <td><div class="order-status status-process">5/5</div></td>
+          <td>Active</td>
+          <td><em>Finalizing</em> - The exchange of funds is being finalized.</td>
+        </tr>
+        <tr>
+          <td><div class="order-status status-finished">&#10003;</div></td>
+          <td>Inactive</td>
+          <td><em>Complete</em> - The funds have been exchanges and the trade is complete.</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="order-status status-process">
+              <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
+                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="-8px" viewBox="0 0 100 100" style="transform-origin: 50px 50px 0px; transform: scale(0.9);" xml:space="preserve">
+                  <path d="M78.3,21.7c-15.6-15.6-41-15.6-56.6,0c-15.6,15.6-15.6,41,0,56.6C29.5,86.1,39.8,90,50,90s20.5-3.9,28.3-11.7 C93.9,62.7,93.9,37.3,78.3,21.7z M28,28c6.1-6.1,14-9.1,22-9.1c6.1,0,12.3,1.8,17.5,5.4L24.3,67.5C16,55.4,17.3,38.7,28,28z M72,72 c-10.7,10.7-27.4,12-39.5,3.7l43.2-43.2C84,44.6,82.7,61.3,72,72z" fill="rgba(0,0,0,0.6)" style="fill: rgba(0, 0, 0, 0.6);"></path>
+                </svg>
+              </svg>
+            </div></td>
+          <td>Inactive</td>
+          <td><em>Canceled</em> - The order has been canceled.</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="order-status status-alert">
+              <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
+                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="-5px" viewBox="0 0 100 100" style="transform-origin: 50px 50px 0px; transform: scale(1);" xml:space="preserve">
+                  <path d="M81.1,77.5C73.7,85,63.6,88.9,53.5,88.9c-5.6,0-11.2-1.2-16.5-3.7c-4.1-1.9-7.8-4.5-11-7.7l7.7-7.7 c2.3,2.3,5,4.2,7.9,5.6c10.7,5,23.4,2.8,31.8-5.6c11-11,11-28.8,0-39.7c-11-11-28.8-11-39.7,0c-3.4,3.4-5.8,7.5-7.1,12.1l7.7,1.1 L17.7,64.6L7.5,39.6l8.2,1.1c1.7-6.9,5.2-13.2,10.3-18.2c15.2-15.2,39.9-15.2,55.1,0C96.3,37.6,96.3,62.4,81.1,77.5z" fill="rgba(0,0,0,0.6)" style="fill: rgba(0,0,0,0.6);"></path>
+                  <polygon points="60.1,33.5 52.9,33.5 52.9,54.5 41.3,54.5 41.3,61.8 60.1,61.8 " fill="rgba(0,0,0,0.7)" style="fill: rgba(0,0,0,0.7);"></polygon>
+                </svg>
+              </svg>
+            </div></td>
+          <td>Inactive</td>
+          <td><em>Expired</em> - The network was unable to connect with your wallet for 6min and has canceled the order.</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="order-status status-alert">
+              <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
+                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="-8px" viewBox="0 0 100 100" style="transform-origin: 50px 50px 0px; transform: scale(1);" xml:space="preserve">
+                  <path d="M56.4,75.4c-3.6-3.6-9.3-3.6-12.9,0l6.4,6.4L56.4,75.4z" fill="rgba(0,0,0,0.7)" style="fill: rgba(0, 0, 0, 0.3);"></path>
+                  <path d="M62.9,69l6.4-6.4c-10.7-10.7-27.9-10.7-38.6,0l6.4,6.4C44.2,61.9,55.8,61.9,62.9,69z" fill="rgba(0,0,0,0.7)" style="fill: rgba(0, 0, 0, 0.3);"></path>
+                  <path d="M75.7,56.1l6.4-6.4c-17.8-17.8-46.5-17.8-64.3,0l6.4,6.4C38.5,41.9,61.5,41.9,75.7,56.1z" fill="rgba(0,0,0,0.7)" style="fill: rgba(0, 0, 0, 0.2);"></path>
+                  <path d="M88.6,43.2l6.4-6.4C70.1,12,29.9,12,5,36.8l6.4,6.4C32.7,22,67.3,22,88.6,43.2z" fill="rgba(0,0,0,0.7)" style="fill: rgba(0, 0, 0, 0.2);"></path>
+                  <line style="fill: none; stroke: rgba(0, 0, 0, 0.6); stroke-width: 8;" x1="10" y1="58.4" x2="36.6" y2="85" stroke="rgba(0, 0, 0, 0.6)"></line>
+                  <line style="fill: none; stroke: rgba(0, 0, 0, 0.6); stroke-width: 8;" x1="36.6" y1="58.4" x2="10" y2="85" stroke="rgba(0, 0, 0, 0.6)"></line>
+                </svg>
+              </svg>
+            </div></td>
+          <td>Inactive</td>
+          <td><em>Offline</em> - Unable to connect to the network and failed to create the order.</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="order-status status-error">
+              <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
+                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="-8px" viewBox="0 0 100 100" style="transform-origin: 50px 50px 0px; transform: scale(1);" xml:space="preserve">
+                  <path d="M50.5,25.1c-0.2-0.4-0.8-0.4-1,0L18.2,74.3c-0.1,0.2-0.1,0.5,0.1,0.7l0.1,0.2l62.8,0c0.1,0,0.4,0,0.5-0.3 c0.2-0.3,0-0.6,0-0.6L50.5,25.1z" fill="none" style="fill: none;"></path>
+                  <path d="M49.3,40.7h1.4c1.8,0,3.3,1.5,3.3,3.3v2.9l-1.3,12.5c-0.2,1.4-1.4,2.5-2.8,2.5h0c-1.4,0-2.6-1.1-2.8-2.5 L46,46.9V44C46,42.2,47.5,40.7,49.3,40.7z M49.6,63.8h0.9c1.8,0,3.3,1.5,3.3,3.3l0,0c0,1.8-1.5,3.3-3.3,3.3h-0.9 c-1.8,0-3.3-1.5-3.3-3.3l0,0C46.2,65.2,47.7,63.8,49.6,63.8z" fill="rgba(0,0,0,0.7)" style="fill: rgba(0, 0, 0, 0.7);"></path>
+                  <path d="M57.2,20.6c-1.6-2.4-4.3-3.9-7.2-3.9c-2.9,0-5.6,1.4-7.3,3.9L11.5,69.7c-1.8,2.7-2,6.1-0.5,9 c1.5,2.9,4.5,4.6,7.7,4.6h62.5c3.2,0,6.2-1.8,7.7-4.6c1.5-2.9,1.4-6.3-0.4-9L57.2,20.6z M81.8,74.8c-0.2,0.3-0.4,0.3-0.5,0.3 l-62.8,0L18.3,75c-0.2-0.2-0.2-0.4-0.1-0.7l31.3-49.2c0.3-0.4,0.8-0.4,1,0l31.3,49.1C81.8,74.3,82,74.5,81.8,74.8z" fill="rgba(0,0,0,0.7)" style="fill: rgba(0, 0, 0, 0.7);"></path>
+                </svg>
+              </svg>
+            </div></td>
+          <td>Inactive</td>
+          <td><em>Invalid</em> - There is an issue with the created order.</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="order-status status-error">
+              <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
+                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="-8px" viewBox="0 0 100 100" style="transform-origin: 50px 50px 0px; transform: scale(1);" xml:space="preserve">
+                  <path d="M28.29,30.481h34.1C78.168,30.481,90,41.403,90,54.828S78.168,79.175,62.39,79.175H12.008V67.127H62.39 c8.98,0,15.562-5.632,15.562-12.299S71.37,42.529,62.39,42.529h-34.1v9.654L10,36.506l18.29-15.681V30.481z" fill="rgba(0,0,0,0.7)" style="fill: rgba(0, 0, 0, 0.7);"></path>
+                </svg>
+              </svg>
+            </div></td>
+          <td>Inactive</td>
+          <td><em>Refunding</em> - The order has failed and funds are being refunded.</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="order-status status-error">
+              <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
+                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="-8px" viewBox="0 0 100 100" style="transform-origin: 50px 50px 0px; transform: scale(1);" xml:space="preserve">
+                  <path d="M28.29,30.481h34.1C78.168,30.481,90,41.403,90,54.828S78.168,79.175,62.39,79.175H12.008V67.127H62.39 c8.98,0,15.562-5.632,15.562-12.299S71.37,42.529,62.39,42.529h-34.1v9.654L10,36.506l18.29-15.681V30.481z" fill="rgba(0,0,0,0.7)" style="fill: rgba(0, 0, 0, 0.7);"></path>
+                </svg>
+              </svg>
+            </div></td>
+          <td>Active</td>
+          <td><em>Refund Failed</em> - The refund failed and needs to be performed manually.</td>
+        </tr>
+      </table>
     </app-big-tooltip>
 
     <div class="sidebar col-lg">
