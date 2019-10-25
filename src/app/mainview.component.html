@@ -29,7 +29,7 @@
         <li><strong>White dots indicate the order is yours.</strong><br>Some orders may have a white dot to the left of them. This indicates it's an order you created.</li>
       </ul>
     </app-big-tooltip>
-    <app-big-tooltip title="Active/Inactive Orders" [show]="showActiveInactiveOrderTooltip">
+    <app-big-tooltip title="Active/Inactive Orders" [show]="showActiveInactiveOrderTooltip" (mouseenter)="activeInactiveOrderTooltip2(true)" (mouseleave)="activeInactiveOrderTooltip2(false)">
       <ul >
         <li><strong>Clear Inactive Button</strong><br>The Clear Inactive button on the Inactive Orders tab removes canccelled orders.</li>
         <li><strong>Refunding failed trades</strong><br>For failed in-progress trades, the funds will be automatically returned in 30 minutes for the taker and 2 hours for the maker.</li>
@@ -272,7 +272,7 @@
           </bn-tab>
           <bn-tab label="" contentInHeader="true">
             <ng-template #content>
-              <i class="material-icons tooltip-icon" (mouseenter)="activeInactiveOrderTooltip(true)" (mouseleave)="activeInactiveOrderTooltip(false)">help</i>
+              <i class="material-icons tooltip-icon" (mouseenter)="activeInactiveOrderTooltip1(true)" (mouseleave)="activeInactiveOrderTooltip1(false)">help</i>
             </ng-template>
           </bn-tab>
         </app-bn-tab-view>
