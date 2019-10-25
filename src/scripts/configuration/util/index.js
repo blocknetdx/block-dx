@@ -115,6 +115,7 @@ class XBridgeConf {
     const { abbr, directory, xBridgeConf, username, password } = wallet;
     if(abbr === 'BLOCK') this._directory = directory;
     const confStr = ipcRenderer.sendSync('getBridgeConf', xBridgeConf);
+    if(!confStr) throw new Error(`${xBridgeConf} not found.`);
     const conf = splitConf(confStr);
     this._data.set(abbr, Object.assign({}, conf, {
       Username: username,
@@ -160,6 +161,7 @@ const updateXBridgeConf = (wallets, blockDir) => {
   for(const wallet of wallets) {
     const { abbr, xBridgeConf, username, password } = wallet;
     const confStr = ipcRenderer.sendSync('getBridgeConf', xBridgeConf);
+    if(!confStr) throw new Error(`${xBridgeConf} not found.`);
     const conf = splitConf(confStr);
     data.set(abbr, Object.assign({}, conf, {
       Username: username,
@@ -204,6 +206,7 @@ const addToXBridgeConf = (wallets, blockDir) => {
   for(const wallet of wallets) {
     const { abbr, xBridgeConf, username, password } = wallet;
     const confStr = ipcRenderer.sendSync('getBridgeConf', xBridgeConf);
+    if(!confStr) throw new Error(`${xBridgeConf} not found.`);
     const conf = splitConf(confStr);
     data.set(abbr, Object.assign({}, conf, {
       Username: username,

@@ -423,7 +423,8 @@ const openConfigurationWindow = (options = {}) => {
       }
       e.returnValue = contents;
     } catch(err) {
-      handleError(err);
+      electron.dialog.showErrorBox(err.message, `There was a problem opening ${walletConf}.`);
+      e.returnValue = '';
     }
   });
 
@@ -438,7 +439,8 @@ const openConfigurationWindow = (options = {}) => {
       }
       e.returnValue = contents;
     } catch(err) {
-      handleError(err);
+      electron.dialog.showErrorBox(err.message, `There was a problem opening ${bridgeConf}.`);
+      e.returnValue = '';
     }
   });
 
