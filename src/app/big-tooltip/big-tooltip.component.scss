@@ -9,6 +9,9 @@
   border-radius: 5px;
   top: 5%;
   left: 50%;
+  width: 55%;
+  max-height: 90%;
+  overflow-y: scroll;
   transform: translate(-50%, -0%);
 }
 .big-tooltip-title {
@@ -17,9 +20,66 @@
   color: #333;
   margin-bottom: 15px;
 }
+.big-tooltip-message {
+  //overflow-y: scroll;
+  //max-height: 500px;
+}
+.big-tooltip-panel::-webkit-scrollbar {
+  width: 11px;
+  border: solid 1px #fff;
+  border-radius: 11px;
+}
+.big-tooltip-panel::-webkit-scrollbar-thumb {
+  background-color: rgba(0,0,0,0.5);
+  border-radius: 6px;
+  border: 2px solid #fff;
+}
 .big-tooltip-message li {
   padding-bottom: 15px;
 }
 .big-tooltip-message li:last-child {
   padding-bottom: 0px;
+}
+.big-tooltip-message table {
+  margin-bottom: 10px;
+}
+.big-tooltip-message th,
+.big-tooltip-message td {
+  //padding: 2px 5px;
+  padding: 5px;
+  border: solid 1px #ccc;
+}
+.big-tooltip-message td:first-child {
+  text-align: center;
+}
+.big-tooltip-message td:last-child {
+  //text-align: left;
+}
+.big-tooltip-message .order-status {
+  //display: inline-block;
+  margin: auto;
+  margin-top: 2px;
+  width: 36px;
+  height: 18px;
+  text-align: center;
+  border-radius: 4px;
+  font-size: 11px;
+  color: rgba(0, 0, 0, 0.7);
+  border: solid 1px #ccc;
+}
+.big-tooltip-message .status-open {
+  background-color: rgba(255, 255, 255, 1);
+}
+.big-tooltip-message .status-process {
+  background-color: rgba(238, 238, 238, 0.8);
+}
+.big-tooltip-message .status-finished {
+  font-size: 12px;
+  background-color: rgba(0, 245, 196, 0.7);
+}
+.big-tooltip-message .status-alert {
+  background-color: rgba(235, 184, 66, 0.9);
+}
+.big-tooltip-message .status-error {
+  background-color: #d65a62;
 }

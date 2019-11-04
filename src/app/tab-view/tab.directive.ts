@@ -9,6 +9,7 @@ export class TabDirective {
 
   @Input() public label: string;
   @Input() public barColor: string;
+  @Input() public contentInHeader = false;
 
   constructor() {}
 }
