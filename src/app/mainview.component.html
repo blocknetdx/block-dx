@@ -275,6 +275,13 @@
               <i class="material-icons tooltip-icon" (mouseenter)="activeInactiveOrderTooltip1(true)" (mouseleave)="activeInactiveOrderTooltip1(false)">help</i>
             </ng-template>
           </bn-tab>
+          <bn-tab label="" contentInHeader="true" float="right" hideLine="true" showOnIndex="1">
+            <ng-template #content>
+              <button type="button" class="clear-inactive-button" (click)="clearInactiveOrders($event)">
+                Clear Inactive
+              </button>
+            </ng-template>
+          </bn-tab>
         </app-bn-tab-view>
 
         <bn-card class="trade_table__cell history col-lg-4">

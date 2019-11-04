@@ -94,7 +94,7 @@ a.tab {
       margin-left: 30px;
       position: relative;
 
-      &::before {
+      &:not(.hidden-left-line)::before {
         content: '|';
         position: absolute;
         left: -1.5em;

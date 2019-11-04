@@ -70,4 +70,9 @@ export class TabViewComponent implements AfterContentInit {
     this.tabChangeEmitter.emit(idx);
   }
 
+  toNumber(num) {
+    if(typeof num === 'number') return num;
+    return Number(num);
+  }
+
 }
