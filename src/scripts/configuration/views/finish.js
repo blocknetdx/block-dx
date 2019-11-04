@@ -117,6 +117,8 @@ class Finish extends RouterView {
                 }
               });
 
+          if(configurationType !== configurationTypes.ADD_NEW_WALLETS) ipcRenderer.sendSync('setTokenPaths', null);
+
             if(addingWallets) {
               for(const [ abbr, version ] of addAbbrToVersion.entries()) {
                 const filteredWallets = wallets.filter(w => w.abbr === abbr);
@@ -169,6 +171,9 @@ class Finish extends RouterView {
 
             let filtered = wallets
               .filter(w => selectedWallets.has(w.versionId));
+
+            ipcRenderer.sendSync('setTokenPaths', filtered);
+
             if(!state.get('skipSetup')) {
               filtered = filtered
                 .map(w => {

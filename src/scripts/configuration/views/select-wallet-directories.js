@@ -34,7 +34,7 @@ class SelectWalletDirectories extends RouterView {
             fs.statSync(w.directory);
             w = w.set('error', false);
           } else {
-            const fullPath = w.getDefaultDirectory();
+            const fullPath = w.directory;
             fs.statSync(fullPath);
             w = w.set({
               directory: fullPath,

@@ -39,7 +39,7 @@ class Wallet {
     this.password = '';
     this.port = '';
     this.version = versions.length > 0 ? versions[versions.length - 1] : '';
-    this.directory = this.getDefaultDirectory();
+    this.directory = this.getCustomDirectory();
 
   }
 
@@ -63,6 +63,11 @@ class Wallet {
     const username = 'BlockDX' + name.replace(/\s/g, '');
     const password = uuid.v4();
     return { username, password };
+  }
+
+  getCustomDirectory() {
+    const customDir = ipcRenderer.sendSync('getTokenPath', this.abbr);
+    return customDir ? customDir : this.getDefaultDirectory();
   }
 
   getDefaultDirectory() {

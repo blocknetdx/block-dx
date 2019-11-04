@@ -133,10 +133,21 @@ class SelectSetupType extends RouterView {
     });
     $('#js-continueBtn').on('click', e => {
       e.preventDefault();
+      const configurationType = state.get('configurationType');
+      const wallets = state.get('wallets');
       if(state.get('quickSetup')) {
-        const wallets = state.get('wallets');
-        const blocknetWallet = wallets.find(w => w.abbr === 'BLOCK');
-        const dir = blocknetWallet.getDefaultDirectory();
+        const newWallets = wallets
+          .map(w => {
+            if(configurationType === configurationTypes.ADD_NEW_WALLETS && w.abbr === 'BLOCK') {
+              // it will use custom Blocknet directory if one has been previously set, otherwise it will fall back to the default directory
+              return w.set('directory', w.getCustomDirectory());
+            } else {
+              return w.set('directory', w.getDefaultDirectory());
+            }
+          });
+        state.set('wallets', newWallets);
+        const blocknetWallet = newWallets.find(w => w.abbr === 'BLOCK');
+        const dir = blocknetWallet.directory;
         try {
           fs.statSync(dir);
           router.goTo(route.SELECT_WALLET_VERSIONS);
@@ -147,6 +158,9 @@ class SelectSetupType extends RouterView {
           });
         }
       } else {
+        const newWallets = wallets
+          .map(w => w.set('directory', w.getCustomDirectory()));
+        state.set('wallets', newWallets);
         router.goTo(route.SELECT_WALLETS);
       }
     });

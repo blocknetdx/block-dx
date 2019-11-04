@@ -580,6 +580,23 @@ const openSettingsWindow = (options = {}) => {
 
 };
 
+ipcMain.on('setTokenPaths', (e, wallets) => {
+  let tokenPaths;
+  if(wallets) {
+    const origTokenPaths = storage.getItem('tokenPaths') || {};
+    tokenPaths = wallets.reduce((obj, { directory, abbr }) => {
+      return Object.assign({}, obj, {[abbr]: directory});
+    }, origTokenPaths);
+  } else {
+    tokenPaths = {};
+  }
+  storage.setItem('tokenPaths', tokenPaths, true);
+  e.returnValue = true;
+});
+ipcMain.on('getTokenPath', (e, token) => {
+  const tokenPaths = storage.getItem('tokenPaths') || {};
+  e.returnValue = tokenPaths[token] || '';
+});
 ipcMain.on('setXbridgeConfPath', (e, p = '') => {
   storage.setItem('xbridgeConfPath', p);
 });
