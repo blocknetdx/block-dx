@@ -27,8 +27,8 @@ export class OpenordersComponent extends BaseComponent implements OnInit {
   public openorders: Openorder[];
   public selectable: boolean;
   public pricing: Pricing;
-  public pricingEnabled = false;
-  public pricingAvailable = false;
+  public pricingEnabled = true;
+  public pricingAvailable = true;
   public longestTokenLength: number;
 
   private _hashPadToken = {};
