@@ -27,8 +27,8 @@ export class FilledOrdersComponent extends BaseComponent implements OnInit {
   public symbols: string[] = [];
   public filledorders: Openorder[];
   public pricing: Pricing;
-  public pricingEnabled = false;
-  public pricingAvailable = false;
+  public pricingEnabled = true;
+  public pricingAvailable = true;
   public longestTokenLength: number;
 
   private _hashPadToken = {};
