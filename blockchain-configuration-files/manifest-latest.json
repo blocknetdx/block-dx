@@ -26,7 +26,7 @@
     "dir_name_win": "ALQO",
     "repo_url": "https://github.com/ALQOCRYPTO/ALQO",
     "versions": [
-      "v4.1"
+      "v5.0"
     ],
     "xbridge_conf": "alqo--v4.1.conf",
     "wallet_conf": "alqo--v4.1.conf"
@@ -680,7 +680,7 @@
     "dir_name_win": "Dogecoin",
     "repo_url": "https://github.com/dogecoin/dogecoin",
     "versions": [
-      "v1.14.0"
+      "v1.14.2"
     ],
     "xbridge_conf": "dogecoin--v1.10.0.conf",
     "wallet_conf": "dogecoin--v1.10.0.conf"
@@ -696,7 +696,7 @@
     "dir_name_win": "Dynamic",
     "repo_url": "https://github.com/duality-solutions/Dynamic",
     "versions": [
-      "v2.4.0.0"
+      "v2.4.3.0"
     ],
     "xbridge_conf": "dynamic--v2.3.5.0.conf",
     "wallet_conf": "dynamic--v2.3.5.0.conf"
@@ -984,7 +984,7 @@
     "dir_name_win": "HTMLCOIN",
     "repo_url": "https://github.com/HTMLCOIN/HTMLCOIN",
     "versions": [
-      "v2.3.2"
+      "v2.4.1"
     ],
     "xbridge_conf": "htmlcoin--v2.0.3.0.conf",
     "wallet_conf": "htmlcoin--v2.0.3.0.conf"
@@ -1410,6 +1410,22 @@
     "wallet_conf": "namecoin--nc0.13.99-name-tab-beta1.conf"
   },
   {
+    "blockchain": "NativeCoin",
+    "ticker": "N8V",
+    "ver_id": "nativecoin--v1.0.0",
+    "ver_name": "NativeCoin",
+    "conf_name": "nativecoin.conf",
+    "dir_name_linux": ".nativecoin",
+    "dir_name_mac": "nativecoin",
+    "dir_name_win": "NativeCoinCore",
+    "repo_url": "https://github.com/N8VCoin/nativecoin",
+    "versions": [
+      "v1.0.0"
+    ],
+    "xbridge_conf": "nativecoin--v1.0.0.conf",
+    "wallet_conf": "nativecoin--v1.0.0.conf"
+  },
+  {
     "blockchain": "Nix",
     "ticker": "NIX",
     "ver_id": "nix--v2.2.0",
@@ -1757,7 +1773,7 @@
     "dir_name_win": "sequence",
     "repo_url": "https://github.com/duality-solutions/Sequence",
     "versions": [
-      "v1.3.1.0"
+      "v1.3.2.0"
     ],
     "xbridge_conf": "sequence--v1.3.0.0.conf",
     "wallet_conf": "sequence--v1.3.0.0.conf"
@@ -2063,8 +2079,7 @@
     "dir_name_win": "Wagerr",
     "repo_url": "https://github.com/wagerr/wagerr",
     "versions": [
-      "v3.0.0",
-      "v3.0.1"
+      "v3.1.0"
     ],
     "xbridge_conf": "wagerr--1.5.0.conf",
     "wallet_conf": "wagerr--1.5.0.conf"
@@ -2098,7 +2113,8 @@
     "versions": [
       "v0.13.8.2",
       "v0.13.8.3",
-      "v0.13.8.4"
+      "v0.13.8.4",
+      "v0.13.8.5"
     ],
     "xbridge_conf": "zcoin--v0.13.6.4.conf",
     "wallet_conf": "zcoin--v0.13.6.4.conf"
