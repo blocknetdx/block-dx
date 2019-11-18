@@ -29,7 +29,7 @@ class SelectWalletVersions extends RouterView {
 
       let filteredWallets = [...wallets]
         .filter(w => {
-          const dir = w.getDefaultDirectory();
+          const dir = w.directory;
           try {
             fs.statSync(dir);
             return true;

@@ -1,0 +1,24 @@
+<div #buttonContainer class="tabs">
+    <a *ngFor="let tab of tabs; let i = index" class="tab" #button
+       [style.color]="tab.barColor ? tab.barColor : ''"
+       (click)="tab.contentInHeader ? null : onClick(tab, i)"
+       [style.marginTop]="tab.contentInHeader ? '-5px' : 0"
+       [style.float]="tab.float"
+       [class.hidden-left-line]="tab.hideLine"
+       [class.active]="activeTab === tab"
+       [class.noTabPointer]="tab.contentInHeader"
+       [style.display]="tab.showOnIndex === -1 || toNumber(tab.showOnIndex) === activeIndex ? 'inline-block' : 'none'">
+      <span *ngIf="tab.contentInHeader">
+        <ng-template *ngTemplateOutlet="tab.content"></ng-template>
+      </span>
+      {{tab.label}}
+    </a>
+    <span [class.notransition]="!allowTransition" [ngStyle]="calculateBar()" class="bar"></span>
+</div>
+<div class="tab-view__body">
+  <ng-container *ngFor="let tab of tabs; let i = index">
+    <ng-container *ngIf="activeTab.label === tab.label">
+      <ng-template *ngTemplateOutlet="tab.content"></ng-template>
+    </ng-container>
+  </ng-container>
+</div>

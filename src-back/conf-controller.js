@@ -50,11 +50,15 @@ class ConfController {
     if(prevSha === newSha) return;
 
     // Get manifest
-    const res = await request.get(manifestPath);
-    const manifestData = res.body;
+    const res = await request
+      .get(manifestPath)
+      .responseType('blob');
+    const manifestData = JSON.parse(res.body.toString('utf8'));
     const manifestKey = 'manifest-latest.json';
-    const { text: manifestJSON } = await request.get(manifestData[manifestKey][1]);
-    const manifest = JSON.parse(manifestJSON);
+    const res1 = await request
+      .get(manifestData[manifestKey][1])
+      .responseType('blob');
+    const manifest = JSON.parse(res1.body.toString('utf8'));
 
     const keys = Object.keys(manifestData);
     const prevManifestData = storage.getItem('manifestData') || {};
@@ -101,7 +105,10 @@ class ConfController {
         return newHash !== prevHash || !prevConfs[keyToFilename[key]];
       })
       .map(key => async function() {
-        const { text } = await request.get(newData[key][1]);
+        const res = await request
+          .get(newData[key][1])
+          .responseType('blob');
+        const text = res.body.toString('utf8');
         const fileName = keyToFilename[key];
         newConfs[fileName] = text;
       });

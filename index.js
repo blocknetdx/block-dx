@@ -423,7 +423,8 @@ const openConfigurationWindow = (options = {}) => {
       }
       e.returnValue = contents;
     } catch(err) {
-      handleError(err);
+      electron.dialog.showErrorBox(err.message, `There was a problem opening ${walletConf}.`);
+      e.returnValue = '';
     }
   });
 
@@ -438,7 +439,8 @@ const openConfigurationWindow = (options = {}) => {
       }
       e.returnValue = contents;
     } catch(err) {
-      handleError(err);
+      electron.dialog.showErrorBox(err.message, `There was a problem opening ${bridgeConf}.`);
+      e.returnValue = '';
     }
   });
 
@@ -578,6 +580,23 @@ const openSettingsWindow = (options = {}) => {
 
 };
 
+ipcMain.on('setTokenPaths', (e, wallets) => {
+  let tokenPaths;
+  if(wallets) {
+    const origTokenPaths = storage.getItem('tokenPaths') || {};
+    tokenPaths = wallets.reduce((obj, { directory, abbr }) => {
+      return Object.assign({}, obj, {[abbr]: directory});
+    }, origTokenPaths);
+  } else {
+    tokenPaths = {};
+  }
+  storage.setItem('tokenPaths', tokenPaths, true);
+  e.returnValue = true;
+});
+ipcMain.on('getTokenPath', (e, token) => {
+  const tokenPaths = storage.getItem('tokenPaths') || {};
+  e.returnValue = tokenPaths[token] || '';
+});
 ipcMain.on('setXbridgeConfPath', (e, p = '') => {
   storage.setItem('xbridgeConfPath', p);
 });
@@ -1245,6 +1264,7 @@ const openAppWindow = () => {
     const isFirstRun = storage.getItem('isFirstRun');
     if(isFirstRun !== false) {
       storage.setItem('isFirstRun', false);
+      storage.setItem('pricingEnabled', true);
       e.returnValue = true;
     } else {
       e.returnValue = false;
@@ -1269,6 +1289,11 @@ const openAppWindow = () => {
 
   ipcMain.on('openTOS', () => {
     openTOSWindow(true);
+  });
+
+  ipcMain.on('flushCancelledOrders', async function() {
+    await sn.dxFlushCancelledOrders();
+    sendMyOrders(true);
   });
 
 };
@@ -1417,7 +1442,7 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
     }
     enablePricing = storage.getItem('pricingEnabled');
     if(!enablePricing && enablePricing !== false) {
-      enablePricing = false;
+      enablePricing = true;
       storage.setItem('pricingEnabled', enablePricing);
     }
     showWallet = storage.getItem('showWallet');

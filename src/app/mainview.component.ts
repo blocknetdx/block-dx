@@ -29,6 +29,9 @@ export class MainviewComponent implements OnInit {
   public showBalancesTooltip = false;
   public showOrderFormTooltip = false;
   public showOrderBookTooltip = false;
+  public showActiveInactiveOrderTooltip1 = false;
+  public showActiveInactiveOrderTooltip2 = false;
+  public showActiveInactiveOrderTooltip = false;
 
   shouldHidePricing = shouldHidePricing;
 
@@ -80,9 +83,29 @@ export class MainviewComponent implements OnInit {
   orderBookTooltip(show) {
     this.showOrderBookTooltip = show;
   }
+  activeInactiveOrderTooltip1(show) {
+    this.showActiveInactiveOrderTooltip1 = show;
+    this.activeInactiveOrderTooltip();
+  }
+  activeInactiveOrderTooltip2(show) {
+    this.showActiveInactiveOrderTooltip2 = show;
+    this.activeInactiveOrderTooltip();
+  }
+  activeInactiveOrderTooltip() {
+    if (this.showActiveInactiveOrderTooltip1 || this.showActiveInactiveOrderTooltip2) {
+      this.showActiveInactiveOrderTooltip = true;
+    } else {
+      this.showActiveInactiveOrderTooltip = false;
+    }
+  }
 
   updateView(view) {
     this.orderbookViewService.orderbookView().next(view);
+  }
+
+  clearInactiveOrders(e) {
+    e.preventDefault();
+    window.electron.ipcRenderer.send('flushCancelledOrders');
   }
 
 }

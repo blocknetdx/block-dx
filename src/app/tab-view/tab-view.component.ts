@@ -5,25 +5,7 @@ import { TabDirective } from './tab.directive';
 @Component({
   selector: 'app-bn-tab-view',
   styleUrls: ['./tab-view.component.scss'],
-  template: `
-    <div #buttonContainer class="tabs">
-      <a class="tab" #button *ngFor="let tab of tabs; let i = index"
-        [style.color]="tab.barColor ? tab.barColor : ''"
-        (click)="onClick(tab, i)"
-        [class.active]="activeTab === tab">
-        {{tab.label}}
-      </a>
-      <span [class.notransition]="!allowTransition" [ngStyle]="calculateBar()" class="bar"></span>
-    </div>
-    <div class="tab-view__body">
-      <ng-container *ngFor="let tab of tabs; let i = index">
-        <ng-container *ngIf="activeTab.label === tab.label">
-          <!--<div>{{tab.label}}</div>-->
-          <ng-template *ngTemplateOutlet="tab.content"></ng-template>
-        </ng-container>
-      </ng-container>
-    </div>
-  `
+  templateUrl: './tab-view.component.html'
 })
 export class TabViewComponent implements AfterContentInit {
   @ViewChild('buttonContainer')
@@ -86,6 +68,11 @@ export class TabViewComponent implements AfterContentInit {
   onClick(tab, idx) {
     this.activeTab = tab;
     this.tabChangeEmitter.emit(idx);
+  }
+
+  toNumber(num) {
+    if(typeof num === 'number') return num;
+    return Number(num);
   }
 
 }

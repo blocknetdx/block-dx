@@ -44,8 +44,8 @@ export class OrderbookComponent implements OnInit, OnDestroy {
   public showSpread = false;
   public priceDecimal = '6';
   public pricing: Pricing;
-  public pricingAvailable = false;
-  public pricingEnabled = false;
+  public pricingAvailable = true;
+  public pricingEnabled = true;
 
   public ownOrders = new Set();
 

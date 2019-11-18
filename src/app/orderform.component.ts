@@ -56,8 +56,8 @@ export class OrderformComponent implements OnInit {
   private precisionLimit = 6;
 
   public pricing: Pricing;
-  public pricingEnabled = false;
-  public pricingAvailable = false;
+  public pricingEnabled = true;
+  public pricingAvailable = true;
   public showConfigurationOverlay = false;
 
   shouldHidePricing = shouldHidePricing;

@@ -39,7 +39,7 @@ class Wallet {
     this.password = '';
     this.port = '';
     this.version = versions.length > 0 ? versions[versions.length - 1] : '';
-    this.directory = this.getDefaultDirectory();
+    this.directory = this.getCustomDirectory();
 
   }
 
@@ -65,6 +65,11 @@ class Wallet {
     return { username, password };
   }
 
+  getCustomDirectory() {
+    const customDir = ipcRenderer.sendSync('getTokenPath', this.abbr);
+    return customDir ? customDir : this.getDefaultDirectory();
+  }
+
   getDefaultDirectory() {
     const folder = platform === 'win32' ? this.dirNameWin : platform === 'darwin' ? this.dirNameMac : '.' + this.dirNameLinux;
     const basePath = (platform === 'win32' || platform === 'darwin') ? ipcRenderer.sendSync('getDataPath') : ipcRenderer.sendSync('getHomePath');
@@ -79,6 +84,7 @@ class Wallet {
     const defaultFile = filePath + '-default';
     if(!fileExists(defaultFile)) fs.copySync(filePath, defaultFile);
     const baseConfStr = ipcRenderer.sendSync('getBaseConf', this.walletConf);
+    if(!baseConfStr) throw new Error(`${this.walletConf} not found.`);
     const baseConf = splitConf(baseConfStr);
     const newContents = Object.assign({}, baseConf, {
       rpcuser: this.username,

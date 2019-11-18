@@ -688,6 +688,17 @@ class ServiceNodeInterface {
     if(error) throw new Error(error);
   }
 
+  /**
+   * Clears cancelled orders
+   * @returns {Promise<void>}
+   */
+  async dxFlushCancelledOrders() {
+    const { error } = await this._makeServiceNodeRequest({
+      method: 'dxFlushCancelledOrders'
+    });
+    if(error) throw new Error(error);
+  }
+
 }
 
 module.exports = ServiceNodeInterface;
