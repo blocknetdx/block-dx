@@ -5,6 +5,7 @@ const { ipcRenderer, remote } = require('electron');
 const renderSidebar = require('./modules/sidebar');
 const renderPricing = require('./modules/pricing');
 const renderBalances = require('./modules/balances');
+const renderOrderFormSettings = require('./modules/order-form');
 const renderLocalization = require('./modules/localization');
 const renderLayout = require('./modules/layout');
 
@@ -43,14 +44,20 @@ state.set('locales', [
 ]);
 state.set('active', 0);
 state.set('sidebarSelected', 0);
+state.set('autofillAddresses', ipcRenderer.sendSync('getAutofillAddresses'));
+
+const autoGenerateAddressesAvailable = ipcRenderer.sendSync('autoGenerateAddressesAvailable');
+state.set('autoGenerateAddressesAvailable', autoGenerateAddressesAvailable);
 
 const marketPricingText = Localize.text('Market Pricing', 'generalSettingsWindow');
 const balancesText = Localize.text('Balances', 'generalSettingsWindow');
+const orderFormText = Localize.text('Order Form', 'generalSettingsWindow');
 const languageText = Localize.text('Language', 'generalSettingsWindow');
 
 state.set('sidebarItems', [
   {sidebarText: marketPricingText, title: marketPricingText.toUpperCase()},
   {sidebarText: balancesText, title: balancesText.toUpperCase()},
+  {sidebarText: orderFormText, title: orderFormText.toUpperCase()},
   {sidebarText: languageText, title: languageText.toUpperCase()}
   // {sidebarText: 'Layout Options', title: 'LAYOUT OPTIONS'}
 ]);
@@ -70,7 +77,8 @@ const saveSettings = () => {
     apiKeys: state.get('apiKeys'),
     pricingUnit: state.get('pricingUnit'),
     pricingFrequency: state.get('pricingFrequency'),
-    showWallet: state.get('showWallet')
+    showWallet: state.get('showWallet'),
+    autofillAddresses: state.get('autofillAddresses')
   });
 };
 
@@ -106,6 +114,9 @@ $(document).ready(() => {
         mainHTML = renderBalances({ state, Localize });
         break;
       case 2:
+        mainHTML = renderOrderFormSettings({ state, Localize });
+        break;
+      case 3:
         mainHTML = renderLocalization({ state, Localize });
         break;
       default:
@@ -388,6 +399,45 @@ $(document).ready(() => {
                 // console.log('newShowWallet', newShowWallet);
                 $($target.find('div')[0]).text(newShowWallet ? yesText : noText);
                 state.set('showWallet', newShowWallet);
+                saveSettings();
+              });
+          }, 0);
+        });
+
+      $('#js-autofillAddressesDropdown')
+        .off('click')
+        .on('click', e => {
+          e.preventDefault();
+          const $target = $(e.currentTarget);
+          const $icon = $target.find('i');
+          const autofillAddresses = state.get('autofillAddresses');
+          const height = $target.outerHeight();
+          const width = $target.outerWidth();
+          if ($icon.hasClass('fa-angle-up')) {
+            closeDropdowns();
+            return;
+          }
+
+          const yesText = Localize.text('Yes', 'universal');
+          const noText = Localize.text('No', 'universal');
+
+          $icon.addClass('fa-angle-up');
+          $icon.removeClass('fa-angle-down');
+          $target.append(`
+            <div class="js-dropdownMenu" style="z-index:1000;position:absolute;top:${height}px;left:0;background-color:#ddd;width:${width}px;max-height:162px;overflow-y:auto;">
+              <div class="js-dropdownMenuItem dropdown-button" data-autofillAddresses="true"><div>${yesText}</div></div>
+              <div class="js-dropdownMenuItem dropdown-button" data-autofillAddresses="false"><div>${noText}</div></div>
+            </div>
+          `);
+          setTimeout(() => {
+            $('.js-dropdownMenuItem')
+              .off('click')
+              .on('click', ee => {
+                ee.preventDefault();
+                const value = $(ee.currentTarget).attr('data-autofillAddresses');
+                const newAutofillAddresses = value === 'true' ? true : false;
+                $($target.find('div')[0]).text(newAutofillAddresses ? yesText : noText);
+                state.set('autofillAddresses', newAutofillAddresses);
                 saveSettings();
               });
           }, 0);
