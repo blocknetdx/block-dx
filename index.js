@@ -1410,6 +1410,14 @@ ipcMain.on('getAutofillAddresses', e => {
   e.returnValue = getAutofillAddresses();
 });
 
+ipcMain.on('generateNewAddress', async function(e, token) {
+  try {
+    e.returnValue = await sn.dxGetNewTokenAddress(token);
+  } catch(err) {
+    console.error(err);
+  }
+});
+
 const getLocaleData = () => {
   const locale = storage.getItem('locale');
   const localesPath = path.join(__dirname, 'locales');

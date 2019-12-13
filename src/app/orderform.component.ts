@@ -495,4 +495,15 @@ export class OrderformComponent implements OnInit {
     window.electron.ipcRenderer.send('openConfigurationWizard');
   }
 
+  generateNewAddress(token, side) {
+    const address = window.electron.ipcRenderer.sendSync('generateNewAddress', token);
+
+    if (side === 'maker') {
+      this.model.makerAddress = address;
+      this.updateStoredAddresses(this.model.makerAddress.trim(), null);
+    } else if (side === 'taker') {
+      this.model.takerAddress = address;
+      this.updateStoredAddresses(null, this.model.takerAddress.trim());
+    }
+  }
 }
