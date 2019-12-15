@@ -45,6 +45,11 @@ class ConfigurationMenu extends RouterView {
         title: Localize.text('Update Blocknet RPC Settings','configurationWindowMenu'),
         text: Localize.text('Use this to update the RPC credentials, port, and IP for the Blocknet wallet. This will require the Blocknet wallet to be restarted, which will cancel any open and in-progress orders.','configurationWindowMenu'),
         value: configurationTypes.UPDATE_RPC_SETTINGS
+      },
+      {
+        title: 'Litewallet RPC Setup',
+        text: 'Use this to configure all your lite-wallets.',
+        value: configurationTypes.LITEWALLET_RPC_SETUP
       }
     ];
 
@@ -108,6 +113,9 @@ class ConfigurationMenu extends RouterView {
           router.goTo(route.SELECT_SETUP_TYPE);
           break;
         case configurationTypes.FRESH_SETUP:
+          router.goTo(route.SELECT_SETUP_TYPE);
+          break;
+        case configurationTypes.LITEWALLET_RPC_SETUP:
           router.goTo(route.SELECT_SETUP_TYPE);
           break;
         case configurationTypes.UPDATE_RPC_SETTINGS:
