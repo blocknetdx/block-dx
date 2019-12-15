@@ -30,6 +30,8 @@ class ExpertSelectSetupType extends RouterView {
       title = titles.ADD_WALLET_EXPERT_CONFIGURATION();
     } else if(configurationType === configurationTypes.UPDATE_WALLETS) {
       title = titles.UPDATE_WALLET_EXPERT_CONFIGURATION();
+    } else if(configurationType === configurationTypes.LITEWALLET_RPC_SETUP) {
+      title = titles.LITEWALLET_EXPERT_CONFIGURATION();
     } else {
       title = titles.FRESH_SETUP_EXPERT_CONFIGURATION();
     }

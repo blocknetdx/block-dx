@@ -41,6 +41,7 @@ class Wallet {
     this.version = versions.length > 0 ? versions[versions.length - 1] : '';
     this.directory = this.getCustomDirectory();
 
+    this.litewallet = false;
   }
 
   set(arg1, arg2) {
@@ -59,6 +60,8 @@ class Wallet {
   }
 
   generateCredentials() {
+    if (this.litewallet) return;
+
     const { name } = this;
     const username = 'BlockDX' + name.replace(/\s/g, '');
     const password = uuid.v4();
@@ -77,6 +80,8 @@ class Wallet {
   }
 
   saveWalletConf() {
+    if (this.litewallet) return;
+
     const { directory } = this;
     const conf = this.confName ? this.confName : this.walletConf.replace(/--.*$/, '') + '.conf';
     const filePath = path.join(directory, conf);
@@ -94,6 +99,31 @@ class Wallet {
     return newContents;
   }
 
+  loadLitewalletConf() {
+    if (this.abbr === 'BLOCK') return this.set('directory', this.getCustomDirectory());
+
+    this.confName = 'config-' + this.abbr + '.json';
+    const basePath = (platform === 'win32' || platform === 'darwin') ? ipcRenderer.sendSync('getDataPath') : ipcRenderer.sendSync('getHomePath');
+    const folderPath = path.join(basePath, 'CloudChains/settings/');
+    const filePath = path.join(folderPath, this.confName);
+
+    fs.ensureFileSync(filePath);
+
+    let conf;
+    try {
+      conf = fs.readJsonSync(filePath);
+    } catch (err) {
+      return this.set('directory', this.getCustomDirectory());
+    }
+
+    this.username = conf.rpcUsername;
+    this.password = conf.rpcPassword;
+
+    this.port = conf.rpcPort;
+    this.litewallet = true;
+
+    return this.set('directory', folderPath.toString());
+  }
 }
 
 module.exports = Wallet;
