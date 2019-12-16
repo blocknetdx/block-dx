@@ -121,7 +121,7 @@
       </div>
 
       <div class="input-group row">
-        <label class="col-4 col-form-label" for="js-maker-address" (click)="generateNewAddress(symbols[0], 'maker')">{{Localize.text('{token} Address', 'orderform', {token: symbols[0]})}}</label>
+        <label class="col-4 col-form-label" for="js-maker-address">{{Localize.text('{token} Address', 'orderform', {token: symbols[0]})}}</label>
         <div class="col-8">
           <input class="form-control"
                  style="padding-right:16px;"
@@ -135,8 +135,12 @@
         </div>
       </div>
 
+      <div class="order-form-new-addr">
+        <span (click)="generateNewAddress(symbols[0], 'maker')">Generate New {{symbols[0]}} Address</span>
+      </div>
+
       <div class="input-group row">
-        <label class="col-4 col-form-label" for="js-taker-address" (click)="generateNewAddress(symbols[1], 'taker')">{{Localize.text('{token} Address', 'orderform', {token: symbols[1]})}}</label>
+        <label class="col-4 col-form-label" for="js-taker-address">{{Localize.text('{token} Address', 'orderform', {token: symbols[1]})}}</label>
         <div class="col-8">
           <input class="form-control"
                  style="padding-right:16px;"
@@ -148,6 +152,10 @@
                  tabindex="0"
                  required />
         </div>
+      </div>
+
+      <div class="order-form-new-addr">
+        <span (click)="generateNewAddress(symbols[1], 'taker')">Generate New {{symbols[1]}} Address</span>
       </div>
 
       <div class="input-group row">
