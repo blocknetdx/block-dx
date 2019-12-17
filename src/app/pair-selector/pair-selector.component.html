@@ -16,7 +16,7 @@
           <div class="col-6 col-md-4">
             <div class="input-group">
               <input name="coinA" type="text"
-              required placeholder="Select asset"
+              required placeholder="{{Localize.text('Select asset', 'pairSelector')}}"
               tabindex="1" autocomplete="off"
               (keyup.ArrowDown)="onArrowDown($event)"
               #coinA="ngModel" #input
@@ -32,7 +32,7 @@
           <div class="col-6 col-md-4">
             <div class="input-group">
               <input name="coinB" type="text"
-              required placeholder="Priced in"
+              required placeholder="{{Localize.text('Priced in', 'pairSelector')}}"
               tabindex="2" autocomplete="off"
               (keyup.ArrowDown)="onArrowDown($event)"
               [disabled]="!coinAValid"

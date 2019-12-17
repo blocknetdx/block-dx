@@ -6,15 +6,33 @@ import {Localize} from './localize.component';
 })
 export class LocalizeDecimalSeparatorPipe implements PipeTransform {
 
-  separator: string;
+  decimalSeparator: string;
+  groupingSeparator: string;
 
   constructor() {
-    this.separator = Localize.decimalSeparator();
+    this.decimalSeparator = Localize.decimalSeparator();
+    this.groupingSeparator = Localize.groupingSeparator();
   }
 
   transform(value: any) {
-    const { separator } = this;
-    return separator === '.' ? value : value.replace('.', this.separator);
+    const { decimalSeparator, groupingSeparator } = this;
+    if(decimalSeparator === '.') {
+      return value;
+    } else if(!/,/.test(value)) { // there are no grouping separators
+      return value.replace('.', decimalSeparator);
+    } else { // there are grouping separators
+      let newVal = '';
+      for(let i = value.length - 1; i > -1; i--) {
+        if(value[i] === '.') {
+          newVal = decimalSeparator + newVal;
+        } else if(value[i] === ',') {
+          newVal = groupingSeparator + newVal;
+        } else {
+          newVal = value[i] + newVal;
+        }
+      }
+      return newVal;
+    }
   }
 
 }

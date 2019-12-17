@@ -55,7 +55,7 @@
                 </circle></g>
               </svg>
             </div></td>
-          <td>Active</td>
+          <td><Localize context="mainview" key="Active"></Localize></td>
           <td><em><Localize context="mainview" key="Creating"></Localize></em> - <Localize context="mainview" key="The order is being broadcasted to the network."></Localize></td>
         </tr>
         <tr>
@@ -239,7 +239,7 @@
                   <div></div>
                   <div></div>
                 </div>
-                <div class="showbuyorsell view-buy-orders" [class.active]="viewBuyOrders" title="Show only buy orders" (click)="updateView(OrderbookViews.BUYS)">
+                <div class="showbuyorsell view-buy-orders" [class.active]="viewBuyOrders" title="{{Localize.text('Show only buy orders', 'mainview')}}" (click)="updateView(OrderbookViews.BUYS)">
                   <div></div>
                   <div></div>
                   <div></div>

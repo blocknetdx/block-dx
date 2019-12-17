@@ -4,7 +4,7 @@ const { ipcRenderer, remote } = require('electron');
 const { RouterView } = require('../../modules/router');
 const route = require('../constants/routes');
 const configurationTypes= require('../constants/configuration-types');
-const titles = require('../constants/titles');
+const titles = require('../modules/titles');
 const defaults = require('../constants/default-values');
 const footerButtons = require('../snippets/footer-buttons');
 const sidebar = require('../snippets/sidebar');
@@ -47,12 +47,12 @@ class EnterBlocknetCredentials extends RouterView {
     `;
 
     const html = `
-          <h3>${standaloneRPCSettingsUpdate ? titles.RPC_SETTINGS : titles.FRESH_SETUP_EXPERT_CONFIGURATION}</h3>
+          <h3>${standaloneRPCSettingsUpdate ? titles.RPC_SETTINGS() : titles.FRESH_SETUP_EXPERT_CONFIGURATION()}</h3>
           <div class="container">
             <div class="flex-container">
               ${col1}
               <div class="${standaloneRPCSettingsUpdate ? 'col2-no-margin' : 'col2'}">
-            
+
                 <p style="${styles.p}">${Localize.text('In order to conduct peer-to-peer trades, Block DX requires access to the <a href="#" class="text-link js-blocknetWalletLink">Blocknet wallet</a>. Please enter the RPC credentials found in <em>blocknetdx.conf</em>.','configurationWindowBlocknetCredentials')}</p>
                 <div class="main-area" style="${styles.mainArea}">
                   <div class="input-group">
@@ -72,9 +72,9 @@ class EnterBlocknetCredentials extends RouterView {
                     <input id="js-rpcIP" type="text" value="${state.get('rpcIP')}" />
                   </div>
                 </div>
-                
+
                 ${footerButtons()}
-                             
+
               </div>
             </div>
           </div>

@@ -6,7 +6,7 @@ const { remote } = require('electron');
 const { RouterView } = require('../../modules/router');
 const route = require('../constants/routes');
 const configurationTypes= require('../constants/configuration-types');
-const titles = require('../constants/titles');
+const titles = require('../modules/titles');
 const { compareByVersion } = require('../util');
 
 class SelectWalletVersions extends RouterView {
@@ -139,11 +139,11 @@ class SelectWalletVersions extends RouterView {
 
     let title;
     if(addingWallets) {
-      title = titles.ADD_WALLET_QUICK_CONFIGURATION;
+      title = titles.ADD_WALLET_QUICK_CONFIGURATION();
     } else if(updatingWallets) {
-      title = titles.UPDATE_WALLET_QUICK_CONFIGURATION;
+      title = titles.UPDATE_WALLET_QUICK_CONFIGURATION();
     } else {
-      title = titles.FRESH_SETUP_QUICK_CONFIGURATION;
+      title = titles.FRESH_SETUP_QUICK_CONFIGURATION();
     }
 
     const disableContinue = addingWallets && addAbbrToVersion.size === 0 ? true : updatingWallets && updateAbbrToVersion.size === 0 ? true : false;
@@ -153,7 +153,7 @@ class SelectWalletVersions extends RouterView {
           <div class="container">
             <div class="flex-container">
               <div class="col2-no-margin">
-              
+
                 <p style="${styles.p}">${Localize.text('Please select the wallet version installed for each of the following assets. <strong>DO NOT</strong> use any wallet versions not listed here. They have either not been tested yet or are not compatible.','configurationWindowWalletVersions')}</p>
                 <div class="select-all-outer-container">
                   <p class="js-selectWalletToContinue text-danger" style="display:${(addingWallets || updatingWallets) && disableContinue ? 'block' : 'none' };">${Localize.text('Please select at least one wallet to continue.','configurationWindowWalletVersions')}</p>
@@ -165,7 +165,7 @@ class SelectWalletVersions extends RouterView {
                 <div style="display:none;">
                 <div class="js-tippyContent">
                   <ul style="text-align:left;">
-                    ${!updatingWallets ? 
+                    ${!updatingWallets ?
                       `<li>${Localize.text('Lite wallets, online wallets, and Electrum wallets are not supported yet.','configurationWindowWalletVersions')}</li>
                       <li>${Localize.text('Not all assets are supported. <a class="js-supportedAssetsLink" href="#">See list of supported assets.</a>','configurationWindowWalletVersions')}</li>
                       <li>${Localize.text('Quick Setup only checks default install locations. If using a custom install location, use Expert Setup.','configurationWindowWalletVersions')}</li>`
@@ -176,13 +176,13 @@ class SelectWalletVersions extends RouterView {
                   </ul>
                 </div>
                 </div>
-                <div style="${styles.bottomP}">${Localize.text('Don\'t see a wallet in the list? ','configurationWindowWalletVersions')}<sup><i class="fas fa-question-circle js-tippyTrigger" /></sup></div>
-                
+                <div style="${styles.bottomP}">${Localize.text('Don\'t see a wallet in the list?','configurationWindowWalletVersions')} <sup><i class="fas fa-question-circle js-tippyTrigger" /></sup></div>
+
                 <div id="js-buttonContainer" class="button-container">
                   <button id="js-backBtn" type="button" class="gray-button">${Localize.text('Back','configurationWindowWalletVersions').toUpperCase()}</button>
                   <button id="js-continueBtn" type="button" ${disableContinue ? 'disabled' : ''}>${Localize.text('Continue','configurationWindowWalletVersions').toUpperCase()}</button>
                 </div>
-              
+
               </div>
             </div>
           </div>

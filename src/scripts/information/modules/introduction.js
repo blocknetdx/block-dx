@@ -71,7 +71,7 @@ const renderIntroduction = ({ Localize }) => {
       </div>
       <div class="section">
         <div class="section-header">
-          <div class="section-header-text">${Localize.text('Order Status' , 'informationWindowIntroduction')}</div><div class="section-header-line"></div>
+          <div class="section-header-text">${Localize.text('Order Status', 'informationWindowIntroduction')}</div><div class="section-header-line"></div>
         </div>
         <p>
           ${Localize.text('You can view the status of an order by hovering over the order in the ‘Active Orders’ or ‘Inactive Orders’ tabs.', 'informationWindowIntroduction')}

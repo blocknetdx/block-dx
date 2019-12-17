@@ -1,6 +1,6 @@
-const renderSidebar = ({ state }) => {
+const renderSidebar = ({ state, Localize }) => {
   const active = state.get('active');
-  const header = `<div class=sidebar-header>Menu</div>`;
+  const header = `<div class=sidebar-header>${Localize.text('Menu', 'informationWindow')}</div>`;
   const links = state.get('sidebarItems')
     .map((item, idx) => {
       const { sidebarText = '' } = item;

@@ -34,6 +34,12 @@
       "note": ""
     }
   },
+  "Refresh Balances": {
+    "balances": {
+      "val": "Refresh Balances",
+      "note": ""
+    }
+  },
   "Mid Market Price": {
     "depthChart": {
       "val": "Mid Market Price",
@@ -195,10 +201,6 @@
       "val": "Open",
       "note": ""
     },
-    "mainview\" key=\"The order is live and open (not taken).": {
-      "val": "Open",
-      "note": ""
-    },
     "openorders": {
       "val": "Open",
       "note": ""
@@ -266,6 +268,12 @@
       "note": ""
     }
   },
+  "Show only buy orders": {
+    "mainview": {
+      "val": "Show only buy orders",
+      "note": ""
+    }
+  },
   "Active Orders": {
     "mainview": {
       "val": "Active Orders",
@@ -300,10 +308,6 @@
     "mainview": {
       "val": "Balances only show for connected wallets.",
       "note": ""
-    },
-    "mainview\" key=\"If you did not connect the wallet, in the right sidebar menu select the Add & Update Wallets link.": {
-      "val": "Balances only show for connected wallets.",
-      "note": ""
     }
   },
   "If you did not connect the wallet, in the right sidebar menu select the Add & Update Wallets link.": {
@@ -314,10 +318,6 @@
   },
   "Balances only show available funds.": {
     "mainview": {
-      "val": "Balances only show available funds.",
-      "note": ""
-    },
-    "mainview\" key=\"If UTXOs are locked in the wallet, or used in trades, then they will not count towards the balance.": {
       "val": "Balances only show available funds.",
       "note": ""
     }
@@ -332,10 +332,6 @@
     "mainview": {
       "val": "Balances only show funds in legacy addresses.",
       "note": ""
-    },
-    "mainview\" key=\"If you are using a Segwit address, please create a new address to send the funds to. A legacy address will automatically be created when generating a new address.": {
-      "val": "Balances only show funds in legacy addresses.",
-      "note": ""
     }
   },
   "If you are using a Segwit address, please create a new address to send the funds to. A legacy address will automatically be created when generating a new address.": {
@@ -348,10 +344,6 @@
     "mainview": {
       "val": "Balances do not show staked funds.",
       "note": ""
-    },
-    "mainview\" key=\"If you have been staking, please send the funds to a new address for them to register.": {
-      "val": "Balances do not show staked funds.",
-      "note": ""
     }
   },
   "If you have been staking, please send the funds to a new address for them to register.": {
@@ -360,26 +352,26 @@
       "note": ""
     }
   },
+  "Block DX uses \"Exact\" orders.": {
+    "mainview": {
+      "val": "Block DX uses \"Exact\" orders.",
+      "note": ""
+    }
+  },
+  "At the moment Block DX only supports \"Exact\" orders, meaning that an order must be taken for the full amount. If you are a maker, you may want to place multiple smaller orders instead of one large order. If you are a taker, multiple orders cannot be combined and taken as a single order with this order type. Market and Limit orders will be supported in a future release.": {
+    "mainview": {
+      "val": "At the moment Block DX only supports \"Exact\" orders, meaning that an order must be taken for the full amount. If you are a maker, you may want to place multiple smaller orders instead of one large order. If you are a taker, multiple orders cannot be combined and taken as a single order with this order type. Market and Limit orders will be supported in a future release.",
+      "note": ""
+    }
+  },
   "Only assets of connected wallets can be traded.": {
     "mainview": {
-      "val": "Only assets of connected wallets can be traded.",
-      "note": ""
-    },
-    "mainview\" key=\"If you did not connect the wallet, in the right sidebar menu select the Add & Update Wallets link.": {
       "val": "Only assets of connected wallets can be traded.",
       "note": ""
     }
   },
   "Trading wallets must remain online and unlocked.": {
     "mainview": {
-      "val": "Trading wallets must remain online and unlocked.",
-      "note": ""
-    },
-    "mainview\" key=\"Since trading is peer-to-peer, you must have the wallet of each traded asset installed, open, synced, unlocked, and online for the duration of the trade. This also applies to the Blocknet wallet since it's used to facilitate even non-BLOCK orders.": {
-      "val": "Trading wallets must remain online and unlocked.",
-      "note": ""
-    },
-    "mainview\" key=\"Since trading is peer-to-peer, you must have the wallet of each traded asset installed, open, synced, unlocked, and online for the duration of the trade. This also applies to the Blocknet wallet since it's used to facilitate the orders.": {
       "val": "Trading wallets must remain online and unlocked.",
       "note": ""
     }
@@ -392,10 +384,6 @@
   },
   "Place orders using BTC pricing.": {
     "mainview": {
-      "val": "Place orders using BTC pricing.",
-      "note": ""
-    },
-    "mainview\" key=\"You can place orders based off BTC pricing, which is more familiar. To enable this capability, from the sidebar menu select General Settings.": {
       "val": "Place orders using BTC pricing.",
       "note": ""
     }
@@ -416,10 +404,6 @@
     "mainview": {
       "val": "Orders take up to 10 min to populate.",
       "note": ""
-    },
-    "mainview\" key=\"After initially opening the wallets of the assets traded, it can take up to 10 minutes for all the orders to load. After the initial load, orders arrive as they're created.": {
-      "val": "Orders take up to 10 min to populate.",
-      "note": ""
     }
   },
   "After initially opening the wallets of the assets traded, it can take up to 10 minutes for all the orders to load. After the initial load, orders arrive as they're created.": {
@@ -430,10 +414,6 @@
   },
   "View orders in BTC pricing.": {
     "mainview": {
-      "val": "View orders in BTC pricing.",
-      "note": ""
-    },
-    "mainview\" key=\"You can view orders based off BTC pricing, which is more familiar. To enable this capability, from the sidebar menu select General Settings.": {
       "val": "View orders in BTC pricing.",
       "note": ""
     }
@@ -448,10 +428,6 @@
     "mainview": {
       "val": "White dots indicate the order is yours.",
       "note": ""
-    },
-    "mainview\" key=\"Some orders may have a white dot to the left of them. This indicates it's an order you created.": {
-      "val": "White dots indicate the order is yours.",
-      "note": ""
     }
   },
   "Some orders may have a white dot to the left of them. This indicates it's an order you created.": {
@@ -464,10 +440,6 @@
     "mainview": {
       "val": "Clear Inactive Button",
       "note": ""
-    },
-    "mainview\" key=\"The Clear Inactive button on the Inactive Orders tab removes canceled orders.": {
-      "val": "Clear Inactive Button",
-      "note": ""
     }
   },
   "The Clear Inactive button on the Inactive Orders tab removes canceled orders.": {
@@ -478,10 +450,6 @@
   },
   "Refunding failed trades": {
     "mainview": {
-      "val": "Refunding failed trades",
-      "note": ""
-    },
-    "mainview\" key=\"For failed in-progress trades, the funds will be automatically returned in 30 minutes for the taker and 2 hours for the maker.": {
       "val": "Refunding failed trades",
       "note": ""
     }
@@ -498,12 +466,14 @@
       "note": ""
     }
   },
+  "Active": {
+    "mainview": {
+      "val": "Active",
+      "note": ""
+    }
+  },
   "Creating": {
     "mainview": {
-      "val": "Creating",
-      "note": ""
-    },
-    "mainview\" key=\"The order is being broadcasted to the network.": {
       "val": "Creating",
       "note": ""
     }
@@ -511,12 +481,6 @@
   "The order is being broadcasted to the network.": {
     "mainview": {
       "val": "The order is being broadcasted to the network.",
-      "note": ""
-    }
-  },
-  "Active": {
-    "mainview": {
-      "val": "Active",
       "note": ""
     }
   },
@@ -528,10 +492,6 @@
   },
   "Accepting": {
     "mainview": {
-      "val": "Accepting",
-      "note": ""
-    },
-    "mainview\" key=\" Attempting to take the order and connecting to the counter party.": {
       "val": "Accepting",
       "note": ""
     }
@@ -546,10 +506,6 @@
     "mainview": {
       "val": "Hold",
       "note": ""
-    },
-    "mainview\" key=\"Waiting for the counter party to respond.": {
-      "val": "Hold",
-      "note": ""
     }
   },
   "Waiting for the counter party to respond.": {
@@ -560,10 +516,6 @@
   },
   "Accepted": {
     "mainview": {
-      "val": "Accepted",
-      "note": ""
-    },
-    "mainview\" key=\"The counter party has agreed to trade.": {
       "val": "Accepted",
       "note": ""
     }
@@ -578,10 +530,6 @@
     "mainview": {
       "val": "Exchanging",
       "note": ""
-    },
-    "mainview\" key=\"The funds are in the process of being exchanged.": {
-      "val": "Exchanging",
-      "note": ""
     }
   },
   "The funds are in the process of being exchanged.": {
@@ -592,10 +540,6 @@
   },
   "Finalizing": {
     "mainview": {
-      "val": "Finalizing",
-      "note": ""
-    },
-    "mainview\" key=\"The exchange of funds is being finalized.": {
       "val": "Finalizing",
       "note": ""
     }
@@ -617,7 +561,7 @@
       "val": "Complete",
       "note": ""
     },
-    "mainview\" key=\"The funds have been exchanged and the trade is complete.": {
+    "openorders": {
       "val": "Complete",
       "note": ""
     }
@@ -630,10 +574,6 @@
   },
   "Canceled": {
     "mainview": {
-      "val": "Canceled",
-      "note": ""
-    },
-    "mainview\" key=\"The order has been canceled.": {
       "val": "Canceled",
       "note": ""
     }
@@ -649,7 +589,7 @@
       "val": "Expired",
       "note": ""
     },
-    "mainview\" key=\"The network was unable to connect with your wallet for 6min and has canceled the order.": {
+    "openorders": {
       "val": "Expired",
       "note": ""
     }
@@ -665,7 +605,7 @@
       "val": "Offline",
       "note": ""
     },
-    "mainview\" key=\"Unable to connect to the network and failed to create the order.": {
+    "openorders": {
       "val": "Offline",
       "note": ""
     }
@@ -681,7 +621,7 @@
       "val": "Invalid",
       "note": ""
     },
-    "mainview\" key=\"There is an issue with the created order.": {
+    "openorders": {
       "val": "Invalid",
       "note": ""
     }
@@ -696,10 +636,6 @@
     "mainview": {
       "val": "Refunding",
       "note": ""
-    },
-    "mainview\" key=\"The order has failed and funds are being refunded.": {
-      "val": "Refunding",
-      "note": ""
     }
   },
   "The order has failed and funds are being refunded.": {
@@ -710,10 +646,6 @@
   },
   "Refund Failed": {
     "mainview": {
-      "val": "Refund Failed",
-      "note": ""
-    },
-    "mainview\" key=\"The refund failed and needs to be performed manually.": {
       "val": "Refund Failed",
       "note": ""
     }
@@ -798,6 +730,10 @@
     "generalSettingsWindow": {
       "val": "Menu",
       "note": ""
+    },
+    "informationWindow": {
+      "val": "Menu",
+      "note": ""
     }
   },
   "Settings": {
@@ -829,6 +765,16 @@
   "Check for Updates": {
     "navbar": {
       "val": "Check for Updates",
+      "note": ""
+    }
+  },
+  "Information": {
+    "navbar": {
+      "val": "Information",
+      "note": ""
+    },
+    "informationWindow": {
+      "val": "Information",
       "note": ""
     }
   },
@@ -941,6 +887,72 @@
   "24 hour volume": {
     "context": {
       "val": "24 hour volume",
+      "note": ""
+    }
+  },
+  "An update is currently being downloaded in the background and can take a few minutes. A prompt will appear when complete.": {
+    "navbar": {
+      "val": "An update is currently being downloaded in the background and can take a few minutes. A prompt will appear when complete.",
+      "note": ""
+    }
+  },
+  "There are no Block DX updates available at this time.": {
+    "navbar": {
+      "val": "There are no Block DX updates available at this time.",
+      "note": ""
+    }
+  },
+  "Creating order": {
+    "openorders": {
+      "val": "Creating order",
+      "note": ""
+    }
+  },
+  "Exchange in progress (1/5)": {
+    "openorders": {
+      "val": "Exchange in progress (1/5)",
+      "note": ""
+    }
+  },
+  "Exchange in progress (2/5)": {
+    "openorders": {
+      "val": "Exchange in progress (2/5)",
+      "note": ""
+    }
+  },
+  "Exchange in progress (3/5)": {
+    "openorders": {
+      "val": "Exchange in progress (3/5)",
+      "note": ""
+    }
+  },
+  "Exchange in progress (4/5)": {
+    "openorders": {
+      "val": "Exchange in progress (4/5)",
+      "note": ""
+    }
+  },
+  "Exchange in progress (5/5)": {
+    "openorders": {
+      "val": "Exchange in progress (5/5)",
+      "note": ""
+    }
+  },
+  "Order failed, refunding": {
+    "openorders": {
+      "val": "Order failed, refunding",
+      "note": ""
+    }
+  },
+  "Order failed, not refunded": {
+    "openorders": {
+      "val": "Order failed, not refunded",
+      "note": ""
+    }
+  },
+  "Cancelled": {
+    "openorders": {
+      "val": "Cancelled",
       "note": ""
     }
   },
@@ -1138,6 +1150,18 @@
       "note": ""
     }
   },
+  "Select asset": {
+    "pairSelector": {
+      "val": "Select asset",
+      "note": ""
+    }
+  },
+  "Priced in": {
+    "pairSelector": {
+      "val": "Priced in",
+      "note": ""
+    }
+  },
   "Select market pair": {
     "pairSelector": {
       "val": "Select market pair",
@@ -1168,6 +1192,12 @@
       "note": ""
     }
   },
+  "Refresh wallets": {
+    "pairSelector": {
+      "val": "Refresh wallets",
+      "note": ""
+    }
+  },
   "No trade history available for this market.": {
     "pricechart": {
       "val": "No trade history available for this market.",
@@ -1192,6 +1222,10 @@
     "universal": {
       "val": "Close",
       "note": ""
+    },
+    "tosWindow": {
+      "val": "Close",
+      "note": ""
     }
   },
   "Low": {
@@ -1200,9 +1234,9 @@
       "note": ""
     }
   },
-  "Size {token}": {
+  "Size ({token})": {
     "tradehistory": {
-      "val": "Size {token}",
+      "val": "Size ({token})",
       "note": ""
     }
   },
@@ -1227,6 +1261,88 @@
   "Configuration": {
     "configurationWindow": {
       "val": "Configuration",
+      "note": ""
+    }
+  },
+  "Configuration Setup": {
+    "configurationMenu": {
+      "val": "Configuration Setup",
+      "note": ""
+    },
+    "configurationWindow": {
+      "val": "Configuration Setup",
+      "note": ""
+    }
+  },
+  "RPC Settings": {
+    "configurationMenu": {
+      "val": "RPC Settings",
+      "note": ""
+    },
+    "configurationWindow": {
+      "val": "RPC Settings",
+      "note": ""
+    }
+  },
+  "Fresh Setup": {
+    "configurationMenu": {
+      "val": "Fresh Setup",
+      "note": ""
+    },
+    "configurationWindowMenu": {
+      "val": "Fresh Setup",
+      "note": ""
+    }
+  },
+  "Fresh Setup - Quick Configuration Setup": {
+    "configurationMenu": {
+      "val": "Fresh Setup - Quick Configuration Setup",
+      "note": ""
+    }
+  },
+  "Fresh Setup - Expert Configuration Setup": {
+    "configurationMenu": {
+      "val": "Fresh Setup - Expert Configuration Setup",
+      "note": ""
+    }
+  },
+  "Add Wallet": {
+    "configurationMenu": {
+      "val": "Add Wallet",
+      "note": ""
+    },
+    "configurationWindowWalletVersions": {
+      "val": "Add Wallet",
+      "note": ""
+    }
+  },
+  "Add Wallet - Quick Configuration Setup": {
+    "configurationMenu": {
+      "val": "Add Wallet - Quick Configuration Setup",
+      "note": ""
+    }
+  },
+  "Add Wallet - Expert Configuration Setup": {
+    "configurationMenu": {
+      "val": "Add Wallet - Expert Configuration Setup",
+      "note": ""
+    }
+  },
+  "Update Wallet": {
+    "configurationMenu": {
+      "val": "Update Wallet",
+      "note": ""
+    }
+  },
+  "Update Wallet - Quick Configuration Setup": {
+    "configurationMenu": {
+      "val": "Update Wallet - Quick Configuration Setup",
+      "note": ""
+    }
+  },
+  "Update Wallet - Expert Configuration Setup": {
+    "configurationMenu": {
+      "val": "Update Wallet - Expert Configuration Setup",
       "note": ""
     }
   },
@@ -1322,9 +1438,9 @@
       "note": ""
     }
   },
-  "Open the wallets of any assets you\\": {
-    ",": {
-      "val": "Open the wallets of any assets you\\",
+  "Open the wallets of any assets you'll be trading. If any are already open, you will need to restart them in order to activate the new configurations. Make sure that the wallets have been encrypted (Settings > Encrypt) and are fully unlocked (Settings > Unlock Wallet).": {
+    "configurationWindowComplete": {
+      "val": "Open the wallets of any assets you'll be trading. If any are already open, you will need to restart them in order to activate the new configurations. Make sure that the wallets have been encrypted (Settings > Encrypt) and are fully unlocked (Settings > Unlock Wallet).",
       "note": ""
     }
   },
@@ -1364,12 +1480,6 @@
       "note": ""
     }
   },
-  "Fresh Setup": {
-    "configurationWindowMenu": {
-      "val": "Fresh Setup",
-      "note": ""
-    }
-  },
   "Use this to reconfigure all your wallets. This will require all wallets to be restarted before trading, which will cancel any open and in-progress orders.": {
     "configurationWindowMenu": {
       "val": "Use this to reconfigure all your wallets. This will require all wallets to be restarted before trading, which will cancel any open and in-progress orders.",
@@ -1391,6 +1501,32 @@
   "We detected you have previously configured your wallets. Please select which of the following you would like to do:": {
     "configurationWindowMenu": {
       "val": "We detected you have previously configured your wallets. Please select which of the following you would like to do:",
+      "note": ""
+    }
+  },
+  "Cancel": {
+    "configurationWindowMenu": {
+      "val": "Cancel",
+      "note": ""
+    },
+    "configurationWindowWalletCredentials": {
+      "val": "Cancel",
+      "note": ""
+    },
+    "configurationWindowSetupType": {
+      "val": "Cancel",
+      "note": ""
+    },
+    "universal": {
+      "val": "Cancel",
+      "note": ""
+    },
+    "tosWindow": {
+      "val": "Cancel",
+      "note": ""
+    },
+    "updateAvaiableWindow": {
+      "val": "Cancel",
       "note": ""
     }
   },
@@ -1496,28 +1632,6 @@
       "note": ""
     }
   },
-  "Cancel": {
-    "configurationWindowWalletCredentials": {
-      "val": "Cancel",
-      "note": ""
-    },
-    "configurationWindowSetupType": {
-      "val": "Cancel",
-      "note": ""
-    },
-    "universal": {
-      "val": "Cancel",
-      "note": ""
-    },
-    "tosWindow": {
-      "val": "Cancel",
-      "note": ""
-    },
-    "updateAvaiableWindow": {
-      "val": "Cancel",
-      "note": ""
-    }
-  },
   "Usernames and passwords must be generated for the wallet of each asset that will be traded.": {
     "configurationWindowExpertSetup": {
       "val": "Usernames and passwords must be generated for the wallet of each asset that will be traded.",
@@ -1525,8 +1639,14 @@
     }
   },
   "Quick Setup": {
-    "Automatically generate credentials (recommended)": {
+    "configurationWindowExpertSetup": {
       "val": "Quick Setup",
+      "note": ""
+    }
+  },
+  "Automatically generate credentials (recommended)": {
+    "configurationWindowExpertSetup": {
+      "val": "Automatically generate credentials (recommended)",
       "note": ""
     }
   },
@@ -1658,12 +1778,6 @@
       "note": ""
     }
   },
-  "Add Wallet": {
-    "configurationWindowWalletVersions": {
-      "val": "Add Wallet",
-      "note": ""
-    }
-  },
   "Update wallet": {
     "configurationWindowWalletVersions": {
       "val": "Update wallet",
@@ -1676,9 +1790,9 @@
       "note": ""
     }
   },
-  "Unable to automatically detect installed wallets that haven\\": {
-    "t already installed the wallet you would like to connect, please do that first. If you are using a custom data directory you will need to go BACK and select Expert Setup. If you would like to configure a wallet you already have configured you will need to go BACK and select Update Wallet.": {
-      "val": "Unable to automatically detect installed wallets that haven\\",
+  "Unable to automatically detect installed wallets that haven't been configured already. If you haven't already installed the wallet you would like to connect, please do that first. If you are using a custom data directory you will need to go BACK and select Expert Setup. If you would like to configure a wallet you already have configured you will need to go BACK and select Update Wallet.": {
+    "configurationWindowWalletVersions": {
+      "val": "Unable to automatically detect installed wallets that haven't been configured already. If you haven't already installed the wallet you would like to connect, please do that first. If you are using a custom data directory you will need to go BACK and select Expert Setup. If you would like to configure a wallet you already have configured you will need to go BACK and select Update Wallet.",
       "note": ""
     }
   },
@@ -1736,9 +1850,9 @@
       "note": ""
     }
   },
-  "Don\\": {
-    ",": {
-      "val": "Don\\",
+  "Don't see a wallet in the list?": {
+    "configurationWindowWalletVersions": {
+      "val": "Don't see a wallet in the list?",
       "note": ""
     }
   },
@@ -1886,12 +2000,6 @@
       "note": ""
     }
   },
-  "Information": {
-    "informationWindow": {
-      "val": "Information",
-      "note": ""
-    }
-  },
   "Block DX is powered by the Blocknet Protocol": {
     "informationWindowBlocknet": {
       "val": "Block DX is powered by the Blocknet Protocol",
@@ -1994,9 +2102,9 @@
       "note": ""
     }
   },
-  "<strong>Service Nodes</strong> - Hosts the full nodes of compatible blockchains, hosts microservices, audits interactions, and performs anti-spam and anti-DOS measures for the network. This service earns 70% of block rewards and 100% of fees generated from use of the network\\": {
-    ", ": {
-      "val": "<strong>Service Nodes</strong> - Hosts the full nodes of compatible blockchains, hosts microservices, audits interactions, and performs anti-spam and anti-DOS measures for the network. This service earns 70% of block rewards and 100% of fees generated from use of the network\\",
+  "<strong>Service Nodes</strong> - Hosts the full nodes of compatible blockchains, hosts microservices, audits interactions, and performs anti-spam and anti-DOS measures for the network. This service earns 70% of block rewards and 100% of fees generated from use of the network's services.": {
+    "informationWindowBlocknet": {
+      "val": "<strong>Service Nodes</strong> - Hosts the full nodes of compatible blockchains, hosts microservices, audits interactions, and performs anti-spam and anti-DOS measures for the network. This service earns 70% of block rewards and 100% of fees generated from use of the network's services.",
       "note": ""
     }
   },
@@ -2144,9 +2252,9 @@
       "note": ""
     }
   },
-  "In the top left panel there is a list of your connected wallets and the available balances for trading. If a value doesn\\": {
-    ", ": {
-      "val": "In the top left panel there is a list of your connected wallets and the available balances for trading. If a value doesn\\",
+  "In the top left panel there is a list of your connected wallets and the available balances for trading. If a value doesn't match the balance shown in the respective wallet, it may be due to funds in your wallet being immature funds (due to staking), funds being in a non-legacy address (<em>see below</em>), or the wallet losing connection. If a wallet you configure is not showing in Balances, it may be because the wallet is locked. If the wallet is unlocked, then try reconfiguring using the Add & Update Wallets menu link.": {
+    "informationWindowIntroduction": {
+      "val": "In the top left panel there is a list of your connected wallets and the available balances for trading. If a value doesn't match the balance shown in the respective wallet, it may be due to funds in your wallet being immature funds (due to staking), funds being in a non-legacy address (<em>see below</em>), or the wallet losing connection. If a wallet you configure is not showing in Balances, it may be because the wallet is locked. If the wallet is unlocked, then try reconfiguring using the Add & Update Wallets menu link.",
       "note": ""
     }
   },

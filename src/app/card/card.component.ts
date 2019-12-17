@@ -6,6 +6,7 @@ import { AppConstants } from '../constants';
 import { briefTimeout } from '../util';
 
 import { CardToolbarDirective } from './card-toolbar.directive';
+import {Localize} from '../localize/localize.component';
 
 @Component({
   selector: 'bn-card',
@@ -19,7 +20,7 @@ import { CardToolbarDirective } from './card-toolbar.directive';
           <ng-template *ngTemplateOutlet="toolbar.template"></ng-template>
         </div>
         <a class="fullscreen" *ngIf="showRefreshBalances"
-           title="Refresh Balances"
+           title="{{Localize.text('Refresh Balances', 'balances')}}"
            (click)="refreshBalances()">
           <i class="material-icons">refresh</i>
         </a>
@@ -40,6 +41,8 @@ export class CardComponent implements OnInit {
   @Input() cardTitleClass: string;
   @Input() allowFullscreen: boolean = true;
   @Input() showRefreshBalances = false;
+
+  public Localize = Localize;
 
   public showBody = true;
 

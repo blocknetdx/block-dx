@@ -63,7 +63,7 @@ $(document).ready(() => {
     const sidebarSelected = state.get('sidebarSelected');
     const active = state.get('active');
 
-    const sidebarHTML = renderSidebar({ state });
+    const sidebarHTML = renderSidebar({ state, Localize });
     let mainHTML = '';
 
     switch(active) {
