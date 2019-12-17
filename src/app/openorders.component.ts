@@ -10,6 +10,7 @@ import { PricingService } from './pricing.service';
 import { Pricing } from './pricing';
 import * as OrderStates from '../orderstates';
 import { shouldHidePricing } from './util';
+import {Localize} from './localize/localize.component';
 
 math.config({
   number: 'BigNumber',
@@ -41,6 +42,8 @@ export class OpenordersComponent extends BaseComponent implements OnInit {
   }
 
   shouldHidePricing = shouldHidePricing;
+
+  public Localize = Localize;
 
   constructor(
     private appService: AppService,
@@ -153,9 +156,9 @@ export class OpenordersComponent extends BaseComponent implements OnInit {
 
     if (order.cancelable) {
       menuTemplate.push({
-        label: 'Cancel Order',
+        label: Localize.text('Cancel Order', 'openorders'),
         click: () => {
-          const confirmed = confirm('Are you sure that you want to cancel this order?');
+          const confirmed = confirm(Localize.text('Are you sure that you want to cancel this order?', 'openorders'));
           if(confirmed) this.cancelOrder(order);
         }
       });
@@ -166,7 +169,7 @@ export class OpenordersComponent extends BaseComponent implements OnInit {
 
     if(!symbols.includes(maker) || !symbols.includes(taker)) {
       menuTemplate.push({
-        label: 'View Market',
+        label: Localize.text('View Market', 'openorders'),
         click: () => {
           ipcRenderer.send('setKeyPair', [maker, taker]);
         }
@@ -174,7 +177,7 @@ export class OpenordersComponent extends BaseComponent implements OnInit {
     }
 
     menuTemplate.push({
-      label: 'View Details',
+      label: Localize.text('View Details', 'openorders'),
       click: () => {
         ipcRenderer.send('openMyOrderDetailsWindow', order.id);
       }

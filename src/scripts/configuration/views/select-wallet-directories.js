@@ -1,3 +1,5 @@
+/* global Localize */
+
 const { ipcRenderer } = require('electron');
 const { dialog, app } = require('electron').remote;
 const fs = require('fs-extra-promise');
@@ -75,11 +77,11 @@ class SelectWalletDirectories extends RouterView {
               <div class="main-area-item2">
                 <div style="display:flex;flex-direction:row:flex-wrap:nowrap;justify-content:space-between;">
                   <div>${w.name}</div>
-                  <div id="${removeNonWordCharacters(w.versionId)}-error" class="text-danger" style="display:${w.error || !w.directory ? 'block' : 'none'};text-align:right;">Error: data directory not found</div>
+                  <div id="${removeNonWordCharacters(w.versionId)}-error" class="text-danger" style="display:${w.error || !w.directory ? 'block' : 'none'};text-align:right;">${Localize.text('Error: data directory not found','configurationWindowWalletDirectories')}</div>
                 </div>
                 <div style="margin-top:10px;display:flex;flex-direction:row;flex-wrap:nowrap;justify-content:flex-start;">
                   <input id="${removeNonWordCharacters(w.versionId)}" class="js-directoryInput" data-id="${w.versionId}" type="text" value="${w.directory}" />
-                  <button class="js-browseBtn" type="button" data-id="${w.versionId}" style="margin-top:0;margin-right:0;width:100px;min-width:100px;">BROWSE</button>
+                  <button class="js-browseBtn" type="button" data-id="${w.versionId}" style="margin-top:0;margin-right:0;width:100px;min-width:100px;">${Localize.text('Browse','configurationWindowWalletDirectories').toUpperCase()}</button>
                 </div>
               </div>
               <div style="height:1px;"></div>
@@ -109,15 +111,15 @@ class SelectWalletDirectories extends RouterView {
           </div>
           <div class="col2">
           
-            <p style="margin-top:0;padding-top:0;padding-left:10px;padding-right:10px;margin-bottom:5px;">Configuration files will be installed to these default data directories. To accept the default locations, select CONTINUE. To change the location, select BROWSE.</p>
-            <p id="js-errors" class="text-danger" style="display:${missingDirectories > 0 ? 'block' : 'none'};margin-top:0;padding-top:0;padding-left:10px;padding-right:10px;margin-bottom:10px;"><span style="display:${allErrors ? 'block' : 'none'};" class="js-allDirectoriesError">Errors detected on all wallets, please resolve at least one to continue.</span><span style="display:${allErrors ? 'none' : 'block'};" class="js-directoryError"><span id="js-errorCount">${missingDirectories}</span> error(s) detected: continue to skip wallets with errors.</span></p>
+            <p style="margin-top:0;padding-top:0;padding-left:10px;padding-right:10px;margin-bottom:5px;">${Localize.text('Configuration files will be installed to these default data directories. To accept the default locations, select CONTINUE. To change the location, select BROWSE.','configurationWindowWalletDirectories')}</p>
+            <p id="js-errors" class="text-danger" style="display:${missingDirectories > 0 ? 'block' : 'none'};margin-top:0;padding-top:0;padding-left:10px;padding-right:10px;margin-bottom:10px;"><span style="display:${allErrors ? 'block' : 'none'};" class="js-allDirectoriesError">${Localize.text('Errors detected on all wallets, please resolve at least one to continue.','configurationWindowWalletDirectories')}</span><span style="display:${allErrors ? 'none' : 'block'};" class="js-directoryError"><span id="js-errorCount">${missingDirectories}</span>${Localize.text(' error(s) detected: continue to skip wallets with errors.','configurationWindowWalletDirectories')}</span></p>
             <div id="js-mainConfigurationArea" class="main-area">
               ${items}
             </div>
             
             <div id="js-buttonContainer" class="button-container">
-              <button id="js-backBtn" type="button" class="gray-button">BACK</button>
-              <button id="js-continueBtn" type="button" ${allErrors ? 'disabled' : ''}>CONTINUE</button>
+              <button id="js-backBtn" type="button" class="gray-button">${Localize.text('Back', 'configurationWindowWalletDirectories').toUpperCase()}</button>
+              <button id="js-continueBtn" type="button" ${allErrors ? 'disabled' : ''}>${Localize.text('Continue', 'configurationWindowWalletDirectories').toUpperCase()}</button>
             </div>
             
           </div>
@@ -137,7 +139,6 @@ class SelectWalletDirectories extends RouterView {
 
     $('#js-continueBtn').on('click', e => {
       e.preventDefault();
-      console.log('Continue!');
       const wallets = state.get('wallets');
 
       const configurationType = state.get('configurationType');

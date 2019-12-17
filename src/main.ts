@@ -3,8 +3,11 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
+import {Localize} from './app/localize/localize.component';
 
-window.electron.ipcRenderer.setMaxListeners(0);
+const { ipcRenderer } = window.electron;
+
+ipcRenderer.setMaxListeners(0);
 
 String.prototype['capitalize'] = function() {
   return this.charAt(0).toUpperCase() + this.slice(1);
@@ -14,12 +17,17 @@ if (environment.production) {
   enableProdMode();
 }
 
+// Initialize the localize module
+const locale = ipcRenderer.sendSync('getUserLocale');
+const localeData = ipcRenderer.sendSync('getLocaleData');
+Localize.initialize(locale, localeData);
+
 platformBrowserDynamic().bootstrapModule(AppModule)
   .catch(err => console.log(err));
 
 let alertTimeout;
 let count = 0;
-window.electron.ipcRenderer.on('error', (e, { name, message }) => {
+ipcRenderer.on('error', (e, { name, message }) => {
   if(count === 0) {
     count++;
     alert(name + ': ' + message);
@@ -31,7 +39,7 @@ window.electron.ipcRenderer.on('error', (e, { name, message }) => {
     alert(name + ': ' + message);
   }
   if (name === 'Unsupported Version')
-    window.electron.ipcRenderer.send('quitResetFirstRun');
+    ipcRenderer.send('quitResetFirstRun');
 });
 
 window.document.addEventListener('drop', e => {

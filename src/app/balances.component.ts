@@ -5,6 +5,7 @@ import {Balance} from './balance';
 import {AppService} from './app.service';
 import {NumberFormatPipe} from './pipes/decimal.pipe';
 import { GeneralSettingsService } from './general-settings.service';
+import {Localize} from './localize/localize.component';
 
 @Component({
   selector: 'app-balances',
@@ -12,7 +13,9 @@ import { GeneralSettingsService } from './general-settings.service';
 })
 export class BalancesComponent implements OnInit {
 
-  public title = 'Balances';
+  public get title() {
+    return Localize.text('Balances', 'balances');
+  }
   public sections: {rows: Balance[]}[] = [];
   public showWallet: boolean;
 

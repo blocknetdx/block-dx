@@ -8,6 +8,7 @@ import { OrderbookService } from './orderbook.service';
 import { Currentprice } from './currentprice';
 import { CurrentpriceService } from './currentprice.service';
 import {NumberFormatPipe} from './pipes/decimal.pipe';
+import {Localize} from './localize/localize.component';
 
 math.config({
   number: 'BigNumber',
@@ -39,6 +40,8 @@ export class DepthComponent implements AfterViewInit, OnChanges, OnDestroy {
   public bottomChartContainer: ElementRef;
 
   private subscriptions = [];
+
+  public Localize = Localize;
 
   constructor(
     private zone: NgZone,
@@ -185,7 +188,13 @@ export class DepthComponent implements AfterViewInit, OnChanges, OnDestroy {
   }
 
   updateDepthChart() {
-    const data = this.orderbook;
+
+    const decimalSeparator = Localize.decimalSeparator();
+
+    const data = this.orderbook
+      .map(d => Object.assign({}, d, {
+        valueStr: String(d.value).replace('.', decimalSeparator)
+      }));
 
     const topChartData = data.filter(obj => obj.askstotalvolume ? true : false);
     const bottomChartData = data.filter(obj => obj.bidstotalvolume ? true : false);
@@ -233,13 +242,13 @@ export class DepthComponent implements AfterViewInit, OnChanges, OnDestroy {
       const { symbols } = this;
       let txt;
       if (graph.id === 'asks') {
-        txt = 'Ask: <strong>' + formatNumber(item.dataContext.value, graph.chart, 6) + ' ' + symbols[1] + '</strong><br />'
-          + 'Volume: <strong>' + formatNumber(item.dataContext.askstotalvolume, graph.chart, 2) + ' ' + symbols[0] + '</strong><br />'
-          + 'Sum: <strong>' + formatNumber(item.dataContext.sum, graph.chart, 2) + ' ' + symbols[1] + '</strong>';
+        txt = Localize.text('Ask', 'depthChart') + ': <strong>' + formatNumber(item.dataContext.value, graph.chart, 6) + ' ' + symbols[1] + '</strong><br />'
+          + Localize.text('Volume', 'depthChart') + ': <strong>' + formatNumber(item.dataContext.askstotalvolume, graph.chart, 2) + ' ' + symbols[0] + '</strong><br />'
+          + Localize.text('Sum', 'depthChart') + ': <strong>' + formatNumber(item.dataContext.sum, graph.chart, 2) + ' ' + symbols[1] + '</strong>';
       } else {
-        txt = 'Bid: <strong>' + formatNumber(item.dataContext.value, graph.chart, 6) + ' ' + symbols[1] + '</strong><br />'
-          + 'Volume: <strong>' + formatNumber(item.dataContext.bidstotalvolume, graph.chart, 2) + ' ' + symbols[0] + '</strong><br />'
-          + 'Sum: <strong>' + formatNumber(item.dataContext.sum, graph.chart, 2) + ' ' + symbols[1] + '</strong>';
+        txt = Localize.text('Bid', 'depthChart') + ': <strong>' + formatNumber(item.dataContext.value, graph.chart, 6) + ' ' + symbols[1] + '</strong><br />'
+          + Localize.text('Volume', 'depthChart') + ': <strong>' + formatNumber(item.dataContext.bidstotalvolume, graph.chart, 2) + ' ' + symbols[0] + '</strong><br />'
+          + Localize.text('Sum', 'depthChart') + ': <strong>' + formatNumber(item.dataContext.sum, graph.chart, 2) + ' ' + symbols[1] + '</strong>';
       }
       return txt;
     };
@@ -249,8 +258,8 @@ export class DepthComponent implements AfterViewInit, OnChanges, OnDestroy {
         val,
         {
           precision: precision ? precision : chart.precision,
-          decimalSeparator: chart.decimalSeparator,
-          thousandsSeparator: chart.thousandsSeparator
+          decimalSeparator: Localize.decimalSeparator(),
+          thousandsSeparator: Localize.groupingSeparator()
         }
       );
     };
@@ -268,6 +277,11 @@ export class DepthComponent implements AfterViewInit, OnChanges, OnDestroy {
         this.topChart.clear();
 
       this.topChart = AmCharts.makeChart(this.topChartContainer.nativeElement, {
+        language: Localize.locale(),
+        numberFormatter: {
+          decimalSeparator: Localize.decimalSeparator(),
+          thousandsSeparator: Localize.groupingSeparator()
+        },
         'responsive': {
           'enabled': true
         },
@@ -290,7 +304,7 @@ export class DepthComponent implements AfterViewInit, OnChanges, OnDestroy {
             'balloonFunction': balloon
           },
         ],
-        'categoryField': 'value',
+        'categoryField': 'valueStr',
         'chartCursor': {},
         'balloon': {
           'textAlign': 'left',
@@ -366,6 +380,11 @@ export class DepthComponent implements AfterViewInit, OnChanges, OnDestroy {
         this.bottomChart.clear();
 
       this.bottomChart = AmCharts.makeChart(this.bottomChartContainer.nativeElement, {
+        language: Localize.locale(),
+        numberFormatter: {
+          decimalSeparator: Localize.decimalSeparator(),
+          thousandsSeparator: Localize.groupingSeparator()
+        },
         'responsive': {
           'enabled': true
         },
@@ -388,7 +407,7 @@ export class DepthComponent implements AfterViewInit, OnChanges, OnDestroy {
             'balloonFunction': balloon
           }
         ],
-        'categoryField': 'value',
+        'categoryField': 'valueStr',
         'chartCursor': {},
         'balloon': {
           'textAlign': 'left',

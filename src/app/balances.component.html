@@ -2,7 +2,7 @@
   [sections]="sections">
 
   <app-table-column [sortable]="false" [classList]="'col-2'">
-    <ng-template columnHeader>Asset</ng-template>
+    <ng-template columnHeader><Localize context="balances" key="Asset"></Localize></ng-template>
     <ng-template let-row="row" columnCell>
 
       <span *ngIf="showWallet || row.coin !== 'Wallet'" class="bn-number">{{row.coin}}</span>
@@ -11,10 +11,10 @@
   </app-table-column>
 
   <app-table-column [sortable]="false" [classList]="'col-8'">
-    <ng-template columnHeader>Available Balance</ng-template>
+    <ng-template columnHeader><Localize context="balances" key="Available Balance"></Localize></ng-template>
     <ng-template let-row="row" columnCell>
       <span *ngIf="showWallet || row.coin !== 'Wallet'" [class]="row.priceClasses">
-        <span class="bn-number" [innerHTML]="">{{row.amount | numberFormat : "1.6-6" }} </span>
+        <span class="bn-number" [innerHTML]="">{{row.amount | numberFormat : "1.6-6" | localizeDecimalSeparator }} </span>
       </span>
     </ng-template>
   </app-table-column>

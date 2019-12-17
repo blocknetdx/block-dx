@@ -143,15 +143,10 @@
 </head>
 <body>
 <div style="width:100%; padding: 20px 0 20px 0; text-align:center;"><img style="max-width:300px;" src="assets/logo_full.svg" alt="Blocknet Logo"></div>
-<h3>ORDER DETAILS</h3>
+<h3 id="js-orderDetailsHeader">ORDER DETAILS</h3>
   <div class="container">
 
     <div id="js-detailsContainer" class="tos-container"></div>
-
-    <div id="js-buttonContainer" class="button-container">
-      <button id="js-cancelBtn" type="button" class="gray-button">CANCEL</button>
-      <button id="js-acceptBtn" type="button">ACCEPT</button>
-    </div>
 
   </div>
 
@@ -166,23 +161,7 @@
   <script>if (window.module) module = window.module;</script>
 
   <script type="text/javascript">
-
-    $(document).ready(() => {
-
-      const { ipcRenderer } = require('electron');
-      const details = ipcRenderer.sendSync('getOrderDetails');
-
-      for(const [ label, value ] of details) {
-        $('#js-detailsContainer').append(`
-          <div class="input-group">
-            <label>${label}</label>
-            <input type="text" value="${value}" readonly />
-          </div>
-        `);
-      }
-
-    });
-
+    require('./scripts/order-details');
   </script>
 
 </body>

@@ -2,6 +2,7 @@ import { Component, NgZone, ViewChild, ElementRef, AfterViewInit, OnDestroy } fr
 import * as moment from 'moment';
 
 import {CurrentpriceService} from './currentprice.service';
+import {Localize} from './localize/localize.component';
 
 declare var AmCharts;
 declare var TradingView;
@@ -22,6 +23,8 @@ export class PricechartComponent implements AfterViewInit, OnDestroy {
   private pairUpdated = true;
   private subscriptions = [];
   private zoomedOut = true;
+
+  public Localize = Localize;
 
   constructor(
     private currentpriceService: CurrentpriceService,
@@ -103,6 +106,11 @@ export class PricechartComponent implements AfterViewInit, OnDestroy {
       this.chart.clear();
 
     this.chart = AmCharts.makeChart(this.container.nativeElement, {
+      language: Localize.locale(),
+      numberFormatter: {
+        decimalSeparator: Localize.decimalSeparator(),
+        thousandsSeparator: Localize.groupingSeparator()
+      },
       'type': 'serial',
       'theme': 'dark',
       'legend': {
@@ -148,7 +156,7 @@ export class PricechartComponent implements AfterViewInit, OnDestroy {
         'negativeLineColor': '#FF7F71',
         'openField': 'open',
         'type': 'candlestick',
-        'title': 'Price:',
+        'title': Localize.text('Price', 'pricechart') + ':',
         'precision': 6,
         'connect': true,
         'columnWidth': 7,
@@ -158,7 +166,7 @@ export class PricechartComponent implements AfterViewInit, OnDestroy {
         'valueField': 'close'
       }, {
         'type': 'column',
-        'title': 'High:',
+        'title': Localize.text('High', 'pricechart') + ':',
         'precision': 6,
         'columnWidth': 0,
         'valueField': 'high',
@@ -169,7 +177,7 @@ export class PricechartComponent implements AfterViewInit, OnDestroy {
         'clustered': false
       }, {
         'type': 'column',
-        'title': 'Open:',
+        'title': Localize.text('Open', 'pricechart') + ':',
         'precision': 6,
         'columnWidth': 0,
         'valueField': 'open',
@@ -180,7 +188,7 @@ export class PricechartComponent implements AfterViewInit, OnDestroy {
         'clustered': false
       }, {
         'type': 'column',
-        'title': 'Close:',
+        'title': Localize.text('Close', 'pricechart') + ':',
         'precision': 6,
         'columnWidth': 0,
         'valueField': 'close',
@@ -191,7 +199,7 @@ export class PricechartComponent implements AfterViewInit, OnDestroy {
         'clustered': false
       }, {
         'type': 'column',
-        'title': 'Low:',
+        'title': Localize.text('Low', 'pricechart') + ':',
         'precision': 6,
         'columnWidth': 0,
         'valueField': 'low',
@@ -212,7 +220,7 @@ export class PricechartComponent implements AfterViewInit, OnDestroy {
         'columnWidth': 7,
         'lineColor': '#66666f',
         'type': 'column',
-        'title': 'Volume:',
+        'title': Localize.text('Volume', 'pricechart') + ':',
         'precision': 0,
         'useLineColorForBulletBorder': true,
         'valueField': 'volume',
@@ -222,7 +230,7 @@ export class PricechartComponent implements AfterViewInit, OnDestroy {
         // 'balloonText': '[[title]]<br /><b style='font-size: 130%'>[[value]]</b>'
       } ],
       'valueAxes': [{
-        'title': 'Price',
+        'title': Localize.text('Price', 'pricechart') + ':',
         'precision': 3,
         'labelOffset': 0,
         'boldLabels': false,
@@ -237,7 +245,7 @@ export class PricechartComponent implements AfterViewInit, OnDestroy {
           'label': '1'
         }]}, {
         'id': 'v2',
-        'title': 'Volume',
+        'title': Localize.text('Volume', 'pricechart') + ':',
         'precision': 0,
         'boldLabels': false,
         'labelOffset': 0,

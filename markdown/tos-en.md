@@ -4,6 +4,7 @@ By downloading and using this software, you acknowledge that:
 - This software is licensed under The MIT License and you agree to the terms of the license below.
 
 [ X ] By clicking Accept, I acknowledge the financial and legal risks of using this software and agree to assume all responsibility.
+
 [   ] If you do not agree to these terms click Cancel and do not use the software.
 
 The MIT License (MIT)

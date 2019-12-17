@@ -9,6 +9,7 @@ import { BigTooltipComponent } from './big-tooltip/big-tooltip.component';
 import { shouldHidePricing } from './util';
 import {OrderbookViewService} from './orderbook.view.service';
 import { OrderbookViews } from './enums';
+import {Localize} from './localize/localize.component';
 
 @Component({
   selector: 'app-mainview',
@@ -35,6 +36,8 @@ export class MainviewComponent implements OnInit {
 
   shouldHidePricing = shouldHidePricing;
 
+  public Localize = Localize;
+
   constructor(
     private route: ActivatedRoute,
     private appService: AppService,
@@ -44,10 +47,10 @@ export class MainviewComponent implements OnInit {
     private zone: NgZone
   ) {
     this.decimalOptions = [
-      {value: '8', viewValue:'8 decimals'},
-      {value: '6', viewValue:'6 decimals'},
-      {value: '4', viewValue:'4 decimals'},
-      {value: '2', viewValue:'2 decimals'}
+      {value: '8', viewValue: Localize.text('8 decimals', 'mainview')},
+      {value: '6', viewValue: Localize.text('6 decimals', 'mainview')},
+      {value: '4', viewValue: Localize.text('4 decimals', 'mainview')},
+      {value: '2', viewValue: Localize.text('2 decimals', 'mainview')}
     ];
     const initialPriceDecimal = localStorage.getItem('priceDecimal') || '6';
     this.initialDecimalIdx = this.decimalOptions.findIndex(({ value }) => value === initialPriceDecimal);
