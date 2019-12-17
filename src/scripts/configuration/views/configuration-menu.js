@@ -4,7 +4,7 @@ const { ipcRenderer } = require('electron');
 const { RouterView } = require('../../modules/router');
 const route = require('../constants/routes');
 const configurationTypes = require('../constants/configuration-types');
-const titles = require('../constants/titles');
+const titles = require('../modules/titles');
 
 class ConfigurationMenu extends RouterView {
 
@@ -52,7 +52,7 @@ class ConfigurationMenu extends RouterView {
       return `
         <div class="js-selectConfigurationType main-area-item" data-value="${i.value}" style="${styles.flexContainer}">
           <div style="${styles.flexCol1}">
-            <i class="${configurationType === i.value ? 'fa' : 'far'} fa-circle radio-icon"></i> 
+            <i class="${configurationType === i.value ? 'fa' : 'far'} fa-circle radio-icon"></i>
           </div>
           <div>
             <div><strong>${i.title}</strong></div>
@@ -63,24 +63,24 @@ class ConfigurationMenu extends RouterView {
     }).join('\n');
 
     const html = `
-          <h3>${titles.CONFIGURATION_SETUP}</h3>
+          <h3>${titles.CONFIGURATION_SETUP()}</h3>
           <div class="container" style="flex-grow:1;">
             <div class="flex-container">
               <div class="col2-no-margin">
-            
+
                 <p style="${styles.p}">${Localize.text('We detected you have previously configured your wallets. Please select which of the following you would like to do:','configurationWindowMenu')}</p>
 
                 <div class="main-area" style="${styles.mainArea}">
-                
+
                   ${options}
-                  
+
                 </div>
-              
+
                 <div id="js-buttonContainer" class="button-container">
-                  <button id="js-backBtn" type="button" class="gray-button">CANCEL</button>
+                  <button id="js-backBtn" type="button" class="gray-button">${Localize.text('Cancel', 'configurationWindowMenu').toUpperCase()}</button>
                   <button id="js-continueBtn" type="button">${Localize.text('Continue','configurationWindowMenu').toUpperCase()}</button>
                 </div>
-              
+
               </div>
             </div>
           </div>

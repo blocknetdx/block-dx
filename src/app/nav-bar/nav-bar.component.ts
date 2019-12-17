@@ -89,13 +89,13 @@ export class NavBarComponent implements OnInit {
         case 'available':
           break;
         case 'downloading':
-          alert('An update is currently being downloaded in the background and can take a few minutes. A prompt will appear when complete.');
+          alert(this.Localize.text('An update is currently being downloaded in the background and can take a few minutes. A prompt will appear when complete.', 'navbar'));
           break;
         case 'downloaded':
           // alert('Update has been downloaded and will be installed once you restart the application.');
           break;
         default:
-          alert('There are no Block DX updates available at this time.');
+          alert(this.Localize.text('There are no Block DX updates available at this time.', 'navbar'));
       }
       this.toggleNav();
     }

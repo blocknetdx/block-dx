@@ -8,9 +8,12 @@ $(document).ready(() => {
   const { Localize } = require('../../../src-back/localize');
   Localize.initialize(ipcRenderer.sendSync('getUserLocale'), ipcRenderer.sendSync('getLocaleData'));
 
+  document.title = Localize.text('License Agreement', 'tosWindow');
+
   $('#js-licenseAgreementHeader').text(Localize.text('License Agreement', 'tosWindow').toUpperCase());
   $('#js-acceptBtn').text(Localize.text('Accept', 'tosWindow').toUpperCase());
   $('#js-cancelBtn').text(Localize.text('Cancel', 'tosWindow').toUpperCase());
+  $('#js-closeBtn').text(Localize.text('Close', 'tosWindow').toUpperCase());
 
   const $outerFlexContainer = $('#js-outerFlexContainer');
   const setContainerHeight = () => {

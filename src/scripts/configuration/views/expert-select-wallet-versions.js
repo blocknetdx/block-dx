@@ -4,7 +4,7 @@ const { Set } = require('immutable');
 const { RouterView } = require('../../modules/router');
 const route = require('../constants/routes');
 const configurationTypes = require('../constants/configuration-types');
-const titles = require('../constants/titles');
+const titles = require('../modules/titles');
 const footerButtons = require('../snippets/footer-buttons');
 const sidebar = require('../snippets/sidebar');
 const { compareByVersion } = require('../util');
@@ -100,11 +100,11 @@ class ExpertSelectWalletVersions extends RouterView {
     const configurationType = state.get('configurationType');
     let title;
     if(configurationType === configurationTypes.ADD_NEW_WALLETS) {
-      title = titles.ADD_WALLET_EXPERT_CONFIGURATION;
+      title = titles.ADD_WALLET_EXPERT_CONFIGURATION();
     } else if(configurationType === configurationTypes.UPDATE_WALLETS) {
-      title = titles.UPDATE_WALLET_EXPERT_CONFIGURATION;
+      title = titles.UPDATE_WALLET_EXPERT_CONFIGURATION();
     } else {
-      title = titles.FRESH_SETUP_EXPERT_CONFIGURATION;
+      title = titles.FRESH_SETUP_EXPERT_CONFIGURATION();
     }
 
     const html = `
@@ -115,14 +115,14 @@ class ExpertSelectWalletVersions extends RouterView {
                 ${sidebar(0)}
               </div>
               <div class="col2">
-              
+
                 <p style="${styles.p}">${Localize.text('Please select the wallet version installed for each of the following assets. <strong>DO NOT</strong> use any wallet versions not listed here. They have either not been tested yet or are not compatible.','configurationWindowExpertVersions')}</p>
                 <div id="js-mainConfigurationArea" class="main-area">
                   ${items}
                 </div>
-                
+
                 ${footerButtons()}
-              
+
               </div>
             </div>
           </div>

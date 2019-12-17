@@ -5,7 +5,7 @@ const fs = require('fs-extra-promise');
 const { RouterView } = require('../../modules/router');
 const route = require('../constants/routes');
 const configurationTypes = require('../constants/configuration-types');
-const titles = require('../constants/titles');
+const titles = require('../modules/titles');
 
 class SelectSetupType extends RouterView {
 
@@ -30,13 +30,13 @@ class SelectSetupType extends RouterView {
 
     let title;
     if(configurationType === configurationTypes.ADD_NEW_WALLETS) {
-      title = titles.ADD_WALLET;
+      title = titles.ADD_WALLET();
     } else if(configurationType === configurationTypes.UPDATE_WALLETS) {
-      title = titles.UPDATE_WALLET;
+      title = titles.UPDATE_WALLET();
     } else if(configurationType === configurationTypes.FRESH_SETUP) {
-      title = titles.FRESH_SETUP;
+      title = titles.FRESH_SETUP();
     } else {
-      title = titles.RPC_SETTINGS;
+      title = titles.RPC_SETTINGS();
     }
 
     const html = `
@@ -44,14 +44,14 @@ class SelectSetupType extends RouterView {
           <div class="container">
             <div class="flex-container">
               <div class="col2-no-margin">
-            
+
                 <p style="${styles.p}">${Localize.text('Block DX is the fastest, most secure, most reliable, and most decentralized exchange, allowing for peer-to-peer trading directly from your wallet.','configurationWindowSetupType')}</p>
                 <p style="${styles.p}">${Localize.text('<strong>Prerequisites</strong>: Block DX requires the <a href="#" class="text-link js-blocknetWalletLink">latest Blocknet wallet</a> and the wallets of any assets you want to trade with. These must be downloaded and installed before continuing. See the full list of <a href="#" class="text-link js-compatibleWalletsLink">compatible assets and wallet versions</a>.','configurationWindowSetupType')}</p>
                 <div class="main-area" style="${styles.mainArea}">
-                
+
                   <div id="js-automaticCredentials" class="main-area-item" style="${styles.flexContainer}">
                     <div style="${styles.flexCol1}">
-                      <i class="${quickSetup ? 'fa' : 'far'} fa-circle radio-icon"></i> 
+                      <i class="${quickSetup ? 'fa' : 'far'} fa-circle radio-icon"></i>
                     </div>
                     <div>
                       <div>${Localize.text('<strong>Quick Setup</strong> (recommended)','configurationWindowSetupType')}</div>
@@ -62,10 +62,10 @@ class SelectSetupType extends RouterView {
                         }
                       </div>
                     </div>
-                  
+
                     <div id="js-manualCredentials" class="main-area-item" style="${styles.flexContainer}">
                       <div style="${styles.flexCol1}">
-                        <i class="${!quickSetup ? 'fa' : 'far'} fa-circle radio-icon"></i> 
+                        <i class="${!quickSetup ? 'fa' : 'far'} fa-circle radio-icon"></i>
                       </div>
                     <div>
                       <div>${Localize.text('<strong>Expert Setup</strong> (advanced users only)','configurationWindowSetupType')}</div>
@@ -78,14 +78,14 @@ class SelectSetupType extends RouterView {
                       </div>
                     </div>
                   </div>
-                
+
                 </div>
-              
+
                 <div id="js-buttonContainer" class="button-container">
                   <button id="js-backBtn" type="button" class="gray-button">${isFirstRun ? Localize.text('Cancel','configurationWindowSetupType').toUpperCase() : Localize.text('Back','configurationWindowSetupType').toUpperCase()}</button>
                   <button id="js-continueBtn" type="button">${Localize.text('Continue','configurationWindowSetupType').toUpperCase()}</button>
                 </div>
-              
+
               </div>
             </div>
           </div>

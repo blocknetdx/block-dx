@@ -44,8 +44,9 @@ $(document).ready(() => {
 
   // Set header and window title text
   const version = ipcRenderer.sendSync('getAppVersion');
-  document.title = `v${version} Release Notes`;
-  $('#js-header').text(`v${version} ${Localize.text('Release Notes', 'releaseNotesWindow').toUpperCase()}`);
+  const headerText = Localize.text('Release Notes', 'releaseNotesWindow');
+  document.title = `v${version} ${headerText}`;
+  $('#js-header').text(`v${version} ${headerText.toUpperCase()}`);
 
   // Listener to open any link in browser
   $('a').on('click', e => {

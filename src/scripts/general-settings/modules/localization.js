@@ -3,7 +3,12 @@ const { dropdown } = require('./shared');
 const showLocaleOption = ({ state, Localize }) => {
   const locale = state.get('locale');
   const locales = state.get('locales');
-  const [ code, name ] = locales.find(l => l[0] === locale);
+  let [ code, name ] = locales.find(l => l[0] === locale) || [];
+  if(!code) {
+    const enLocale = locales.find(l => l[0] === 'en');
+    code = enLocale[0];
+    name = enLocale[1];
+  }
   return `
     <div class="option-container">
       <p class="option-title"></p>

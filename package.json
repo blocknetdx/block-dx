@@ -154,7 +154,7 @@
       ],
       "category": "public.app-category.utilities",
       "icon": "./src/assets/favicon_block.icns",
-      "gatekeeperAssess" : false,
+      "gatekeeperAssess": false,
       "publish": {
         "provider": "github",
         "releaseType": "draft"

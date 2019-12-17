@@ -3,6 +3,7 @@ import { Pricing } from './pricing';
 
 import * as moment from 'moment';
 import * as math from 'mathjs';
+import {Localize} from './localize/localize.component';
 
 export class Openorder {
   id: string;
@@ -71,20 +72,20 @@ export class Openorder {
 
   public simpleStatus() {
     switch (this.status) {
-      case OrderStates.New:             return `Creating order`;
-      case OrderStates.Open:            return `Open`;
-      case OrderStates.Accepting:       return `Exchange in progress (1/5)`;
-      case OrderStates.Hold:            return `Exchange in progress (2/5)`;
-      case OrderStates.Initialized:     return `Exchange in progress (3/5)`;
-      case OrderStates.Created:         return `Exchange in progress (4/5)`;
-      case OrderStates.Committed:       return `Exchange in progress (5/5)`;
-      case OrderStates.Finished:        return `Complete`;
-      case OrderStates.Expired:         return `Expired`;
-      case OrderStates.Offline:         return `Offline`;
-      case OrderStates.Invalid:         return `Invalid`;
-      case OrderStates.RolledBack:      return `Order failed, refunding`;
-      case OrderStates.RollbackFailed:  return `Order failed, not refunded`;
-      case OrderStates.Canceled:        return `Cancelled`;
+      case OrderStates.New:             return Localize.text('Creating order', 'openorders');
+      case OrderStates.Open:            return Localize.text('Open', 'openorders');
+      case OrderStates.Accepting:       return Localize.text('Exchange in progress (1/5)', 'openorders');
+      case OrderStates.Hold:            return Localize.text('Exchange in progress (2/5)', 'openorders');
+      case OrderStates.Initialized:     return Localize.text('Exchange in progress (3/5)', 'openorders');
+      case OrderStates.Created:         return Localize.text('Exchange in progress (4/5)', 'openorders');
+      case OrderStates.Committed:       return Localize.text('Exchange in progress (5/5)', 'openorders');
+      case OrderStates.Finished:        return Localize.text('Complete', 'openorders');
+      case OrderStates.Expired:         return Localize.text('Expired', 'openorders');
+      case OrderStates.Offline:         return Localize.text('Offline', 'openorders');
+      case OrderStates.Invalid:         return Localize.text('Invalid', 'openorders');
+      case OrderStates.RolledBack:      return Localize.text('Order failed, refunding', 'openorders');
+      case OrderStates.RollbackFailed:  return Localize.text('Order failed, not refunded', 'openorders');
+      case OrderStates.Canceled:        return Localize.text('Cancelled', 'openorders');
       default:                          return this.status;
     }
   }

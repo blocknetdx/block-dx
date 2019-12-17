@@ -198,7 +198,7 @@ export class PairSelectorComponent implements OnInit, AfterViewInit {
   }
 
   refreshButtonMarkup(): String {
-    return '<a href="#" style="color:#8e98a4;" class="js-refreshWallets refresh-wallets-button" title="Refresh Wallets"><i class="material-icons refresh-wallets-icon">refresh</i></a>';
+    return `<a href="#" style="color:#8e98a4;" class="js-refreshWallets refresh-wallets-button" title="${this.Localize.text('Refresh wallets', 'pairSelector')}"><i class="material-icons refresh-wallets-icon">refresh</i></a>`;
   }
 
   async registerRefreshClickEvent() {

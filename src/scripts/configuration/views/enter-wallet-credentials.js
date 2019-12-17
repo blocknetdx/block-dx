@@ -3,7 +3,7 @@
 const { RouterView } = require('../../modules/router');
 const route = require('../constants/routes');
 const configurationTypes = require('../constants/configuration-types');
-const titles = require('../constants/titles');
+const titles = require('../modules/titles');
 const footerButtons = require('../snippets/footer-buttons');
 const sidebar = require('../snippets/sidebar');
 
@@ -52,11 +52,11 @@ class EnterWalletCredentials extends RouterView {
 
     let title;
     if(addingWallets) {
-      title = titles.ADD_WALLET_EXPERT_CONFIGURATION;
+      title = titles.ADD_WALLET_EXPERT_CONFIGURATION();
     } else if(updatingWallets) {
-      title = titles.UPDATE_WALLET_EXPERT_CONFIGURATION;
+      title = titles.UPDATE_WALLET_EXPERT_CONFIGURATION();
     } else {
-      title = titles.FRESH_SETUP_EXPERT_CONFIGURATION;
+      title = titles.FRESH_SETUP_EXPERT_CONFIGURATION();
     }
 
     const html = `
@@ -67,14 +67,14 @@ class EnterWalletCredentials extends RouterView {
                 ${sidebar(1)}
               </div>
               <div class="col2">
-            
+
                 <p style="${styles.p}">${Localize.text('Please set the RPC username and password for each wallet.','configurationWindowWalletCredentials')}</p>
                 <div id="js-mainConfigurationArea" class="main-area">
                   ${items}
                 </div>
-                
+
                 ${footerButtons()}
-                             
+
               </div>
             </div>
           </div>

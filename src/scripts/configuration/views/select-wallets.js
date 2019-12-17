@@ -5,7 +5,7 @@ const { RouterView } = require('../../modules/router');
 const route = require('../constants/routes');
 const sidebar = require('../snippets/sidebar');
 const configurationTypes = require('../constants/configuration-types');
-const titles = require('../constants/titles');
+const titles = require('../modules/titles');
 
 class SelectWallets extends RouterView {
 
@@ -46,11 +46,11 @@ class SelectWallets extends RouterView {
 
     let title;
     if(addingWallets) {
-      title = titles.ADD_WALLET_EXPERT_CONFIGURATION;
+      title = titles.ADD_WALLET_EXPERT_CONFIGURATION();
     } else if(updatingWallets) {
-      title = titles.UPDATE_WALLET_EXPERT_CONFIGURATION;
+      title = titles.UPDATE_WALLET_EXPERT_CONFIGURATION();
     } else {
-      title = titles.FRESH_SETUP_EXPERT_CONFIGURATION;
+      title = titles.FRESH_SETUP_EXPERT_CONFIGURATION();
     }
 
     const html = `
@@ -73,7 +73,7 @@ class SelectWallets extends RouterView {
 
             <div id="js-buttonContainer" class="button-container">
               <button id="js-backBtn" type="button" class="gray-button">${Localize.text('Back','configurationWindowWallets').toUpperCase()}</button>
-              <button id="js-continueBtn" type="button" ${selected.size === 0 ? 'disabled' : ''}>${Localize.text('Continue','configurationWindowWallets')}</button>
+              <button id="js-continueBtn" type="button" ${selected.size === 0 ? 'disabled' : ''}>${Localize.text('Continue','configurationWindowWallets').toUpperCase()}</button>
             </div>
 
           </div>

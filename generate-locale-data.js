@@ -18,9 +18,9 @@ const processFile = async function(filePath) {
   }
 };
 
-const functionPatt = /Localize\.text\('(.+?)'.+?'(.+?)'/g;
-const componentPatt0 = /<Localize.+?context="(.+?)".*?key="(.+?)">/g;
-const componentPatt1 = /<Localize.+?key="(.+?)".*?context="(.+?)">/g;
+const functionPatt = /Localize\.text\('(.+?)',\s*?'(.+?)'/g;
+const componentPatt0 = /<Localize\s+context="(.+?)"\s+key=["'](.+?)["']>/g;
+const componentPatt1 = /<Localize\s+key=["'](.+?)["']\s+context="(.+?)">/g;
 
 (async function() {
   try {
@@ -28,7 +28,8 @@ const componentPatt1 = /<Localize.+?key="(.+?)".*?context="(.+?)">/g;
     const matches = [];
     await processFile(baseDir);
     for(const file of selectedFiles) {
-      const contents = await fs.readFileAsync(file, 'utf8');
+      let contents = await fs.readFileAsync(file, 'utf8');
+      contents = contents.replace(/\\'/g, `'`);
       [...matchAll(contents, functionPatt)]
         .filter(arr => arr.length > 1)
         .reduce((arr, a) => {

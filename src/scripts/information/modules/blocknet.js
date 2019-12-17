@@ -22,7 +22,7 @@ const renderBlocknet = ({ Localize }) => {
     <ul>
       <li><a href="#" class="text-link js-externalLink" data-link="https://blocknet.us16.list-manage.com/subscribe?u=5d0a376e982034a2ddd6edb98&id=6ae2c503df">${Localize.text('General Newsletter', 'informationWindowBlocknet')}</a></li>
       <li><a href="#" class="text-link js-externalLink" data-link="https://blocknet.us16.list-manage.com/subscribe?u=5d0a376e982034a2ddd6edb98&id=d8349ac0b0">${Localize.text('Service Node Newsletter', 'informationWindowBlocknet')}</a></li>
-      <li><a href="#" class="text-link js-externalLink" data-link="https://blocknet.us16.list-manage.com/subscribe?u=5d0a376e982034a2ddd6edb98&id=e5efe39ee5">${Localize.text('Developer Newsletter' , 'informationWindowBlocknet')}</a></li>
+      <li><a href="#" class="text-link js-externalLink" data-link="https://blocknet.us16.list-manage.com/subscribe?u=5d0a376e982034a2ddd6edb98&id=e5efe39ee5">${Localize.text('Developer Newsletter', 'informationWindowBlocknet')}</a></li>
     </ul>
   </p>
 </div>

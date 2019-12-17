@@ -12,7 +12,7 @@
 
   <!-- Size of the first market pair -->
   <app-table-column [sortable]="false" [classList]="'col'">
-    <ng-template columnHeader>{{Localize.text('Size {token}', 'tradehistory', {token: symbols[0]})}})</ng-template>
+    <ng-template columnHeader>{{Localize.text('Size ({token})', 'tradehistory', {token: symbols[0]})}}</ng-template>
     <ng-template let-row="row" columnCell>
       <!--<div class="percentBar {{row.percentbarClasses}}" [style.width]="row.percent + '%'"></div>-->
       <span class="bn-number no-highlight" [innerHTML]="row.displaySize | blockCurrency:symbols[0]:'6' | localizeDecimalSeparator"></span>
