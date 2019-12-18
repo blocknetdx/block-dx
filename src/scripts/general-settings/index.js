@@ -439,6 +439,8 @@ $(document).ready(() => {
                 $($target.find('div')[0]).text(newAutofillAddresses ? yesText : noText);
                 state.set('autofillAddresses', newAutofillAddresses);
                 saveSettings();
+                // if set to autofill addresses, then generate new addresses
+                if(newAutofillAddresses) ipcRenderer.send('generateNewAddresses');
               });
           }, 0);
         });

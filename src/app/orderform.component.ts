@@ -79,6 +79,10 @@ export class OrderformComponent implements OnInit {
     this.model = {};
 
     this.addresses = window.electron.ipcRenderer.sendSync('getAddressesSync');
+    window.electron.ipcRenderer.on('updatedAddresses', (e, addresses) => {
+      this.addresses = addresses;
+      this.resetModel();
+    });
 
     this.appService.marketPairChanges.subscribe((symbols) => {
       this.symbols = symbols;

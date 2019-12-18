@@ -1496,6 +1496,33 @@ ipcMain.on('autoGenerateAddressesAvailable', e => {
 
 const onReady = new Promise(resolve => app.on('ready', resolve));
 
+const generateNewAddresses = async function() {
+  try {
+    const selectedWallets = storage.getItem('selectedWallets');
+    const addresses = {};
+    const manifest = getManifest()
+      .reduce((map, w) => map.set(w.ver_id, w.ticker), new Map());
+    for(const versionId of selectedWallets) {
+      try {
+        const token = manifest.get(versionId);
+        const address = await sn.dxGetNewTokenAddress(token);
+        if(address) addresses[token] = address;
+      } catch(err) {
+        // silently handle errors
+        console.error(err);
+      }
+    }
+    storage.setItem('addresses', addresses);
+    return addresses;
+  } catch(err) {
+    handleError(err);
+  }
+};
+ipcMain.on('generateNewAddresses', async function(e) {
+  const addresses = await generateNewAddresses();
+  appWindow.send('updatedAddresses', addresses);
+});
+
 // Run the application within async function for flow control
 (async function() {
   try {
@@ -1630,21 +1657,7 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
 
     // Autogenerate new addresses
     if(autoGenerateAddressesAvailable() && storage.getItem('autofillAddresses')) {
-      const selectedWallets = storage.getItem('selectedWallets');
-      const addresses = {};
-      const manifest = getManifest()
-        .reduce((map, w) => map.set(w.ver_id, w.ticker), new Map());
-      for(const versionId of selectedWallets) {
-        try {
-          const token = manifest.get(versionId);
-          const address = await sn.dxGetNewTokenAddress(token);
-          if(address) addresses[token] = address;
-        } catch(err) {
-          // silently handle errors
-          console.error(err);
-        }
-      }
-      storage.setItem('addresses', addresses);
+      await generateNewAddresses();
     }
 
     const localhost = 'localhost';
