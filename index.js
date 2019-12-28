@@ -1410,14 +1410,6 @@ ipcMain.on('getAutofillAddresses', e => {
   e.returnValue = getAutofillAddresses();
 });
 
-ipcMain.on('generateNewAddress', async function(e, token) {
-  try {
-    e.returnValue = await sn.dxGetNewTokenAddress(token);
-  } catch(err) {
-    console.error(err);
-  }
-});
-
 const getLocaleData = () => {
   const locale = storage.getItem('locale');
   const localesPath = path.join(__dirname, 'locales');
@@ -1495,6 +1487,20 @@ ipcMain.on('autoGenerateAddressesAvailable', e => {
 });
 
 const onReady = new Promise(resolve => app.on('ready', resolve));
+
+ipcMain.on('generateNewAddress', async function(e, token) {
+  try {
+    const addresses = storage.getItem('addresses') || {};
+    const newAddress = await sn.dxGetNewTokenAddress(token);
+    const newAddresses = Object.assign({}, addresses, {
+      [token]: newAddress
+    });
+    storage.setItem('addresses', newAddresses);
+    appWindow.send('updatedAddresses', newAddresses);
+  } catch(err) {
+    console.error(err);
+  }
+});
 
 const generateNewAddresses = async function() {
   try {

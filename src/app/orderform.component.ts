@@ -60,6 +60,7 @@ export class OrderformComponent implements OnInit {
   public pricingEnabled = true;
   public pricingAvailable = true;
   public showConfigurationOverlay = false;
+  public autoGenerateAddressesAvailable = true;
 
   shouldHidePricing = shouldHidePricing;
 
@@ -78,8 +79,12 @@ export class OrderformComponent implements OnInit {
   ngOnInit() {
     this.model = {};
 
-    this.addresses = window.electron.ipcRenderer.sendSync('getAddressesSync');
-    window.electron.ipcRenderer.on('updatedAddresses', (e, addresses) => {
+    const { ipcRenderer } = window.electron;
+
+    this.autoGenerateAddressesAvailable = ipcRenderer.sendSync('autoGenerateAddressesAvailable');
+
+    this.addresses = ipcRenderer.sendSync('getAddressesSync');
+    ipcRenderer.on('updatedAddresses', (e, addresses) => {
       this.addresses = addresses;
       this.resetModel();
     });
@@ -499,15 +504,7 @@ export class OrderformComponent implements OnInit {
     window.electron.ipcRenderer.send('openConfigurationWizard');
   }
 
-  generateNewAddress(token, side) {
-    const address = window.electron.ipcRenderer.sendSync('generateNewAddress', token);
-
-    if (side === 'maker') {
-      this.model.makerAddress = address;
-      this.updateStoredAddresses(this.model.makerAddress.trim(), null);
-    } else if (side === 'taker') {
-      this.model.takerAddress = address;
-      this.updateStoredAddresses(null, this.model.takerAddress.trim());
-    }
+  generateNewAddress(token) {
+    window.electron.ipcRenderer.send('generateNewAddress', token);
   }
 }

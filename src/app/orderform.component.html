@@ -135,8 +135,8 @@
         </div>
       </div>
 
-      <div class="order-form-new-addr">
-        <span (click)="generateNewAddress(symbols[0], 'maker')">Generate New {{symbols[0]}} Address</span>
+      <div *ngIf="autoGenerateAddressesAvailable" class="order-form-new-addr">
+        <span (click)="generateNewAddress(symbols[0])">{{Localize.text('Generate New {token} Address', 'orderform', {token: symbols[0]})}}</span>
       </div>
 
       <div class="input-group row">
@@ -154,8 +154,8 @@
         </div>
       </div>
 
-      <div class="order-form-new-addr">
-        <span (click)="generateNewAddress(symbols[1], 'taker')">Generate New {{symbols[1]}} Address</span>
+      <div *ngIf="autoGenerateAddressesAvailable" class="order-form-new-addr">
+        <span (click)="generateNewAddress(symbols[1])">{{Localize.text('Generate New {token} Address', 'orderform', {token: symbols[1]})}}</span>
       </div>
 
       <div class="input-group row">
