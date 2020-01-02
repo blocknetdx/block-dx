@@ -390,7 +390,7 @@ class ServiceNodeInterface {
    */
   async getinfo() {
     const { error, result } = await this._makeServiceNodeRequest({
-      method: 'getinfo'
+      method: 'getnetworkinfo'
     });
     if(error) throw new Error(error);
     return result;
