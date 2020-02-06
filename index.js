@@ -853,7 +853,7 @@ const openAppWindow = () => {
       .then(res => {
         if(res.id) { // success
           appWindow.send('orderDone', 'success');
-          sendOrderBook();
+          sendOrderBook(true);
         } else {
           appWindow.send('orderDone', 'failed');
         }
@@ -869,8 +869,8 @@ const openAppWindow = () => {
       .then(res => {
         if(res.id) { // success
           appWindow.send('orderDone', 'success');
-          sendOrderBook();
-          sendOrderHistory();
+          sendOrderBook(true);
+          sendOrderHistory('', true);
         } else {
           appWindow.send('orderDone', 'failed');
         }
@@ -1007,32 +1007,32 @@ const openAppWindow = () => {
   };
 
   const orderKey = (pair) => pair[0] + pair[1];
-  let orderHistoryDict = new Map();
+  const orderHistoryDict = new Map();
 
-  const sendOrderHistory = (which) => {
+  const sendOrderHistory = (which = '', force = false) => {
     if (!isTokenPairValid(keyPair)) // need valid token pair
       return;
     const key = orderKey(keyPair);
-    const shouldUpdate = !orderHistoryDict.has(key) ||
-      (moment.utc().diff(orderHistoryDict[key]['orderHistoryLastUpdate'], 'seconds', true) >= 15);
+    const shouldUpdate = force || !orderHistoryDict.has(key) ||
+      (moment.utc().diff(orderHistoryDict.get(key)['orderHistoryLastUpdate'], 'seconds', true) >= 15);
     if (!shouldUpdate) {
       if (orderHistoryDict.has(key) && which)
-        appWindow.send(which, orderHistoryDict[key][which]);
+        appWindow.send(which, orderHistoryDict.get(key)[which]);
       return;
     }
 
     // Make sure storage has key
     if (!orderHistoryDict.has(key))
-      orderHistoryDict[key] = {
+      orderHistoryDict.set(key, {
         'orderHistory': [],
         'orderHistoryByMinute': [],
         'orderHistoryBy15Minutes': [],
         'orderHistoryBy1Hour': [],
         'currentPrice': { time: moment.utc().toISOString(), open: 0, close: 0, high: 0, low: 0, volume: 0 },
         'orderHistoryLastUpdate': moment.utc()
-      };
+      });
     else
-      orderHistoryDict[key]['orderHistoryLastUpdate'] = moment.utc();
+      orderHistoryDict.get(key)['orderHistoryLastUpdate'] = moment.utc();
 
     const end = moment().utc();
     const start = end.clone().subtract(1, 'day');
@@ -1040,13 +1040,15 @@ const openAppWindow = () => {
     {
       sn.dxGetOrderHistory(keyPair[0], keyPair[1], start.unix(), end.unix(), 60)
         .then(res => {
-          orderHistoryDict[key]['orderHistory'] = res;
-          orderHistoryDict[key]['orderHistoryByMinute'] = res;
-          orderHistoryDict[key]['currentPrice'] = calculatePricingData(res);
+          Object.assign(orderHistoryDict.get(key), {
+            orderHistory: res,
+            orderHistoryByMinute: res,
+            currentPrice: calculatePricingData(res)
+          });
           if (key === orderKey(keyPair)) {
             appWindow.send('orderHistory', res);
             appWindow.send('orderHistoryByMinute', res);
-            appWindow.send('currentPrice', orderHistoryDict[key]['currentPrice']);
+            appWindow.send('currentPrice', orderHistoryDict.get(key)['currentPrice']);
           }
         })
         .catch(handleError);
@@ -1054,7 +1056,7 @@ const openAppWindow = () => {
     {
       sn.dxGetOrderHistory(keyPair[0], keyPair[1], start.unix(), end.unix(), 900)
         .then(res => {
-          orderHistoryDict[key]['orderHistoryBy15Minutes'] = res;
+          orderHistoryDict.get(key)['orderHistoryBy15Minutes'] = res;
           if (key === orderKey(keyPair))
             appWindow.send('orderHistoryBy15Minutes', res);
         })
@@ -1063,7 +1065,7 @@ const openAppWindow = () => {
     {
       sn.dxGetOrderHistory(keyPair[0], keyPair[1], start.unix(), end.unix(), 3600)
         .then(res => {
-          orderHistoryDict[key]['orderHistoryBy1Hour'] = res;
+          orderHistoryDict.get(key)['orderHistoryBy1Hour'] = res;
           if (key === orderKey(keyPair))
             appWindow.send('orderHistoryBy1Hour', res);
         })
