@@ -700,6 +700,22 @@ class ServiceNodeInterface {
     if(error) throw new Error(error);
   }
 
+  /**
+   * Generates a new token address
+   * @param {string} token
+   * @returns {Promise<string>}
+   */
+  async dxGetNewTokenAddress(token) {
+    const { error, result = [] } = await this._makeServiceNodeRequest({
+      method: 'dxGetNewTokenAddress',
+      params: [
+        token
+      ]
+    });
+    if(error) throw new Error(error);
+    return result[0] || '';
+  }
+
 }
 
 module.exports = ServiceNodeInterface;

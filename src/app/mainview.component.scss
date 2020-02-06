@@ -71,10 +71,12 @@
       }
     }
 
+    $orderform-regular-height: 456px;
+
     &.balances {
       @include screen(lg) {
         min-height: 130px;
-        max-height: calc(100vh - 553px - 106px + 48px + 48px + 40px);
+        max-height: calc(100vh - #{$orderform-regular-height} - 137px - 106px + 48px + 48px + 40px);
       }
       @media(max-height: 700px) {
         min-height: 130px;
@@ -85,7 +87,7 @@
     &.balances.alternate-pricing {
       @include screen(lg) {
         min-height: 130px;
-        max-height: calc(100vh - 553px - 106px + 40px + 48px);
+        max-height: calc(100vh - #{$orderform-regular-height} - 137px - 106px + 40px + 48px);
       }
       @media(max-height: 700px) {
         min-height: 130px;
@@ -95,8 +97,8 @@
     }
     &.orderform {
       @include screen(lg) {
-        min-height: 416px;
-        max-height: 416px;
+        min-height: $orderform-regular-height;
+        max-height: $orderform-regular-height;
       }
       @media(max-height: 700px) {
         max-height: calc(100vh - 236px);
@@ -106,8 +108,8 @@
     }
     &.orderform.alternate-pricing {
       @include screen(lg) {
-        min-height: 416px + 48px;
-        max-height: 416px + 48px;
+        min-height: $orderform-regular-height + 48px;
+        max-height: $orderform-regular-height + 48px;
       }
       @media(max-height: 700px) {
         max-height: calc(100vh - 236px);

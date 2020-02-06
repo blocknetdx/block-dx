@@ -1359,6 +1359,9 @@ ipcMain.on('saveGeneralSettings', (e, s) => {
   if(['showWallet'].some(prop => Object.keys(changed).includes(prop))) {
     sendGeneralSettings();
   }
+  if(getAutofillAddresses() !== s.autofillAddresses) {
+    changed.autofillAddresses = s.autofillAddresses;
+  }
   if(['enablePricing', 'pricingSource', 'apiKeys', 'pricingUnit', 'pricingFrequency'].some(prop => Object.keys(changed).includes(prop))) {
     clearPricingInterval();
     sendPricingMultipliers();
@@ -1400,6 +1403,11 @@ ipcMain.on('setUserLocale', (e, locale) => {
 const getUserLocale = () => storage.getItem('locale');
 ipcMain.on('getUserLocale', e => {
   e.returnValue = getUserLocale();
+});
+
+const getAutofillAddresses = () => storage.getItem('autofillAddresses') || false;
+ipcMain.on('getAutofillAddresses', e => {
+  e.returnValue = getAutofillAddresses();
 });
 
 const getLocaleData = () => {
@@ -1471,7 +1479,55 @@ ipcMain.on('localizeText', (e, key, context, replacers = {}) => {
   }
 });
 
+const autoGenerateAddressesAvailable = () => {
+  return info.version >= 3140100 ? true : false;
+};
+ipcMain.on('autoGenerateAddressesAvailable', e => {
+  e.returnValue = autoGenerateAddressesAvailable();
+});
+
 const onReady = new Promise(resolve => app.on('ready', resolve));
+
+ipcMain.on('generateNewAddress', async function(e, token) {
+  try {
+    const addresses = storage.getItem('addresses') || {};
+    const newAddress = await sn.dxGetNewTokenAddress(token);
+    const newAddresses = Object.assign({}, addresses, {
+      [token]: newAddress
+    });
+    storage.setItem('addresses', newAddresses);
+    appWindow.send('updatedAddresses', newAddresses);
+  } catch(err) {
+    console.error(err);
+  }
+});
+
+const generateNewAddresses = async function() {
+  try {
+    const selectedWallets = storage.getItem('selectedWallets');
+    const addresses = {};
+    const manifest = getManifest()
+      .reduce((map, w) => map.set(w.ver_id, w.ticker), new Map());
+    for(const versionId of selectedWallets) {
+      try {
+        const token = manifest.get(versionId);
+        const address = await sn.dxGetNewTokenAddress(token);
+        if(address) addresses[token] = address;
+      } catch(err) {
+        // silently handle errors
+        console.error(err);
+      }
+    }
+    storage.setItem('addresses', addresses);
+    return addresses;
+  } catch(err) {
+    handleError(err);
+  }
+};
+ipcMain.on('generateNewAddresses', async function(e) {
+  const addresses = await generateNewAddresses();
+  appWindow.send('updatedAddresses', addresses);
+});
 
 // Run the application within async function for flow control
 (async function() {
@@ -1605,6 +1661,11 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
       storage.setItem('keyPair', keyPair);
     }
 
+    // Autogenerate new addresses
+    if(autoGenerateAddressesAvailable() && storage.getItem('autofillAddresses')) {
+      await generateNewAddresses();
+    }
+
     const localhost = 'localhost';
 
     // In development use the live ng server. In production serve the built files
@@ -1633,8 +1694,8 @@ function isTokenPairValid(keyPair) {
 }
 
 // check for version number. Minimum supported blocknet client version
-function versionCheck(version) {
-  if (version < 3130200) {
+function versionCheck(v) {
+  if (v < 3130200) {
     return {name: Localize.text('Unsupported Version', 'universal'), message: Localize.text('BLOCK DX requires Blocknet wallet version 3.13.2 or greater.', 'universal')};
   }
   return null;

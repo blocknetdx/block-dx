@@ -242,6 +242,10 @@
     "mainview": {
       "val": "Order Form",
       "note": ""
+    },
+    "generalSettingsWindow": {
+      "val": "Order Form",
+      "note": ""
     }
   },
   "Order Book": {
@@ -1081,6 +1085,12 @@
   "{token} Address": {
     "orderform": {
       "val": "{token} Address",
+      "note": ""
+    }
+  },
+  "Generate New {token} Address": {
+    "orderform": {
+      "val": "Generate New {token} Address",
       "note": ""
     }
   },
@@ -1949,6 +1959,30 @@
   "Select App Locale": {
     "generalSettingsWindow": {
       "val": "Select App Locale",
+      "note": ""
+    }
+  },
+  "Auto Generate Addresses": {
+    "generalSettingsWindow": {
+      "val": "Auto Generate Addresses",
+      "note": ""
+    }
+  },
+  "This setting automatically generates new addresses on startup for connected wallets and auto-populates the order form address fields.": {
+    "generalSettingsWindow": {
+      "val": "This setting automatically generates new addresses on startup for connected wallets and auto-populates the order form address fields.",
+      "note": ""
+    }
+  },
+  "Note: This feature requires Blocknet version 3.14.1 or higher.": {
+    "generalSettingsWindow": {
+      "val": "Note: This feature requires Blocknet version 3.14.1 or higher.",
+      "note": ""
+    }
+  },
+  "Auto Generate Addresses?": {
+    "generalSettingsWindow": {
+      "val": "Auto Generate Addresses?",
       "note": ""
     }
   },

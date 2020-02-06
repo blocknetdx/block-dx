@@ -135,6 +135,10 @@
         </div>
       </div>
 
+      <div *ngIf="autoGenerateAddressesAvailable" class="order-form-new-addr">
+        <span (click)="generateNewAddress(symbols[0])">{{Localize.text('Generate New {token} Address', 'orderform', {token: symbols[0]})}}</span>
+      </div>
+
       <div class="input-group row">
         <label class="col-4 col-form-label" for="js-taker-address">{{Localize.text('{token} Address', 'orderform', {token: symbols[1]})}}</label>
         <div class="col-8">
@@ -148,6 +152,10 @@
                  tabindex="0"
                  required />
         </div>
+      </div>
+
+      <div *ngIf="autoGenerateAddressesAvailable" class="order-form-new-addr">
+        <span (click)="generateNewAddress(symbols[1])">{{Localize.text('Generate New {token} Address', 'orderform', {token: symbols[1]})}}</span>
       </div>
 
       <div class="input-group row">
