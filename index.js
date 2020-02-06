@@ -13,6 +13,20 @@ const _ = require('lodash');
 const math = require('mathjs');
 const MarkdownIt = require('markdown-it');
 const { Localize } = require('./src-back/localize');
+const { blocknetDir4, blocknetDir3, BLOCKNET_CONF_NAME4, BLOCKNET_CONF_NAME3 } = require('./src-back/constants');
+const { checkAndCopyV3Configs } = require('./src-back/config-updater');
+
+const versionDirectories = [
+  blocknetDir4,
+  blocknetDir3
+];
+const blocknetConfNames = [
+  BLOCKNET_CONF_NAME4,
+  BLOCKNET_CONF_NAME3
+];
+
+const getHomePath = () => app.getPath('home');
+const getDataPath = () => app.getPath('appData');
 
 const fileExists = p => {
   try {
@@ -54,7 +68,8 @@ ipcMain.on('getAppVersion', e => {
 
 let appWindow, serverLocation, sn, keyPair, storage, user, password, port, info, pricingSource, pricingUnit, apiKeys,
   pricingFrequency, enablePricing, sendPricingMultipliers, clearPricingInterval, setPricingInterval,
-  sendMarketPricingEnabled, metaPath, availableUpdate, tradeHistory, myOrders, showWallet, tosWindow, releaseNotesWindow;
+  sendMarketPricingEnabled, metaPath, availableUpdate, tradeHistory, myOrders, showWallet, tosWindow, releaseNotesWindow,
+  latestBlocknetDir, latestConfName;
 let updateError = false;
 
 // Handle explicit quit
@@ -72,6 +87,14 @@ const getManifest = () => {
     const filePath = path.join(configurationFilesDirectory, 'manifest-latest.json');
     manifest = fs.readJsonSync(filePath);
   }
+  const blockIdx = manifest.findIndex(t => t.ticker === 'BLOCK');
+  const blockDirectories = versionDirectories[0];
+  manifest[blockIdx] = Object.assign({}, manifest[blockIdx], {
+    conf_name: blocknetConfNames[0],
+    dir_name_linux: blockDirectories.linux,
+    dir_name_mac: blockDirectories.darwin,
+    dir_name_win: blockDirectories.win32
+  });
   return manifest;
 };
 
@@ -469,12 +492,12 @@ const openConfigurationWindow = (options = {}) => {
 
   ipcMain.removeAllListeners('getHomePath');
   ipcMain.on('getHomePath', e => {
-    e.returnValue = app.getPath('home');
+    e.returnValue = getHomePath();
   });
 
   ipcMain.removeAllListeners('getDataPath');
   ipcMain.on('getDataPath', e => {
-    e.returnValue = app.getPath('appData');
+    e.returnValue = getDataPath();
   });
 
   ipcMain.removeAllListeners('getSelected');
@@ -499,6 +522,8 @@ const openConfigurationWindow = (options = {}) => {
   });
 
 };
+
+const getBaseDataPath = () => (platform === 'win32' || platform === 'darwin') ? getDataPath() : getHomePath();
 
 ipcMain.on('closeConfigurationWindow', e => {
   configurationWindow.close();
@@ -612,9 +637,14 @@ ipcMain.on('getTokenPath', (e, token) => {
 ipcMain.on('setXbridgeConfPath', (e, p = '') => {
   storage.setItem('xbridgeConfPath', p);
 });
+
+const getCustomXbridgeConfPath = () => {
+  return storage.getItem('xbridgeConfPath') || '';
+};
 ipcMain.on('getXbridgeConfPath', (e) => {
-  e.returnValue = storage.getItem('xbridgeConfPath') || '';
+  e.returnValue = getCustomXbridgeConfPath();
 });
+
 ipcMain.on('getUser', e => {
   e.returnValue = storage.getItem('user') || '';
 });
@@ -819,17 +849,9 @@ const openAppWindow = () => {
   });
 
   appWindow.once('show', () => {
-    // version check
-    const err = versionCheck(info['version']);
-    if (err) {
-      handleError(err);
-      // setTimeout(() => app.quit(), 1);
-    }
-
     // Show release notes if newly updated
     const showReleaseNotes = storage.getItem('showReleaseNotes');
     if(showReleaseNotes) openReleaseNotesWindow();
-
   });
 
   appWindow.on('close', () => {
@@ -1623,7 +1645,10 @@ ipcMain.on('generateNewAddresses', async function(e) {
       }
     }
 
+    const upgradedToV4 = storage.getItem('upgradedToV4');
+
     if(!user || !password) {
+      if(!upgradedToV4) storage.setItem('upgradedToV4', true, true);
       await onReady;
       openConfigurationWindow({isFirstRun: true});
       checkForUpdates();
@@ -1634,13 +1659,40 @@ ipcMain.on('generateNewAddresses', async function(e) {
 
     await new Promise(resolve => setTimeout(resolve, 2000));
 
+    let infoErr;
     try {
       info = await sn.getinfo();
     } catch(err) {
-      await onReady;
+      infoErr = err;
+    }
 
+    if(info) {
+
+      if(info.version < 4000000) storage.setItem('upgradedToV4', false, true);
+
+      // version check
+      const versionErr = versionCheck(info.version);
+      if(versionErr) {
+        await electron.dialog.showMessageBox({
+          type: 'info',
+          title: versionErr.name,
+          message: versionErr.message,
+          buttons: [
+            Localize.text('OK', 'universal')
+          ]
+        });
+        return app.quit();
+      }
+    }
+
+    if(!upgradedToV4) storage.setItem('upgradedToV4', true, true);
+
+    if(infoErr && !upgradedToV4) await checkAndCopyV3Configs(getBaseDataPath(), app, Localize, storage);
+
+    if(infoErr) {
+      await onReady;
       checkForUpdates();
-      openConfigurationWindow({ error: err });
+      openConfigurationWindow({ error: infoErr });
       return;
     }
 
@@ -1696,9 +1748,9 @@ function isTokenPairValid(keyPair) {
 }
 
 // check for version number. Minimum supported blocknet client version
-function versionCheck(v) {
-  if (v < 3130200) {
-    return {name: Localize.text('Unsupported Version', 'universal'), message: Localize.text('BLOCK DX requires Blocknet wallet version 3.13.2 or greater.', 'universal')};
+function versionCheck(version) {
+  if (version < 4000000) {
+    return {name: Localize.text('Unsupported Version', 'universal'), message: Localize.text('Block DX requires Blocknet wallet version 4.0.0 or greater.', 'universal')};
   }
   return null;
 }

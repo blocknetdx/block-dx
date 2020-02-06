@@ -53,7 +53,7 @@ class EnterBlocknetCredentials extends RouterView {
               ${col1}
               <div class="${standaloneRPCSettingsUpdate ? 'col2-no-margin' : 'col2'}">
 
-                <p style="${styles.p}">${Localize.text('In order to conduct peer-to-peer trades, Block DX requires access to the <a href="#" class="text-link js-blocknetWalletLink">Blocknet wallet</a>. Please enter the RPC credentials found in <em>blocknetdx.conf</em>.','configurationWindowBlocknetCredentials')}</p>
+                <p style="${styles.p}">${Localize.text('In order to conduct peer-to-peer trades, Block DX requires access to the <a href="#" class="text-link js-blocknetWalletLink">Blocknet wallet</a>. Please enter the RPC credentials found in <em>blocknet.conf</em>.','configurationWindowBlocknetCredentials')}</p>
                 <div class="main-area" style="${styles.mainArea}">
                   <div class="input-group">
                     <label>${Localize.text('Blocknet RPC Port','configurationWindowBlocknetCredentials')}</label>
