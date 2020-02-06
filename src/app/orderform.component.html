@@ -45,10 +45,10 @@
                  (keyup)="amountChanged($event)"
                  (paste)="amountChanged($event)"
                  (blur)="onNumberInputBlur($event, 'amount')"
-                 [value]="model.amount"
+                 [value]="model.amount | localizeDecimalSeparator"
                  class="form-control" name="amount" id="amount"
                  type="text" pattern="\d+" inputmode="numeric"
-                 placeholder="{{formatNumberSymbol0}}"
+                 placeholder="{{formatNumberSymbol0 | localizeDecimalSeparator}}"
                  tabindex="0" />
           <span class="input-group-addon">{{symbols[0]}}</span>
         </div>
@@ -60,7 +60,7 @@
           <input (keyup)="calcPrice($event)"
                  class="form-control" name="limit" id="limit"
                  type="number" step="0.000001" pattern="\d+" inputmode="numeric"
-                 placeholder="{{formatNumberSymbol1}}" />
+                 placeholder="{{formatNumberSymbol1 | localizeDecimalSeparator}}" />
           <span class="input-group-addon">{{symbols[1]}}</span>
         </div>
       </div>
@@ -72,10 +72,10 @@
                  (keyup)="priceChanged($event)"
                  (paste)="priceChanged($event)"
                  (blur)="onNumberInputBlur($event, 'price')"
-                 [value]="model.price"
+                 [value]="model.price | localizeDecimalSeparator"
                  class="form-control" name="amount" id="price"
                  type="text" pattern="\d+" inputmode="numeric"
-                 placeholder="{{formatNumberSymbol1}}"
+                 placeholder="{{formatNumberSymbol1 | localizeDecimalSeparator}}"
                  tabindex="0" />
           <span class="input-group-addon">{{symbols[1]}}</span>
         </div>
@@ -95,11 +95,11 @@
                  (keyup)="secondPriceChanged($event)"
                  (paste)="secondPriceChanged($event)"
                  (blur)="onNumberInputBlur($event, 'secondPrice')"
-                 [value]="pricingAvailable ? model.secondPrice : ''"
+                 [value]="!pricingAvailable ? '' : (model.secondPrice  | localizeDecimalSeparator)"
                  [class.order-form-total-input]="!pricingAvailable"
                  class="form-control" name="amount" id="price2"
                  type="text" pattern="\d+" inputmode="numeric"
-                 [placeholder]="!pricingAvailable ? 'N/A' : formatNumberSymbol1"
+                 [placeholder]="!pricingAvailable ? 'N/A' : (formatNumberSymbol1 | localizeDecimalSeparator)"
                  tabindex="0" />
           <span class="input-group-addon">{{pricing ? pricing.in : ''}}</span>
         </div>
@@ -112,8 +112,8 @@
                  class="form-control order-form-total-input"
                  name="total" id="total_calc" type="text"
                  step="0.000001" pattern="\d+" inputmode="numeric"
-                 placeholder="{{formatNumberSymbol1}}"
-                 [value]="model.totalPrice"
+                 placeholder="{{formatNumberSymbol1 | localizeDecimalSeparator}}"
+                 [value]="model.totalPrice | localizeDecimalSeparator"
                  tabindex="-1"
                  readonly />
           <span class="input-group-addon">{{symbols[1]}}</span>
