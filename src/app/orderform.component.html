@@ -65,24 +65,8 @@
         </div>
       </div>
 
-      <div class="input-group row">
-        <label class="col-4 col-form-label" for="amount"><Localize context="orderform" key="Price"></Localize></label>
-        <div class="col-8">
-          <input #priceInput
-                 (keyup)="priceChanged($event)"
-                 (paste)="priceChanged($event)"
-                 (blur)="onNumberInputBlur($event, 'price')"
-                 [value]="model.price | localizeDecimalSeparator"
-                 class="form-control" name="amount" id="price"
-                 type="text" pattern="\d+" inputmode="numeric"
-                 placeholder="{{formatNumberSymbol1 | localizeDecimalSeparator}}"
-                 tabindex="0" />
-          <span class="input-group-addon">{{symbols[1]}}</span>
-        </div>
-      </div>
-
       <div class="input-group row" *ngIf="pricingEnabled && !shouldHidePricing(symbols)">
-        <label class="col-4 col-form-label" for="amount"><Localize context="orderform" key="Price"></Localize></label>
+        <label class="col-4 col-form-label" for="amount">{{pricing ? pricing.in : ''}}  <Localize context="orderform" key="Price"></Localize></label>
         <div class="col-8">
           <input disabled
                  *ngIf="!pricingAvailable"
@@ -102,6 +86,22 @@
                  [placeholder]="!pricingAvailable ? 'N/A' : (formatNumberSymbol1 | localizeDecimalSeparator)"
                  tabindex="0" />
           <span class="input-group-addon">{{pricing ? pricing.in : ''}}</span>
+        </div>
+      </div>
+
+      <div class="input-group row">
+        <label class="col-4 col-form-label" for="amount">{{symbols[1]}} <Localize context="orderform" key="Price"></Localize></label>
+        <div class="col-8">
+          <input #priceInput
+                 (keyup)="priceChanged($event)"
+                 (paste)="priceChanged($event)"
+                 (blur)="onNumberInputBlur($event, 'price')"
+                 [value]="model.price | localizeDecimalSeparator"
+                 class="form-control" name="amount" id="price"
+                 type="text" pattern="\d+" inputmode="numeric"
+                 placeholder="{{formatNumberSymbol1 | localizeDecimalSeparator}}"
+                 tabindex="0" />
+          <span class="input-group-addon">{{symbols[1]}}</span>
         </div>
       </div>
 
