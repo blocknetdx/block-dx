@@ -87,6 +87,25 @@ form {
   margin-bottom: 10px;
 }
 
+.order-form-new-addr {
+  line-height: 26px;
+  vertical-align: center;
+  font-family: "Open Sans", sans-serif;
+  font-size: 12px;
+  width: 100%;
+  padding-right: 5px;
+  margin-bottom: 1px;
+  margin-top: 0px;
+  text-align: right;
+  text-decoration: underline;
+  color: rgba(255,255,255,0.9);
+}
+
+.order-form-new-addr span {
+  cursor: pointer;
+}
+
+
 //$popper-color: #f33;
 //.popper {
 //  opacity: .8;

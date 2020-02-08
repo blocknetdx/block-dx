@@ -66,10 +66,25 @@ class SimpleStorage {
     return obj;
   }
 
-  removeItem(key) {
+  removeItem(key, saveSync = false) {
     const newData = omit(this._data, [key]);
     this._data = newData;
-    this.saveData();
+    if(saveSync) {
+      this.saveDataSync();
+    } else {
+      this.saveData();
+    }
+    return;
+  }
+
+  removeItems(keys, saveSync = false) {
+    const newData = omit(this._data, keys);
+    this._data = newData;
+    if(saveSync) {
+      this.saveDataSync();
+    } else {
+      this.saveData();
+    }
     return;
   }
 

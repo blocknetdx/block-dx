@@ -1,9 +1,9 @@
 import { Component, Input, ViewEncapsulation, OnInit, NgZone } from '@angular/core';
-
 import { AppService } from '../app.service';
 import { Currentprice } from '../currentprice';
 import { CurrentpriceService } from '../currentprice.service';
 import {NumberFormatPipe} from '../pipes/decimal.pipe';
+import {Localize} from '../localize/localize.component';
 
 @Component({
   selector: 'app-nav-bar',
@@ -12,6 +12,7 @@ import {NumberFormatPipe} from '../pipes/decimal.pipe';
   encapsulation: ViewEncapsulation.None
 })
 export class NavBarComponent implements OnInit {
+
   public symbols: string[];
   public currentPrice: Currentprice;
 
@@ -20,6 +21,8 @@ export class NavBarComponent implements OnInit {
 
   public appName: string;
   public appVersion: string;
+
+  public Localize = Localize;
 
   constructor(
     private appService: AppService,
@@ -86,13 +89,13 @@ export class NavBarComponent implements OnInit {
         case 'available':
           break;
         case 'downloading':
-          alert('An update is currently being downloaded in the background and can take a few minutes. A prompt will appear when complete.');
+          alert(this.Localize.text('An update is currently being downloaded in the background and can take a few minutes. A prompt will appear when complete.', 'navbar'));
           break;
         case 'downloaded':
           // alert('Update has been downloaded and will be installed once you restart the application.');
           break;
         default:
-          alert('There are no Block DX updates available at this time.');
+          alert(this.Localize.text('There are no Block DX updates available at this time.', 'navbar'));
       }
       this.toggleNav();
     }

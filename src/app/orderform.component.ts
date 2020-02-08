@@ -9,10 +9,21 @@ import { OrderbookService } from './orderbook.service';
 import { TabViewComponent } from './tab-view/tab-view.component';
 import { SelectComponent } from './select/select.component';
 import {NumberFormatPipe} from './pipes/decimal.pipe';
+import { LocalizeDecimalSeparatorPipe } from './localize/localize-decimal-separator.pipe';
 import { PricingService } from './pricing.service';
 import { Pricing } from './pricing';
 import {ConfigurationOverlayService} from './configuration.overlay.service';
 import { shouldHidePricing } from './util';
+import {Localize} from './localize/localize.component';
+
+const delocalize = (numStr = '') => {
+  const decimalSeparator = Localize.decimalSeparator();
+  return decimalSeparator === '.' ? numStr : numStr.replace(decimalSeparator, '.');
+};
+const relocalize = (numStr = '') => {
+  const decimalSeparator = Localize.decimalSeparator();
+  return numStr.replace('.', decimalSeparator);
+};
 
 math.config({
   number: 'BigNumber',
@@ -59,6 +70,7 @@ export class OrderformComponent implements OnInit {
   public pricingEnabled = true;
   public pricingAvailable = true;
   public showConfigurationOverlay = false;
+  public autoGenerateAddressesAvailable = true;
 
   shouldHidePricing = shouldHidePricing;
 
@@ -72,10 +84,20 @@ export class OrderformComponent implements OnInit {
     private zone: NgZone
   ) { }
 
+  public Localize = Localize;
+
   ngOnInit() {
     this.model = {};
 
-    this.addresses = window.electron.ipcRenderer.sendSync('getAddressesSync');
+    const { ipcRenderer } = window.electron;
+
+    this.autoGenerateAddressesAvailable = ipcRenderer.sendSync('autoGenerateAddressesAvailable');
+
+    this.addresses = ipcRenderer.sendSync('getAddressesSync');
+    ipcRenderer.on('updatedAddresses', (e, addresses) => {
+      this.addresses = addresses;
+      this.resetModel();
+    });
 
     this.appService.marketPairChanges.subscribe((symbols) => {
       this.symbols = symbols;
@@ -204,16 +226,17 @@ export class OrderformComponent implements OnInit {
     } else {
       amount = e.target.value;
     }
+    amount = delocalize(amount);
     amount = amount === '.' ? '0.' : amount;
     const { price = '' } = this.model;
     const [ valid, skipPopper = false ] = this.validAmount(amount);
     let fixed;
     if(!valid) {
       fixed = this.fixAmount(amount);
-      if(!skipPopper) this.showPopper('amount', 'You can only specify amounts with at most 6 decimal places.', 5000);
-      e.target.value = fixed;
+      if(!skipPopper) this.showPopper('amount', Localize.text('You can only specify amounts with at most 6 decimal places.', 'orderform'), 5000);
+      e.target.value = relocalize(fixed);
     } else if(e.type === 'paste') {
-      e.target.value = amount;
+      e.target.value = relocalize(amount);
     }
     if(!amount) {
       this.model.totalPrice = '';
@@ -230,6 +253,7 @@ export class OrderformComponent implements OnInit {
 
   priceChanged(e) {
     e.preventDefault();
+    const decimalSeparator = Localize.decimalSeparator();
     const type = this.tabView.activeIndex === 0 ? 'buy' : 'sell';
     this.model.id = '';
     let price;
@@ -238,18 +262,19 @@ export class OrderformComponent implements OnInit {
     } else {
       price = e.target.value;
     }
+    price = delocalize(price);
     price = price === '.' ? '0.' : price;
     const { amount = '', totalPrice = '' } = this.model;
     const [ valid, skipPopper = false ] = this.validAmount(price);
     let fixed;
     if(!valid) {
       fixed = this.fixAmount(price);
-      if(!skipPopper) this.showPopper('price', 'You can only specify amounts with at most 6 decimal places.', 5000);
-      e.target.value = fixed;
+      if(!skipPopper) this.showPopper('price', Localize.text('You can only specify amounts with at most 6 decimal places.', 'orderform'), 5000);
+      e.target.value = relocalize(fixed);
     } else if(e.type === 'paste') {
-      e.target.value = price;
+      e.target.value = relocalize(price);
     }
-    const numeric = new Set(['0','1','2','3','4','5','6','7','8','9','.','Decimal','Backspace']);
+    const numeric = new Set(['0','1','2','3','4','5','6','7','8','9','.','Decimal','Backspace', decimalSeparator]);
     if (!numeric.has(e.key)) return; // do not calculate price if not a numeric key
     if(!price) {
       this.model.totalPrice = '';
@@ -268,6 +293,7 @@ export class OrderformComponent implements OnInit {
 
   secondPriceChanged(e) {
     e.preventDefault();
+    const decimalSeparator = Localize.decimalSeparator();
     const type = this.tabView.activeIndex === 0 ? 'buy' : 'sell';
     this.model.id = '';
     let secondPrice;
@@ -276,18 +302,19 @@ export class OrderformComponent implements OnInit {
     } else {
       secondPrice = e.target.value;
     }
+    secondPrice = delocalize(secondPrice);
     secondPrice = secondPrice === '.' ? '0.' : secondPrice;
     const { amount = '', totalPrice = '' } = this.model;
     const [ valid, skipPopper = false ] = this.validAmount(secondPrice);
     let fixed;
     if(!valid) {
       fixed = this.fixAmount(secondPrice);
-      if(!skipPopper) this.showPopper('secondPrice', 'You can only specify amounts with at most 6 decimal places.', 5000);
-      e.target.value = fixed;
+      if(!skipPopper) this.showPopper('secondPrice', Localize.text('You can only specify amounts with at most 6 decimal places.', 'orderform'), 5000);
+      e.target.value = relocalize(fixed);
     } else if(e.type === 'paste') {
-      e.target.value = secondPrice;
+      e.target.value = relocalize(secondPrice);
     }
-    const numeric = new Set(['0','1','2','3','4','5','6','7','8','9','.','Decimal','Backspace']);
+    const numeric = new Set(['0','1','2','3','4','5','6','7','8','9','.','Decimal','Backspace', decimalSeparator]);
     if (!numeric.has(e.key)) return; // do not calculate price if not a numeric key
     if(!secondPrice) {
       this.model.totalPrice = '';
@@ -325,7 +352,8 @@ export class OrderformComponent implements OnInit {
   }
 
   onNumberInputBlur(e, field) {
-    const { value } = e.target;
+    let { value } = e.target;
+    value = delocalize(value);
     const emptyOrZero = (s => /^0*\.?0*$/.test(s) || /^\s*$/.test(s));
     if (value === '.' || emptyOrZero(value)) {
       this.model[field] = '';
@@ -391,19 +419,19 @@ export class OrderformComponent implements OnInit {
     }
 
     if(!amount) {
-      alert('Oops! You must enter an amount.');
+      alert(Localize.text('Oops! You must enter an amount.', 'orderform'));
       return;
     } else if(!totalPrice) {
-      alert('Oops! You must enter a price.');
+      alert(Localize.text('Oops! You must enter a price.', 'orderform'));
       return;
     } else if(!makerAddress) {
-      alert(`Oops! You must enter a ${this.symbols[0]} address.`);
+      alert(Localize.text('Oops! You must enter a {token} address.', 'orderform', {token: this.symbols[0]}));
       return;
     } else if(!takerAddress) {
-      alert(`Oops! You must enter a ${this.symbols[1]} address.`);
+      alert(Localize.text('Oops! You must enter a {token} address.', 'orderform', {token: this.symbols[1]}));
       return;
     } else if(makerAddress === takerAddress) {
-      alert(`Oops! You have the same address entered for both ${this.symbols[0]} and ${this.symbols[1]}.`);
+      alert(Localize.text('Oops! You have the same address entered for both {token0} and {token1}.', 'orderform', {token0: this.symbols[0], token1: this.symbols[1]}));
       return;
     }
 
@@ -492,4 +520,7 @@ export class OrderformComponent implements OnInit {
     window.electron.ipcRenderer.send('openConfigurationWizard');
   }
 
+  generateNewAddress(token) {
+    window.electron.ipcRenderer.send('generateNewAddress', token);
+  }
 }

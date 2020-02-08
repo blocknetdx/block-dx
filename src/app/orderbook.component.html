@@ -3,7 +3,7 @@
   <div class="orderbook-table-outer-container-top" [style.display]="showBuyOrders ? 'none' : 'block'">
 
 
-    <div *ngIf="sections[0].rows.length === 0" class="no-open-orders-message-top">No sell orders.</div>
+    <div *ngIf="sections[0].rows.length === 0" class="no-open-orders-message-top"><Localize context="orderbook" key="No sell orders."></Localize></div>
 
     <app-table #orderbookTopTable
                [noPadding]="true"
@@ -13,58 +13,58 @@
                (onRowContextMenu)="onRowContextMenu($event)">
 
       <app-table-column [sortable]="false" [classList]="'col'">
-        <ng-template columnHeader>Size ({{symbols[0]}})</ng-template>
+        <ng-template columnHeader><Localize context="orderbook" key="Size"></Localize> ({{symbols[0]}})</ng-template>
         <ng-template let-row="row" columnCell>
           <span class="bn-number no-highlight"
            [class.orderbook-own-order]="ownOrders.has(row[2])"
-           [innerHtml]="row[1] | blockCurrency:symbols[0]:'6'"
-           [title]="ownOrders.has(row[2]) ? 'Your order' : ''">
+           [innerHtml]="row[1] | blockCurrency:symbols[0]:'6' | localizeDecimalSeparator"
+           [title]="ownOrders.has(row[2]) ? Localize.text('Your order', 'orderbook') : ''">
           </span>
         </ng-template>
       </app-table-column>
 
       <app-table-column [sortable]="false" [classList]="'col'" *ngIf="pricingEnabled && !shouldHidePricing(symbols)">
-        <ng-template columnHeader>Price ({{pricing ? pricing.in : ''}})</ng-template>
+        <ng-template columnHeader><Localize context="orderbook" key="Price"></Localize> ({{pricing ? pricing.in : ''}})</ng-template>
         <ng-template let-row="row" columnCell>
           <span class="no-highlight"
            [class.orderbook-own-order]="ownOrders.has(row[2])"
            [class.color-red]="row[4] == 'ask'"
            [class.color-green]="row[4] == 'bid'"
-           [title]="ownOrders.has(row[2]) ? 'Your order' : ''">
+           [title]="ownOrders.has(row[2]) ? Localize.text('Your order', 'orderbook') : ''">
             <span *ngIf="!pricingAvailable" class="bn-number">N/A</span>
-            <span *ngIf="pricingAvailable" class="bn-number" [title]="row[8] | blockCurrency:symbols[1]:8: true" [innerHtml]="row[8] | blockCurrency:symbols[1]:priceDecimal"></span>
+            <span *ngIf="pricingAvailable" class="bn-number" [title]="row[8] | blockCurrency:symbols[1]:8: true | localizeDecimalSeparator" [innerHtml]="row[8] | blockCurrency:symbols[1]:priceDecimal | localizeDecimalSeparator"></span>
           </span>
         </ng-template>
       </app-table-column>
 
       <app-table-column [sortable]="false" [classList]="'col'">
-        <ng-template columnHeader>Price ({{symbols[1]}})</ng-template>
+        <ng-template columnHeader><Localize context="orderbook" key="Price"></Localize> ({{symbols[1]}})</ng-template>
         <ng-template let-row="row" columnCell>
           <span class="no-highlight"
            [class.orderbook-own-order]="ownOrders.has(row[2])"
            [class.color-red]="row[4] == 'ask'"
            [class.color-green]="row[4] == 'bid'"
-           [title]="ownOrders.has(row[2]) ? 'Your order' : ''">
-            <span class="bn-number" [innerHtml]="row[0] | blockCurrency:symbols[1]:priceDecimal"></span>
+           [title]="ownOrders.has(row[2]) ? Localize.text('Your order', 'orderbook') : ''">
+            <span class="bn-number" [innerHtml]="row[0] | blockCurrency:symbols[1]:priceDecimal | localizeDecimalSeparator"></span>
           </span>
         </ng-template>
       </app-table-column>
 
       <app-table-column [sortable]="false" [classList]="'col'">
-        <ng-template columnHeader>Total ({{symbols[1]}})</ng-template>
+        <ng-template columnHeader><Localize context="orderbook" key="Total"></Localize> ({{symbols[1]}})</ng-template>
         <ng-template let-row="row" columnCell>
           <div class="percentBar red-bar"
              [ngStyle]="{'width.%': row[6]}">
           </div>
-          <div *ngIf="ownOrders.has(row[2]) == true" class="orderbook-own-order-highlight" title="Your order"
+          <div *ngIf="ownOrders.has(row[2]) == true" class="orderbook-own-order-highlight" title="{{Localize.text('Your order', 'orderbook')}}"
              [ngStyle]="{'width.%': 100}">
             <span class="orderbook-own-order-dot"></span>
           </div>
           <span>
             <span class="bn-number no-highlight"
              [class.orderbook-own-order]="ownOrders.has(row[2])"
-             [innerHTML]="row[5] | blockCurrency:symbols[1]:'6'"
-             [title]="ownOrders.has(row[2]) ? 'Your order' : ''">
+             [innerHTML]="row[5] | blockCurrency:symbols[1]:'6' | localizeDecimalSeparator"
+             [title]="ownOrders.has(row[2]) ? Localize.text('Your order', 'orderbook') : ''">
             </span>
           </span>
         </ng-template>
@@ -75,23 +75,23 @@
   </div>
 
   <div class="orderbook-divider">
-    <span class="spread-container spread">Spread</span>
+    <span class="spread-container spread"><Localize context="orderbook" key="Spread"></Localize></span>
     <span class="spread-container" *ngIf="pricingAvailable && pricingEnabled && !shouldHidePricing(symbols)">
-      <span *ngIf="showSpread && pricingAvailable" [title]="pricingSpread | blockCurrency:symbols[1]:8: true" [innerHtml]="pricingSpread | blockCurrency:symbols[1]:priceDecimal"></span>
-      <span *ngIf="showSpread && !pricingAvailable">N/A</span>
-      <span *ngIf="!showSpread" [innerHtml]="'0' | blockCurrency:symbols[1]:priceDecimal"></span>
+      <span *ngIf="showSpread && pricingAvailable" [title]="pricingSpread | blockCurrency:symbols[1]:8: true | localizeDecimalSeparator" [innerHtml]="pricingSpread | blockCurrency:symbols[1]:priceDecimal | localizeDecimalSeparator"></span>
+      <span *ngIf="showSpread && !pricingAvailable"><Localize context="orderbook" key="N/A"></Localize></span>
+      <span *ngIf="!showSpread" [innerHtml]="'0' | blockCurrency:symbols[1]:priceDecimal | localizeDecimalSeparator"></span>
     </span>
     <span class="spread-container" *ngIf="!pricingAvailable && pricingEnabled && !shouldHidePricing(symbols)"></span>
     <span class="spread-container">
-      <span *ngIf="showSpread" [innerHtml]="spread | blockCurrency:symbols[1]:priceDecimal"></span>
-      <span *ngIf="!showSpread" [innerHtml]="'0' | blockCurrency:symbols[1]:priceDecimal"></span>
+      <span *ngIf="showSpread" [innerHtml]="spread | blockCurrency:symbols[1]:priceDecimal | localizeDecimalSeparator"></span>
+      <span *ngIf="!showSpread" [innerHtml]="'0' | blockCurrency:symbols[1]:priceDecimal | localizeDecimalSeparator"></span>
     </span>
     <span class="spread-container"></span>
   </div>
 
   <div class="orderbook-table-outer-container-bottom" [style.display]="showSellOrders ? 'none' : 'block'" [style.height]="showBuyOrders ? 'calc(100% - 22px)' : 'calc(50% - 22px)'">
 
-    <div *ngIf="sections[1].rows.length === 0" class="no-open-orders-message-bottom">No buy orders.</div>
+    <div *ngIf="sections[1].rows.length === 0" class="no-open-orders-message-bottom"><Localize context="orderbook" key="No buy orders."></Localize></div>
 
     <div class="orderbook-table-container">
       <app-table #orderbookBottomTable
@@ -107,8 +107,8 @@
           <ng-template let-row="row" columnCell>
             <span class="bn-number no-highlight"
              [class.orderbook-own-order]="ownOrders.has(row[2])"
-             [innerHtml]="row[1] | blockCurrency:symbols[0]:'6'"
-             [title]="ownOrders.has(row[2]) ? 'Your order' : ''">
+             [innerHtml]="row[1] | blockCurrency:symbols[0]:'6' | localizeDecimalSeparator"
+             [title]="ownOrders.has(row[2]) ? Localize.text('Your order', 'orderbook') : ''">
             </span>
           </ng-template>
         </app-table-column>
@@ -120,9 +120,9 @@
              [class.orderbook-own-order]="ownOrders.has(row[2])"
              [class.color-red]="row[4] == 'ask'"
              [class.color-green]="row[4] == 'bid'"
-             [title]="ownOrders.has(row[2]) ? 'Your order' : ''">
+             [title]="ownOrders.has(row[2]) ? Localize.text('Your order', 'orderbook') : ''">
               <span *ngIf="!pricingAvailable" class="bn-number">N/A</span>
-              <span *ngIf="pricingAvailable" class="bn-number" [title]="row[8] | blockCurrency:symbols[1]:8: true" [innerHtml]="row[8] | blockCurrency:symbols[1]:priceDecimal"></span>
+              <span *ngIf="pricingAvailable" class="bn-number" [title]="row[8] | blockCurrency:symbols[1]:8: true | localizeDecimalSeparator" [innerHtml]="row[8] | blockCurrency:symbols[1]:priceDecimal | localizeDecimalSeparator"></span>
             </span>
           </ng-template>
         </app-table-column>
@@ -134,8 +134,8 @@
              [class.orderbook-own-order]="ownOrders.has(row[2])"
              [class.color-red]="row[4] == 'ask'"
              [class.color-green]="row[4] == 'bid'"
-             [title]="ownOrders.has(row[2]) ? 'Your order' : ''">
-              <span class="bn-number" [innerHtml]="row[0] | blockCurrency:symbols[1]:priceDecimal"></span>
+             [title]="ownOrders.has(row[2]) ? Localize.text('Your order', 'orderbook') : ''">
+              <span class="bn-number" [innerHtml]="row[0] | blockCurrency:symbols[1]:priceDecimal | localizeDecimalSeparator"></span>
             </span>
           </ng-template>
         </app-table-column>
@@ -146,15 +146,15 @@
             <div class="percentBar green-bar"
                [ngStyle]="{'width.%': row[6]}">
             </div>
-            <div *ngIf="ownOrders.has(row[2]) == true" class="orderbook-own-order-highlight" title="Your order"
+            <div *ngIf="ownOrders.has(row[2]) == true" class="orderbook-own-order-highlight" title="{{Localize.text('Your order', 'orderbook')}}"
              [ngStyle]="{'width.%': 100}">
               <span class="orderbook-own-order-dot"></span>
             </div>
             <span>
               <span class="bn-number no-highlight"
                [class.orderbook-own-order]="ownOrders.has(row[2])"
-               [innerHTML]="row[5] | blockCurrency:symbols[1]:'6'"
-               [title]="ownOrders.has(row[2]) ? 'Your order' : ''">
+               [innerHTML]="row[5] | blockCurrency:symbols[1]:'6' | localizeDecimalSeparator"
+               [title]="ownOrders.has(row[2]) ? Localize.text('Your order', 'orderbook') : ''">
               </span>
             </span>
           </ng-template>
@@ -165,8 +165,8 @@
   </div>
 
   <div class="orderbook-configuration-message-overlay" *ngIf="showConfigurationOverlay">
-    <p>In order to trade this market, the wallets for both assets must be configured for trading, opened, and unlocked.</p>
-    <button class="orderbook-open-configuration-button" type="button" (click)="openConfigurationWindow()">Open Configuration</button>
+    <p><Localize context="orderbook" key="In order to trade this market, the wallets for both assets must be configured for trading, opened, and unlocked."></Localize></p>
+    <button class="orderbook-open-configuration-button" type="button" (click)="openConfigurationWindow()"><Localize context="orderbook" key="Open Configuration"></Localize></button>
   </div>
 
 </div>

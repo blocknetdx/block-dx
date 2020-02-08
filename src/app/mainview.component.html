@@ -3,42 +3,42 @@
   <!-- Desktop -->
   <div class="row" *isBp="['lg', 'xl']">
 
-    <app-big-tooltip title="Balances" [show]="showBalancesTooltip">
+    <app-big-tooltip title="{{Localize.text('Balances', 'mainview')}}" [show]="showBalancesTooltip">
       <ul>
-        <li><strong>Balances only show for connected wallets.</strong><br>If you did not connect the wallet, in the right sidebar menu select the Add & Update Wallets link.</li>
-        <li><strong>Balances only show available funds.</strong><br>If UTXOs are locked in the wallet, or used in trades, then they will not count towards the balance.</li>
-        <li><strong>Balances only show funds in legacy addresses.</strong><br>If you are using a Segwit address, please create a new address to send the funds to. A legacy address will automatically be created when generating a new address.</li>
-        <li><strong>Balances do not show staked funds.</strong><br>If you have been staking, please send the funds to a new address for them to register.</li>
+        <li><strong><Localize context="mainview" key="Balances only show for connected wallets."></Localize></strong><br><Localize context="mainview" key="If you did not connect the wallet, in the right sidebar menu select the Add & Update Wallets link."></Localize></li>
+        <li><strong><Localize context="mainview" key="Balances only show available funds."></Localize></strong><br><Localize context="mainview" key="If UTXOs are locked in the wallet, or used in trades, then they will not count towards the balance."></Localize></li>
+        <li><strong><Localize context="mainview" key="Balances only show funds in legacy addresses."></Localize></strong><br><Localize context="mainview" key="If you are using a Segwit address, please create a new address to send the funds to. A legacy address will automatically be created when generating a new address."></Localize></li>
+        <li><strong><Localize context="mainview" key="Balances do not show staked funds."></Localize></strong><br><Localize context="mainview" key="If you have been staking, please send the funds to a new address for them to register."></Localize></li>
       </ul>
     </app-big-tooltip>
-    <app-big-tooltip title="Order Form" [show]="showOrderFormTooltip">
+    <app-big-tooltip title="{{Localize.text('Order Form', 'mainview')}}" [show]="showOrderFormTooltip">
       <ul>
-        <li><strong>Block DX uses "Exact" orders.</strong><br>At the moment Block DX only supports "Exact" orders, meaning that an order must be taken for the full amount. If you are a maker, you may want to place multiple smaller orders instead of one large order. If you are a taker, multiple orders cannot be combined and taken as a single order with this order type. Market and Limit orders will be supported in a future release.</li>
-        <li><strong>Only assets of connected wallets can be traded.</strong><br>If you did not connect the wallet, in the right sidebar menu select the Add & Update Wallets link.</li>
-        <li><strong>Trading wallets must remain online and unlocked.</strong><br>Since trading is peer-to-peer, you must have the wallet of each traded asset installed, open, synced, unlocked, and online for the duration of the trade. This also applies to the Blocknet wallet since it's used to facilitate even non-BLOCK orders.</li>
-        <li><strong>Place orders using BTC pricing.</strong><br>You can place orders based off BTC pricing, which is more familiar. To enable this capability, from the sidebar menu select General Settings.</li>
+        <li><strong><Localize context="mainview" key='Block DX uses "Exact" orders.'></Localize></strong><br><Localize context="mainview" key='At the moment Block DX only supports "Exact" orders, meaning that an order must be taken for the full amount. If you are a maker, you may want to place multiple smaller orders instead of one large order. If you are a taker, multiple orders cannot be combined and taken as a single order with this order type. Market and Limit orders will be supported in a future release.'></Localize></li>
+        <li><strong><Localize context="mainview" key="Only assets of connected wallets can be traded."></Localize></strong><br><Localize context="mainview" key="If you did not connect the wallet, in the right sidebar menu select the Add & Update Wallets link."></Localize></li>
+        <li><strong><Localize context="mainview" key="Trading wallets must remain online and unlocked."></Localize></strong><br><Localize context="mainview" key="Since trading is peer-to-peer, you must have the wallet of each traded asset installed, open, synced, unlocked, and online for the duration of the trade. This also applies to the Blocknet wallet since it's used to facilitate even non-BLOCK orders."></Localize></li>
+        <li><strong><Localize context="mainview" key="Place orders using BTC pricing."></Localize></strong><br><Localize context="mainview" key="You can place orders based off BTC pricing, which is more familiar. To enable this capability, from the sidebar menu select General Settings."></Localize></li>
       </ul>
     </app-big-tooltip>
-    <app-big-tooltip title="Order Book" [show]="showOrderBookTooltip">
+    <app-big-tooltip title="{{Localize.text('Order Book', 'mainview')}}" [show]="showOrderBookTooltip">
       <ul>
         <!-- <li><strong>Block DX uses "Exact" orders.</strong><br>At the moment Block DX only supports "Exact" orders, meaning that an order must be taken for the full amount. Multiple orders also cannot be combined and taken as a single order with this order type. Market and Limit orders will be supported in a future release.</li> -->
-        <li><strong>Only assets of connected wallets can be traded.</strong><br>If you did not connect the wallet, in the right sidebar menu select the Add & Update Wallets link.</li>
-        <li><strong>Trading wallets must remain online and unlocked.</strong><br>Since trading is peer-to-peer, you must have the wallet of each traded asset installed, open, synced, unlocked, and online for the duration of the trade. This also applies to the Blocknet wallet since it's used to facilitate the orders.</li>
-        <li><strong>Orders take up to 10 min to populate.</strong><br>After initially opening the wallets of the assets traded, it can take up to 10 minutes for all the orders to load. After the initial load, orders arrive as they're created.</li>
-        <li><strong>View orders in BTC pricing.</strong><br>You can view orders based off BTC pricing, which is more familiar. To enable this capability, from the sidebar menu select General Settings.</li>
-        <li><strong>White dots indicate the order is yours.</strong><br>Some orders may have a white dot to the left of them. This indicates it's an order you created.</li>
+        <li><strong><Localize context="mainview" key="Only assets of connected wallets can be traded."></Localize></strong><br><Localize context="mainview" key="If you did not connect the wallet, in the right sidebar menu select the Add & Update Wallets link."></Localize></li>
+        <li><strong><Localize context="mainview" key="Trading wallets must remain online and unlocked."></Localize></strong><br><Localize context="mainview" key="Since trading is peer-to-peer, you must have the wallet of each traded asset installed, open, synced, unlocked, and online for the duration of the trade. This also applies to the Blocknet wallet since it's used to facilitate the orders."></Localize></li>
+        <li><strong><Localize context="mainview" key="Orders take up to 10 min to populate."></Localize></strong><br><Localize context="mainview" key="After initially opening the wallets of the assets traded, it can take up to 10 minutes for all the orders to load. After the initial load, orders arrive as they're created."></Localize></li>
+        <li><strong><Localize context="mainview" key="View orders in BTC pricing."></Localize></strong><br><Localize context="mainview" key="You can view orders based off BTC pricing, which is more familiar. To enable this capability, from the sidebar menu select General Settings."></Localize></li>
+        <li><strong><Localize context="mainview" key="White dots indicate the order is yours."></Localize></strong><br><Localize context="mainview" key="Some orders may have a white dot to the left of them. This indicates it's an order you created."></Localize></li>
       </ul>
     </app-big-tooltip>
-    <app-big-tooltip title="Active/Inactive Orders" [show]="showActiveInactiveOrderTooltip" (mouseenter)="activeInactiveOrderTooltip2(true)" (mouseleave)="activeInactiveOrderTooltip2(false)">
+    <app-big-tooltip title="{{Localize.text('Active/Inactive Orders', 'mainview')}}" [show]="showActiveInactiveOrderTooltip" (mouseenter)="activeInactiveOrderTooltip2(true)" (mouseleave)="activeInactiveOrderTooltip2(false)">
       <ul >
-        <li><strong>Clear Inactive Button</strong><br>The Clear Inactive button on the Inactive Orders tab removes canceled orders.</li>
-        <li><strong>Refunding failed trades</strong><br>For failed in-progress trades, the funds will be automatically returned in 30 minutes for the taker and 2 hours for the maker.</li>
+        <li><strong><Localize context="mainview" key="Clear Inactive Button"></Localize></strong><br><Localize context="mainview" key="The Clear Inactive button on the Inactive Orders tab removes canceled orders."></Localize></li>
+        <li><strong><Localize context="mainview" key="Refunding failed trades"></Localize></strong><br><Localize context="mainview" key="For failed in-progress trades, the funds will be automatically returned in 30 minutes for the taker and 2 hours for the maker."></Localize></li>
       </ul>
       <table>
         <tr>
-          <th>Status</th>
-          <th>Type</th>
-          <th>Description</th>
+          <th><Localize context="mainview" key="Status"></Localize></th>
+          <th><Localize context="mainview" key="Type"></Localize></th>
+          <th><Localize context="mainview" key="Description"></Localize></th>
         </tr>
         <tr>
           <td>
@@ -55,43 +55,43 @@
                 </circle></g>
               </svg>
             </div></td>
-          <td>Active</td>
-          <td><em>Creating</em> - The order is being broadcasted to the network.</td>
+          <td><Localize context="mainview" key="Active"></Localize></td>
+          <td><em><Localize context="mainview" key="Creating"></Localize></em> - <Localize context="mainview" key="The order is being broadcasted to the network."></Localize></td>
         </tr>
         <tr>
-          <td><div class="order-status status-open">Open</div></td>
-          <td>Active</td>
-          <td><em>Open</em> - The order is live and open (not taken).</td>
+          <td><div class="order-status status-open"><Localize context="mainview" key="Open"></Localize></div></td>
+          <td><Localize context="mainview" key="Active"></Localize></td>
+          <td><em><Localize context="mainview" key="Open"></Localize></em> - <Localize context="mainview" key="The order is live and open (not taken)."></Localize></td>
         </tr>
         <tr>
           <td><div class="order-status status-process">1/5</div></td>
-          <td>Active</td>
-          <td><em>Accepting</em> - Attempting to take the order and connecting to the counter party.</td>
+          <td><Localize context="mainview" key="Active"></Localize></td>
+          <td><em><Localize context="mainview" key="Accepting"></Localize></em> - <Localize context="mainview" key=" Attempting to take the order and connecting to the counter party."></Localize></td>
         </tr>
         <tr>
           <td><div class="order-status status-process">2/5</div></td>
-          <td>Active</td>
-          <td><em>Hold</em> -  Waiting for the counter party to respond.</td>
+          <td><Localize context="mainview" key="Active"></Localize></td>
+          <td><em><Localize context="mainview" key="Hold"></Localize></em> - <Localize context="mainview" key="Waiting for the counter party to respond."></Localize></td>
         </tr>
         <tr>
           <td><div class="order-status status-process">3/5</div></td>
-          <td>Active</td>
-          <td><em>Accepted</em> - The counter party has agreed to trade.</td>
+          <td><Localize context="mainview" key="Active"></Localize></td>
+          <td><em><Localize context="mainview" key="Accepted"></Localize></em> - <Localize context="mainview" key="The counter party has agreed to trade."></Localize></td>
         </tr>
         <tr>
           <td><div class="order-status status-process">4/5</div></td>
-          <td>Active</td>
-          <td><em>Exchanging</em> - The funds are in the process of being exchanged.</td>
+          <td><Localize context="mainview" key="Active"></Localize></td>
+          <td><em><Localize context="mainview" key="Exchanging"></Localize></em> - <Localize context="mainview" key="The funds are in the process of being exchanged."></Localize></td>
         </tr>
         <tr>
           <td><div class="order-status status-process">5/5</div></td>
-          <td>Active</td>
-          <td><em>Finalizing</em> - The exchange of funds is being finalized.</td>
+          <td><Localize context="mainview" key="Active"></Localize></td>
+          <td><em><Localize context="mainview" key="Finalizing"></Localize></em> - <Localize context="mainview" key="The exchange of funds is being finalized."></Localize></td>
         </tr>
         <tr>
           <td><div class="order-status status-finished">&#10003;</div></td>
-          <td>Inactive</td>
-          <td><em>Complete</em> - The funds have been exchanged and the trade is complete.</td>
+          <td><Localize context="mainview" key="Inactive"></Localize></td>
+          <td><em><Localize context="mainview" key="Complete"></Localize></em> - <Localize context="mainview" key="The funds have been exchanged and the trade is complete."></Localize></td>
         </tr>
         <tr>
           <td>
@@ -102,8 +102,8 @@
                 </svg>
               </svg>
             </div></td>
-          <td>Inactive</td>
-          <td><em>Canceled</em> - The order has been canceled.</td>
+          <td><Localize context="mainview" key="Inactive"></Localize></td>
+          <td><em><Localize context="mainview" key="Canceled"></Localize></em> - <Localize context="mainview" key="The order has been canceled."></Localize></td>
         </tr>
         <tr>
           <td>
@@ -115,8 +115,8 @@
                 </svg>
               </svg>
             </div></td>
-          <td>Inactive</td>
-          <td><em>Expired</em> - The network was unable to connect with your wallet for 6min and has canceled the order.</td>
+          <td><Localize context="mainview" key="Inactive"></Localize></td>
+          <td><em><Localize context="mainview" key="Expired"></Localize></em> - <Localize context="mainview" key="The network was unable to connect with your wallet for 6min and has canceled the order."></Localize></td>
         </tr>
         <tr>
           <td>
@@ -132,8 +132,8 @@
                 </svg>
               </svg>
             </div></td>
-          <td>Inactive</td>
-          <td><em>Offline</em> - Unable to connect to the network and failed to create the order.</td>
+          <td><Localize context="mainview" key="Inactive"></Localize></td>
+          <td><em><Localize context="mainview" key="Offline"></Localize></em> - <Localize context="mainview" key="Unable to connect to the network and failed to create the order."></Localize></td>
         </tr>
         <tr>
           <td>
@@ -146,8 +146,8 @@
                 </svg>
               </svg>
             </div></td>
-          <td>Inactive</td>
-          <td><em>Invalid</em> - There is an issue with the created order.</td>
+          <td><Localize context="mainview" key="Inactive"></Localize></td>
+          <td><em><Localize context="mainview" key="Invalid"></Localize></em> - <Localize context="mainview" key="There is an issue with the created order."></Localize></td>
         </tr>
         <tr>
           <td>
@@ -158,8 +158,8 @@
                 </svg>
               </svg>
             </div></td>
-          <td>Inactive</td>
-          <td><em>Refunding</em> - The order has failed and funds are being refunded.</td>
+          <td><Localize context="mainview" key="Inactive"></Localize></td>
+          <td><em><Localize context="mainview" key="Refunding"></Localize></em> - <Localize context="mainview" key="The order has failed and funds are being refunded."></Localize></td>
         </tr>
         <tr>
           <td>
@@ -170,8 +170,8 @@
                 </svg>
               </svg>
             </div></td>
-          <td>Active</td>
-          <td><em>Refund Failed</em> - The refund failed and needs to be performed manually.</td>
+          <td><Localize context="mainview" key="Active"></Localize></td>
+          <td><em><Localize context="mainview" key="Refund Failed"></Localize></em> - <Localize context="mainview" key="The refund failed and needs to be performed manually."></Localize></td>
         </tr>
       </table>
     </app-big-tooltip>
@@ -181,7 +181,7 @@
 
           <bn-card class="trade_table__cell balances col-lg-12" [class.alternate-pricing]="pricingEnabled && !shouldHidePricing(symbols)" [allowFullscreen]="false" [showRefreshBalances]="true">
             <bn-card-title>
-              <span>Balances
+              <span><Localize context="mainview" key="Balances"></Localize>
                 <i class="material-icons tooltip-icon" (mouseenter)="balancesTooltip(true)" (mouseleave)="balancesTooltip(false)">help</i>
               </span>
             </bn-card-title>
@@ -192,7 +192,7 @@
 
           <bn-card class="trade_table__cell orderform col-lg-12" [class.alternate-pricing]="pricingEnabled && !shouldHidePricing(symbols)" [allowFullscreen]="false">
             <bn-card-title>
-              <span>Order Form
+              <span><Localize context="mainview" key="Order Form"></Localize>
                 <i class="material-icons tooltip-icon" (mouseenter)="orderFormTooltip(true)" (mouseleave)="orderFormTooltip(false)">help</i>
               </span>
             </bn-card-title>
@@ -208,14 +208,14 @@
       <div class="trade_table row">
 
         <bn-card class="trade_table__cell col-lg-6">
-          <bn-card-title>Price Chart</bn-card-title>
+          <bn-card-title><Localize context="mainview" key="Price Chart"></Localize></bn-card-title>
           <bn-card-body>
             <app-pricechart></app-pricechart>
           </bn-card-body>
         </bn-card>
 
         <bn-card class="trade_table__cell col-lg-2" [allowFullscreen]="false">
-          <bn-card-title>Depth Chart</bn-card-title>
+          <bn-card-title><Localize context="mainview" key="Depth Chart"></Localize></bn-card-title>
           <bn-card-body>
             <app-depth></app-depth>
           </bn-card-body>
@@ -225,21 +225,21 @@
           <bn-card-toolbar>
             <ng-template #toolbar>
               <div class="order-book-view-wrapper">
-                <div class="showbuyorsell view-all-orders" [class.active]="viewAllOrders" title="Show buy & sell orders" (click)="updateView(OrderbookViews.ALL)">
+                <div class="showbuyorsell view-all-orders" [class.active]="viewAllOrders" title="{{Localize.text('Show buy & sell orders', 'mainview')}}" (click)="updateView(OrderbookViews.ALL)">
                   <div class="sell"></div>
                   <div></div>
                   <div></div>
                   <div></div>
                   <div class="buy"></div>
                 </div>
-                <div class="showbuyorsell view-sell-orders" [class.active]="viewSellOrders" title="Show only sell orders" (click)="updateView(OrderbookViews.SELLS)">
+                <div class="showbuyorsell view-sell-orders" [class.active]="viewSellOrders" title="{{Localize.text('Show only sell orders', 'mainview')}}" (click)="updateView(OrderbookViews.SELLS)">
                   <div class="sell"></div>
                   <div></div>
                   <div></div>
                   <div></div>
                   <div></div>
                 </div>
-                <div class="showbuyorsell view-buy-orders" [class.active]="viewBuyOrders" title="Show only buy orders" (click)="updateView(OrderbookViews.BUYS)">
+                <div class="showbuyorsell view-buy-orders" [class.active]="viewBuyOrders" title="{{Localize.text('Show only buy orders', 'mainview')}}" (click)="updateView(OrderbookViews.BUYS)">
                   <div></div>
                   <div></div>
                   <div></div>
@@ -250,7 +250,7 @@
             </ng-template>
           </bn-card-toolbar>
           <bn-card-title>
-            <span>Order Book
+            <span><Localize context="mainview" key="Order Book"></Localize>
               <i class="material-icons tooltip-icon" (mouseenter)="orderBookTooltip(true)" (mouseleave)="orderBookTooltip(false)">help</i>
             </span>
           </bn-card-title>
@@ -260,12 +260,12 @@
         </bn-card>
 
         <app-bn-tab-view class="trade_table__cell card orders col-lg-8">
-          <bn-tab label="Active Orders">
+          <bn-tab label="{{Localize.text('Active Orders', 'mainview')}}">
             <ng-template #content>
               <app-openorders></app-openorders>
             </ng-template>
           </bn-tab>
-          <bn-tab label="Inactive Orders">
+          <bn-tab label="{{Localize.text('Inactive Orders', 'mainview')}}">
             <ng-template #content>
               <bn-filled-orders></bn-filled-orders>
             </ng-template>
@@ -278,14 +278,14 @@
           <bn-tab label="" contentInHeader="true" float="right" hideLine="true" showOnIndex="1">
             <ng-template #content>
               <button type="button" class="clear-inactive-button" (click)="clearInactiveOrders($event)">
-                Clear Inactive
+                <Localize context="mainview" key="Clear Inactive"></Localize>
               </button>
             </ng-template>
           </bn-tab>
         </app-bn-tab-view>
 
         <bn-card class="trade_table__cell history col-lg-4">
-          <bn-card-title>Trade History</bn-card-title>
+          <bn-card-title>{{Localize.text('Trade History', 'mainview')}}</bn-card-title>
           <bn-card-body>
             <app-tradehistory></app-tradehistory>
           </bn-card-body>
@@ -308,12 +308,12 @@
       </div>
       <div #charts>
         <app-bn-tab-view>
-          <bn-tab label="Price Chart">
+          <bn-tab label="{{Localize.text('Price Chart', 'mainview')}}">
             <ng-template #content>
               <app-pricechart></app-pricechart>
             </ng-template>
           </bn-tab>
-          <bn-tab label="Depth Chart">
+          <bn-tab label="{{Localize.text('Depth Chart', 'mainview')}}">
             <ng-template #content>
               <app-depth></app-depth>
             </ng-template>
@@ -323,12 +323,12 @@
 
       <div #orders>
         <app-bn-tab-view>
-          <bn-tab label="Active Orders">
+          <bn-tab label="{{Localize.text('Active Orders', 'mainview')}}">
             <ng-template #content>
               <app-openorders></app-openorders>
             </ng-template>
           </bn-tab>
-          <bn-tab label="Inactive Orders">
+          <bn-tab label="{{Localize.text('Inactive Orders', 'mainview')}}">
             <ng-template #content>
               <bn-filled-orders></bn-filled-orders>
             </ng-template>
@@ -343,11 +343,11 @@
     </div>
 
     <app-bottom-nav (onNavChange)="onNavChange($event)">
-      <app-nav-button [views]="[trade]">Trade</app-nav-button>
-      <app-nav-button [views]="[book]">Book</app-nav-button>
-      <app-nav-button [views]="[charts]">Charts</app-nav-button>
-      <app-nav-button [views]="[orders]">Orders</app-nav-button>
-      <app-nav-button [views]="[history]">History</app-nav-button>
+      <app-nav-button [views]="[trade]"><Localize context="mainview" key="Trade"></Localize></app-nav-button>
+      <app-nav-button [views]="[book]"><Localize context="mainview" key="Book"></Localize></app-nav-button>
+      <app-nav-button [views]="[charts]"><Localize context="mainview" key="Charts"></Localize></app-nav-button>
+      <app-nav-button [views]="[orders]"><Localize context="mainview" key="Orders"></Localize></app-nav-button>
+      <app-nav-button [views]="[history]"><Localize context="mainview" key="History"></Localize></app-nav-button>
     </app-bottom-nav>
 
   </div>

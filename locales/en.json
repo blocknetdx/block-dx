@@ -1,0 +1,2451 @@
+{
+  "locale": "en",
+  "Asset": {
+    "balances": {
+      "val": "Asset",
+      "note": ""
+    },
+    "pairSelector": {
+      "val": "Asset",
+      "note": ""
+    }
+  },
+  "Available Balance": {
+    "balances": {
+      "val": "Available Balance",
+      "note": ""
+    }
+  },
+  "Balances": {
+    "balances": {
+      "val": "Balances",
+      "note": ""
+    },
+    "mainview": {
+      "val": "Balances",
+      "note": ""
+    },
+    "generalSettingsWindow": {
+      "val": "Balances",
+      "note": ""
+    },
+    "informationWindowIntroduction": {
+      "val": "Balances",
+      "note": ""
+    }
+  },
+  "Refresh Balances": {
+    "balances": {
+      "val": "Refresh Balances",
+      "note": ""
+    }
+  },
+  "Mid Market Price": {
+    "depthChart": {
+      "val": "Mid Market Price",
+      "note": ""
+    }
+  },
+  "Ask": {
+    "depthChart": {
+      "val": "Ask",
+      "note": ""
+    }
+  },
+  "Volume": {
+    "depthChart": {
+      "val": "Volume",
+      "note": ""
+    },
+    "pricechart": {
+      "val": "Volume",
+      "note": ""
+    }
+  },
+  "Sum": {
+    "depthChart": {
+      "val": "Sum",
+      "note": ""
+    }
+  },
+  "Bid": {
+    "depthChart": {
+      "val": "Bid",
+      "note": ""
+    }
+  },
+  "buy": {
+    "filledOrders": {
+      "val": "buy",
+      "note": ""
+    }
+  },
+  "Sell": {
+    "filledOrders": {
+      "val": "Sell",
+      "note": ""
+    },
+    "openorders": {
+      "val": "Sell",
+      "note": ""
+    }
+  },
+  "Type": {
+    "filledOrders": {
+      "val": "Type",
+      "note": ""
+    },
+    "mainview": {
+      "val": "Type",
+      "note": ""
+    },
+    "openorders": {
+      "val": "Type",
+      "note": ""
+    }
+  },
+  "Market": {
+    "filledOrders": {
+      "val": "Market",
+      "note": ""
+    },
+    "openorders": {
+      "val": "Market",
+      "note": ""
+    }
+  },
+  "Amount": {
+    "filledOrders": {
+      "val": "Amount",
+      "note": ""
+    },
+    "openorders": {
+      "val": "Amount",
+      "note": ""
+    },
+    "orderform": {
+      "val": "Amount",
+      "note": ""
+    }
+  },
+  "Price": {
+    "filledOrders": {
+      "val": "Price",
+      "note": ""
+    },
+    "openorders": {
+      "val": "Price",
+      "note": ""
+    },
+    "orderbook": {
+      "val": "Price",
+      "note": ""
+    },
+    "orderform": {
+      "val": "Price",
+      "note": ""
+    },
+    "pricechart": {
+      "val": "Price",
+      "note": ""
+    }
+  },
+  "Total": {
+    "filledOrders": {
+      "val": "Total",
+      "note": ""
+    },
+    "openorders": {
+      "val": "Total",
+      "note": ""
+    },
+    "orderbook": {
+      "val": "Total",
+      "note": ""
+    },
+    "orderform": {
+      "val": "Total",
+      "note": ""
+    }
+  },
+  "Created": {
+    "filledOrders": {
+      "val": "Created",
+      "note": ""
+    },
+    "openorders": {
+      "val": "Created",
+      "note": ""
+    }
+  },
+  "Status": {
+    "filledOrders": {
+      "val": "Status",
+      "note": ""
+    },
+    "mainview": {
+      "val": "Status",
+      "note": ""
+    },
+    "openorders": {
+      "val": "Status",
+      "note": ""
+    }
+  },
+  "Open": {
+    "filledOrders": {
+      "val": "Open",
+      "note": ""
+    },
+    "mainview": {
+      "val": "Open",
+      "note": ""
+    },
+    "openorders": {
+      "val": "Open",
+      "note": ""
+    },
+    "pricechart": {
+      "val": "Open",
+      "note": ""
+    }
+  },
+  "View Market": {
+    "filledOrders": {
+      "val": "View Market",
+      "note": ""
+    },
+    "openorders": {
+      "val": "View Market",
+      "note": ""
+    }
+  },
+  "View Details": {
+    "filledOrders": {
+      "val": "View Details",
+      "note": ""
+    },
+    "openorders": {
+      "val": "View Details",
+      "note": ""
+    },
+    "orderbook": {
+      "val": "View Details",
+      "note": ""
+    },
+    "tradehistory": {
+      "val": "View Details",
+      "note": ""
+    }
+  },
+  "Order Form": {
+    "mainview": {
+      "val": "Order Form",
+      "note": ""
+    },
+    "generalSettingsWindow": {
+      "val": "Order Form",
+      "note": ""
+    }
+  },
+  "Order Book": {
+    "mainview": {
+      "val": "Order Book",
+      "note": ""
+    }
+  },
+  "Active/Inactive Orders": {
+    "mainview": {
+      "val": "Active/Inactive Orders",
+      "note": ""
+    }
+  },
+  "Show buy & sell orders": {
+    "mainview": {
+      "val": "Show buy & sell orders",
+      "note": ""
+    }
+  },
+  "Show only sell orders": {
+    "mainview": {
+      "val": "Show only sell orders",
+      "note": ""
+    }
+  },
+  "Show only buy orders": {
+    "mainview": {
+      "val": "Show only buy orders",
+      "note": ""
+    }
+  },
+  "Active Orders": {
+    "mainview": {
+      "val": "Active Orders",
+      "note": ""
+    }
+  },
+  "Inactive Orders": {
+    "mainview": {
+      "val": "Inactive Orders",
+      "note": ""
+    }
+  },
+  "Trade History": {
+    "mainview": {
+      "val": "Trade History",
+      "note": ""
+    }
+  },
+  "Price Chart": {
+    "mainview": {
+      "val": "Price Chart",
+      "note": ""
+    }
+  },
+  "Depth Chart": {
+    "mainview": {
+      "val": "Depth Chart",
+      "note": ""
+    }
+  },
+  "Balances only show for connected wallets.": {
+    "mainview": {
+      "val": "Balances only show for connected wallets.",
+      "note": ""
+    }
+  },
+  "If you did not connect the wallet, in the right sidebar menu select the Add & Update Wallets link.": {
+    "mainview": {
+      "val": "If you did not connect the wallet, in the right sidebar menu select the Add & Update Wallets link.",
+      "note": ""
+    }
+  },
+  "Balances only show available funds.": {
+    "mainview": {
+      "val": "Balances only show available funds.",
+      "note": ""
+    }
+  },
+  "If UTXOs are locked in the wallet, or used in trades, then they will not count towards the balance.": {
+    "mainview": {
+      "val": "If UTXOs are locked in the wallet, or used in trades, then they will not count towards the balance.",
+      "note": ""
+    }
+  },
+  "Balances only show funds in legacy addresses.": {
+    "mainview": {
+      "val": "Balances only show funds in legacy addresses.",
+      "note": ""
+    }
+  },
+  "If you are using a Segwit address, please create a new address to send the funds to. A legacy address will automatically be created when generating a new address.": {
+    "mainview": {
+      "val": "If you are using a Segwit address, please create a new address to send the funds to. A legacy address will automatically be created when generating a new address.",
+      "note": ""
+    }
+  },
+  "Balances do not show staked funds.": {
+    "mainview": {
+      "val": "Balances do not show staked funds.",
+      "note": ""
+    }
+  },
+  "If you have been staking, please send the funds to a new address for them to register.": {
+    "mainview": {
+      "val": "If you have been staking, please send the funds to a new address for them to register.",
+      "note": ""
+    }
+  },
+  "Block DX uses \"Exact\" orders.": {
+    "mainview": {
+      "val": "Block DX uses \"Exact\" orders.",
+      "note": ""
+    }
+  },
+  "At the moment Block DX only supports \"Exact\" orders, meaning that an order must be taken for the full amount. If you are a maker, you may want to place multiple smaller orders instead of one large order. If you are a taker, multiple orders cannot be combined and taken as a single order with this order type. Market and Limit orders will be supported in a future release.": {
+    "mainview": {
+      "val": "At the moment Block DX only supports \"Exact\" orders, meaning that an order must be taken for the full amount. If you are a maker, you may want to place multiple smaller orders instead of one large order. If you are a taker, multiple orders cannot be combined and taken as a single order with this order type. Market and Limit orders will be supported in a future release.",
+      "note": ""
+    }
+  },
+  "Only assets of connected wallets can be traded.": {
+    "mainview": {
+      "val": "Only assets of connected wallets can be traded.",
+      "note": ""
+    }
+  },
+  "Trading wallets must remain online and unlocked.": {
+    "mainview": {
+      "val": "Trading wallets must remain online and unlocked.",
+      "note": ""
+    }
+  },
+  "Since trading is peer-to-peer, you must have the wallet of each traded asset installed, open, synced, unlocked, and online for the duration of the trade. This also applies to the Blocknet wallet since it's used to facilitate even non-BLOCK orders.": {
+    "mainview": {
+      "val": "Since trading is peer-to-peer, you must have the wallet of each traded asset installed, open, synced, unlocked, and online for the duration of the trade. This also applies to the Blocknet wallet since it's used to facilitate even non-BLOCK orders.",
+      "note": ""
+    }
+  },
+  "Place orders using BTC pricing.": {
+    "mainview": {
+      "val": "Place orders using BTC pricing.",
+      "note": ""
+    }
+  },
+  "You can place orders based off BTC pricing, which is more familiar. To enable this capability, from the sidebar menu select General Settings.": {
+    "mainview": {
+      "val": "You can place orders based off BTC pricing, which is more familiar. To enable this capability, from the sidebar menu select General Settings.",
+      "note": ""
+    }
+  },
+  "Since trading is peer-to-peer, you must have the wallet of each traded asset installed, open, synced, unlocked, and online for the duration of the trade. This also applies to the Blocknet wallet since it's used to facilitate the orders.": {
+    "mainview": {
+      "val": "Since trading is peer-to-peer, you must have the wallet of each traded asset installed, open, synced, unlocked, and online for the duration of the trade. This also applies to the Blocknet wallet since it's used to facilitate the orders.",
+      "note": ""
+    }
+  },
+  "Orders take up to 10 min to populate.": {
+    "mainview": {
+      "val": "Orders take up to 10 min to populate.",
+      "note": ""
+    }
+  },
+  "After initially opening the wallets of the assets traded, it can take up to 10 minutes for all the orders to load. After the initial load, orders arrive as they're created.": {
+    "mainview": {
+      "val": "After initially opening the wallets of the assets traded, it can take up to 10 minutes for all the orders to load. After the initial load, orders arrive as they're created.",
+      "note": ""
+    }
+  },
+  "View orders in BTC pricing.": {
+    "mainview": {
+      "val": "View orders in BTC pricing.",
+      "note": ""
+    }
+  },
+  "You can view orders based off BTC pricing, which is more familiar. To enable this capability, from the sidebar menu select General Settings.": {
+    "mainview": {
+      "val": "You can view orders based off BTC pricing, which is more familiar. To enable this capability, from the sidebar menu select General Settings.",
+      "note": ""
+    }
+  },
+  "White dots indicate the order is yours.": {
+    "mainview": {
+      "val": "White dots indicate the order is yours.",
+      "note": ""
+    }
+  },
+  "Some orders may have a white dot to the left of them. This indicates it's an order you created.": {
+    "mainview": {
+      "val": "Some orders may have a white dot to the left of them. This indicates it's an order you created.",
+      "note": ""
+    }
+  },
+  "Clear Inactive Button": {
+    "mainview": {
+      "val": "Clear Inactive Button",
+      "note": ""
+    }
+  },
+  "The Clear Inactive button on the Inactive Orders tab removes canceled orders.": {
+    "mainview": {
+      "val": "The Clear Inactive button on the Inactive Orders tab removes canceled orders.",
+      "note": ""
+    }
+  },
+  "Refunding failed trades": {
+    "mainview": {
+      "val": "Refunding failed trades",
+      "note": ""
+    }
+  },
+  "For failed in-progress trades, the funds will be automatically returned in 30 minutes for the taker and 2 hours for the maker.": {
+    "mainview": {
+      "val": "For failed in-progress trades, the funds will be automatically returned in 30 minutes for the taker and 2 hours for the maker.",
+      "note": ""
+    }
+  },
+  "Description": {
+    "mainview": {
+      "val": "Description",
+      "note": ""
+    }
+  },
+  "Active": {
+    "mainview": {
+      "val": "Active",
+      "note": ""
+    }
+  },
+  "Creating": {
+    "mainview": {
+      "val": "Creating",
+      "note": ""
+    }
+  },
+  "The order is being broadcasted to the network.": {
+    "mainview": {
+      "val": "The order is being broadcasted to the network.",
+      "note": ""
+    }
+  },
+  "The order is live and open (not taken).": {
+    "mainview": {
+      "val": "The order is live and open (not taken).",
+      "note": ""
+    }
+  },
+  "Accepting": {
+    "mainview": {
+      "val": "Accepting",
+      "note": ""
+    }
+  },
+  " Attempting to take the order and connecting to the counter party.": {
+    "mainview": {
+      "val": " Attempting to take the order and connecting to the counter party.",
+      "note": ""
+    }
+  },
+  "Hold": {
+    "mainview": {
+      "val": "Hold",
+      "note": ""
+    }
+  },
+  "Waiting for the counter party to respond.": {
+    "mainview": {
+      "val": "Waiting for the counter party to respond.",
+      "note": ""
+    }
+  },
+  "Accepted": {
+    "mainview": {
+      "val": "Accepted",
+      "note": ""
+    }
+  },
+  "The counter party has agreed to trade.": {
+    "mainview": {
+      "val": "The counter party has agreed to trade.",
+      "note": ""
+    }
+  },
+  "Exchanging": {
+    "mainview": {
+      "val": "Exchanging",
+      "note": ""
+    }
+  },
+  "The funds are in the process of being exchanged.": {
+    "mainview": {
+      "val": "The funds are in the process of being exchanged.",
+      "note": ""
+    }
+  },
+  "Finalizing": {
+    "mainview": {
+      "val": "Finalizing",
+      "note": ""
+    }
+  },
+  "The exchange of funds is being finalized.": {
+    "mainview": {
+      "val": "The exchange of funds is being finalized.",
+      "note": ""
+    }
+  },
+  "Inactive": {
+    "mainview": {
+      "val": "Inactive",
+      "note": ""
+    }
+  },
+  "Complete": {
+    "mainview": {
+      "val": "Complete",
+      "note": ""
+    },
+    "openorders": {
+      "val": "Complete",
+      "note": ""
+    }
+  },
+  "The funds have been exchanged and the trade is complete.": {
+    "mainview": {
+      "val": "The funds have been exchanged and the trade is complete.",
+      "note": ""
+    }
+  },
+  "Canceled": {
+    "mainview": {
+      "val": "Canceled",
+      "note": ""
+    }
+  },
+  "The order has been canceled.": {
+    "mainview": {
+      "val": "The order has been canceled.",
+      "note": ""
+    }
+  },
+  "Expired": {
+    "mainview": {
+      "val": "Expired",
+      "note": ""
+    },
+    "openorders": {
+      "val": "Expired",
+      "note": ""
+    }
+  },
+  "The network was unable to connect with your wallet for 6min and has canceled the order.": {
+    "mainview": {
+      "val": "The network was unable to connect with your wallet for 6min and has canceled the order.",
+      "note": ""
+    }
+  },
+  "Offline": {
+    "mainview": {
+      "val": "Offline",
+      "note": ""
+    },
+    "openorders": {
+      "val": "Offline",
+      "note": ""
+    }
+  },
+  "Unable to connect to the network and failed to create the order.": {
+    "mainview": {
+      "val": "Unable to connect to the network and failed to create the order.",
+      "note": ""
+    }
+  },
+  "Invalid": {
+    "mainview": {
+      "val": "Invalid",
+      "note": ""
+    },
+    "openorders": {
+      "val": "Invalid",
+      "note": ""
+    }
+  },
+  "There is an issue with the created order.": {
+    "mainview": {
+      "val": "There is an issue with the created order.",
+      "note": ""
+    }
+  },
+  "Refunding": {
+    "mainview": {
+      "val": "Refunding",
+      "note": ""
+    }
+  },
+  "The order has failed and funds are being refunded.": {
+    "mainview": {
+      "val": "The order has failed and funds are being refunded.",
+      "note": ""
+    }
+  },
+  "Refund Failed": {
+    "mainview": {
+      "val": "Refund Failed",
+      "note": ""
+    }
+  },
+  "The refund failed and needs to be performed manually.": {
+    "mainview": {
+      "val": "The refund failed and needs to be performed manually.",
+      "note": ""
+    }
+  },
+  "Clear Inactive": {
+    "mainview": {
+      "val": "Clear Inactive",
+      "note": ""
+    }
+  },
+  "Trade": {
+    "mainview": {
+      "val": "Trade",
+      "note": ""
+    }
+  },
+  "Book": {
+    "mainview": {
+      "val": "Book",
+      "note": ""
+    }
+  },
+  "Charts": {
+    "mainview": {
+      "val": "Charts",
+      "note": ""
+    }
+  },
+  "Orders": {
+    "mainview": {
+      "val": "Orders",
+      "note": ""
+    }
+  },
+  "History": {
+    "mainview": {
+      "val": "History",
+      "note": ""
+    }
+  },
+  "8 decimals": {
+    "mainview": {
+      "val": "8 decimals",
+      "note": ""
+    }
+  },
+  "6 decimals": {
+    "mainview": {
+      "val": "6 decimals",
+      "note": ""
+    }
+  },
+  "4 decimals": {
+    "mainview": {
+      "val": "4 decimals",
+      "note": ""
+    }
+  },
+  "2 decimals": {
+    "mainview": {
+      "val": "2 decimals",
+      "note": ""
+    }
+  },
+  "Blocknet Logo": {
+    "navbar": {
+      "val": "Blocknet Logo",
+      "note": ""
+    }
+  },
+  "Menu": {
+    "navbar": {
+      "val": "Menu",
+      "note": ""
+    },
+    "generalSettingsWindow": {
+      "val": "Menu",
+      "note": ""
+    },
+    "informationWindow": {
+      "val": "Menu",
+      "note": ""
+    }
+  },
+  "Settings": {
+    "navbar": {
+      "val": "Settings",
+      "note": ""
+    }
+  },
+  "General Settings": {
+    "navbar": {
+      "val": "General Settings",
+      "note": ""
+    },
+    "generalSettingsWindow": {
+      "val": "General Settings",
+      "note": ""
+    },
+    "releaseNotesWindow": {
+      "val": "General Settings",
+      "note": ""
+    }
+  },
+  "Add & Update Wallets": {
+    "navbar": {
+      "val": "Add & Update Wallets",
+      "note": ""
+    }
+  },
+  "Check for Updates": {
+    "navbar": {
+      "val": "Check for Updates",
+      "note": ""
+    }
+  },
+  "Information": {
+    "navbar": {
+      "val": "Information",
+      "note": ""
+    },
+    "informationWindow": {
+      "val": "Information",
+      "note": ""
+    }
+  },
+  "Getting Started": {
+    "navbar": {
+      "val": "Getting Started",
+      "note": ""
+    },
+    "informationWindow": {
+      "val": "Getting Started",
+      "note": ""
+    }
+  },
+  "Release Notes": {
+    "navbar": {
+      "val": "Release Notes",
+      "note": ""
+    },
+    "releaseNotesWindow": {
+      "val": "Release Notes",
+      "note": ""
+    }
+  },
+  "API": {
+    "navbar": {
+      "val": "API",
+      "note": ""
+    }
+  },
+  "Buy BLOCK": {
+    "navbar": {
+      "val": "Buy BLOCK",
+      "note": ""
+    }
+  },
+  "FAQ": {
+    "navbar": {
+      "val": "FAQ",
+      "note": ""
+    }
+  },
+  "Fees": {
+    "navbar": {
+      "val": "Fees",
+      "note": ""
+    },
+    "informationWindow": {
+      "val": "Fees",
+      "note": ""
+    }
+  },
+  "Resources": {
+    "navbar": {
+      "val": "Resources",
+      "note": ""
+    }
+  },
+  "Terms of Service": {
+    "navbar": {
+      "val": "Terms of Service",
+      "note": ""
+    }
+  },
+  "Contact Us": {
+    "navbar": {
+      "val": "Contact Us",
+      "note": ""
+    }
+  },
+  "Discord": {
+    "navbar": {
+      "val": "Discord",
+      "note": ""
+    }
+  },
+  "Reddit": {
+    "navbar": {
+      "val": "Reddit",
+      "note": ""
+    }
+  },
+  "Twitter": {
+    "navbar": {
+      "val": "Twitter",
+      "note": ""
+    }
+  },
+  "Powered by Blocknet": {
+    "navbar": {
+      "val": "Powered by Blocknet",
+      "note": ""
+    },
+    "informationWindow": {
+      "val": "Powered by Blocknet",
+      "note": ""
+    }
+  },
+  "Last trade price": {
+    "navbar": {
+      "val": "Last trade price",
+      "note": ""
+    }
+  },
+  "24 hour price": {
+    "navbar": {
+      "val": "24 hour price",
+      "note": ""
+    }
+  },
+  "24 hour volume": {
+    "context": {
+      "val": "24 hour volume",
+      "note": ""
+    }
+  },
+  "An update is currently being downloaded in the background and can take a few minutes. A prompt will appear when complete.": {
+    "navbar": {
+      "val": "An update is currently being downloaded in the background and can take a few minutes. A prompt will appear when complete.",
+      "note": ""
+    }
+  },
+  "There are no Block DX updates available at this time.": {
+    "navbar": {
+      "val": "There are no Block DX updates available at this time.",
+      "note": ""
+    }
+  },
+  "Creating order": {
+    "openorders": {
+      "val": "Creating order",
+      "note": ""
+    }
+  },
+  "Exchange in progress (1/5)": {
+    "openorders": {
+      "val": "Exchange in progress (1/5)",
+      "note": ""
+    }
+  },
+  "Exchange in progress (2/5)": {
+    "openorders": {
+      "val": "Exchange in progress (2/5)",
+      "note": ""
+    }
+  },
+  "Exchange in progress (3/5)": {
+    "openorders": {
+      "val": "Exchange in progress (3/5)",
+      "note": ""
+    }
+  },
+  "Exchange in progress (4/5)": {
+    "openorders": {
+      "val": "Exchange in progress (4/5)",
+      "note": ""
+    }
+  },
+  "Exchange in progress (5/5)": {
+    "openorders": {
+      "val": "Exchange in progress (5/5)",
+      "note": ""
+    }
+  },
+  "Order failed, refunding": {
+    "openorders": {
+      "val": "Order failed, refunding",
+      "note": ""
+    }
+  },
+  "Order failed, not refunded": {
+    "openorders": {
+      "val": "Order failed, not refunded",
+      "note": ""
+    }
+  },
+  "Cancelled": {
+    "openorders": {
+      "val": "Cancelled",
+      "note": ""
+    }
+  },
+  "Buy": {
+    "openorders": {
+      "val": "Buy",
+      "note": ""
+    }
+  },
+  "Fee": {
+    "openorders": {
+      "val": "Fee",
+      "note": ""
+    }
+  },
+  "Cancel order": {
+    "openorders": {
+      "val": "Cancel order",
+      "note": ""
+    }
+  },
+  "Cancel Order": {
+    "openorders": {
+      "val": "Cancel Order",
+      "note": ""
+    },
+    "orderbook": {
+      "val": "Cancel Order",
+      "note": ""
+    }
+  },
+  "Are you sure that you want to cancel this order?": {
+    "openorders": {
+      "val": "Are you sure that you want to cancel this order?",
+      "note": ""
+    },
+    "orderbook": {
+      "val": "Are you sure that you want to cancel this order?",
+      "note": ""
+    }
+  },
+  "Your order": {
+    "orderbook": {
+      "val": "Your order",
+      "note": ""
+    }
+  },
+  "No sell orders.": {
+    "orderbook": {
+      "val": "No sell orders.",
+      "note": ""
+    }
+  },
+  "Size": {
+    "orderbook": {
+      "val": "Size",
+      "note": ""
+    }
+  },
+  "Spread": {
+    "orderbook": {
+      "val": "Spread",
+      "note": ""
+    }
+  },
+  "N/A": {
+    "orderbook": {
+      "val": "N/A",
+      "note": ""
+    }
+  },
+  "No buy orders.": {
+    "orderbook": {
+      "val": "No buy orders.",
+      "note": ""
+    }
+  },
+  "In order to trade this market, the wallets for both assets must be configured for trading, opened, and unlocked.": {
+    "orderbook": {
+      "val": "In order to trade this market, the wallets for both assets must be configured for trading, opened, and unlocked.",
+      "note": ""
+    },
+    "orderform": {
+      "val": "In order to trade this market, the wallets for both assets must be configured for trading, opened, and unlocked.",
+      "note": ""
+    }
+  },
+  "Open Configuration": {
+    "orderbook": {
+      "val": "Open Configuration",
+      "note": ""
+    },
+    "orderform": {
+      "val": "Open Configuration",
+      "note": ""
+    }
+  },
+  "You cannot take your own order.": {
+    "orderbook": {
+      "val": "You cannot take your own order.",
+      "note": ""
+    }
+  },
+  "Copy Order ID": {
+    "orderbook": {
+      "val": "Copy Order ID",
+      "note": ""
+    },
+    "tradehistory": {
+      "val": "Copy Order ID",
+      "note": ""
+    }
+  },
+  "Buy {token}": {
+    "orderform": {
+      "val": "Buy {token}",
+      "note": ""
+    }
+  },
+  "Sell {token}": {
+    "orderform": {
+      "val": "Sell {token}",
+      "note": ""
+    }
+  },
+  "{token} Address": {
+    "orderform": {
+      "val": "{token} Address",
+      "note": ""
+    }
+  },
+  "Generate New {token} Address": {
+    "orderform": {
+      "val": "Generate New {token} Address",
+      "note": ""
+    }
+  },
+  "Accept Order": {
+    "orderform": {
+      "val": "Accept Order",
+      "note": ""
+    }
+  },
+  "Place Buy Order": {
+    "orderform": {
+      "val": "Place Buy Order",
+      "note": ""
+    }
+  },
+  "Place Sell Order": {
+    "orderform": {
+      "val": "Place Sell Order",
+      "note": ""
+    }
+  },
+  "Limit Price": {
+    "orderform": {
+      "val": "Limit Price",
+      "note": ""
+    }
+  },
+  "Order ID": {
+    "orderform": {
+      "val": "Order ID",
+      "note": ""
+    }
+  },
+  "You can only specify amounts with at most 6 decimal places.": {
+    "orderform": {
+      "val": "You can only specify amounts with at most 6 decimal places.",
+      "note": ""
+    }
+  },
+  "Oops! You must enter an amount.": {
+    "orderform": {
+      "val": "Oops! You must enter an amount.",
+      "note": ""
+    }
+  },
+  "Oops! You must enter a price.": {
+    "orderform": {
+      "val": "Oops! You must enter a price.",
+      "note": ""
+    }
+  },
+  "Oops! You must enter a {token} address.": {
+    "orderform": {
+      "val": "Oops! You must enter a {token} address.",
+      "note": ""
+    }
+  },
+  "Oops! You have the same address entered for both {token0} and {token1}.": {
+    "orderform": {
+      "val": "Oops! You have the same address entered for both {token0} and {token1}.",
+      "note": ""
+    }
+  },
+  "Select Market Pair": {
+    "pairSelector": {
+      "val": "Select Market Pair",
+      "note": ""
+    }
+  },
+  "Select asset": {
+    "pairSelector": {
+      "val": "Select asset",
+      "note": ""
+    }
+  },
+  "Priced in": {
+    "pairSelector": {
+      "val": "Priced in",
+      "note": ""
+    }
+  },
+  "Select market pair": {
+    "pairSelector": {
+      "val": "Select market pair",
+      "note": ""
+    }
+  },
+  "Select": {
+    "pairSelector": {
+      "val": "Select",
+      "note": ""
+    }
+  },
+  "Ticker": {
+    "pairSelector": {
+      "val": "Ticker",
+      "note": ""
+    }
+  },
+  "Connected Assets": {
+    "pairSelector": {
+      "val": "Connected Assets",
+      "note": ""
+    }
+  },
+  "All Assets": {
+    "pairSelector": {
+      "val": "All Assets",
+      "note": ""
+    }
+  },
+  "Refresh wallets": {
+    "pairSelector": {
+      "val": "Refresh wallets",
+      "note": ""
+    }
+  },
+  "No trade history available for this market.": {
+    "pricechart": {
+      "val": "No trade history available for this market.",
+      "note": ""
+    }
+  },
+  "High": {
+    "pricechart": {
+      "val": "High",
+      "note": ""
+    }
+  },
+  "Close": {
+    "pricechart": {
+      "val": "Close",
+      "note": ""
+    },
+    "configurationWindowComplete": {
+      "val": "Close",
+      "note": ""
+    },
+    "universal": {
+      "val": "Close",
+      "note": ""
+    },
+    "tosWindow": {
+      "val": "Close",
+      "note": ""
+    }
+  },
+  "Low": {
+    "pricechart": {
+      "val": "Low",
+      "note": ""
+    }
+  },
+  "Size ({token})": {
+    "tradehistory": {
+      "val": "Size ({token})",
+      "note": ""
+    }
+  },
+  "Price ({token})": {
+    "tradehistory": {
+      "val": "Price ({token})",
+      "note": ""
+    }
+  },
+  "Total ({token})": {
+    "tradehistory": {
+      "val": "Total ({token})",
+      "note": ""
+    }
+  },
+  "Time": {
+    "tradehistory": {
+      "val": "Time",
+      "note": ""
+    }
+  },
+  "Configuration": {
+    "configurationWindow": {
+      "val": "Configuration",
+      "note": ""
+    }
+  },
+  "Configuration Setup": {
+    "configurationMenu": {
+      "val": "Configuration Setup",
+      "note": ""
+    },
+    "configurationWindow": {
+      "val": "Configuration Setup",
+      "note": ""
+    }
+  },
+  "RPC Settings": {
+    "configurationMenu": {
+      "val": "RPC Settings",
+      "note": ""
+    },
+    "configurationWindow": {
+      "val": "RPC Settings",
+      "note": ""
+    }
+  },
+  "Fresh Setup": {
+    "configurationMenu": {
+      "val": "Fresh Setup",
+      "note": ""
+    },
+    "configurationWindowMenu": {
+      "val": "Fresh Setup",
+      "note": ""
+    }
+  },
+  "Fresh Setup - Quick Configuration Setup": {
+    "configurationMenu": {
+      "val": "Fresh Setup - Quick Configuration Setup",
+      "note": ""
+    }
+  },
+  "Fresh Setup - Expert Configuration Setup": {
+    "configurationMenu": {
+      "val": "Fresh Setup - Expert Configuration Setup",
+      "note": ""
+    }
+  },
+  "Add Wallet": {
+    "configurationMenu": {
+      "val": "Add Wallet",
+      "note": ""
+    },
+    "configurationWindowWalletVersions": {
+      "val": "Add Wallet",
+      "note": ""
+    }
+  },
+  "Add Wallet - Quick Configuration Setup": {
+    "configurationMenu": {
+      "val": "Add Wallet - Quick Configuration Setup",
+      "note": ""
+    }
+  },
+  "Add Wallet - Expert Configuration Setup": {
+    "configurationMenu": {
+      "val": "Add Wallet - Expert Configuration Setup",
+      "note": ""
+    }
+  },
+  "Update Wallet": {
+    "configurationMenu": {
+      "val": "Update Wallet",
+      "note": ""
+    }
+  },
+  "Update Wallet - Quick Configuration Setup": {
+    "configurationMenu": {
+      "val": "Update Wallet - Quick Configuration Setup",
+      "note": ""
+    }
+  },
+  "Update Wallet - Expert Configuration Setup": {
+    "configurationMenu": {
+      "val": "Update Wallet - Expert Configuration Setup",
+      "note": ""
+    }
+  },
+  "Back": {
+    "configurationWindowFooter": {
+      "val": "Back",
+      "note": ""
+    },
+    "configurationWindowFinish": {
+      "val": "Back",
+      "note": ""
+    },
+    "configurationWindowSetupType": {
+      "val": "Back",
+      "note": ""
+    },
+    "configurationWindowWalletDirectories": {
+      "val": "Back",
+      "note": ""
+    },
+    "configurationWindowWalletVersions": {
+      "val": "Back",
+      "note": ""
+    },
+    "configurationWindowWallets": {
+      "val": "Back",
+      "note": ""
+    }
+  },
+  "Continue": {
+    "configurationWindowFooter": {
+      "val": "Continue",
+      "note": ""
+    },
+    "configurationWindowMenu": {
+      "val": "Continue",
+      "note": ""
+    },
+    "configurationWindowWalletCredentials": {
+      "val": "Continue",
+      "note": ""
+    },
+    "configurationWindowSetupType": {
+      "val": "Continue",
+      "note": ""
+    },
+    "configurationWindowWalletDirectories": {
+      "val": "Continue",
+      "note": ""
+    },
+    "configurationWindowWalletVersions": {
+      "val": "Continue",
+      "note": ""
+    },
+    "configurationWindowWallets": {
+      "val": "Continue",
+      "note": ""
+    }
+  },
+  "Configuration Complete!": {
+    "configurationWindowComplete": {
+      "val": "Configuration Complete!",
+      "note": ""
+    }
+  },
+  "Before Block DX can be used, these last few steps must be completed:": {
+    "configurationWindowComplete": {
+      "val": "Before Block DX can be used, these last few steps must be completed:",
+      "note": ""
+    }
+  },
+  "The wallets for each of the newly added assets must be restarted to load the new configurations. Make sure that the wallets have been encrypted (Settings > Encrypt), synced, and are fully unlocked (Settings > Unlock Wallet).": {
+    "configurationWindowComplete": {
+      "val": "The wallets for each of the newly added assets must be restarted to load the new configurations. Make sure that the wallets have been encrypted (Settings > Encrypt), synced, and are fully unlocked (Settings > Unlock Wallet).",
+      "note": ""
+    }
+  },
+  "Open, sync, and fully unlock the <a href=\"#\" class=\"text-link js-blocknetWalletLink\">Blocknet wallet</a>.": {
+    "configurationWindowComplete": {
+      "val": "Open, sync, and fully unlock the <a href=\"#\" class=\"text-link js-blocknetWalletLink\">Blocknet wallet</a>.",
+      "note": ""
+    }
+  },
+  "Select RESTART to restart Block DX and begin trading.": {
+    "configurationWindowComplete": {
+      "val": "Select RESTART to restart Block DX and begin trading.",
+      "note": ""
+    }
+  },
+  "Before the updated assets can be traded on Block DX, <strong>the wallets for each of the updated assets must be restarted</strong> to load the new configurations. This includes the Blocknet wallet if it was updated.": {
+    "configurationWindowComplete": {
+      "val": "Before the updated assets can be traded on Block DX, <strong>the wallets for each of the updated assets must be restarted</strong> to load the new configurations. This includes the Blocknet wallet if it was updated.",
+      "note": ""
+    }
+  },
+  "Open the wallets of any assets you'll be trading. If any are already open, you will need to restart them in order to activate the new configurations. Make sure that the wallets have been encrypted (Settings > Encrypt) and are fully unlocked (Settings > Unlock Wallet).": {
+    "configurationWindowComplete": {
+      "val": "Open the wallets of any assets you'll be trading. If any are already open, you will need to restart them in order to activate the new configurations. Make sure that the wallets have been encrypted (Settings > Encrypt) and are fully unlocked (Settings > Unlock Wallet).",
+      "note": ""
+    }
+  },
+  "Open the <a href=\"#\" class=\"text-link js-blocknetWalletLink\">Blocknet wallet</a>. If it is already open, you will need to restart it in order to activate the new configurations. Make sure that the wallet has been encrypted (Settings > Encrypt) and is fully unlocked (Settings > Unlock Wallet).": {
+    "configurationWindowComplete": {
+      "val": "Open the <a href=\"#\" class=\"text-link js-blocknetWalletLink\">Blocknet wallet</a>. If it is already open, you will need to restart it in order to activate the new configurations. Make sure that the wallet has been encrypted (Settings > Encrypt) and is fully unlocked (Settings > Unlock Wallet).",
+      "note": ""
+    }
+  },
+  "Restart": {
+    "configurationWindowComplete": {
+      "val": "Restart",
+      "note": ""
+    }
+  },
+  "Add New Wallet(s)": {
+    "configurationWindowMenu": {
+      "val": "Add New Wallet(s)",
+      "note": ""
+    }
+  },
+  "Use this to configure new wallets for trading. Newly added wallets will need to be restarted before trading.": {
+    "configurationWindowMenu": {
+      "val": "Use this to configure new wallets for trading. Newly added wallets will need to be restarted before trading.",
+      "note": ""
+    }
+  },
+  "Update Wallet(s)": {
+    "configurationWindowMenu": {
+      "val": "Update Wallet(s)",
+      "note": ""
+    }
+  },
+  "Use this to reconfigure existing wallet(s). Updated wallets will need to be restarted before trading.": {
+    "configurationWindowMenu": {
+      "val": "Use this to reconfigure existing wallet(s). Updated wallets will need to be restarted before trading.",
+      "note": ""
+    }
+  },
+  "Use this to reconfigure all your wallets. This will require all wallets to be restarted before trading, which will cancel any open and in-progress orders.": {
+    "configurationWindowMenu": {
+      "val": "Use this to reconfigure all your wallets. This will require all wallets to be restarted before trading, which will cancel any open and in-progress orders.",
+      "note": ""
+    }
+  },
+  "Update Blocknet RPC Settings": {
+    "configurationWindowMenu": {
+      "val": "Update Blocknet RPC Settings",
+      "note": ""
+    }
+  },
+  "Use this to update the RPC credentials, port, and IP for the Blocknet wallet. This will require the Blocknet wallet to be restarted, which will cancel any open and in-progress orders.": {
+    "configurationWindowMenu": {
+      "val": "Use this to update the RPC credentials, port, and IP for the Blocknet wallet. This will require the Blocknet wallet to be restarted, which will cancel any open and in-progress orders.",
+      "note": ""
+    }
+  },
+  "We detected you have previously configured your wallets. Please select which of the following you would like to do:": {
+    "configurationWindowMenu": {
+      "val": "We detected you have previously configured your wallets. Please select which of the following you would like to do:",
+      "note": ""
+    }
+  },
+  "Cancel": {
+    "configurationWindowMenu": {
+      "val": "Cancel",
+      "note": ""
+    },
+    "configurationWindowWalletCredentials": {
+      "val": "Cancel",
+      "note": ""
+    },
+    "configurationWindowSetupType": {
+      "val": "Cancel",
+      "note": ""
+    },
+    "universal": {
+      "val": "Cancel",
+      "note": ""
+    },
+    "tosWindow": {
+      "val": "Cancel",
+      "note": ""
+    },
+    "updateAvaiableWindow": {
+      "val": "Cancel",
+      "note": ""
+    }
+  },
+  "In order to conduct peer-to-peer trades, Block DX requires access to the <a href=\"#\" class=\"text-link js-blocknetWalletLink\">Blocknet wallet</a>. Please enter the RPC credentials found in <em>blocknet.conf</em>.": {
+    "configurationWindowBlocknetCredentials": {
+      "val": "In order to conduct peer-to-peer trades, Block DX requires access to the <a href=\"#\" class=\"text-link js-blocknetWalletLink\">Blocknet wallet</a>. Please enter the RPC credentials found in <em>blocknet.conf</em>.",
+      "note": ""
+    }
+  },
+  "Blocknet RPC Port": {
+    "configurationWindowBlocknetCredentials": {
+      "val": "Blocknet RPC Port",
+      "note": ""
+    }
+  },
+  "Blocknet RPC User": {
+    "configurationWindowBlocknetCredentials": {
+      "val": "Blocknet RPC User",
+      "note": ""
+    }
+  },
+  "Blocknet RPC Password": {
+    "configurationWindowBlocknetCredentials": {
+      "val": "Blocknet RPC Password",
+      "note": ""
+    }
+  },
+  "Blocknet IP": {
+    "configurationWindowBlocknetCredentials": {
+      "val": "Blocknet IP",
+      "note": ""
+    }
+  },
+  "Missing Credentials": {
+    "configurationWindowBlocknetCredentials": {
+      "val": "Missing Credentials",
+      "note": ""
+    },
+    "configurationWindowWalletCredentials": {
+      "val": "Missing Credentials",
+      "note": ""
+    }
+  },
+  "You must enter credentials for {name} in order to continue.": {
+    "configurationWindowBlocknetCredentials": {
+      "val": "You must enter credentials for {name} in order to continue.",
+      "note": ""
+    }
+  },
+  "OK": {
+    "configurationWindowBlocknetCredentials": {
+      "val": "OK",
+      "note": ""
+    },
+    "universal": {
+      "val": "OK",
+      "note": ""
+    }
+  },
+  "Error: data directory not found": {
+    "configurationWindowWalletCredentials": {
+      "val": "Error: data directory not found",
+      "note": ""
+    },
+    "configurationWindowWalletDirectories": {
+      "val": "Error: data directory not found",
+      "note": ""
+    }
+  },
+  "RPC username": {
+    "configurationWindowWalletCredentials": {
+      "val": "RPC username",
+      "note": ""
+    }
+  },
+  "RPC password": {
+    "configurationWindowWalletCredentials": {
+      "val": "RPC password",
+      "note": ""
+    }
+  },
+  "Save": {
+    "configurationWindowWalletCredentials": {
+      "val": "Save",
+      "note": ""
+    }
+  },
+  "Please set the RPC username and password for each wallet.": {
+    "configurationWindowWalletCredentials": {
+      "val": "Please set the RPC username and password for each wallet.",
+      "note": ""
+    }
+  },
+  "You must enter credentials for {wallet} in order to continue.": {
+    "configurationWindowWalletCredentials": {
+      "val": "You must enter credentials for {wallet} in order to continue.",
+      "note": ""
+    }
+  },
+  "Credentials for the wallet(s) listed have not been entered. If CONTINUE is selected, the following asset(s) will not be setup for trading.": {
+    "configurationWindowWalletCredentials": {
+      "val": "Credentials for the wallet(s) listed have not been entered. If CONTINUE is selected, the following asset(s) will not be setup for trading.",
+      "note": ""
+    }
+  },
+  "Usernames and passwords must be generated for the wallet of each asset that will be traded.": {
+    "configurationWindowExpertSetup": {
+      "val": "Usernames and passwords must be generated for the wallet of each asset that will be traded.",
+      "note": ""
+    }
+  },
+  "Quick Setup": {
+    "configurationWindowExpertSetup": {
+      "val": "Quick Setup",
+      "note": ""
+    }
+  },
+  "Automatically generate credentials (recommended)": {
+    "configurationWindowExpertSetup": {
+      "val": "Automatically generate credentials (recommended)",
+      "note": ""
+    }
+  },
+  "Expert Setup": {
+    "configurationWindowExpertSetup": {
+      "val": "Expert Setup",
+      "note": ""
+    }
+  },
+  "Manually create RPC credentials (advanced users only)": {
+    "configurationWindowExpertSetup": {
+      "val": "Manually create RPC credentials (advanced users only)",
+      "note": ""
+    }
+  },
+  "Wallet Version": {
+    "configurationWindowExpertVersions": {
+      "val": "Wallet Version",
+      "note": ""
+    },
+    "configurationWindowWalletVersions": {
+      "val": "Wallet Version",
+      "note": ""
+    }
+  },
+  "Please select the wallet version installed for each of the following assets. <strong>DO NOT</strong> use any wallet versions not listed here. They have either not been tested yet or are not compatible.": {
+    "configurationWindowExpertVersions": {
+      "val": "Please select the wallet version installed for each of the following assets. <strong>DO NOT</strong> use any wallet versions not listed here. They have either not been tested yet or are not compatible.",
+      "note": ""
+    },
+    "configurationWindowWalletVersions": {
+      "val": "Please select the wallet version installed for each of the following assets. <strong>DO NOT</strong> use any wallet versions not listed here. They have either not been tested yet or are not compatible.",
+      "note": ""
+    }
+  },
+  "Upon selecting FINISH, the configurations set will be saved.": {
+    "configurationWindowFinish": {
+      "val": "Upon selecting FINISH, the configurations set will be saved.",
+      "note": ""
+    }
+  },
+  "Note": {
+    "configurationWindowFinish": {
+      "val": "Note",
+      "note": ""
+    }
+  },
+  "Staking will be disabled on all configured wallets. Staking is not recommended for any wallet connected to Block DX, as it can interfere with your ability to trade.": {
+    "configurationWindowFinish": {
+      "val": "Staking will be disabled on all configured wallets. Staking is not recommended for any wallet connected to Block DX, as it can interfere with your ability to trade.",
+      "note": ""
+    }
+  },
+  "Finish": {
+    "configurationWindowFinish": {
+      "val": "Finish",
+      "note": ""
+    }
+  },
+  "Block DX is the fastest, most secure, most reliable, and most decentralized exchange, allowing for peer-to-peer trading directly from your wallet.": {
+    "configurationWindowSetupType": {
+      "val": "Block DX is the fastest, most secure, most reliable, and most decentralized exchange, allowing for peer-to-peer trading directly from your wallet.",
+      "note": ""
+    }
+  },
+  "<strong>Prerequisites</strong>: Block DX requires the <a href=\"#\" class=\"text-link js-blocknetWalletLink\">latest Blocknet wallet</a> and the wallets of any assets you want to trade with. These must be downloaded and installed before continuing. See the full list of <a href=\"#\" class=\"text-link js-compatibleWalletsLink\">compatible assets and wallet versions</a>.": {
+    "configurationWindowSetupType": {
+      "val": "<strong>Prerequisites</strong>: Block DX requires the <a href=\"#\" class=\"text-link js-blocknetWalletLink\">latest Blocknet wallet</a> and the wallets of any assets you want to trade with. These must be downloaded and installed before continuing. See the full list of <a href=\"#\" class=\"text-link js-compatibleWalletsLink\">compatible assets and wallet versions</a>.",
+      "note": ""
+    }
+  },
+  "<strong>Quick Setup</strong> (recommended)": {
+    "configurationWindowSetupType": {
+      "val": "<strong>Quick Setup</strong> (recommended)",
+      "note": ""
+    }
+  },
+  "This option reconfigures the wallets with the most up-to-date default settings. If using a custom data directory location, you must use Expert Setup.": {
+    "configurationWindowSetupType": {
+      "val": "This option reconfigures the wallets with the most up-to-date default settings. If using a custom data directory location, you must use Expert Setup.",
+      "note": ""
+    }
+  },
+  "This option automatically detects the wallets installed and simplifies the process to configure them for trading. If using a custom data directory location, you must use Expert Setup.": {
+    "configurationWindowSetupType": {
+      "val": "This option automatically detects the wallets installed and simplifies the process to configure them for trading. If using a custom data directory location, you must use Expert Setup.",
+      "note": ""
+    }
+  },
+  "<strong>Expert Setup</strong> (advanced users only)": {
+    "configurationWindowSetupType": {
+      "val": "<strong>Expert Setup</strong> (advanced users only)",
+      "note": ""
+    }
+  },
+  "This option allows you to specify the data directory locations and RPC credentials.": {
+    "configurationWindowSetupType": {
+      "val": "This option allows you to specify the data directory locations and RPC credentials.",
+      "note": ""
+    }
+  },
+  "An installation of the Blocknet wallet was not found, but is required to use Block DX. Please install the Blocknet wallet before continuing.": {
+    "configurationWindowSetupType": {
+      "val": "An installation of the Blocknet wallet was not found, but is required to use Block DX. Please install the Blocknet wallet before continuing.",
+      "note": ""
+    }
+  },
+  "Browse": {
+    "configurationWindowWalletDirectories": {
+      "val": "Browse",
+      "note": ""
+    }
+  },
+  "Configuration files will be installed to these default data directories. To accept the default locations, select CONTINUE. To change the location, select BROWSE.": {
+    "configurationWindowWalletDirectories": {
+      "val": "Configuration files will be installed to these default data directories. To accept the default locations, select CONTINUE. To change the location, select BROWSE.",
+      "note": ""
+    }
+  },
+  "Errors detected on all wallets, please resolve at least one to continue.": {
+    "configurationWindowWalletDirectories": {
+      "val": "Errors detected on all wallets, please resolve at least one to continue.",
+      "note": ""
+    }
+  },
+  " error(s) detected: continue to skip wallets with errors.": {
+    "configurationWindowWalletDirectories": {
+      "val": " error(s) detected: continue to skip wallets with errors.",
+      "note": ""
+    }
+  },
+  "Update wallet": {
+    "configurationWindowWalletVersions": {
+      "val": "Update wallet",
+      "note": ""
+    }
+  },
+  "Skip": {
+    "configurationWindowWalletVersions": {
+      "val": "Skip",
+      "note": ""
+    }
+  },
+  "Unable to automatically detect installed wallets that haven't been configured already. If you haven't already installed the wallet you would like to connect, please do that first. If you are using a custom data directory you will need to go BACK and select Expert Setup. If you would like to configure a wallet you already have configured you will need to go BACK and select Update Wallet.": {
+    "configurationWindowWalletVersions": {
+      "val": "Unable to automatically detect installed wallets that haven't been configured already. If you haven't already installed the wallet you would like to connect, please do that first. If you are using a custom data directory you will need to go BACK and select Expert Setup. If you would like to configure a wallet you already have configured you will need to go BACK and select Update Wallet.",
+      "note": ""
+    }
+  },
+  "Please select at least one wallet to continue.": {
+    "configurationWindowWalletVersions": {
+      "val": "Please select at least one wallet to continue.",
+      "note": ""
+    }
+  },
+  "fa-check-square": {
+    "configurationWindowWalletVersions": {
+      "val": "fa-check-square",
+      "note": ""
+    }
+  },
+  "Add": {
+    "configurationWindowWalletVersions": {
+      "val": "Add",
+      "note": ""
+    }
+  },
+  "Update": {
+    "configurationWindowWalletVersions": {
+      "val": "Update",
+      "note": ""
+    }
+  },
+  "Skip All": {
+    "configurationWindowWalletVersions": {
+      "val": "Skip All",
+      "note": ""
+    }
+  },
+  "Lite wallets, online wallets, and Electrum wallets are not supported yet.": {
+    "configurationWindowWalletVersions": {
+      "val": "Lite wallets, online wallets, and Electrum wallets are not supported yet.",
+      "note": ""
+    }
+  },
+  "Not all assets are supported. <a class=\"js-supportedAssetsLink\" href=\"#\">See list of supported assets.</a>": {
+    "configurationWindowWalletVersions": {
+      "val": "Not all assets are supported. <a class=\"js-supportedAssetsLink\" href=\"#\">See list of supported assets.</a>",
+      "note": ""
+    }
+  },
+  "Quick Setup only checks default install locations. If using a custom install location, use Expert Setup.": {
+    "configurationWindowWalletVersions": {
+      "val": "Quick Setup only checks default install locations. If using a custom install location, use Expert Setup.",
+      "note": ""
+    }
+  },
+  "The wallet might not be configured. Only wallets that have been configured can be updated. To add a new wallet, go BACK and choose the Add Wallet option.": {
+    "configurationWindowWalletVersions": {
+      "val": "The wallet might not be configured. Only wallets that have been configured can be updated. To add a new wallet, go BACK and choose the Add Wallet option.",
+      "note": ""
+    }
+  },
+  "Don't see a wallet in the list?": {
+    "configurationWindowWalletVersions": {
+      "val": "Don't see a wallet in the list?",
+      "note": ""
+    }
+  },
+  "Select the wallet(s) that you would like to update.": {
+    "configurationWindowWallets": {
+      "val": "Select the wallet(s) that you would like to update.",
+      "note": ""
+    }
+  },
+  "In order to conduct peer-to-peer trades, Block DX requires the <a href=\"#\" class=\"text-link js-blocknetWalletLink\">Blocknet wallet</a> and the wallets of any assets you want to trade with. Select the wallets that are installed to begin setup.": {
+    "configurationWindowWallets": {
+      "val": "In order to conduct peer-to-peer trades, Block DX requires the <a href=\"#\" class=\"text-link js-blocknetWalletLink\">Blocknet wallet</a> and the wallets of any assets you want to trade with. Select the wallets that are installed to begin setup.",
+      "note": ""
+    }
+  },
+  " Select All": {
+    "configurationWindowWallets": {
+      "val": " Select All",
+      "note": ""
+    }
+  },
+  " Skip and setup Block DX manually (not recommended": {
+    "configurationWindowWallets": {
+      "val": " Skip and setup Block DX manually (not recommended",
+      "note": ""
+    }
+  },
+  "Market Pricing": {
+    "generalSettingsWindow": {
+      "val": "Market Pricing",
+      "note": ""
+    }
+  },
+  "Language": {
+    "generalSettingsWindow": {
+      "val": "Language",
+      "note": ""
+    }
+  },
+  "Enter API key": {
+    "generalSettingsWindow": {
+      "val": "Enter API key",
+      "note": ""
+    }
+  },
+  "API key not needed": {
+    "generalSettingsWindow": {
+      "val": "API key not needed",
+      "note": ""
+    }
+  },
+  "Yes": {
+    "universal": {
+      "val": "Yes",
+      "note": ""
+    }
+  },
+  "No": {
+    "universal": {
+      "val": "No",
+      "note": ""
+    }
+  },
+  "In order to change the language to {selected}, Block DX must restart. Do you want to continue?": {
+    "generalSettingsWindow": {
+      "val": "In order to change the language to {selected}, Block DX must restart. Do you want to continue?",
+      "note": ""
+    }
+  },
+  "Wallet Balance": {
+    "generalSettingsWindow": {
+      "val": "Wallet Balance",
+      "note": ""
+    }
+  },
+  "The \"Wallet\" balance is the <em>total</em> balance of your Blocknet wallet. This is useful when using a separate Blocknet wallet for trading and want to see the balance of your main Blocknet wallet, which is where fees are paid from.": {
+    "generalSettingsWindow": {
+      "val": "The \"Wallet\" balance is the <em>total</em> balance of your Blocknet wallet. This is useful when using a separate Blocknet wallet for trading and want to see the balance of your main Blocknet wallet, which is where fees are paid from.",
+      "note": ""
+    }
+  },
+  "Show \"Wallet\" in Balances?": {
+    "generalSettingsWindow": {
+      "val": "Show \"Wallet\" in Balances?",
+      "note": ""
+    }
+  },
+  "This will change the language of the Block DX application. Please select one of the available locales.": {
+    "generalSettingsWindow": {
+      "val": "This will change the language of the Block DX application. Please select one of the available locales.",
+      "note": ""
+    }
+  },
+  "Select App Locale": {
+    "generalSettingsWindow": {
+      "val": "Select App Locale",
+      "note": ""
+    }
+  },
+  "Auto Generate Addresses": {
+    "generalSettingsWindow": {
+      "val": "Auto Generate Addresses",
+      "note": ""
+    }
+  },
+  "This setting automatically generates new addresses on startup for connected wallets and auto-populates the order form address fields.": {
+    "generalSettingsWindow": {
+      "val": "This setting automatically generates new addresses on startup for connected wallets and auto-populates the order form address fields.",
+      "note": ""
+    }
+  },
+  "Note: This feature requires Blocknet version 3.14.1 or higher.": {
+    "generalSettingsWindow": {
+      "val": "Note: This feature requires Blocknet version 3.14.1 or higher.",
+      "note": ""
+    }
+  },
+  "Auto Generate Addresses?": {
+    "generalSettingsWindow": {
+      "val": "Auto Generate Addresses?",
+      "note": ""
+    }
+  },
+  "Enabled": {
+    "generalSettingsWindow": {
+      "val": "Enabled",
+      "note": ""
+    }
+  },
+  "Disabled": {
+    "generalSettingsWindow": {
+      "val": "Disabled",
+      "note": ""
+    }
+  },
+  "Allows orders to be viewed and placed in BTC for any market pair. This feature is limited by the pricing data available from each API source. The selected API source must have BTC pricing for the selected market. An API key may be required from the source to access their pricing data. When selecting the pricing update frequency, keep in mind the API rate-limit if applicable.": {
+    "generalSettingsWindow": {
+      "val": "Allows orders to be viewed and placed in BTC for any market pair. This feature is limited by the pricing data available from each API source. The selected API source must have BTC pricing for the selected market. An API key may be required from the source to access their pricing data. When selecting the pricing update frequency, keep in mind the API rate-limit if applicable.",
+      "note": ""
+    }
+  },
+  "Pricing Unit": {
+    "generalSettingsWindow": {
+      "val": "Pricing Unit",
+      "note": ""
+    }
+  },
+  "Price Source": {
+    "generalSettingsWindow": {
+      "val": "Price Source",
+      "note": ""
+    }
+  },
+  "API Key": {
+    "generalSettingsWindow": {
+      "val": "API Key",
+      "note": ""
+    }
+  },
+  "Update Frequency (seconds)": {
+    "generalSettingsWindow": {
+      "val": "Update Frequency (seconds)",
+      "note": ""
+    }
+  },
+  "Blocknet Protocol": {
+    "informationWindow": {
+      "val": "Blocknet Protocol",
+      "note": ""
+    }
+  },
+  "Block DX is powered by the Blocknet Protocol": {
+    "informationWindowBlocknet": {
+      "val": "Block DX is powered by the Blocknet Protocol",
+      "note": ""
+    }
+  },
+  "In addition to the information below, you can learn more about Blocknet <a href=\"#\" class=\"text-link js-externalLink\" data-link=\"https://docs.blocknet.co/\">here</a>.": {
+    "informationWindowBlocknet": {
+      "val": "In addition to the information below, you can learn more about Blocknet <a href=\"#\" class=\"text-link js-externalLink\" data-link=\"https://docs.blocknet.co/\">here</a>.",
+      "note": ""
+    }
+  },
+  "What is Blocknet?": {
+    "informationWindowBlocknet": {
+      "val": "What is Blocknet?",
+      "note": ""
+    }
+  },
+  "Blocknet is a 2nd layer blockchain interoperability protocol that enables communication, interaction, and exchange between different blockchains. This allows for the development of multi-chain applications and blockchain microservices, creating exponentially more capabilities and possibilities for the blockchain ecosystem. Blocknet is a self-funded and self-governed open source project with contributors around the world building an open and collaborative ecosystem.": {
+    "informationWindowBlocknet": {
+      "val": "Blocknet is a 2nd layer blockchain interoperability protocol that enables communication, interaction, and exchange between different blockchains. This allows for the development of multi-chain applications and blockchain microservices, creating exponentially more capabilities and possibilities for the blockchain ecosystem. Blocknet is a self-funded and self-governed open source project with contributors around the world building an open and collaborative ecosystem.",
+      "note": ""
+    }
+  },
+  "Subscribe to the following email lists for the latest features, updates, and news!": {
+    "informationWindowBlocknet": {
+      "val": "Subscribe to the following email lists for the latest features, updates, and news!",
+      "note": ""
+    }
+  },
+  "General Newsletter": {
+    "informationWindowBlocknet": {
+      "val": "General Newsletter",
+      "note": ""
+    }
+  },
+  "Service Node Newsletter": {
+    "informationWindowBlocknet": {
+      "val": "Service Node Newsletter",
+      "note": ""
+    }
+  },
+  "Developer Newsletter": {
+    "informationWindowBlocknet": {
+      "val": "Developer Newsletter",
+      "note": ""
+    }
+  },
+  "Technical Overview": {
+    "informationWindowBlocknet": {
+      "val": "Technical Overview",
+      "note": ""
+    }
+  },
+  "Blocknet is a Proof-of-Stake (PoS) blockchain with a utility token called <a href=\"#\" class=\"text-link js-externalLink\" data-link=\"https://docs.blocknet.co/blockchain/introduction\">BLOCK</a>. Unlike other currency-focused blockchains, Blocknet is a service-based blockchain comprised of 3 main components:": {
+    "informationWindowBlocknet": {
+      "val": "Blocknet is a Proof-of-Stake (PoS) blockchain with a utility token called <a href=\"#\" class=\"text-link js-externalLink\" data-link=\"https://docs.blocknet.co/blockchain/introduction\">BLOCK</a>. Unlike other currency-focused blockchains, Blocknet is a service-based blockchain comprised of 3 main components:",
+      "note": ""
+    }
+  },
+  "<strong>XRouter</strong> - Provides the Blocknet Protocol with a communication layer consisting of an inter-blockchain SPV backend that enables the verification of blockchain records without requiring users to download the full blockchain. XRouter allows applications to interface with blockchains on the TCP/IP networking layer, enabling a true Internet of Blockchains.": {
+    "informationWindowBlocknet": {
+      "val": "<strong>XRouter</strong> - Provides the Blocknet Protocol with a communication layer consisting of an inter-blockchain SPV backend that enables the verification of blockchain records without requiring users to download the full blockchain. XRouter allows applications to interface with blockchains on the TCP/IP networking layer, enabling a true Internet of Blockchains.",
+      "note": ""
+    }
+  },
+  "<strong>XBridge</strong> - Provides the ability to perform trustless atomic swap exchanges between any blockchain that is supported by the Blocknet Protocol via APIs. XBridge allows any application to perform decentralized exchange, opening the door to an ecosystem of decentralized trading services.": {
+    "informationWindowBlocknet": {
+      "val": "<strong>XBridge</strong> - Provides the ability to perform trustless atomic swap exchanges between any blockchain that is supported by the Blocknet Protocol via APIs. XBridge allows any application to perform decentralized exchange, opening the door to an ecosystem of decentralized trading services.",
+      "note": ""
+    }
+  },
+  "<strong>XCloud</strong> - Provides a decentralized microservice cloud network powered by XRouter. Developers will be able to put both blockchain and non-blockchain microservices on Blocknet’s “public cloud” decentralized network. XCloud allows applications to run entirely decentralized, opening the door to the possibility of monetizable, fully decentralized applications.": {
+    "informationWindowBlocknet": {
+      "val": "<strong>XCloud</strong> - Provides a decentralized microservice cloud network powered by XRouter. Developers will be able to put both blockchain and non-blockchain microservices on Blocknet’s “public cloud” decentralized network. XCloud allows applications to run entirely decentralized, opening the door to the possibility of monetizable, fully decentralized applications.",
+      "note": ""
+    }
+  },
+  "The Blocknet Protocol is designed to maximize interoperability between different blockchains through the use of these components. Just as the internet enabled computers to communicate, the Blocknet Protocol is critical for blockchains to realize full potential.": {
+    "informationWindowBlocknet": {
+      "val": "The Blocknet Protocol is designed to maximize interoperability between different blockchains through the use of these components. Just as the internet enabled computers to communicate, the Blocknet Protocol is critical for blockchains to realize full potential.",
+      "note": ""
+    }
+  },
+  "Nodes": {
+    "informationWindowBlocknet": {
+      "val": "Nodes",
+      "note": ""
+    }
+  },
+  "The network is powered by 2 types of nodes:": {
+    "informationWindowBlocknet": {
+      "val": "The network is powered by 2 types of nodes:",
+      "note": ""
+    }
+  },
+  "<strong>Staking Nodes</strong> - Secures the network by staking BLOCK to verify the blockchain. This service earns 30% of block rewards.": {
+    "informationWindowBlocknet": {
+      "val": "<strong>Staking Nodes</strong> - Secures the network by staking BLOCK to verify the blockchain. This service earns 30% of block rewards.",
+      "note": ""
+    }
+  },
+  "<strong>Service Nodes</strong> - Hosts the full nodes of compatible blockchains, hosts microservices, audits interactions, and performs anti-spam and anti-DOS measures for the network. This service earns 70% of block rewards and 100% of fees generated from use of the network's services.": {
+    "informationWindowBlocknet": {
+      "val": "<strong>Service Nodes</strong> - Hosts the full nodes of compatible blockchains, hosts microservices, audits interactions, and performs anti-spam and anti-DOS measures for the network. This service earns 70% of block rewards and 100% of fees generated from use of the network's services.",
+      "note": ""
+    }
+  },
+  "The following are the requirements to operate each type of node:": {
+    "informationWindowBlocknet": {
+      "val": "The following are the requirements to operate each type of node:",
+      "note": ""
+    }
+  },
+  "<strong>Staking Nodes</strong> - A Staking Node can be operated with any amount of BLOCK, but staking more BLOCK yields more frequent rewards.": {
+    "informationWindowBlocknet": {
+      "val": "<strong>Staking Nodes</strong> - A Staking Node can be operated with any amount of BLOCK, but staking more BLOCK yields more frequent rewards.",
+      "note": ""
+    }
+  },
+  "<strong>Service Nodes</strong> - A Service Node requires 5000 BLOCK.": {
+    "informationWindowBlocknet": {
+      "val": "<strong>Service Nodes</strong> - A Service Node requires 5000 BLOCK.",
+      "note": ""
+    }
+  },
+  "Tokenomics": {
+    "informationWindowBlocknet": {
+      "val": "Tokenomics",
+      "note": ""
+    }
+  },
+  "<a href=\"#\" class=\"text-link js-externalLink\" data-link=\"https://docs.blocknet.co/blockchain/introduction\">BLOCK</a> is the utility token that powers the Blocknet. Fees are paid in BLOCK when using the network and 100% of those fees are distributed to Service Nodes for supporting the network and infrastructure. Normal transaction fees on the network are also paid in BLOCK, but those fees are burned. If seeking to acquire BLOCK, <a href=\"#\" class=\"text-link js-externalLink\" data-link=\"https://docs.blocknet.co/project/exchanges\">there are various options available</a>.": {
+    "informationWindowBlocknet": {
+      "val": "<a href=\"#\" class=\"text-link js-externalLink\" data-link=\"https://docs.blocknet.co/blockchain/introduction\">BLOCK</a> is the utility token that powers the Blocknet. Fees are paid in BLOCK when using the network and 100% of those fees are distributed to Service Nodes for supporting the network and infrastructure. Normal transaction fees on the network are also paid in BLOCK, but those fees are burned. If seeking to acquire BLOCK, <a href=\"#\" class=\"text-link js-externalLink\" data-link=\"https://docs.blocknet.co/project/exchanges\">there are various options available</a>.",
+      "note": ""
+    }
+  },
+  "Blocknet involves multiple economic models with respect to the use of the BLOCK token:": {
+    "informationWindowBlocknet": {
+      "val": "Blocknet involves multiple economic models with respect to the use of the BLOCK token:",
+      "note": ""
+    }
+  },
+  "<strong>Block Rewards</strong> - Blocknet is Proof-of-Stake(PoS) with 1 BLOCK created every minute, of which 30% is awarded to Staking Nodes and 70% to Service Nodes.": {
+    "informationWindowBlocknet": {
+      "val": "<strong>Block Rewards</strong> - Blocknet is Proof-of-Stake(PoS) with 1 BLOCK created every minute, of which 30% is awarded to Staking Nodes and 70% to Service Nodes.",
+      "note": ""
+    }
+  },
+  "<strong>Service Fees</strong> - Service Nodes receive 100% of BLOCK fees generated from the use of services on the network, including trades performed via XBridge, interfacing with blockchains via XRouter, and use of microservices via XCloud.": {
+    "informationWindowBlocknet": {
+      "val": "<strong>Service Fees</strong> - Service Nodes receive 100% of BLOCK fees generated from the use of services on the network, including trades performed via XBridge, interfacing with blockchains via XRouter, and use of microservices via XCloud.",
+      "note": ""
+    }
+  },
+  "<strong>Collateral</strong> - BLOCK is required for collateral to operate a Service Node, as well as to use certain services on the network.": {
+    "informationWindowBlocknet": {
+      "val": "<strong>Collateral</strong> - BLOCK is required for collateral to operate a Service Node, as well as to use certain services on the network.",
+      "note": ""
+    }
+  },
+  "<strong>Governance</strong> - Submitting proposals to the network requires a fee to be paid in BLOCK and proposals can only be voted on by Service Nodes.": {
+    "informationWindowBlocknet": {
+      "val": "<strong>Governance</strong> - Submitting proposals to the network requires a fee to be paid in BLOCK and proposals can only be voted on by Service Nodes.",
+      "note": ""
+    }
+  },
+  "<strong>Transaction Fees</strong> - Transferring funds on the network incurs a transaction fee paid in BLOCK.": {
+    "informationWindowBlocknet": {
+      "val": "<strong>Transaction Fees</strong> - Transferring funds on the network incurs a transaction fee paid in BLOCK.",
+      "note": ""
+    }
+  },
+  "The utility of the BLOCK token increases the buy pressure on the market, while the reward potential of operating a node reduces sell pressure on the market.": {
+    "informationWindowBlocknet": {
+      "val": "The utility of the BLOCK token increases the buy pressure on the market, while the reward potential of operating a node reduces sell pressure on the market.",
+      "note": ""
+    }
+  },
+  "Using Block DX is cheaper than using centralized exchanges, especially since there are no withdrawal fees. Below is Block DX’s fee structure. For the most up-to-date information on fees, <a href=\"#\" class=\"text-link js-externalLink\" data-link=\"https://docs.blocknet.co/blockdx/fees/\">click here</a>.": {
+    "informationWindowFees": {
+      "val": "Using Block DX is cheaper than using centralized exchanges, especially since there are no withdrawal fees. Below is Block DX’s fee structure. For the most up-to-date information on fees, <a href=\"#\" class=\"text-link js-externalLink\" data-link=\"https://docs.blocknet.co/blockdx/fees/\">click here</a>.",
+      "note": ""
+    }
+  },
+  "Maker Fee": {
+    "informationWindowFees": {
+      "val": "Maker Fee",
+      "note": ""
+    }
+  },
+  "When creating an order on Block DX, there is no fee other than the network fee of the asset being sold. This is the same type of fee you would incur if sending this asset to another party.": {
+    "informationWindowFees": {
+      "val": "When creating an order on Block DX, there is no fee other than the network fee of the asset being sold. This is the same type of fee you would incur if sending this asset to another party.",
+      "note": ""
+    }
+  },
+  "Taker Fee": {
+    "informationWindowFees": {
+      "val": "Taker Fee",
+      "note": ""
+    }
+  },
+  "When accepting an order on Block DX, a static fee of 0.015 BLOCK is charged at the time the order is taken. This fee is charged even if a trade is canceled or fails and is meant to discourage malicious behavior on the network.": {
+    "informationWindowFees": {
+      "val": "When accepting an order on Block DX, a static fee of 0.015 BLOCK is charged at the time the order is taken. This fee is charged even if a trade is canceled or fails and is meant to discourage malicious behavior on the network.",
+      "note": ""
+    }
+  },
+  "In addition to the 0.015 BLOCK fee, there is also the network fee of the asset being sold. This is the same type of fee you would incur if sending this asset to another party.": {
+    "informationWindowFees": {
+      "val": "In addition to the 0.015 BLOCK fee, there is also the network fee of the asset being sold. This is the same type of fee you would incur if sending this asset to another party.",
+      "note": ""
+    }
+  },
+  "Fees Distribution": {
+    "informationWindowFees": {
+      "val": "Fees Distribution",
+      "note": ""
+    }
+  },
+  "100% of trade fees are distributed to Blocknet Service Node operators for supporting the network.": {
+    "informationWindowFees": {
+      "val": "100% of trade fees are distributed to Blocknet Service Node operators for supporting the network.",
+      "note": ""
+    }
+  },
+  "Welcome to simplified, trustless, peer-to-peer trading!": {
+    "informationWindowIntroduction": {
+      "val": "Welcome to simplified, trustless, peer-to-peer trading!",
+      "note": ""
+    }
+  },
+  "Block DX is the fastest, most secure, most reliable, and most decentralized DEX. There are some differences when using a decentralized exchange verses a centralized exchange. Aside from there being no accounts, KYC, withdrawal limits, or withdrawal fees, below is a list of things you should know.": {
+    "informationWindowIntroduction": {
+      "val": "Block DX is the fastest, most secure, most reliable, and most decentralized DEX. There are some differences when using a decentralized exchange verses a centralized exchange. Aside from there being no accounts, KYC, withdrawal limits, or withdrawal fees, below is a list of things you should know.",
+      "note": ""
+    }
+  },
+  "Connected Wallets": {
+    "informationWindowIntroduction": {
+      "val": "Connected Wallets",
+      "note": ""
+    }
+  },
+  "Since trading is peer-to-peer, you must have the wallet of each asset being traded installed, synced, and configured. Configuration was done when starting Block DX the first time, but you can reconfigure to add new wallets for trading using the Add & Update Wallets menu link.": {
+    "informationWindowIntroduction": {
+      "val": "Since trading is peer-to-peer, you must have the wallet of each asset being traded installed, synced, and configured. Configuration was done when starting Block DX the first time, but you can reconfigure to add new wallets for trading using the Add & Update Wallets menu link.",
+      "note": ""
+    }
+  },
+  "In the top left panel there is a list of your connected wallets and the available balances for trading. If a value doesn't match the balance shown in the respective wallet, it may be due to funds in your wallet being immature funds (due to staking), funds being in a non-legacy address (<em>see below</em>), or the wallet losing connection. If a wallet you configure is not showing in Balances, it may be because the wallet is locked. If the wallet is unlocked, then try reconfiguring using the Add & Update Wallets menu link.": {
+    "informationWindowIntroduction": {
+      "val": "In the top left panel there is a list of your connected wallets and the available balances for trading. If a value doesn't match the balance shown in the respective wallet, it may be due to funds in your wallet being immature funds (due to staking), funds being in a non-legacy address (<em>see below</em>), or the wallet losing connection. If a wallet you configure is not showing in Balances, it may be because the wallet is locked. If the wallet is unlocked, then try reconfiguring using the Add & Update Wallets menu link.",
+      "note": ""
+    }
+  },
+  "Address Types (Legacy, Segwit, p2sh, bech32)": {
+    "informationWindowIntroduction": {
+      "val": "Address Types (Legacy, Segwit, p2sh, bech32)",
+      "note": ""
+    }
+  },
+  "At the moment only <em>\"legacy\"</em> addresses are compatible with Block DX.  Here are examples of various Bitcoin addresses:": {
+    "informationWindowIntroduction": {
+      "val": "At the moment only <em>\"legacy\"</em> addresses are compatible with Block DX.  Here are examples of various Bitcoin addresses:",
+      "note": ""
+    }
+  },
+  "The configuration wizard will automatically set your trading wallets to generate Legacy addresses when generating a new address. If funds intended for trading are <strong>not</strong> in a Legacy address, you will need to generate one and send your funds to it in order for your funds to be shown in the Balances section. This is needed for the following wallets:": {
+    "informationWindowIntroduction": {
+      "val": "The configuration wizard will automatically set your trading wallets to generate Legacy addresses when generating a new address. If funds intended for trading are <strong>not</strong> in a Legacy address, you will need to generate one and send your funds to it in order for your funds to be shown in the Balances section. This is needed for the following wallets:",
+      "note": ""
+    }
+  },
+  "Bitcoin | FujiCoin | Litecoin | MachineCoin | MonaCoin | Myriad | NIX | UniformFiscalObject | Vertcoin": {
+    "informationWindowIntroduction": {
+      "val": "Bitcoin | FujiCoin | Litecoin | MachineCoin | MonaCoin | Myriad | NIX | UniformFiscalObject | Vertcoin",
+      "note": ""
+    }
+  },
+  "Inputs": {
+    "informationWindowIntroduction": {
+      "val": "Inputs",
+      "note": ""
+    }
+  },
+  "If you are taking an order where you are selling BLOCK, you need at least 1 or more inputs (UTXOs) to cover the amount of BLOCK being sold and 1 or more inputs (UTXOs) to cover the BLOCK trade fee. If placing multiple orders, you will need a separate set of inputs (UTXOs) that are not used in the previous orders placed. Splitting of assets (creating inputs) can be done using the Coin Control functionality within the respective wallet.": {
+    "informationWindowIntroduction": {
+      "val": "If you are taking an order where you are selling BLOCK, you need at least 1 or more inputs (UTXOs) to cover the amount of BLOCK being sold and 1 or more inputs (UTXOs) to cover the BLOCK trade fee. If placing multiple orders, you will need a separate set of inputs (UTXOs) that are not used in the previous orders placed. Splitting of assets (creating inputs) can be done using the Coin Control functionality within the respective wallet.",
+      "note": ""
+    }
+  },
+  "Order Types": {
+    "informationWindowIntroduction": {
+      "val": "Order Types",
+      "note": ""
+    }
+  },
+  "At the moment Block DX does not support partial order fills. It uses what is called <em>\"Exact\"</em> orders, meaning that an order must be taken for the full amount. If you are a taker, multiple orders cannot be combined and taken as a single order with this order type. Market and Limit orders will be supported in a future release.": {
+    "informationWindowIntroduction": {
+      "val": "At the moment Block DX does not support partial order fills. It uses what is called <em>\"Exact\"</em> orders, meaning that an order must be taken for the full amount. If you are a taker, multiple orders cannot be combined and taken as a single order with this order type. Market and Limit orders will be supported in a future release.",
+      "note": ""
+    }
+  },
+  "Unlocked Wallet & Closing Wallet": {
+    "informationWindowIntroduction": {
+      "val": "Unlocked Wallet & Closing Wallet",
+      "note": ""
+    }
+  },
+  "Since trading utilizes the Blocknet wallet and the wallet of the assets being traded, these wallets must remain open and unlocked when trading. If the Blocknet wallet is closed, all orders will be canceled. If the Blocknet wallet is locked, all orders will fail. If the wallet of an asset being traded is closed or locked, all orders for that asset will fail. It is important to keep all wallets online until trades are fully completed.": {
+    "informationWindowIntroduction": {
+      "val": "Since trading utilizes the Blocknet wallet and the wallet of the assets being traded, these wallets must remain open and unlocked when trading. If the Blocknet wallet is closed, all orders will be canceled. If the Blocknet wallet is locked, all orders will fail. If the wallet of an asset being traded is closed or locked, all orders for that asset will fail. It is important to keep all wallets online until trades are fully completed.",
+      "note": ""
+    }
+  },
+  "Order Status": {
+    "informationWindowIntroduction": {
+      "val": "Order Status",
+      "note": ""
+    }
+  },
+  "You can view the status of an order by hovering over the order in the ‘Active Orders’ or ‘Inactive Orders’ tabs.": {
+    "informationWindowIntroduction": {
+      "val": "You can view the status of an order by hovering over the order in the ‘Active Orders’ or ‘Inactive Orders’ tabs.",
+      "note": ""
+    }
+  },
+  "Order Details": {
+    "orderDetailsWindow": {
+      "val": "Order Details",
+      "note": ""
+    }
+  },
+  "There are no notes to display.": {
+    "releaseNotesWindow": {
+      "val": "There are no notes to display.",
+      "note": ""
+    }
+  },
+  "License Agreement": {
+    "tosWindow": {
+      "val": "License Agreement",
+      "note": ""
+    }
+  },
+  "Accept": {
+    "tosWindow": {
+      "val": "Accept",
+      "note": ""
+    }
+  },
+  "Update Available": {
+    "updateAvailableWindow": {
+      "val": "Update Available",
+      "note": ""
+    }
+  },
+  "Do not ask again (you can manually update later from the sidebar menu)": {
+    "updateAvailableWindow": {
+      "val": "Do not ask again (you can manually update later from the sidebar menu)",
+      "note": ""
+    }
+  },
+  "Update Available!": {
+    "updateAvailableWindow": {
+      "val": "Update Available!",
+      "note": ""
+    }
+  },
+  "Block DX version {version} is available! Would you like to download it now?": {
+    "updateAvailableWindow": {
+      "val": "Block DX version {version} is available! Would you like to download it now?",
+      "note": ""
+    }
+  },
+  "Download Update": {
+    "updateAvailableWindow": {
+      "val": "Download Update",
+      "note": ""
+    }
+  },
+  "Not Now": {
+    "updateAvailableWindow": {
+      "val": "Not Now",
+      "note": ""
+    }
+  },
+  "Block DX {version} Is Ready!": {
+    "updateAvailableWindow": {
+      "val": "Block DX {version} Is Ready!",
+      "note": ""
+    }
+  },
+  "Block DX {version} is almost ready to use! To complete the update, a restart is required.": {
+    "updateAvailableWindow": {
+      "val": "Block DX {version} is almost ready to use! To complete the update, a restart is required.",
+      "note": ""
+    }
+  },
+  "Restart Now": {
+    "updateAvailableWindow": {
+      "val": "Restart Now",
+      "note": ""
+    }
+  },
+  "The update is currently being downloaded. A prompt will appear when complete.": {
+    "updateAvailableWindow": {
+      "val": "The update is currently being downloaded. A prompt will appear when complete.",
+      "note": ""
+    }
+  }
+}

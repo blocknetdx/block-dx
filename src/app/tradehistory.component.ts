@@ -6,6 +6,7 @@ import { Trade } from './trade';
 import { TradehistoryService } from './tradehistory.service';
 import { PricingService } from './pricing.service';
 import { Pricing } from './pricing';
+import {Localize} from './localize/localize.component';
 
 math.config({
   number: 'BigNumber',
@@ -26,6 +27,8 @@ export class TradehistoryComponent implements OnInit {
   public pricingEnabled = false;
   public pricingAvailable = false;
   public priceDecimal = '6';
+
+  public Localize = Localize;
 
   constructor(
     private appService: AppService,
@@ -83,13 +86,13 @@ export class TradehistoryComponent implements OnInit {
     const menuTemplate = [];
 
     menuTemplate.push({
-      label: 'Copy Order ID',
+      label: Localize.text('Copy Order ID', 'tradehistory'),
       click: () => {
         clipboard.writeText(orderId);
       }
     });
     menuTemplate.push({
-      label: 'View Details',
+      label: Localize.text('View Details', 'tradehistory'),
       click: () => {
         ipcRenderer.send('openOrderHistoryDetailsWindow', orderId);
       }

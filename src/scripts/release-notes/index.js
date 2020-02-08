@@ -1,7 +1,15 @@
 const MarkdownIt = require('markdown-it');
 const md = new MarkdownIt();
+const { Localize } = require('../../../src-back/localize');
+const { ipcRenderer } = require('electron');
+
+Localize.initialize(ipcRenderer.sendSync('getUserLocale'), ipcRenderer.sendSync('getLocaleData'));
 
 $(document).ready(() => {
+
+  document.title = Localize.text('General Settings', 'releaseNotesWindow');
+
+  $('#js-closeBtn').text(Localize.text('Close', 'universal').toUpperCase());
 
   const $outerFlexContainer = $('#js-outerFlexContainer');
   const setContainerHeight = () => {
@@ -22,7 +30,7 @@ $(document).ready(() => {
   // Get and display release notes text
   const $notesContainer = $('#js-notesContainer');
   const notes = ipcRenderer.sendSync('getReleaseNotes');
-  const noNotesMessage = 'There are no notes to display.';
+  const noNotesMessage = Localize.text('There are no notes to display.', 'releaseNotesWindow');
   if (!notes) {
     $notesContainer.html(`<p>${noNotesMessage}</p>`);
   } else {
@@ -36,8 +44,9 @@ $(document).ready(() => {
 
   // Set header and window title text
   const version = ipcRenderer.sendSync('getAppVersion');
-  document.title = `v${version} Release Notes`;
-  $('#js-header').text(`v${version} RELEASE NOTES`);
+  const headerText = Localize.text('Release Notes', 'releaseNotesWindow');
+  document.title = `v${version} ${headerText}`;
+  $('#js-header').text(`v${version} ${headerText.toUpperCase()}`);
 
   // Listener to open any link in browser
   $('a').on('click', e => {

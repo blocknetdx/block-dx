@@ -1,6 +1,6 @@
 {
   "name": "BLOCK-DX",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "license": "MIT",
   "author": "Blocknet <contact@blocknet.co>",
   "homepage": "https://github.com/blocknetdx/block-dx",
@@ -70,6 +70,7 @@
     "mathjs": "5.10.3",
     "moment": "2.24.0",
     "ngx-perfect-scrollbar": "5.3.5",
+    "performance-now": "^2.1.0",
     "popper.js": "1.15.0",
     "rxjs": "5.5.12",
     "superagent": "5.1.0",
@@ -105,6 +106,7 @@
     "protractor": "5.4.2",
     "rmrf-promise": "1.1.0",
     "should": "13.2.3",
+    "string.prototype.matchall": "^4.0.0",
     "ts-node": "3.3.0",
     "tslint": "5.17.0",
     "typescript": "3.2.4"
@@ -115,7 +117,7 @@
     "appId": "co.blocknet.blockdx",
     "productName": "BLOCK DX",
     "artifactName": "${name}-${version}-${os}.${ext}",
-    "copyright": "Copyright © 2018-2019 Blocknet",
+    "copyright": "Copyright © 2018-2020 Blocknet",
     "directories": {
       "app": "temp",
       "output": "dist-native"
@@ -152,7 +154,7 @@
       ],
       "category": "public.app-category.utilities",
       "icon": "./src/assets/favicon_block.icns",
-      "gatekeeperAssess" : false,
+      "gatekeeperAssess": false,
       "publish": {
         "provider": "github",
         "releaseType": "draft"
@@ -165,8 +167,8 @@
         "deb"
       ],
       "icon": "./src/assets/linux_icons/",
-      "synopsis": "Copyright © 2018-2019 Blocknet",
-      "description": "Copyright © 2018-2019 Blocknet",
+      "synopsis": "Copyright © 2018-2020 Blocknet",
+      "description": "Copyright © 2018-2020 Blocknet",
       "category": "Utility",
       "desktop": {
         "Name": "BLOCK DX"

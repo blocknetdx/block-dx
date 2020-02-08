@@ -1,11 +1,11 @@
-/* global swal */
+/* global swal, Localize */
 
 const { ipcRenderer, remote } = require('electron');
 const fs = require('fs-extra-promise');
 const { RouterView } = require('../../modules/router');
 const route = require('../constants/routes');
 const configurationTypes = require('../constants/configuration-types');
-const titles = require('../constants/titles');
+const titles = require('../modules/titles');
 
 class SelectSetupType extends RouterView {
 
@@ -30,13 +30,13 @@ class SelectSetupType extends RouterView {
 
     let title;
     if(configurationType === configurationTypes.ADD_NEW_WALLETS) {
-      title = titles.ADD_WALLET;
+      title = titles.ADD_WALLET();
     } else if(configurationType === configurationTypes.UPDATE_WALLETS) {
-      title = titles.UPDATE_WALLET;
+      title = titles.UPDATE_WALLET();
     } else if(configurationType === configurationTypes.FRESH_SETUP) {
-      title = titles.FRESH_SETUP;
+      title = titles.FRESH_SETUP();
     } else {
-      title = titles.RPC_SETTINGS;
+      title = titles.RPC_SETTINGS();
     }
 
     const html = `
@@ -44,48 +44,48 @@ class SelectSetupType extends RouterView {
           <div class="container">
             <div class="flex-container">
               <div class="col2-no-margin">
-            
-                <p style="${styles.p}">Block DX is the fastest, most secure, most reliable, and most decentralized exchange, allowing for peer-to-peer trading directly from your wallet.</p>
-                <p style="${styles.p}"><strong>Prerequisites</strong>: Block DX requires the <a href="#" class="text-link js-blocknetWalletLink">latest Blocknet wallet</a> and the wallets of any assets you want to trade with. These must be downloaded and installed before continuing. See the full list of <a href="#" class="text-link js-compatibleWalletsLink">compatible assets and wallet versions</a>.</p>
+
+                <p style="${styles.p}">${Localize.text('Block DX is the fastest, most secure, most reliable, and most decentralized exchange, allowing for peer-to-peer trading directly from your wallet.','configurationWindowSetupType')}</p>
+                <p style="${styles.p}">${Localize.text('<strong>Prerequisites</strong>: Block DX requires the <a href="#" class="text-link js-blocknetWalletLink">latest Blocknet wallet</a> and the wallets of any assets you want to trade with. These must be downloaded and installed before continuing. See the full list of <a href="#" class="text-link js-compatibleWalletsLink">compatible assets and wallet versions</a>.','configurationWindowSetupType')}</p>
                 <div class="main-area" style="${styles.mainArea}">
-                
+
                   <div id="js-automaticCredentials" class="main-area-item" style="${styles.flexContainer}">
                     <div style="${styles.flexCol1}">
-                      <i class="${quickSetup ? 'fa' : 'far'} fa-circle radio-icon"></i> 
+                      <i class="${quickSetup ? 'fa' : 'far'} fa-circle radio-icon"></i>
                     </div>
                     <div>
-                      <div><strong>Quick Setup</strong> (recommended)</div>
+                      <div>${Localize.text('<strong>Quick Setup</strong> (recommended)','configurationWindowSetupType')}</div>
                         ${configurationType === configurationTypes.UPDATE_WALLETS ?
-                          '<div>This option reconfigures the wallets with the most up-to-date default settings. If using a custom data directory location, you must use Expert Setup.</div>'
+                          `<div>${Localize.text('This option reconfigures the wallets with the most up-to-date default settings. If using a custom data directory location, you must use Expert Setup.','configurationWindowSetupType')}</div>`
                           :
-                          '<div>This option automatically detects the wallets installed and simplifies the process to configure them for trading. If using a custom data directory location, you must use Expert Setup.</div>'
+                          `<div>${Localize.text('This option automatically detects the wallets installed and simplifies the process to configure them for trading. If using a custom data directory location, you must use Expert Setup.','configurationWindowSetupType')}</div>`
                         }
                       </div>
                     </div>
-                  
+
                     <div id="js-manualCredentials" class="main-area-item" style="${styles.flexContainer}">
                       <div style="${styles.flexCol1}">
-                        <i class="${!quickSetup ? 'fa' : 'far'} fa-circle radio-icon"></i> 
+                        <i class="${!quickSetup ? 'fa' : 'far'} fa-circle radio-icon"></i>
                       </div>
                     <div>
-                      <div><strong>Expert Setup</strong> (advanced users only)</div>
+                      <div>${Localize.text('<strong>Expert Setup</strong> (advanced users only)','configurationWindowSetupType')}</div>
                       <div>
                         ${configurationType === configurationTypes.UPDATE_WALLETS ?
-                          '<div>This option allows you to specify the data directory locations and RPC credentials.</div>'
+                          `<div>${Localize.text('This option allows you to specify the data directory locations and RPC credentials.','configurationWindowSetupType')}</div>`
                         :
-                          '<div>This option allows you to specify the data directory locations and RPC credentials.</div>'
+                          `<div>${Localize.text('This option allows you to specify the data directory locations and RPC credentials.','configurationWindowSetupType')}</div>`
                         }
                       </div>
                     </div>
                   </div>
-                
+
                 </div>
-              
+
                 <div id="js-buttonContainer" class="button-container">
-                  <button id="js-backBtn" type="button" class="gray-button">${isFirstRun ? 'CANCEL' : 'BACK'}</button>
-                  <button id="js-continueBtn" type="button">CONTINUE</button>
+                  <button id="js-backBtn" type="button" class="gray-button">${isFirstRun ? Localize.text('Cancel','configurationWindowSetupType').toUpperCase() : Localize.text('Back','configurationWindowSetupType').toUpperCase()}</button>
+                  <button id="js-continueBtn" type="button">${Localize.text('Continue','configurationWindowSetupType').toUpperCase()}</button>
                 </div>
-              
+
               </div>
             </div>
           </div>
@@ -153,7 +153,7 @@ class SelectSetupType extends RouterView {
           router.goTo(route.SELECT_WALLET_VERSIONS);
         } catch(err) {
           swal({
-            text: 'An installation of the Blocknet wallet was not found, but is required to use Block DX. Please install the Blocknet wallet before continuing.',
+            text: Localize.text('An installation of the Blocknet wallet was not found, but is required to use Block DX. Please install the Blocknet wallet before continuing.','configurationWindowSetupType'),
             type: 'warning'
           });
         }

@@ -1,8 +1,10 @@
+/* global Localize */
+
 const { ipcRenderer } = require('electron');
 const { RouterView } = require('../../modules/router');
 const route = require('../constants/routes');
 const configurationTypes = require('../constants/configuration-types');
-const titles = require('../constants/titles');
+const titles = require('../modules/titles');
 const { saveConfs, addConfs, updateConfs } = require('../util');
 const sidebar = require('../snippets/sidebar');
 
@@ -25,13 +27,13 @@ class Finish extends RouterView {
     const configurationType = state.get('configurationType');
     let title;
     if(configurationType === configurationTypes.ADD_NEW_WALLETS) {
-      title = quick ? titles.ADD_WALLET_QUICK_CONFIGURATION : titles.ADD_WALLET_EXPERT_CONFIGURATION;
+      title = quick ? titles.ADD_WALLET_QUICK_CONFIGURATION() : titles.ADD_WALLET_EXPERT_CONFIGURATION();
     } else if(configurationType === configurationTypes.UPDATE_WALLETS) {
-      title = quick ? titles.UPDATE_WALLET_QUICK_CONFIGURATION : titles.UPDATE_WALLET_EXPERT_CONFIGURATION;
+      title = quick ? titles.UPDATE_WALLET_QUICK_CONFIGURATION() : titles.UPDATE_WALLET_EXPERT_CONFIGURATION();
     } else if(configurationType === configurationTypes.FRESH_SETUP) {
-      title = quick ? titles.FRESH_SETUP_QUICK_CONFIGURATION : titles.FRESH_SETUP_EXPERT_CONFIGURATION;
+      title = quick ? titles.FRESH_SETUP_QUICK_CONFIGURATION() : titles.FRESH_SETUP_EXPERT_CONFIGURATION();
     } else {
-      title = titles.RPC_SETTINGS;
+      title = titles.RPC_SETTINGS();
     }
 
     const html = `
@@ -42,17 +44,17 @@ class Finish extends RouterView {
                 ${sidebar(1)}
               </div>
               <div class="col2">
-            
-                <p style="${styles.p}">Upon selecting FINISH, the configurations set will be saved.</p>
 
-                <p style="${styles.p}"><strong>Note:</strong> Staking will be disabled on all configured wallets. Staking is not recommended for any wallet connected to Block DX, as it can interfere with your ability to trade.</p>
+                <p style="${styles.p}">${Localize.text('Upon selecting FINISH, the configurations set will be saved.','configurationWindowFinish')}</p>
+
+                <p style="${styles.p}"><strong>${Localize.text('Note', 'configurationWindowFinish')}:</strong> ${Localize.text('Staking will be disabled on all configured wallets. Staking is not recommended for any wallet connected to Block DX, as it can interfere with your ability to trade.','configurationWindowFinish')}</p>
 
                 <div class="main-area" style="${styles.mainArea}"></div>
                 <div id="js-buttonContainer" class="button-container">
-                  <button id="js-backBtn" type="button" class="gray-button">BACK</button>
-                  <button id="js-continueBtn" type="button">FINISH</button>
+                  <button id="js-backBtn" type="button" class="gray-button">${Localize.text('Back','configurationWindowFinish').toUpperCase()}</button>
+                  <button id="js-continueBtn" type="button">${Localize.text('Finish','configurationWindowFinish').toUpperCase()}</button>
                 </div>
-              
+
               </div>
             </div>
           </div>

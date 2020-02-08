@@ -1,8 +1,9 @@
-/* global swal */
+/* global swal, Localize */
+
 const { RouterView } = require('../../modules/router');
 const route = require('../constants/routes');
 const configurationTypes = require('../constants/configuration-types');
-const titles = require('../constants/titles');
+const titles = require('../modules/titles');
 const footerButtons = require('../snippets/footer-buttons');
 const sidebar = require('../snippets/sidebar');
 
@@ -31,12 +32,12 @@ class EnterWalletCredentials extends RouterView {
               <div class="main-area-item2">
                 <div style="display:flex;flex-direction:row:flex-wrap:nowrap;justify-content:space-between;">
                   <div>${w.name}</div>
-                  <div id="${w.versionId}-error" class="text-danger" style="display:none;text-align:right;">Error: data directory not found</div>
+                  <div id="${w.versionId}-error" class="text-danger" style="display:none;text-align:right;">${Localize.text('Error: data directory not found','configurationWindowWalletCredentials')}</div>
                 </div>
                 <div style="margin-top:10px;display:flex;flex-direction:row;flex-wrap:nowrap;justify-content:flex-start;">
-                  <input class="js-usernameInput" data-id="${w.versionId}" type="text" style="margin-right:10px;" value="${w.username}" placeholder="RPC username" />
-                  <input class="js-passwordInput" data-id="${w.versionId}" type="text" value="${w.password}" placeholder="RPC password" />
-                  <!--<button class="js-saveBtn" type="button" data-id="${w.versionId}" style="margin-top:0;margin-right:0;width:100px;min-width:100px;">SAVE</button>-->
+                  <input class="js-usernameInput" data-id="${w.versionId}" type="text" style="margin-right:10px;" value="${w.username}" placeholder="${Localize.text('RPC username','configurationWindowWalletCredentials')}" />
+                  <input class="js-passwordInput" data-id="${w.versionId}" type="text" value="${w.password}" placeholder="${Localize.text('RPC password','configurationWindowWalletCredentials')}" />
+                  <!--<button class="js-saveBtn" type="button" data-id="${w.versionId}" style="margin-top:0;margin-right:0;width:100px;min-width:100px;">${Localize.text('Save','configurationWindowWalletCredentials').toUpperCase()}</button>-->
                 </div>
               </div>
               <div style="height:1px;"></div>
@@ -51,11 +52,11 @@ class EnterWalletCredentials extends RouterView {
 
     let title;
     if(addingWallets) {
-      title = titles.ADD_WALLET_EXPERT_CONFIGURATION;
+      title = titles.ADD_WALLET_EXPERT_CONFIGURATION();
     } else if(updatingWallets) {
-      title = titles.UPDATE_WALLET_EXPERT_CONFIGURATION;
+      title = titles.UPDATE_WALLET_EXPERT_CONFIGURATION();
     } else {
-      title = titles.FRESH_SETUP_EXPERT_CONFIGURATION;
+      title = titles.FRESH_SETUP_EXPERT_CONFIGURATION();
     }
 
     const html = `
@@ -66,14 +67,14 @@ class EnterWalletCredentials extends RouterView {
                 ${sidebar(1)}
               </div>
               <div class="col2">
-            
-                <p style="${styles.p}">Please set the RPC username and password for each wallet.</p>
+
+                <p style="${styles.p}">${Localize.text('Please set the RPC username and password for each wallet.','configurationWindowWalletCredentials')}</p>
                 <div id="js-mainConfigurationArea" class="main-area">
                   ${items}
                 </div>
-                
+
                 ${footerButtons()}
-                             
+
               </div>
             </div>
           </div>
@@ -103,22 +104,22 @@ class EnterWalletCredentials extends RouterView {
       if(incomplete.length > 0) {
         if(incomplete.some(w => w.abbr === 'BLOCK')) {
           await swal({
-            title: 'Missing Credentials',
-            html: `You must enter credentials for ${incomplete[0].name} in order to continue.`,
+            title: Localize.text('Missing Credentials','configurationWindowWalletCredentials'),
+            html: Localize.text('You must enter credentials for {wallet} in order to continue.','configurationWindowWalletCredentials', {wallet: incomplete[0].name}),
             type: 'error',
             showConfirmButton: true,
-            confirmButtonText: 'OK'
+            confirmButtonText: Localize.text('OK', 'universal')
           });
           return;
         }
         const { dismiss } = await swal({
-          title: 'Missing Credentials',
-          html: `Credentials for the wallet(s) listed have not been entered. If CONTINUE is selected, the following asset(s) will not be setup for trading.<br><br>${incomplete.map(w => w.name).join('<br>')}`,
+          title: Localize.text('Missing Credentials','configurationWindowWalletCredentials'),
+          html: `${Localize.text('Credentials for the wallet(s) listed have not been entered. If CONTINUE is selected, the following asset(s) will not be setup for trading.','configurationWindowWalletCredentials')}<br><br>${incomplete.map(w => w.name).join('<br>')}`,
           type: 'warning',
           showConfirmButton: true,
-          confirmButtonText: 'Continue',
+          confirmButtonText: Localize.text('Continue','configurationWindowWalletCredentials'),
           showCancelButton: true,
-          cancelButtonText: 'Cancel',
+          cancelButtonText: Localize.text('Cancel','configurationWindowWalletCredentials'),
           reverseButtons: true
         });
         if(dismiss === 'cancel') {

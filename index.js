@@ -12,6 +12,32 @@ const ConfController = require('./src-back/conf-controller');
 const _ = require('lodash');
 const math = require('mathjs');
 const MarkdownIt = require('markdown-it');
+const { Localize } = require('./src-back/localize');
+const { blocknetDir4, blocknetDir3, BLOCKNET_CONF_NAME4, BLOCKNET_CONF_NAME3 } = require('./src-back/constants');
+const { checkAndCopyV3Configs } = require('./src-back/config-updater');
+
+const versionDirectories = [
+  blocknetDir4,
+  blocknetDir3
+];
+const blocknetConfNames = [
+  BLOCKNET_CONF_NAME4,
+  BLOCKNET_CONF_NAME3
+];
+
+const getHomePath = () => app.getPath('home');
+const getDataPath = () => app.getPath('appData');
+
+const fileExists = p => {
+  try {
+    fs.statSync(p);
+    return true;
+  } catch(err) {
+    return false;
+  }
+};
+
+const defaultLocale = 'en';
 
 math.config({
   number: 'BigNumber',
@@ -42,7 +68,8 @@ ipcMain.on('getAppVersion', e => {
 
 let appWindow, serverLocation, sn, keyPair, storage, user, password, port, info, pricingSource, pricingUnit, apiKeys,
   pricingFrequency, enablePricing, sendPricingMultipliers, clearPricingInterval, setPricingInterval,
-  sendMarketPricingEnabled, metaPath, availableUpdate, tradeHistory, myOrders, showWallet, tosWindow, releaseNotesWindow;
+  sendMarketPricingEnabled, metaPath, availableUpdate, tradeHistory, myOrders, showWallet, tosWindow, releaseNotesWindow,
+  latestBlocknetDir, latestConfName;
 let updateError = false;
 
 // Handle explicit quit
@@ -60,6 +87,14 @@ const getManifest = () => {
     const filePath = path.join(configurationFilesDirectory, 'manifest-latest.json');
     manifest = fs.readJsonSync(filePath);
   }
+  const blockIdx = manifest.findIndex(t => t.ticker === 'BLOCK');
+  const blockDirectories = versionDirectories[0];
+  manifest[blockIdx] = Object.assign({}, manifest[blockIdx], {
+    conf_name: blocknetConfNames[0],
+    dir_name_linux: blockDirectories.linux,
+    dir_name_mac: blockDirectories.darwin,
+    dir_name_win: blockDirectories.win32
+  });
   return manifest;
 };
 
@@ -342,12 +377,12 @@ const openConfigurationWindow = (options = {}) => {
     console.log(error);
     switch(error.status) {
       case 401:
-        errorTitle = 'Authorization Problem';
-        errorMessage = 'There was an authorization problem. Please check your Blocknet RPC username and/or password.';
+        errorTitle = Localize.text('Authorization Problem', 'configurationWindow');
+        errorMessage = Localize.text('There was an authorization problem. Please check your Blocknet RPC username and/or password.', 'configurationWindow');
         break;
       default:
-        errorTitle = 'Connection Error';
-        errorMessage = 'There was a problem connecting to the Blocknet wallet. Make sure the wallet has been configured, restarted, and is open and unlocked.';
+        errorTitle = Localize.text('Connection Error', 'configurationWindow');
+        errorMessage = Localize.text('There was a problem connecting to the Blocknet wallet. Make sure the wallet has been configured, restarted, and is open and unlocked.', 'configurationWindow');
     }
     console.log(errorMessage);
   } else {
@@ -457,12 +492,12 @@ const openConfigurationWindow = (options = {}) => {
 
   ipcMain.removeAllListeners('getHomePath');
   ipcMain.on('getHomePath', e => {
-    e.returnValue = app.getPath('home');
+    e.returnValue = getHomePath();
   });
 
   ipcMain.removeAllListeners('getDataPath');
   ipcMain.on('getDataPath', e => {
-    e.returnValue = app.getPath('appData');
+    e.returnValue = getDataPath();
   });
 
   ipcMain.removeAllListeners('getSelected');
@@ -488,6 +523,8 @@ const openConfigurationWindow = (options = {}) => {
 
 };
 
+const getBaseDataPath = () => (platform === 'win32' || platform === 'darwin') ? getDataPath() : getHomePath();
+
 ipcMain.on('closeConfigurationWindow', e => {
   configurationWindow.close();
 });
@@ -508,10 +545,10 @@ const openSettingsWindow = (options = {}) => {
     console.log(error);
     switch(error.status) {
       case 401:
-        errorMessage = 'There was an authorization problem. Please correct your username and/or password.';
+        errorMessage = Localize.text('There was an authorization problem. Please correct your username and/or password.', 'settingsWindow');
         break;
       default:
-        errorMessage = 'There was a problem connecting to the Blocknet RPC server. Please check the RPC port.';
+        errorMessage = Localize.text('There was a problem connecting to the Blocknet RPC server. Please check the RPC port.', 'settingsWindow');
     }
     console.log(errorMessage);
   }
@@ -600,9 +637,14 @@ ipcMain.on('getTokenPath', (e, token) => {
 ipcMain.on('setXbridgeConfPath', (e, p = '') => {
   storage.setItem('xbridgeConfPath', p);
 });
+
+const getCustomXbridgeConfPath = () => {
+  return storage.getItem('xbridgeConfPath') || '';
+};
 ipcMain.on('getXbridgeConfPath', (e) => {
-  e.returnValue = storage.getItem('xbridgeConfPath') || '';
+  e.returnValue = getCustomXbridgeConfPath();
 });
+
 ipcMain.on('getUser', e => {
   e.returnValue = storage.getItem('user') || '';
 });
@@ -727,6 +769,7 @@ const openTOSWindow = (alreadyAccepted = false) => {
 
   ipcMain.on('getTOS', e => {
     try {
+      const locale = getUserLocale();
       const text = fs.readFileSync(path.join(__dirname, 'tos.txt'), 'utf8');
       e.returnValue = text;
     } catch(err) {
@@ -806,17 +849,9 @@ const openAppWindow = () => {
   });
 
   appWindow.once('show', () => {
-    // version check
-    const err = versionCheck(info['version']);
-    if (err) {
-      handleError(err);
-      // setTimeout(() => app.quit(), 1);
-    }
-
     // Show release notes if newly updated
     const showReleaseNotes = storage.getItem('showReleaseNotes');
     if(showReleaseNotes) openReleaseNotesWindow();
-
   });
 
   appWindow.on('close', () => {
@@ -840,7 +875,7 @@ const openAppWindow = () => {
       .then(res => {
         if(res.id) { // success
           appWindow.send('orderDone', 'success');
-          sendOrderBook();
+          sendOrderBook(true);
         } else {
           appWindow.send('orderDone', 'failed');
         }
@@ -856,8 +891,8 @@ const openAppWindow = () => {
       .then(res => {
         if(res.id) { // success
           appWindow.send('orderDone', 'success');
-          sendOrderBook();
-          sendOrderHistory();
+          sendOrderBook(true);
+          sendOrderHistory('', true);
         } else {
           appWindow.send('orderDone', 'failed');
         }
@@ -994,32 +1029,32 @@ const openAppWindow = () => {
   };
 
   const orderKey = (pair) => pair[0] + pair[1];
-  let orderHistoryDict = new Map();
+  const orderHistoryDict = new Map();
 
-  const sendOrderHistory = (which) => {
+  const sendOrderHistory = (which = '', force = false) => {
     if (!isTokenPairValid(keyPair)) // need valid token pair
       return;
     const key = orderKey(keyPair);
-    const shouldUpdate = !orderHistoryDict.has(key) ||
-      (moment.utc().diff(orderHistoryDict[key]['orderHistoryLastUpdate'], 'seconds', true) >= 15);
+    const shouldUpdate = force || !orderHistoryDict.has(key) ||
+      (moment.utc().diff(orderHistoryDict.get(key)['orderHistoryLastUpdate'], 'seconds', true) >= 15);
     if (!shouldUpdate) {
       if (orderHistoryDict.has(key) && which)
-        appWindow.send(which, orderHistoryDict[key][which]);
+        appWindow.send(which, orderHistoryDict.get(key)[which]);
       return;
     }
 
     // Make sure storage has key
     if (!orderHistoryDict.has(key))
-      orderHistoryDict[key] = {
+      orderHistoryDict.set(key, {
         'orderHistory': [],
         'orderHistoryByMinute': [],
         'orderHistoryBy15Minutes': [],
         'orderHistoryBy1Hour': [],
         'currentPrice': { time: moment.utc().toISOString(), open: 0, close: 0, high: 0, low: 0, volume: 0 },
         'orderHistoryLastUpdate': moment.utc()
-      };
+      });
     else
-      orderHistoryDict[key]['orderHistoryLastUpdate'] = moment.utc();
+      orderHistoryDict.get(key)['orderHistoryLastUpdate'] = moment.utc();
 
     const end = moment().utc();
     const start = end.clone().subtract(1, 'day');
@@ -1027,13 +1062,15 @@ const openAppWindow = () => {
     {
       sn.dxGetOrderHistory(keyPair[0], keyPair[1], start.unix(), end.unix(), 60)
         .then(res => {
-          orderHistoryDict[key]['orderHistory'] = res;
-          orderHistoryDict[key]['orderHistoryByMinute'] = res;
-          orderHistoryDict[key]['currentPrice'] = calculatePricingData(res);
+          Object.assign(orderHistoryDict.get(key), {
+            orderHistory: res,
+            orderHistoryByMinute: res,
+            currentPrice: calculatePricingData(res)
+          });
           if (key === orderKey(keyPair)) {
             appWindow.send('orderHistory', res);
             appWindow.send('orderHistoryByMinute', res);
-            appWindow.send('currentPrice', orderHistoryDict[key]['currentPrice']);
+            appWindow.send('currentPrice', orderHistoryDict.get(key)['currentPrice']);
           }
         })
         .catch(handleError);
@@ -1041,7 +1078,7 @@ const openAppWindow = () => {
     {
       sn.dxGetOrderHistory(keyPair[0], keyPair[1], start.unix(), end.unix(), 900)
         .then(res => {
-          orderHistoryDict[key]['orderHistoryBy15Minutes'] = res;
+          orderHistoryDict.get(key)['orderHistoryBy15Minutes'] = res;
           if (key === orderKey(keyPair))
             appWindow.send('orderHistoryBy15Minutes', res);
         })
@@ -1050,7 +1087,7 @@ const openAppWindow = () => {
     {
       sn.dxGetOrderHistory(keyPair[0], keyPair[1], start.unix(), end.unix(), 3600)
         .then(res => {
-          orderHistoryDict[key]['orderHistoryBy1Hour'] = res;
+          orderHistoryDict.get(key)['orderHistoryBy1Hour'] = res;
           if (key === orderKey(keyPair))
             appWindow.send('orderHistoryBy1Hour', res);
         })
@@ -1346,6 +1383,9 @@ ipcMain.on('saveGeneralSettings', (e, s) => {
   if(['showWallet'].some(prop => Object.keys(changed).includes(prop))) {
     sendGeneralSettings();
   }
+  if(getAutofillAddresses() !== s.autofillAddresses) {
+    changed.autofillAddresses = s.autofillAddresses;
+  }
   if(['enablePricing', 'pricingSource', 'apiKeys', 'pricingUnit', 'pricingFrequency'].some(prop => Object.keys(changed).includes(prop))) {
     clearPricingInterval();
     sendPricingMultipliers();
@@ -1378,6 +1418,55 @@ ipcMain.on('loadXBridgeConf', async function() {
   }
 });
 
+ipcMain.on('setUserLocale', (e, locale) => {
+  storage.setItem('locale', locale, true);
+  app.relaunch();
+  app.quit();
+});
+
+const getUserLocale = () => storage.getItem('locale');
+ipcMain.on('getUserLocale', e => {
+  e.returnValue = getUserLocale();
+});
+
+const getAutofillAddresses = () => storage.getItem('autofillAddresses') || false;
+ipcMain.on('getAutofillAddresses', e => {
+  e.returnValue = getAutofillAddresses();
+});
+
+const getLocaleData = () => {
+  const locale = storage.getItem('locale');
+  const localesPath = path.join(__dirname, 'locales');
+  const files = fs.readdirSync(localesPath);
+  const localeFileName = `${locale}.json`;
+  let data;
+  if(files.includes(localeFileName)) {
+    data = fs.readJsonSync(path.join(localesPath, localeFileName));
+  } else {
+    data = fs.readJsonSync(path.join(localesPath, `${defaultLocale}.json`));
+  }
+  return data;
+};
+
+const getLocalizedTextBlock = textBlockName => {
+  const fileName = `${textBlockName}-${getUserLocale()}.md`;
+  const defaultFileName = `${textBlockName}-${defaultLocale}.md`;
+  let filePath = path.join(__dirname, 'markdown', fileName);
+  if(!fileExists(filePath)) filePath = path.join(__dirname, 'markdown', defaultFileName);
+  return fs.readFileSync(filePath, 'utf8');
+};
+ipcMain.on('getLocalizedTextBlock', (e, textBlockName) => {
+  try {
+    e.returnValue = getLocalizedTextBlock(textBlockName);
+  } catch(err) {
+    e.returnValue = err.message;
+  }
+});
+
+ipcMain.on('getLocaleData', e => {
+  e.returnValue = getLocaleData();
+});
+
 const checkForUpdates = async function() {
   try {
     await new Promise(resolve => setTimeout(resolve, 3000));
@@ -1391,7 +1480,78 @@ const checkForUpdates = async function() {
   }
 };
 
+const localeData = {};
+const debugging = false;
+ipcMain.on('localizeText', (e, key, context, replacers = {}) => {
+  try {
+    let text = localeData[key] && localeData[key][context] ? localeData[key][context].val : key;
+    const replacerKeys = Object.keys(replacers);
+    if(replacerKeys.length > 0) {
+      for(const replacer of Object.keys(replacers)) {
+        const val = replacers[replacer];
+        const patt = new RegExp(_.escapeRegExp('{' + replacer + '}'), 'g');
+        text = text.replace(patt, val);
+      }
+    }
+    if(debugging) {
+      e.returnValue = '***' + text + '***';
+    } else {
+      e.returnValue = text;
+    }
+  } catch(err) {
+    handleError(err);
+  }
+});
+
+const autoGenerateAddressesAvailable = () => {
+  return info.version >= 3140100 ? true : false;
+};
+ipcMain.on('autoGenerateAddressesAvailable', e => {
+  e.returnValue = autoGenerateAddressesAvailable();
+});
+
 const onReady = new Promise(resolve => app.on('ready', resolve));
+
+ipcMain.on('generateNewAddress', async function(e, token) {
+  try {
+    const addresses = storage.getItem('addresses') || {};
+    const newAddress = await sn.dxGetNewTokenAddress(token);
+    const newAddresses = Object.assign({}, addresses, {
+      [token]: newAddress
+    });
+    storage.setItem('addresses', newAddresses);
+    appWindow.send('updatedAddresses', newAddresses);
+  } catch(err) {
+    console.error(err);
+  }
+});
+
+const generateNewAddresses = async function() {
+  try {
+    const selectedWallets = storage.getItem('selectedWallets');
+    const addresses = {};
+    const manifest = getManifest()
+      .reduce((map, w) => map.set(w.ver_id, w.ticker), new Map());
+    for(const versionId of selectedWallets) {
+      try {
+        const token = manifest.get(versionId);
+        const address = await sn.dxGetNewTokenAddress(token);
+        if(address) addresses[token] = address;
+      } catch(err) {
+        // silently handle errors
+        console.error(err);
+      }
+    }
+    storage.setItem('addresses', addresses);
+    return addresses;
+  } catch(err) {
+    handleError(err);
+  }
+};
+ipcMain.on('generateNewAddresses', async function(e) {
+  const addresses = await generateNewAddresses();
+  appWindow.send('updatedAddresses', addresses);
+});
 
 // Run the application within async function for flow control
 (async function() {
@@ -1404,14 +1564,6 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
       dataPath = app.getPath('userData');
     }
 
-    const fileExists = p => {
-      try {
-        fs.statSync(p);
-        return true;
-      } catch(err) {
-        return false;
-      }
-    };
 
     metaPath = path.join(dataPath, 'app-meta.json');
     storage = new SimpleStorage(metaPath);
@@ -1419,6 +1571,14 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
     password = storage.getItem('password');
     port = storage.getItem('port');
     let ip = storage.getItem('blocknetIP');
+
+    let locale = storage.getItem('locale');
+    if(!locale) {
+      locale = 'en';
+      storage.setItem('locale', defaultLocale);
+    }
+
+    Localize.initialize(locale, getLocaleData());
 
     pricingSource = storage.getItem('pricingSource');
     if(!pricingSource) {
@@ -1485,7 +1645,10 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
       }
     }
 
+    const upgradedToV4 = storage.getItem('upgradedToV4');
+
     if(!user || !password) {
+      if(!upgradedToV4) storage.setItem('upgradedToV4', true, true);
       await onReady;
       openConfigurationWindow({isFirstRun: true});
       checkForUpdates();
@@ -1496,13 +1659,40 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
 
     await new Promise(resolve => setTimeout(resolve, 2000));
 
+    let infoErr;
     try {
       info = await sn.getinfo();
     } catch(err) {
-      await onReady;
+      infoErr = err;
+    }
 
+    if(info) {
+
+      if(info.version < 4000000) storage.setItem('upgradedToV4', false, true);
+
+      // version check
+      const versionErr = versionCheck(info.version);
+      if(versionErr) {
+        await electron.dialog.showMessageBox({
+          type: 'info',
+          title: versionErr.name,
+          message: versionErr.message,
+          buttons: [
+            Localize.text('OK', 'universal')
+          ]
+        });
+        return app.quit();
+      }
+    }
+
+    if(!upgradedToV4) storage.setItem('upgradedToV4', true, true);
+
+    if(infoErr && !upgradedToV4) await checkAndCopyV3Configs(getBaseDataPath(), app, Localize, storage);
+
+    if(infoErr) {
+      await onReady;
       checkForUpdates();
-      openConfigurationWindow({ error: err });
+      openConfigurationWindow({ error: infoErr });
       return;
     }
 
@@ -1525,6 +1715,11 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
       storage.setItem('keyPair', keyPair);
     }
 
+    // Autogenerate new addresses
+    if(autoGenerateAddressesAvailable() && storage.getItem('autofillAddresses')) {
+      await generateNewAddresses();
+    }
+
     const localhost = 'localhost';
 
     // In development use the live ng server. In production serve the built files
@@ -1540,6 +1735,8 @@ const onReady = new Promise(resolve => app.on('ready', resolve));
 
   } catch(err) {
     handleError(err);
+    electron.dialog.showErrorBox(Localize.text('Oops! There was an error.', 'universal'), err.message + '\n' + err.stack);
+    app.quit();
   }
 
 })();
@@ -1552,8 +1749,8 @@ function isTokenPairValid(keyPair) {
 
 // check for version number. Minimum supported blocknet client version
 function versionCheck(version) {
-  if (version < 3130200) {
-    return {name: 'Unsupported Version', message: 'BLOCK DX requires Blocknet wallet version 3.13.2 or greater.'};
+  if (version < 4000100) {
+    return {name: Localize.text('Unsupported Version', 'universal'), message: Localize.text('Block DX requires Blocknet wallet version 4.0.0 or greater.', 'universal')};
   }
   return null;
 }

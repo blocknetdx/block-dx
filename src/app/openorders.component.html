@@ -7,28 +7,28 @@
     <ng-template #rowDetail let-row="row">
       <div class="row-detail" [title]="row.displayStatus">
         <div>
-          <span>Fee: <span [innerHtml]="0 | blockCurrency:symbols[1]:'6'"></span></span>
+          <span><Localize context="openorders" key="Fee"></Localize>: <span [innerHtml]="0 | blockCurrency:symbols[1]:'6' | localizeDecimalSeparator"></span></span>
         </div>
         <div>
           <span>{{row.created_at | timeAgo}}</span>
-          <span><a class="close" (click)="cancelOrder(row)">Cancel order</a></span>
+          <span><a class="close" (click)="cancelOrder(row)"><Localize context="openorders" key="Cancel order"></Localize></a></span>
         </div>
       </div>
     </ng-template>
   </bn-table-row-detail>
 
   <app-table-column [prop]="'price'" [classList]="'col'" maxWidth="36px">
-    <ng-template columnHeader>Type</ng-template>
+    <ng-template columnHeader><Localize context="openorders" key="Type"></Localize></ng-template>
     <ng-template let-row="row" columnCell>
       <span class="bn-number no-highlight open-order-table-font" [title]="row.displayStatus"
             [class.color-red]="row.side == 'sell'"
             [class.color-green]="row.side == 'buy'"
-            [innerHtml]="row.side === 'buy' ? 'BUY' : 'SELL'"></span>
+            [innerHtml]="row.side === 'buy' ? Localize.text('Buy', 'openorders').toUpperCase() : Localize.text('Sell', 'openorders').toUpperCase()"></span>
     </ng-template>
   </app-table-column>
 
   <app-table-column [prop]="'price'" [classList]="'col'" maxWidth="80px">
-    <ng-template columnHeader>Market</ng-template>
+    <ng-template columnHeader><Localize context="openorders" key="Market"></Localize></ng-template>
     <ng-template let-row="row" columnCell>
       <span class="bn-number open-order-table-font no-highlight" [title]="row.displayStatus"
             [innerHtml]="row.taker + '/' + row.maker"></span>
@@ -36,38 +36,38 @@
   </app-table-column>
 
   <app-table-column [prop]="'size'" [classList]="'col'">
-    <ng-template columnHeader>Amount</ng-template>
+    <ng-template columnHeader><Localize context="openorders" key="Amount"></Localize></ng-template>
     <ng-template let-row="row" columnCell>
-      <span class="bn-number open-order-table-font no-highlight" [title]="row.displayStatus" [innerHTML]="row.displaySize | blockCurrency:symbols[0]:'6'"></span> <span class="padded-token open-order-table-font no-highlight" [title]="row.displayStatus" [innerHTML]="hashPadToken[row.taker]"></span>
+      <span class="bn-number open-order-table-font no-highlight" [title]="row.displayStatus" [innerHTML]="row.displaySize | blockCurrency:symbols[0]:'6' | localizeDecimalSeparator"></span> <span class="padded-token open-order-table-font no-highlight" [title]="row.displayStatus" [innerHTML]="hashPadToken[row.taker]"></span>
     </ng-template>
   </app-table-column>
 
   <app-table-column [prop]="'price'" [classList]="'col'">
-    <ng-template columnHeader>Price</ng-template>
+    <ng-template columnHeader><Localize context="openorders" key="Price"></Localize></ng-template>
     <ng-template let-row="row" columnCell>
       <span class="bn-number open-order-table-font no-highlight" [title]="row.displayStatus"
-            [innerHTML]="row.displayPrice | blockCurrency:symbols[1]:'6'"></span> <span class="padded-token open-order-table-font no-highlight" [title]="row.displayStatus" [innerHTML]="hashPadToken[row.maker]"></span>
+            [innerHTML]="row.displayPrice | blockCurrency:symbols[1]:'6' | localizeDecimalSeparator"></span> <span class="padded-token open-order-table-font no-highlight" [title]="row.displayStatus" [innerHTML]="hashPadToken[row.maker]"></span>
     </ng-template>
   </app-table-column>
 
   <app-table-column *ngIf="pricingEnabled && !shouldHidePricing(symbols)" [prop]="'price'" [classList]="'col'" maxWidth="74px">
-    <ng-template columnHeader>Price ({{pricing ? pricing.in : ''}})</ng-template>
+    <ng-template columnHeader><Localize context="openorders" key="Price"></Localize> ({{pricing ? pricing.in : ''}})</ng-template>
     <ng-template let-row="row" columnCell>
       <span *ngIf="!pricingAvailable || !row.pricingAvailable" class="bn-number open-order-table-font no-highlight" [title]="row.displayStatus">N/A</span>
       <span *ngIf="pricingAvailable && row.pricingAvailable" class="bn-number open-order-table-font no-highlight"  [title]="row.displayStatus"
-            [innerHTML]="row.displayAPIPrice | blockCurrency:symbols[1]:'6'"></span>
+            [innerHTML]="row.displayAPIPrice | blockCurrency:symbols[1]:'6' | localizeDecimalSeparator"></span>
     </ng-template>
   </app-table-column>
 
   <app-table-column [prop]="'price'" [classList]="'col'">
-    <ng-template columnHeader>Total</ng-template>
+    <ng-template columnHeader><Localize context="openorders" key="Total"></Localize></ng-template>
     <ng-template let-row="row" columnCell>
-      <span class="bn-number open-order-table-font no-highlight" [title]="row.displayStatus" [innerHTML]="row.displayTotal | blockCurrency:symbols[1]:'6'"></span> <span class="padded-token open-order-table-font no-highlight" [title]="row.displayStatus" [innerHTML]="hashPadToken[row.maker]"></span>
+      <span class="bn-number open-order-table-font no-highlight" [title]="row.displayStatus" [innerHTML]="row.displayTotal | blockCurrency:symbols[1]:'6' | localizeDecimalSeparator"></span> <span class="padded-token open-order-table-font no-highlight" [title]="row.displayStatus" [innerHTML]="hashPadToken[row.maker]"></span>
     </ng-template>
   </app-table-column>
 
   <app-table-column [prop]="'created_at'" [classList]="'col d-none d-sm-block'">
-    <ng-template columnHeader>Created</ng-template>
+    <ng-template columnHeader><Localize context="openorders" key="Created"></Localize></ng-template>
     <ng-template let-row="row" columnCell>
       <span class="open-order-table-font no-highlight" [title]="row.displayStatus">{{row.displayDate}}</span>
     </ng-template>
@@ -81,7 +81,7 @@
   <!--</app-table-column>-->
 
   <app-table-column [prop]="'status'" [classList]="'d-none d-sm-block col'" maxWidth="40px">
-    <ng-template columnHeader>Status</ng-template>
+    <ng-template columnHeader><Localize context="openorders" key="Status"></Localize></ng-template>
     <ng-template let-row="row" columnCell>
       <div *ngIf="row.status === OrderStates.New" class="order-status status-open" [title]="row.displayStatus">
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
@@ -96,7 +96,7 @@
           </circle></g>
         </svg>
       </div>
-      <div *ngIf="row.status === OrderStates.Open" class="order-status status-open" [title]="row.displayStatus">Open</div>
+      <div *ngIf="row.status === OrderStates.Open" class="order-status status-open" [title]="row.displayStatus"><Localize context="openorders" key="Open"></Localize></div>
       <div *ngIf="row.status === OrderStates.Accepting" class="order-status status-process" [title]="row.displayStatus">1/5</div>
       <div *ngIf="row.status === OrderStates.Hold" class="order-status status-process" [title]="row.displayStatus">2/5</div>
       <div *ngIf="row.status === OrderStates.Initialized" class="order-status status-process" [title]="row.displayStatus">3/5</div>

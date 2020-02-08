@@ -21,6 +21,10 @@ const EnterWalletCredentials = require('./views/enter-wallet-credentials');
 const ConfigurationMenu = require('./views/configuration-menu');
 const Wallet = require('./modules/wallet');
 
+const { Localize } = require('../../../src-back/localize');
+Localize.initialize(ipcRenderer.sendSync('getUserLocale'), ipcRenderer.sendSync('getLocaleData'));
+window.Localize = Localize;
+
 ipcRenderer.on('errorMessage', async function(e, title, message) {
   try {
     const { dismiss } = await swal({
@@ -63,6 +67,8 @@ const state = {
 
 $(document).ready(() => {
   try {
+
+    document.title = Localize.text('Configuration', 'configurationWindow');
 
     const setLayoutHeights = height => {
       const headerHeight = 113;

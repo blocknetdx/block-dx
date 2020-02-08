@@ -1,16 +1,24 @@
 /* global $, swal */
 
-const { ipcRenderer } = require('electron');
+const { ipcRenderer, remote } = require('electron');
 
 const renderSidebar = require('./modules/sidebar');
 const renderPricing = require('./modules/pricing');
 const renderBalances = require('./modules/balances');
+const renderOrderFormSettings = require('./modules/order-form');
+const renderLocalization = require('./modules/localization');
 const renderLayout = require('./modules/layout');
 
 const handleError = err => {
   console.error(err);
   alert(err);
 };
+
+const { Localize } = require('../../../src-back/localize');
+const locale = ipcRenderer.sendSync('getUserLocale');
+Localize.initialize(locale, ipcRenderer.sendSync('getLocaleData'));
+
+document.title = Localize.text('General Settings', 'generalSettingsWindow');
 
 const state = {
 
@@ -29,12 +37,28 @@ const state = {
 
 };
 
-
+state.set('locale', locale);
+state.set('locales', [
+  ['en', 'English']
+  // ['de', 'Deutsch']
+]);
 state.set('active', 0);
 state.set('sidebarSelected', 0);
+state.set('autofillAddresses', ipcRenderer.sendSync('getAutofillAddresses'));
+
+const autoGenerateAddressesAvailable = ipcRenderer.sendSync('autoGenerateAddressesAvailable');
+state.set('autoGenerateAddressesAvailable', autoGenerateAddressesAvailable);
+
+const marketPricingText = Localize.text('Market Pricing', 'generalSettingsWindow');
+const balancesText = Localize.text('Balances', 'generalSettingsWindow');
+const orderFormText = Localize.text('Order Form', 'generalSettingsWindow');
+const languageText = Localize.text('Language', 'generalSettingsWindow');
+
 state.set('sidebarItems', [
-  {sidebarText: 'Market Pricing', title: 'MARKET PRICING'},
-  {sidebarText: 'Balances', title: 'BALANCES'}
+  {sidebarText: marketPricingText, title: marketPricingText.toUpperCase()},
+  {sidebarText: balancesText, title: balancesText.toUpperCase()},
+  {sidebarText: orderFormText, title: orderFormText.toUpperCase()},
+  {sidebarText: languageText, title: languageText.toUpperCase()}
   // {sidebarText: 'Layout Options', title: 'LAYOUT OPTIONS'}
 ]);
 
@@ -53,7 +77,8 @@ const saveSettings = () => {
     apiKeys: state.get('apiKeys'),
     pricingUnit: state.get('pricingUnit'),
     pricingFrequency: state.get('pricingFrequency'),
-    showWallet: state.get('showWallet')
+    showWallet: state.get('showWallet'),
+    autofillAddresses: state.get('autofillAddresses')
   });
 };
 
@@ -72,21 +97,27 @@ $(document).ready(() => {
     const msg = bool ? "Error: an API key is required for this data source." : "&nbsp;";
     $('#js-pricingInputError').html(msg);
     bool ? $('#js-apiKeyInput').addClass('pricingInputError') : $('#js-apiKeyInput').removeClass('pricingInputError');
-  }
+  };
 
   const render = () => {
 
     const sidebarItems = state.get('sidebarItems');
     const sidebarSelected = state.get('sidebarSelected');
     const active = state.get('active');
-    const sidebarHTML = renderSidebar({ state });
+    const sidebarHTML = renderSidebar({ state, Localize });
     let mainHTML = '';
     switch(active) {
       case 0:
-        mainHTML = renderPricing({ state });
+        mainHTML = renderPricing({ state, Localize });
         break;
       case 1:
-        mainHTML = renderBalances({ state });
+        mainHTML = renderBalances({ state, Localize });
+        break;
+      case 2:
+        mainHTML = renderOrderFormSettings({ state, Localize });
+        break;
+      case 3:
+        mainHTML = renderLocalization({ state, Localize });
         break;
       default:
         mainHTML = '';
@@ -213,7 +244,7 @@ $(document).ready(() => {
                 const $colorBar = $('.js-pricingColorBar');
                 $($target.find('div')[0]).text(pricingSourceObj.text);
                 state.set('pricingSource', source);
-                $('#js-apiKeyInput').attr("placeholder", "Enter API key");
+                $('#js-apiKeyInput').attr("placeholder", Localize.text('Enter API key', 'generalSettingsWindow'));
                 const apiKeys = state.get('apiKeys');
                 let key;
                 if(apiKeys[source]) {
@@ -229,7 +260,7 @@ $(document).ready(() => {
                 if(!pricingSourceObj.apiKeyNeeded) {
                   // api key not needed
                   $('#js-apiKeyInput').prop("disabled", true);
-                  $('#js-apiKeyInput').attr("placeholder", "API key not needed").val('');
+                  $('#js-apiKeyInput').attr("placeholder", Localize.text('API key not needed', 'generalSettingsWindow')).val('');
                   apiKeyError(false);
                 } else {
                   // api key needed
@@ -345,12 +376,16 @@ $(document).ready(() => {
             closeDropdowns();
             return;
           }
+
+          const yesText = Localize.text('Yes', 'universal');
+          const noText = Localize.text('No', 'universal');
+
           $icon.addClass('fa-angle-up');
           $icon.removeClass('fa-angle-down');
           $target.append(`
             <div class="js-dropdownMenu" style="z-index:1000;position:absolute;top:${height}px;left:0;background-color:#ddd;width:${width}px;max-height:162px;overflow-y:auto;">
-              <div class="js-dropdownMenuItem dropdown-button" data-showWallet="true"><div>Yes</div></div>
-              <div class="js-dropdownMenuItem dropdown-button" data-showWallet="false"><div>No</div></div>
+              <div class="js-dropdownMenuItem dropdown-button" data-showWallet="true"><div>${yesText}</div></div>
+              <div class="js-dropdownMenuItem dropdown-button" data-showWallet="false"><div>${noText}</div></div>
             </div>
           `);
           setTimeout(() => {
@@ -362,9 +397,93 @@ $(document).ready(() => {
                 // console.log('value', value, typeof value);
                 const newShowWallet = value === 'true' ? true : false;
                 // console.log('newShowWallet', newShowWallet);
-                $($target.find('div')[0]).text(newShowWallet ? 'Yes' : 'No');
+                $($target.find('div')[0]).text(newShowWallet ? yesText : noText);
                 state.set('showWallet', newShowWallet);
                 saveSettings();
+              });
+          }, 0);
+        });
+
+      $('#js-autofillAddressesDropdown')
+        .off('click')
+        .on('click', e => {
+          e.preventDefault();
+          const $target = $(e.currentTarget);
+          const $icon = $target.find('i');
+          const autofillAddresses = state.get('autofillAddresses');
+          const height = $target.outerHeight();
+          const width = $target.outerWidth();
+          if ($icon.hasClass('fa-angle-up')) {
+            closeDropdowns();
+            return;
+          }
+
+          const yesText = Localize.text('Yes', 'universal');
+          const noText = Localize.text('No', 'universal');
+
+          $icon.addClass('fa-angle-up');
+          $icon.removeClass('fa-angle-down');
+          $target.append(`
+            <div class="js-dropdownMenu" style="z-index:1000;position:absolute;top:${height}px;left:0;background-color:#ddd;width:${width}px;max-height:162px;overflow-y:auto;">
+              <div class="js-dropdownMenuItem dropdown-button" data-autofillAddresses="true"><div>${yesText}</div></div>
+              <div class="js-dropdownMenuItem dropdown-button" data-autofillAddresses="false"><div>${noText}</div></div>
+            </div>
+          `);
+          setTimeout(() => {
+            $('.js-dropdownMenuItem')
+              .off('click')
+              .on('click', ee => {
+                ee.preventDefault();
+                const value = $(ee.currentTarget).attr('data-autofillAddresses');
+                const newAutofillAddresses = value === 'true' ? true : false;
+                $($target.find('div')[0]).text(newAutofillAddresses ? yesText : noText);
+                state.set('autofillAddresses', newAutofillAddresses);
+                saveSettings();
+                // if set to autofill addresses, then generate new addresses
+                if(newAutofillAddresses) ipcRenderer.send('generateNewAddresses');
+              });
+          }, 0);
+        });
+
+      $('#js-selectLocaleDropdown')
+        .off('click')
+        .on('click', e => {
+          e.preventDefault();
+          const $target = $(e.currentTarget);
+          const $icon = $target.find('i');
+          const height = $target.outerHeight();
+          const width = $target.outerWidth();
+          const locales = state.get('locales');
+          if ($icon.hasClass('fa-angle-up')) {
+            closeDropdowns();
+            return;
+          }
+          $icon.addClass('fa-angle-up');
+          $icon.removeClass('fa-angle-down');
+          $target.append(`
+            <div class="js-dropdownMenu" style="z-index:1000;position:absolute;top:${height}px;left:0;background-color:#ddd;width:${width}px;max-height:162px;overflow-y:auto;">
+              ${locales.map(([code, name]) => `<div class="js-dropdownMenuItem dropdown-button" data-locale="${code}"><div>${code} - ${name}</div></div>`).join('')}
+            </div>
+          `);
+          setTimeout(() => {
+            $('.js-dropdownMenuItem')
+              .off('click')
+              .on('click', async function(ee) {
+                ee.preventDefault();
+                const value = $(ee.currentTarget).attr('data-locale');
+                const selected = locales.find(([code]) => code === value);
+                const confirmed = await remote.dialog.showMessageBox({
+                  type: 'warning',
+                  message: Localize.text('In order to change the language to {selected}, Block DX must restart. Do you want to continue?', 'generalSettingsWindow', {selected: selected[1]}),
+                  buttons: [
+                    Localize.text('Cancel', 'universal'),
+                    Localize.text('OK', 'universal')
+                  ]
+                });
+                if(!confirmed) return;
+                $($target.find('div')[0]).text(selected[0] + ' - ' + selected[1]);
+                state.set('locale', value);
+                ipcRenderer.send('setUserLocale', value);
               });
           }, 0);
         });
@@ -394,10 +513,10 @@ $(document).ready(() => {
       apiKeyError(false);
       if(!pricingSourceObj.apiKeyNeeded) {
         $('#js-apiKeyInput').prop("disabled", true);
-        $('#js-apiKeyInput').attr("placeholder", "API key not needed").val('');
+        $('#js-apiKeyInput').attr("placeholder", Localize.text('API key not needed', 'generalSettingsWindow')).val('');
       } else {
         $('#js-apiKeyInput').prop("disabled", false);
-        $('#js-apiKeyInput').attr("placeholder", "Enter API key");
+        $('#js-apiKeyInput').attr("placeholder", Localize.text('Enter API key', 'generalSettingsWindow'));
         if (pricingSourceObj.apiKeyNeeded && $('#js-apiKeyInput').val().trim() == '') {
           $('#js-apiKeyInput').val('');
           apiKeyError(true);

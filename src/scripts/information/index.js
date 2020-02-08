@@ -10,8 +10,9 @@ const renderFAQ = require('./modules/faq');
 const renderTutorials = require('./modules/tutorials');
 const renderSupport = require('./modules/support');
 const renderBlocknet = require('./modules/blocknet');
+const { Localize } = require('../../../src-back/localize');
 
-
+Localize.initialize(ipcRenderer.sendSync('getUserLocale'), ipcRenderer.sendSync('getLocaleData'));
 
 const handleError = err => {
   console.error(err);
@@ -34,16 +35,19 @@ const state = {
 };
 
 
+const gettingStartedText = Localize.text('Getting Started', 'informationWindow');
+const feesText = Localize.text('Fees', 'informationWindow');
+
 state.set('active', 0);
 state.set('sidebarSelected', 0);
 state.set('sidebarItems', [
-  {sidebarText: 'Getting Started', title: 'GETTING STARTED'},
-  {sidebarText: 'Fees', title: 'FEES'},
+  {sidebarText: gettingStartedText, title: gettingStartedText.toUpperCase()},
+  {sidebarText: feesText, title: feesText.toUpperCase()},
   // {sidebarText: 'Listings', title: 'LISTINGS'},
   // {sidebarText: 'FAQ', title: 'FAQ'},
   // {sidebarText: 'Tutorials', title: 'TUTORIALS'},
   // {sidebarText: 'Troubleshooting', title: 'TROUBLESHOOTING'},
-  {sidebarText: 'Powered by Blocknet', title: 'BLOCKNET PROTOCOL'}
+  {sidebarText: Localize.text('Powered by Blocknet', 'informationWindow'), title: Localize.text('Blocknet Protocol', 'informationWindow').toUpperCase()}
 ]);
 
 
@@ -51,6 +55,7 @@ state.set('sidebarItems', [
 
 $(document).ready(() => {
 
+  document.title = Localize.text('Information', 'informationWindow');
 
   const render = () => {
 
@@ -58,15 +63,15 @@ $(document).ready(() => {
     const sidebarSelected = state.get('sidebarSelected');
     const active = state.get('active');
 
-    const sidebarHTML = renderSidebar({ state });
+    const sidebarHTML = renderSidebar({ state, Localize });
     let mainHTML = '';
 
     switch(active) {
       case 0:
-        mainHTML = renderIntroduction();
+        mainHTML = renderIntroduction({ Localize });
         break;
       case 1:
-        mainHTML = renderFees();
+        mainHTML = renderFees({ Localize });
         break;
       // case 4:
       //   mainHTML = renderListings();
@@ -81,7 +86,7 @@ $(document).ready(() => {
       //   mainHTML = renderSupport();
       //   break;
       case 2:
-        mainHTML = renderBlocknet();
+        mainHTML = renderBlocknet({ Localize });
         break;
       default:
         mainHTML = '';
@@ -98,7 +103,7 @@ $(document).ready(() => {
                 <h3 class="title">${sidebarItems[sidebarSelected]['title']}</h3>
                 ${mainHTML}
                 <div id="js-buttonContainer" class="button-container">
-                  <button id="js-closeBtn" type="button">CLOSE</button>
+                  <button id="js-closeBtn" type="button">${Localize.text('Close', 'universal').toUpperCase()}</button>
                 </div>
               </div>
             </div>

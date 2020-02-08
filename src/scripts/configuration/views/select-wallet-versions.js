@@ -1,4 +1,4 @@
-/* global tippy */
+/* global tippy, Localize */
 
 const fs = require('fs-extra-promise');
 const { Set } = require('immutable');
@@ -6,7 +6,7 @@ const { remote } = require('electron');
 const { RouterView } = require('../../modules/router');
 const route = require('../constants/routes');
 const configurationTypes= require('../constants/configuration-types');
-const titles = require('../constants/titles');
+const titles = require('../modules/titles');
 const { compareByVersion } = require('../util');
 
 class SelectWalletVersions extends RouterView {
@@ -120,10 +120,10 @@ class SelectWalletVersions extends RouterView {
               <div class="main-area-item2">
                 <div style="display:flex;flex-direction:row:flex-wrap:nowrap;justify-content:space-between;">
                   <div>${w.name}</div>
-                  <div style="display:${!updatingWallets && w.abbr === 'BLOCK' ? 'none' : 'block'};"><small><a class="js-skipBtn" href="#" data-abbr="${w.abbr}" data-version="${w.version}"><i class="far ${checked ? 'fa-check-square' : 'fa-square'} check-icon" /></a> ${addingWallets ? 'Add Wallet' : updatingWallets ? 'Update wallet' : 'Skip'}</small></div>
+                  <div style="display:${!updatingWallets && w.abbr === 'BLOCK' ? 'none' : 'block'};"><small><a class="js-skipBtn" href="#" data-abbr="${w.abbr}" data-version="${w.version}"><i class="far ${checked ? 'fa-check-square' : 'fa-square'} check-icon" /></a> ${addingWallets ? Localize.text('Add Wallet', 'configurationWindowWalletVersions') : updatingWallets ? Localize.text('Update wallet', 'configurationWindowWalletVersions') : Localize.text('Skip', 'configurationWindowWalletVersions')}</small></div>
                 </div>
                 <div class="input-group" style="margin-bottom:0;margin-top:10px;">
-                  <label style="flex-basis:0;flex-grow:1;">Wallet Version</label>
+                  <label style="flex-basis:0;flex-grow:1;">${Localize.text('Wallet Version','configurationWindowWalletVersions')}</label>
                   <div class="js-versionDropdownButton dropdown-button" data-abbr="${w.abbr}" data-version="${w.version}" style="flex-basis:0;flex-grow:1;position:relative;">
                     <div style="margin-left:10px;">${w.version}</div>
                     <div><i class="fas fa-angle-down radio-icon" style="margin-right:0;font-size:20px;"></i></div>
@@ -135,15 +135,15 @@ class SelectWalletVersions extends RouterView {
       })
       .join('\n');
 
-    const noFoundMessage = 'Unable to automatically detect installed wallets that haven\'t been configured already. If you haven\'t already installed the wallet you would like to connect, please do that first. If you are using a custom data directory you will need to go BACK and select Expert Setup. If you would like to configure a wallet you already have configured you will need to go BACK and select Update Wallet.';
+    const noFoundMessage = Localize.text('Unable to automatically detect installed wallets that haven\'t been configured already. If you haven\'t already installed the wallet you would like to connect, please do that first. If you are using a custom data directory you will need to go BACK and select Expert Setup. If you would like to configure a wallet you already have configured you will need to go BACK and select Update Wallet.','configurationWindowWalletVersions');
 
     let title;
     if(addingWallets) {
-      title = titles.ADD_WALLET_QUICK_CONFIGURATION;
+      title = titles.ADD_WALLET_QUICK_CONFIGURATION();
     } else if(updatingWallets) {
-      title = titles.UPDATE_WALLET_QUICK_CONFIGURATION;
+      title = titles.UPDATE_WALLET_QUICK_CONFIGURATION();
     } else {
-      title = titles.FRESH_SETUP_QUICK_CONFIGURATION;
+      title = titles.FRESH_SETUP_QUICK_CONFIGURATION();
     }
 
     const disableContinue = addingWallets && addAbbrToVersion.size === 0 ? true : updatingWallets && updateAbbrToVersion.size === 0 ? true : false;
@@ -153,11 +153,11 @@ class SelectWalletVersions extends RouterView {
           <div class="container">
             <div class="flex-container">
               <div class="col2-no-margin">
-              
-                <p style="${styles.p}">Please select the wallet version installed for each of the following assets. <strong>DO NOT</strong> use any wallet versions not listed here. They have either not been tested yet or are not compatible.</p>
+
+                <p style="${styles.p}">${Localize.text('Please select the wallet version installed for each of the following assets. <strong>DO NOT</strong> use any wallet versions not listed here. They have either not been tested yet or are not compatible.','configurationWindowWalletVersions')}</p>
                 <div class="select-all-outer-container">
-                  <p class="js-selectWalletToContinue text-danger" style="display:${(addingWallets || updatingWallets) && disableContinue ? 'block' : 'none' };">Please select at least one wallet to continue.</p>
-                  <p class="select-all-container"><a class="js-selectAll select-all-link" href="#"><i class="far ${allChecked ? 'fa-check-square' : 'fa-square'} check-icon" /> ${addingWallets ? 'Add' : updatingWallets ? 'Update' : 'Skip'} All</a></p>
+                  <p class="js-selectWalletToContinue text-danger" style="display:${(addingWallets || updatingWallets) && disableContinue ? 'block' : 'none' };">${Localize.text('Please select at least one wallet to continue.','configurationWindowWalletVersions')}</p>
+                  <p class="select-all-container"><a class="js-selectAll select-all-link" href="#"><i class="far ${allChecked ? Localize.text('fa-check-square','configurationWindowWalletVersions') : 'fa-square'} check-icon" /> ${addingWallets ? Localize.text('Add','configurationWindowWalletVersions') : updatingWallets ? Localize.text('Update','configurationWindowWalletVersions') : Localize.text('Skip All','configurationWindowWalletVersions')}</a></p>
                 </div>
                 <div id="js-mainConfigurationArea" class="main-area">
                   ${items.length > 0 ? items : `<div>${noFoundMessage}</div>`}
@@ -165,24 +165,24 @@ class SelectWalletVersions extends RouterView {
                 <div style="display:none;">
                 <div class="js-tippyContent">
                   <ul style="text-align:left;">
-                    ${!updatingWallets ? 
-                      `<li>Lite wallets, online wallets, and Electrum wallets are not supported yet.</li>
-                      <li>Not all assets are supported. <a class="js-supportedAssetsLink" href="#">See list of supported assets.</a></li>
-                      <li>Quick Setup only checks default install locations. If using a custom install location, use Expert Setup.</li>`
+                    ${!updatingWallets ?
+                      `<li>${Localize.text('Lite wallets, online wallets, and Electrum wallets are not supported yet.','configurationWindowWalletVersions')}</li>
+                      <li>${Localize.text('Not all assets are supported. <a class="js-supportedAssetsLink" href="#">See list of supported assets.</a>','configurationWindowWalletVersions')}</li>
+                      <li>${Localize.text('Quick Setup only checks default install locations. If using a custom install location, use Expert Setup.','configurationWindowWalletVersions')}</li>`
                     :
-                      `<li>The wallet might not be configured. Only wallets that have been configured can be updated. To add a new wallet, go BACK and choose the Add Wallet option.</li>
-                      <li>Quick Setup only checks default install locations. If using a custom install location, use Expert Setup.</li>`
+                      `<li>${Localize.text('The wallet might not be configured. Only wallets that have been configured can be updated. To add a new wallet, go BACK and choose the Add Wallet option.','configurationWindowWalletVersions')}</li>
+                      <li>${Localize.text('Quick Setup only checks default install locations. If using a custom install location, use Expert Setup.','configurationWindowWalletVersions')}</li>`
                     }
                   </ul>
                 </div>
                 </div>
-                <div style="${styles.bottomP}">Don't see a wallet in the list? <sup><i class="fas fa-question-circle js-tippyTrigger" /></sup></div>
-                
+                <div style="${styles.bottomP}">${Localize.text('Don\'t see a wallet in the list?','configurationWindowWalletVersions')} <sup><i class="fas fa-question-circle js-tippyTrigger" /></sup></div>
+
                 <div id="js-buttonContainer" class="button-container">
-                  <button id="js-backBtn" type="button" class="gray-button">BACK</button>
-                  <button id="js-continueBtn" type="button" ${disableContinue ? 'disabled' : ''}>CONTINUE</button>
+                  <button id="js-backBtn" type="button" class="gray-button">${Localize.text('Back','configurationWindowWalletVersions').toUpperCase()}</button>
+                  <button id="js-continueBtn" type="button" ${disableContinue ? 'disabled' : ''}>${Localize.text('Continue','configurationWindowWalletVersions').toUpperCase()}</button>
                 </div>
-              
+
               </div>
             </div>
           </div>

@@ -3,20 +3,20 @@
 <div class="navbar-pricing__cell" [class.active]="active" *ngIf="symbols">
   <div class="navbar-pricing__cell_body" (click)="active = !active">
     <div class="navbar-pricing__upper">{{symbols[0]}} / {{symbols[1]}}</div>
-    <div class="navbar-pricing__lower">Select market pair</div>
+    <div class="navbar-pricing__lower"><Localize context="pairSelector" key="Select market pair"></Localize></div>
   </div>
 
   <div [@fadeInOut] class="pair-container" *ngIf="active">
     <header>
       <form (ngSubmit)="onSubmit()" id="pairForm" #pairForm="ngForm" novalidate>
         <div class="row d-md-none">
-          <p class="type2">SELECT MARKET PAIR</p>
+          <p class="type2">{{Localize.text('Select Market Pair', 'pairSelector').toUpperCase()}}</p>
         </div>
         <div class="form-group row">
           <div class="col-6 col-md-4">
             <div class="input-group">
               <input name="coinA" type="text"
-              required placeholder="Select asset"
+              required placeholder="{{Localize.text('Select asset', 'pairSelector')}}"
               tabindex="1" autocomplete="off"
               (keyup.ArrowDown)="onArrowDown($event)"
               #coinA="ngModel" #input
@@ -32,7 +32,7 @@
           <div class="col-6 col-md-4">
             <div class="input-group">
               <input name="coinB" type="text"
-              required placeholder="Priced in"
+              required placeholder="{{Localize.text('Priced in', 'pairSelector')}}"
               tabindex="2" autocomplete="off"
               (keyup.ArrowDown)="onArrowDown($event)"
               [disabled]="!coinAValid"
@@ -47,7 +47,7 @@
             </div>
           </div>
           <div class="col-md-4 d-none d-md-block">
-            <button #submit tabindex="0" type="submit" [disabled]="!(coinAValid && coinBValid)">Select</button>
+            <button #submit tabindex="0" type="submit" [disabled]="!(coinAValid && coinBValid)"><Localize context="pairSelector" key="Select"></Localize></button>
           </div>
         </div>
       </form>
@@ -63,7 +63,7 @@
       (onRowSelect)="onRowSelect($event)">
 
       <app-table-column [prop]="'symbol'" [classList]="'col-6 col-sm-3 align-left'">
-        <ng-template columnHeader>Ticker</ng-template>
+        <ng-template columnHeader><Localize context="pairSelector" key="Ticker"></Localize></ng-template>
         <ng-template let-row="row" columnCell>
           <span class="coin-cell">
             <b><span *ngIf="coinAValid">{{model.coinA.symbol}}/</span>{{row.symbol}}</b>
@@ -72,7 +72,7 @@
       </app-table-column>
 
       <app-table-column [prop]="'name'" [classList]="'col-6 col-sm-3 align-left d-md-block'">
-        <ng-template columnHeader>Asset</ng-template>
+        <ng-template columnHeader><Localize context="pairSelector" key="Asset"></Localize></ng-template>
         <ng-template let-row="row" columnCell>
           <span class="capitalize currency-cell">{{row.name}}</span>
         </ng-template>
@@ -105,7 +105,7 @@
 
     <ng-container *isBp="['xs', 'sm']">
       <div [@fadeInOut] class="submit-button" *ngIf="pairForm.form.valid">
-        <button tabindex="-1" type="submit" form="pairForm">Select</button>
+        <button tabindex="-1" type="submit" form="pairForm"><Localize context="pairSelector" key="Select"></Localize></button>
       </div>
     </ng-container>
 

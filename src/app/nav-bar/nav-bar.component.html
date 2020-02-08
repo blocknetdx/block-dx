@@ -1,7 +1,7 @@
 <nav class="navbar">
   <div class="navbar-bar" [class.menu-active]="pairSelectorActiveState">
     <a class="navbar-brand" [routerLink]="['/trading']">
-      <img src="assets/icon.svg" alt="Blocknet Logo">
+      <img src="assets/icon.svg" [alt]="Localize.text('Blocknet Logo', 'navbar')">
     </a>
 
     <app-pair-selector (onActiveStatus)="pairSelectorActiveState = $event"></app-pair-selector>
@@ -10,43 +10,43 @@
     <div class="collapse navbar-collapse" [class.active]="navCollapsed">
       <a (click)="toggleNav()" class="close"><i class="material-icons">close</i></a>
       <ul>
-        <li>Settings</li>
+        <li><Localize context="navbar" key="Settings"></Localize></li>
         <!--<li><a href="#">My Balances</a></li>-->
         <!--<li><a href="#">Setup Wallet</a></li>-->
-        <li><a href="#" (click)="openGeneralSettings($event)">General Settings</a></li>
-        <li><a href="#" (click)="openConfigurationWizard($event)">Add & Update Wallets</a></li>
+        <li><a href="#" (click)="openGeneralSettings($event)"><Localize context="navbar" key="General Settings"></Localize></a></li>
+        <li><a href="#" (click)="openConfigurationWizard($event)"><Localize context="navbar" key="Add & Update Wallets"></Localize></a></li>
         <!-- <li><a href="#" (click)="openSettings($event)">RPC Settings</a></li> -->
-        <li><a href="#" (click)="checkForUpdates($event)">Check for Updates</a></li>
+        <li><a href="#" (click)="checkForUpdates($event)"><Localize context="navbar" key="Check for Updates"></Localize></a></li>
       </ul>
       <ul>
-        <li>Information</li>
-        <li><a href="#" (click)="openInformation($event)">Getting Started</a></li>
-        <li><a href="#" (click)="openReleaseNotesWindow($event)">Release Notes</a></li>
-        <li><a href="#" (click)="openLink($event, 'api')">API</a></li>
-        <li><a href="#" (click)="openLink($event, 'exchanges')">Buy BLOCK</a></li>
-        <li><a href="#" (click)="openLink($event, 'faq')">FAQ</a></li>
-        <li><a href="#" (click)="openLink($event, 'fees')">Fees</a></li>
-        <li><a href="#" (click)="openLink($event, 'resources')">Resources</a></li>
-        <li><a href="#" (click)="openNotices($event)">Terms of Service</a></li>
+        <li><Localize context="navbar" key="Information"></Localize></li>
+        <li><a href="#" (click)="openInformation($event)"><Localize context="navbar" key="Getting Started"></Localize></a></li>
+        <li><a href="#" (click)="openReleaseNotesWindow($event)"><Localize context="navbar" key="Release Notes"></Localize></a></li>
+        <li><a href="#" (click)="openLink($event, 'api')"><Localize context="navbar" key="API"></Localize></a></li>
+        <li><a href="#" (click)="openLink($event, 'exchanges')"><Localize context="navbar" key="Buy BLOCK"></Localize></a></li>
+        <li><a href="#" (click)="openLink($event, 'faq')"><Localize context="navbar" key="FAQ"></Localize></a></li>
+        <li><a href="#" (click)="openLink($event, 'fees')"><Localize context="navbar" key="Fees"></Localize></a></li>
+        <li><a href="#" (click)="openLink($event, 'resources')"><Localize context="navbar" key="Resources"></Localize></a></li>
+        <li><a href="#" (click)="openNotices($event)"><Localize context="navbar" key="Terms of Service"></Localize></a></li>
       </ul>
       <!-- <ul>
         <li>Support</li>
         <li><a href="#" (click)="openLink($event, 'community')">Community Forum</a></li>
       </ul> -->
       <ul>
-        <li>Contact Us</li>
-        <li><a href="#" (click)="openLink($event, 'community')">Discord</a></li>
-        <li><a href="#" (click)="openLink($event, 'reddit')">Reddit</a></li>
-        <li><a href="#" (click)="openLink($event, 'twitter')">Twitter</a></li>
+        <li><Localize context="navbar" key="Contact Us"></Localize></li>
+        <li><a href="#" (click)="openLink($event, 'community')"><Localize context="navbar" key="Discord"></Localize></a></li>
+        <li><a href="#" (click)="openLink($event, 'reddit')"><Localize context="navbar" key="Reddit"></Localize></a></li>
+        <li><a href="#" (click)="openLink($event, 'twitter')"><Localize context="navbar" key="Twitter"></Localize></a></li>
       </ul>
       <ul>
         <li class="app-version"></li>
-        <li class="app-version">v{{appVersion}} | Powered by Blocknet</li>
+        <li class="app-version">v{{appVersion}} | <Localize context="navbar" key="Powered by Blocknet"></Localize></li>
       </ul>
     </div>
     <a (click)="toggleNav()" class="navbar-toggler">
       <!-- <i class="left material-icons">menu</i> -->
-      MENU
+      {{Localize.text('Menu', 'navbar').toUpperCase()}}
     </a>
   </div>
 
@@ -54,21 +54,21 @@
 
     <div class="navbar-pricing__cell">
       <div class="navbar-pricing__upper">
-        <span class="d-none d-sm-inline" [innerHTML]="currentPrice.last | blockCurrency:symbols[1]:'8'"></span><span class="d-none d-sm-inline"> {{symbols[1]}}</span>
+        <span class="d-none d-sm-inline" [innerHTML]="currentPrice.last | blockCurrency:symbols[1]:'8' | localizeDecimalSeparator"></span><span class="d-none d-sm-inline"> {{symbols[1]}}</span>
       </div>
-      <div class="navbar-pricing__lower">Last trade price</div>
+      <div class="navbar-pricing__lower"><Localize context="navbar" key="Last trade price"></Localize></div>
     </div>
 
     <div class="navbar-pricing__cell twentyfourprice--">
       <div class="navbar-pricing__upper price_{{currentPrice.priceStatus}}">
-        {{currentPrice.priceDiff | percent:'1.2-2'}}
+        {{currentPrice.priceDiff | percent:'1.2-2' | localizeDecimalSeparator}}
       </div>
-      <div class="navbar-pricing__lower">24 hour price</div>
+      <div class="navbar-pricing__lower"><Localize context="navbar" key="24 hour price"></Localize></div>
     </div>
 
     <div class="navbar-pricing__cell twentyfourvol--">
-      <div class="navbar-pricing__upper">{{currentPrice._volume < 1 ? (currentPrice.volume | numberFormat : "1.8-8") : (currentPrice.volume | numberFormat : "1.0-0")}}<span class="d-none d-sm-inline"> {{symbols[0]}}</span></div>
-      <div class="navbar-pricing__lower">24 hour volume</div>
+      <div class="navbar-pricing__upper">{{currentPrice._volume < 1 ? (currentPrice.volume | numberFormat : "1.8-8" | localizeDecimalSeparator) : (currentPrice.volume | numberFormat : "1.0-0")}}<span class="d-none d-sm-inline"> {{symbols[0]}}</span></div>
+      <div class="navbar-pricing__lower"><Localize context="context" key="24 hour volume"></Localize></div>
     </div>
   </div>
 

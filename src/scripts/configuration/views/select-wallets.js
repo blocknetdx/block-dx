@@ -1,9 +1,11 @@
+/* global Localize */
+
 const { remote } = require('electron');
 const { RouterView } = require('../../modules/router');
 const route = require('../constants/routes');
 const sidebar = require('../snippets/sidebar');
 const configurationTypes = require('../constants/configuration-types');
-const titles = require('../constants/titles');
+const titles = require('../modules/titles');
 
 class SelectWallets extends RouterView {
 
@@ -44,11 +46,11 @@ class SelectWallets extends RouterView {
 
     let title;
     if(addingWallets) {
-      title = titles.ADD_WALLET_EXPERT_CONFIGURATION;
+      title = titles.ADD_WALLET_EXPERT_CONFIGURATION();
     } else if(updatingWallets) {
-      title = titles.UPDATE_WALLET_EXPERT_CONFIGURATION;
+      title = titles.UPDATE_WALLET_EXPERT_CONFIGURATION();
     } else {
-      title = titles.FRESH_SETUP_EXPERT_CONFIGURATION;
+      title = titles.FRESH_SETUP_EXPERT_CONFIGURATION();
     }
 
     const html = `
@@ -59,19 +61,19 @@ class SelectWallets extends RouterView {
             ${sidebar(0)}
           </div>
           <div class="col2">
-            <p style="margin-top:0;padding-top:0;padding-left:10px;padding-right:10px;margin-bottom:10px;">${updatingWallets ? 'Select the wallet(s) that you would like to update.' : 'In order to conduct peer-to-peer trades, Block DX requires the <a href="#" class="text-link js-blocknetWalletLink">Blocknet wallet</a> and the wallets of any assets you want to trade with. Select the wallets that are installed to begin setup.'}</p>
-            <p class="select-all-container"><a class="js-selectAll select-all-link" href="#"><i class="far ${allChecked ? 'fa-check-square' : 'fa-square'} check-icon" /> Select All</a></p>
+            <p style="margin-top:0;padding-top:0;padding-left:10px;padding-right:10px;margin-bottom:10px;">${updatingWallets ? Localize.text('Select the wallet(s) that you would like to update.','configurationWindowWallets') : Localize.text('In order to conduct peer-to-peer trades, Block DX requires the <a href="#" class="text-link js-blocknetWalletLink">Blocknet wallet</a> and the wallets of any assets you want to trade with. Select the wallets that are installed to begin setup.','configurationWindowWallets')}</p>
+            <p class="select-all-container"><a class="js-selectAll select-all-link" href="#"><i class="far ${allChecked ? 'fa-check-square' : 'fa-square'} check-icon" />${Localize.text(' Select All','configurationWindowWallets')}</a></p>
             <div id="js-mainConfigurationArea" class="main-area" style="position:relative;${skip ? 'opacity:.6;overflow-y:hidden;' : 'opacity:1;overflow-y:scroll;'}">
               ${listItems}
               <div id="js-overlay" style="display:${skip ? 'block' : 'none'};position:absolute;left:0;top:0;width:100%;height:100%;background-color:#000;opacity:0;"></div>
             </div>
             <div style="display:${(updatingWallets || addingWallets) ? 'none' : 'block'};padding: 10px; cursor: pointer;padding-bottom:0;">
-              <div id="js-skip" class="main-area-item"><i class="far ${skip ? 'fa-check-square' : 'fa-square'} radio-icon"></i> Skip and setup Block DX manually (not recommended)</div>
+              <div id="js-skip" class="main-area-item"><i class="far ${skip ? 'fa-check-square' : 'fa-square'} radio-icon"></i>${Localize.text(' Skip and setup Block DX manually (not recommended','configurationWindowWallets')})</div>
             </div>
 
             <div id="js-buttonContainer" class="button-container">
-              <button id="js-backBtn" type="button" class="gray-button">BACK</button>
-              <button id="js-continueBtn" type="button" ${selected.size === 0 ? 'disabled' : ''}>CONTINUE</button>
+              <button id="js-backBtn" type="button" class="gray-button">${Localize.text('Back','configurationWindowWallets').toUpperCase()}</button>
+              <button id="js-continueBtn" type="button" ${selected.size === 0 ? 'disabled' : ''}>${Localize.text('Continue','configurationWindowWallets').toUpperCase()}</button>
             </div>
 
           </div>
