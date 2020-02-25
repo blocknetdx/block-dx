@@ -93,6 +93,7 @@ export class OpenordersComponent extends BaseComponent implements OnInit {
             this._hashPadToken[order.taker] = this.padToken(order.taker);
           });
         });
+        this.updatePricingAvailable(this.pricing ? this.pricing.enabled : false);
       });
 
     this.breakpointService.breakpointChanges.first()
