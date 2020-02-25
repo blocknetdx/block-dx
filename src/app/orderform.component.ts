@@ -387,12 +387,12 @@ export class OrderformComponent implements OnInit {
     this.totalPrice = enteredValue * currPrice;
   }
 
-  resetModel() {
+  resetModel(retainPrice = false) {
     this.model = {
       id: '',
       amount: '',
-      price: '',
-      secondPrice: '',
+      price: retainPrice ? this.model.price : '',
+      secondPrice: retainPrice ? this.model.secondPrice : '',
       totalPrice: '',
       makerAddress: this.addresses[this.symbols[0]] || '',
       takerAddress: this.addresses[this.symbols[1]] || ''
@@ -467,7 +467,7 @@ export class OrderformComponent implements OnInit {
       if(state === 'success') {
         ipcRenderer.send('saveAddress', this.symbols[0], makerAddress);
         ipcRenderer.send('saveAddress', this.symbols[1], takerAddress);
-        if(orderformOrder) this.resetModel();
+        if(orderformOrder) this.resetModel(true);
       } else if (state === 'failed') {
         alert('There was a problem with your order.');
       }
