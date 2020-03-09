@@ -95,8 +95,11 @@ export class OrderformComponent implements OnInit {
 
     this.addresses = ipcRenderer.sendSync('getAddressesSync');
     ipcRenderer.on('updatedAddresses', (e, addresses) => {
-      this.addresses = addresses;
-      this.resetModel();
+      this.zone.run(() => {
+        this.addresses = addresses;
+        this.model.makerAddress = this.addresses[this.symbols[0]] || '';
+        this.model.takerAddress = this.addresses[this.symbols[1]] || '';
+      });
     });
 
     this.appService.marketPairChanges.subscribe((symbols) => {
