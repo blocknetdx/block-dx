@@ -4,10 +4,13 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
 import {Localize} from './app/localize/localize.component';
+import './scripts/zoom';
 
 const { ipcRenderer } = window.electron;
 
 ipcRenderer.setMaxListeners(0);
+
+const platform = ipcRenderer.sendSync('getPlatform');
 
 String.prototype['capitalize'] = function() {
   return this.charAt(0).toUpperCase() + this.slice(1);

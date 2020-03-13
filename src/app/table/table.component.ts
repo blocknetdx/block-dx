@@ -182,13 +182,13 @@ export class TableComponent {
   }
 
   rowContextMenu(row, e:any) {
-    if (this.selectable) {
-      if (e) {
-        e.preventDefault();
-        e.stopPropagation();
-      }
+    if (this.selectable && e) {
+      e.preventDefault();
+      e.stopPropagation();
+      const { ipcRenderer } = window.electron;
+      const zoomFactor = ipcRenderer.sendSync('getZoomFactor');
       const { clientX, clientY } = e;
-      this.onRowContextMenu.emit({row, clientX, clientY});
+      this.onRowContextMenu.emit({row, clientX: Math.floor(clientX * zoomFactor), clientY: Math.floor(clientY * zoomFactor)});
     }
   }
 

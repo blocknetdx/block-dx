@@ -2,7 +2,7 @@ const isDev = require('electron-is-dev');
 const path = require('path');
 const { BrowserWindow } = require('../browser-window');
 
-const openUnverifiedAssetWindow = (tokens, platform, appWindow) => new Promise(resolve => new BrowserWindow({
+const openUnverifiedAssetWindow = (tokens, platform, appWindow, storage) => new Promise(resolve => new BrowserWindow({
   filePath: path.resolve(__dirname, '../../', isDev ? 'src' : 'dist', 'unverified-asset.html'),
   // toggleDevTools: true,
   windowOptions: {
@@ -23,6 +23,9 @@ const openUnverifiedAssetWindow = (tokens, platform, appWindow) => new Promise(r
     closeUnverifiedAssetWindow() {
       this.close();
     }
+  },
+  onBeforeLoad() {
+    this._window.webContents.setZoomFactor(storage.getItem('zoomFactor'));
   },
   onClose() {
     const hide = this.data.get('hide') || false;
