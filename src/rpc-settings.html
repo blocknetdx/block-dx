@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Settings</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0">
+  <meta name="format-detection" content="telephone=no">
+
+  <link rel="shortcut icon" href="assets/favicon_block.png"  />
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700|Roboto+Mono:300,400,700" rel="stylesheet">
+  <!--<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">-->
+
+  <style>
+
+    body {
+      background-color: #0e2742;
+      font-family: "Open Sans", sans-serif;
+      margin-left: 0;
+      margin-right: 0;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+    h1, h2, h3, h4 {
+      color: #fff;
+      margin-top: 0;
+      margin-bottom: 0;
+      padding: 10px 15px;
+      background-color: #172e48;
+      letter-spacing: 1px;
+    }
+    .container {
+      padding: 0 20px;
+    }
+    .input-group {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      margin-bottom: 15px;
+    }
+    .input-group label {
+      width: 35%;
+      background-color: #213d54;
+      color: #fff;
+      padding: 15px 15px;
+      font-weight: 300;
+      font-size: 14px;
+    }
+    .input-group input {
+      flex-grow: 1;
+      background-color: #123149;
+      color: #fff;
+      padding: 15px 20px;
+      font-weight: 300;
+      font-size: 14px;
+      border-width: 1px;
+      border-color: #123149;
+      border-style: solid;
+      outline-width: 0;
+    }
+    .input-group input:focus {
+      outline-width: 0px;
+      border-width: 1px;
+      border-color: #4b6275;
+      border-style: solid;
+    }
+    .label {
+      color: #fff;
+      padding: 15px 15px;
+      font-weight: 300;
+      font-size: 14px;
+    }
+    button {
+      display: block;
+      width: 100%;
+      background-color: #0069ff;
+      color: #fff;
+      padding: 15px 20px;
+      font-size: 14px;
+      border-top-width: 0;
+      border-bottom-width: 0;
+      border-left-width: 0;
+      border-right-width: 0;
+      outline-width: 0;
+      cursor: pointer;
+      transition: background-color .5s;
+    }
+    button:hover {
+      background-color: #0054cc;
+    }
+    button:active {
+      outline-width: 0;
+    }
+    button:disabled {
+      background-color: #0054cc;
+      opacity: .8;
+      cursor: default;
+    }
+    .version {
+      font-size: 14px;
+      color: #fff;
+      text-align: right;
+      justify-content: flex-end;
+    }
+    a.blocknet-link {
+      color: #006afe;
+    }
+    a.blocknet-link:hover {
+      color: #66d0ff;
+    }
+
+  </style>
+
+</head>
+<body>
+
+  <div style="width:100%; padding: 20px 0 20px 0; text-align:center;"><img style="max-width:300px;" src="assets/logo_full.svg" alt="Blocknet Logo"></div>
+  <h3>SETTINGS</h3>
+  <form class="container">
+    <div class="label">In order to conduct peer-to-peer trades, Block DX requires access to the <a href="#" class="blocknet-link js-blocknetWalletLink">Blocknet wallet</a>. Please enter the RPC credentials found in <em>blocknet.conf</em>.</div>
+
+    <div class="input-group">
+      <label>Blocknet RPC Port</label>
+      <input type="text" id="js-port" pattern="\d+" required />
+    </div>
+
+    <div class="input-group">
+      <label>Blocknet RPC User</label>
+      <input type="text" id="js-user" pattern="\w+" required />
+    </div>
+
+    <div class="input-group">
+      <label>Blocknet RPC Password</label>
+      <input type="password" id="js-password" />
+    </div>
+
+    <div class="input-group">
+      <label>Blocknet  IP</label>
+      <input type="text" pattern="^\d+\.\d+\.\d+\.\d+$" id="js-ip" />
+    </div>
+
+    <div class="input-group">
+      <button type="submit">SAVE CHANGES</button>
+    </div>
+
+    <div class="input-group version">
+      <span id="js-versionSpan"></span>
+    </div>
+
+  </form>
+
+  <script type="text/javascript">
+    window.electron = require('electron');
+  </script>
+
+  <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+
+  <script type="text/javascript" src="assets/vendor/jquery.min.js"></script>
+
+  <script>if (window.module) module = window.module;</script>
+
+  <script type="text/javascript">
+
+    $(document).ready(() => {
+
+      const { ipcRenderer } = require('electron');
+
+      const port = ipcRenderer.sendSync('getPort');
+      const user = ipcRenderer.sendSync('getUser');
+      const version = ipcRenderer.sendSync('getAppVersion');
+      const ip = ipcRenderer.sendSync('getBlocknetIP');
+
+      console.log(port);
+      console.log(user);
+
+      const $port = $('#js-port');
+      const $user = $('#js-user');
+      const $password = $('#js-password');
+      const $ip = $('#js-ip');
+
+      $port.val(port);
+      $user.val(user);
+      $ip.val(ip);
+      $('#js-versionSpan').text(`BLOCK DX v${version}`);
+
+      if(!port) {
+        $port[0].focus();
+      } else if(!user) {
+        $user[0].focus();
+      }
+
+      $('.js-blocknetWalletLink').on('click', e => {
+        e.preventDefault();
+        const { openExternal } = window.electron.remote.shell;
+        openExternal('https://github.com/blocknetdx/blocknet/releases/latest');
+      });
+
+      $('form').on('submit', e => {
+        e.preventDefault();
+
+        console.log('Submitted!', e);
+
+        $('button').attr('disabled', true);
+
+        const dataToSave = {
+          port: $port.val(),
+          user: $user.val(),
+          password: $password.val(),
+          blocknetIP: $ip.val()
+        };
+
+        console.log(dataToSave);
+
+        ipcRenderer.on('dataSaved', () => {
+          alert('The new settings have been saved. The application will now restart.');
+          ipcRenderer.send('restart');
+        });
+
+        ipcRenderer.send('saveData', dataToSave);
+
+      });
+
+      ipcRenderer.on('errorMessage', (e, message) => {
+        setTimeout(() => {
+          alert(message);
+        }, 100);
+      });
+
+    });
+
+  </script>
+
+</body>
+</html>

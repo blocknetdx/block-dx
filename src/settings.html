@@ -2,13 +2,15 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Settings</title>
+  <title>General Settings</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0">
   <meta name="format-detection" content="telephone=no">
 
   <link rel="shortcut icon" href="assets/favicon_block.png"  />
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700|Roboto+Mono:300,400,700" rel="stylesheet">
+  <link href="./assets/vendor/css/fontawesome-all.min.css" rel="stylesheet">
+  <link href="./assets/vendor/css/sweetalert2.css" rel="stylesheet">
   <!--<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">-->
 
   <style>
@@ -30,7 +32,7 @@
       letter-spacing: 1px;
     }
     .container {
-      padding: 0 20px;
+      padding: 20px;
     }
     .input-group {
       display: flex;
@@ -40,14 +42,62 @@
       margin-bottom: 15px;
     }
     .input-group label {
-      width: 35%;
+      width: 40%;
+      max-width: 40%;
+      min-width: 40%;
       background-color: #213d54;
       color: #fff;
       padding: 15px 15px;
       font-weight: 300;
-      font-size: 14px;
+      /*font-size: 14px;*/
     }
     .input-group input {
+      flex-grow: 1;
+      background-color: #123149;
+      color: #fff;
+      padding: 15px 20px;
+      font-weight: 300;
+      /*font-size: 14px;*/
+      border-width: 1px;
+      border-color: #123149;
+      border-style: solid;
+      outline-width: 0;
+    }
+    .input-group input:focus {
+      outline-width: 0;
+      border-width: 1px;
+      border-color: #4b6275;
+      border-style: solid;
+    }
+    input[type=text]:disabled {
+      opacity: .35;
+    }
+    .dropdown-button {
+      position: relative;
+      opacity: 1;
+      flex-grow: 1;
+      background-color: #123149;
+      color: #fff;
+      padding: 15px 20px;
+      font-weight: 300;
+      /*font-size: 14px;*/
+      border-width: 1px;
+      border-color: #123149;
+      border-style: solid;
+      outline-width: 0;
+      cursor: pointer;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: space-between;
+    }
+    .dropdown-button.disabled {
+      cursor: default;
+    }
+    .dropdown-button:hover {
+      background-color: rgba(18, 49, 73, .8);
+    }
+    input {
       flex-grow: 1;
       background-color: #123149;
       color: #fff;
@@ -59,21 +109,20 @@
       border-style: solid;
       outline-width: 0;
     }
-    .input-group input:focus {
-      outline-width: 0px;
+    input:focus {
+      outline-width: 0;
       border-width: 1px;
       border-color: #4b6275;
       border-style: solid;
     }
-    .label {
-      color: #fff;
-      padding: 15px 15px;
-      font-weight: 300;
-      font-size: 14px;
-    }
     button {
       display: block;
-      width: 100%;
+      flex-grow: 1;
+      flex-basis: 0;
+      /*flex-basis: 1;*/
+      /*width: 100%;*/
+      margin: 10px;
+      margin-bottom: 0;
       background-color: #0069ff;
       color: #fff;
       padding: 15px 20px;
@@ -97,58 +146,233 @@
       opacity: .8;
       cursor: default;
     }
-    .version {
-      font-size: 14px;
+    button.gray-button {
+      background-color: #ddd;
+      color: #0069ff;
+      opacity: 1;
+      transition: opacity .5s;
+    }
+    button.gray-button:hover {
+      opacity: .7;
+    }
+    div.button-container {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      margin-top: 10px;
+      height: 56px;
+      min-height: 56px;
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+    .flex-container {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+    }
+    .col1 {
+      position: absolute;
+      top: 112px;
+      bottom: 20px;
+      width: 200px;
+      min-width: 200px;
+      padding: 10px 20px;
+      background-color: #172e48;
+      overflow-y: auto;
+    }
+    .col2 {
+      display: flex;
+      flex-grow: 1;
+      flex-direction: column;
+      position: absolute;
+      top: 112px;
+      bottom: 20px;
+      left: 270px;
+      right: 20px;
+      margin-left: 10px;
       color: #fff;
-      text-align: right;
-      justify-content: flex-end;
     }
-    a.blocknet-link {
-      color: #006afe;
+    .title {
+      margin-right: -20px;
     }
-    a.blocknet-link:hover {
-      color: #66d0ff;
+    .sidebar-header {
+      color: #fff;
+      font-weight: bold;
+      text-transform: uppercase;
+      border-bottom: solid 1px rgba(255,255,255,0.3);
+      padding-bottom: 10px;
+      margin-bottom: 25px;
+    }
+    .sidebar-item {
+      margin-top: 10px;
+      margin-bottom: 10px;
+      color: #eee;
+      font-weight: 100;
+      cursor: default;
+      cursor: pointer;
+    }
+    .sidebar-item:hover {
+      /*opacity: .8;*/
+    }
+    .sidebar-inactive-link {
+      /*margin-left: 10px;*/
+    }
+    .sidebar-active-link {
+      font-weight: bold;
+      color: #fff;
+    }
+    .radio-icon {
+      color: #339CFF;
+      margin-right: 10px;
+    }
+    .main-area {
+      flex-grow: 1;
+      /*background-color: #243b55;*/
+      /*padding: 10px;*/
+      /*padding-top: 0;*/
+      margin-top: 20px;
+      overflow-x: hidden;
+      overflow-y: auto;
+      position:relative;
+      background-color:inherit;
+      padding: 0 10px;
+    }
+    .pricingErrorMessage {
+      color: #ed1c24;
+      margin-top: 6px;
+      margin-bottom: -6px;
+      /*margin-left: 10px;*/
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+      border: 0;
     }
 
+    ::-webkit-scrollbar-track {
+      -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background-color: rgba(248, 248, 248, 0.5);
+      border: 0;
+      border-radius: 3px;
+    }
+    a.text-link {
+      color: #0ce3ff;
+      opacity: 1;
+    }
+    a.text-link:hover {
+      color: #0ce3ff;
+      opacity: .8;
+    }
+    input[type="number"] {
+      position: relative;
+      /*margin: 0 0 1rem;*/
+      /*border: 1px solid #BBB;*/
+      /*border-color: #BBB #ECECEC #ECECEC #BBB;*/
+      /*padding: .2rem;*/
+    }
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      background: url("./assets/number_input_buttons.png") no-repeat center center;
+      background-size: 54px 54px;
+      width: 54px;
+      opacity: 1;
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      cursor: pointer;
+    }
+    .color-toggle-container {
+      position: relative;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      margin-top: 10px;
+      min-height: 52px;
+    }
+    .color-toggle-container a.pricingToggle1 {
+      background-color: #123149;
+      flex-basis: 0;
+      flex-grow: 1;
+      font-size: 16px;
+      padding: 15px;
+      transition: color .1s linear;
+      text-align: center;
+    }
+    .color-toggle-container a {
+      color: #fff;
+      text-decoration: none;
+    }
+    /*.color-toggle-container a.active:hover {*/
+      /*opacity: 1;*/
+    /*}*/
+    /*.color-toggle-container a:hover {*/
+      /*opacity: .8;*/
+    /*}*/
+    .color-toggle-container a.pricingToggle1.active {
+      color: #00f4c5;
+    }
+    .color-toggle-container a.pricingToggle2 {
+      color: #fff;
+      background-color: #123149;
+      flex-basis: 0;
+      flex-grow: 1;
+      font-size: 16px;
+      padding: 15px;
+      transition: color .1s linear;
+      text-align: center;
+    }
+    .color-toggle-container a.pricingToggle2.active {
+      color: #ff725e;
+    }
+    .color-toggle-container .color-bar {
+      position: absolute;
+      bottom: 0;
+      height: 2px;
+      width: 50%;
+      transition: margin .1s linear;
+    }
+    .color-toggle-container .color-bar.color-bar-left {
+      left: 0;
+      background-color: #00f4c5;
+      margin-left: 0;
+    }
+    .color-toggle-container .color-bar.color-bar-right {
+      /*right: 0;*/
+      margin-left: 50%;
+      background-color: #ff725e;
+    }
+    .pricingInputError {
+      border: 1px solid #ed1c24 !important;
+    }
+    .option-container {
+      margin-bottom: 25px;
+    }
+    .option-title {
+      font-weight: bold;
+      font-size: 1.05rem;
+      margin-bottom: 0;
+      margin-top: 0;
+    }
+    .option-description {
+      margin-top: 5px;
+      padding-top: 0;
+      padding-right: 10px;
+      margin-bottom: 0;
+    }
   </style>
 
 </head>
 <body>
+<div style="width:100%; padding: 20px 0 20px 0; text-align:center;"><img style="max-width:300px;" src="assets/logo_full.svg" alt="Blocknet Logo"></div>
 
-  <div style="width:100%; padding: 20px 0 20px 0; text-align:center;"><img style="max-width:300px;" src="assets/logo_full.svg" alt="Blocknet Logo"></div>
-  <h3>SETTINGS</h3>
-  <form class="container">
-    <div class="label">In order to conduct peer-to-peer trades, Block DX requires access to the <a href="#" class="blocknet-link js-blocknetWalletLink">Blocknet wallet</a>. Please enter the RPC credentials found in <em>blocknet.conf</em>.</div>
-
-    <div class="input-group">
-      <label>Blocknet RPC Port</label>
-      <input type="text" id="js-port" pattern="\d+" required />
-    </div>
-
-    <div class="input-group">
-      <label>Blocknet RPC User</label>
-      <input type="text" id="js-user" pattern="\w+" required />
-    </div>
-
-    <div class="input-group">
-      <label>Blocknet RPC Password</label>
-      <input type="password" id="js-password" />
-    </div>
-
-    <div class="input-group">
-      <label>Blocknet  IP</label>
-      <input type="text" pattern="^\d+\.\d+\.\d+\.\d+$" id="js-ip" />
-    </div>
-
-    <div class="input-group">
-      <button type="submit">SAVE CHANGES</button>
-    </div>
-
-    <div class="input-group version">
-      <span id="js-versionSpan"></span>
-    </div>
-
-  </form>
+<div id="js-main"></div>
 
   <script type="text/javascript">
     window.electron = require('electron');
@@ -160,75 +384,10 @@
 
   <script>if (window.module) module = window.module;</script>
 
+  <script type="text/javascript" src="assets/vendor/sweetalert2.js"></script>
+
   <script type="text/javascript">
-
-    $(document).ready(() => {
-
-      const { ipcRenderer } = require('electron');
-
-      const port = ipcRenderer.sendSync('getPort');
-      const user = ipcRenderer.sendSync('getUser');
-      const version = ipcRenderer.sendSync('getAppVersion');
-      const ip = ipcRenderer.sendSync('getBlocknetIP');
-
-      console.log(port);
-      console.log(user);
-
-      const $port = $('#js-port');
-      const $user = $('#js-user');
-      const $password = $('#js-password');
-      const $ip = $('#js-ip');
-
-      $port.val(port);
-      $user.val(user);
-      $ip.val(ip);
-      $('#js-versionSpan').text(`BLOCK DX v${version}`);
-
-      if(!port) {
-        $port[0].focus();
-      } else if(!user) {
-        $user[0].focus();
-      }
-
-      $('.js-blocknetWalletLink').on('click', e => {
-        e.preventDefault();
-        const { openExternal } = window.electron.remote.shell;
-        openExternal('https://github.com/blocknetdx/blocknet/releases/latest');
-      });
-
-      $('form').on('submit', e => {
-        e.preventDefault();
-
-        console.log('Submitted!', e);
-
-        $('button').attr('disabled', true);
-
-        const dataToSave = {
-          port: $port.val(),
-          user: $user.val(),
-          password: $password.val(),
-          blocknetIP: $ip.val()
-        };
-
-        console.log(dataToSave);
-
-        ipcRenderer.on('dataSaved', () => {
-          alert('The new settings have been saved. The application will now restart.');
-          ipcRenderer.send('restart');
-        });
-
-        ipcRenderer.send('saveData', dataToSave);
-
-      });
-
-      ipcRenderer.on('errorMessage', (e, message) => {
-        setTimeout(() => {
-          alert(message);
-        }, 100);
-      });
-
-    });
-
+    require('./scripts/settings');
   </script>
 
 </body>
