@@ -163,8 +163,16 @@ if(!isDev) {
 require('electron-context-menu')();
 
 // Only allow one application instance to be open at a time
-const isSecondInstance = app.makeSingleInstance(() => {});
-if(isSecondInstance) app.quit();
+const unlocked = app.requestSingleInstanceLock();
+if(!unlocked) {
+  app.quit();
+}
+app.on('second-instance', () => {
+  if(appWindow) {
+    if (appWindow.isMinimized()) appWindow.restore();
+    appWindow.focus();
+  }
+});
 
 const openOrderDetailsWindow = details => {
 
@@ -181,7 +189,10 @@ const openOrderDetailsWindow = details => {
     show: false,
     width: 800,
     height,
-    parent: appWindow
+    parent: appWindow,
+    webPreferences: {
+      nodeIntegration: true
+    }
   });
   if(isDev) {
     detailsWindow.loadURL(`file://${path.join(__dirname, 'src', 'order-details.html')}`);
@@ -266,7 +277,10 @@ const openUpdateAvailableWindow = (v, windowType, hideCheckbox = false) => new P
     show: false,
     width: 580,
     height: platform === 'win32' ? 375 : platform === 'darwin' ? 355 : 340,
-    parent: appWindow
+    parent: appWindow,
+    webPreferences: {
+      nodeIntegration: true
+    }
   });
   if(platform !== 'darwin') updateAvailableWindow.setMenu(null);
   if(isDev) {
@@ -393,7 +407,10 @@ const openConfigurationWindow = (options = {}) => {
     show: false,
     width: 1050,
     height: platform === 'win32' ? 708 : platform === 'darwin' ? 695 : 670,
-    parent: appWindow
+    parent: appWindow,
+    webPreferences: {
+      nodeIntegration: true
+    }
   });
   if(isDev) {
     configurationWindow.loadURL(`file://${path.join(__dirname, 'src', 'automation.html')}`);
@@ -579,7 +596,10 @@ const openSettingsWindow = (options = {}) => {
     show: false,
     width: 500,
     height: platform === 'win32' ? 640 : platform === 'darwin' ? 625 : 600,
-    parent: appWindow
+    parent: appWindow,
+    webPreferences: {
+      nodeIntegration: true
+    }
   });
   if(isDev) {
     settingsWindow.loadURL(`file://${path.join(__dirname, 'src', 'settings.html')}`);
@@ -665,7 +685,10 @@ const openGeneralSettingsWindow = () => {
     width: 1000,
     height: platform === 'win32' ? 708 : platform === 'darwin' ? 695 : 670,
     parent: appWindow,
-    modal: platform === 'darwin' ? false : true
+    modal: platform === 'darwin' ? false : true,
+    webPreferences: {
+      nodeIntegration: true
+    }
   });
 
   generalSettingsWindow.setMenu(null);
@@ -693,7 +716,10 @@ const openInformationWindow = () => {
     width: 1000,
     height: platform === 'win32' ? 708 : platform === 'darwin' ? 695 : 670,
     parent: appWindow,
-    modal: platform === 'darwin' ? false : true
+    modal: platform === 'darwin' ? false : true,
+    webPreferences: {
+      nodeIntegration: true
+    }
   });
 
   informationWindow.setMenu(null);
@@ -730,7 +756,10 @@ const openReleaseNotesWindow = () => {
     show: false,
     width: 500,
     height: height,
-    parent: appWindow
+    parent: appWindow,
+    webPreferences: {
+      nodeIntegration: true
+    }
   });
   if(isDev) {
     releaseNotesWindow.loadURL(`file://${path.join(__dirname, 'src', 'release-notes.html')}`);
@@ -801,7 +830,10 @@ const openTOSWindow = (alreadyAccepted = false) => {
     show: false,
     width: 500,
     height: height,
-    parent: appWindow
+    parent: appWindow,
+    webPreferences: {
+      nodeIntegration: true
+    }
   });
   if(isDev) {
     tosWindow.loadURL(`file://${path.join(__dirname, 'src', 'tos.html')}`);
@@ -826,7 +858,10 @@ const openAppWindow = () => {
   appWindow = new BrowserWindow({
     show: false,
     width: Math.max(width, 1050),
-    height: Math.max(height, 760)
+    height: Math.max(height, 760),
+    webPreferences: {
+      nodeIntegration: true
+    }
   });
 
   const initialBounds = storage.getItem('bounds');
