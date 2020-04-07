@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Unverified Asset</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0">
+  <meta name="format-detection" content="telephone=no">
+
+  <link rel="shortcut icon" href="assets/favicon_block.png"  />
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700|Roboto+Mono:300,400,700" rel="stylesheet">
+  <link href="./assets/vendor/css/fontawesome-all.min.css" rel="stylesheet">
+  <!--<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">-->
+
+  <style>
+
+    body {
+      background-color: #0e2742;
+      font-family: "Open Sans", sans-serif;
+      margin-left: 0;
+      margin-right: 0;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+    h1, h2, h3, h4 {
+      color: #fff;
+      margin-top: 0;
+      margin-bottom: 0;
+      padding: 10px 15px;
+      background-color: #172e48;
+      letter-spacing: 1px;
+    }
+    .container {
+      padding: 0 20px;
+    }
+    /*.input-group {*/
+      /*display: flex;*/
+      /*flex-direction: row;*/
+      /*flex-wrap: nowrap;*/
+      /*justify-content: flex-start;*/
+      /*margin-bottom: 15px;*/
+    /*}*/
+    .input-group label {
+      width: 35%;
+      background-color: #213d54;
+      color: #fff;
+      padding: 15px 15px;
+      font-weight: 300;
+      font-size: 14px;
+    }
+    .input-group input {
+      flex-grow: 1;
+      background-color: #123149;
+      color: #fff;
+      padding: 15px 20px;
+      font-weight: 300;
+      font-size: 14px;
+      border-width: 1px;
+      border-color: #123149;
+      border-style: solid;
+      outline-width: 0;
+    }
+    .input-group input:focus {
+      outline-width: 0;
+      border-width: 1px;
+      border-color: #4b6275;
+      border-style: solid;
+    }
+    .label {
+      color: #fff;
+      padding-top: 30px;
+      padding-bottom: 0;
+      padding-left: 0;
+      padding-right: 0;
+      font-weight: 300;
+      font-size: 14px;
+      min-height: 16px;
+    }
+    button {
+      display: block;
+      flex-grow: 1;
+      /*flex-basis: 1;*/
+      /*width: 100%;*/
+      margin: 10px;
+      background-color: #0069ff;
+      color: #fff;
+      padding: 15px 20px;
+      font-size: 14px;
+      border-top-width: 0;
+      border-bottom-width: 0;
+      border-left-width: 0;
+      border-right-width: 0;
+      outline-width: 0;
+      cursor: pointer;
+      transition: background-color .5s;
+    }
+    button:hover {
+      background-color: #0054cc;
+    }
+    button:active {
+      outline-width: 0;
+    }
+    button:disabled {
+      background-color: #0054cc;
+      opacity: .8;
+      cursor: default;
+    }
+    button.gray-button {
+      background-color: #ddd;
+      color: #0069ff;
+      opacity: 1;
+      transition: opacity .5s;
+    }
+    button.gray-button:hover {
+      opacity: .7;
+    }
+    div.button-container {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      margin-left: -10px;
+      margin-right: -10px;
+      padding-top: 15px;
+    }
+    .ask-again-container {
+      padding-top: 20px;
+      color: #888;
+    }
+    .ask-again-container a {
+      opacity: 1;
+      color: #aaa;
+      text-decoration: none;
+    }
+    .ask-again-container a:hover {
+      opacity: .8;
+      color: #aaa;
+      text-decoration: none;
+    }
+
+  </style>
+
+</head>
+<body>
+
+  <div style="width:100%; padding: 20px 0 20px 0; text-align:center;"><img style="max-width:300px;" src="assets/logo_full.svg" alt="Blocknet Logo"></div>
+  <h3 id="js-header"></h3>
+  <form class="container">
+
+    <div id="js-label" class="label"></div>
+
+    <div class="ask-again-container">
+      <a id="js-notAskAgain" href="#"><small><i class="far fa-square"></i> <span id="js-doNotAskAgainMessage"></span></small></a>
+    </div>
+
+    <div id="js-buttonContainer" class="button-container">
+      <button id="js-acceptBtn" type="button"></button>
+    </div>
+
+  </form>
+
+  <script type="text/javascript">
+    window.electron = require('electron');
+  </script>
+
+  <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+
+  <script type="text/javascript" src="assets/vendor/jquery.min.js"></script>
+
+  <script>if (window.module) module = window.module;</script>
+
+  <script type="text/javascript">
+    require('./scripts/unverified-asset');
+  </script>
+
+</body>
+</html>

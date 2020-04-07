@@ -26,6 +26,8 @@
               "src/tos.html",
               "src/update-available.html",
               "src/settings.html",
+              "src/unverified-asset.html",
+              "src/general-settings.html",
               "src/order-details.html",
               "src/information.html",
               "src/release-notes.html"

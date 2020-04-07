@@ -14,6 +14,7 @@ import { Cryptocurrency } from '../cryptocurrency';
 import { AppConstants } from '../constants';
 import { briefTimeout } from '../util';
 import {Localize} from '../localize/localize.component';
+import { renderSwitch } from '../modules/render-switch';
 
 @Component({
   selector: 'app-pair-selector',
@@ -309,12 +310,27 @@ export class PairSelectorComponent implements OnInit, AfterViewInit {
     return null;
   }
 
-  onSubmit() {
-    // console.log(this.model);
+  async onSubmit() {
     const a: string = this.model.coinA.symbol;
     const b: string = this.model.coinB.symbol;
-    // this.router.navigate(['/trading', `${a}-${b}`]);
-    window.electron.ipcRenderer.send('setKeyPair', [a, b]);
+
+    const tokenArr = [a, b];
+
+    const { ipcRenderer } = window.electron;
+    const approved = ipcRenderer.sendSync('checkTokensAgainstManifest', tokenArr);
+    let doNotShowWarningPairs = ipcRenderer.sendSync('getDoNotShowWarningAssetPairs');
+    doNotShowWarningPairs = [
+      ...doNotShowWarningPairs,
+      ...doNotShowWarningPairs.map(arr => [...arr].reverse())
+    ];
+    const notVerified = tokenArr.filter(t => !approved[t]);
+
+    if(notVerified.length > 0 && !doNotShowWarningPairs.some(([t0, t1]) => t0 === a && t1 === b)) {
+      const notShowAgain = await renderSwitch.send('openUnverifiedAssetWindow', notVerified);
+      if(notShowAgain) ipcRenderer.send('addToDoNotShowWarningAssetPairs', tokenArr);
+    }
+
+    window.electron.ipcRenderer.send('setKeyPair', tokenArr);
     this.active = false;
   }
 
