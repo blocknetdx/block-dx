@@ -70,23 +70,6 @@ $(document).ready(() => {
 
     document.title = Localize.text('Configuration', 'configurationWindow');
 
-    const setLayoutHeights = height => {
-      const headerHeight = 113;
-      const bodyHeight = height - 113;
-      $('#js-mainHeaderContainer').css('height', headerHeight - 40 + 'px'); // subtract the 40px of padding
-      $('#js-main').css({
-        height: bodyHeight + 'px',
-        'min-height': bodyHeight + 'px',
-        'max-height': bodyHeight + 'px'
-      });
-    };
-    setLayoutHeights(window.innerHeight);
-
-    window.addEventListener('resize', e => {
-      const { innerHeight } = e.target;
-      setLayoutHeights(innerHeight);
-    });
-
     state.set('sidebarSelected', 0);
     state.set('sidebarItems', [
       {text: 'Configuration Setup'},
