@@ -166,37 +166,39 @@
       flex-direction: row;
       flex-wrap: nowrap;
       justify-content: flex-start;
-      min-width: 100%;
     }
     .col1 {
+      position: absolute;
+      top: 177px;
+      bottom: 20px;
       width: 300px;
       min-width: 300px;
-      /*height: 465px;*/
-      margin-top: 0;
-      margin-bottom: 0;
-      margin-left: 0;
-      margin-right: 10px;
       padding-left: 20px;
       padding-right: 20px;
       padding-top: 10px;
       background-color: #172e48;
     }
     .col2 {
-      flex-grow: 1;
-      margin-left: 10px;
-      /*height: 475px;*/
-      /*max-height: 475px;*/
-      color: #fff;
       display: flex;
+      flex-grow: 1;
+      color: #fff;
       flex-direction: column;
+      position: absolute;
+      top: 177px;
+      bottom: 20px;
+      left: 380px;
+      right: 20px;
     }
     .col2-no-margin {
-      flex-grow: 1;
-      /*height: 475px;*/
-      /*max-height: 475px;*/
-      color: #fff;
       display: flex;
+      flex-grow: 1;
+      color: #fff;
       flex-direction: column;
+      position: absolute;
+      top: 177px;
+      bottom: 20px;
+      left: 20px;
+      right: 20px;
     }
     .sidebar-item {
       margin-top: 10px;
@@ -311,8 +313,11 @@
 </head>
 <body>
 
-  <div id="js-mainHeaderContainer" style="width:100%; padding: 20px 0 20px 0; text-align:center;"><img style="max-width:300px;" src="assets/logo_full.svg" alt="Blocknet Logo"></div>
-  <div id="js-main" style="display:flex;flex-direction:column;flex-wrap:nowrap;justify-content:flex-start;overflow-y:hidden;"></div>
+  <div id="js-mainHeaderContainer" style="width:100%; padding: 20px 0 20px 0; text-align:center;">
+    <img style="max-width:300px;" src="assets/logo_full.svg" alt="Blocknet Logo">
+  </div>
+
+  <div id="js-main"></div>
 
   <script type="text/javascript">
     window.electron = require('electron');
