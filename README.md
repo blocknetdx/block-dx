@@ -5,7 +5,7 @@
 
 BLOCK DX is a decentralized exchange dApp built on top of the [Blocknet Protocol](https://api.blocknet.co). This repository is maintained by the Blocknet Core Team. We encourage the community to create dApps on top of Blocknet. Please connect with our community on [Discord](https://discord.gg/2e6s7H8). More information about Blocknet can be found on the [Blocknet website](https://blocknet.co) and [documentation portal](https://docs.blocknet.co).
 
-[Website](https://blocknet.co) | [API](https://api.blocknet.co) | [Documentation](https://docs.blocknet.co) | [Discord](https://discord.gg/2e6s7H8)
+[Website](https://blockdx.com) | [API](https://api.blocknet.co) | [Documentation](https://docs.blocknet.co) | [Discord](https://discord.gg/2e6s7H8)
 -------------|-------------|-------------|-------------
 
 # Dev Instructions
@@ -14,7 +14,7 @@ Block DX requires the [Blocknet wallet](https://github.com/blocknetdx/blocknet/r
 
 ## Build and run locally:
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.4.1.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli).
 
 1. Install dependencies: `npm install`
 1. Start the dev server: `npm start`
