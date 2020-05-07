@@ -16,22 +16,6 @@
     "wallet_conf": "aeriumx--v2.0.conf"
   },
   {
-    "blockchain": "AmsterdamCoin",
-    "ticker": "AMS",
-    "ver_id": "amsterdamcoin--v4.6.0.0",
-    "ver_name": "AmsterdamCoin",
-    "conf_name": "amsterdamcoin.conf",
-    "dir_name_linux": "amsterdamcoin",
-    "dir_name_mac": "AmsterdamCoin",
-    "dir_name_win": "AmsterdamCoin",
-    "repo_url": "https://github.com/CoinProjects/AmsterdamCoin-v4",
-    "versions": [
-      "v4.6.0.0"
-    ],
-    "xbridge_conf": "amsterdamcoin--v4.6.0.0.conf",
-    "wallet_conf": "amsterdamcoin--v4.6.0.0.conf"
-  },
-  {
     "blockchain": "APR Coin",
     "ticker": "APR",
     "ver_id": "aprcoin--v1.0",
@@ -58,7 +42,8 @@
     "dir_name_win": "Argoneum",
     "repo_url": "https://github.com/Argoneum/argoneum",
     "versions": [
-      "v1.2.3.4"
+      "v1.4.0.0",
+      "v1.4.1.0"
     ],
     "xbridge_conf": "argoneum--v1.2.3.4.conf",
     "wallet_conf": "argoneum--v1.2.3.4.conf"
@@ -110,38 +95,6 @@
     ],
     "xbridge_conf": "badcoin--v0.16.3-2.conf",
     "wallet_conf": "badcoin--v0.16.3-2.conf"
-  },
-  {
-    "blockchain": "BiFrost",
-    "ticker": "FROST",
-    "ver_id": "bifrost--v1.2.0",
-    "ver_name": "BiFrost",
-    "conf_name": "bifrost.conf",
-    "dir_name_linux": "bifrost",
-    "dir_name_mac": "Bifrost",
-    "dir_name_win": "Bifrost",
-    "repo_url": "https://github.com/bifrost-actual/bifrost-coin",
-    "versions": [
-      "v1.2.1"
-    ],
-    "xbridge_conf": "bifrost--v1.2.0.conf",
-    "wallet_conf": "bifrost--v1.2.0.conf"
-  },
-  {
-    "blockchain": "BitBay",
-    "ticker": "BAY",
-    "ver_id": "bitbay--v2.1.2a",
-    "ver_name": "BitBay",
-    "conf_name": "bitbay.conf",
-    "dir_name_linux": "bitbay",
-    "dir_name_mac": "BitBay",
-    "dir_name_win": "BitBay",
-    "repo_url": "https://github.com/bitbaymarket/bitbay-core",
-    "versions": [
-      "v2.1.2a"
-    ],
-    "xbridge_conf": "bitbay--v2.1.2a.conf",
-    "wallet_conf": "bitbay--v2.1.2a.conf"
   },
   {
     "blockchain": "Bitcloud",
@@ -242,7 +195,8 @@
     "repo_url": "https://github.com/bitcoin/bitcoin",
     "versions": [
       "v0.19.0",
-      "v0.19.0.1"
+      "v0.19.0.1",
+      "v0.19.1"
     ],
     "xbridge_conf": "bitcoin--v0.15.1.conf",
     "wallet_conf": "bitcoin--v0.16.0.conf"
@@ -258,7 +212,7 @@
     "dir_name_win": "BCZ",
     "repo_url": "https://github.com/SpecialCoins/bitcoincz",
     "versions": [
-      "6.0.1.5"
+      "6.0.2.1"
     ],
     "xbridge_conf": "bcz--6.0.0.8.conf",
     "wallet_conf": "bcz--6.0.0.8.conf"
@@ -266,7 +220,7 @@
   {
     "blockchain": "BitGreen",
     "ticker": "BITG",
-    "ver_id": "bitgreen--v1.3.1",
+    "ver_id": "bitgreen--v1.4.0.8",
     "ver_name": "BitGreen",
     "conf_name": "bitgreen.conf",
     "dir_name_linux": "bitgreen",
@@ -274,27 +228,30 @@
     "dir_name_win": "BitGreen",
     "repo_url": "https://github.com/bitgreen/bitgreen",
     "versions": [
-      "v1.3.1",
-      "v1.3.2"
+      "v1.4.0.8",
+      "v1.4.0.9"
     ],
-    "xbridge_conf": "bitcoingreen--1.1.0.conf",
-    "wallet_conf": "bitcoingreen--1.1.0.conf"
+    "xbridge_conf": "bitgreen--v1.4.0.8.conf",
+    "wallet_conf": "bitgreen--v1.4.0.8.conf"
   },
   {
     "blockchain": "BitCore",
     "ticker": "BTX",
-    "ver_id": "bitcore--0.15.2.0.0",
-    "ver_name": "BitCore",
+    "ver_id": "bitcore--0.90.8.8.1",
+    "ver_name": "BitCore 0.90.x",
     "conf_name": "bitcore.conf",
     "dir_name_linux": "bitcore",
     "dir_name_mac": "BitCore",
     "dir_name_win": "BitCore",
     "repo_url": "https://github.com/LIMXTEC/BitCore",
     "versions": [
-      "0.15.2.2"
+      "0.90.8.8.1",
+      "0.90.8.9",
+      "0.90.8.10",
+      "0.90.8.11"
     ],
     "xbridge_conf": "bitcore--0.15.2.0.0.conf",
-    "wallet_conf": "bitcore--0.15.2.0.0.conf"
+    "wallet_conf": "bitcore--0.90.8.8.1.conf"
   },
   {
     "blockchain": "BitcoinZero",
@@ -307,7 +264,7 @@
     "dir_name_win": "bitcoinzero",
     "repo_url": "https://github.com/SpecialCoins/BitcoinZero",
     "versions": [
-      "5.0.3.5"
+      "5.0.7.8"
     ],
     "xbridge_conf": "bitcoinzero--5.0.0.5.conf",
     "wallet_conf": "bitcoinzero--5.0.0.5.conf"
@@ -353,9 +310,9 @@
     "dir_name_linux": "blast",
     "dir_name_mac": "BLAST",
     "dir_name_win": "BLAST",
-    "repo_url": "https://github.com/blastdev/blast-core",
+    "repo_url": "https://github.com/blastdev/blast-core-v2",
     "versions": [
-      "v1.3.0.0"
+      "v2.2.0"
     ],
     "xbridge_conf": "blast--v1.2.0.2.conf",
     "wallet_conf": "blast--v1.2.0.2.conf"
@@ -371,7 +328,7 @@
     "dir_name_win": "Blocknet",
     "repo_url": "https://github.com/blocknetdx/blocknet",
     "versions": [
-      "v4.0.1"
+      "v4.1.0"
     ],
     "xbridge_conf": "blocknet--v4.0.1.conf",
     "wallet_conf": "blocknet--v4.0.1.conf"
@@ -409,6 +366,22 @@
     "wallet_conf": "carebitcoin--v3.0.0.0.conf"
   },
   {
+    "blockchain": "CbdHealthNetwork",
+    "ticker": "CHN",
+    "ver_id": "cbdhealthnetwork--wallets-source-daemon",
+    "ver_name": "CbdHealthNetwork",
+    "conf_name": "cbdhealthnetwork.conf",
+    "dir_name_linux": "cbdhealthnetwork",
+    "dir_name_mac": "CbdHealthNetwork",
+    "dir_name_win": "CbdHealthNetwork",
+    "repo_url": "https://github.com/CHN-portal/CHN-Portal",
+    "versions": [
+      "wallets-source-daemon"
+    ],
+    "xbridge_conf": "cbdhealthnetwork--wallets-source-daemon.conf",
+    "wallet_conf": "cbdhealthnetwork--wallets-source-daemon.conf"
+  },
+  {
     "blockchain": "Chaincoin",
     "ticker": "CHC",
     "ver_id": "chaincoin--v0.18.1",
@@ -419,7 +392,7 @@
     "dir_name_win": "Chaincoin",
     "repo_url": "https://github.com/chaincoin/chaincoin",
     "versions": [
-      "v0.18.1"
+      "v0.18"
     ],
     "xbridge_conf": "chaincoin--v0.18.1.conf",
     "wallet_conf": "chaincoin--v0.18.1.conf"
@@ -451,7 +424,8 @@
     "dir_name_win": "ColossusXT",
     "repo_url": "https://github.com/ColossusCoinXT/ColossusCoinXT",
     "versions": [
-      "v1.2.2"
+      "v1.2.3",
+      "v1.2.4"
     ],
     "xbridge_conf": "colossusxt--v1.2.1.conf",
     "wallet_conf": "colossusxt--v1.2.1.conf"
@@ -499,7 +473,7 @@
     "dir_name_win": "CryptoDezireCash",
     "repo_url": "https://github.com/cryptodezire/CryptoDezireCash",
     "versions": [
-      "v2.1.1"
+      "v2.1.2"
     ],
     "xbridge_conf": "cryptodezirecash--v2.1.1.conf",
     "wallet_conf": "cryptodezirecash--v2.1.1.conf"
@@ -534,7 +508,8 @@
       "v0.14.0.2",
       "v0.14.0.3",
       "v0.14.0.4",
-      "v0.14.0.5"
+      "v0.14.0.5",
+      "v0.15.0.0"
     ],
     "xbridge_conf": "dash--v0.12.2.3.conf",
     "wallet_conf": "dash--v0.12.2.3.conf"
@@ -553,7 +528,8 @@
       "v3.3.9.3",
       "v3.3.9.4",
       "v3.3.9.5",
-      "v3.3.9.6"
+      "v3.3.9.6",
+      "v3.3.9.7"
     ],
     "xbridge_conf": "denarius--v3.3.9.3.conf",
     "wallet_conf": "denarius--v3.3.9.3.conf"
@@ -649,9 +625,8 @@
     "dir_name_win": "DIVI",
     "repo_url": "https://github.com/DiviProject/Divi",
     "versions": [
-      "DESK-1.2.2",
-      "v1.0.4-core",
-      "v1.0.7"
+      "v1.0.8",
+      "DESK-1.6.6"
     ],
     "xbridge_conf": "divi--v1.0.4-core.conf",
     "wallet_conf": "divi--v1.0.4-core.conf"
@@ -667,7 +642,7 @@
     "dir_name_win": "DogeCashCore",
     "repo_url": "https://github.com/dogecash/dogecash",
     "versions": [
-      "v5.1.1.3"
+      "5.1.1.6"
     ],
     "xbridge_conf": "dogecash--3.0.0.conf",
     "wallet_conf": "dogecash--3.0.0.conf"
@@ -796,7 +771,7 @@
     "dir_name_win": "FantasyGold",
     "repo_url": "https://github.com/FantasyGold/FantasyGold-Core",
     "versions": [
-      "2.0.0"
+      "2.19.1"
     ],
     "xbridge_conf": "fantasygold--2.0.0.conf",
     "wallet_conf": "fantasygold--2.0.0.conf"
@@ -941,7 +916,7 @@
     "dir_name_win": "GravityCoin",
     "repo_url": "https://github.com/SpecialCoins/GravityCoin",
     "versions": [
-      "4.0.7.5"
+      "4.0.7.8"
     ],
     "xbridge_conf": "gravitycoin--4.0.5.0.1.conf",
     "wallet_conf": "gravitycoin--4.0.5.0.1.conf"
@@ -1093,7 +1068,7 @@
   },
   {
     "blockchain": "Know Your Developer",
-    "ticker": "KYD",
+    "ticker": "KYDC",
     "ver_id": "kyd--v3.2.0.3",
     "ver_name": "Know Your Developer",
     "conf_name": "kyd.conf",
@@ -1105,7 +1080,7 @@
       "3.2.1",
       "3.3.1"
     ],
-    "xbridge_conf": "kyd--v3.2.0.3.conf",
+    "xbridge_conf": "kyd--3.3.1.conf",
     "wallet_conf": "kyd--v3.2.0.3.conf"
   },
   {
@@ -1153,8 +1128,7 @@
     "versions": [
       "v0.17.3.1",
       "v0.17.3.2",
-      "v0.17.4.1",
-      "v0.17.4.2"
+      "v0.17.4.5"
     ],
     "xbridge_conf": "lbrycrd--v0.12.2.1.conf",
     "wallet_conf": "lbrycrd--v0.17.2.0.conf"
@@ -1284,7 +1258,7 @@
     "dir_name_win": "Machinecoin",
     "repo_url": "https://github.com/machinecoin-project/machinecoin-core",
     "versions": [
-      "v0.16.2.1"
+      "v0.16.3"
     ],
     "xbridge_conf": "machinecoin--v0.16.1.4.conf",
     "wallet_conf": "machinecoin--v0.16.1.4.conf"
@@ -1412,7 +1386,8 @@
     "dir_name_win": "Myriadcoin",
     "repo_url": "https://github.com/myriadteam/myriadcoin",
     "versions": [
-      "v0.16.4.1"
+      "v0.16.4.1",
+      "v0.18.1.0"
     ],
     "xbridge_conf": "myriadcoin--v0.14.2.5.conf",
     "wallet_conf": "myriadcoin--v0.16.3.0.conf"
@@ -1428,7 +1403,15 @@
     "dir_name_win": "Namecoin",
     "repo_url": "https://github.com/namecoin/namecoin-core",
     "versions": [
-      "nc0.13.99-name-tab-beta1"
+      "nc0.13.99-name-tab-beta1",
+      "nc0.16.1",
+      "nc0.16.2",
+      "nc0.17.0",
+      "nc0.18.0",
+      "nc0.18.1",
+      "nc0.19.0",
+      "nc0.19.0.1",
+      "nc0.19.1"
     ],
     "xbridge_conf": "namecoin--nc0.13.99-name-tab-beta1.conf",
     "wallet_conf": "namecoin--nc0.13.99-name-tab-beta1.conf"
@@ -1460,7 +1443,8 @@
     "dir_name_win": "nix",
     "repo_url": "https://github.com/NixPlatform/NixCore",
     "versions": [
-      "v3.0.7"
+      "v3.0.7",
+      "v3.0.8"
     ],
     "xbridge_conf": "nix--v2.0.3.conf",
     "wallet_conf": "nix--v2.0.3.conf"
@@ -1492,7 +1476,8 @@
     "dir_name_win": "noir",
     "repo_url": "https://github.com/noirofficial/noir",
     "versions": [
-      "v2.1.0.3"
+      "v2.1.0.5",
+      "v2.1.0.6"
     ],
     "xbridge_conf": "noir--v1.0.0.2.conf",
     "wallet_conf": "noir--v1.0.0.2.conf"
@@ -1508,7 +1493,8 @@
     "dir_name_win": "Northern",
     "repo_url": "https://github.com/northern-community/Northern",
     "versions": [
-      "3.0.0"
+      "3.2.0",
+      "3.2.1"
     ],
     "xbridge_conf": "northern--1.0.0.conf",
     "wallet_conf": "northern--1.0.0.conf"
@@ -1594,20 +1580,20 @@
     "wallet_conf": "opcoinx--v2.0.0.conf"
   },
   {
-    "blockchain": "PACcoin",
-    "ticker": "$PAC",
-    "ver_id": "paccoin--v0.12.5.1",
-    "ver_name": "PACcoin",
-    "conf_name": "paccoin.conf",
-    "dir_name_linux": "paccoincore",
-    "dir_name_mac": "PaccoinCore",
-    "dir_name_win": "PaccoinCore",
-    "repo_url": "https://github.com/PACCommunity/PAC",
+    "blockchain": "PACGlobal",
+    "ticker": "PAC",
+    "ver_id": "pacglobal--v0.15-da839021c",
+    "ver_name": "PACGlobal",
+    "conf_name": "pacglobal.conf",
+    "dir_name_linux": "PACGlobal",
+    "dir_name_mac": "PACGlobal",
+    "dir_name_win": "PACGlobal",
+    "repo_url": "https://github.com/pacglobalofficial/pac",
     "versions": [
-      "v0.12.6.2"
+      "v0.15-da839021c"
     ],
-    "xbridge_conf": "paccoin--v0.12.5.1.conf",
-    "wallet_conf": "paccoin--v0.12.5.1.conf"
+    "xbridge_conf": "pacglobal--v0.15-da839021c.conf",
+    "wallet_conf": "pacglobal--v0.15-da839021c.conf"
   },
   {
     "blockchain": "Phore",
@@ -1644,6 +1630,22 @@
     "wallet_conf": "pivx--v3.3.0.conf"
   },
   {
+    "blockchain": "Placeholders",
+    "ticker": "PHL",
+    "ver_id": "placeh--2.0.30.5",
+    "ver_name": "Placeholders",
+    "conf_name": "placeh.conf",
+    "dir_name_linux": "placeh",
+    "dir_name_mac": "placeh",
+    "dir_name_win": "placeh",
+    "repo_url": "https://github.com/xagau/Placeholders-X16R",
+    "versions": [
+      "2.0.30.5"
+    ],
+    "xbridge_conf": "placeh--2.0.30.5.conf",
+    "wallet_conf": "placeh--2.0.30.5.conf"
+  },
+  {
     "blockchain": "Polis",
     "ticker": "POLIS",
     "ver_id": "polis--v1.3.1",
@@ -1654,7 +1656,9 @@
     "dir_name_win": "PolisCore",
     "repo_url": "https://github.com/polispay/polis",
     "versions": [
-      "v1.6.0"
+      "v1.6.0",
+      "v1.6.1",
+      "v1.6.2"
     ],
     "xbridge_conf": "polis--v1.3.1.conf",
     "wallet_conf": "polis--v1.3.1.conf"
@@ -1702,7 +1706,8 @@
     "dir_name_win": "Qtum",
     "repo_url": "https://github.com/qtumproject/qtum",
     "versions": [
-      "mainnet-ignition-v0.18.3"
+      "mainnet-ignition-v0.18.3",
+      "mainnet-ignition-v0.19.0"
     ],
     "xbridge_conf": "qtum--mainnet-ignition-v0.15.2.conf",
     "wallet_conf": "qtum--mainnet-ignition-v0.17.1.conf"
@@ -1750,26 +1755,26 @@
     "dir_name_win": "Raven",
     "repo_url": "https://github.com/RavenProject/Ravencoin",
     "versions": [
-      "v3.3.2"
+      "v4.1.0"
     ],
     "xbridge_conf": "raven--v0.15.99.0.conf",
     "wallet_conf": "raven--v0.15.99.0.conf"
   },
   {
-    "blockchain": "Rupaya",
-    "ticker": "RUPX",
-    "ver_id": "rupaya--v5.2.0",
-    "ver_name": "Rupaya",
-    "conf_name": "rupaya.conf",
-    "dir_name_linux": "rupayacore",
-    "dir_name_mac": "RupayaCore",
-    "dir_name_win": "RupayaCore",
-    "repo_url": "https://github.com/rupaya-project/rupx",
+    "blockchain": "Scribe",
+    "ticker": "SCRIBE",
+    "ver_id": "scribe--v0.2",
+    "ver_name": "Scribe",
+    "conf_name": "scribe.conf",
+    "dir_name_linux": "scribecore",
+    "dir_name_mac": "ScribeCore",
+    "dir_name_win": "ScribeCore",
+    "repo_url": "https://github.com/scribenetwork/scribe",
     "versions": [
-      "5.3.1.1"
+      "v0.2"
     ],
-    "xbridge_conf": "rupaya--v5.2.0.conf",
-    "wallet_conf": "rupaya--v5.2.0.conf"
+    "xbridge_conf": "scribe--v0.2.conf",
+    "wallet_conf": "scribe--v0.2.conf"
   },
   {
     "blockchain": "Secure Cloud Net",
@@ -1853,22 +1858,6 @@
     "wallet_conf": "send--v1.1.0.0.conf"
   },
   {
-    "blockchain": "Solaris",
-    "ticker": "XLR",
-    "ver_id": "solaris--v2.8.0.0",
-    "ver_name": "Solaris",
-    "conf_name": "solaris.conf",
-    "dir_name_linux": "solaris",
-    "dir_name_mac": "Solaris",
-    "dir_name_win": "Solaris",
-    "repo_url": "https://github.com/Solaris-Project/Solaris",
-    "versions": [
-      "v2.8.1.0"
-    ],
-    "xbridge_conf": "solaris--v2.8.0.0.conf",
-    "wallet_conf": "solaris--v2.8.0.0.conf"
-  },
-  {
     "blockchain": "SparksPay",
     "ticker": "SPK",
     "ver_id": "sparks--v0.12.3.2",
@@ -1943,11 +1932,7 @@
     "dir_name_win": "Syscoin",
     "repo_url": "https://github.com/syscoin/syscoin",
     "versions": [
-      "v4.0.3",
-      "v4.1.0",
-      "v4.1.1",
-      "v4.1.2",
-      "v4.1.2.1"
+      "v4.1.3"
     ],
     "xbridge_conf": "syscoin--v4.0.3.conf",
     "wallet_conf": "syscoin--v4.0.3.conf"
@@ -1963,7 +1948,8 @@
     "dir_name_win": "TerracoinCore",
     "repo_url": "https://github.com/terracoin/terracoin",
     "versions": [
-      "v0.12.2.4"
+      "v0.12.2.4",
+      "v0.12.2.5"
     ],
     "xbridge_conf": "terracoin--v0.12.1.8.conf",
     "wallet_conf": "terracoin--v0.12.1.8.conf"
@@ -2029,7 +2015,8 @@
     "repo_url": "https://github.com/vertcoin-project/vertcoin-core",
     "versions": [
       "0.14.0",
-      "0.15.0"
+      "0.15.0",
+      "0.15.0.1"
     ],
     "xbridge_conf": "vertcoin--0.12.0.conf",
     "wallet_conf": "vertcoin--0.13.0.conf"
