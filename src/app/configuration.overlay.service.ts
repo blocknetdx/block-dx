@@ -7,7 +7,7 @@ export class ConfigurationOverlayService {
 
   constructor() { }
 
-  private localTokens = new Set();
+  private localTokens: Set<string>;
   private marketPair = [];
 
   private configurationOverlayObservable: BehaviorSubject<boolean>;
@@ -32,7 +32,7 @@ export class ConfigurationOverlayService {
 
   private setShowOverlay() {
     const { marketPair, localTokens } = this;
-    if(marketPair.length > 0 && localTokens.size > 0) {
+    if(localTokens !== undefined && marketPair.length > 0) {
       if(marketPair.every(t => localTokens.has(t))) {
         this.configurationOverlayObservable.next(false);
       } else {
