@@ -1885,7 +1885,7 @@ ipcMain.on('getZoomFactor', (e) => e.returnValue = storage.getItem('zoomFactor')
     }
 
     // Check ShowAllOrders
-    {
+    try {
       const showAllOrders = storage.getItem('showAllOrders');
       const split = getSplitXBridgeConf();
       const idx = split.findIndex(l => /^ShowAllOrders=/.test(l));
@@ -1899,6 +1899,8 @@ ipcMain.on('getZoomFactor', (e) => e.returnValue = storage.getItem('zoomFactor')
       } else if(showAllOrders !== false) { // if it wasn't found in xbridge conf
         storage.setItem('showAllOrders', false);
       }
+    } catch(err) {
+      // quietly fail
     }
 
     keyPair = storage.getItem('keyPair');
