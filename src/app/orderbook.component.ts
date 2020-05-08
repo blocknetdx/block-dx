@@ -15,8 +15,6 @@ import { shouldHidePricing } from './util';
 import {OrderbookViewService} from './orderbook.view.service';
 import { OrderbookViews } from './enums';
 import {Localize} from './localize/localize.component';
-import {GeneralSettingsService} from './general-settings.service';
-
 
 math.config({
   number: 'BigNumber',
@@ -53,7 +51,7 @@ export class OrderbookComponent implements OnInit, OnDestroy {
 
   public showLoading = false;
   public showConfigurationOverlay = false;
-  public showAllWalletOrders = false;
+  public nonLocalTokens = false;
 
   shouldHidePricing = shouldHidePricing;
 
@@ -77,7 +75,6 @@ export class OrderbookComponent implements OnInit, OnDestroy {
     private pricingService: PricingService,
     private configurationOverlayService: ConfigurationOverlayService,
     private orderbookViewService: OrderbookViewService,
-    private generalSettingsService: GeneralSettingsService,
     private zone: NgZone
   ) {
     this.orderbookViewService.orderbookView()
@@ -226,16 +223,10 @@ export class OrderbookComponent implements OnInit, OnDestroy {
     });
 
     this.configurationOverlayService.showConfigurationOverlay()
-      .subscribe(show => {
+      .subscribe(([nonLocalTokens, show]) => {
         this.zone.run(() => {
+          this.nonLocalTokens = nonLocalTokens;
           this.showConfigurationOverlay = show;
-        });
-      });
-
-    this.generalSettingsService.generalSettings()
-      .subscribe(({ showAllOrders }) => {
-        this.zone.run(() => {
-          this.showAllWalletOrders = showAllOrders;
         });
       });
 
@@ -293,7 +284,7 @@ export class OrderbookComponent implements OnInit, OnDestroy {
   }
 
   onRowSelect(row) {
-    if (row && !this.showConfigurationOverlay) {
+    if (row && !this.nonLocalTokens) {
       if(this.ownOrders.has(row[2])) {
         const newRow = [...row];
         newRow[2] = '';
@@ -315,7 +306,7 @@ export class OrderbookComponent implements OnInit, OnDestroy {
   }
 
   onRowContextMenu({ row, clientX, clientY }) {
-    if(this.showConfigurationOverlay) return;
+    if(this.nonLocalTokens) return;
     const { Menu } = window.electron.remote;
     const { clipboard, ipcRenderer } = window.electron;
 
