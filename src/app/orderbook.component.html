@@ -3,7 +3,8 @@
   <div class="orderbook-table-outer-container-top" [style.display]="showBuyOrders ? 'none' : 'block'">
 
 
-    <div *ngIf="sections[0].rows.length === 0" class="no-open-orders-message-top"><Localize context="orderbook" key="No sell orders."></Localize></div>
+    <div *ngIf="sections[0].rows.length === 0 && showLoading && ((showConfigurationOverlay && showAllWalletOrders) || !showConfigurationOverlay)" class="no-open-orders-message-top"><Localize context="orderbook" key="Loading sell orders..."></Localize></div>
+    <div *ngIf="sections[0].rows.length === 0 && (!showLoading || (showLoading && !((showConfigurationOverlay && showAllWalletOrders) || !showConfigurationOverlay)))" class="no-open-orders-message-top"><Localize context="orderbook" key="No sell orders."></Localize></div>
 
     <app-table #orderbookTopTable
                [noPadding]="true"
@@ -91,7 +92,8 @@
 
   <div class="orderbook-table-outer-container-bottom" [style.display]="showSellOrders ? 'none' : 'block'" [style.height]="showBuyOrders ? 'calc(100% - 22px)' : 'calc(50% - 22px)'">
 
-    <div *ngIf="sections[1].rows.length === 0" class="no-open-orders-message-bottom"><Localize context="orderbook" key="No buy orders."></Localize></div>
+    <div *ngIf="sections[1].rows.length === 0 && showLoading && ((showConfigurationOverlay && showAllWalletOrders) || !showConfigurationOverlay)" class="no-open-orders-message-bottom"><Localize context="orderbook" key="Loading buy orders..."></Localize></div>
+    <div *ngIf="sections[1].rows.length === 0 && (!showLoading || (showLoading && !((showConfigurationOverlay && showAllWalletOrders) || !showConfigurationOverlay)))" class="no-open-orders-message-bottom"><Localize context="orderbook" key="No buy orders."></Localize></div>
 
     <div class="orderbook-table-container">
       <app-table #orderbookBottomTable
@@ -164,7 +166,7 @@
     </div>
   </div>
 
-  <div class="orderbook-configuration-message-overlay" *ngIf="showConfigurationOverlay">
+  <div class="orderbook-configuration-message-overlay" *ngIf="showConfigurationOverlay && !showAllWalletOrders">
     <p><Localize context="orderbook" key="In order to trade this market, the wallets for both assets must be configured for trading, opened, and unlocked."></Localize></p>
     <button class="orderbook-open-configuration-button" type="button" (click)="openConfigurationWindow()"><Localize context="orderbook" key="Open Configuration"></Localize></button>
   </div>

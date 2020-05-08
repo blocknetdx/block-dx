@@ -15,6 +15,7 @@ import { shouldHidePricing } from './util';
 import {OrderbookViewService} from './orderbook.view.service';
 import { OrderbookViews } from './enums';
 import {Localize} from './localize/localize.component';
+import {GeneralSettingsService} from './general-settings.service';
 
 
 math.config({
@@ -50,7 +51,9 @@ export class OrderbookComponent implements OnInit, OnDestroy {
 
   public ownOrders = new Set();
 
+  public showLoading = false;
   public showConfigurationOverlay = false;
+  public showAllWalletOrders = false;
 
   shouldHidePricing = shouldHidePricing;
 
@@ -63,6 +66,8 @@ export class OrderbookComponent implements OnInit, OnDestroy {
 
   public Localize = Localize;
 
+  private showLoadingTimeout: any;
+
   constructor(
     private appService: AppService,
     private numberFormatPipe: NumberFormatPipe,
@@ -72,6 +77,7 @@ export class OrderbookComponent implements OnInit, OnDestroy {
     private pricingService: PricingService,
     private configurationOverlayService: ConfigurationOverlayService,
     private orderbookViewService: OrderbookViewService,
+    private generalSettingsService: GeneralSettingsService,
     private zone: NgZone
   ) {
     this.orderbookViewService.orderbookView()
@@ -143,7 +149,17 @@ export class OrderbookComponent implements OnInit, OnDestroy {
 
     this.appService.marketPairChanges.subscribe((symbols) => {
       zone.run(() => {
+        const changed = this.symbols.length === 0 || symbols.some(s => !this.symbols.includes(s));
         this.symbols = symbols;
+        if(changed) {
+          this.showLoading = true;
+          clearTimeout(this.showLoadingTimeout);
+          setTimeout(() => {
+            this.zone.run(() => {
+              this.showLoading = false;
+            });
+          }, 30000);
+        }
         this.updatePricingAvailable(this.pricing ? this.pricing.enabled : false);
         this.updatePricingData();
       });
@@ -216,6 +232,13 @@ export class OrderbookComponent implements OnInit, OnDestroy {
         });
       });
 
+    this.generalSettingsService.generalSettings()
+      .subscribe(({ showAllOrders }) => {
+        this.zone.run(() => {
+          this.showAllWalletOrders = showAllOrders;
+        });
+      });
+
     // this.currentpriceService.currentprice.subscribe((cp) => {
     //   zone.run(() => {
     //     this.lastTradePrice = cp.last;
@@ -270,7 +293,7 @@ export class OrderbookComponent implements OnInit, OnDestroy {
   }
 
   onRowSelect(row) {
-    if (row) {
+    if (row && !this.showConfigurationOverlay) {
       if(this.ownOrders.has(row[2])) {
         const newRow = [...row];
         newRow[2] = '';
@@ -292,6 +315,7 @@ export class OrderbookComponent implements OnInit, OnDestroy {
   }
 
   onRowContextMenu({ row, clientX, clientY }) {
+    if(this.showConfigurationOverlay) return;
     const { Menu } = window.electron.remote;
     const { clipboard, ipcRenderer } = window.electron;
 
