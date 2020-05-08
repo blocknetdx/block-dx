@@ -46,6 +46,7 @@ state.set('locales', [
 state.set('active', 0);
 state.set('sidebarSelected', 0);
 state.set('autofillAddresses', ipcRenderer.sendSync('getAutofillAddresses'));
+state.set('xBridgeConfExists', ipcRenderer.sendSync('xBridgeConfExists'));
 
 const autoGenerateAddressesAvailable = ipcRenderer.sendSync('autoGenerateAddressesAvailable');
 state.set('autoGenerateAddressesAvailable', autoGenerateAddressesAvailable);

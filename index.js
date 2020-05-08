@@ -1495,13 +1495,28 @@ ipcMain.on('getPricingEnabled', e => {
   e.returnValue = enablePricing;
 });
 
+const xBridgeConfExists = () => {
+  try {
+    const confPath = getCustomXbridgeConfPath();
+    return fs.existsSync(confPath);
+  } catch(err) {
+    return false;
+  }
+};
+
 const getSplitXBridgeConf = () => {
+  if(!xBridgeConfExists()) return [];
   const confPath = getCustomXbridgeConfPath();
-  const contents = fs.readFileSync(confPath, 'utf8');
+  const contents = fs.readFileSync(confPath, 'utf8').trim();
+  if(!contents) return [];
   return contents
     .split(/\r?\n/g)
     .map(l => l.trim());
 };
+
+ipcMain.on('xBridgeConfExists', e => {
+  e.returnValue = getSplitXBridgeConf().length > 0;
+});
 
 const saveShowAllOrders = showAllOrders => {
   let split = getSplitXBridgeConf();
@@ -1885,22 +1900,22 @@ ipcMain.on('getZoomFactor', (e) => e.returnValue = storage.getItem('zoomFactor')
     }
 
     // Check ShowAllOrders
-    try {
+    {
       const showAllOrders = storage.getItem('showAllOrders');
       const split = getSplitXBridgeConf();
-      const idx = split.findIndex(l => /^ShowAllOrders=/.test(l));
-      if(idx > -1) { // if it has been found in xbridge conf
-        const splitValue = split[idx].split('=');
-        if(splitValue.length > 1 && splitValue[1].trim() === 'true') {
-          if(showAllOrders !== true) storage.setItem('showAllOrders', true);
-        } else if(showAllOrders !== false) {
+      if(split.length > 0) {
+        const idx = split.findIndex(l => /^ShowAllOrders=/.test(l));
+        if(idx > -1) { // if it has been found in xbridge conf
+          const splitValue = split[idx].split('=');
+          if(splitValue.length > 1 && splitValue[1].trim() === 'true') {
+            if(showAllOrders !== true) storage.setItem('showAllOrders', true);
+          } else if(showAllOrders !== false) {
+            storage.setItem('showAllOrders', false);
+          }
+        } else if(showAllOrders !== false) { // if it wasn't found in xbridge conf
           storage.setItem('showAllOrders', false);
         }
-      } else if(showAllOrders !== false) { // if it wasn't found in xbridge conf
-        storage.setItem('showAllOrders', false);
       }
-    } catch(err) {
-      // quietly fail
     }
 
     keyPair = storage.getItem('keyPair');
