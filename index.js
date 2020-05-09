@@ -794,6 +794,32 @@ const openGeneralSettingsWindow = () => {
 ipcMain.on('getShowWallet', e => {
   e.returnValue = showWallet;
 });
+ipcMain.on('getShowAllOrders', e => {
+  e.returnValue = storage.getItem('showAllOrders');
+});
+
+const getShowAllOrdersFromXbridgeConf = () => {
+  const split = getSplitXBridgeConf();
+  if(split.length > 0) { // If a valid xbridge conf was found
+    const idx = split.findIndex(l => /^ShowAllOrders=/.test(l));
+    if(idx > -1) { // if it has been found in xbridge conf
+      const splitValue = split[idx].split('=');
+      if(splitValue.length > 1 && splitValue[1].trim() === 'true') {
+        return true;
+      } else {
+        return false;
+      }
+    } else { // if it wasn't found in xbridge conf
+      return false;
+    }
+  } else { // If xbridge conf wasn't found
+    return null;
+  }
+};
+
+ipcMain.on('getShowAllOrdersFromXbridgeConf', e => {
+  e.returnValue = getShowAllOrdersFromXbridgeConf();
+});
 
 let informationWindow;
 
@@ -1491,7 +1517,54 @@ ipcMain.on('getPricingFrequency', e => {
 ipcMain.on('getPricingEnabled', e => {
   e.returnValue = enablePricing;
 });
-ipcMain.on('saveGeneralSettings', (e, s) => {
+
+const xBridgeConfExists = () => {
+  try {
+    const confPath = getCustomXbridgeConfPath();
+    return fs.existsSync(confPath);
+  } catch(err) {
+    return false;
+  }
+};
+
+const getSplitXBridgeConf = () => {
+  if(!xBridgeConfExists()) return [];
+  const confPath = getCustomXbridgeConfPath();
+  const contents = fs.readFileSync(confPath, 'utf8').trim();
+  if(!contents) return [];
+  return contents
+    .split(/\r?\n/g)
+    .map(l => l.trim());
+};
+
+ipcMain.on('xBridgeConfExists', e => {
+  e.returnValue = getSplitXBridgeConf().length > 0;
+});
+
+const saveShowAllOrders = showAllOrders => {
+  let split = getSplitXBridgeConf();
+  let idx = split.findIndex(l => /^ShowAllOrders=/.test(l));
+  const newValue = `ShowAllOrders=${showAllOrders ? 'true' : 'false'}`;
+  if(idx < 0) {
+    const mainIdx = split.findIndex(l => /^\[Main]/.test(l));
+    idx = mainIdx + 1;
+    split = [
+      ...split.slice(0, idx),
+      newValue,
+      ...split.slice(idx)
+    ];
+  } else {
+    split = [
+      ...split.slice(0, idx),
+      newValue,
+      ...split.slice(idx + 1)
+    ];
+  }
+  const newContents = split.join('\n');
+  fs.writeFileSync(getCustomXbridgeConfPath(), newContents, 'utf8');
+};
+
+ipcMain.on('saveGeneralSettings', async function(e, s) {
   const changed = {};
   if(enablePricing !== s.pricingEnabled) {
     enablePricing = s.pricingEnabled;
@@ -1513,33 +1586,43 @@ ipcMain.on('saveGeneralSettings', (e, s) => {
     pricingFrequency = s.pricingFrequency;
     changed.pricingFrequency = pricingFrequency;
   }
+  if(storage.getItem('showAllOrders') !== s.showAllOrders) {
+    changed.showAllOrders = s.showAllOrders;
+    saveShowAllOrders(s.showAllOrders);
+  }
   if(showWallet !== s.showWallet) {
     showWallet = s.showWallet;
     changed.showWallet = showWallet;
   }
-  if(['showWallet'].some(prop => Object.keys(changed).includes(prop))) {
-    sendGeneralSettings();
-  }
   if(getAutofillAddresses() !== s.autofillAddresses) {
     changed.autofillAddresses = s.autofillAddresses;
   }
-  if(['enablePricing', 'pricingSource', 'apiKeys', 'pricingUnit', 'pricingFrequency'].some(prop => Object.keys(changed).includes(prop))) {
+  const changedKeys = Object.keys(changed);
+  if(['enablePricing', 'pricingSource', 'apiKeys', 'pricingUnit', 'pricingFrequency'].some(prop => changedKeys.includes(prop))) {
     clearPricingInterval();
     sendPricingMultipliers();
     setPricingInterval();
     sendMarketPricingEnabled();
   }
   storage.setItems(changed, true);
+  if(changedKeys.includes('showAllOrders')) {
+    loadXBridgeConf();
+  }
+  if(['showWallet', 'showAllOrders'].some(prop => Object.keys(changed).includes(prop))) {
+    sendGeneralSettings();
+  }
 });
 
 const sendGeneralSettings = () => {
   appWindow.send('generalSettings', {
-    showWallet
+    showWallet,
+    showAllOrders: storage.getItem('showAllOrders')
   });
 };
 ipcMain.on('getGeneralSettings', e => {
   e.returnValue = {
-    showWallet
+    showWallet,
+    showAllOrders: storage.getItem('showAllOrders')
   };
 });
 
@@ -1837,6 +1920,16 @@ ipcMain.on('getZoomFactor', (e) => e.returnValue = storage.getItem('zoomFactor')
       checkForUpdates();
       openConfigurationWindow({ error: infoErr });
       return;
+    }
+
+    // Check ShowAllOrders
+    {
+      const showAllOrders = getShowAllOrdersFromXbridgeConf();
+      if(showAllOrders === true) {
+        storage.setItem('showAllOrders', true);
+      } else {
+        storage.setItem('showAllOrders', false);
+      }
     }
 
     keyPair = storage.getItem('keyPair');

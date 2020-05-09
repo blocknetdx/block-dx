@@ -154,7 +154,7 @@ export class OrderformComponent implements OnInit {
     ];
 
     this.configurationOverlayService.showConfigurationOverlay()
-      .subscribe(show => {
+      .subscribe(([show]) => {
         this.zone.run(() => {
           this.showConfigurationOverlay = show;
         });

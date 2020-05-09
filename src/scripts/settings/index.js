@@ -5,6 +5,7 @@ const { ipcRenderer, remote } = require('electron');
 const renderSidebar = require('./modules/sidebar');
 const renderPricing = require('./modules/pricing');
 const renderBalances = require('./modules/balances');
+const renderOrderBookSettings = require('./modules/order-book');
 const renderOrderFormSettings = require('./modules/order-form');
 const renderLocalization = require('./modules/localization');
 const renderLayout = require('./modules/layout');
@@ -45,18 +46,21 @@ state.set('locales', [
 state.set('active', 0);
 state.set('sidebarSelected', 0);
 state.set('autofillAddresses', ipcRenderer.sendSync('getAutofillAddresses'));
+state.set('xBridgeConfExists', ipcRenderer.sendSync('xBridgeConfExists'));
 
 const autoGenerateAddressesAvailable = ipcRenderer.sendSync('autoGenerateAddressesAvailable');
 state.set('autoGenerateAddressesAvailable', autoGenerateAddressesAvailable);
 
 const marketPricingText = Localize.text('Market Pricing', 'generalSettingsWindow');
 const balancesText = Localize.text('Balances', 'generalSettingsWindow');
+const orderBookText = Localize.text('Order Book', 'generalSettingsWindow');
 const orderFormText = Localize.text('Order Form', 'generalSettingsWindow');
 const languageText = Localize.text('Language', 'generalSettingsWindow');
 
 state.set('sidebarItems', [
   {sidebarText: marketPricingText, title: marketPricingText.toUpperCase()},
   {sidebarText: balancesText, title: balancesText.toUpperCase()},
+  {sidebarText: orderBookText, title: orderBookText.toUpperCase()},
   {sidebarText: orderFormText, title: orderFormText.toUpperCase()},
   {sidebarText: languageText, title: languageText.toUpperCase()}
   // {sidebarText: 'Layout Options', title: 'LAYOUT OPTIONS'}
@@ -78,7 +82,8 @@ const saveSettings = () => {
     pricingUnit: state.get('pricingUnit'),
     pricingFrequency: state.get('pricingFrequency'),
     showWallet: state.get('showWallet'),
-    autofillAddresses: state.get('autofillAddresses')
+    autofillAddresses: state.get('autofillAddresses'),
+    showAllOrders: state.get('showAllOrders')
   });
 };
 
@@ -114,9 +119,12 @@ $(document).ready(() => {
         mainHTML = renderBalances({ state, Localize });
         break;
       case 2:
-        mainHTML = renderOrderFormSettings({ state, Localize });
+        mainHTML = renderOrderBookSettings({ state, Localize });
         break;
       case 3:
+        mainHTML = renderOrderFormSettings({ state, Localize });
+        break;
+      case 4:
         mainHTML = renderLocalization({ state, Localize });
         break;
       default:
@@ -404,6 +412,46 @@ $(document).ready(() => {
           }, 0);
         });
 
+      $('#js-showAllOrdersDropdown')
+        .off('click')
+        .on('click', e => {
+          e.preventDefault();
+          const $target = $(e.currentTarget);
+          const $icon = $target.find('i');
+          const height = $target.outerHeight();
+          const width = $target.outerWidth();
+          if ($icon.hasClass('fa-angle-up')) {
+            closeDropdowns();
+            return;
+          }
+
+          const yesText = Localize.text('Yes', 'universal');
+          const noText = Localize.text('No', 'universal');
+
+          $icon.addClass('fa-angle-up');
+          $icon.removeClass('fa-angle-down');
+          $target.append(`
+            <div class="js-dropdownMenu" style="z-index:1000;position:absolute;top:${height}px;left:0;background-color:#ddd;width:${width}px;max-height:162px;overflow-y:auto;">
+              <div class="js-dropdownMenuItem dropdown-button" data-showallorders="true"><div>${yesText}</div></div>
+              <div class="js-dropdownMenuItem dropdown-button" data-showallorders="false"><div>${noText}</div></div>
+            </div>
+          `);
+          setTimeout(() => {
+            $('.js-dropdownMenuItem')
+              .off('click')
+              .on('click', ee => {
+                ee.preventDefault();
+                const value = $(ee.currentTarget).attr('data-showallorders');
+                const selected = value === 'true' ? true : false;
+                $($target.find('div')[0]).text(selected ? yesText : noText);
+                state.set('showAllOrders', selected);
+                saveSettings();
+                // if set to autofill addresses, then generate new addresses
+                // if(newAutofillAddresses) ipcRenderer.send('generateNewAddresses');
+              });
+          }, 0);
+        });
+
       $('#js-autofillAddressesDropdown')
         .off('click')
         .on('click', e => {
@@ -505,6 +553,17 @@ $(document).ready(() => {
       state.set('pricingFrequency', pricingFrequency);
       const showWallet = ipcRenderer.sendSync('getShowWallet');
       state.set('showWallet', showWallet);
+      const showAllOrders = ipcRenderer.sendSync('getShowAllOrders');
+      const showAllOrdersFromXbridgeConf = ipcRenderer.sendSync('getShowAllOrdersFromXbridgeConf');
+      if(
+        showAllOrdersFromXbridgeConf !== null && // if a valid xbridge conf was found
+        showAllOrders !== showAllOrdersFromXbridgeConf // if the value in the conf is different from the current Block DX state
+      ) {
+        state.set('showAllOrders', showAllOrdersFromXbridgeConf);
+        saveSettings();
+      } else {
+        state.set('showAllOrders', showAllOrders);
+      }
 
       render();
 

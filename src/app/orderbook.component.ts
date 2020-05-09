@@ -16,7 +16,6 @@ import {OrderbookViewService} from './orderbook.view.service';
 import { OrderbookViews } from './enums';
 import {Localize} from './localize/localize.component';
 
-
 math.config({
   number: 'BigNumber',
   precision: 64
@@ -50,7 +49,9 @@ export class OrderbookComponent implements OnInit, OnDestroy {
 
   public ownOrders = new Set();
 
+  public showLoading = false;
   public showConfigurationOverlay = false;
+  public nonLocalTokens = false;
 
   shouldHidePricing = shouldHidePricing;
 
@@ -62,6 +63,8 @@ export class OrderbookComponent implements OnInit, OnDestroy {
   private alertTimeout: any;
 
   public Localize = Localize;
+
+  private showLoadingTimeout: any;
 
   constructor(
     private appService: AppService,
@@ -143,7 +146,17 @@ export class OrderbookComponent implements OnInit, OnDestroy {
 
     this.appService.marketPairChanges.subscribe((symbols) => {
       zone.run(() => {
+        const changed = this.symbols.length === 0 || symbols.some(s => !this.symbols.includes(s));
         this.symbols = symbols;
+        if(changed) {
+          this.showLoading = true;
+          clearTimeout(this.showLoadingTimeout);
+          setTimeout(() => {
+            this.zone.run(() => {
+              this.showLoading = false;
+            });
+          }, 30000);
+        }
         this.updatePricingAvailable(this.pricing ? this.pricing.enabled : false);
         this.updatePricingData();
       });
@@ -210,8 +223,9 @@ export class OrderbookComponent implements OnInit, OnDestroy {
     });
 
     this.configurationOverlayService.showConfigurationOverlay()
-      .subscribe(show => {
+      .subscribe(([nonLocalTokens, show]) => {
         this.zone.run(() => {
+          this.nonLocalTokens = nonLocalTokens;
           this.showConfigurationOverlay = show;
         });
       });
@@ -270,7 +284,7 @@ export class OrderbookComponent implements OnInit, OnDestroy {
   }
 
   onRowSelect(row) {
-    if (row) {
+    if (row && !this.nonLocalTokens) {
       if(this.ownOrders.has(row[2])) {
         const newRow = [...row];
         newRow[2] = '';
@@ -292,6 +306,7 @@ export class OrderbookComponent implements OnInit, OnDestroy {
   }
 
   onRowContextMenu({ row, clientX, clientY }) {
+    if(this.nonLocalTokens) return;
     const { Menu } = window.electron.remote;
     const { clipboard, ipcRenderer } = window.electron;
 
