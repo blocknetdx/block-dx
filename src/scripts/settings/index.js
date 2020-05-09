@@ -554,7 +554,16 @@ $(document).ready(() => {
       const showWallet = ipcRenderer.sendSync('getShowWallet');
       state.set('showWallet', showWallet);
       const showAllOrders = ipcRenderer.sendSync('getShowAllOrders');
-      state.set('showAllOrders', showAllOrders);
+      const showAllOrdersFromXbridgeConf = ipcRenderer.sendSync('getShowAllOrdersFromXbridgeConf');
+      if(
+        showAllOrdersFromXbridgeConf !== null && // if a valid xbridge conf was found
+        showAllOrders !== showAllOrdersFromXbridgeConf // if the value in the conf is different from the current Block DX state
+      ) {
+        state.set('showAllOrders', showAllOrdersFromXbridgeConf);
+        saveSettings();
+      } else {
+        state.set('showAllOrders', showAllOrders);
+      }
 
       render();
 

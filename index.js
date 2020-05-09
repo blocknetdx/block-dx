@@ -798,6 +798,29 @@ ipcMain.on('getShowAllOrders', e => {
   e.returnValue = storage.getItem('showAllOrders');
 });
 
+const getShowAllOrdersFromXbridgeConf = () => {
+  const split = getSplitXBridgeConf();
+  if(split.length > 0) { // If a valid xbridge conf was found
+    const idx = split.findIndex(l => /^ShowAllOrders=/.test(l));
+    if(idx > -1) { // if it has been found in xbridge conf
+      const splitValue = split[idx].split('=');
+      if(splitValue.length > 1 && splitValue[1].trim() === 'true') {
+        return true;
+      } else {
+        return false;
+      }
+    } else { // if it wasn't found in xbridge conf
+      return false;
+    }
+  } else { // If xbridge conf wasn't found
+    return null;
+  }
+};
+
+ipcMain.on('getShowAllOrdersFromXbridgeConf', e => {
+  e.returnValue = getShowAllOrdersFromXbridgeConf();
+});
+
 let informationWindow;
 
 const openInformationWindow = () => {
@@ -1901,20 +1924,11 @@ ipcMain.on('getZoomFactor', (e) => e.returnValue = storage.getItem('zoomFactor')
 
     // Check ShowAllOrders
     {
-      const showAllOrders = storage.getItem('showAllOrders');
-      const split = getSplitXBridgeConf();
-      if(split.length > 0) {
-        const idx = split.findIndex(l => /^ShowAllOrders=/.test(l));
-        if(idx > -1) { // if it has been found in xbridge conf
-          const splitValue = split[idx].split('=');
-          if(splitValue.length > 1 && splitValue[1].trim() === 'true') {
-            if(showAllOrders !== true) storage.setItem('showAllOrders', true);
-          } else if(showAllOrders !== false) {
-            storage.setItem('showAllOrders', false);
-          }
-        } else if(showAllOrders !== false) { // if it wasn't found in xbridge conf
-          storage.setItem('showAllOrders', false);
-        }
+      const showAllOrders = getShowAllOrdersFromXbridgeConf();
+      if(showAllOrders === true) {
+        storage.setItem('showAllOrders', true);
+      } else {
+        storage.setItem('showAllOrders', false);
       }
     }
 
