@@ -60,7 +60,12 @@ class Wallet {
   }
 
   generateCredentials() {
-    if (this.litewallet) return;
+    if (this.litewallet) {
+      const username = this.username;
+      const password = this.password;
+
+      return { username, password };
+    }
 
     const { name } = this;
     const username = 'BlockDX' + name.replace(/\s/g, '');

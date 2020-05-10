@@ -48,7 +48,7 @@ class ConfigurationMenu extends RouterView {
       },
       {
         title: 'Litewallet RPC Setup',
-        text: 'Use this to configure all your lite-wallets.',
+        text: 'Use this to configure your lite-wallets.',
         value: configurationTypes.LITEWALLET_RPC_SETUP
       }
     ];
