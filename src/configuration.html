@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>General Settings</title>
+  <title>Configuration</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0">
   <meta name="format-detection" content="telephone=no">
@@ -33,6 +33,9 @@
     }
     .container {
       padding: 20px;
+      padding-bottom: 10px;
+      display: flex;
+      flex-grow: 1;
     }
     .input-group {
       display: flex;
@@ -42,9 +45,7 @@
       margin-bottom: 15px;
     }
     .input-group label {
-      width: 40%;
-      max-width: 40%;
-      min-width: 40%;
+      width: 35%;
       background-color: #213d54;
       color: #fff;
       padding: 15px 15px;
@@ -69,9 +70,6 @@
       border-color: #4b6275;
       border-style: solid;
     }
-    input[type=text]:disabled {
-      opacity: .35;
-    }
     .dropdown-button {
       position: relative;
       opacity: 1;
@@ -90,9 +88,6 @@
       flex-direction: row;
       flex-wrap: nowrap;
       justify-content: space-between;
-    }
-    .dropdown-button.disabled {
-      cursor: default;
     }
     .dropdown-button:hover {
       background-color: rgba(18, 49, 73, .8);
@@ -174,76 +169,104 @@
     }
     .col1 {
       position: absolute;
-      top: 112px;
+      top: 177px;
       bottom: 20px;
-      width: 200px;
-      min-width: 200px;
-      padding: 10px 20px;
+      width: 300px;
+      min-width: 300px;
+      padding-left: 20px;
+      padding-right: 20px;
+      padding-top: 10px;
       background-color: #172e48;
-      overflow-y: auto;
     }
     .col2 {
       display: flex;
       flex-grow: 1;
+      color: #fff;
       flex-direction: column;
       position: absolute;
-      top: 112px;
+      top: 177px;
       bottom: 20px;
-      left: 270px;
+      left: 380px;
       right: 20px;
-      margin-left: 10px;
-      color: #fff;
     }
-    .title {
-      margin-right: -20px;
-    }
-    .sidebar-header {
+    .col2-no-margin {
+      display: flex;
+      flex-grow: 1;
       color: #fff;
-      font-weight: bold;
-      text-transform: uppercase;
-      border-bottom: solid 1px rgba(255,255,255,0.3);
-      padding-bottom: 10px;
-      margin-bottom: 25px;
+      flex-direction: column;
+      position: absolute;
+      top: 177px;
+      bottom: 20px;
+      left: 20px;
+      right: 20px;
     }
     .sidebar-item {
       margin-top: 10px;
       margin-bottom: 10px;
-      color: #eee;
-      font-weight: 100;
+      color: #fff;
       cursor: default;
-      cursor: pointer;
+      /*cursor: pointer;*/
     }
     .sidebar-item:hover {
       /*opacity: .8;*/
-    }
-    .sidebar-inactive-link {
-      /*margin-left: 10px;*/
-    }
-    .sidebar-active-link {
-      font-weight: bold;
-      color: #fff;
     }
     .radio-icon {
       color: #339CFF;
       margin-right: 10px;
     }
+    .check-icon {
+      color: #339CFF;
+      margin-right: 5px;
+    }
+    .select-all-outer-container {
+      margin-top: 0;
+      min-height: 25px;
+      margin-bottom: 10px;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: space-between;
+    }
+    .select-all-outer-container .text-danger {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+    .select-all-container {
+      margin-top: 0;
+      margin-bottom: 10px;
+      text-align: right;
+    }
+    .select-all-outer-container .select-all-container {
+      flex-grow: 1;
+      margin-top: 0;
+      margin-bottom: 0;
+      text-align: right;
+    }
+    .select-all-link {
+      color: #339CFF;
+      text-decoration: none;
+    }
     .main-area {
       flex-grow: 1;
-      /*background-color: #243b55;*/
-      /*padding: 10px;*/
-      /*padding-top: 0;*/
-      margin-top: 20px;
+      background-color: #243b55;
+      padding: 10px;
       overflow-x: hidden;
-      overflow-y: auto;
-      position:relative;
-      background-color:inherit;
-      padding: 0 10px;
+      overflow-y: scroll;
     }
-    .pricingErrorMessage {
+    .main-area-item {
+      padding: 10px;
+      cursor: pointer;
+    }
+    .main-area-item:hover {
+      opacity: .8;
+    }
+    .main-area-item2 {
+      background-color: #0e2742;
+      margin: 10px;
+      padding: 20px;
+    }
+    .text-danger {
       color: #ed1c24;
-      margin-top: 6px;
-      margin-bottom: -6px;
-      /*margin-left: 10px;*/
     }
     ::-webkit-scrollbar {
       width: 6px;
@@ -259,6 +282,10 @@
       border: 0;
       border-radius: 3px;
     }
+    .js-dropdownMenu::-webkit-scrollbar-track {
+      box-shadow: inset 0 0 6px rgba(0,0,0,0.2) !important;
+      background-color: #123149;
+    }
     a.text-link {
       color: #0ce3ff;
       opacity: 1;
@@ -267,112 +294,30 @@
       color: #0ce3ff;
       opacity: .8;
     }
-    input[type="number"] {
-      position: relative;
-      /*margin: 0 0 1rem;*/
-      /*border: 1px solid #BBB;*/
-      /*border-color: #BBB #ECECEC #ECECEC #BBB;*/
-      /*padding: .2rem;*/
+    .tippy-tooltip.block-theme {
+      background-color: #eee;
+      color: #000;
     }
-    input[type=number]::-webkit-inner-spin-button,
-    input[type=number]::-webkit-outer-spin-button {
-      -webkit-appearance: none;
-      background: url("./assets/number_input_buttons.png") no-repeat center center;
-      background-size: 54px 54px;
-      width: 54px;
-      opacity: 1;
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      cursor: pointer;
+    .tippy-tooltip.block-theme a {
+      color: #0398a8;
     }
-    .color-toggle-container {
-      position: relative;
-      display: flex;
-      flex-direction: row;
-      flex-wrap: nowrap;
-      justify-content: flex-start;
-      margin-top: 10px;
-      min-height: 52px;
+    .tippy-tooltip.block-theme[data-animatefill] {
+      background-color: transparent;
     }
-    .color-toggle-container a.pricingToggle1 {
-      background-color: #123149;
-      flex-basis: 0;
-      flex-grow: 1;
-      font-size: 16px;
-      padding: 15px;
-      transition: color .1s linear;
-      text-align: center;
+    .tippy-tooltip.block-theme .tippy-backdrop {
+      background-color: #eee;
     }
-    .color-toggle-container a {
-      color: #fff;
-      text-decoration: none;
-    }
-    /*.color-toggle-container a.active:hover {*/
-      /*opacity: 1;*/
-    /*}*/
-    /*.color-toggle-container a:hover {*/
-      /*opacity: .8;*/
-    /*}*/
-    .color-toggle-container a.pricingToggle1.active {
-      color: #00f4c5;
-    }
-    .color-toggle-container a.pricingToggle2 {
-      color: #fff;
-      background-color: #123149;
-      flex-basis: 0;
-      flex-grow: 1;
-      font-size: 16px;
-      padding: 15px;
-      transition: color .1s linear;
-      text-align: center;
-    }
-    .color-toggle-container a.pricingToggle2.active {
-      color: #ff725e;
-    }
-    .color-toggle-container .color-bar {
-      position: absolute;
-      bottom: 0;
-      height: 2px;
-      width: 50%;
-      transition: margin .1s linear;
-    }
-    .color-toggle-container .color-bar.color-bar-left {
-      left: 0;
-      background-color: #00f4c5;
-      margin-left: 0;
-    }
-    .color-toggle-container .color-bar.color-bar-right {
-      /*right: 0;*/
-      margin-left: 50%;
-      background-color: #ff725e;
-    }
-    .pricingInputError {
-      border: 1px solid #ed1c24 !important;
-    }
-    .option-container {
-      margin-bottom: 25px;
-    }
-    .option-title {
-      font-weight: bold;
-      font-size: 1.05rem;
-      margin-bottom: 0;
-      margin-top: 0;
-    }
-    .option-description {
-      margin-top: 5px;
-      padding-top: 0;
-      padding-right: 10px;
-      margin-bottom: 0;
-    }
+
   </style>
 
 </head>
 <body>
-<div style="width:100%; padding: 20px 0 20px 0; text-align:center;"><img style="max-width:300px;" src="assets/logo_full.svg" alt="Blocknet Logo"></div>
 
-<div id="js-main"></div>
+  <div id="js-mainHeaderContainer" style="width:100%; padding: 20px 0 20px 0; text-align:center;">
+    <img style="max-width:300px;" src="assets/logo_full.svg" alt="Blocknet Logo">
+  </div>
+
+  <div id="js-main"></div>
 
   <script type="text/javascript">
     window.electron = require('electron');
@@ -385,9 +330,12 @@
   <script>if (window.module) module = window.module;</script>
 
   <script type="text/javascript" src="assets/vendor/sweetalert2.js"></script>
+  <script src="https://unpkg.com/popper.js@1/dist/umd/popper.min.js"></script>
+  <script src="https://unpkg.com/tippy.js@4"></script>
 
   <script type="text/javascript">
-    require('./scripts/general-settings');
+    require('./scripts/configuration/index');
+    require('./scripts/zoom');
   </script>
 
 </body>

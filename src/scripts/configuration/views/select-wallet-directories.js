@@ -221,19 +221,18 @@ class SelectWalletDirectories extends RouterView {
       updateDirectory(versionId, e.target.value);
     });
 
-    $('.js-browseBtn').on('click', e => {
+    $('.js-browseBtn').on('click', async function(e) {
       e.preventDefault();
       const versionId = $(e.currentTarget).attr('data-id');
       const wallets = state.get('wallets');
       const idx = wallets.findIndex(w => w.versionId === versionId);
-      dialog.showOpenDialog({
+      const { filePaths } = await dialog.showOpenDialog({
         title: `${wallets[idx].name} Data Directory`,
         defaultPath: platform === 'linux' ? ipcRenderer.sendSync('getHomePath') : app.getPath('appData'),
         properties: ['openDirectory']
-      }, (paths = []) => {
-        const [directoryPath] = paths;
-        if (directoryPath) updateDirectory(versionId, directoryPath);
       });
+      const [ directoryPath ] = filePaths;
+      if (directoryPath) updateDirectory(versionId, directoryPath);
     });
   }
 

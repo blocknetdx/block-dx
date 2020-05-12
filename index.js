@@ -15,6 +15,8 @@ const MarkdownIt = require('markdown-it');
 const { Localize } = require('./src-back/localize');
 const { blocknetDir4, blocknetDir3, BLOCKNET_CONF_NAME4, BLOCKNET_CONF_NAME3 } = require('./src-back/constants');
 const { checkAndCopyV3Configs } = require('./src-back/config-updater');
+const { MainSwitch } = require('./src-back/main-switch');
+const { openUnverifiedAssetWindow } = require('./src-back/windows/unverified-asset-window');
 
 const versionDirectories = [
   blocknetDir4,
@@ -46,7 +48,7 @@ math.config({
 
 const md = new MarkdownIt();
 
-const { app, BrowserWindow, Menu, ipcMain } = electron;
+const { app, BrowserWindow: ElectronBrowserWindow, Menu, ipcMain } = electron;
 
 autoUpdater.autoDownload = false;
 autoUpdater.autoInstallOnAppQuit = true;
@@ -79,6 +81,8 @@ ipcMain.on('quitResetFirstRun', () => {
   app.quit();
 });
 
+ipcMain.on('getPlatform', e => e.returnValue = process.platform);
+
 const configurationFilesDirectory = path.join(__dirname, 'blockchain-configuration-files');
 
 const getManifest = () => {
@@ -98,13 +102,47 @@ const getManifest = () => {
   return manifest;
 };
 
+const maxZoom = 1.5;
+const minZoom = .6;
+const zoomIncrement = .1;
+
+const zoomIn = () => {
+  const zoomFactor = storage.getItem('zoomFactor');
+  if(zoomFactor < maxZoom) {
+    const windows = ElectronBrowserWindow.getAllWindows();
+    const newZoomFactor = zoomFactor + zoomIncrement;
+    windows.forEach(w => {
+      w.send('ZOOM_IN', newZoomFactor);
+    });
+    storage.setItem('zoomFactor', newZoomFactor);
+  }
+};
+const zoomOut = () => {
+  const zoomFactor = storage.getItem('zoomFactor');
+  if(zoomFactor > minZoom) {
+    const windows = ElectronBrowserWindow.getAllWindows();
+    const newZoomFactor = zoomFactor - zoomIncrement;
+    windows.forEach(w => {
+      w.send('ZOOM_OUT', newZoomFactor);
+    });
+    storage.setItem('zoomFactor', newZoomFactor);
+  }
+};
+const zoomReset = () => {
+  const windows = ElectronBrowserWindow.getAllWindows();
+  windows.forEach(w => {
+    w.send('ZOOM_RESET');
+  });
+  storage.setItem('zoomFactor', 1);
+};
+
 const setAppMenu = () => {
 
   const menuTemplate = [];
 
   // File Menu
   menuTemplate.push({
-    label: 'File',
+    label: Localize.text('File', 'universal'),
     submenu: [
       { role: 'quit' }
     ]
@@ -112,7 +150,7 @@ const setAppMenu = () => {
 
   // Edit Menu
   menuTemplate.push({
-    label: 'Edit',
+    label: Localize.text('Edit', 'universal'),
     submenu: [
       { role: 'undo' },
       { role: 'redo' },
@@ -124,10 +162,32 @@ const setAppMenu = () => {
     ]
   });
 
+  // Edit Menu
+  menuTemplate.push({
+    label: Localize.text('View', 'universal'),
+    submenu: [
+      {
+        label: Localize.text('Zoom In', 'univeral'),
+        click: zoomIn
+      },
+      {
+        label: Localize.text('Zoom Out', 'univeral'),
+        click: zoomOut
+      },
+      {
+        type: 'separator'
+      },
+      {
+        label: Localize.text('Reset Zoom', 'univeral'),
+        click: zoomReset
+      }
+    ]
+});
+
   // Window Menu
   if(isDev) {
     menuTemplate.push({
-      label: 'Window',
+      label: Localize.text('Window', 'universal'),
       submenu: [
         { label: 'Show Dev Tools', role: 'toggledevtools' }
       ]
@@ -138,6 +198,10 @@ const setAppMenu = () => {
   Menu.setApplicationMenu(appMenu);
 
 };
+
+ipcMain.on('ZOOM_IN', zoomIn);
+ipcMain.on('ZOOM_OUT', zoomOut);
+ipcMain.on('ZOOM_RESET', zoomReset);
 
 // General Error Handler
 const handleError = err => {
@@ -163,8 +227,16 @@ if(!isDev) {
 require('electron-context-menu')();
 
 // Only allow one application instance to be open at a time
-const isSecondInstance = app.makeSingleInstance(() => {});
-if(isSecondInstance) app.quit();
+const unlocked = app.requestSingleInstanceLock();
+if(!unlocked) {
+  app.quit();
+}
+app.on('second-instance', () => {
+  if(appWindow) {
+    if (appWindow.isMinimized()) appWindow.restore();
+    appWindow.focus();
+  }
+});
 
 const openOrderDetailsWindow = details => {
 
@@ -177,11 +249,14 @@ const openOrderDetailsWindow = details => {
     height = 645;
   }
 
-  const detailsWindow = new BrowserWindow({
+  const detailsWindow = new ElectronBrowserWindow({
     show: false,
     width: 800,
     height,
-    parent: appWindow
+    parent: appWindow,
+    webPreferences: {
+      nodeIntegration: true
+    }
   });
   if(isDev) {
     detailsWindow.loadURL(`file://${path.join(__dirname, 'src', 'order-details.html')}`);
@@ -189,6 +264,7 @@ const openOrderDetailsWindow = details => {
     detailsWindow.loadURL(`file://${path.join(__dirname, 'dist', 'order-details.html')}`);
   }
   detailsWindow.once('ready-to-show', () => {
+    detailsWindow.webContents.setZoomFactor(storage.getItem('zoomFactor'));
     detailsWindow.show();
   });
 
@@ -262,11 +338,14 @@ const openUpdateAvailableWindow = (v, windowType, hideCheckbox = false) => new P
 
   updateAvailableWindowOpen = true;
 
-  const updateAvailableWindow = new BrowserWindow({
+  const updateAvailableWindow = new ElectronBrowserWindow({
     show: false,
     width: 580,
     height: platform === 'win32' ? 375 : platform === 'darwin' ? 355 : 340,
-    parent: appWindow
+    parent: appWindow,
+    webPreferences: {
+      nodeIntegration: true
+    }
   });
   if(platform !== 'darwin') updateAvailableWindow.setMenu(null);
   if(isDev) {
@@ -275,6 +354,7 @@ const openUpdateAvailableWindow = (v, windowType, hideCheckbox = false) => new P
     updateAvailableWindow.loadURL(`file://${path.join(__dirname, 'dist', 'update-available.html')}`);
   }
   updateAvailableWindow.once('ready-to-show', () => {
+    updateAvailableWindow.webContents.setZoomFactor(storage.getItem('zoomFactor'));
     updateAvailableWindow.show();
   });
   updateAvailableWindow.once('close', () => {
@@ -389,19 +469,23 @@ const openConfigurationWindow = (options = {}) => {
     errorMessage = '';
   }
 
-  configurationWindow = new BrowserWindow({
+  configurationWindow = new ElectronBrowserWindow({
     show: false,
     width: 1050,
     height: platform === 'win32' ? 708 : platform === 'darwin' ? 695 : 670,
-    parent: appWindow
+    parent: appWindow,
+    webPreferences: {
+      nodeIntegration: true
+    }
   });
   if(isDev) {
-    configurationWindow.loadURL(`file://${path.join(__dirname, 'src', 'automation.html')}`);
+    configurationWindow.loadURL(`file://${path.join(__dirname, 'src', 'configuration.html')}`);
   } else {
     configurationWindow.setMenu(null);
-    configurationWindow.loadURL(`file://${path.join(__dirname, 'dist', 'automation.html')}`);
+    configurationWindow.loadURL(`file://${path.join(__dirname, 'dist', 'configuration.html')}`);
   }
   configurationWindow.once('ready-to-show', () => {
+    configurationWindow.webContents.setZoomFactor(storage.getItem('zoomFactor'));
     configurationWindow.show();
 
     setTimeout(() => {
@@ -433,15 +517,6 @@ const openConfigurationWindow = (options = {}) => {
     try {
       openSettingsWindow();
       configurationWindow.close();
-    } catch(err) {
-      handleError(err);
-    }
-  });
-
-  ipcMain.removeAllListeners('getManifest');
-  ipcMain.on('getManifest', async function(e) {
-    try {
-      e.returnValue = getManifest();
     } catch(err) {
       handleError(err);
     }
@@ -523,6 +598,33 @@ const openConfigurationWindow = (options = {}) => {
 
 };
 
+ipcMain.on('getManifest', async function(e) {
+  try {
+    e.returnValue = getManifest();
+  } catch(err) {
+    handleError(err);
+  }
+});
+
+ipcMain.on('checkTokensAgainstManifest', async function(e, tokens = []) {
+  try {
+    const manifest = getManifest();
+    const verifiedTokens = new Set(manifest.map(({ ticker }) => ticker));
+    e.returnValue = tokens.reduce((obj, t) => Object.assign({}, obj, {[t]: verifiedTokens.has(t)}), {});
+  } catch(err) {
+    handleError(err);
+  }
+});
+
+ipcMain.on('getDoNotShowWarningAssetPairs', e => {
+  const doNotShowWarningPairs = storage.getItem('doNotShowAssetPairs') || [];
+  e.returnValue = doNotShowWarningPairs;
+});
+ipcMain.on('addToDoNotShowWarningAssetPairs', (e, pair) => {
+  const doNotShowWarningPairs = storage.getItem('doNotShowAssetPairs') || [];
+  storage.setItem('doNotShowAssetPairs', [...doNotShowWarningPairs, pair]);
+});
+
 const getBaseDataPath = () => (platform === 'win32' || platform === 'darwin') ? getDataPath() : getHomePath();
 
 ipcMain.on('closeConfigurationWindow', e => {
@@ -575,19 +677,23 @@ const openSettingsWindow = (options = {}) => {
     }
   });
 
-  const settingsWindow = new BrowserWindow({
+  const settingsWindow = new ElectronBrowserWindow({
     show: false,
     width: 500,
     height: platform === 'win32' ? 640 : platform === 'darwin' ? 625 : 600,
-    parent: appWindow
+    parent: appWindow,
+    webPreferences: {
+      nodeIntegration: true
+    }
   });
   if(isDev) {
-    settingsWindow.loadURL(`file://${path.join(__dirname, 'src', 'settings.html')}`);
+    settingsWindow.loadURL(`file://${path.join(__dirname, 'src', 'rpc-settings.html')}`);
   } else {
     settingsWindow.setMenu(null);
-    settingsWindow.loadURL(`file://${path.join(__dirname, 'dist', 'settings.html')}`);
+    settingsWindow.loadURL(`file://${path.join(__dirname, 'dist', 'rpc-settings.html')}`);
   }
   settingsWindow.once('ready-to-show', () => {
+    settingsWindow.webContents.setZoomFactor(storage.getItem('zoomFactor'));
     settingsWindow.show();
     if(errorMessage) {
       settingsWindow.send('errorMessage', errorMessage);
@@ -660,22 +766,26 @@ ipcMain.on('getBlocknetIP', e => {
 
 const openGeneralSettingsWindow = () => {
 
-  const generalSettingsWindow = new BrowserWindow({
+  const generalSettingsWindow = new ElectronBrowserWindow({
     show: false,
     width: 1000,
     height: platform === 'win32' ? 708 : platform === 'darwin' ? 695 : 670,
     parent: appWindow,
-    modal: platform === 'darwin' ? false : true
+    modal: platform === 'darwin' ? false : true,
+    webPreferences: {
+      nodeIntegration: true
+    }
   });
 
   generalSettingsWindow.setMenu(null);
 
   if(isDev) {
-    generalSettingsWindow.loadURL(`file://${path.join(__dirname, 'src', 'general-settings.html')}`);
+    generalSettingsWindow.loadURL(`file://${path.join(__dirname, 'src', 'settings.html')}`);
   } else {
-    generalSettingsWindow.loadURL(`file://${path.join(__dirname, 'dist', 'general-settings.html')}`);
+    generalSettingsWindow.loadURL(`file://${path.join(__dirname, 'dist', 'settings.html')}`);
   }
   generalSettingsWindow.once('ready-to-show', () => {
+    generalSettingsWindow.webContents.setZoomFactor(storage.getItem('zoomFactor'));
     generalSettingsWindow.show();
   });
 
@@ -684,16 +794,45 @@ const openGeneralSettingsWindow = () => {
 ipcMain.on('getShowWallet', e => {
   e.returnValue = showWallet;
 });
+ipcMain.on('getShowAllOrders', e => {
+  e.returnValue = storage.getItem('showAllOrders');
+});
+
+const getShowAllOrdersFromXbridgeConf = () => {
+  const split = getSplitXBridgeConf();
+  if(split.length > 0) { // If a valid xbridge conf was found
+    const idx = split.findIndex(l => /^ShowAllOrders=/.test(l));
+    if(idx > -1) { // if it has been found in xbridge conf
+      const splitValue = split[idx].split('=');
+      if(splitValue.length > 1 && splitValue[1].trim() === 'true') {
+        return true;
+      } else {
+        return false;
+      }
+    } else { // if it wasn't found in xbridge conf
+      return false;
+    }
+  } else { // If xbridge conf wasn't found
+    return null;
+  }
+};
+
+ipcMain.on('getShowAllOrdersFromXbridgeConf', e => {
+  e.returnValue = getShowAllOrdersFromXbridgeConf();
+});
 
 let informationWindow;
 
 const openInformationWindow = () => {
-  informationWindow = new BrowserWindow({
+  informationWindow = new ElectronBrowserWindow({
     show: false,
     width: 1000,
     height: platform === 'win32' ? 708 : platform === 'darwin' ? 695 : 670,
     parent: appWindow,
-    modal: platform === 'darwin' ? false : true
+    modal: platform === 'darwin' ? false : true,
+    webPreferences: {
+      nodeIntegration: true
+    }
   });
 
   informationWindow.setMenu(null);
@@ -704,6 +843,7 @@ const openInformationWindow = () => {
     informationWindow.loadURL(`file://${path.join(__dirname, 'dist', 'information.html')}`);
   }
   informationWindow.once('ready-to-show', () => {
+    informationWindow.webContents.setZoomFactor(storage.getItem('zoomFactor'));
     informationWindow.show();
   });
 
@@ -726,11 +866,14 @@ const openReleaseNotesWindow = () => {
     height = 645;
   }
 
-  releaseNotesWindow = new BrowserWindow({
+  releaseNotesWindow = new ElectronBrowserWindow({
     show: false,
     width: 500,
     height: height,
-    parent: appWindow
+    parent: appWindow,
+    webPreferences: {
+      nodeIntegration: true
+    }
   });
   if(isDev) {
     releaseNotesWindow.loadURL(`file://${path.join(__dirname, 'src', 'release-notes.html')}`);
@@ -738,6 +881,7 @@ const openReleaseNotesWindow = () => {
     releaseNotesWindow.loadURL(`file://${path.join(__dirname, 'dist', 'release-notes.html')}`);
   }
   releaseNotesWindow.once('ready-to-show', () => {
+    releaseNotesWindow.webContents.setZoomFactor(storage.getItem('zoomFactor'));
     releaseNotesWindow.show();
   });
 
@@ -797,11 +941,14 @@ const openTOSWindow = (alreadyAccepted = false) => {
     height = alreadyAccepted ? 645 : 700;
   }
 
-  tosWindow = new BrowserWindow({
+  tosWindow = new ElectronBrowserWindow({
     show: false,
     width: 500,
     height: height,
-    parent: appWindow
+    parent: appWindow,
+    webPreferences: {
+      nodeIntegration: true
+    }
   });
   if(isDev) {
     tosWindow.loadURL(`file://${path.join(__dirname, 'src', 'tos.html')}`);
@@ -809,6 +956,7 @@ const openTOSWindow = (alreadyAccepted = false) => {
     tosWindow.loadURL(`file://${path.join(__dirname, 'dist', 'tos.html')}`);
   }
   tosWindow.once('ready-to-show', () => {
+    tosWindow.webContents.setZoomFactor(storage.getItem('zoomFactor'));
     tosWindow.show();
   });
 
@@ -822,11 +970,20 @@ const openAppWindow = () => {
 
   let { height } = electron.screen.getPrimaryDisplay().workAreaSize;
   height -= 300;
-  let width = Math.floor(height * 1.5);
-  appWindow = new BrowserWindow({
+  const width = Math.floor(height * 1.5);
+  appWindow = new ElectronBrowserWindow({
     show: false,
     width: Math.max(width, 1050),
-    height: Math.max(height, 760)
+    height: Math.max(height, 760),
+    webPreferences: {
+      nodeIntegration: true
+    }
+    // Below is the proper way to set the initial window zoom factor, but there is a bug
+    // in Electron 3 which causes it to not work correctly. When we upgrade, we can
+    // un-comment this section and remove the setZoomFactor() from the 'ready-to-show' event
+    // webPreferences: {
+    //   zoomFactor: storage.getItem('zoomFactor')
+    // }
   });
 
   const initialBounds = storage.getItem('bounds');
@@ -845,6 +1002,7 @@ const openAppWindow = () => {
   }
 
   appWindow.once('ready-to-show', () => {
+    appWindow.webContents.setZoomFactor(storage.getItem('zoomFactor'));
     appWindow.show();
   });
 
@@ -1335,6 +1493,11 @@ const openAppWindow = () => {
 
 };
 
+MainSwitch.register('openUnverifiedAssetWindow', async function(tokens) {
+  const doNotShowAgain = await openUnverifiedAssetWindow(tokens, platform, appWindow, storage);
+  return doNotShowAgain;
+});
+
 ipcMain.on('openSettings', () => {
   openSettingsWindow();
 });
@@ -1354,7 +1517,54 @@ ipcMain.on('getPricingFrequency', e => {
 ipcMain.on('getPricingEnabled', e => {
   e.returnValue = enablePricing;
 });
-ipcMain.on('saveGeneralSettings', (e, s) => {
+
+const xBridgeConfExists = () => {
+  try {
+    const confPath = getCustomXbridgeConfPath();
+    return fs.existsSync(confPath);
+  } catch(err) {
+    return false;
+  }
+};
+
+const getSplitXBridgeConf = () => {
+  if(!xBridgeConfExists()) return [];
+  const confPath = getCustomXbridgeConfPath();
+  const contents = fs.readFileSync(confPath, 'utf8').trim();
+  if(!contents) return [];
+  return contents
+    .split(/\r?\n/g)
+    .map(l => l.trim());
+};
+
+ipcMain.on('xBridgeConfExists', e => {
+  e.returnValue = getSplitXBridgeConf().length > 0;
+});
+
+const saveShowAllOrders = showAllOrders => {
+  let split = getSplitXBridgeConf();
+  let idx = split.findIndex(l => /^ShowAllOrders=/.test(l));
+  const newValue = `ShowAllOrders=${showAllOrders ? 'true' : 'false'}`;
+  if(idx < 0) {
+    const mainIdx = split.findIndex(l => /^\[Main]/.test(l));
+    idx = mainIdx + 1;
+    split = [
+      ...split.slice(0, idx),
+      newValue,
+      ...split.slice(idx)
+    ];
+  } else {
+    split = [
+      ...split.slice(0, idx),
+      newValue,
+      ...split.slice(idx + 1)
+    ];
+  }
+  const newContents = split.join('\n');
+  fs.writeFileSync(getCustomXbridgeConfPath(), newContents, 'utf8');
+};
+
+ipcMain.on('saveGeneralSettings', async function(e, s) {
   const changed = {};
   if(enablePricing !== s.pricingEnabled) {
     enablePricing = s.pricingEnabled;
@@ -1376,33 +1586,43 @@ ipcMain.on('saveGeneralSettings', (e, s) => {
     pricingFrequency = s.pricingFrequency;
     changed.pricingFrequency = pricingFrequency;
   }
+  if(storage.getItem('showAllOrders') !== s.showAllOrders) {
+    changed.showAllOrders = s.showAllOrders;
+    saveShowAllOrders(s.showAllOrders);
+  }
   if(showWallet !== s.showWallet) {
     showWallet = s.showWallet;
     changed.showWallet = showWallet;
   }
-  if(['showWallet'].some(prop => Object.keys(changed).includes(prop))) {
-    sendGeneralSettings();
-  }
   if(getAutofillAddresses() !== s.autofillAddresses) {
     changed.autofillAddresses = s.autofillAddresses;
   }
-  if(['enablePricing', 'pricingSource', 'apiKeys', 'pricingUnit', 'pricingFrequency'].some(prop => Object.keys(changed).includes(prop))) {
+  const changedKeys = Object.keys(changed);
+  if(['enablePricing', 'pricingSource', 'apiKeys', 'pricingUnit', 'pricingFrequency'].some(prop => changedKeys.includes(prop))) {
     clearPricingInterval();
     sendPricingMultipliers();
     setPricingInterval();
     sendMarketPricingEnabled();
   }
   storage.setItems(changed, true);
+  if(changedKeys.includes('showAllOrders')) {
+    loadXBridgeConf();
+  }
+  if(['showWallet', 'showAllOrders'].some(prop => Object.keys(changed).includes(prop))) {
+    sendGeneralSettings();
+  }
 });
 
 const sendGeneralSettings = () => {
   appWindow.send('generalSettings', {
-    showWallet
+    showWallet,
+    showAllOrders: storage.getItem('showAllOrders')
   });
 };
 ipcMain.on('getGeneralSettings', e => {
   e.returnValue = {
-    showWallet
+    showWallet,
+    showAllOrders: storage.getItem('showAllOrders')
   };
 });
 
@@ -1553,6 +1773,9 @@ ipcMain.on('generateNewAddresses', async function(e) {
   appWindow.send('updatedAddresses', addresses);
 });
 
+ipcMain.on('setZoomFactor', (e, zoomFactor) => storage.setItem('zoomFactor', zoomFactor));
+ipcMain.on('getZoomFactor', (e) => e.returnValue = storage.getItem('zoomFactor'));
+
 // Run the application within async function for flow control
 (async function() {
   try {
@@ -1577,6 +1800,9 @@ ipcMain.on('generateNewAddresses', async function(e) {
       locale = 'en';
       storage.setItem('locale', defaultLocale);
     }
+
+    const zoomFactor = storage.getItem('zoomFactor');
+    if(!zoomFactor) storage.setItem('zoomFactor', 1);
 
     Localize.initialize(locale, getLocaleData());
 
@@ -1696,6 +1922,16 @@ ipcMain.on('generateNewAddresses', async function(e) {
       return;
     }
 
+    // Check ShowAllOrders
+    {
+      const showAllOrders = getShowAllOrdersFromXbridgeConf();
+      if(showAllOrders === true) {
+        storage.setItem('showAllOrders', true);
+      } else {
+        storage.setItem('showAllOrders', false);
+      }
+    }
+
     keyPair = storage.getItem('keyPair');
     if(!isTokenPairValid(keyPair)) {
 
@@ -1749,8 +1985,12 @@ function isTokenPairValid(keyPair) {
 
 // check for version number. Minimum supported blocknet client version
 function versionCheck(version) {
-  if (version < 4000100) {
-    return {name: Localize.text('Unsupported Version', 'universal'), message: Localize.text('Block DX requires Blocknet wallet version 4.0.0 or greater.', 'universal')};
+  if (version < 4020000) {
+    const requiredVersion = '4.2.0';
+    return {
+      name: Localize.text('Unsupported Version', 'universal'), 
+      message: Localize.text('Block DX requires Blocknet wallet version {requiredVersion} or greater.', 'universal', {requiredVersion})
+    };
   }
   return null;
 }
