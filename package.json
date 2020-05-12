@@ -63,7 +63,7 @@
     "fs-extra-promise": "1.0.1",
     "immutable": "3.8.2",
     "intl": "1.2.5",
-    "jquery": "3.4.1",
+    "jquery": "3.5.1",
     "lodash": "4.17.13",
     "markdown-it": "9.1.0",
     "mathjs": "5.10.3",
