@@ -1,4 +1,4 @@
-FROM electronuserland/builder:10
+FROM electronuserland/builder:latest
 
 ARG GIT_BRANCH=""
 
