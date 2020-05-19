@@ -1,4 +1,4 @@
-FROM electronuserland/builder:10
+FROM electronuserland/builder:latest
 
 # Create app directory
 RUN mkdir -p /opt/blockdx-ui/dist-native
