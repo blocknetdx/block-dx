@@ -1,16 +1,16 @@
 <div class="chart-holder">
 
-  <div #topChartContainer class="top-chart-container"></div>
-  <div #bottomChartContainer class="bottom-chart-container"></div>
+  <div #leftChartContainer class="left-chart-container"></div>
+  <div #rightChartContainer class="right-chart-container"></div>
 
   <div style="display:none;" id="chartdiv"></div>
 
-	<div class="midmarket-price-container" [style.display]="orderbook.length > 0 ? 'block' : 'none'"  *ngIf="currentPrice">
-	 	<span id="midmarket-dash"></span>
-		<span id="midmarket-data">
-	    <span id="midmarket-price" class="bn-number" [innerHtml]="midMarketPrice | localizeDecimalSeparator"></span>
-	    <span id="midmarket-label"><Localize context="depthChart" key="Mid Market Price"></Localize></span>
-		</span>
+  <div class="midmarket-price-container" [style.display]="orderbook.length > 0 ? 'block' : 'none'" *ngIf="currentPrice">
+    		<span class="" id="midmarket-data">
+    	    <span id="midmarket-price" class="bn-number" [innerHtml]="midMarketPrice | localizeDecimalSeparator"></span>
+    	    <span id="midmarket-label"><Localize context="depthChart" key="Mid Market Price"></Localize></span>
+    		</span>
   </div>
+  <div class="midmarket-price-line" [style.display]="orderbook.length > 0 ? 'block' : 'none'" *ngIf="currentPrice"></div>
 
 </div>

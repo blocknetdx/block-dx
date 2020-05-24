@@ -1,29 +1,25 @@
+$midmarket-price-container-width: 200px;
+$midmarket-price-container-height: 45px;
+$midmarket-price-line-color: rgba(88, 104, 124, 1);
+
 #midmarket-dash {
   position: absolute;
   left: 0;
   border-bottom: 1px dashed white;
   min-width: calc(100% - 105px);
 }
-#midmarket-data {
-  position: absolute;
-  right: 0;
-  width: 105px;
-  margin-top: -10px;
-  display: inline;
-  text-align: center;
-  text-shadow: 1px 1px #0f2742;
-}
 #midmarket-price {
   display: block;
   font-family: "Roboto Mono", sans-serif;
-  font-size: 13px;
+  font-size: 16px;
   font-weight: bold;
   text-align: center;
 }
 #midmarket-label {
   display: block;
-  font-size: 10px;
+  font-size: 12px;
   text-align: center;
+  color: $midmarket-price-line-color;
 }
 
 .chart-holder {
@@ -31,59 +27,47 @@
   height: 100%;
   margin: 0;
   padding: 0;
-  margin-left: -10px;
-  margin-top: -20px;
-  margin-right: -20px;
   position: relative;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
 
-  .top-chart-container {
+  .left-chart-container {
     flex-grow: 1;
     flex-basis: 0;
     position: relative;
-    width: calc(100% + 23px);
-    height: calc(50% + 40px);
-
-    /*@media(max-height: 601px) {
-      top: 10px;
-      height: calc(50% + 22px);
-    }
-    @media(max-height: 328px) {
-      top: 20px;
-      height: calc(50% + 5px);
-    }*/
+    width: 50%;
+    height: calc(100% - 8px);
+    margin-right: -10px;
+    margin-left: 20px;
   }
 
-  .bottom-chart-container {
+  .right-chart-container {
     flex-grow: 1;
     flex-basis: 0;
     position: relative;
-    width: calc(100% + 23px);
-    height: calc(50% + 20px);
-    margin-top: -40px;
-
-    /*top: -40px;
-
-    @media(max-height: 669px) {
-      top: -30px;
-    }
-    @media(max-height: 601px) {
-      top: -13px;
-    }
-    @media(max-height: 335px) {
-      top: -5px;
-      height: calc(50% + 30px);
-    }
-    @media(max-height: 328px) {
-      top: 0px;
-      height: calc(50% + 30px);
-    }*/
+    width: 50%;
+    height: calc(100% - 8px);
+    margin-left: -11px;
   }
 
   .midmarket-price-container {
     position: absolute;
-    top: calc(50% + 19px);
-    left: 0;
-    right: 0;
+    top: calc(40% - #{$midmarket-price-container-height} - 43px);
+    width: $midmarket-price-container-width;
+    left: 50%;
+    margin-left:  calc(-1 * #{$midmarket-price-container-width} / 2 - 0px);
+    min-height: $midmarket-price-container-height;
+  }
+
+  .midmarket-price-line {
+    position: absolute;
+    width: 2px;
+    bottom: 43px;
+    left: calc(50% - 0px);
+    height: 60%;
+    background-color: $midmarket-price-line-color;
   }
 
 }

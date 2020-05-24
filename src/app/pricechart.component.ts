@@ -18,6 +18,7 @@ export class PricechartComponent implements AfterViewInit, OnDestroy {
   public container: ElementRef;
   public granularity = 2; // 1: minute, 2: 15 minutes, 3: 30 minutes
   public model = { 1: [], 2: [], 3: [] };
+  public dataReady = false;
 
   private chart: any;
   private pairUpdated = true;
@@ -32,57 +33,66 @@ export class PricechartComponent implements AfterViewInit, OnDestroy {
   ) {}
 
   ngAfterViewInit() {
+    // Without a setTimeout we get an "ExpressionChangedAfterItHasBeenCheckedError" warning
+    setTimeout(() => {
 
-    this.makeChart();
+      this.makeChart();
 
-    const { model, granularity, zone } = this;
+      const { model, granularity, zone } = this;
 
-    const prepData = arr => arr
-      .map(i => Object.assign({}, i, {
-        date: moment(i.time).toDate(),
-        formattedTime: moment(i.time).format('LT'),
-        low: i.low === 0 ? null : i.low,
-        high: i.high === 0 ? null : i.high,
-        open: i.open === 0 ? null : i.open,
-        close: i.close === 0 ? null : i.close,
-      }));
+      const prepData = arr => arr
+        .map(i => Object.assign({}, i, {
+          date: moment(i.time).toDate(),
+          formattedTime: moment(i.time).format('LT'),
+          low: i.low === 0 ? null : i.low,
+          high: i.high === 0 ? null : i.high,
+          open: i.open === 0 ? null : i.open,
+          close: i.close === 0 ? null : i.close,
+        }));
 
-    this.subscriptions.push(this.currentpriceService.getOrderHistoryByMinute()
-      .subscribe(items => {
-        zone.run(() => {
-          model['1'] = prepData(items);
-        });
-        if (granularity === 1)
-          this.updatePriceChart();
-      })
-    );
+      this.subscriptions.push(this.currentpriceService.getOrderHistoryByMinute()
+        .subscribe(items => {
+          zone.run(() => {
+            model['1'] = prepData(items);
+          });
+          if (granularity === 1) {
+            this.dataReady = true;
+            this.updatePriceChart();
+          }
+        })
+      );
 
-    this.subscriptions.push(this.currentpriceService.getOrderHistoryBy15Minutes()
-      .subscribe(items => {
-        zone.run(() => {
-          model['2'] = prepData(items);
-        });
-        if (granularity === 2)
-          this.updatePriceChart();
-      })
-    );
+      this.subscriptions.push(this.currentpriceService.getOrderHistoryBy15Minutes()
+        .subscribe(items => {
+          zone.run(() => {
+            model['2'] = prepData(items);
+            if (granularity === 2) {
+              this.dataReady = true;
+              this.updatePriceChart();
+            }
+          });
+        })
+      );
 
-    this.subscriptions.push(this.currentpriceService.getOrderHistoryBy1Hour()
-      .subscribe(items => {
-        zone.run(() => {
-          model['3'] = prepData(items);
-        });
-        if (granularity === 3)
-          this.updatePriceChart();
-      })
-    );
+      this.subscriptions.push(this.currentpriceService.getOrderHistoryBy1Hour()
+        .subscribe(items => {
+          zone.run(() => {
+            model['3'] = prepData(items);
+          });
+          if (granularity === 3) {
+            this.dataReady = true;
+            this.updatePriceChart();
+          }
+        })
+      );
 
-    this.subscriptions.push(this.currentpriceService.onPair()
-      .subscribe(pair => {
-        this.pairUpdated = true;
-      })
-    );
+      this.subscriptions.push(this.currentpriceService.onPair()
+        .subscribe(pair => {
+          this.pairUpdated = true;
+        })
+      );
 
+    }, 0);
   }
 
   updatePriceChart() {

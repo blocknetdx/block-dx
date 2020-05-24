@@ -27,7 +27,6 @@ import { OpenordersComponent } from './openorders.component';
 import { OpenordersService } from './openorders.service';
 import { OrderformComponent } from './orderform.component';
 import { OrderbookComponent } from './orderbook.component';
-import { DepthchartComponent } from './depthchart.component';
 import { DepthComponent } from './depth.component';
 import { MainviewComponent } from './mainview.component';
 import { WatchlistComponent } from './watchlist.component';
@@ -77,7 +76,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   declarations: [
     AppComponent,
     BalancesComponent,
-    DepthchartComponent,
     DepthComponent,
     MainviewComponent,
     OpenordersComponent,
