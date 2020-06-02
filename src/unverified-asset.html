@@ -32,6 +32,14 @@
     }
     .container {
       padding: 0 20px;
+      position:absolute;
+      left:0;
+      right:0;
+      top:159px;
+      bottom:0;
+      display:flex;
+      flex-direction:column;
+      justify-content:flex-start;
     }
     /*.input-group {*/
       /*display: flex;*/
@@ -75,6 +83,8 @@
       font-weight: 300;
       font-size: 14px;
       min-height: 16px;
+      flex: 1;
+      overflow-y: auto;
     }
     button {
       display: block;
@@ -137,17 +147,52 @@
       color: #aaa;
       text-decoration: none;
     }
+    .image-container {
+      position:absolute;
+      left:0;
+      right:0;
+      top:0;
+      height:113px;
+      width:100%;
+      padding: 20px 0 20px 0;
+      text-align:center;
+    }
+    .logo-image {
+      max-width:300px;
+    }
+    .header {
+      position:absolute;
+      left:0;
+      right:0;
+      top:114px;
+      height:25px;
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+      border: 0;
+    }
+    ::-webkit-scrollbar-track {
+      -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    }
+    ::-webkit-scrollbar-thumb {
+      background-color: rgba(248, 248, 248, 0.5);
+      border: 0;
+      border-radius: 3px;
+    }
 
   </style>
 
 </head>
 <body>
 
-  <div style="width:100%; padding: 20px 0 20px 0; text-align:center;"><img style="max-width:300px;" src="assets/logo_full.svg" alt="Blocknet Logo"></div>
-  <h3 id="js-header"></h3>
-  <form class="container">
+<div style="position:relative;height:100vh;width:100vw;">
 
-    <div id="js-label" class="label"></div>
+  <div class="image-container"><img class="logo-image" src="assets/logo_full.svg" alt="Blocknet Logo"></div>
+  <h3 class="header" id="js-header"></h3>
+  <form class="container" style="">
+
+    <div id="js-label" class="label">
+    </div>
 
     <div class="ask-again-container">
       <a id="js-notAskAgain" href="#"><small><i class="far fa-square"></i> <span id="js-doNotAskAgainMessage"></span></small></a>
@@ -158,6 +203,8 @@
     </div>
 
   </form>
+
+</div>
 
   <script type="text/javascript">
     window.electron = require('electron');
