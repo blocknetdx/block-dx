@@ -12,6 +12,7 @@ const ConfController = require('./src-back/conf-controller');
 const _ = require('lodash');
 const math = require('mathjs');
 const MarkdownIt = require('markdown-it');
+const request = require('superagent');
 const { Localize } = require('./src-back/localize');
 const { blocknetDir4, blocknetDir3, BLOCKNET_CONF_NAME4, BLOCKNET_CONF_NAME3 } = require('./src-back/constants');
 const { checkAndCopyV3Configs } = require('./src-back/config-updater');
@@ -71,7 +72,7 @@ ipcMain.on('getAppVersion', e => {
 let appWindow, serverLocation, sn, keyPair, storage, user, password, port, info, pricingSource, pricingUnit, apiKeys,
   pricingFrequency, enablePricing, sendPricingMultipliers, clearPricingInterval, setPricingInterval,
   sendMarketPricingEnabled, metaPath, availableUpdate, tradeHistory, myOrders, showWallet, tosWindow, releaseNotesWindow,
-  latestBlocknetDir, latestConfName;
+  latestBlocknetDir, latestConfName, unconnected, availableTokens;
 let updateError = false;
 
 // Handle explicit quit
@@ -1077,30 +1078,68 @@ const openAppWindow = () => {
 
   const calculateBackupTotal = (price, size) => math.round(math.multiply(math.bignumber(price), math.bignumber(size)), 6).toNumber().toFixed(6);
 
-  const sendOrderBook = force => {
-    if (isTokenPairValid(keyPair))
-      sn.dxGetOrderBook3(keyPair[0], keyPair[1], 250)
-        .then(async function(res) {
-          if(force === true || JSON.stringify(res) !== JSON.stringify(orderBook)) {
-            orderBook = res;
-            const allOrders = await getOrders();
-            const orderTotals = new Map(allOrders.map(({ id, makerSize, takerSize }) => [id, [makerSize, takerSize]]));
-            const orderBookWithTotals = Object.assign({}, res, {
-              asks: res.asks.map(a => {
-                const order = orderTotals.get(a.orderId);
-                const total = !order ? calculateBackupTotal(a.price, a.size) : a.size === order[0] ? order[1] : order[0];
-                return Object.assign({}, a, {total});
-              }),
-              bids: res.bids.map(b => {
-                const order = orderTotals.get(b.orderId);
-                const total = !order ? calculateBackupTotal(b.price, b.size) : b.size === order[0] ? order[1] : order[0];
-                return Object.assign({}, b, {total});
-              })
-            });
-            appWindow.send('orderBook', orderBookWithTotals);
-          }
+  const getOrderbook = async function() {
+    let prepped;
+    if(unconnected) {
+      const { body } = await request.get('https://data.blocknet.co/api/v2.0/dxgetorders');
+      const res = body.filter(o => o.maker === keyPair[0] && o.taker === keyPair[1] || o.maker === keyPair[1] && o.taker === keyPair[0]);
+      const asks = [], bids = [];
+      for(const o of res) {
+        if(o.maker === keyPair[0]) {
+          asks.push({
+            price: math.divide(math.bignumber(o.taker_size), math.bignumber(o.maker_size)).toString(),
+            size: o.maker_size,
+            total: o.taker_size,
+            orderId: o.id
+          });
+        } else {
+          bids.push({
+            price: math.divide(math.bignumber(o.maker_size), math.bignumber(o.taker_size)).toString(),
+            size: o.taker_size,
+            total: o.maker_size,
+            orderId: o.id
+          });
+        }
+      }
+      prepped = {
+        detail: 3,
+        maker: keyPair[0],
+        taker: keyPair[1],
+        asks: asks.sort((a, b) => b.price.localeCompare(a.price)),
+        bids: bids.sort((a, b) => b.price.localeCompare(a.price))
+      };
+    } else {
+      const res = await sn.dxGetOrderBook3(keyPair[0], keyPair[1], 250);
+      const allOrders = await getOrders();
+      const orderTotals = new Map(allOrders.map(({id, makerSize, takerSize}) => [id, [makerSize, takerSize]]));
+      prepped = Object.assign({}, res, {
+        asks: res.asks.map(a => {
+          const order = orderTotals.get(a.orderId);
+          const total = !order ? calculateBackupTotal(a.price, a.size) : a.size === order[0] ? order[1] : order[0];
+          return Object.assign({}, a, {total});
+        }),
+        bids: res.bids.map(b => {
+          const order = orderTotals.get(b.orderId);
+          const total = !order ? calculateBackupTotal(b.price, b.size) : b.size === order[0] ? order[1] : order[0];
+          return Object.assign({}, b, {total});
         })
-        .catch(handleError);
+      });
+    }
+    return prepped;
+  };
+
+  const sendOrderBook = async function(force) {
+    try {
+      if (isTokenPairValid(keyPair)) {
+        const res = await getOrderbook();
+        if (force === true || JSON.stringify(res) !== JSON.stringify(orderBook)) {
+          orderBook = res;
+          appWindow.send('orderBook', res);
+        }
+      }
+    } catch(err) {
+      handleError(err);
+    }
   };
   ipcMain.on('getOrderBook', () => sendOrderBook(true));
   setInterval(sendOrderBook, stdInterval);
@@ -1108,26 +1147,30 @@ const openAppWindow = () => {
   tradeHistory = [];
   const sendTradeHistory = force => {
     if (isTokenPairValid(keyPair))
-      sn.dxGetOrderFills(keyPair[0], keyPair[1])
-        .then(res => {
-          if(force === true || JSON.stringify(res) !== JSON.stringify(tradeHistory)) {
-            tradeHistory = res;
-            appWindow.send('tradeHistory', tradeHistory, keyPair);
-          }
-        })
-        .catch(handleError);
+      if(unconnected) {
+        appWindow.send('tradeHistory', [], keyPair);
+      } else {
+        sn.dxGetOrderFills(keyPair[0], keyPair[1])
+          .then(res => {
+            if(force === true || JSON.stringify(res) !== JSON.stringify(tradeHistory)) {
+              tradeHistory = res;
+              appWindow.send('tradeHistory', tradeHistory, keyPair);
+            }
+          })
+          .catch(handleError);
+      }
   };
   ipcMain.on('getTradeHistory', () => sendTradeHistory(true));
   setInterval(sendTradeHistory, stdInterval);
 
   const sendLocalTokens = async function() {
-    const localTokens = await sn.dxGetLocalTokens();
+    const localTokens = await getLocalTokens();
     appWindow.send('localTokens', localTokens);
   };
   ipcMain.on('getLocalTokens', sendLocalTokens);
 
   const manifestData = getManifest();
-  const availableTokens = new Set(manifestData.map(d => d.ticker));
+  availableTokens = new Set(manifestData.map(d => d.ticker));
   const tokenNames = manifestData
     .reduce((map, d) => {
       return map.set(d.ticker, d.blockchain);
@@ -1138,9 +1181,8 @@ const openAppWindow = () => {
   });
 
   const sendNetworkTokens = async function() {
-    const networkTokens = await sn.dxGetNetworkTokens();
-    const filteredTokens = networkTokens.filter(t => availableTokens.has(t));
-    appWindow.send('networkTokens', filteredTokens);
+    const tokens = await getNetworkTokens();
+    appWindow.send('networkTokens', tokens);
   };
   ipcMain.on('getNetworkTokens', sendNetworkTokens);
 
@@ -1152,14 +1194,18 @@ const openAppWindow = () => {
 
   myOrders = [];
   const sendMyOrders = force => {
-    sn.dxGetMyOrders()
-      .then(res => {
-        if(force === true || JSON.stringify(res) !== JSON.stringify(myOrders)) {
-          myOrders = res;
-          appWindow.send('myOrders', myOrders, keyPair);
-        }
-      })
-      .catch(handleError);
+    if(unconnected) {
+      appWindow.send('myOrders', [], keyPair);
+    } else {
+      sn.dxGetMyOrders()
+        .then(res => {
+          if(force === true || JSON.stringify(res) !== JSON.stringify(myOrders)) {
+            myOrders = res;
+            appWindow.send('myOrders', myOrders, keyPair);
+          }
+        })
+        .catch(handleError);
+    }
   };
   ipcMain.on('getMyOrders', () => sendMyOrders(true));
   setInterval(sendMyOrders, stdInterval);
@@ -1217,6 +1263,13 @@ const openAppWindow = () => {
     const end = moment().utc();
     const start = end.clone().subtract(1, 'day');
 
+    if(unconnected) {
+      appWindow.send('orderHistory', []);
+      appWindow.send('orderHistoryByMinute', []);
+      appWindow.send('currentPrice', 0);
+      return;
+    }
+
     {
       sn.dxGetOrderHistory(keyPair[0], keyPair[1], start.unix(), end.unix(), 60)
         .then(res => {
@@ -1265,8 +1318,8 @@ const openAppWindow = () => {
   const sendCurrencies = async function() {
     try {
       const [ localTokens, networkTokens ] = await Promise.all([
-        sn.dxGetLocalTokens(),
-        sn.dxGetNetworkTokens()
+        getLocalTokens(),
+        getNetworkTokens()
       ]);
       const localTokensSet = new Set(localTokens);
       const comparator = networkTokens.includes('BTC') ? 'BTC' : networkTokens.includes('LTC') ? 'LTC' : networkTokens[0];
@@ -1307,8 +1360,8 @@ const openAppWindow = () => {
   const sendCurrencyComparisons = async function(primary) {
     try {
       const [ localTokens, networkTokens ] = await Promise.all([
-        sn.dxGetLocalTokens(),
-        sn.dxGetNetworkTokens()
+        getLocalTokens(),
+        getNetworkTokens()
       ]);
       const localTokensSet = new Set(localTokens);
       const currencies = [];
@@ -1374,14 +1427,18 @@ const openAppWindow = () => {
 
   let balances = [];
   const sendBalances = force  => {
-    sn.dxGetTokenBalances()
-      .then(data => {
-        if(force === true || JSON.stringify(data) !== JSON.stringify(balances)) {
-          balances = data;
-          appWindow.send('balances', balances);
-        }
-      })
-      .catch(handleError);
+    if(unconnected) {
+      appWindow.send('balances', {});
+    } else {
+      sn.dxGetTokenBalances()
+        .then(data => {
+          if(force === true || JSON.stringify(data) !== JSON.stringify(balances)) {
+            balances = data;
+            appWindow.send('balances', balances);
+          }
+        })
+        .catch(handleError);
+    }
   };
   ipcMain.on('getBalances', () => sendBalances(true));
   setInterval(sendBalances, stdInterval);
@@ -1491,6 +1548,31 @@ const openAppWindow = () => {
     sendMyOrders(true);
   });
 
+};
+
+const getLocalTokens = async function() {
+  let localTokens;
+  if(unconnected) {
+    localTokens = [];
+  } else {
+    localTokens = await sn.dxGetLocalTokens();
+  }
+  return localTokens;
+};
+
+const getNetworkTokens = async function() {
+  let filteredTokens;
+  if(unconnected) {
+    if(!availableTokens) {
+      const manifestData = getManifest();
+      availableTokens = new Set(manifestData.map(d => d.ticker));
+    }
+    filteredTokens = [...availableTokens.values()];
+  } else {
+    const networkTokens = await sn.dxGetNetworkTokens();
+    filteredTokens = networkTokens.filter(t => availableTokens.has(t));
+  }
+  return filteredTokens;
 };
 
 MainSwitch.register('openUnverifiedAssetWindow', async function(tokens) {
@@ -1724,7 +1806,7 @@ ipcMain.on('localizeText', (e, key, context, replacers = {}) => {
 });
 
 const autoGenerateAddressesAvailable = () => {
-  return info.version >= 3140100 ? true : false;
+  return !unconnected && info.version >= 3140100 ? true : false;
 };
 ipcMain.on('autoGenerateAddressesAvailable', e => {
   e.returnValue = autoGenerateAddressesAvailable();
@@ -1873,23 +1955,30 @@ ipcMain.on('getZoomFactor', (e) => e.returnValue = storage.getItem('zoomFactor')
 
     const upgradedToV4 = storage.getItem('upgradedToV4');
 
+    let infoErr;
+
     if(!user || !password) {
       if(!upgradedToV4) storage.setItem('upgradedToV4', true, true);
-      await onReady;
-      openConfigurationWindow({isFirstRun: true});
-      checkForUpdates();
-      return;
-    }
+      // await onReady;
+      // openConfigurationWindow({isFirstRun: true});
+      // checkForUpdates();
+      // return;
 
-    sn = new ServiceNodeInterface(user, password, `http://${ip}:${port}`);
+      unconnected = true;
 
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    } else {
 
-    let infoErr;
-    try {
-      info = await sn.getinfo();
-    } catch(err) {
-      infoErr = err;
+      sn = new ServiceNodeInterface(user, password, `http://${ip}:${port}`);
+
+      await new Promise(resolve => setTimeout(resolve, 2000));
+
+      try {
+        info = await sn.getinfo();
+      } catch(err) {
+        infoErr = err;
+        unconnected = true;
+      }
+
     }
 
     if(info) {
@@ -1911,14 +2000,28 @@ ipcMain.on('getZoomFactor', (e) => e.returnValue = storage.getItem('zoomFactor')
       }
     }
 
+    const localhost = 'localhost';
+
+    // In development use the live ng server. In production serve the built files
+    if(isDev) {
+      serverLocation =  `http://${localhost}:4200`;
+    }
+
     if(!upgradedToV4) storage.setItem('upgradedToV4', true, true);
 
     if(infoErr && !upgradedToV4) await checkAndCopyV3Configs(getBaseDataPath(), app, Localize, storage);
 
+    keyPair = storage.getItem('keyPair');
+
     if(infoErr) {
       await onReady;
       checkForUpdates();
-      openConfigurationWindow({ error: infoErr });
+      // openConfigurationWindow({ error: infoErr });
+
+      if(!keyPair) keyPair = ['BLOCK', 'LTC'];
+
+      openAppWindow();
+
       return;
     }
 
@@ -1932,14 +2035,13 @@ ipcMain.on('getZoomFactor', (e) => e.returnValue = storage.getItem('zoomFactor')
       }
     }
 
-    keyPair = storage.getItem('keyPair');
     if(!isTokenPairValid(keyPair)) {
 
-      const tokens = await sn.dxGetLocalTokens();
+      const tokens = await getLocalTokens();
 
       if(tokens.length < 2) {
         const dif = 2 - tokens.length;
-        const networkTokens = await sn.dxGetNetworkTokens();
+        const networkTokens = await getNetworkTokens();
         for(let i = 0; i < dif; i++) {
           const newToken = networkTokens.find(t => !tokens.includes(t));
           tokens.push(newToken);
@@ -1954,13 +2056,6 @@ ipcMain.on('getZoomFactor', (e) => e.returnValue = storage.getItem('zoomFactor')
     // Autogenerate new addresses
     if(autoGenerateAddressesAvailable() && storage.getItem('autofillAddresses')) {
       await generateNewAddresses();
-    }
-
-    const localhost = 'localhost';
-
-    // In development use the live ng server. In production serve the built files
-    if(isDev) {
-      serverLocation =  `http://${localhost}:4200`;
     }
 
     await onReady;
