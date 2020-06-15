@@ -100,9 +100,9 @@ export class DepthComponent implements AfterViewInit, OnChanges, OnDestroy {
 
           // Convert to data points
           for(let i = 0; i < list.length; i++) {
-            const value = Number(list[i][0]);
-            const volume = Number(list[i][1]);
-            const total = Number(list[i][5]);
+            const value = Number(list[i][0]); // price
+            const volume = Number(list[i][1]); // size
+            const total = Number(list[i][5]); // total
             list[i] = {
               value,
               volume,
@@ -154,9 +154,15 @@ export class DepthComponent implements AfterViewInit, OnChanges, OnDestroy {
             obj[totalVolumeKey] = totalVolumeMap.get(obj.value);
           }
 
-          if(desc) res.reverse();
+          // group by value
+          const valueMap = new Map();
+          for(const obj of res) {
+            valueMap.set(obj.value, obj);
+          }
+          const filteredByValueArr = [...valueMap.values()];
+          if(desc) filteredByValueArr.reverse();
 
-          return res;
+          return filteredByValueArr;
 
         };
 
@@ -305,8 +311,8 @@ export class DepthComponent implements AfterViewInit, OnChanges, OnDestroy {
             'lineThickness': 1,
             'lineColor': '#FF7E70',
             fillColors: [
-              '#172E48',
-              '#FF7E70'
+              '#FF7E70',
+              '#172E48'
             ],
             'type': 'step',
             'valueField': 'askstotalvolume',
@@ -349,6 +355,8 @@ export class DepthComponent implements AfterViewInit, OnChanges, OnDestroy {
           'showFirstLabel': false,
           'showLastLabel': false,
           'inside': false,
+          autoGridCount: true,
+          minHorizontalGap: 100,
           'balloon': {
             'fontSize': 0,
             'color': '#FFFFFF'
@@ -448,6 +456,8 @@ export class DepthComponent implements AfterViewInit, OnChanges, OnDestroy {
           'showFirstLabel': false,
           'showLastLabel': false,
           'inside': false,
+          autoGridCount: true,
+          minHorizontalGap: 100,
           'balloon': {
             'fontSize': 0,
             'color': '#FFFFFF'
