@@ -1988,7 +1988,7 @@ function versionCheck(version) {
   if (version < 4020000) {
     const requiredVersion = '4.2.0';
     return {
-      name: Localize.text('Unsupported Version', 'universal'), 
+      name: Localize.text('Unsupported Version', 'universal'),
       message: Localize.text('Block DX requires Blocknet wallet version {requiredVersion} or greater.', 'universal', {requiredVersion})
     };
   }

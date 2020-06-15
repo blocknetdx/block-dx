@@ -7,7 +7,9 @@ const openUnverifiedAssetWindow = (tokens, platform, appWindow, storage) => new 
   // toggleDevTools: true,
   windowOptions: {
     width: 580,
-    height: platform === 'win32' ? 390 : platform === 'darwin' ? 380 : 360,
+    minWidth: 300,
+    height: platform === 'win32' ? 390 : platform === 'darwin' ? 395 : 360,
+    minHeight: 395,
     parent: appWindow,
     webPreferences: {
       nodeIntegration: true
