@@ -1,65 +1,49 @@
 build_linux:
   stage: build
+  image: electronuserland/builder:latest
   script:
-    - mkdir -p $CI_PROJECT_DIR/linux
-    - docker build -f Dockerfile-linux --build-arg GIT_BRANCH=$CI_COMMIT_REF_NAME -t blocknetdx/blockdx-ui-devbuilds:$CI_COMMIT_REF_NAME-$CI_COMMIT_SHA-linux .
-    - if [ ! -z "$(docker ps -qa -f name=$CI_COMMIT_REF_NAME-$CI_COMMIT_SHA-linux)" ]; then docker rm $CI_COMMIT_REF_NAME-$CI_COMMIT_SHA-linux; fi
-    - docker run --name=$CI_COMMIT_REF_NAME-$CI_COMMIT_SHA-linux blocknetdx/blockdx-ui-devbuilds:$CI_COMMIT_REF_NAME-$CI_COMMIT_SHA-linux
-    - docker stop $CI_COMMIT_REF_NAME-$CI_COMMIT_SHA-linux
-    - docker cp $CI_COMMIT_REF_NAME-$CI_COMMIT_SHA-linux:/opt/blockdx-ui/dist-native/. $CI_PROJECT_DIR/linux
-    - if [ ! -z "$(docker ps -qa -f name=$CI_COMMIT_REF_NAME-$CI_COMMIT_SHA-linux)" ]; then docker rm $CI_COMMIT_REF_NAME-$CI_COMMIT_SHA-linux; fi
+    - "echo GIT_BRANCH=\"$CI_COMMIT_REF_NAME\" > electron-builder.env"
+    - "npm install --no-audit"
+    - "npm run build-native-linux"
   artifacts:
     name: "BLOCKDX-$CI_COMMIT_REF_NAME-linux"
     paths:
-     - linux/*.tar.gz
-     - linux/*.AppImage
-     - linux/*.deb
-
-test_linux:
-  stage: test
-  script:
-    - "[[ \"$CI_PROJECT_DIR/linux/*.tar.gz\" =~ \\.tar.gz$ ]]"
-    - "[[ \"$CI_PROJECT_DIR/linux/*.AppImage\" =~ \\.AppImage$ ]]"
-    - "[[ \"$CI_PROJECT_DIR/linux/*.deb\" =~ \\.deb$ ]]"
+      - dist-native/*.tar.gz
+      - dist-native/*.AppImage
+      - dist-native/*.deb
 
 build_win:
   stage: build
+  image: electronuserland/builder:wine
   script:
-    - mkdir -p $CI_PROJECT_DIR/win
-    - docker build -f Dockerfile-win --build-arg GIT_BRANCH=$CI_COMMIT_REF_NAME -t blocknetdx/blockdx-ui-devbuilds:$CI_COMMIT_REF_NAME-$CI_COMMIT_SHA-win .
-    - if [ ! -z "$(docker ps -qa -f name=$CI_COMMIT_REF_NAME-$CI_COMMIT_SHA-win)" ]; then docker rm $CI_COMMIT_REF_NAME-$CI_COMMIT_SHA-win; fi
-    - docker run --name=$CI_COMMIT_REF_NAME-$CI_COMMIT_SHA-win blocknetdx/blockdx-ui-devbuilds:$CI_COMMIT_REF_NAME-$CI_COMMIT_SHA-win
-    - docker stop $CI_COMMIT_REF_NAME-$CI_COMMIT_SHA-win
-    - docker cp $CI_COMMIT_REF_NAME-$CI_COMMIT_SHA-win:/opt/blockdx-ui/dist-native/. $CI_PROJECT_DIR/win
-    - if [ ! -z "$(docker ps -qa -f name=$CI_COMMIT_REF_NAME-$CI_COMMIT_SHA-win)" ]; then docker rm $CI_COMMIT_REF_NAME-$CI_COMMIT_SHA-win; fi
+    - "echo GIT_BRANCH=\"$CI_COMMIT_REF_NAME\" > electron-builder.env"
+    - "npm install --no-audit"
+    - "npm run build-native-win"
   artifacts:
     name: "BLOCKDX-$CI_COMMIT_REF_NAME-win"
     paths:
-     - win/*.exe
-     - win/*.zip
-
-test_win:
-  stage: test
-  script:
-    - "[[ \"$CI_PROJECT_DIR/win/*.exe\" =~ \\.exe$ ]]"
-    - "[[ \"$CI_PROJECT_DIR/win/*.zip\" =~ \\.zip$ ]]"
+      - dist-native/*.exe
+      - dist-native/*.zip
 
 build_mac:
   stage: build
+  image: blocknetdx/devbuilds:blockdx-gitlab-mac
   script:
-    - mkdir -p $CI_PROJECT_DIR/mac
-    - docker build -f Dockerfile-mac --build-arg GIT_BRANCH=$CI_COMMIT_REF_NAME -t blocknetdx/blockdx-ui-devbuilds:$CI_COMMIT_REF_NAME-$CI_COMMIT_SHA-mac .
-    - if [ ! -z "$(docker ps -qa -f name=$CI_COMMIT_REF_NAME-$CI_COMMIT_SHA-mac)" ]; then docker rm $CI_COMMIT_REF_NAME-$CI_COMMIT_SHA-mac; fi
-    - docker run --name=$CI_COMMIT_REF_NAME-$CI_COMMIT_SHA-mac blocknetdx/blockdx-ui-devbuilds:$CI_COMMIT_REF_NAME-$CI_COMMIT_SHA-mac
-    - docker stop $CI_COMMIT_REF_NAME-$CI_COMMIT_SHA-mac
-    - docker cp $CI_COMMIT_REF_NAME-$CI_COMMIT_SHA-mac:/opt/blockdx-ui/dist-native/. $CI_PROJECT_DIR/mac
-    - if [ ! -z "$(docker ps -qa -f name=$CI_COMMIT_REF_NAME-$CI_COMMIT_SHA-mac)" ]; then docker rm $CI_COMMIT_REF_NAME-$CI_COMMIT_SHA-mac; fi
+    - "echo GIT_BRANCH=\"$CI_COMMIT_REF_NAME\" > electron-builder.env"
+    - "npm install --no-audit"
+    - "npm run build-native-mac"
   artifacts:
     name: "BLOCKDX-$CI_COMMIT_REF_NAME-mac"
     paths:
-     - mac/*.zip
+      - dist-native/*.zip
 
-test_mac:
+test_artifacts:
   stage: test
+  image: ubuntu:bionic
   script:
-    - "[[ \"$CI_PROJECT_DIR/mac/*.zip\" =~ \\.zip$ ]]"
+    - "set -- dist-native/BLOCK-DX-*-linux.tar.gz && [[ -f \"$1\" ]]"
+    - "set -- dist-native/BLOCK-DX-*-linux.AppImage && [[ -f \"$1\" ]]"
+    - "set -- dist-native/BLOCK-DX-*-linux.deb && [[ -f \"$1\" ]]"
+    - "set -- dist-native/BLOCK-DX-*-win.exe && [[ -f \"$1\" ]]"
+    - "set -- dist-native/BLOCK-DX-*-win-x64.zip && [[ -f \"$1\" ]]"
+    - "set -- dist-native/BLOCK-DX-*-mac.zip && [[ -f \"$1\" ]]"
