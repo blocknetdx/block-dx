@@ -6,7 +6,7 @@ export class NumberFormatPipe implements PipeTransform {
   toNumberString(num: number|string) {
     if(typeof num === 'string' && !/e/.test(num)) return num;
     const newNum = typeof num === 'number' ? num : Number(num);
-    return newNum.toLocaleString('fullwide', {useGrouping: false, maximumFractionDigits: 20});
+    return newNum.toLocaleString('en', {useGrouping: false, maximumFractionDigits: 20});
   }
 
   transform(num: string = '0', format: string): string {
