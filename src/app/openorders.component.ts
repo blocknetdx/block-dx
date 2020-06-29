@@ -9,7 +9,7 @@ import * as math from 'mathjs';
 import { PricingService } from './pricing.service';
 import { Pricing } from './pricing';
 import * as OrderStates from '../orderstates';
-import { shouldHidePricing } from './util';
+import {confirm, shouldHidePricing} from './util';
 import {Localize} from './localize/localize.component';
 
 math.config({

@@ -5,6 +5,7 @@ import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
 import {Localize} from './app/localize/localize.component';
 import './scripts/zoom';
+import { alert } from './app/util';
 
 const { ipcRenderer } = window.electron;
 

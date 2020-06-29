@@ -11,7 +11,7 @@ import { BlockCurrencyPipe } from './block-currency.pipe';
 import { PricingService } from './pricing.service';
 import { Pricing } from './pricing';
 import {ConfigurationOverlayService} from './configuration.overlay.service';
-import { shouldHidePricing } from './util';
+import {alert, confirm, shouldHidePricing} from './util';
 import {OrderbookViewService} from './orderbook.view.service';
 import { OrderbookViews } from './enums';
 import {Localize} from './localize/localize.component';
