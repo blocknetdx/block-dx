@@ -11,6 +11,7 @@ import { Pricing } from './pricing';
 import * as OrderStates from '../orderstates';
 import { shouldHidePricing } from './util';
 import {Localize} from './localize/localize.component';
+import { ipcMainListeners } from '../../src-back/constants';
 
 math.config({
   number: 'BigNumber',
@@ -69,6 +70,24 @@ export class OpenordersComponent extends BaseComponent implements OnInit {
       .takeUntil(this.$destroy)
       .subscribe(openorders => {
         this.zone.run(() => {
+          const { ipcRenderer } = window.electron;
+          const currentOrders = this.openorders || [];
+          // @ts-ignore
+          const currentOrdersMap = new Map(currentOrders.map(o => [o.id, o.status]));
+
+          for(const o of openorders) {
+            const prev = currentOrdersMap.get(o.id);
+            if(prev && o.status === OrderStates.RolledBack) {
+              const hideRefundNotification = ipcRenderer.sendSync(ipcMainListeners.GET_HIDE_REFUND_NOTIFICATION);
+              if(!hideRefundNotification) {
+                ipcRenderer.send(ipcMainListeners.OPEN_REFUND_NOTIFICATION, {
+                  title: Localize.text('Order Failed', 'openorders'),
+                  message: Localize.text('An order failed and is refunding. It may take up to 2 hours (in block time, not real time) for the transaction to reverse. Please keep your wallets open and unlocked until you receive the refund transaction.\n\nOrder ID: {orderId}', 'openorders', {orderId: o.id})
+                });
+              }
+            }
+          }
+
           const orders = openorders
             .filter(o => o.status !== OrderStates.Finished &&
                         o.status !== OrderStates.Canceled &&

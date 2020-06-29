@@ -13,10 +13,11 @@ const _ = require('lodash');
 const math = require('mathjs');
 const MarkdownIt = require('markdown-it');
 const { Localize } = require('./src-back/localize');
-const { blocknetDir4, blocknetDir3, BLOCKNET_CONF_NAME4, BLOCKNET_CONF_NAME3 } = require('./src-back/constants');
+const { blocknetDir4, blocknetDir3, BLOCKNET_CONF_NAME4, BLOCKNET_CONF_NAME3, ipcMainListeners } = require('./src-back/constants');
 const { checkAndCopyV3Configs } = require('./src-back/config-updater');
 const { MainSwitch } = require('./src-back/main-switch');
 const { openUnverifiedAssetWindow } = require('./src-back/windows/unverified-asset-window');
+const { openMessageBox } = require('./src-back/windows/message-box');
 
 const versionDirectories = [
   blocknetDir4,
@@ -1775,6 +1776,20 @@ ipcMain.on('generateNewAddresses', async function(e) {
 
 ipcMain.on('setZoomFactor', (e, zoomFactor) => storage.setItem('zoomFactor', zoomFactor));
 ipcMain.on('getZoomFactor', (e) => e.returnValue = storage.getItem('zoomFactor'));
+
+ipcMain.on(ipcMainListeners.GET_HIDE_REFUND_NOTIFICATION, e => {
+  const hideRefundNotification = storage.getItem('hideRefundNotification') || false;
+  e.returnValue = hideRefundNotification;
+});
+
+ipcMain.on(ipcMainListeners.OPEN_REFUND_NOTIFICATION, async function(e, { title, message }) {
+  try {
+    const notShowAgain = await openMessageBox(title, message, appWindow, storage);
+    storage.setItem('hideRefundNotification', notShowAgain);
+  } catch(err) {
+    handleError(err);
+  }
+});
 
 // Run the application within async function for flow control
 (async function() {
