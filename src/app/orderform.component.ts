@@ -13,7 +13,7 @@ import { LocalizeDecimalSeparatorPipe } from './localize/localize-decimal-separa
 import { PricingService } from './pricing.service';
 import { Pricing } from './pricing';
 import {ConfigurationOverlayService} from './configuration.overlay.service';
-import { shouldHidePricing } from './util';
+import {alert, shouldHidePricing} from './util';
 import {Localize} from './localize/localize.component';
 
 const delocalize = (numStr = '') => {
