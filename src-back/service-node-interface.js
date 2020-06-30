@@ -333,6 +333,7 @@ const OrderBook4 = data => ({
 /**
  * Class representing a service node interface instance.
  */
+const kServiceNodeInterfaceMaxRequests = 10;
 class ServiceNodeInterface {
 
   /**
@@ -345,12 +346,49 @@ class ServiceNodeInterface {
     this._user = user;
     this._password = password;
     this._endpoint = endpoint;
+    this._requests_in_progress = new Map();
+    this._requests_in_progress_queue = [];
+    this._requestPoll();
   }
 
-  async _makeServiceNodeRequest({ id = '', method, params = [] }) {
-    // console.log(JSON.stringify({
-    //   id, method, params
-    // }));
+  // Periodically handle requests
+  _requestPoll() {
+    setTimeout(() => {
+      if (this._requests_in_progress_queue.length <= 0) {
+        this._requestPoll();
+        return;
+      }
+
+      for (let i = 0; i < this._requests_in_progress_queue.length; i++) {
+        if (i >= kServiceNodeInterfaceMaxRequests)
+          break;
+        const key = this._requests_in_progress_queue[i];
+        const p = this._requests_in_progress.get(key);
+        setTimeout(async () => {
+          try {
+            const body = await this._queueRequest({ id: p.id, method: p.method, params: p.params });
+            p.presolve(body);
+          } catch(err) {
+            p.preject(err);
+          }
+        }, 0);
+      }
+
+      // Remove resolved/rejected promises
+      let removed;
+      if (this._requests_in_progress_queue.length <= kServiceNodeInterfaceMaxRequests)
+        removed = this._requests_in_progress_queue.splice(0, this._requests_in_progress_queue.length);
+      else
+        removed = this._requests_in_progress_queue.splice(0, kServiceNodeInterfaceMaxRequests);
+      if (removed.length > 0)
+        removed.forEach(k => this._requests_in_progress.delete(k));
+
+      // Next iteration
+      this._requestPoll();
+    }, 50);
+  }
+
+  async _queueRequest({ id = '', method, params = [] }) {
     let status, body, res;
     try {
         res = await request
@@ -363,6 +401,8 @@ class ServiceNodeInterface {
           }));
         status = res.status || '';
         body = res.body;
+      if (_.isUndefined(body))
+        throw new Error();
     } catch(err) {
       if (res && res.body && res.body.error) {
         const { code = 1025, message = '' } = res.body.error;
@@ -382,6 +422,27 @@ class ServiceNodeInterface {
     if(status !== 200)
       throw new Error(`Response code ${status}`);
     return body;
+  }
+
+  async _makeServiceNodeRequest({ id = '', method, params = [] }) {
+    // console.log(JSON.stringify({
+    //   id, method, params
+    // }));
+    // Queue up requests to prevent requests from happening too often
+    // The wallet endpoints typically handle 16 or fewer requests at
+    // a time.
+    const key = method + params.toString();
+    const req = this._requests_in_progress.get(key);
+    if (!_.isNull(req) && !_.isUndefined(req))
+      return req.p; // req already in progress
+    let presolve, preject;
+    const p = new Promise((resolve, reject) => {
+      presolve = resolve;
+      preject = reject;
+    });
+    this._requests_in_progress.set(key, { id, method, params, p, presolve, preject });
+    this._requests_in_progress_queue.push(key);
+    return p;
   }
 
   /**
