@@ -35,8 +35,6 @@ class SelectSetupType extends RouterView {
       title = titles.UPDATE_WALLET();
     } else if(configurationType === configurationTypes.FRESH_SETUP) {
       title = titles.FRESH_SETUP();
-    } else if(configurationType === configurationTypes.LITEWALLET_RPC_SETUP) {
-      title = titles.LITEWALLET_SETUP();
     } else {
       title = titles.RPC_SETTINGS();
     }
@@ -137,15 +135,12 @@ class SelectSetupType extends RouterView {
       e.preventDefault();
       const configurationType = state.get('configurationType');
       const wallets = state.get('wallets');
-
       if(state.get('quickSetup')) {
         const newWallets = wallets
           .map(w => {
             if(configurationType === configurationTypes.ADD_NEW_WALLETS && w.abbr === 'BLOCK') {
               // it will use custom Blocknet directory if one has been previously set, otherwise it will fall back to the default directory
               return w.set('directory', w.getCustomDirectory());
-            } else if (configurationType === configurationTypes.LITEWALLET_RPC_SETUP) {
-              return w.loadLitewalletConf();
             } else {
               return w.set('directory', w.getDefaultDirectory());
             }
@@ -164,7 +159,7 @@ class SelectSetupType extends RouterView {
         }
       } else {
         const newWallets = wallets
-          .map(w => w.loadLitewalletConf());
+          .map(w => w.set('directory', w.getCustomDirectory()));
         state.set('wallets', newWallets);
         router.goTo(route.SELECT_WALLETS);
       }

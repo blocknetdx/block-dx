@@ -763,14 +763,29 @@ ipcMain.on('getPort', e => {
 ipcMain.on('getBlocknetIP', e => {
   e.returnValue = storage.getItem('blocknetIP') || '';
 });
-// Flag used for the config setup to show the litewallet option 
+
+// Flag used for the config setup to show the litewallet option
 ipcMain.on('enableLitewalletConfig', e => {
   let enableLitewalletConfig = storage.getItem('enableLitewalletConfig');
-  if (_.isNull(enableLitewalletConfig) || _.isUndefined(enableLitewalletConfig))
-    storage.setItem('enableLitewalletConfig', false);
-  e.returnValue = storage.getItem('enableLitewalletConfig');
+  if (!enableLitewalletConfig && enableLitewalletConfig !== false) {
+    enableLitewalletConfig = false;
+    storage.setItem('enableLitewalletConfig', enableLitewalletConfig);
+  }
+  e.returnValue = enableLitewalletConfig;
 });
 
+ipcMain.on('getLitewalletConfigDirectory', e => {
+  let litewalletConfigDirectory = storage.getItem('litewalletConfigDirectory');
+  if(!litewalletConfigDirectory && litewalletConfigDirectory !== '') {
+    litewalletConfigDirectory = '';
+    storage.setItem('litewalletConfigDirectory', litewalletConfigDirectory);
+  }
+  e.returnValue = litewalletConfigDirectory;
+});
+
+ipcMain.on('saveLitewalletConfigDirectory', (e, litewalletConfigDirectory) => {
+  storage.setItem('litewalletConfigDirectory', litewalletConfigDirectory);
+});
 
 const openGeneralSettingsWindow = () => {
 

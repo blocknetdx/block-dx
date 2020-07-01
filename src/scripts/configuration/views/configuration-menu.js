@@ -5,6 +5,9 @@ const { RouterView } = require('../../modules/router');
 const route = require('../constants/routes');
 const configurationTypes = require('../constants/configuration-types');
 const titles = require('../modules/titles');
+const fs = require('fs-extra-promise');
+const path = require('path');
+const { getDefaultLitewalletConfigDirectory, handleError } = require('../util');
 
 class ConfigurationMenu extends RouterView {
 
@@ -51,11 +54,11 @@ class ConfigurationMenu extends RouterView {
     const enableLitewalletConfig = state.get('enableLitewalletConfig');
     if (enableLitewalletConfig === true) {
       items.push({
-        title: 'Litewallet Setup',
-        text: 'Use this to configure the CloudChains litewallet.',
+        title: Localize.text('Litewallet Setup', 'configurationWindowMenu'),
+        text: Localize.text('Use this to configure the CloudChains litewallet.', 'configurationWindowMenu'),
         value: configurationTypes.LITEWALLET_RPC_SETUP
       });
-    };
+    }
 
     const options = items.map(i => {
       return `
@@ -105,26 +108,43 @@ class ConfigurationMenu extends RouterView {
       ipcRenderer.send('configurationWindowCancel');
     });
 
-    $('#js-continueBtn').on('click', e => {
-      e.preventDefault();
-      state.set('lookForWallets', true);
-      const configurationType = state.get('configurationType');
-      switch(configurationType) {
-        case configurationTypes.ADD_NEW_WALLETS:
-          router.goTo(route.SELECT_SETUP_TYPE);
-          break;
-        case configurationTypes.UPDATE_WALLETS:
-          router.goTo(route.SELECT_SETUP_TYPE);
-          break;
-        case configurationTypes.FRESH_SETUP:
-          router.goTo(route.SELECT_SETUP_TYPE);
-          break;
-        case configurationTypes.LITEWALLET_RPC_SETUP:
-          router.goTo(route.SELECT_SETUP_TYPE);
-          break;
-        case configurationTypes.UPDATE_RPC_SETTINGS:
-          router.goTo(route.ENTER_BLOCKNET_CREDENTIALS);
-          break;
+    $('#js-continueBtn').on('click', async function(e) {
+      try {
+        e.preventDefault();
+        state.set('lookForWallets', true);
+        const configurationType = state.get('configurationType');
+        switch(configurationType) {
+          case configurationTypes.ADD_NEW_WALLETS:
+            router.goTo(route.SELECT_SETUP_TYPE);
+            break;
+          case configurationTypes.UPDATE_WALLETS:
+            router.goTo(route.SELECT_SETUP_TYPE);
+            break;
+          case configurationTypes.FRESH_SETUP:
+            router.goTo(route.SELECT_SETUP_TYPE);
+            break;
+          case configurationTypes.LITEWALLET_RPC_SETUP: {
+            let directory = state.get('litewalletConfigDirectory');
+            if(!directory) {
+              directory = await getDefaultLitewalletConfigDirectory();
+              state.set('litewalletConfigDirectory', directory);
+            }
+            console.log(directory);
+            const dirExists = await fs.existsAsync(directory);
+            const settingsDirExists = await fs.existsAsync(path.join(directory, 'settings'));
+            if(dirExists && settingsDirExists) {
+              // go right to wallet selection
+              router.goTo(route.SELECT_WALLETS);
+            } else { // no CloudChains directory found
+              router.goTo(route.LITEWALLET_SELECT_CONFIG_DIRECTORY);
+            }
+            break;
+          } case configurationTypes.UPDATE_RPC_SETTINGS:
+            router.goTo(route.ENTER_BLOCKNET_CREDENTIALS);
+            break;
+        }
+      } catch(err) {
+        handleError(err);
       }
     });
 

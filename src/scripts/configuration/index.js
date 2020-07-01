@@ -19,6 +19,7 @@ const Finish = require('./views/finish');
 const EnterBlocknetCredentials = require('./views/enter-blocknet-credentials');
 const EnterWalletCredentials = require('./views/enter-wallet-credentials');
 const ConfigurationMenu = require('./views/configuration-menu');
+const SelectLitewalletConfigDirectory = require('./views/select-litewallet-config-directory');
 const Wallet = require('./modules/wallet');
 
 const { Localize } = require('../../../src-back/localize');
@@ -84,6 +85,7 @@ $(document).ready(() => {
     state.set('username', ipcRenderer.sendSync('getUser'));
     state.set('password', ipcRenderer.sendSync('getPassword'));
     state.set('enableLitewalletConfig', ipcRenderer.sendSync('enableLitewalletConfig'));
+    state.set('litewalletConfigDirectory', ipcRenderer.sendSync('getLitewalletConfigDirectory'));
 
     const isFirstRun = ipcRenderer.sendSync('isFirstRun');
     state.set('isFirstRun', isFirstRun);
@@ -105,6 +107,7 @@ $(document).ready(() => {
     router.registerRoute(route.ENTER_BLOCKNET_CREDENTIALS, EnterBlocknetCredentials);
     router.registerRoute(route.ENTER_WALLET_CREDENTIALS, EnterWalletCredentials);
     router.registerRoute(route.CONFIGURATION_MENU, ConfigurationMenu);
+    router.registerRoute(route.LITEWALLET_SELECT_CONFIG_DIRECTORY, SelectLitewalletConfigDirectory);
 
     let wallets = ipcRenderer.sendSync('getManifest');
     wallets = wallets.map(w => new Wallet(w));

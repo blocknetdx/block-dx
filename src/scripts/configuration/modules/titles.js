@@ -12,7 +12,6 @@ module.exports = {
   UPDATE_WALLET: () => Localize.text('Update Wallet', 'configurationMenu').toUpperCase(),
   UPDATE_WALLET_QUICK_CONFIGURATION: () => Localize.text('Update Wallet - Quick Configuration Setup', 'configurationMenu').toUpperCase(),
   UPDATE_WALLET_EXPERT_CONFIGURATION: () => Localize.text('Update Wallet - Expert Configuration Setup', 'configurationMenu').toUpperCase(),
-  LITEWALLET_SETUP: () => Localize.text('Litewallet Setup', 'configurationMenu').toUpperCase(),
-  LITEWALLET_EXPERT_CONFIGURATION: () => Localize.text('Litewallet Setup - Expert Configuration Setup', 'configurationMenu').toUpperCase(),
-  LITEWALLET_QUICK_CONFIGURATION: () => Localize.text('Litwallet Setup - Quick Configuration Setup', 'configurationMenu').toUpperCase(),
+  LITEWALLET_SELECT_CONFIG_DIRECTORY: () => Localize.text('Litewallet Setup - Select Config Directory', 'configurationMenu').toUpperCase(),
+  LITEWALLET_SELECT_WALLETS: () => Localize.text('Litewallet Setup - Select Wallets', 'configurationMenu').toUpperCase()
 };

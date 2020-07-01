@@ -142,8 +142,6 @@ class SelectWalletVersions extends RouterView {
       title = titles.ADD_WALLET_QUICK_CONFIGURATION();
     } else if(updatingWallets) {
       title = titles.UPDATE_WALLET_QUICK_CONFIGURATION();
-    } else if(configurationType === configurationTypes.LITEWALLET_RPC_SETUP) {
-      title = titles.LITEWALLET_QUICK_CONFIGURATION();
     } else {
       title = titles.FRESH_SETUP_QUICK_CONFIGURATION();
     }
