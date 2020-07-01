@@ -404,12 +404,7 @@ class ServiceNodeInterface {
       if (_.isUndefined(body))
         throw new Error();
     } catch(err) {
-      if (res && res.body && res.body.error) {
-        const { code = 1025, message = '' } = res.body.error;
-        throw new Error(`API\n${method}\n\n${ErrorMsg(method, code)}\n\n${message}\n\nStatus Code: ${err.status}`);
-      } else {
-        throw new Error(`API\n${method}\n\n${ErrorMsg(method, err.status)}\n\n${err.message}\n\n${err.status ? err.status : 'Disconnected'}`);
-      }
+      throw new Error(`Unable to connect to the Blocknet wallet.\n\nMake sure your Blocknet wallet is open, synced, and unlocked.`);
     }
     if(body.result.error) {
       const { code = 1025, name = '', error = '' } = body.result;
