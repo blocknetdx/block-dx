@@ -274,6 +274,9 @@ class SelectWallets extends RouterView {
             rpcUsername = username;
             rpcPassword = password;
           }
+          litewallet.rpcUsername = rpcUsername;
+          litewallet.rpcPassword = rpcPassword;
+          litewallet.rpcPort = rpcPort;
           const config = fs.readJsonSync(filePath);
           const newConfig = Object.assign({}, config, {
             rpcUsername,
@@ -281,21 +284,21 @@ class SelectWallets extends RouterView {
             rpcEnabled: true
           });
           fs.writeJsonSync(filePath, newConfig);
-          const preppedWallets = walletsToSave
-            .map(w => w.wallet.set({
-              username: rpcUsername,
-              password: rpcPassword,
-              port: rpcPort
-            }));
-          const block = state.get('wallets').find(w => w.abbr === 'BLOCK');
-          putConfs(preppedWallets, block.directory, true);
-          const cloudChainsDir = state.get('litewalletConfigDirectory');
-          ipcRenderer.send('saveLitewalletConfigDirectory', cloudChainsDir);
-          ipcRenderer.send('loadXBridgeConf');
-          setTimeout(() => {
-            ipcRenderer.send('restart');
-          }, 500);
         }
+        const preppedWallets = walletsToSave
+          .map(w => w.wallet.set({
+            username: w.rpcUsername,
+            password: w.rpcPassword,
+            port: w.rpcPort
+          }));
+        const block = state.get('wallets').find(w => w.abbr === 'BLOCK');
+        putConfs(preppedWallets, block.directory, true);
+        const cloudChainsDir = state.get('litewalletConfigDirectory');
+        ipcRenderer.send('saveLitewalletConfigDirectory', cloudChainsDir);
+        ipcRenderer.send('loadXBridgeConf');
+        setTimeout(() => {
+          ipcRenderer.send('restart');
+        }, 500);
       } else {
         const skip = state.get('skipSetup');
         if(skip) {

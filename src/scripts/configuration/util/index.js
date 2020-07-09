@@ -251,6 +251,16 @@ const putToXBridgeConf = (wallets, blockDir) => {
   let split = bridgeConf
     .replace(/\r/g, '')
     .split(/\n/);
+  const walletsIdx = split.findIndex(s => /^ExchangeWallets=/.test(s));
+  const walletMatches = split[walletsIdx].match(/=(.+)$/);
+  const exchangeWallets = walletMatches[1]
+    .split(',')
+    .map(str => str.trim());
+  for(const { abbr } of wallets) {
+    if(!exchangeWallets.includes(abbr)) {
+      split[walletsIdx] = split[walletsIdx].trim() + ',' + abbr;
+    }
+  }
   for(const [ abbr, walletData ] of [...data.entries()]) {
     const startIndex = split.findIndex(s => s.trim() === `[${abbr}]`);
     const alreadyInConf = startIndex > -1;
