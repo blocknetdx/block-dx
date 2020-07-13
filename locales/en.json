@@ -1316,6 +1316,28 @@
       "note": ""
     }
   },
+  "Litewallet Setup": {
+    "configurationMenu": {
+      "val": "Litewallet Setup",
+      "note": ""
+    },
+    "configurationWindowMenu": {
+      "val": "Litewallet Setup",
+      "note": ""
+    }
+  },
+  "Litewallet Setup - Quick Configuration Setup": {
+    "configurationMenu": {
+      "val": "Litewallet Setup - Quick Configuration Setup",
+      "note": ""
+    }
+  },
+  "Litewallet Setup - Expert Configuration Setup": {
+    "configurationMenu": {
+      "val": "Litewallet Setup - Expert Configuration Setup",
+      "note": ""
+    }
+  },
   "Add Wallet": {
     "configurationMenu": {
       "val": "Add Wallet",

@@ -1,6 +1,6 @@
 const fs = require('fs');
-const path= require('path');
-const { ipcRenderer } = require('electron');
+const path = require('path');
+const { ipcRenderer, remote } = require('electron');
 const { splitConf } = require('../../../../src-back/util');
 
 module.exports.removeNonWordCharacters = (str = '') => str.replace(/\W/g, '');
@@ -232,6 +232,82 @@ module.exports.saveConfs = wallets => {
   return confs;
 };
 
+const putToXBridgeConf = (wallets, blockDir) => {
+  const data = new Map();
+  for(const wallet of wallets) {
+    const { abbr, xBridgeConf, username, password } = wallet;
+    const confStr = ipcRenderer.sendSync('getBridgeConf', xBridgeConf);
+    if(!confStr) throw new Error(`${xBridgeConf} not found.`);
+    const conf = splitConf(confStr);
+    data.set(abbr, Object.assign({}, conf, {
+      Username: username,
+      Password: password,
+      Port: wallet.port || conf.Port,
+      Address: ''
+    }));
+  }
+  const confPath = path.join(blockDir, 'xbridge.conf');
+  const bridgeConf = fs.readFileSync(confPath, 'utf8');
+  let split = bridgeConf
+    .replace(/\r/g, '')
+    .split(/\n/);
+  const walletsIdx = split.findIndex(s => /^ExchangeWallets=/.test(s));
+  const walletMatches = split[walletsIdx].match(/=(.+)$/);
+  const exchangeWallets = walletMatches[1]
+    .split(',')
+    .map(str => str.trim());
+  for(const { abbr } of wallets) {
+    if(!exchangeWallets.includes(abbr)) {
+      split[walletsIdx] = split[walletsIdx].trim() + ',' + abbr;
+    }
+  }
+  for(const [ abbr, walletData ] of [...data.entries()]) {
+    const startIndex = split.findIndex(s => s.trim() === `[${abbr}]`);
+    const alreadyInConf = startIndex > -1;
+    let endIndex;
+    if(alreadyInConf) {
+      for (let i = startIndex + 1; i < split.length; i++) {
+        const s = split[i].trim();
+        if (!s) {
+          endIndex = i - 1;
+          break;
+        } else if (/^\[.+]$/.test(s)) {
+          endIndex = i - 1;
+          break;
+        } else if (i === split.length - 1) {
+          endIndex = i;
+        }
+      }
+      split = [
+        ...split.slice(0, startIndex + 1),
+        joinConf(walletData),
+        ...split.slice(endIndex + 1)
+      ];
+    } else {
+      split = [
+        ...split,
+        `[${abbr}]`,
+        joinConf(walletData)
+      ];
+    }
+
+  }
+  const joined = split.join('\n');
+  fs.writeFileSync(confPath, joined, 'utf8');
+};
+
+module.exports.putConfs = (wallets, blockDir, isLitewallets = false) => {
+  const confs = new Map();
+  if(!isLitewallets) {
+    for(const w of wallets) {
+      const conf = w.saveWalletConf();
+      confs.set(w.abbr, conf);
+    }
+  }
+  putToXBridgeConf(wallets, blockDir);
+  return confs;
+};
+
 module.exports.addConfs = (wallets, blockDir) => {
   const confs = new Map();
   for(const w of wallets) {
@@ -250,4 +326,20 @@ module.exports.updateConfs = (wallets, blockDir) => {
   }
   updateXBridgeConf(wallets, blockDir);
   return confs;
+};
+
+module.exports.getDefaultLitewalletConfigDirectory = () => {
+  const { app } = remote;
+  switch(process.platform) {
+    case 'win32':
+      return path.join(app.getPath('appData'), 'CloudChains');
+    case 'linux':
+      return path.join(app.getPath('home'), 'CloudChains');
+    default:
+      return path.join(app.getPath('appData'), 'CloudChains');
+  }
+};
+
+module.exports.handleError = err => {
+  console.error(err);
 };
