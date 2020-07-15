@@ -2023,8 +2023,8 @@ function isTokenPairValid(keyPair) {
 
 // check for version number. Minimum supported blocknet client version
 function versionCheck(version) {
-  if (version < 4020000) {
-    const requiredVersion = '4.2.0';
+  if (version < 4030000) {
+    const requiredVersion = '4.3.0';
     return {
       name: Localize.text('Unsupported Version', 'universal'),
       message: Localize.text('Block DX requires Blocknet wallet version {requiredVersion} or greater.', 'universal', {requiredVersion})
