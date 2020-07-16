@@ -1,5 +1,21 @@
 [
   {
+    "blockchain": "Abosom",
+    "ticker": "ABS",
+    "ver_id": "abosom--v1.0.0",
+    "ver_name": "Abosom",
+    "conf_name": "abosom.conf",
+    "dir_name_linux": "abosomcore",
+    "dir_name_mac": "AbosomCore",
+    "dir_name_win": "AbosomCore",
+    "repo_url": "https://github.com/ZenyattaAbosom/Abosom",
+    "versions": [
+      "v1.0.0"
+    ],
+    "xbridge_conf": "abosom--v1.0.0.conf",
+    "wallet_conf": "abosom--v1.0.0.conf"
+  },
+  {
     "blockchain": "AeriumX",
     "ticker": "AEX",
     "ver_id": "aeriumx--v2.0",
@@ -14,6 +30,22 @@
     ],
     "xbridge_conf": "aeriumx--v2.0.conf",
     "wallet_conf": "aeriumx--v2.0.conf"
+  },
+  {
+    "blockchain": "Altbet",
+    "ticker": "ABET",
+    "ver_id": "abet--v3.4.1.0",
+    "ver_name": "Altbet",
+    "conf_name": "abet.conf",
+    "dir_name_linux": "abet",
+    "dir_name_mac": "Abet",
+    "dir_name_win": "Abet",
+    "repo_url": "https://github.com/altbet/abet",
+    "versions": [
+      "v3.4.1.0"
+    ],
+    "xbridge_conf": "abet--v3.4.1.0.conf",
+    "wallet_conf": "abet--v3.4.1.0.conf"
   },
   {
     "blockchain": "APR Coin",
@@ -202,6 +234,22 @@
     "wallet_conf": "bitcoin--v0.16.0.conf"
   },
   {
+    "blockchain": "Bitcoin",
+    "ticker": "BTC",
+    "ver_id": "bitcoin--v0.20.0",
+    "ver_name": "Bitcoin v0.20.x",
+    "conf_name": "bitcoin.conf",
+    "dir_name_linux": "bitcoin",
+    "dir_name_mac": "Bitcoin",
+    "dir_name_win": "Bitcoin",
+    "repo_url": "https://github.com/bitcoin/bitcoin",
+    "versions": [
+      "v0.20.0"
+    ],
+    "xbridge_conf": "bitcoin--v0.15.1.conf",
+    "wallet_conf": "bitcoin--v0.16.0.conf"
+  },
+  {
     "blockchain": "Bitcoin CZ",
     "ticker": "BCZ",
     "ver_id": "bcz--6.0.0.8",
@@ -230,7 +278,8 @@
     "versions": [
       "v1.4.0.8",
       "v1.4.0.9",
-      "v1.5.0.1"
+      "v1.5.0.1",
+      "v1.5.0.2"
     ],
     "xbridge_conf": "bitgreen--v1.4.0.8.conf",
     "wallet_conf": "bitgreen--v1.4.0.8.conf"
@@ -628,7 +677,7 @@
     "dir_name_win": "DIVI",
     "repo_url": "https://github.com/DiviProject/Divi",
     "versions": [
-      "v1.0.8",
+      "v1.1.2",
       "DESK-1.6.6"
     ],
     "xbridge_conf": "divi--v1.0.4-core.conf",
@@ -711,7 +760,8 @@
     "dir_name_win": "Electra",
     "repo_url": "https://github.com/Electra-project/electra-core",
     "versions": [
-      "2.1.1"
+      "2.1.1",
+      "2.1.2"
     ],
     "xbridge_conf": "electra--2.0.2.1.conf",
     "wallet_conf": "electra--2.0.2.1.conf"
@@ -795,7 +845,7 @@
       "v0.15.2.1"
     ],
     "xbridge_conf": "flo--v0.15.0.3.conf",
-    "wallet_conf": "flo--v0.15.0.3.conf"
+    "wallet_conf": "flo--v0.15.2.1.conf"
   },
   {
     "blockchain": "FujiCoin",
@@ -984,8 +1034,7 @@
     "dir_name_win": "HTMLCOIN",
     "repo_url": "https://github.com/HTMLCOIN/HTMLCOIN",
     "versions": [
-      "v2.4.1",
-      "v2.4.2"
+      "v2.5.0"
     ],
     "xbridge_conf": "htmlcoin--v2.0.3.0.conf",
     "wallet_conf": "htmlcoin--v2.0.3.0.conf"
@@ -1001,7 +1050,7 @@
     "dir_name_win": "Innova",
     "repo_url": "https://github.com/innova-foundation/innova",
     "versions": [
-      "v4.3.8.6"
+      "v4.3.8.7"
     ],
     "xbridge_conf": "innova--v4.3.8.6.conf",
     "wallet_conf": "innova--v4.3.8.6.conf"
@@ -1201,7 +1250,23 @@
       "v0.17.1"
     ],
     "xbridge_conf": "litecoin--v0.15.1.conf",
-    "wallet_conf": "litecoin--v0.17.1.conf"
+    "wallet_conf": "litecoin--v0.16.0.conf"
+  },
+  {
+    "blockchain": "Litecoin",
+    "ticker": "LTC",
+    "ver_id": "litecoin--v0.18.1",
+    "ver_name": "Litecoin v0.18.x",
+    "conf_name": "litecoin.conf",
+    "dir_name_linux": "litecoin",
+    "dir_name_mac": "Litecoin",
+    "dir_name_win": "Litecoin",
+    "repo_url": "https://github.com/litecoin-project/litecoin",
+    "versions": [
+      "v0.18.1"
+    ],
+    "xbridge_conf": "litecoin--v0.15.1.conf",
+    "wallet_conf": "litecoin--v0.18.1.conf"
   },
   {
     "blockchain": "LogisCoin",
@@ -1262,7 +1327,8 @@
     "dir_name_win": "Machinecoin",
     "repo_url": "https://github.com/machinecoin-project/machinecoin-core",
     "versions": [
-      "v0.16.3"
+      "v0.16.3",
+      "v0.17.1"
     ],
     "xbridge_conf": "machinecoin--v0.16.1.4.conf",
     "wallet_conf": "machinecoin--v0.16.1.4.conf"
@@ -1298,22 +1364,6 @@
     ],
     "xbridge_conf": "mnpcoin--v1.2.5.conf",
     "wallet_conf": "mnpcoin--v1.2.5.conf"
-  },
-  {
-    "blockchain": "MinexCoin",
-    "ticker": "MNX",
-    "ver_id": "minexcoin--v1.3.1",
-    "ver_name": "MinexCoin",
-    "conf_name": "minexcoin.conf",
-    "dir_name_linux": "Minexcoin",
-    "dir_name_mac": "Minexcoin",
-    "dir_name_win": "Minexcoin",
-    "repo_url": "https://github.com/minexcoin/minexcoin",
-    "versions": [
-      "v1.3.2"
-    ],
-    "xbridge_conf": "minexcoin--v1.3.1.conf",
-    "wallet_conf": "minexcoin--v1.3.1.conf"
   },
   {
     "blockchain": "MktCoin",
@@ -1358,7 +1408,8 @@
     "dir_name_win": "MonetaryUnitCore",
     "repo_url": "https://github.com/muecoin/MUE",
     "versions": [
-      "v2.1.4"
+      "v2.1.4",
+      "v2.1.6"
     ],
     "xbridge_conf": "monetaryunit--v2.0.2.conf",
     "wallet_conf": "monetaryunit--v2.0.2.conf"
@@ -1415,7 +1466,8 @@
       "nc0.18.1",
       "nc0.19.0",
       "nc0.19.0.1",
-      "nc0.19.1"
+      "nc0.19.1",
+      "nc0.20.0"
     ],
     "xbridge_conf": "namecoin--nc0.13.99-name-tab-beta1.conf",
     "wallet_conf": "namecoin--nc0.13.99-name-tab-beta1.conf"
@@ -1431,7 +1483,7 @@
     "dir_name_win": "NativeCoinCore",
     "repo_url": "https://github.com/N8VCoin/nativecoin",
     "versions": [
-      "v1.0.0"
+      "1.2"
     ],
     "xbridge_conf": "nativecoin--v1.0.0.conf",
     "wallet_conf": "nativecoin--v1.0.0.conf"
@@ -1480,7 +1532,7 @@
     "dir_name_win": "noir",
     "repo_url": "https://github.com/noirofficial/noir",
     "versions": [
-      "v2.1.0.7"
+      "v2.1.0.9"
     ],
     "xbridge_conf": "noir--v1.0.0.2.conf",
     "wallet_conf": "noir--v1.0.0.2.conf"
@@ -1625,10 +1677,7 @@
     "dir_name_win": "PIVX",
     "repo_url": "https://github.com/PIVX-Project/PIVX",
     "versions": [
-      "v4.0.0",
-      "v4.0.1",
-      "v4.0.2",
-      "v4.1.0"
+      "v4.1.1"
     ],
     "xbridge_conf": "pivx--v3.3.0.conf",
     "wallet_conf": "pivx--v3.3.0.conf"
@@ -1711,8 +1760,7 @@
     "dir_name_win": "Qtum",
     "repo_url": "https://github.com/qtumproject/qtum",
     "versions": [
-      "mainnet-ignition-v0.18.3",
-      "mainnet-ignition-v0.19.0"
+      "mainnet-ignition-v0.19.1"
     ],
     "xbridge_conf": "qtum--mainnet-ignition-v0.15.2.conf",
     "wallet_conf": "qtum--mainnet-ignition-v0.17.1.conf"
@@ -1764,6 +1812,22 @@
     ],
     "xbridge_conf": "raven--v0.15.99.0.conf",
     "wallet_conf": "raven--v0.15.99.0.conf"
+  },
+  {
+    "blockchain": "Reecore",
+    "ticker": "REEX",
+    "ver_id": "Reecore--v1.4.2.2",
+    "ver_name": "Reecore",
+    "conf_name": "Reecore.conf",
+    "dir_name_linux": "Reecore",
+    "dir_name_mac": "Reecore",
+    "dir_name_win": "Reecore",
+    "repo_url": "https://github.com/reecore-coin/Reex",
+    "versions": [
+      "v1.4.2.2"
+    ],
+    "xbridge_conf": "reecore--v1.4.2.2.conf",
+    "wallet_conf": "reecore--v1.4.2.2.conf"
   },
   {
     "blockchain": "Scribe",
@@ -1857,7 +1921,8 @@
     "dir_name_win": "SEND",
     "repo_url": "https://github.com/SocialSend/SocialSend",
     "versions": [
-      "1.2.0.5"
+      "1.2.0.5",
+      "v1.2.1.0"
     ],
     "xbridge_conf": "send--v1.1.0.0.conf",
     "wallet_conf": "send--v1.1.0.0.conf"
@@ -1921,7 +1986,7 @@
     "dir_name_win": "Syndicate",
     "repo_url": "https://github.com/SyndicateLtd/SyndicateQT",
     "versions": [
-      "v2.2.0"
+      "v2.3.0"
     ],
     "xbridge_conf": "syndicate--v2.0.0.conf",
     "wallet_conf": "syndicate--v2.0.0.conf"
@@ -2009,6 +2074,22 @@
     "wallet_conf": "unobtanium--v0.10.1.1.conf"
   },
   {
+    "blockchain": "Verge",
+    "ticker": "XVG",
+    "ver_id": "verge--v6.0.2",
+    "ver_name": "Verge",
+    "conf_name": "VERGE.conf",
+    "dir_name_linux": "VERGE",
+    "dir_name_mac": "VERGE",
+    "dir_name_win": "VERGE",
+    "repo_url": "https://github.com/vergecurrency/verge",
+    "versions": [
+      "v6.0.2"
+    ],
+    "xbridge_conf": "verge--v6.0.2.conf",
+    "wallet_conf": "verge--v6.0.2.conf"
+  },
+  {
     "blockchain": "Vertcoin",
     "ticker": "VTC",
     "ver_id": "vertcoin--0.14.0",
@@ -2053,7 +2134,8 @@
     "dir_name_win": "VITAE",
     "repo_url": "https://github.com/VitaeTeam/Vitae",
     "versions": [
-      "v4.4.0.3"
+      "v4.4.0.3",
+      "v4.4.2"
     ],
     "xbridge_conf": "vitae--v4.1.0.1.conf",
     "wallet_conf": "vitae--v4.1.0.1.conf"
@@ -2134,8 +2216,7 @@
     "dir_name_win": "zcoin",
     "repo_url": "https://github.com/zcoinofficial/zcoin",
     "versions": [
-      "v0.13.8.9",
-      "v0.13.8.10"
+      "v0.14.0.0"
     ],
     "xbridge_conf": "zcoin--v0.13.6.4.conf",
     "wallet_conf": "zcoin--v0.13.6.4.conf"
