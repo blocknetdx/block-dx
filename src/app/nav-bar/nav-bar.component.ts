@@ -4,6 +4,7 @@ import { Currentprice } from '../currentprice';
 import { CurrentpriceService } from '../currentprice.service';
 import {NumberFormatPipe} from '../pipes/decimal.pipe';
 import {Localize} from '../localize/localize.component';
+import {alert} from '../util';
 
 @Component({
   selector: 'app-nav-bar',

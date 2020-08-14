@@ -1,3 +1,4 @@
+import { Localize } from './localize/localize.component';
 
 export function naturalSort(arr:any[], key:any):any[] {
   let a, b, a1, b1, rx = /(\d+)|(\D+)/g, rd=/\d+/;
@@ -38,4 +39,28 @@ export const briefTimeout = (timeout = 0) => new Promise(resolve => setTimeout(r
 
 export const shouldHidePricing = (symbols: String[]): boolean => {
   return symbols.includes('BTC');
+};
+
+export const alert = message => {
+  const { BrowserWindow, dialog } = window.electron.remote;
+  dialog.showMessageBoxSync(BrowserWindow.getFocusedWindow(), {
+    title: Localize.text('Alert', 'universal'),
+    message,
+    buttons: [
+      Localize.text('OK', 'universal')
+    ]
+  });
+};
+
+export const confirm = message => {
+  const { BrowserWindow, dialog } = window.electron.remote;
+  const res = dialog.showMessageBoxSync(BrowserWindow.getFocusedWindow(), {
+    title: Localize.text('Alert', 'universal'),
+    message,
+    buttons: [
+      Localize.text('Cancel', 'universal'),
+      Localize.text('OK', 'universal')
+    ]
+  });
+  return res;
 };

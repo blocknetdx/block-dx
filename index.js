@@ -13,10 +13,11 @@ const _ = require('lodash');
 const math = require('mathjs');
 const MarkdownIt = require('markdown-it');
 const { Localize } = require('./src-back/localize');
-const { blocknetDir4, blocknetDir3, BLOCKNET_CONF_NAME4, BLOCKNET_CONF_NAME3 } = require('./src-back/constants');
+const { blocknetDir4, blocknetDir3, BLOCKNET_CONF_NAME4, BLOCKNET_CONF_NAME3, ipcMainListeners } = require('./src-back/constants');
 const { checkAndCopyV3Configs } = require('./src-back/config-updater');
 const { MainSwitch } = require('./src-back/main-switch');
 const { openUnverifiedAssetWindow } = require('./src-back/windows/unverified-asset-window');
+const { openMessageBox } = require('./src-back/windows/message-box');
 
 const versionDirectories = [
   blocknetDir4,
@@ -762,6 +763,29 @@ ipcMain.on('getPort', e => {
 });
 ipcMain.on('getBlocknetIP', e => {
   e.returnValue = storage.getItem('blocknetIP') || '';
+});
+
+// Flag used for the config setup to show the litewallet option
+ipcMain.on('enableLitewalletConfig', e => {
+  let enableLitewalletConfig = storage.getItem('enableLitewalletConfig');
+  if (!enableLitewalletConfig && enableLitewalletConfig !== false) {
+    enableLitewalletConfig = false;
+    storage.setItem('enableLitewalletConfig', enableLitewalletConfig);
+  }
+  e.returnValue = enableLitewalletConfig;
+});
+
+ipcMain.on('getLitewalletConfigDirectory', e => {
+  let litewalletConfigDirectory = storage.getItem('litewalletConfigDirectory');
+  if(!litewalletConfigDirectory && litewalletConfigDirectory !== '') {
+    litewalletConfigDirectory = '';
+    storage.setItem('litewalletConfigDirectory', litewalletConfigDirectory);
+  }
+  e.returnValue = litewalletConfigDirectory;
+});
+
+ipcMain.on('saveLitewalletConfigDirectory', (e, litewalletConfigDirectory) => {
+  storage.setItem('litewalletConfigDirectory', litewalletConfigDirectory);
 });
 
 const openGeneralSettingsWindow = () => {
@@ -1776,6 +1800,20 @@ ipcMain.on('generateNewAddresses', async function(e) {
 ipcMain.on('setZoomFactor', (e, zoomFactor) => storage.setItem('zoomFactor', zoomFactor));
 ipcMain.on('getZoomFactor', (e) => e.returnValue = storage.getItem('zoomFactor'));
 
+ipcMain.on(ipcMainListeners.GET_HIDE_REFUND_NOTIFICATION, e => {
+  const hideRefundNotification = storage.getItem('hideRefundNotification') || false;
+  e.returnValue = hideRefundNotification;
+});
+
+ipcMain.on(ipcMainListeners.OPEN_REFUND_NOTIFICATION, async function(e, { title, message }) {
+  try {
+    const notShowAgain = await openMessageBox(title, message, appWindow, storage);
+    storage.setItem('hideRefundNotification', notShowAgain);
+  } catch(err) {
+    handleError(err);
+  }
+});
+
 // Run the application within async function for flow control
 (async function() {
   try {
@@ -1985,10 +2023,10 @@ function isTokenPairValid(keyPair) {
 
 // check for version number. Minimum supported blocknet client version
 function versionCheck(version) {
-  if (version < 4020000) {
-    const requiredVersion = '4.2.0';
+  if (version < 4030000) {
+    const requiredVersion = '4.3.0';
     return {
-      name: Localize.text('Unsupported Version', 'universal'), 
+      name: Localize.text('Unsupported Version', 'universal'),
       message: Localize.text('Block DX requires Blocknet wallet version {requiredVersion} or greater.', 'universal', {requiredVersion})
     };
   }

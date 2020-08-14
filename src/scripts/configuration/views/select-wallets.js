@@ -1,16 +1,57 @@
 /* global Localize */
 
-const { remote } = require('electron');
+const { ipcRenderer, remote } = require('electron');
 const { RouterView } = require('../../modules/router');
 const route = require('../constants/routes');
 const sidebar = require('../snippets/sidebar');
 const configurationTypes = require('../constants/configuration-types');
 const titles = require('../modules/titles');
+const fs = require('fs-extra-promise');
+const path = require('path');
+const { Set } = require('immutable');
+const { putConfs } = require('../util');
 
 class SelectWallets extends RouterView {
 
   constructor(options) {
     super(options);
+  }
+
+  onBeforeMount(state) {
+    const configurationType = state.get('configurationType');
+    if(configurationType === configurationTypes.LITEWALLET_RPC_SETUP) {
+      const cloudChainsDir = state.get('litewalletConfigDirectory');
+      const settingsDir = path.join(cloudChainsDir, 'settings');
+      console.log(settingsDir);
+      const configFilePatt = /^config-(.+)\.json$/i;
+      const wallets = state.get('wallets');
+      const walletsMap = new Map(wallets.map(w => [w.abbr, w]));
+      const litewallets = fs.readdirSync(settingsDir)
+        .filter(f => configFilePatt.test(f))
+        .map(f => {
+          const filePath = path.join(settingsDir, f);
+          try {
+            const data = fs.readJsonSync(filePath);
+            const matches = f.match(configFilePatt);
+            const abbr = matches[1];
+            const wallet = walletsMap.get(abbr);
+            if(!wallet) return null;
+            return Object.assign({}, data, {
+              abbr,
+              name: wallet.name,
+              wallet,
+              filePath
+            });
+          } catch(err) {
+            return null;
+          }
+        })
+        .filter(data => data);
+      state.set('availableLitewallets', litewallets);
+      state.set('selectedLitewallets', Set(litewallets.map(w => w.abbr)));
+      // state.set('selectedLitewallets', Set(litewallets.filter(w => w.abbr !== 'BLOCK').map(w => w.abbr)));
+      console.log(JSON.stringify(litewallets, null, '  '));
+    }
   }
 
   render(state) {
@@ -20,20 +61,29 @@ class SelectWallets extends RouterView {
     const configurationType = state.get('configurationType');
     const addingWallets = configurationType === configurationTypes.ADD_NEW_WALLETS;
     const updatingWallets = configurationType === configurationTypes.UPDATE_WALLETS;
+    const configuringLitewallets = configurationType === configurationTypes.LITEWALLET_RPC_SETUP;
 
     let allChecked = true;
 
-    const selected = addingWallets ? state.get('addAbbrs') : updatingWallets ? state.get('updateAbbrs') : state.get('selectedAbbrs');
-    const items = state
-      .get('wallets')
-      .filter(w => addingWallets ? !state.get('selectedAbbrs').has(w.abbr) : updatingWallets ? state.get('selectedAbbrs').has(w.abbr) : true)
-      .reduce((arr, w) => {
-        return arr.some(ww => ww.abbr === w.abbr) ? arr : [...arr, w];
-      }, []);
+    let selected, items;
+
+    if(configuringLitewallets) {
+      items = state.get('availableLitewallets');
+      selected = state.get('selectedLitewallets');
+    } else {
+      selected = addingWallets ? state.get('addAbbrs') : updatingWallets ? state.get('updateAbbrs') : state.get('selectedAbbrs');
+      items = state
+        .get('wallets')
+        .filter(w => addingWallets ? !state.get('selectedAbbrs').has(w.abbr) : updatingWallets ? state.get('selectedAbbrs').has(w.abbr) : true)
+        .reduce((arr, w) => {
+          return arr.some(ww => ww.abbr === w.abbr) ? arr : [...arr, w];
+        }, []);
+
+    }
 
     const listItems = items
       .map(i => {
-        if(!updatingWallets && i.abbr === 'BLOCK') {
+        if(!configuringLitewallets && !updatingWallets && i.abbr === 'BLOCK') {
           return `<div class="main-area-item" style="cursor:default;opacity:1;"><i class="far fa-check-square radio-icon"></i> ${i.name} (${i.abbr})</div>`;
         } else {
           if(!selected.has(i.abbr)) allChecked = false;
@@ -49,6 +99,8 @@ class SelectWallets extends RouterView {
       title = titles.ADD_WALLET_EXPERT_CONFIGURATION();
     } else if(updatingWallets) {
       title = titles.UPDATE_WALLET_EXPERT_CONFIGURATION();
+    } else if(configurationType === configurationTypes.LITEWALLET_RPC_SETUP) {
+      title = titles.LITEWALLET_SELECT_WALLETS();
     } else {
       title = titles.FRESH_SETUP_EXPERT_CONFIGURATION();
     }
@@ -57,23 +109,23 @@ class SelectWallets extends RouterView {
       <h3>${title}</h3>
       <div class="container">
         <div class="flex-container">
-          <div class="col1">
+          ${configuringLitewallets ? '' : `<div class="col1">
             ${sidebar(0)}
-          </div>
-          <div class="col2">
+          </div>`}
+          <div class="${configuringLitewallets ? 'col2-no-margin' : 'col2'}">
             <p style="margin-top:0;padding-top:0;padding-left:10px;padding-right:10px;margin-bottom:10px;">${updatingWallets ? Localize.text('Select the wallet(s) that you would like to update.','configurationWindowWallets') : Localize.text('In order to conduct peer-to-peer trades, Block DX requires the <a href="#" class="text-link js-blocknetWalletLink">Blocknet wallet</a> and the wallets of any assets you want to trade with. Select the wallets that are installed to begin setup.','configurationWindowWallets')}</p>
             <p class="select-all-container"><a class="js-selectAll select-all-link" href="#"><i class="far ${allChecked ? 'fa-check-square' : 'fa-square'} check-icon" />${Localize.text(' Select All','configurationWindowWallets')}</a></p>
             <div id="js-mainConfigurationArea" class="main-area" style="position:relative;${skip ? 'opacity:.6;overflow-y:hidden;' : 'opacity:1;overflow-y:scroll;'}">
               ${listItems}
               <div id="js-overlay" style="display:${skip ? 'block' : 'none'};position:absolute;left:0;top:0;width:100%;height:100%;background-color:#000;opacity:0;"></div>
             </div>
-            <div style="display:${(updatingWallets || addingWallets) ? 'none' : 'block'};padding: 10px; cursor: pointer;padding-bottom:0;">
+            ${configuringLitewallets ? '' : `<div style="display:${(updatingWallets || addingWallets) ? 'none' : 'block'};padding: 10px; cursor: pointer;padding-bottom:0;">
               <div id="js-skip" class="main-area-item"><i class="far ${skip ? 'fa-check-square' : 'fa-square'} radio-icon"></i>${Localize.text(' Skip and setup Block DX manually (not recommended','configurationWindowWallets')})</div>
-            </div>
+            </div>`}
 
             <div id="js-buttonContainer" class="button-container">
               <button id="js-backBtn" type="button" class="gray-button">${Localize.text('Back','configurationWindowWallets').toUpperCase()}</button>
-              <button id="js-continueBtn" type="button" ${selected.size === 0 ? 'disabled' : ''}>${Localize.text('Continue','configurationWindowWallets').toUpperCase()}</button>
+              <button id="js-continueBtn" type="button" ${selected.size === 0 ? 'disabled' : ''}>${Localize.text('Finish','configurationWindowWallets').toUpperCase()}</button>
             </div>
 
           </div>
@@ -93,10 +145,11 @@ class SelectWallets extends RouterView {
       const configurationType = state.get('configurationType');
       const addingWallets = configurationType === configurationTypes.ADD_NEW_WALLETS;
       const updatingWallets = configurationType === configurationTypes.UPDATE_WALLETS;
+      const configuringLitewallets = configurationType === configurationTypes.LITEWALLET_RPC_SETUP;
 
       const abbr = $target.attr('data-id');
       const $icon = $target.find('i');
-      const selectedListName = addingWallets ? 'addAbbrs' : updatingWallets ? 'updateAbbrs' : 'selectedAbbrs';
+      const selectedListName = configuringLitewallets ? 'selectedLitewallets' : addingWallets ? 'addAbbrs' : updatingWallets ? 'updateAbbrs' : 'selectedAbbrs';
       let selectedAbbrs = state.get(selectedListName);
       if(selectedAbbrs.has(abbr)) { // it is checked
         $icon.addClass('fa-square');
@@ -122,8 +175,19 @@ class SelectWallets extends RouterView {
         const $target = $(e.currentTarget);
         toggleSelect($target);
         const $selectAllIcon = $('.js-selectAll').find('i');
-        $selectAllIcon.addClass('fa-square');
-        $selectAllIcon.removeClass('fa-check-square');
+        const configurationType = state.get('configurationType');
+        if(configurationType === configurationTypes.LITEWALLET_RPC_SETUP) {
+          if(state.get('availableLitewallets').length === state.get('selectedLitewallets').size) {
+            $selectAllIcon.removeClass('fa-square');
+            $selectAllIcon.addClass('fa-check-square');
+          } else {
+            $selectAllIcon.addClass('fa-square');
+            $selectAllIcon.removeClass('fa-check-square');
+          }
+        } else {
+          $selectAllIcon.addClass('fa-square');
+          $selectAllIcon.removeClass('fa-check-square');
+        }
       });
 
     $('.js-selectAll').on('click', e => {
@@ -186,16 +250,62 @@ class SelectWallets extends RouterView {
 
     $('#js-backBtn').on('click', e => {
       e.preventDefault();
-      router.goTo(route.SELECT_SETUP_TYPE);
+      const configurationType = state.get('configurationType');
+      if(configurationType === configurationTypes.LITEWALLET_RPC_SETUP) {
+        router.goTo(route.CONFIGURATION_MENU);
+      } else {
+        router.goTo(route.SELECT_SETUP_TYPE);
+      }
     });
 
     $('#js-continueBtn').on('click', e => {
       e.preventDefault();
-      const skip = state.get('skipSetup');
-      if(skip) {
-        router.goTo(route.ENTER_BLOCKNET_CREDENTIALS);
+      const configurationType = state.get('configurationType');
+      if(configurationType === configurationTypes.LITEWALLET_RPC_SETUP) {
+        const availableLitewallets = state.get('availableLitewallets');
+        const selectedLitewallets = state.get('selectedLitewallets');
+        const walletsToSave = availableLitewallets
+          .filter(w => selectedLitewallets.has(w.abbr));
+        for(const litewallet of walletsToSave) {
+          const { filePath, rpcPort } = litewallet;
+          let { rpcUsername, rpcPassword } = litewallet;
+          if(!rpcUsername || !rpcPassword) {
+            const { username, password } = litewallet.wallet.generateCredentials();
+            rpcUsername = username;
+            rpcPassword = password;
+          }
+          litewallet.rpcUsername = rpcUsername;
+          litewallet.rpcPassword = rpcPassword;
+          litewallet.rpcPort = rpcPort;
+          const config = fs.readJsonSync(filePath);
+          const newConfig = Object.assign({}, config, {
+            rpcUsername,
+            rpcPassword,
+            rpcEnabled: true
+          });
+          fs.writeJsonSync(filePath, newConfig);
+        }
+        const preppedWallets = walletsToSave
+          .map(w => w.wallet.set({
+            username: w.rpcUsername,
+            password: w.rpcPassword,
+            port: w.rpcPort
+          }));
+        const block = state.get('wallets').find(w => w.abbr === 'BLOCK');
+        putConfs(preppedWallets, block.directory, true);
+        const cloudChainsDir = state.get('litewalletConfigDirectory');
+        ipcRenderer.send('saveLitewalletConfigDirectory', cloudChainsDir);
+        ipcRenderer.send('loadXBridgeConf');
+        setTimeout(() => {
+          ipcRenderer.send('restart');
+        }, 500);
       } else {
-        router.goTo(route.EXPERT_SELECT_WALLET_VERSIONS);
+        const skip = state.get('skipSetup');
+        if(skip) {
+          router.goTo(route.ENTER_BLOCKNET_CREDENTIALS);
+        } else {
+          router.goTo(route.EXPERT_SELECT_WALLET_VERSIONS);
+        }
       }
     });
 

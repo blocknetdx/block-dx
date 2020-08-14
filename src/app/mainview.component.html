@@ -207,19 +207,18 @@
     <div class="content col-lg">
       <div class="trade_table row">
 
-        <bn-card class="trade_table__cell col-lg-6">
-          <bn-card-title><Localize context="mainview" key="Price Chart"></Localize></bn-card-title>
-          <bn-card-body>
-            <app-pricechart></app-pricechart>
-          </bn-card-body>
-        </bn-card>
-
-        <bn-card class="trade_table__cell col-lg-2" [allowFullscreen]="false">
-          <bn-card-title><Localize context="mainview" key="Depth Chart"></Localize></bn-card-title>
-          <bn-card-body>
-            <app-depth></app-depth>
-          </bn-card-body>
-        </bn-card>
+        <app-bn-tab-view class="trade_table__cell card col-lg-8 charts-tab-view">
+          <bn-tab label="{{Localize.text('Price Chart', 'mainview')}}">
+            <ng-template #content>
+              <app-pricechart></app-pricechart>
+            </ng-template>
+          </bn-tab>
+          <bn-tab label="{{Localize.text('Depth Chart', 'mainview')}}">
+            <ng-template #content>
+              <app-depth></app-depth>
+            </ng-template>
+          </bn-tab>
+        </app-bn-tab-view>
 
         <bn-card class="trade_table__cell col-lg-4" >
           <bn-card-toolbar>
