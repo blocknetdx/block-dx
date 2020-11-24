@@ -775,11 +775,20 @@ ipcMain.on('enableLitewalletConfig', e => {
   e.returnValue = enableLitewalletConfig;
 });
 
+const getDefaultCCDirectory = () => {
+  if(platform === 'win32') { // Windows
+    return path.join(electron.app.getPath('appData'), 'CloudChains');
+  } else if(platform === 'darwin') { // Mac
+    return path.join(electron.app.getPath('appData'), 'CloudChains');
+  } else { // Linux
+    return path.join(electron.app.getPath('appData'), 'CloudChains');
+  }
+};
+
 ipcMain.on('getLitewalletConfigDirectory', e => {
-  let litewalletConfigDirectory = storage.getItem('litewalletConfigDirectory');
-  if(!litewalletConfigDirectory && litewalletConfigDirectory !== '') {
+  let litewalletConfigDirectory = storage.getItem('litewalletConfigDirectory') || getDefaultCCDirectory();
+  if(!fs.existsSync(litewalletConfigDirectory)) {
     litewalletConfigDirectory = '';
-    storage.setItem('litewalletConfigDirectory', litewalletConfigDirectory);
   }
   e.returnValue = litewalletConfigDirectory;
 });
