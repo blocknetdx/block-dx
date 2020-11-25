@@ -765,16 +765,6 @@ ipcMain.on('getBlocknetIP', e => {
   e.returnValue = storage.getItem('blocknetIP') || '';
 });
 
-// Flag used for the config setup to show the litewallet option
-ipcMain.on('enableLitewalletConfig', e => {
-  let enableLitewalletConfig = storage.getItem('enableLitewalletConfig');
-  if (!enableLitewalletConfig && enableLitewalletConfig !== false) {
-    enableLitewalletConfig = false;
-    storage.setItem('enableLitewalletConfig', enableLitewalletConfig);
-  }
-  e.returnValue = enableLitewalletConfig;
-});
-
 const getDefaultCCDirectory = () => {
   if(platform === 'win32') { // Windows
     return path.join(electron.app.getPath('appData'), 'CloudChains');
