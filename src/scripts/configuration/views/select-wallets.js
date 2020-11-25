@@ -10,6 +10,7 @@ const fs = require('fs-extra-promise');
 const path = require('path');
 const { Set } = require('immutable');
 const { putConfs } = require('../util');
+const request = require('superagent');
 
 class SelectWallets extends RouterView {
 
@@ -258,7 +259,7 @@ class SelectWallets extends RouterView {
       }
     });
 
-    $('#js-continueBtn').on('click', e => {
+    $('#js-continueBtn').on('click', async function(e) {
       e.preventDefault();
       const configurationType = state.get('configurationType');
       if(configurationType === configurationTypes.LITEWALLET_RPC_SETUP) {
@@ -267,8 +268,11 @@ class SelectWallets extends RouterView {
         const walletsToSave = availableLitewallets
           .filter(w => selectedLitewallets.has(w.abbr));
         for(const litewallet of walletsToSave) {
-          const { filePath, rpcPort } = litewallet;
-          let { rpcUsername, rpcPassword } = litewallet;
+          const { filePath } = litewallet;
+          const config = fs.readJsonSync(filePath);
+          const rpcPort = config.rpcPort || litewallet.rpcPort;
+          let rpcUsername = config.rpcUsername || litewallet.rpcUsername;
+          let rpcPassword = config.rpcPassword || litewallet.rpcPassword;
           if(!rpcUsername || !rpcPassword) {
             const { username, password } = litewallet.wallet.generateCredentials();
             rpcUsername = username;
@@ -277,11 +281,11 @@ class SelectWallets extends RouterView {
           litewallet.rpcUsername = rpcUsername;
           litewallet.rpcPassword = rpcPassword;
           litewallet.rpcPort = rpcPort;
-          const config = fs.readJsonSync(filePath);
           const newConfig = Object.assign({}, config, {
             rpcUsername,
             rpcPassword,
-            rpcEnabled: true
+            rpcEnabled: true,
+            rpcPort
           });
           fs.writeJsonSync(filePath, newConfig);
         }
@@ -295,6 +299,31 @@ class SelectWallets extends RouterView {
         putConfs(preppedWallets, block.directory, true);
         const cloudChainsDir = state.get('litewalletConfigDirectory');
         ipcRenderer.send('saveLitewalletConfigDirectory', cloudChainsDir);
+        let ccUpdated;
+        try {
+          const ccConfig = fs.readJsonSync(path.join(cloudChainsDir, 'settings', 'config-master.json'));
+          if(ccConfig.rpcPort && ccConfig.rpcUsername && ccConfig.rpcPassword) {
+            for(const { abbr } of walletsToSave) {
+              await request
+                .post(`http://127.0.0.1:${ccConfig.rpcPort}`)
+                .auth(ccConfig.rpcUsername, ccConfig.rpcPassword)
+                .send(JSON.stringify({
+                  method: 'reloadconfig',
+                  params: [
+                    abbr
+                  ]
+                }));
+            }
+            ccUpdated = true;
+          } else {
+            ccUpdated = false;
+          }
+        } catch(err) {
+          console.error(err);
+          ccUpdated = false;
+        }
+        if(!ccUpdated)
+          alert(Localize.text('Unable to reload CloudChains daemon configuration. You will need to manually either start or restart the daemon before you will be able to use the wallets in Block DX.', 'configurationWindowWallets'));
         ipcRenderer.send('loadXBridgeConf');
         setTimeout(() => {
           ipcRenderer.send('restart');

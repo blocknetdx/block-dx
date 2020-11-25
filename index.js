@@ -765,21 +765,20 @@ ipcMain.on('getBlocknetIP', e => {
   e.returnValue = storage.getItem('blocknetIP') || '';
 });
 
-// Flag used for the config setup to show the litewallet option
-ipcMain.on('enableLitewalletConfig', e => {
-  let enableLitewalletConfig = storage.getItem('enableLitewalletConfig');
-  if (!enableLitewalletConfig && enableLitewalletConfig !== false) {
-    enableLitewalletConfig = false;
-    storage.setItem('enableLitewalletConfig', enableLitewalletConfig);
+const getDefaultCCDirectory = () => {
+  if(platform === 'win32') { // Windows
+    return path.join(electron.app.getPath('appData'), 'CloudChains');
+  } else if(platform === 'darwin') { // Mac
+    return path.join(electron.app.getPath('appData'), 'CloudChains');
+  } else { // Linux
+    return path.join(electron.app.getPath('appData'), 'CloudChains');
   }
-  e.returnValue = enableLitewalletConfig;
-});
+};
 
 ipcMain.on('getLitewalletConfigDirectory', e => {
-  let litewalletConfigDirectory = storage.getItem('litewalletConfigDirectory');
-  if(!litewalletConfigDirectory && litewalletConfigDirectory !== '') {
+  let litewalletConfigDirectory = storage.getItem('litewalletConfigDirectory') || getDefaultCCDirectory();
+  if(!fs.existsSync(litewalletConfigDirectory)) {
     litewalletConfigDirectory = '';
-    storage.setItem('litewalletConfigDirectory', litewalletConfigDirectory);
   }
   e.returnValue = litewalletConfigDirectory;
 });

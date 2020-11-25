@@ -84,7 +84,6 @@ $(document).ready(() => {
     state.set('rpcIP', defaults.IP);
     state.set('username', ipcRenderer.sendSync('getUser'));
     state.set('password', ipcRenderer.sendSync('getPassword'));
-    state.set('enableLitewalletConfig', ipcRenderer.sendSync('enableLitewalletConfig'));
     state.set('litewalletConfigDirectory', ipcRenderer.sendSync('getLitewalletConfigDirectory'));
 
     const isFirstRun = ipcRenderer.sendSync('isFirstRun');

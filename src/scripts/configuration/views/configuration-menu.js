@@ -48,17 +48,13 @@ class ConfigurationMenu extends RouterView {
         title: Localize.text('Update Blocknet RPC Settings','configurationWindowMenu'),
         text: Localize.text('Use this to update the RPC credentials, port, and IP for the Blocknet wallet. This will require the Blocknet wallet to be restarted, which will cancel any open and in-progress orders.','configurationWindowMenu'),
         value: configurationTypes.UPDATE_RPC_SETTINGS
-      }
-    ];
-
-    const enableLitewalletConfig = state.get('enableLitewalletConfig');
-    if (enableLitewalletConfig === true) {
-      items.push({
+      },
+      {
         title: Localize.text('Litewallet Setup', 'configurationWindowMenu'),
         text: Localize.text('Use this to configure the CloudChains litewallet.', 'configurationWindowMenu'),
         value: configurationTypes.LITEWALLET_RPC_SETUP
-      });
-    }
+      }
+    ];
 
     const options = items.map(i => {
       return `
