@@ -35,7 +35,7 @@ build_mac:
   artifacts:
     name: "BLOCKDX-$CI_COMMIT_REF_NAME-mac"
     paths:
-      - dist-native/*.zip
+      - dist-native/mac/BLOCK DX.app
 
 test_artifacts:
   stage: test
@@ -46,4 +46,4 @@ test_artifacts:
     - "set -- dist-native/BLOCK-DX-*-linux.deb && [[ -f \"$1\" ]]"
     - "set -- dist-native/BLOCK-DX-*-win.exe && [[ -f \"$1\" ]]"
     - "set -- dist-native/BLOCK-DX-*-win-x64.zip && [[ -f \"$1\" ]]"
-    - "set -- dist-native/BLOCK-DX-*-mac.zip && [[ -f \"$1\" ]]"
+    - "set -- dist-native/mac/BLOCK*DX.app && [[ -d \"$1\" ]]"
