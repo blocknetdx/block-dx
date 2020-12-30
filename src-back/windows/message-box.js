@@ -16,7 +16,9 @@ const openMessageBox = (title, message, appWindow, storage) => new Promise(resol
     parent: appWindow,
     modal: true,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true,
     }
   },
   listeners: {
