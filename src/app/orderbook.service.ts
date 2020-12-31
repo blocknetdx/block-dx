@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Headers, Http } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { Observer } from 'rxjs/Observer';
 import { Subject } from 'rxjs/Subject';
@@ -30,7 +29,7 @@ export class OrderbookService {
   private orderbookUrl = '';
   // private orderbookUrl = 'https://api-public.sandbox.gdax.com/products/ETH-BTC/book?level=2';
 
-  constructor(private http: Http) { }
+  constructor() { }
 
   requestOrder(order: any) {
     this.requestedOrder.next(order);

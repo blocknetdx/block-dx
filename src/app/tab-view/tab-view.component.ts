@@ -8,7 +8,7 @@ import { TabDirective } from './tab.directive';
   templateUrl: './tab-view.component.html'
 })
 export class TabViewComponent implements AfterContentInit {
-  @ViewChild('buttonContainer')
+  @ViewChild('buttonContainer', {static: false})
   public buttonContainer: ElementRef;
 
   @ViewChildren('button')

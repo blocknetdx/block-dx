@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Headers, Http } from '@angular/http';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
 import * as moment from 'moment';
@@ -17,7 +16,7 @@ export class CurrentpriceService {
   public orderHistoryBy1Hour: BehaviorSubject<Currentprice[]>;
   private _onPair: BehaviorSubject<any>;
 
-  constructor(private http: Http, private appService: AppService) {
+  constructor(private appService: AppService) {
     this.currentprice = this.getCurrentprice();
     window.electron.ipcRenderer.on('currentPrice', (e, order) => {
       this.currentprice.next(Currentprice.fromObject(order));

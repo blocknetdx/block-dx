@@ -21,10 +21,10 @@ export class TableComponent {
   @ViewChildren('rowRef')
   public rowRefs: QueryList<ElementRef>;
 
-  @ViewChild('tableBody')
+  @ViewChild('tableBody', {static: false})
   public tableBody: ElementRef;
 
-  @ViewChild('scrollbar')
+  @ViewChild('scrollbar', {static: false})
   public scrollbar: PerfectScrollbarDirective;
 
   @Output('onRowSelect')
@@ -51,13 +51,13 @@ export class TableComponent {
     this.columns = val.toArray();
   }
 
-  @ContentChild(TableRowDetailDirective)
+  @ContentChild(TableRowDetailDirective, {static: false})
   public rowDetail: TableRowDetailDirective;
 
-  @ContentChild(TableInfoDirective)
+  @ContentChild(TableInfoDirective, {static: false})
   public tableInfo: TableInfoDirective;
 
-  @ContentChild(TableSectionDividerDirective)
+  @ContentChild(TableSectionDividerDirective, {static: false})
   public sectionDivider: TableSectionDividerDirective;
 
   private _rows: any[];

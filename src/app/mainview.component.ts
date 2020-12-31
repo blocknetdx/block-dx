@@ -17,7 +17,7 @@ import {Localize} from './localize/localize.component';
   styleUrls: ['./mainview.component.scss']
 })
 export class MainviewComponent implements OnInit {
-  @ViewChild('orderbook')
+  @ViewChild('orderbook', {static: false})
   public orderbook: OrderbookComponent;
 
   public orderCardIndex = 0; // Temporary FIXME
@@ -69,7 +69,7 @@ export class MainviewComponent implements OnInit {
 
   onNavChange(list) {
     if (list.contains('book')) {
-      this.orderbook.orderbookTopTable.scrollToBottom();
+      // this.orderbook.orderbookTopTable.scrollToBottom();
     }
   }
 

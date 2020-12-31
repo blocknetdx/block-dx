@@ -38,10 +38,10 @@ const { bignumber } = math;
   styleUrls: ['./orderform.component.scss']
 })
 export class OrderformComponent implements OnInit {
-  @ViewChild('tabView') public tabView: TabViewComponent;
-  @ViewChild('typeSelect') public typeSelect: SelectComponent;
+  @ViewChild('tabView', {static: false}) public tabView: TabViewComponent;
+  @ViewChild('typeSelect', {static: false}) public typeSelect: SelectComponent;
 
-  @ViewChild('scrollbar')
+  @ViewChild('scrollbar', {static: false})
 
   public scrollbar: PerfectScrollbarDirective;
   public symbols:string[] = [];

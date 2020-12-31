@@ -5,7 +5,7 @@ import { Directive, ContentChild, TemplateRef } from '@angular/core';
 })
 export class TableRowDetailDirective {
 
-  @ContentChild('rowDetail', {read: TemplateRef})
+  @ContentChild('rowDetail', {read: TemplateRef, static: false})
   public template: TemplateRef<any>;
 
   constructor() { }

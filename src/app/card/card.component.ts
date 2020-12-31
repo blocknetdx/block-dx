@@ -46,10 +46,10 @@ export class CardComponent implements OnInit {
 
   public showBody = true;
 
-  @ContentChild(CardToolbarDirective)
+  @ContentChild(CardToolbarDirective, {static: false})
   public toolbar: CardToolbarDirective;
 
-  @ViewChild('card') public card: ElementRef;
+  @ViewChild('card', {static: false}) public card: ElementRef;
 
   public isFullscreen: boolean;
 
