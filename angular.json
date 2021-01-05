@@ -48,6 +48,10 @@
               "src/amcharts/themes/dark.js",
               "src/amcharts/plugins/responsive/responsive.min.js",
               "src/scripts/main.js"
+            ],
+            "allowedCommonJsDependencies": [
+              "mathjs",
+              "rxjs"
             ]
           },
           "configurations": {
