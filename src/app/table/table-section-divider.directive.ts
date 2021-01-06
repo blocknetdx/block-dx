@@ -5,7 +5,7 @@ import { Directive, ContentChild, TemplateRef } from '@angular/core';
 })
 export class TableSectionDividerDirective {
 
-  @ContentChild('sectionDivider', {read: TemplateRef})
+  @ContentChild('sectionDivider', {read: TemplateRef, static: false})
   public template: TemplateRef<any>;
 
   constructor() { }

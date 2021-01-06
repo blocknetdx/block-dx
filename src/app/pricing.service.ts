@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { Pricing } from './pricing';
@@ -10,7 +9,7 @@ export class PricingService {
   private pricingEnabledObservable: BehaviorSubject<boolean>;
   private pricingObservable: BehaviorSubject<Pricing>;
 
-  constructor(private http: Http) { }
+  constructor() { }
 
   /**
    * Returns if pricing is enabled or not

@@ -12,7 +12,9 @@ const openUnverifiedAssetWindow = (tokens, platform, appWindow, storage) => new 
     minHeight: 395,
     parent: appWindow,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true,
     }
   },
   listeners: {

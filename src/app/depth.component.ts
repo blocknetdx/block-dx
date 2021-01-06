@@ -33,10 +33,10 @@ export class DepthComponent implements AfterViewInit, OnChanges, OnDestroy {
   public leftChart: any;
   public orderbook:any[] = [];
 
-  @ViewChild('rightChartContainer')
+  @ViewChild('rightChartContainer', {static: false})
   public rightChartContainer: ElementRef;
 
-  @ViewChild('leftChartContainer')
+  @ViewChild('leftChartContainer', {static: false})
   public leftChartContainer: ElementRef;
 
   private subscriptions = [];

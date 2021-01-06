@@ -256,7 +256,9 @@ const openOrderDetailsWindow = details => {
     height,
     parent: appWindow,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true,
     }
   });
   if(isDev) {
@@ -345,7 +347,9 @@ const openUpdateAvailableWindow = (v, windowType, hideCheckbox = false) => new P
     height: platform === 'win32' ? 375 : platform === 'darwin' ? 355 : 340,
     parent: appWindow,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true,
     }
   });
   if(platform !== 'darwin') updateAvailableWindow.setMenu(null);
@@ -476,7 +480,9 @@ const openConfigurationWindow = (options = {}) => {
     height: platform === 'win32' ? 708 : platform === 'darwin' ? 695 : 670,
     parent: appWindow,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true,
     }
   });
   if(isDev) {
@@ -684,7 +690,9 @@ const openSettingsWindow = (options = {}) => {
     height: platform === 'win32' ? 640 : platform === 'darwin' ? 625 : 600,
     parent: appWindow,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true,
     }
   });
   if(isDev) {
@@ -796,7 +804,9 @@ const openGeneralSettingsWindow = () => {
     parent: appWindow,
     modal: platform === 'darwin' ? false : true,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true,
     }
   });
 
@@ -854,7 +864,9 @@ const openInformationWindow = () => {
     parent: appWindow,
     modal: platform === 'darwin' ? false : true,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true,
     }
   });
 
@@ -895,7 +907,9 @@ const openReleaseNotesWindow = () => {
     height: height,
     parent: appWindow,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true,
     }
   });
   if(isDev) {
@@ -970,7 +984,9 @@ const openTOSWindow = (alreadyAccepted = false) => {
     height: height,
     parent: appWindow,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true,
     }
   });
   if(isDev) {
@@ -999,7 +1015,9 @@ const openAppWindow = () => {
     width: Math.max(width, 1050),
     height: Math.max(height, 760),
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true,
     }
     // Below is the proper way to set the initial window zoom factor, but there is a bug
     // in Electron 3 which causes it to not work correctly. When we upgrade, we can

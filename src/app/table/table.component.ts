@@ -21,10 +21,10 @@ export class TableComponent {
   @ViewChildren('rowRef')
   public rowRefs: QueryList<ElementRef>;
 
-  @ViewChild('tableBody')
+  @ViewChild('tableBody', {static: false})
   public tableBody: ElementRef;
 
-  @ViewChild('scrollbar')
+  @ViewChild('scrollbar', {static: false})
   public scrollbar: PerfectScrollbarDirective;
 
   @Output('onRowSelect')
@@ -51,13 +51,13 @@ export class TableComponent {
     this.columns = val.toArray();
   }
 
-  @ContentChild(TableRowDetailDirective)
+  @ContentChild(TableRowDetailDirective, {static: false})
   public rowDetail: TableRowDetailDirective;
 
-  @ContentChild(TableInfoDirective)
+  @ContentChild(TableInfoDirective, {static: false})
   public tableInfo: TableInfoDirective;
 
-  @ContentChild(TableSectionDividerDirective)
+  @ContentChild(TableSectionDividerDirective, {static: false})
   public sectionDivider: TableSectionDividerDirective;
 
   private _rows: any[];
@@ -114,8 +114,8 @@ export class TableComponent {
   }
 
   scrollToMiddle() {
-    if (this.scrollbar) {
-      const el = this.scrollbar['elementRef'].nativeElement;
+    if (this.scrollbar && this.scrollbar['directiveRef'] && this.scrollbar['directiveRef'].elementRef && this.scrollbar['directiveRef'].elementRef.nativeElement) {
+      const el = this.scrollbar['directiveRef'].elementRef.nativeElement;
       const elRect = el.getBoundingClientRect();
       const content = el.querySelector('.ps-content');
       const interval = setInterval(() => {
@@ -130,8 +130,8 @@ export class TableComponent {
   }
 
   scrollToBottom(force = false) {
-    if (this.scrollbar) {
-      const el = this.scrollbar['elementRef'].nativeElement;
+    if (this.scrollbar && this.scrollbar['directiveRef'] && this.scrollbar['directiveRef'].elementRef && this.scrollbar['directiveRef'].elementRef.nativeElement) {
+      const el = this.scrollbar['directiveRef'].elementRef.nativeElement;
       const elRect = el.getBoundingClientRect();
       const content = el.querySelector('.ps-content');
       const interval = setInterval(() => {
@@ -150,8 +150,8 @@ export class TableComponent {
   }
 
   scrollToTop(force = false) {
-    if(this.scrollbar) {
-      const el = this.scrollbar['elementRef'].nativeElement;
+    if(this.scrollbar && this.scrollbar['directiveRef'] && this.scrollbar['directiveRef'].elementRef && this.scrollbar['directiveRef'].elementRef.nativeElement) {
+      const el = this.scrollbar['directiveRef'].elementRef.nativeElement;
       const content = el.querySelector('.ps-content');
       const interval = setInterval(() => {
         const contentRect = content.getBoundingClientRect();

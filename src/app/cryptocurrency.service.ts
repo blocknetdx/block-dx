@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { Cryptocurrency } from './cryptocurrency';
@@ -11,7 +10,7 @@ export class CryptocurrencyService {
   private tokensObservable: BehaviorSubject<Cryptocurrency[]>;
   private currencyComparisonsObservable: BehaviorSubject<Cryptocurrency[]>;
 
-  constructor(private http: Http) { }
+  constructor() { }
 
   public getCurrencyComparisons(token): BehaviorSubject<Cryptocurrency[]> {
 

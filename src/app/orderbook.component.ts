@@ -30,8 +30,8 @@ const { bignumber } = math;
 })
 
 export class OrderbookComponent implements OnInit, OnDestroy {
-  @ViewChild('orderbookTopTable') public orderbookTopTable: TableComponent;
-  @ViewChild('orderbookBottomTable') public orderbookBottomTable: TableComponent;
+  @ViewChild('orderbookTopTable', {static: true}) public orderbookTopTable: TableComponent;
+  @ViewChild('orderbookBottomTable', {static: true}) public orderbookBottomTable: TableComponent;
 
   public sections: any[] = [
     {rows: []},
