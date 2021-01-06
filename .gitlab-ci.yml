@@ -41,9 +41,10 @@ test_artifacts:
   stage: test
   image: ubuntu:bionic
   script:
-    - "set -- dist-native/BLOCK-DX-*-linux.tar.gz && [[ -f \"$1\" ]]"
-    - "set -- dist-native/BLOCK-DX-*-linux.AppImage && [[ -f \"$1\" ]]"
-    - "set -- dist-native/BLOCK-DX-*-linux.deb && [[ -f \"$1\" ]]"
+    - "set -- dist-native/BLOCK-DX-*-linux-x64.tar.gz && [[ -f \"$1\" ]]"
+    - "set -- dist-native/BLOCK-DX-*-linux-x86_64.AppImage && [[ -f \"$1\" ]]"
+    - "set -- dist-native/BLOCK-DX-*-linux-armv7l.AppImage && [[ -f \"$1\" ]]"
+    - "set -- dist-native/BLOCK-DX-*-linux-amd64.deb && [[ -f \"$1\" ]]"
     - "set -- dist-native/BLOCK-DX-*-win.exe && [[ -f \"$1\" ]]"
     - "set -- dist-native/BLOCK-DX-*-win-x64.zip && [[ -f \"$1\" ]]"
     - "set -- dist-native/mac/BLOCK*DX.app && [[ -d \"$1\" ]]"
