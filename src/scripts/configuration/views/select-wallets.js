@@ -303,18 +303,38 @@ class SelectWallets extends RouterView {
         try {
           const ccConfig = fs.readJsonSync(path.join(cloudChainsDir, 'settings', 'config-master.json'));
           if(ccConfig.rpcPort && ccConfig.rpcUsername && ccConfig.rpcPassword) {
+            const walletErrors = [];
+            const allReqs = [];
+            let walletCount = 0;
             for(const { abbr } of walletsToSave) {
-              await request
+              walletCount++;
+              allReqs.push({token: abbr, req: request
                 .post(`http://127.0.0.1:${ccConfig.rpcPort}`)
+                .timeout(5000)
                 .auth(ccConfig.rpcUsername, ccConfig.rpcPassword)
                 .send(JSON.stringify({
                   method: 'reloadconfig',
                   params: [
                     abbr
                   ]
-                }));
+                }))});
             }
-            ccUpdated = true;
+            // Wait for all requests to complete
+            await new Promise(resolve => {
+              const done = () => {
+                walletCount--;
+                if (walletCount <= 0)
+                  resolve();
+              };
+              for (const {token, req} of allReqs)
+                req.then(() => done()).catch(e2 => {
+                  walletErrors.push(`failed to reload litewallet config for ${token}: ${e2}`);
+                  done();
+                });
+            });
+            for (const emsg of walletErrors)
+              console.error(emsg);
+            ccUpdated = walletErrors.length < walletsToSave.length; // if no wallets updated then notify user
           } else {
             ccUpdated = false;
           }

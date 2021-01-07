@@ -210,7 +210,10 @@ const addToXBridgeConf = (wallets, blockDir) => {
     .replace(/\r/g, '')
     .split(/\n/);
   const walletsIdx = split.findIndex(s => /^ExchangeWallets=/.test(s));
-  split[walletsIdx] = split[walletsIdx].trim() + ',' + [...data.keys()].join(',');
+  const existingWalletList = new Set(split[walletsIdx].trim().split(','));
+  const newWalletList = new Set([...data.keys(), ...existingWalletList]);
+  newWalletList.delete(''); // Remove empty
+  split[walletsIdx] = `ExchangeWallets=${[...newWalletList.values()].join(',')}`;
   for(const [ abbr, walletData ] of [...data.entries()]) {
     split = [
       ...split,
@@ -252,15 +255,13 @@ const putToXBridgeConf = (wallets, blockDir) => {
     .replace(/\r/g, '')
     .split(/\n/);
   const walletsIdx = split.findIndex(s => /^ExchangeWallets=/.test(s));
-  const walletMatches = split[walletsIdx].match(/=(.+)$/);
-  const exchangeWallets = walletMatches[1]
+  const walletsRaw = split[walletsIdx].match(/=(.*)$/); // e.g. BLOCK,BTC,LTC or empty
+  const walletList = !walletsRaw || walletsRaw.length <= 1 ? [] : walletsRaw[1]
     .split(',')
     .map(str => str.trim());
-  for(const { abbr } of wallets) {
-    if(!exchangeWallets.includes(abbr)) {
-      split[walletsIdx] = split[walletsIdx].trim() + ',' + abbr;
-    }
-  }
+  const newWalletList = new Set([...walletList, ...(wallets.map(w => w.abbr))]);
+  newWalletList.delete(''); // Remove empty
+  split[walletsIdx] = `ExchangeWallets=${[...newWalletList.values()].join(',')}`;
   for(const [ abbr, walletData ] of [...data.entries()]) {
     const startIndex = split.findIndex(s => s.trim() === `[${abbr}]`);
     const alreadyInConf = startIndex > -1;
