@@ -323,7 +323,7 @@ class SelectWallets extends RouterView {
           ccUpdated = false;
         }
         if(!ccUpdated)
-          alert(Localize.text('Unable to reload CloudChains daemon configuration. You will need to manually either start or restart the daemon before you will be able to use the wallets in Block DX.', 'configurationWindowWallets'));
+          alert(Localize.text('Block DX cannot connect to XLite wallet. Please start or restart XLite to continue using Block DX.', 'configurationWindowWallets'));
         ipcRenderer.send('loadXBridgeConf');
         setTimeout(() => {
           ipcRenderer.send('restart');
