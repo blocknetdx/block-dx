@@ -297,6 +297,41 @@ const putToXBridgeConf = (wallets, blockDir) => {
   fs.writeFileSync(confPath, joined, 'utf8');
 };
 
+/**
+ * Adds rpcworkqueue= configuration option to the blocknet.conf. If the current
+ * value is under the target it is replaced with the specified minimum value.
+ * If the target is over the minimum, the value remains unchanged. If the value
+ * is missing, the minimum is used.
+ * @param blockDir {string}
+ * @param minimumValue {number} Default 128
+ */
+const putBlockConf = (blockDir, minimumValue=128) => {
+  const blockConf = path.join(blockDir, 'blocknet.conf');
+  let data = fs.readFileSync(blockConf, 'utf8');
+  let split = data
+    .replace(/\r/g, '')
+    .split(/\n/);
+  const findIdx = split.findIndex(s => /^rpcworkqueue\s*=/.test(s));
+  if (findIdx < 0) {
+    data = `rpcworkqueue=${minimumValue}\n` + data; // add to front to avoid [test] sections
+    fs.writeFileSync(blockConf, data, 'utf8');
+    return;
+  }
+  const rpcWQ = split[findIdx].match(/=\s*(.*)$/);
+  if (!rpcWQ || rpcWQ.length <= 1)
+    split[findIdx] = `rpcworkqueue=${minimumValue}`;
+  else { // if entry already has value
+    const n = parseInt(rpcWQ[1].trim(), 10);
+    if (isNaN(n) || n < minimumValue)
+      split[findIdx] = `rpcworkqueue=${minimumValue}`;
+    else
+      split[findIdx] = 'rpcworkqueue=' + n;
+  }
+  // Serialize
+  data = split.join('\n');
+  fs.writeFileSync(blockConf, data, 'utf8');
+};
+
 module.exports.putConfs = (wallets, blockDir, isLitewallets = false) => {
   const confs = new Map();
   if(!isLitewallets) {
@@ -306,6 +341,7 @@ module.exports.putConfs = (wallets, blockDir, isLitewallets = false) => {
     }
   }
   putToXBridgeConf(wallets, blockDir);
+  putBlockConf(blockDir);
   return confs;
 };
 
