@@ -207,6 +207,9 @@ ipcMain.on('ZOOM_RESET', zoomReset);
 // General Error Handler
 const handleError = err => {
   console.error(err);
+};
+const displayError = err => {
+  console.error(err);
   if(appWindow) {
     appWindow.send('error', { name: err.name, message: err.message });
   }
@@ -525,7 +528,7 @@ const openConfigurationWindow = (options = {}) => {
       openSettingsWindow();
       configurationWindow.close();
     } catch(err) {
-      handleError(err);
+      displayError(err);
     }
   });
 
@@ -1081,7 +1084,7 @@ const openAppWindow = () => {
       })
       .catch(err => {
         appWindow.send('orderDone', 'server error');
-        handleError(err);
+        displayError(err);
       });
   });
 
@@ -1098,7 +1101,7 @@ const openAppWindow = () => {
       })
       .catch(err => {
         appWindow.send('orderDone', 'server error');
-        handleError(err);
+        displayError(err);
       });
   });
 
@@ -1393,7 +1396,7 @@ const openAppWindow = () => {
         [key]: address
       }));
     } catch(err) {
-      handleError(err);
+      displayError(err);
     }
   });
 
@@ -1410,7 +1413,7 @@ const openAppWindow = () => {
           sendMyOrders(true);
         }, 1000);
       })
-      .catch(handleError);
+      .catch(displayError);
   });
 
   let balances = [];
@@ -1827,7 +1830,7 @@ ipcMain.on(ipcMainListeners.OPEN_REFUND_NOTIFICATION, async function(e, { title,
     const notShowAgain = await openMessageBox(title, message, appWindow, storage);
     storage.setItem('hideRefundNotification', notShowAgain);
   } catch(err) {
-    handleError(err);
+    displayError(err);
   }
 });
 
