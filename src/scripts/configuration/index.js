@@ -140,7 +140,7 @@ $(document).ready(() => {
           .map(s => s.trim())
           .filter(s => s ? true : false);
         const exchangeWallets = splitConf
-          .find(s => /^ExchangeWallets=/.test(s))
+          .find(s => /^ExchangeWallets\s*=/.test(s))
           .split('=')[1]
           .split(',')
           .map(s => s.trim())
