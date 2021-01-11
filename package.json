@@ -75,6 +75,7 @@
     "sweetalert": "2.1.2",
     "uuid": "3.3.2",
     "web-animations-js": "2.3.1",
+    "winston": "3.3.3",
     "zone.js": "0.10.3"
   },
   "devDependencies": {

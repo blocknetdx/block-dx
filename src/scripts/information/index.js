@@ -15,7 +15,7 @@ const { Localize } = require('../../../src-back/localize');
 Localize.initialize(ipcRenderer.sendSync('getUserLocale'), ipcRenderer.sendSync('getLocaleData'));
 
 const handleError = err => {
-  console.error(err);
+  ipcRenderer.send('LOGGER_ERROR', err.message + '\n' + err.stack);
   alert(err);
 };
 window.onerror = handleError;

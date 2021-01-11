@@ -78,7 +78,6 @@ class SelectLitewalletConfigDirectory extends RouterView {
         properties: ['openDirectory']
       });
       const [ directoryPath ] = filePaths;
-      console.log('directoryPath', directoryPath);
       if(!directoryPath) return;
       $('#js-cloudChainsDirInput').val(directoryPath);
       $('#js-continueBtn').attr('disabled', false);

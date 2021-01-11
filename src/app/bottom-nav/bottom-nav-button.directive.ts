@@ -8,8 +8,6 @@ export class BottomNavButtonDirective {
   constructor(
     private templateRef: TemplateRef<any>,
     private viewContainerRef: ViewContainerRef,
-  ) {
-    console.log(this.templateRef);
-  }
+  ) {}
 
 }

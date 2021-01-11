@@ -1,6 +1,7 @@
 const request = require('superagent');
 const _ = require('lodash');
 const { Localize } = require('./localize');
+const { logger } = require('./logger');
 
 // Errors
 const ErrorMsg = (name, code) => {
@@ -420,9 +421,6 @@ class ServiceNodeInterface {
   }
 
   async _makeServiceNodeRequest({ id = '', method, params = [] }) {
-    // console.log(JSON.stringify({
-    //   id, method, params
-    // }));
     // Queue up requests to prevent requests from happening too often
     // The wallet endpoints typically handle 16 or fewer requests at
     // a time.

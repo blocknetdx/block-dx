@@ -1,6 +1,7 @@
 const fs = require('fs-extra-promise');
 const cloneDeep = require('lodash/cloneDeep');
 const omit = require('lodash/omit');
+const { logger } = require('./logger');
 
 class SimpleStorage {
 
@@ -21,7 +22,7 @@ class SimpleStorage {
     try {
       await fs.writeJsonAsync(this._dataFilePath, this._data);
     } catch(err) {
-      console.error(err);
+      logger.error(err.message + '\n' + err.stack);
     }
   }
 

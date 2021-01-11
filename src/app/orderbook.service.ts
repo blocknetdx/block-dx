@@ -7,6 +7,7 @@ import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
 import { Order } from './order';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {logger} from './modules/logger';
 
 math.config({
   number: 'BigNumber',
@@ -136,7 +137,7 @@ export class OrderbookService {
   }
 
   private handleError(error: any): Promise<any> {
-    console.error('An error occurred', error); // for demo purposes only
+    logger.error(error.message + '\n' + error.stack);
     return Promise.reject(error.message || error);
   }
 }

@@ -51,15 +51,12 @@ class RouterView {
   }
 
   onBeforeMount() {
-    console.log('onBeforeMount');
   }
 
   onMount() {
-    console.log('onMount');
   }
 
   onDismount() {
-    console.log('onDismount');
   }
 
 }

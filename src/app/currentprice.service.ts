@@ -6,6 +6,7 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/debounceTime';
 import { AppService } from './app.service';
 import { Currentprice } from './currentprice';
+import {logger} from './modules/logger';
 
 @Injectable()
 export class CurrentpriceService {
@@ -202,7 +203,7 @@ export class CurrentpriceService {
   }
 
   private handleError(error: any): Promise<any> {
-    console.error('An error occurred', error); // for demo purposes only
+    logger.error(error.message + '\n' + error.stack);
     return Promise.reject(error.message || error);
   }
 }
