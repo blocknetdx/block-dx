@@ -1106,7 +1106,7 @@ const openAppWindow = () => {
       });
   });
 
-  const stdInterval = 4000;
+  const stdInterval = 12000;
 
   let orderBook = {
     maker: '',
