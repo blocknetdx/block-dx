@@ -248,7 +248,7 @@ const openOrderDetailsWindow = details => {
   if(process.platform === 'win32') {
     height = isDev ? 680 : 662;
   } else if(process.platform === 'darwin') {
-    height = 645;
+    height = 655;
   } else { // Linux
     height = 645;
   }
