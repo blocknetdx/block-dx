@@ -303,29 +303,39 @@ const putToXBridgeConf = (wallets, blockDir) => {
  * If the target is over the minimum, the value remains unchanged. If the value
  * is missing, the minimum is used.
  * @param blockDir {string}
- * @param minimumValue {number} Default 128
+ * @param rpcWorkQueueMinimum {number} Default 128
+ * @param rpcXBridgeTimeout {number} Default 15
  */
-const putBlockConf = (blockDir, minimumValue=128) => {
+const putBlockConf = (blockDir, rpcWorkQueueMinimum=128, rpcXBridgeTimeout=15) => {
   const blockConf = path.join(blockDir, 'blocknet.conf');
   let data = fs.readFileSync(blockConf, 'utf8');
   let split = data
     .replace(/\r/g, '')
     .split(/\n/);
-  const findIdx = split.findIndex(s => /^rpcworkqueue\s*=/.test(s));
-  if (findIdx < 0) {
-    data = `rpcworkqueue=${minimumValue}\n` + data; // add to front to avoid [test] sections
-    fs.writeFileSync(blockConf, data, 'utf8');
-    return;
+  const rpcQueueIdx = split.findIndex(s => /^rpcworkqueue\s*=/.test(s));
+  if (rpcQueueIdx >= 0) {
+    const rpcWQ = split[rpcQueueIdx].match(/=\s*(.*)$/);
+    if (!rpcWQ || rpcWQ.length <= 1)
+      split[rpcQueueIdx] = `rpcworkqueue=${rpcWorkQueueMinimum}`;
+    else { // if entry already has value
+      const n = parseInt(rpcWQ[1].trim(), 10);
+      if (isNaN(n) || n < rpcWorkQueueMinimum)
+        split[rpcQueueIdx] = `rpcworkqueue=${rpcWorkQueueMinimum}`;
+      else
+        split[rpcQueueIdx] = 'rpcworkqueue=' + n;
+    }
+  } else {
+    // add to front to avoid [test] sections
+    split.splice(0, 0, `rpcworkqueue=${rpcWorkQueueMinimum}`);
   }
-  const rpcWQ = split[findIdx].match(/=\s*(.*)$/);
-  if (!rpcWQ || rpcWQ.length <= 1)
-    split[findIdx] = `rpcworkqueue=${minimumValue}`;
-  else { // if entry already has value
-    const n = parseInt(rpcWQ[1].trim(), 10);
-    if (isNaN(n) || n < minimumValue)
-      split[findIdx] = `rpcworkqueue=${minimumValue}`;
-    else
-      split[findIdx] = 'rpcworkqueue=' + n;
+  const xbridgeTimeoutIdx = split.findIndex(s => /^rpcxbridgetimeout\s*=/.test(s));
+  if (xbridgeTimeoutIdx >= 0) {
+    const rpcWQ = split[xbridgeTimeoutIdx].match(/=\s*(.*)$/);
+    if (!rpcWQ || rpcWQ.length <= 1)
+      split[xbridgeTimeoutIdx] = `rpcxbridgetimeout=${rpcXBridgeTimeout}`;
+  } else {
+    // add to front to avoid [test] sections
+    split.splice(0, 0, `rpcxbridgetimeout=${rpcXBridgeTimeout}`);
   }
   // Serialize
   data = split.join('\n');
