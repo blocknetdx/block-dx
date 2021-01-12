@@ -1,5 +1,6 @@
 const { BrowserWindow: ElectronBrowserWindow, ipcMain } = require('electron');
 const isDev  = require('electron-is-dev');
+const { logger } = require('./logger');
 
 const throwFilePathError = () => {
   throw new Error('You must pass in a filePath parameter when creating a new BrowserWindow. e.g. "/home/users/myUser/myProject/myWindow.html"');
@@ -80,7 +81,7 @@ class BrowserWindow {
     try {
       if(this._window) this._window.close();
     } catch(err) {
-      console.error(err);
+      logger.error(err.message + '\n' + err.stack);
     }
   }
 
@@ -88,7 +89,7 @@ class BrowserWindow {
     try {
       if(this._window) this._window.show();
     } catch(err) {
-      console.error(err);
+      logger.error(err.message + '\n' + err.stack);
     }
   }
 }

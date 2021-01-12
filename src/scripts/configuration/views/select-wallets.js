@@ -9,7 +9,7 @@ const titles = require('../modules/titles');
 const fs = require('fs-extra-promise');
 const path = require('path');
 const { Set } = require('immutable');
-const { putConfs } = require('../util');
+const { handleError, putConfs } = require('../util');
 const request = require('superagent');
 
 class SelectWallets extends RouterView {
@@ -23,7 +23,6 @@ class SelectWallets extends RouterView {
     if(configurationType === configurationTypes.LITEWALLET_RPC_SETUP) {
       const cloudChainsDir = state.get('litewalletConfigDirectory');
       const settingsDir = path.join(cloudChainsDir, 'settings');
-      console.log(settingsDir);
       const configFilePatt = /^config-(.+)\.json$/i;
       const wallets = state.get('wallets');
       const walletsMap = new Map(wallets.map(w => [w.abbr, w]));
@@ -51,7 +50,6 @@ class SelectWallets extends RouterView {
       state.set('availableLitewallets', litewallets);
       state.set('selectedLitewallets', Set(litewallets.map(w => w.abbr)));
       // state.set('selectedLitewallets', Set(litewallets.filter(w => w.abbr !== 'BLOCK').map(w => w.abbr)));
-      console.log(JSON.stringify(litewallets, null, '  '));
     }
   }
 
@@ -333,13 +331,13 @@ class SelectWallets extends RouterView {
                 });
             });
             for (const emsg of walletErrors)
-              console.error(emsg);
+              handleError(new Error(emsg));
             ccUpdated = walletErrors.length < walletsToSave.length; // if no wallets updated then notify user
           } else {
             ccUpdated = false;
           }
         } catch(err) {
-          console.error(err);
+          handleError(err);
           ccUpdated = false;
         }
         if(!ccUpdated)

@@ -40,7 +40,6 @@ $(document).ready(() => {
 
   const $cancelBtn = $('#js-cancelBtn');
   $cancelBtn.on('click', () => {
-    console.log('canceled!');
     ipcRenderer.send('cancelTOS');
   });
 
@@ -48,7 +47,6 @@ $(document).ready(() => {
   $acceptBtn.on('click', () => {
     $cancelBtn.attr('disabled', true);
     $acceptBtn.attr('disabled', true);
-    console.log('accepted!');
     ipcRenderer.send('acceptTOS');
   });
 

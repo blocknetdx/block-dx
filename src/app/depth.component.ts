@@ -385,7 +385,6 @@ export class DepthComponent implements AfterViewInit, OnChanges, OnDestroy {
           // {
           //   'event': 'clickGraphItem',
           //   'method': e => {
-          //     console.log('Clicked!', e);
           //   }
           // }
         ]
@@ -487,18 +486,15 @@ export class DepthComponent implements AfterViewInit, OnChanges, OnDestroy {
           // {
           //   'event': 'clickGraphItem',
           //   'method': e => {
-          //     console.log('Clicked!', e);
           //   }
           // }
         ]
       });
 
       // this.chart.addListener('clickGraphItem', () => {
-      //   console.log('Clicked!');
       //   alert('Clicked!');
       // });
 
-      // console.log(this.chart);
 
     });
 

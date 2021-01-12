@@ -44,7 +44,6 @@ export class BalancesComponent implements OnInit {
     const { zone } = this;
     this.generalSettingsService.generalSettings().subscribe(generalSettings => {
       zone.run(() => {
-        console.log('generalSettings', generalSettings);
         this.showWallet = generalSettings.showWallet;
       });
     });

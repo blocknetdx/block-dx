@@ -21,6 +21,7 @@ const EnterWalletCredentials = require('./views/enter-wallet-credentials');
 const ConfigurationMenu = require('./views/configuration-menu');
 const SelectLitewalletConfigDirectory = require('./views/select-litewallet-config-directory');
 const Wallet = require('./modules/wallet');
+const { handleError } = require('./util');
 
 const { Localize } = require('../../../src-back/localize');
 Localize.initialize(ipcRenderer.sendSync('getUserLocale'), ipcRenderer.sendSync('getLocaleData'));
@@ -44,7 +45,7 @@ ipcRenderer.on('errorMessage', async function(e, title, message) {
       ipcRenderer.send('restart');
     }
   } catch(err) {
-    console.error(err);
+    handleError(err);
     alert(err);
   }
 });
@@ -130,7 +131,7 @@ $(document).ready(() => {
       if(!xbridgeConfPath) xbridgeConfPath = path.join(wallets.find(w => w.abbr === 'BLOCK').directory, 'xbridge.conf');
       xbridgeConf = fs.readFileSync(xbridgeConfPath, 'utf8');
     } catch(err) {
-      console.error(err);
+      handleError(err);
       xbridgeConf = '';
     }
     if(xbridgeConf) {
@@ -162,7 +163,7 @@ $(document).ready(() => {
           selectedWalletIds = selectedWalletIds.add(w.versionId);
         }
       } catch(err) {
-        console.error(err);
+        handleError(err);
       }
 
     }
@@ -192,6 +193,6 @@ $(document).ready(() => {
 
   } catch(err) {
     alert(err.message);
-    console.error(err);
+    handleError(err);
   }
 });

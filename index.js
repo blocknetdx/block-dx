@@ -18,6 +18,7 @@ const { checkAndCopyV3Configs } = require('./src-back/config-updater');
 const { MainSwitch } = require('./src-back/main-switch');
 const { openUnverifiedAssetWindow } = require('./src-back/windows/unverified-asset-window');
 const { openMessageBox } = require('./src-back/windows/message-box');
+const { logger } = require('./src-back/logger');
 
 const versionDirectories = [
   blocknetDir4,
@@ -206,10 +207,10 @@ ipcMain.on('ZOOM_RESET', zoomReset);
 
 // General Error Handler
 const handleError = err => {
-  console.error(err);
+  logger.error(err.message + '\n' + err.stack);
 };
 const displayError = err => {
-  console.error(err);
+  handleError(err);
   if(appWindow) {
     appWindow.send('error', { name: err.name, message: err.message });
   }
@@ -462,7 +463,7 @@ const openConfigurationWindow = (options = {}) => {
   // const errorMessage = error ? 'There was a problem connecting to the Blocknet RPC server. What would you like to do?' : '';
   let errorTitle, errorMessage;
   if(error) {
-    console.log(error);
+    handleError(error);
     switch(error.status) {
       case 401:
         errorTitle = Localize.text('Authorization Problem', 'configurationWindow');
@@ -472,7 +473,7 @@ const openConfigurationWindow = (options = {}) => {
         errorTitle = Localize.text('Connection Error', 'configurationWindow');
         errorMessage = Localize.text('There was a problem connecting to the Blocknet wallet. Make sure the wallet has been configured, restarted, and is open and unlocked.', 'configurationWindow');
     }
-    console.log(errorMessage);
+    logger.info(errorMessage);
   } else {
     errorMessage = '';
   }
@@ -654,7 +655,7 @@ const openSettingsWindow = (options = {}) => {
 
   if(options.error) {
     const { error } = options;
-    console.log(error);
+    handleError(error);
     switch(error.status) {
       case 401:
         errorMessage = Localize.text('There was an authorization problem. Please correct your username and/or password.', 'settingsWindow');
@@ -662,7 +663,7 @@ const openSettingsWindow = (options = {}) => {
       default:
         errorMessage = Localize.text('There was a problem connecting to the Blocknet RPC server. Please check the RPC port.', 'settingsWindow');
     }
-    console.log(errorMessage);
+    logger.info(errorMessage);
   }
 
   ipcMain.on('getPort', e => {
@@ -714,7 +715,7 @@ const openSettingsWindow = (options = {}) => {
       try {
         configurationWindow.close();
       } catch(err) {
-        console.error(err);
+        handleError(err);
       }
     }
   });
@@ -957,7 +958,7 @@ const openTOSWindow = (alreadyAccepted = false) => {
       const text = fs.readFileSync(path.join(__dirname, 'tos.txt'), 'utf8');
       e.returnValue = text;
     } catch(err) {
-      console.error(err);
+      handleError(err);
     }
   });
   ipcMain.on('cancelTOS', () => {
@@ -1061,7 +1062,7 @@ const openAppWindow = () => {
       const bounds = appWindow.getBounds();
       storage.setItem('bounds', bounds);
     } catch(err) {
-      console.error(err);
+      handleError(err);
     }
   });
 
@@ -1437,7 +1438,7 @@ const openAppWindow = () => {
       await sendLocalTokens();
       await sendBalances(true);
     } catch(err) {
-      console.error(err);
+      handleError(err);
     }
   });
 
@@ -1678,7 +1679,7 @@ ipcMain.on('loadXBridgeConf', async function() {
   try {
     await loadXBridgeConf();
   } catch(err) {
-    console.error(err);
+    handleError(err);
   }
 });
 
@@ -1786,7 +1787,7 @@ ipcMain.on('generateNewAddress', async function(e, token) {
     storage.setItem('addresses', newAddresses);
     appWindow.send('updatedAddresses', newAddresses);
   } catch(err) {
-    console.error(err);
+    handleError(err);
   }
 });
 
@@ -1803,7 +1804,7 @@ const generateNewAddresses = async function() {
         if(address) addresses[token] = address;
       } catch(err) {
         // silently handle errors
-        console.error(err);
+        handleError(err);
       }
     }
     storage.setItem('addresses', addresses);
@@ -1845,6 +1846,7 @@ ipcMain.on(ipcMainListeners.OPEN_REFUND_NOTIFICATION, async function(e, { title,
       dataPath = app.getPath('userData');
     }
 
+    logger.initialize(dataPath);
 
     metaPath = path.join(dataPath, 'app-meta.json');
     storage = new SimpleStorage(metaPath);
@@ -1925,7 +1927,7 @@ ipcMain.on(ipcMainListeners.OPEN_REFUND_NOTIFICATION, async function(e, { title,
         const confController = new ConfController({ storage });
         await confController.update();
       } catch(err) {
-        console.error(err);
+        handleError(err);
       }
     }
 

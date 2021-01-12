@@ -9,7 +9,6 @@ export abstract class BaseComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
-    // console.log('destroy:', this.constructor.name);
     this.$destroy.next(true);
     this.$destroy.unsubscribe();
     this.$destroy = null;

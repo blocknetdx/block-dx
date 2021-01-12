@@ -15,6 +15,7 @@ import { Pricing } from './pricing';
 import {ConfigurationOverlayService} from './configuration.overlay.service';
 import {alert, shouldHidePricing} from './util';
 import {Localize} from './localize/localize.component';
+import {logger} from './modules/logger';
 
 const delocalize = (numStr = '') => {
   const decimalSeparator = Localize.decimalSeparator();
@@ -449,7 +450,7 @@ export class OrderformComponent implements OnInit {
     }
 
     const { ipcRenderer } = window.electron;
-    console.log('Submit order', type, this.model);
+    logger.info(`Submit ${type} order\n${JSON.stringify(this.model, null, '  ')}`);
     makerAddress = makerAddress.trim();
     takerAddress = takerAddress.trim();
     amount = amount.trim();

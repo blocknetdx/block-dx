@@ -125,7 +125,6 @@ class ConfigurationMenu extends RouterView {
               directory = await getDefaultLitewalletConfigDirectory();
               state.set('litewalletConfigDirectory', directory);
             }
-            console.log(directory);
             const dirExists = await fs.existsAsync(directory);
             const settingsDirExists = await fs.existsAsync(path.join(directory, 'settings'));
             if(dirExists && settingsDirExists) {

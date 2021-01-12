@@ -14,6 +14,7 @@ const { bignumber } = math;
 
 import { Openorder } from './openorder';
 import * as OrderStates from '../orderstates';
+import {logger} from './modules/logger';
 
 @Injectable()
 export class OpenordersService {
@@ -94,7 +95,6 @@ export class OpenordersService {
           })
           .sort((a, b) => b.created_at.localeCompare(a.created_at));
 
-        // console.log('myOrders', newOrders);
         this.ordersObservable.next(newOrders);
       });
       window.electron.ipcRenderer.send('getMyOrders');
@@ -103,7 +103,7 @@ export class OpenordersService {
   }
 
   private handleError(error: any): Promise<any> {
-    console.error('An error occurred', error); // for demo purposes only
+    logger.error(error.message + '\n' + error.stack);
     return Promise.reject(error.message || error);
   }
 }

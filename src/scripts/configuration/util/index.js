@@ -379,4 +379,5 @@ module.exports.getDefaultLitewalletConfigDirectory = () => {
 
 module.exports.handleError = err => {
   console.error(err);
+  ipcRenderer.send('LOGGER_ERROR', err.message + '\n' + err.stack);
 };

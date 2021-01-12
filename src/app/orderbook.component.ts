@@ -257,7 +257,6 @@ export class OrderbookComponent implements OnInit, OnDestroy {
       const askPrice = pricing.getPrice(asks[asks.length - 1][0], symbols[1]);
       const bidPrice = pricing.getPrice(bids[0][0], symbols[1]);
       this.pricingSpread = String(math.subtract(bignumber(askPrice), bignumber(bidPrice)).toNumber());
-      // console.log('pricingSpread', this.pricingSpread);
     } else {
       this.pricingSpread = '';
     }
