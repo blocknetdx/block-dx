@@ -1107,7 +1107,7 @@ const openAppWindow = () => {
       });
   });
 
-  const stdInterval = 12000;
+  const stdInterval = 5000;
 
   let orderBook = {
     maker: '',
@@ -1447,7 +1447,7 @@ const openAppWindow = () => {
   };
   ipcMain.on('getBalances', () => sendBalances(true));
   const sendBalancesInterval = new RecursiveInterval();
-  sendBalancesInterval.set(sendBalances, stdInterval);
+  sendBalancesInterval.set(sendBalances, 12000);
 
   ipcMain.on('refreshBalances', async function() {
     try {
