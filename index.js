@@ -19,6 +19,7 @@ const { MainSwitch } = require('./src-back/main-switch');
 const { openUnverifiedAssetWindow } = require('./src-back/windows/unverified-asset-window');
 const { openMessageBox } = require('./src-back/windows/message-box');
 const { logger } = require('./src-back/logger');
+const { RecursiveInterval } = require('./src-back/recursive-interval');
 
 const versionDirectories = [
   blocknetDir4,
@@ -1122,48 +1123,54 @@ const openAppWindow = () => {
 
   const calculateBackupTotal = (price, size) => math.round(math.multiply(math.bignumber(price), math.bignumber(size)), 6).toNumber().toFixed(6);
 
-  const sendOrderBook = force => {
-    if (isTokenPairValid(keyPair))
-      sn.dxGetOrderBook3(keyPair[0], keyPair[1], 250)
-        .then(async function(res) {
-          if(force === true || JSON.stringify(res) !== JSON.stringify(orderBook)) {
-            orderBook = res;
-            const allOrders = await getOrders();
-            const orderTotals = new Map(allOrders.map(({ id, makerSize, takerSize }) => [id, [makerSize, takerSize]]));
-            const orderBookWithTotals = Object.assign({}, res, {
-              asks: res.asks.map(a => {
-                const order = orderTotals.get(a.orderId);
-                const total = !order ? calculateBackupTotal(a.price, a.size) : a.size === order[0] ? order[1] : order[0];
-                return Object.assign({}, a, {total});
-              }),
-              bids: res.bids.map(b => {
-                const order = orderTotals.get(b.orderId);
-                const total = !order ? calculateBackupTotal(b.price, b.size) : b.size === order[0] ? order[1] : order[0];
-                return Object.assign({}, b, {total});
-              })
-            });
-            appWindow.send('orderBook', orderBookWithTotals);
-          }
-        })
-        .catch(handleError);
+  const sendOrderBook = async function(force) {
+    if (isTokenPairValid(keyPair)) {
+      try {
+        const res = await sn.dxGetOrderBook3(keyPair[0], keyPair[1], 250);
+        if(force === true || JSON.stringify(res) !== JSON.stringify(orderBook)) {
+          orderBook = res;
+          const allOrders = await getOrders();
+          const orderTotals = new Map(allOrders.map(({ id, makerSize, takerSize }) => [id, [makerSize, takerSize]]));
+          const orderBookWithTotals = Object.assign({}, res, {
+            asks: res.asks.map(a => {
+              const order = orderTotals.get(a.orderId);
+              const total = !order ? calculateBackupTotal(a.price, a.size) : a.size === order[0] ? order[1] : order[0];
+              return Object.assign({}, a, {total});
+            }),
+            bids: res.bids.map(b => {
+              const order = orderTotals.get(b.orderId);
+              const total = !order ? calculateBackupTotal(b.price, b.size) : b.size === order[0] ? order[1] : order[0];
+              return Object.assign({}, b, {total});
+            })
+          });
+          appWindow.send('orderBook', orderBookWithTotals);
+        }
+      } catch(err) {
+        handleError(err);
+      }
+    }
   };
   ipcMain.on('getOrderBook', () => sendOrderBook(true));
-  setInterval(sendOrderBook, stdInterval);
+  const sendOrderBookInterval = new RecursiveInterval();
+  sendOrderBookInterval.set(sendOrderBook, stdInterval);
 
   tradeHistory = [];
-  const sendTradeHistory = force => {
-    if (isTokenPairValid(keyPair))
-      sn.dxGetOrderFills(keyPair[0], keyPair[1])
-        .then(res => {
-          if(force === true || JSON.stringify(res) !== JSON.stringify(tradeHistory)) {
-            tradeHistory = res;
-            appWindow.send('tradeHistory', tradeHistory, keyPair);
-          }
-        })
-        .catch(handleError);
+  const sendTradeHistory = async function(force) {
+    if (isTokenPairValid(keyPair)) {
+      try {
+        const res = await sn.dxGetOrderFills(keyPair[0], keyPair[1])
+        if(force === true || JSON.stringify(res) !== JSON.stringify(tradeHistory)) {
+          tradeHistory = res;
+          appWindow.send('tradeHistory', tradeHistory, keyPair);
+        }
+      } catch(err) {
+        handleError(err);
+      }
+    }
   };
   ipcMain.on('getTradeHistory', () => sendTradeHistory(true));
-  setInterval(sendTradeHistory, stdInterval);
+  const sendTradeHistoryInterval = new RecursiveInterval();
+  sendTradeHistoryInterval.set(sendTradeHistory, stdInterval);
 
   const sendLocalTokens = async function() {
     const localTokens = await sn.dxGetLocalTokens();
@@ -1190,24 +1197,35 @@ const openAppWindow = () => {
   ipcMain.on('getNetworkTokens', sendNetworkTokens);
 
   // Token refresh interval
-  setInterval(() => {
-    sendNetworkTokens();
-    sendLocalTokens();
+  const sendTokensInterval = new RecursiveInterval();
+  sendTokensInterval.set(async function() {
+    try {
+      await sendNetworkTokens();
+    } catch(err) {
+      handleError(err);
+    }
+    try {
+      await sendLocalTokens();
+    } catch(err) {
+      handleError(err);
+    }
   }, 15000);
 
   myOrders = [];
-  const sendMyOrders = force => {
-    sn.dxGetMyOrders()
-      .then(res => {
-        if(force === true || JSON.stringify(res) !== JSON.stringify(myOrders)) {
-          myOrders = res;
-          appWindow.send('myOrders', myOrders, keyPair);
-        }
-      })
-      .catch(handleError);
+  const sendMyOrders = async function(force) {
+    try {
+      const res = await sn.dxGetMyOrders();
+      if(force === true || JSON.stringify(res) !== JSON.stringify(myOrders)) {
+        myOrders = res;
+        appWindow.send('myOrders', myOrders, keyPair);
+      }
+    } catch(err) {
+      handleError(err);
+    }
   };
   ipcMain.on('getMyOrders', () => sendMyOrders(true));
-  setInterval(sendMyOrders, stdInterval);
+  const sendMyOrdersInterval = new RecursiveInterval();
+  sendMyOrdersInterval.set(sendMyOrders, stdInterval);
 
   const calculatePricingData = orderHistory => {
     if (!orderHistory || orderHistory.length === 0)
@@ -1234,7 +1252,7 @@ const openAppWindow = () => {
   const orderKey = (pair) => pair[0] + pair[1];
   const orderHistoryDict = new Map();
 
-  const sendOrderHistory = (which = '', force = false) => {
+  const sendOrderHistory = async function(which = '', force = false) {
     if (!isTokenPairValid(keyPair)) // need valid token pair
       return;
     const key = orderKey(keyPair);
@@ -1262,39 +1280,36 @@ const openAppWindow = () => {
     const end = moment().utc();
     const start = end.clone().subtract(1, 'day');
 
-    {
-      sn.dxGetOrderHistory(keyPair[0], keyPair[1], start.unix(), end.unix(), 60)
-        .then(res => {
-          Object.assign(orderHistoryDict.get(key), {
-            orderHistory: res,
-            orderHistoryByMinute: res,
-            currentPrice: calculatePricingData(res)
-          });
-          if (key === orderKey(keyPair)) {
-            appWindow.send('orderHistory', res);
-            appWindow.send('orderHistoryByMinute', res);
-            appWindow.send('currentPrice', orderHistoryDict.get(key)['currentPrice']);
-          }
-        })
-        .catch(handleError);
+    try {
+      const res = await sn.dxGetOrderHistory(keyPair[0], keyPair[1], start.unix(), end.unix(), 60);
+      Object.assign(orderHistoryDict.get(key), {
+        orderHistory: res,
+        orderHistoryByMinute: res,
+        currentPrice: calculatePricingData(res)
+      });
+      if (key === orderKey(keyPair)) {
+        appWindow.send('orderHistory', res);
+        appWindow.send('orderHistoryByMinute', res);
+        appWindow.send('currentPrice', orderHistoryDict.get(key)['currentPrice']);
+      }
+    } catch(err) {
+      handleError(err);
     }
-    {
-      sn.dxGetOrderHistory(keyPair[0], keyPair[1], start.unix(), end.unix(), 900)
-        .then(res => {
-          orderHistoryDict.get(key)['orderHistoryBy15Minutes'] = res;
-          if (key === orderKey(keyPair))
-            appWindow.send('orderHistoryBy15Minutes', res);
-        })
-        .catch(handleError);
+    try {
+      const res = await sn.dxGetOrderHistory(keyPair[0], keyPair[1], start.unix(), end.unix(), 900);
+      orderHistoryDict.get(key)['orderHistoryBy15Minutes'] = res;
+      if (key === orderKey(keyPair))
+        appWindow.send('orderHistoryBy15Minutes', res);
+    } catch(err) {
+      handleError(err);
     }
-    {
-      sn.dxGetOrderHistory(keyPair[0], keyPair[1], start.unix(), end.unix(), 3600)
-        .then(res => {
-          orderHistoryDict.get(key)['orderHistoryBy1Hour'] = res;
-          if (key === orderKey(keyPair))
-            appWindow.send('orderHistoryBy1Hour', res);
-        })
-        .catch(handleError);
+    try {
+      const res = await sn.dxGetOrderHistory(keyPair[0], keyPair[1], start.unix(), end.unix(), 3600);
+      orderHistoryDict.get(key)['orderHistoryBy1Hour'] = res;
+      if (key === orderKey(keyPair))
+        appWindow.send('orderHistoryBy1Hour', res);
+    } catch(err) {
+      handleError(err);
     }
   };
 
@@ -1304,7 +1319,8 @@ const openAppWindow = () => {
   ipcMain.on('getOrderHistoryBy1Hour', () => sendOrderHistory('orderHistoryBy1Hour'));
   ipcMain.on('getCurrentPrice', () => sendOrderHistory('currentPrice'));
 
-  setInterval(sendOrderHistory, 30000);
+  const sendOrderHistoryInterval = new RecursiveInterval();
+  sendOrderHistoryInterval.set(sendOrderHistory, 30000);
 
   // TODO This is too aggressive to be called as frequently as it is...
   const sendCurrencies = async function() {
@@ -1418,18 +1434,20 @@ const openAppWindow = () => {
   });
 
   let balances = [];
-  const sendBalances = force  => {
-    sn.dxGetTokenBalances()
-      .then(data => {
-        if(force === true || JSON.stringify(data) !== JSON.stringify(balances)) {
-          balances = data;
-          appWindow.send('balances', balances);
-        }
-      })
-      .catch(handleError);
+  const sendBalances = async function(force) {
+    try {
+      const data = await sn.dxGetTokenBalances();
+      if(force === true || JSON.stringify(data) !== JSON.stringify(balances)) {
+        balances = data;
+        appWindow.send('balances', balances);
+      }
+    } catch(err) {
+      handleError(err);
+    }
   };
   ipcMain.on('getBalances', () => sendBalances(true));
-  setInterval(sendBalances, stdInterval);
+  const sendBalancesInterval = new RecursiveInterval();
+  sendBalancesInterval.set(sendBalances, stdInterval);
 
   ipcMain.on('refreshBalances', async function() {
     try {
@@ -1462,12 +1480,13 @@ const openAppWindow = () => {
   let pricingInterval;
 
   clearPricingInterval = () => {
-    clearInterval(pricingInterval);
+    pricingInterval.clear();
   };
   setPricingInterval = () => {
-    pricingInterval = setInterval(() => {
+    pricingInterval = new RecursiveInterval();
+    pricingInterval.set(async function() {
       if (isTokenPairValid(keyPair))
-        sendPricingMultipliers();
+        await sendPricingMultipliers();
     }, pricingFrequency);
   };
 
