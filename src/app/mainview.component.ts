@@ -30,13 +30,18 @@ export class MainviewComponent implements OnInit {
   public showBalancesTooltip = false;
   public showOrderFormTooltip = false;
   public showOrderBookTooltip = false;
-  public showActiveInactiveOrderTooltip1 = false;
   public showActiveInactiveOrderTooltip2 = false;
   public showActiveInactiveOrderTooltip = false;
 
   shouldHidePricing = shouldHidePricing;
 
   public Localize = Localize;
+
+  tooltipDelay = 200;
+  showBalancesTooltipTimeout = null;
+  showOrderFormTooltipTimeout = null;
+  showOrderBookTooltipTimeout = null;
+  showActiveInactiveOrderTooltipTimeout = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -77,29 +82,32 @@ export class MainviewComponent implements OnInit {
     this.orderbookService.setPriceDecimal(num);
   }
 
-  balancesTooltip(show) {
-    this.showBalancesTooltip = show;
+  showHideTooltip(tooltip: string, show: boolean) {
+    const timeoutProp = `${tooltip}Timeout`;
+    if(show) {
+      this[timeoutProp] = setTimeout(() => {
+        this[tooltip] = show;
+      }, this.tooltipDelay);
+    } else {
+      clearTimeout(this[timeoutProp]);
+      this[tooltip] = show;
+    }
   }
-  orderFormTooltip(show) {
-    this.showOrderFormTooltip = show;
-  }
-  orderBookTooltip(show) {
-    this.showOrderBookTooltip = show;
-  }
+
   activeInactiveOrderTooltip1(show) {
-    this.showActiveInactiveOrderTooltip1 = show;
-    this.activeInactiveOrderTooltip();
+    if(show) {
+      this.showActiveInactiveOrderTooltipTimeout = setTimeout(() => {
+        this.showActiveInactiveOrderTooltip2 = true;
+        this.showActiveInactiveOrderTooltip = true;
+      }, this.tooltipDelay);
+    } else if(!this.showActiveInactiveOrderTooltip2) {
+      clearTimeout(this.showActiveInactiveOrderTooltipTimeout);
+      this.showActiveInactiveOrderTooltip = false;
+    }
   }
   activeInactiveOrderTooltip2(show) {
     this.showActiveInactiveOrderTooltip2 = show;
-    this.activeInactiveOrderTooltip();
-  }
-  activeInactiveOrderTooltip() {
-    if (this.showActiveInactiveOrderTooltip1 || this.showActiveInactiveOrderTooltip2) {
-      this.showActiveInactiveOrderTooltip = true;
-    } else {
-      this.showActiveInactiveOrderTooltip = false;
-    }
+    this.showActiveInactiveOrderTooltip = show;
   }
 
   updateView(view) {

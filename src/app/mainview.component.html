@@ -182,7 +182,7 @@
           <bn-card class="trade_table__cell balances col-lg-12" [class.alternate-pricing]="pricingEnabled && !shouldHidePricing(symbols)" [allowFullscreen]="false" [showRefreshBalances]="true">
             <bn-card-title>
               <span><Localize context="mainview" key="Balances"></Localize>
-                <i class="material-icons tooltip-icon" (mouseenter)="balancesTooltip(true)" (mouseleave)="balancesTooltip(false)">help</i>
+                <i class="material-icons tooltip-icon" (mouseenter)="showHideTooltip('showBalancesTooltip', true)" (mouseleave)="showHideTooltip('showBalancesTooltip', false)">help</i>
               </span>
             </bn-card-title>
             <bn-card-body>
@@ -193,7 +193,7 @@
           <bn-card class="trade_table__cell orderform col-lg-12" [class.alternate-pricing]="pricingEnabled && !shouldHidePricing(symbols)" [allowFullscreen]="false">
             <bn-card-title>
               <span><Localize context="mainview" key="Order Form"></Localize>
-                <i class="material-icons tooltip-icon" (mouseenter)="orderFormTooltip(true)" (mouseleave)="orderFormTooltip(false)">help</i>
+                <i class="material-icons tooltip-icon" (mouseenter)="showHideTooltip('showOrderFormTooltip', true)" (mouseleave)="showHideTooltip('showOrderFormTooltip', false)">help</i>
               </span>
             </bn-card-title>
             <bn-card-body>
@@ -250,7 +250,7 @@
           </bn-card-toolbar>
           <bn-card-title>
             <span><Localize context="mainview" key="Order Book"></Localize>
-              <i class="material-icons tooltip-icon" (mouseenter)="orderBookTooltip(true)" (mouseleave)="orderBookTooltip(false)">help</i>
+              <i class="material-icons tooltip-icon" (mouseenter)="showHideTooltip('showOrderBookTooltip', true)" (mouseleave)="showHideTooltip('showOrderBookTooltip', false)">help</i>
             </span>
           </bn-card-title>
           <bn-card-body>
