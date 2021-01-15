@@ -2,9 +2,12 @@ build_linux:
   stage: build
   image: electronuserland/builder:latest
   script:
-    - "echo GIT_BRANCH=\"$CI_COMMIT_REF_NAME\" > electron-builder.env"
-    - "npm install --no-audit"
-    - "npm run build-native-linux"
+    - |
+      echo GIT_BRANCH="$CI_COMMIT_REF_NAME" > electron-builder.env
+      sha=$CI_COMMIT_SHORT_SHA commithash="${sha:0:5}"
+      sed -i -re "s#[\"]version[\"]: [\"](.*)[\"]#\"version\": \"\1-$commithash\"#" package.json
+      npm install --no-audit
+      npm run build-native-linux
   artifacts:
     name: "BLOCKDX-$CI_COMMIT_REF_NAME-linux"
     paths:
@@ -16,9 +19,12 @@ build_win:
   stage: build
   image: electronuserland/builder:wine
   script:
-    - "echo GIT_BRANCH=\"$CI_COMMIT_REF_NAME\" > electron-builder.env"
-    - "npm install --no-audit"
-    - "npm run build-native-win"
+    - |
+      echo GIT_BRANCH="$CI_COMMIT_REF_NAME" > electron-builder.env
+      sha=$CI_COMMIT_SHORT_SHA commithash="${sha:0:5}"
+      sed -i -re "s#[\"]version[\"]: [\"](.*)[\"]#\"version\": \"\1-$commithash\"#" package.json
+      npm install --no-audit
+      npm run build-native-win
   artifacts:
     name: "BLOCKDX-$CI_COMMIT_REF_NAME-win"
     paths:
@@ -29,9 +35,12 @@ build_mac:
   stage: build
   image: blocknetdx/devbuilds:blockdx-gitlab-mac
   script:
-    - "echo GIT_BRANCH=\"$CI_COMMIT_REF_NAME\" > electron-builder.env"
-    - "npm install --no-audit"
-    - "npm run build-native-mac"
+    - |
+      echo GIT_BRANCH="$CI_COMMIT_REF_NAME" > electron-builder.env
+      sha=$CI_COMMIT_SHORT_SHA commithash="${sha:0:5}"
+      sed -i -re "s#[\"]version[\"]: [\"](.*)[\"]#\"version\": \"\1-$commithash\"#" package.json
+      npm install --no-audit
+      npm run build-native-mac
   artifacts:
     name: "BLOCKDX-$CI_COMMIT_REF_NAME-mac"
     paths:
