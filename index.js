@@ -13,7 +13,7 @@ const _ = require('lodash');
 const math = require('mathjs');
 const MarkdownIt = require('markdown-it');
 const { Localize } = require('./src-back/localize');
-const { blocknetDir4, blocknetDir3, BLOCKNET_CONF_NAME4, BLOCKNET_CONF_NAME3, ipcMainListeners } = require('./src-back/constants');
+const { blocknetDir4, blocknetDir3, BLOCKNET_CONF_NAME4, BLOCKNET_CONF_NAME3, ipcMainListeners, pricingSources } = require('./src-back/constants');
 const { checkAndCopyV3Configs } = require('./src-back/config-updater');
 const { MainSwitch } = require('./src-back/main-switch');
 const { openUnverifiedAssetWindow } = require('./src-back/windows/unverified-asset-window');
@@ -1887,7 +1887,7 @@ ipcMain.on(ipcMainListeners.OPEN_REFUND_NOTIFICATION, async function(e, { title,
 
     pricingSource = storage.getItem('pricingSource');
     if(!pricingSource) {
-      pricingSource = 'CRYPTO_COMPARE';
+      pricingSource = pricingSources.CLOUD_CHAINS;
       storage.setItem('pricingSource', pricingSource);
     }
     apiKeys = storage.getItem('apiKeys');
