@@ -9,6 +9,7 @@ const renderOrderBookSettings = require('./modules/order-book');
 const renderOrderFormSettings = require('./modules/order-form');
 const renderLocalization = require('./modules/localization');
 const renderLayout = require('./modules/layout');
+const constants = require('../../../src-back/constants');
 
 const handleError = err => {
   ipcRenderer.send('LOGGER_ERROR', err.message + '\n' + err.stack);
@@ -67,8 +68,9 @@ state.set('pricingUnits', [
   'BTC'
 ]);
 state.set('pricingSources', [
-  {id: 'CRYPTO_COMPARE', text: 'CryptoCompare', apiKeyNeeded: false},
-  {id: 'COIN_MARKET_CAP', text: 'CoinMarketCap', apiKeyNeeded: true}
+  {id: constants.pricingSources.CLOUD_CHAINS, text: 'CloudChains', apiKeyNeeded: false},
+  {id: constants.pricingSources.CRYPTO_COMPARE, text: 'CryptoCompare', apiKeyNeeded: false},
+  {id: constants.pricingSources.COIN_MARKET_CAP, text: 'CoinMarketCap', apiKeyNeeded: true}
 ]);
 
 const saveSettings = () => {
