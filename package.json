@@ -37,7 +37,9 @@
     "pack-native": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --production && cd .. && electron-builder",
     "publish-native": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --production && cd .. && electron-builder --publish always",
     "generate-docs": "jsdoc src-back/service-node-interface.js -d docs",
-    "compile-sweetalert-css": "node ./sweetalert-scss/compile.js"
+    "compile-sweetalert-css": "node ./sweetalert-scss/compile.js",
+    "update-electron-builder-image": "docker rmi electronuserland/builder:latest && docker pull electronuserland/builder:latest",
+    "update-electron-builder-wine-image": "docker rmi electronuserland/builder:wine && docker pull electronuserland/builder:wine"
   },
   "private": true,
   "dependencies": {
