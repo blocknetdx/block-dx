@@ -134,7 +134,7 @@ export class NavBarComponent implements OnInit {
         openExternal('https://docs.blocknet.co/');
         break;
       case 'community':
-        openExternal('https://discord.gg/7RHfBdY');
+        openExternal('https://discord.gg/2e6s7H8');
         break;
       case 'discord':
         openExternal('https://discord.gg/2e6s7H8');
