@@ -148,7 +148,13 @@ const Order = data => ({
   takerAddress: data.taker_address || '',
   updatedAt: data.updated_at || '',
   createdAt: data.created_at || '',
-  status: data.status || ''
+  status: data.status || '',
+  orderType: data.order_type || '',
+  partialMinimum: data.partial_minimum || '',
+  partialOrigMakerSize: data.partial_orig_maker_size || '',
+  partialOrigTakerSize: data.partial_orig_taker_size || '',
+  partialRepost: data.partial_repost || false,
+  partialParentId: data.partial_parent_id || '',
 });
 
 /**

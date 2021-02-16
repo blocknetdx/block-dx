@@ -200,7 +200,6 @@ export class OrderformComponent implements OnInit {
     this.amountPercent = value;
     const newAmount = math.multiply(bignumber(value / 100), bignumber(Number(balance.amount)));
     const preppedAmount = this.fixAmount(newAmount.toString());
-    console.log('preppedAmount', preppedAmount);
     this.model.amount = this.formatNumber(preppedAmount, 'BTC');
     const { price = '' } = this.model;
     if(price) {
@@ -491,7 +490,6 @@ export class OrderformComponent implements OnInit {
       orderType: this.model.orderType || this.partialOrderType,
       repost: isBoolean(this.model.respost) ? this.model.repost : true,
     };
-    console.log({...this.model});
     this.formatNumberSymbol0 = this.formatNumber('0', this.symbols[0]);
     this.formatNumberSymbol1 = this.formatNumber('0', this.symbols[1]);
     this.amountPercent = 0;

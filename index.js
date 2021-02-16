@@ -1153,17 +1153,25 @@ const openAppWindow = () => {
         if(force === true || JSON.stringify(res) !== JSON.stringify(orderBook)) {
           orderBook = res;
           const allOrders = await getOrders();
-          const orderTotals = new Map(allOrders.map(({ id, makerSize, takerSize }) => [id, [makerSize, takerSize]]));
+          const orderDetails = new Map(allOrders.map(({ id, makerSize, takerSize, partialMinimum, orderType }) => [id, [makerSize, takerSize, partialMinimum, orderType]]));
           const orderBookWithTotals = Object.assign({}, res, {
             asks: res.asks.map(a => {
-              const order = orderTotals.get(a.orderId);
+              const order = orderDetails.get(a.orderId);
               const total = !order ? calculateBackupTotal(a.price, a.size) : a.size === order[0] ? order[1] : order[0];
-              return Object.assign({}, a, {total});
+              return Object.assign({}, a, {
+                total,
+                partialMinimum: order ? order[2] : '',
+                orderType: order ? order[3] : '',
+              });
             }),
             bids: res.bids.map(b => {
-              const order = orderTotals.get(b.orderId);
+              const order = orderDetails.get(b.orderId);
               const total = !order ? calculateBackupTotal(b.price, b.size) : b.size === order[0] ? order[1] : order[0];
-              return Object.assign({}, b, {total});
+              return Object.assign({}, b, {
+                total,
+                partialMinimum: order ? order[2] : '',
+                orderType: order ? order[3] : '',
+              });
             })
           });
           appWindow.send('orderBook', orderBookWithTotals);

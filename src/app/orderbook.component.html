@@ -24,6 +24,17 @@
         </ng-template>
       </app-table-column>
 
+      <app-table-column [sortable]="false" [classList]="'col'">
+        <ng-template columnHeader><Localize context="orderbook" key="Min Size"></Localize></ng-template>
+        <ng-template let-row="row" columnCell>
+          <span class="bn-number no-highlight"
+                [class.orderbook-own-order]="ownOrders.has(row[2])"
+                [innerHtml]="getMinSize(row) | blockCurrency:symbols[0]:'6' | localizeDecimalSeparator"
+                [title]="ownOrders.has(row[2]) ? Localize.text('Your order', 'orderbook') : ''">
+          </span>
+        </ng-template>
+      </app-table-column>
+
       <app-table-column [sortable]="false" [classList]="'col'" *ngIf="pricingEnabled && !shouldHidePricing(symbols)">
         <ng-template columnHeader><Localize context="orderbook" key="Price"></Localize> ({{pricing ? pricing.in : ''}})</ng-template>
         <ng-template let-row="row" columnCell>
@@ -111,6 +122,17 @@
              [class.orderbook-own-order]="ownOrders.has(row[2])"
              [innerHtml]="row[1] | blockCurrency:symbols[0]:'6' | localizeDecimalSeparator"
              [title]="ownOrders.has(row[2]) ? Localize.text('Your order', 'orderbook') : ''">
+            </span>
+          </ng-template>
+        </app-table-column>
+
+        <app-table-column [sortable]="false" [classList]="'col'">
+          <!--<ng-template columnHeader>Size ({{symbols[0]}})</ng-template>-->
+          <ng-template let-row="row" columnCell>
+            <span class="bn-number no-highlight"
+                  [class.orderbook-own-order]="ownOrders.has(row[2])"
+                  [innerHtml]="getMinSize(row) | blockCurrency:symbols[0]:'6' | localizeDecimalSeparator"
+                  [title]="ownOrders.has(row[2]) ? Localize.text('Your order', 'orderbook') : ''">
             </span>
           </ng-template>
         </app-table-column>
