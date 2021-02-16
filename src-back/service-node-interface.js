@@ -405,6 +405,10 @@ class ServiceNodeInterface {
       if (_.isUndefined(body))
         throw new Error();
     } catch(err) {
+
+      // ToDo this is for debugging only remove before merging in
+      console.log('status', err.status);
+
       throw new Error(`Unable to connect to the Blocknet wallet.\n\nMake sure your Blocknet wallet is open, synced, and unlocked.`);
     }
     if(body.result.error) {
@@ -433,6 +437,11 @@ class ServiceNodeInterface {
       presolve = resolve;
       preject = reject;
     });
+
+    // ToDo this is for debugging only remove before merging in
+    if(method === 'dxMakeOrder' || method === 'dxMakePartialOrder')
+      console.log(JSON.stringify({method, params }, null, '  '));
+
     this._requests_in_progress.set(key, { id, method, params, p, presolve, preject });
     this._requests_in_progress_queue.push(key);
     return p;
@@ -458,10 +467,9 @@ class ServiceNodeInterface {
    * @param {string} taker
    * @param {string} takerSize
    * @param {string} takerAddress
-   * @param {string} type
    * @returns {Promise<OrderObject>}
    */
-  async dxMakeOrder(maker, makerSize, makerAddress, taker, takerSize, takerAddress, type) {
+  async dxMakeOrder(maker, makerSize, makerAddress, taker, takerSize, takerAddress) {
     const { error, result } = await this._makeServiceNodeRequest({
       method: 'dxMakeOrder',
       params: [
@@ -471,7 +479,37 @@ class ServiceNodeInterface {
         taker,
         takerSize,
         takerAddress,
-        type
+        'exact'
+      ]
+    });
+    if(error) throw new Error(error);
+    return Order(result);
+  }
+
+  /**
+   * Makes a new partial order.
+   * @param {string} maker
+   * @param {string} makerSize
+   * @param {string} makerAddress
+   * @param {string} taker
+   * @param {string} takerSize
+   * @param {string} takerAddress
+   * @param {string} minimumSize
+   * @param {boolean} repost
+   * @returns {Promise<OrderObject>}
+   */
+  async dxMakePartialOrder(maker, makerSize, makerAddress, taker, takerSize, takerAddress, minimumSize, repost) {
+    const { error, result } = await this._makeServiceNodeRequest({
+      method: 'dxMakePartialOrder',
+      params: [
+        maker,
+        makerSize,
+        makerAddress,
+        taker,
+        takerSize,
+        takerAddress,
+        minimumSize,
+        repost
       ]
     });
     if(error) throw new Error(error);

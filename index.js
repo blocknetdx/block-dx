@@ -1032,6 +1032,8 @@ const openAppWindow = () => {
     // }
   });
 
+  appWindow.toggleDevTools();
+
   const initialBounds = storage.getItem('bounds');
   if(initialBounds) {
     try {
@@ -1074,20 +1076,41 @@ const openAppWindow = () => {
   };
   ipcMain.on('getKeyPair', sendKeyPair);
 
+  const makeOrder = async function(orderFunc) {
+    try {
+      const res = await orderFunc();
+      if(res.id) { // success
+        appWindow.send('orderDone', 'success');
+        sendOrderBook(true);
+      } else {
+        appWindow.send('orderDone', 'failed');
+      }
+    } catch(err) {
+      appWindow.send('orderDone', 'server error');
+      displayError(err);
+    }
+  };
   ipcMain.on('makeOrder', (e, data) => {
-    sn.dxMakeOrder(data.maker, data.makerSize, data.makerAddress, data.taker, data.takerSize, data.takerAddress, data.type)
-      .then(res => {
-        if(res.id) { // success
-          appWindow.send('orderDone', 'success');
-          sendOrderBook(true);
-        } else {
-          appWindow.send('orderDone', 'failed');
-        }
-      })
-      .catch(err => {
-        appWindow.send('orderDone', 'server error');
-        displayError(err);
-      });
+    makeOrder(() => sn.dxMakeOrder(
+      data.maker,
+      data.makerSize,
+      data.makerAddress,
+      data.taker,
+      data.takerSize,
+      data.takerAddress,
+    ));
+  });
+  ipcMain.on('makePartialOrder', (e, data) => {
+    makeOrder(() => sn.dxMakePartialOrder(
+      data.maker,
+      data.makerSize,
+      data.makerAddress,
+      data.taker,
+      data.takerSize,
+      data.takerAddress,
+      data.minimumSize,
+      data.repost,
+    ));
   });
 
   ipcMain.on('takeOrder', (e, data) => {
@@ -1435,17 +1458,21 @@ const openAppWindow = () => {
 
   let balances = [];
   const sendBalances = async function(force) {
+    let data;
     try {
-      const data = await sn.dxGetTokenBalances();
+      data = await sn.dxGetTokenBalances();
       if(force === true || JSON.stringify(data) !== JSON.stringify(balances)) {
         balances = data;
         appWindow.send('balances', balances);
       }
     } catch(err) {
+      data = [];
       handleError(err);
     }
+    return data;
   };
   ipcMain.on('getBalances', () => sendBalances(true));
+  ipcMain.handle('getBalancesPromise', () => sendBalances(true));
   const sendBalancesInterval = new RecursiveInterval();
   sendBalancesInterval.set(sendBalances, 12000);
 
