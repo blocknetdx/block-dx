@@ -300,31 +300,38 @@ const formatDate = isoStr => moment(isoStr).format('HH:mm:ss MMM D, YYYY');
 
 ipcMain.on('openOrderDetailsWindow', async function(e, orderId) {
   const order = await sn.dxGetOrder(orderId);
-  openOrderDetailsWindow([
-    ['ID', order.id],
-    ['Maker', order.maker],
-    ['Maker Size', order.makerSize],
-    ['Taker', order.taker],
-    ['Taker Size', order.takerSize],
-    ['Updated At', formatDate(order.updatedAt)],
-    ['Created At', formatDate(order.createdAt)],
-    ['Status', order.status]
-  ]);
+  const details = [
+    [Localize.text('ID', 'orderDetailsWindow'), order.id],
+    [Localize.text('Maker', 'orderDetailsWindow'), order.maker],
+    [Localize.text('Maker Size', 'orderDetailsWindow'), order.makerSize],
+    [Localize.text('Taker', 'orderDetailsWindow'), order.taker],
+    [Localize.text('Taker Size', 'orderDetailsWindow'), order.takerSize],
+    [Localize.text('Updated At', 'orderDetailsWindow'), formatDate(order.updatedAt)],
+    [Localize.text('Created At', 'orderDetailsWindow'), formatDate(order.createdAt)],
+    [Localize.text('Status', 'orderDetailsWindow'), order.status],
+  ];
+  if(order.orderType === 'partial') {
+    details.splice(3, 0, [Localize.text('Maker Minimum Size', 'orderDetailsWindow'), order.partialMinimum]);
+  }
+  openOrderDetailsWindow(details);
 });
 ipcMain.on('openMyOrderDetailsWindow', async function(e, orderId) {
   const order = myOrders.find(o => o.id === orderId) || {};
   const details = [
-    ['ID', order.id],
-    ['Maker', order.maker],
-    ['Maker Size', order.makerSize],
-    ['Maker Address', order.makerAddress],
-    ['Taker', order.taker],
-    ['Taker Size', order.takerSize],
-    ['Taker Address', order.takerAddress],
-    ['Updated At', formatDate(order.updatedAt)],
-    ['Created At', formatDate(order.createdAt)],
-    ['Status', order.status]
+    [Localize.text('ID', 'orderDetailsWindow'), order.id],
+    [Localize.text('Maker', 'orderDetailsWindow'), order.maker],
+    [Localize.text('Maker Size', 'orderDetailsWindow'), order.makerSize],
+    [Localize.text('Maker Address', 'orderDetailsWindow'), order.makerAddress],
+    [Localize.text('Taker', 'orderDetailsWindow'), order.taker],
+    [Localize.text('Taker Size', 'orderDetailsWindow'), order.takerSize],
+    [Localize.text('Taker Address', 'orderDetailsWindow'), order.takerAddress],
+    [Localize.text('Updated At', 'orderDetailsWindow'), formatDate(order.updatedAt)],
+    [Localize.text('Created At', 'orderDetailsWindow'), formatDate(order.createdAt)],
+    [Localize.text('Status', 'orderDetailsWindow'), order.status]
   ];
+  if(order.orderType === 'partial') {
+    details.splice(3, 0, [Localize.text('Maker Minimum Size', 'orderDetailsWindow'), order.partialMinimum]);
+  }
   openOrderDetailsWindow(details);
 });
 ipcMain.on('openOrderHistoryDetailsWindow', async function(e, orderId) {
