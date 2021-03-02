@@ -189,7 +189,8 @@
       "description": "Copyright © 2018-2021 Blocknet",
       "category": "Utility",
       "desktop": {
-        "Name": "BLOCK DX"
+        "Name": "BLOCK DX",
+        "StartupWMClass": "block-dx"
       },
       "publish": {
         "provider": "github",
