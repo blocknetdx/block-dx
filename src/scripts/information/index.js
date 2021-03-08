@@ -1,16 +1,15 @@
-/* global $, swal */
+/* global $ */
 
 const { ipcRenderer } = require('electron');
-const { dialog, shell, app } = require('electron').remote;
 const renderSidebar = require('./modules/sidebar');
 const renderIntroduction = require('./modules/introduction');
 const renderFees = require('./modules/fees');
-const renderListings = require('./modules/listings');
-const renderFAQ = require('./modules/faq');
-const renderTutorials = require('./modules/tutorials');
-const renderSupport = require('./modules/support');
 const renderBlocknet = require('./modules/blocknet');
 const { Localize } = require('../../../src-back/localize');
+// const renderListings = require('./modules/listings');
+// const renderFAQ = require('./modules/faq');
+// const renderTutorials = require('./modules/tutorials');
+// const renderSupport = require('./modules/support');
 
 Localize.initialize(ipcRenderer.sendSync('getUserLocale'), ipcRenderer.sendSync('getLocaleData'));
 
@@ -123,7 +122,7 @@ $(document).ready(() => {
         .off('click')
         .on('click', e => {
           e.preventDefault();
-          var newActive = Number($(e.target).attr("data-sidebar-index"));
+          const newActive = Number($(e.target).attr('data-sidebar-index'));
           state.set('active', newActive);
           state.set('sidebarSelected', newActive);
           render();
@@ -133,8 +132,8 @@ $(document).ready(() => {
         .off('click')
         .on('click', e => {
           e.preventDefault();
-          var url = $(e.target).attr("data-link");
-          shell.openExternal(url);
+          const url = $(e.currentTarget).attr('href');
+          ipcRenderer.send('openExternal', url);
         });
 
     }, 0);

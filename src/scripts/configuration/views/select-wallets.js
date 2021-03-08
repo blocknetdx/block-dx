@@ -1,6 +1,6 @@
 /* global Localize */
 
-const { ipcRenderer, remote } = require('electron');
+const { ipcRenderer } = require('electron');
 const { RouterView } = require('../../modules/router');
 const route = require('../constants/routes');
 const sidebar = require('../snippets/sidebar');
@@ -358,7 +358,7 @@ class SelectWallets extends RouterView {
 
     $('.js-blocknetWalletLink').on('click', e => {
       e.preventDefault();
-      remote.shell.openExternal('https://github.com/blocknetdx/blocknet/releases/latest');
+      ipcRenderer.send('openExternal', 'https://github.com/blocknetdx/blocknet/releases/latest');
     });
 
   }

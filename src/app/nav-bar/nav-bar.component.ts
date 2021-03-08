@@ -4,7 +4,7 @@ import { Currentprice } from '../currentprice';
 import { CurrentpriceService } from '../currentprice.service';
 import {NumberFormatPipe} from '../pipes/decimal.pipe';
 import {Localize} from '../localize/localize.component';
-import {alert} from '../util';
+import {alert, openExternal} from '../util';
 
 @Component({
   selector: 'app-nav-bar',
@@ -82,7 +82,6 @@ export class NavBarComponent implements OnInit {
   checkForUpdates(e) {
     e.preventDefault();
     if(window.electron.ipcRenderer.sendSync('updateError')) {
-      const { openExternal } = window.electron.remote.shell;
       openExternal('https://github.com/blocknetdx/block-dx/releases/latest');
     } else {
       const status = window.electron.ipcRenderer.sendSync('checkForUpdates');
@@ -110,7 +109,6 @@ export class NavBarComponent implements OnInit {
 
   openLink(e, name) {
     e.preventDefault();
-    const { openExternal } = window.electron.remote.shell;
     switch(name) {
       case 'reddit':
         openExternal('https://www.reddit.com/r/theblocknet/');

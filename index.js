@@ -1919,6 +1919,30 @@ ipcMain.on(ipcMainListeners.OPEN_REFUND_NOTIFICATION, async function(e, { title,
   }
 });
 
+const domainWhitelist = [
+  'blocknet.co',
+  'xlitewallet.com',
+  'github.com',
+  'reddit.com',
+  'twitter.com',
+  'discord.gg',
+  'blocknet.us16.list-manage.com',
+];
+const validateUrl = url => {
+  const domainPatts = domainWhitelist
+    .map(d => new RegExp(`https://(.+\\.)*?${d}(?=/|$)`, 'i'));
+  return domainPatts.some(p => p.test(url));
+};
+
+ipcMain.on('openExternal', (e, url) => {
+  const validated = validateUrl(url);
+  if(validated) {
+    electron.shell.openExternal(url);
+  } else {
+    logger.info(`Failed to validate the following link on openExternal call: ${url}`);
+  }
+});
+
 // Run the application within async function for flow control
 (async function() {
   try {
