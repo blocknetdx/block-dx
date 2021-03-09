@@ -8,7 +8,7 @@ export class BlockCurrencyPipe implements PipeTransform {
 
   constructor(private numberFormatPipe: NumberFormatPipe) {}
 
-  transform(value: any, symbol: any, decimalMax, ignoreRemainingZeroes = false): any {
+  transform(value: any, symbol: any, decimalMax, ignoreRemainingZeroes = false, decimalMinimum): any {
     const format = symbol !== 'USD' ? `1.${decimalMax}-${decimalMax}` : '1.2-2';
     let v = this.numberFormatPipe.transform(value,format);
 

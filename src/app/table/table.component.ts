@@ -34,17 +34,18 @@ export class TableComponent {
   public onRowContextMenu: EventEmitter<any> = new EventEmitter();
 
   @Input() public selectable: boolean;
+  @Input() public leftAlign = false;
   @Input() public hideHeader = false;
   @Input() public noPadding = false;
-  @Input() public deselectOnBlur: boolean = true;
+  @Input() public deselectOnBlur = true;
   @Input() public groupBy: string;
   @Input() public sections: {rows: any[], title?: string}[];
 
   public columns: any[];
   public selectedRow: any;
-  private rowFocusIndex: number = 0;
+  private rowFocusIndex = 0;
   private viewIsInit: boolean;
-  private firstScroll: boolean = true;
+  private firstScroll = true;
 
   @ContentChildren(TableColumnDirective)
   set columnTemplates(val: QueryList<TableColumnDirective>) {
