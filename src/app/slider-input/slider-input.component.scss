@@ -1,0 +1,88 @@
+.slider-input-container {
+  height: 44px;
+  background-color: #112841;
+  font-size: 12px;
+  padding-top: 5px;
+  padding-left: 15px;
+  padding-right: 15px;
+  margin-left: -4px;
+  margin-right: -4px;
+  margin-top: 8px;
+  box-sizing: border-box;
+  color: #c8cdd6;
+
+  .slider-input-bar-container {
+    height: 12px;
+    padding-top: 5px;
+    position: relative;
+
+    .slider-input-bar {
+      height: 2px;
+      background-color: #69747e;
+    }
+
+    .slider-input-bar-highlight {
+      margin-top: -2px;
+      height: 2px;
+      background-color: #eaeaea;
+      position: absolute;
+    }
+
+    .slider-input-marker {
+      background-color: #69747e;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      position: absolute;
+      margin-left: -3px;
+      top: 3px;
+
+      &.active {
+        background-color: #ffffff;
+      }
+
+    }
+
+    .slider-input-handle {
+      width: 12px;
+      height: 12px;
+      padding: 2px;
+      border-radius: 50%;
+      position: absolute;
+      margin-left: -6px;
+      top: 0;
+      background-color: #112841;
+      box-sizing: border-box;
+      border-color: #ffffff;
+      border-width: 1px;
+      border-style: solid;
+      cursor: pointer;
+      tab-index: 1;
+
+      &:focus {
+        border-color: #f00;
+      }
+
+      .slider-input-handle-inner {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background-color: #ffffff;
+      }
+
+    }
+
+  }
+
+  .slider-input-min-max-container {
+    margin-left: -3px;
+    margin-right: -3px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    font-size: 10px;
+    font-family: "Roboto Mono", sans-serif;
+  }
+
+}

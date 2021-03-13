@@ -19,6 +19,7 @@ import {Localize} from './localize/localize.component';
 import {logger} from './modules/logger';
 import {BalancesService} from './balances.service';
 import {Balance} from './balance';
+import {OrderformService} from './orderform.service';
 
 const delocalize = (numStr = '') => {
   const decimalSeparator = Localize.decimalSeparator();
@@ -100,8 +101,11 @@ export class OrderformComponent implements OnInit {
     private pricingService: PricingService,
     private configurationOverlayService: ConfigurationOverlayService,
     private balancesService: BalancesService,
-    private zone: NgZone
-  ) { }
+    private zone: NgZone,
+    private orderformService: OrderformService,
+  ) {
+    this.onSliderChange = this.onSliderChange.bind(this);
+  }
 
   public Localize = Localize;
 
@@ -178,6 +182,10 @@ export class OrderformComponent implements OnInit {
 
     this.balancesService.getBalances().subscribe(balances => {
       this.balances = balances;
+    });
+
+    this.orderformService.getResetOrderForm().subscribe(() => {
+      this.resetModel(false);
     });
 
   }
@@ -487,7 +495,7 @@ export class OrderformComponent implements OnInit {
       makerAddress: this.addresses[this.symbols[0]] || '',
       takerAddress: this.addresses[this.symbols[1]] || '',
       minAmount: '',
-      orderType: this.model.orderType || this.partialOrderType,
+      orderType: this.partialOrderType,
       repost: isBoolean(this.model.respost) ? this.model.repost : true,
     };
     this.formatNumberSymbol0 = this.formatNumber('0', this.symbols[0]);
@@ -627,6 +635,7 @@ export class OrderformComponent implements OnInit {
   }
 
   onTabChange() {
+    this.model.orderType = this.partialOrderType;
     this.model.id = '';
     this.amountPercent = 0;
   }
@@ -638,4 +647,19 @@ export class OrderformComponent implements OnInit {
   generateNewAddress(token) {
     window.electron.ipcRenderer.send('generateNewAddress', token);
   }
+
+  toNumber(numStr) {
+    if(!numStr) {
+      return 0;
+    } else {
+      return Number(numStr);
+    }
+  }
+
+  onSliderChange(newMinAmount) {
+    this.zone.run(() => {
+      this.model.minAmount = this.formatNumber(String(newMinAmount), 'BTC');
+    });
+  }
+
 }

@@ -26,24 +26,24 @@
 
       <span class="button-spacer"></span>
 
-      <div class="select-order-type-label"><Localize context="orderform" key="Select order type"></Localize></div>
+<!--      <div class="select-order-type-label"><Localize context="orderform" key="Select order type"></Localize></div>-->
 
-      <div class="order-type-select-container">
-        <div class="order-form-type-select-box" [class.active]="this.model.orderType === partialOrderType" (click)="selectOrderType(partialOrderType)">
-          <div class="order-form-select-type-radio order-form-select-type-radio-left">
-            <div class="radio-interior"></div>
-          </div>
-          <Localize context="orderform" key="Partial Order"></Localize>
-        </div>
-        <div class="order-form-type-select-box order-form-select-type-radio-right" [class.active]="this.model.orderType === exactOrderType" (click)="selectOrderType(exactOrderType)">
-          <div class="order-form-select-type-radio order-form-select-type-radio-right">
-            <div class="radio-interior"></div>
-          </div>
-          <Localize context="orderform" key="Exact Order"></Localize>
-        </div>
-      </div>
+<!--      <div class="order-type-select-container">-->
+<!--        <div class="order-form-type-select-box" [class.active]="this.model.orderType === partialOrderType" (click)="selectOrderType(partialOrderType)">-->
+<!--          <div class="order-form-select-type-radio order-form-select-type-radio-left">-->
+<!--            <div class="radio-interior"></div>-->
+<!--          </div>-->
+<!--          <Localize context="orderform" key="Partial Order"></Localize>-->
+<!--        </div>-->
+<!--        <div class="order-form-type-select-box order-form-select-type-radio-right" [class.active]="this.model.orderType === exactOrderType" (click)="selectOrderType(exactOrderType)">-->
+<!--          <div class="order-form-select-type-radio order-form-select-type-radio-right">-->
+<!--            <div class="radio-interior"></div>-->
+<!--          </div>-->
+<!--          <Localize context="orderform" key="Exact Order"></Localize>-->
+<!--        </div>-->
+<!--      </div>-->
 
-      <span class="button-spacer"></span>
+<!--      <span class="button-spacer"></span>-->
 
 <!--      <span class="button-spacer"></span>-->
 
@@ -60,7 +60,10 @@
 
 
       <div class="input-group row">
-        <label class="col-4 col-form-label" for="amount"><Localize context="orderform" key="Amount"></Localize></label>
+        <label class="col-4 col-form-label order-form-label" for="amount">
+          <span *ngIf="type === 'buy'"><Localize context="orderform" key="Quantity to buy"></Localize></span>
+          <span *ngIf="type === 'sell'"><Localize context="orderform" key="Quantity to sell"></Localize></span>
+        </label>
         <div class="col-8">
           <input #amountInput
                  (keyup)="amountChanged($event)"
@@ -75,12 +78,29 @@
         </div>
       </div>
 
-      <div class="order-form-amount-percentage-select-container">
-        <div class="order-form-amount-percentage-select-item" [class.active]="amountPercent === 25" (click)="setAmountPercent(25)">25%</div>
-        <div class="order-form-amount-percentage-select-item" [class.active]="amountPercent === 50" (click)="setAmountPercent(50)">50%</div>
-        <div class="order-form-amount-percentage-select-item" [class.active]="amountPercent === 75" (click)="setAmountPercent(75)">75%</div>
-        <div class="order-form-amount-percentage-select-item" [class.active]="amountPercent === 100" (click)="setAmountPercent(100)">100%</div>
+      <div class="input-group row" [style.display]="'flex'">
+        <label class="col-4 col-form-label order-form-label" for="total_calc">
+          <span *ngIf="type === 'buy'"><Localize context="orderform" key="Min buy qty"></Localize></span>
+          <span *ngIf="type === 'sell'"><Localize context="orderform" key="Min sell qty"></Localize></span>
+        </label>
+        <div class="col-8">
+          <input #minAmountInput
+                 class="form-control"
+                 name="total" type="text"
+                 step="0.000001" pattern="\d+" inputmode="numeric"
+                 placeholder="{{formatNumberSymbol1 | localizeDecimalSeparator}}"
+                 [value]="model.minAmount | localizeDecimalSeparator"
+                 (keyup)="minAmountChanged($event)"
+                 (paste)="minAmountChanged($event)"
+                 (blur)="onNumberInputBlur($event, 'minAmount')" />
+          <span class="input-group-addon">{{symbols[0]}}</span>
+        </div>
       </div>
+
+      <app-slider-input *ngIf="model.orderType === partialOrderType" [minAmount]=".1 * toNumber(model.amount)"
+                        [maxAmount]="toNumber(model.amount)"
+                        [value]="toNumber(model.minAmount)"
+                        [onChange]="this.onSliderChange"></app-slider-input>
 
 <!--      <div class="input-group row" *ngIf="selectedOrderType == 'limit'">-->
 <!--        <label class="col-4 col-form-label" for="limit"><Localize context="orderform" key="Limit Price"></Localize></label>-->
@@ -94,7 +114,7 @@
 <!--      </div>-->
 
       <div class="input-group row" [style.display]="pricingEnabled && !shouldHidePricing(symbols) ? 'flex' : 'none'">
-        <label class="col-4 col-form-label" for="amount">{{pricing ? pricing.in : ''}}  <Localize context="orderform" key="Price"></Localize></label>
+        <label class="col-4 col-form-label order-form-label" for="amount">{{pricing ? pricing.in : ''}}  <Localize context="orderform" key="Price"></Localize></label>
         <div class="col-8">
           <input #secondPriceInput
                  [disabled]="!pricingAvailable"
@@ -112,7 +132,7 @@
       </div>
 
       <div class="input-group row">
-        <label class="col-4 col-form-label" for="amount">{{symbols[1]}} <Localize context="orderform" key="Price"></Localize></label>
+        <label class="col-4 col-form-label order-form-label" for="amount">{{symbols[1]}} <Localize context="orderform" key="Price"></Localize></label>
         <div class="col-8">
           <input #priceInput
                  (keyup)="priceChanged($event)"
@@ -128,7 +148,7 @@
       </div>
 
       <div class="input-group row">
-        <label class="col-4 col-form-label" for="total_calc"><Localize context="orderform" key="Total"></Localize></label>
+        <label class="col-4 col-form-label order-form-label" for="total_calc"><Localize context="orderform" key="Total"></Localize></label>
         <div class="col-8">
           <input #totalInput
                  class="form-control order-form-total-input"
@@ -142,25 +162,8 @@
         </div>
       </div>
 
-      <div class="input-group row" [style.display]="this.model.orderType === partialOrderType ? 'flex' : 'none'">
-        <label class="col-4 col-form-label" for="total_calc"><Localize context="orderform" key="Min amount"></Localize></label>
-        <div class="col-8">
-          <input #minAmountInput
-                 class="form-control"
-                 name="total" type="text"
-                 step="0.000001" pattern="\d+" inputmode="numeric"
-                 placeholder="{{formatNumberSymbol1 | localizeDecimalSeparator}}"
-                 [value]="model.minAmount | localizeDecimalSeparator"
-                 (keyup)="minAmountChanged($event)"
-                 (paste)="minAmountChanged($event)"
-                 (blur)="onNumberInputBlur($event, 'minAmount')"
-                 tabindex="-1" />
-          <span class="input-group-addon">{{symbols[0]}}</span>
-        </div>
-      </div>
-
       <div class="input-group row">
-        <label class="col-4 col-form-label" for="js-maker-address">{{Localize.text('{token} Address', 'orderform', {token: symbols[0]})}}</label>
+        <label class="col-4 col-form-label order-form-label" for="js-maker-address">{{Localize.text('{token} Address', 'orderform', {token: symbols[0]})}}</label>
         <div class="col-8">
           <input class="form-control"
                  style="padding-right:16px;"
@@ -179,7 +182,7 @@
       </div>
 
       <div class="input-group row">
-        <label class="col-4 col-form-label" for="js-taker-address">{{Localize.text('{token} Address', 'orderform', {token: symbols[1]})}}</label>
+        <label class="col-4 col-form-label order-form-label" for="js-taker-address">{{Localize.text('{token} Address', 'orderform', {token: symbols[1]})}}</label>
         <div class="col-8">
           <input class="form-control"
                  style="padding-right:16px;"
@@ -197,7 +200,7 @@
         <span (click)="generateNewAddress(symbols[1])">{{Localize.text('Generate New {token} Address', 'orderform', {token: symbols[1]})}}</span>
       </div>
 
-      <span class="button-spacer" [class.button-spacer-lg]="model.orderType === exactOrderType"></span>
+      <span [class.button-spacer]="model.orderType === exactOrderType" [class.button-spacer-lg]="model.orderType === exactOrderType"></span>
 
       <div class="input-group row">
 
