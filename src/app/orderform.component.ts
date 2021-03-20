@@ -590,32 +590,38 @@ export class OrderformComponent implements OnInit {
     });
 
     if(id) { // take order
+      const origOrder = await ipcRenderer.invoke('getOrder', id);
+      let params;
       if(type === 'buy') {
-        // console.log('buy order!');
-        ipcRenderer.send('takeOrder', {
+        params = {
           id,
-          amount,
           sendAddress: takerAddress,
           receiveAddress: makerAddress
-        });
+        };
+        if(Number(origOrder.partialMinimum) > 0) {
+          params = {
+            ...params,
+            amount
+          };
+        }
       } else if(type === 'sell') {
-        // console.log('sell order!');
-        // const origOrder = await ipcRenderer.invoke('getOrder', id);
-        // console.log('origOrder', origOrder);
-        // const minInPrice = this.minAmountToPrice();
-        ipcRenderer.send('takeOrder', {
+        params = {
           id,
-          amount,
-          // amount: this.minAmountToPrice(maxAmount, amount, totalPrice),
           sendAddress: makerAddress,
           receiveAddress: takerAddress
-        });
+        };
+        if(Number(origOrder.partialMinimum) > 0) {
+          params = {
+            ...params,
+            amount: this.minAmountToPrice(origOrder.takerSize, amount, origOrder.makerSize).toFixed(6)
+          };
+        }
       }
+      ipcRenderer.send('takeOrder', params);
     } else { // make order
       const endpoint = isPartialOrder ? 'makePartialOrder' : 'makeOrder';
       let params;
       if(type === 'buy') {
-        // console.log('buy order!');
         params = {
           maker: this.symbols[1],
           makerSize: totalPrice,
@@ -624,7 +630,6 @@ export class OrderformComponent implements OnInit {
           takerSize: amount,
           takerAddress: makerAddress,
         };
-        // console.log(totalPrice, this.minAmountToPrice(amount, minimumAmount, totalPrice));
         if(isPartialOrder) { // good
           params = {
             ...params,
@@ -633,7 +638,6 @@ export class OrderformComponent implements OnInit {
           };
         }
       } else if(type === 'sell') {
-        // console.log('sell order!');
         params = {
           maker: this.symbols[0],
           makerSize: amount,
