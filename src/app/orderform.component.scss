@@ -19,6 +19,9 @@ form {
   overflow: hidden;
 }
 
+.order-form-input:read-only {
+  opacity: .5;
+}
 .order-form-total-input {
   opacity: .5;
 }

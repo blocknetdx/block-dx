@@ -529,15 +529,17 @@ class ServiceNodeInterface {
    * @param {string} sendAddress
    * @param {string} receive
    * @param {string} receiveAddress
+   * @param {string} amount
    * @returns {Promise<OrderObject>}
    */
-  async dxTakeOrder(id, sendAddress, receiveAddress) {
+  async dxTakeOrder(id, sendAddress, receiveAddress, amount) {
     const { error, result } = await this._makeServiceNodeRequest({
       method: 'dxTakeOrder',
       params: [
         id,
         sendAddress,
-        receiveAddress
+        receiveAddress,
+        amount
       ]
     });
     if(error) throw new Error(error);

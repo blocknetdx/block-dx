@@ -151,6 +151,7 @@ export class OrderformComponent implements OnInit {
     this.orderbookService.requestedOrder
       .subscribe((order) => {
         this.zone.run(() => {
+          // console.log('order', order);
           const tabIndex = order[4] === 'ask' ? 0 : 1;
           this.tabView.activeTab = this.tabView.tabs[tabIndex];
           this.resetModel();
@@ -162,6 +163,7 @@ export class OrderformComponent implements OnInit {
             price: this.formatNumber(String(order[0]), this.symbols[1]),
             secondPrice,
             orderType: this.exactOrderType,
+            minAmount: Number(order[7]) ? this.formatNumber(String(order[7]), this.symbols[0]) : this.formatNumber(String(order[1]), this.symbols[0]),
             // totalPrice: this.formatNumber(String(order[0] * order[1]), this.symbols[1])
           });
           this.amountPercent = 0;
@@ -286,7 +288,7 @@ export class OrderformComponent implements OnInit {
 
   amountChanged(e) {
     e.preventDefault();
-    this.model.id = '';
+    // this.model.id = '';
     this.amountPercent = 0;
     let amount;
     if(e.type === 'paste') {
@@ -508,7 +510,7 @@ export class OrderformComponent implements OnInit {
     return /\d+/.test(numStr) && /^\d*\.?\d*$/.test(numStr) && Number(numStr) > 0;
   }
 
-  onOrderSubmit(id = '', amount = '', totalPrice = '', type = '') {
+  async onOrderSubmit(id = '', amount = '', totalPrice = '', type = '') {
 
     let { makerAddress = '', takerAddress = '' } = this.model;
     const { orderType, repost = false } = this.model;
@@ -589,14 +591,22 @@ export class OrderformComponent implements OnInit {
 
     if(id) { // take order
       if(type === 'buy') {
+        // console.log('buy order!');
         ipcRenderer.send('takeOrder', {
           id,
+          amount,
           sendAddress: takerAddress,
           receiveAddress: makerAddress
         });
       } else if(type === 'sell') {
+        // console.log('sell order!');
+        // const origOrder = await ipcRenderer.invoke('getOrder', id);
+        // console.log('origOrder', origOrder);
+        // const minInPrice = this.minAmountToPrice();
         ipcRenderer.send('takeOrder', {
           id,
+          amount,
+          // amount: this.minAmountToPrice(maxAmount, amount, totalPrice),
           sendAddress: makerAddress,
           receiveAddress: takerAddress
         });
@@ -605,6 +615,7 @@ export class OrderformComponent implements OnInit {
       const endpoint = isPartialOrder ? 'makePartialOrder' : 'makeOrder';
       let params;
       if(type === 'buy') {
+        // console.log('buy order!');
         params = {
           maker: this.symbols[1],
           makerSize: totalPrice,
@@ -613,7 +624,16 @@ export class OrderformComponent implements OnInit {
           takerSize: amount,
           takerAddress: makerAddress,
         };
+        // console.log(totalPrice, this.minAmountToPrice(amount, minimumAmount, totalPrice));
+        if(isPartialOrder) { // good
+          params = {
+            ...params,
+            minimumSize: this.minAmountToPrice(amount, minimumAmount, totalPrice).toFixed(6),
+            repost,
+          };
+        }
       } else if(type === 'sell') {
+        // console.log('sell order!');
         params = {
           maker: this.symbols[0],
           makerSize: amount,
@@ -622,16 +642,24 @@ export class OrderformComponent implements OnInit {
           takerSize: totalPrice,
           takerAddress: takerAddress,
         };
-      }
-      if(isPartialOrder) {
-        params = {
-          ...params,
-          minimumSize: this.model.minAmount,
-          repost,
-        };
+        if(isPartialOrder) {
+          params = {
+            ...params,
+            minimumSize: this.model.minAmount,
+            repost,
+          };
+        }
       }
       ipcRenderer.send(endpoint, params);
     }
+  }
+
+  minAmountToPrice(amount, minAmount, totalPrice) {
+    // (minAmount * totalPrice) / amount
+    amount = bignumber(amount);
+    minAmount = bignumber(minAmount);
+    totalPrice = bignumber(totalPrice);
+    return math.divide(math.multiply(minAmount, totalPrice), amount).toNumber();
   }
 
   onTabChange() {

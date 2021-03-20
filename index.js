@@ -744,6 +744,11 @@ const openSettingsWindow = (options = {}) => {
 
 };
 
+ipcMain.handle('getOrder', async function(e, orderId) {
+  const order = await sn.dxGetOrder(orderId);
+  return order;
+});
+
 ipcMain.on('setTokenPaths', (e, wallets) => {
   let tokenPaths;
   if(wallets) {
@@ -1121,7 +1126,7 @@ const openAppWindow = () => {
   });
 
   ipcMain.on('takeOrder', (e, data) => {
-    sn.dxTakeOrder(data.id, data.sendAddress, data.receiveAddress)
+    sn.dxTakeOrder(data.id, data.sendAddress, data.receiveAddress, data.amount)
       .then(res => {
         if(res.id) { // success
           appWindow.send('orderDone', 'success');

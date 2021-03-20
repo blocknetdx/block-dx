@@ -85,14 +85,15 @@
         </label>
         <div class="col-8">
           <input #minAmountInput
-                 class="form-control"
+                 class="form-control order-form-input"
                  name="total" type="text"
                  step="0.000001" pattern="\d+" inputmode="numeric"
                  placeholder="{{formatNumberSymbol1 | localizeDecimalSeparator}}"
                  [value]="model.minAmount | localizeDecimalSeparator"
                  (keyup)="minAmountChanged($event)"
                  (paste)="minAmountChanged($event)"
-                 (blur)="onNumberInputBlur($event, 'minAmount')" />
+                 (blur)="onNumberInputBlur($event, 'minAmount')"
+                 [readOnly]="model.orderType === exactOrderType" />
           <span class="input-group-addon">{{symbols[0]}}</span>
         </div>
       </div>
@@ -123,10 +124,10 @@
                  (blur)="onNumberInputBlur($event, 'secondPrice')"
                  [value]="!pricingAvailable ? '' : (model.secondPrice  | localizeDecimalSeparator)"
                  [class.order-form-total-input]="!pricingAvailable"
-                 class="form-control" name="amount" id="price2"
+                 class="form-control order-form-input" name="amount" id="price2"
                  type="text" pattern="\d+" inputmode="numeric"
                  [placeholder]="!pricingAvailable ? 'N/A' : (formatNumberSymbol1 | localizeDecimalSeparator)"
-                 tabindex="0" />
+                 tabindex="0" [readOnly]="model.id ? true : false" />
           <span class="input-group-addon">{{pricing ? pricing.in : ''}}</span>
         </div>
       </div>
@@ -139,10 +140,10 @@
                  (paste)="priceChanged($event)"
                  (blur)="onNumberInputBlur($event, 'price')"
                  [value]="model.price | localizeDecimalSeparator"
-                 class="form-control" name="amount" id="price"
+                 class="form-control order-form-input" name="amount" id="price"
                  type="text" pattern="\d+" inputmode="numeric"
                  placeholder="{{formatNumberSymbol1 | localizeDecimalSeparator}}"
-                 tabindex="0" />
+                 tabindex="0" [readOnly]="model.id ? true : false" />
           <span class="input-group-addon">{{symbols[1]}}</span>
         </div>
       </div>
