@@ -8,6 +8,7 @@ import 'rxjs/add/operator/map';
 import { Order } from './order';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {logger} from './modules/logger';
+import {minAmountToPrice} from './util';
 
 math.config({
   number: 'BigNumber',
@@ -137,7 +138,7 @@ export class OrderbookService {
           // add partial order data
           const order = rawOrderDetailsMap.get(bid[2]);
           bid.push(order.orderType === 'partial');
-          bid.push(order.partialMinimum);
+          bid.push(minAmountToPrice(order.total, order.partialMinimum, order.size));
 
           // [ price, size, order ID, size / total size, type, total, isPartial, partialMinimum ]
         }

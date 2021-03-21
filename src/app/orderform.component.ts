@@ -14,7 +14,7 @@ import { LocalizeDecimalSeparatorPipe } from './localize/localize-decimal-separa
 import { PricingService } from './pricing.service';
 import { Pricing } from './pricing';
 import {ConfigurationOverlayService} from './configuration.overlay.service';
-import {alert, shouldHidePricing} from './util';
+import {alert, minAmountToPrice, shouldHidePricing} from './util';
 import {Localize} from './localize/localize.component';
 import {logger} from './modules/logger';
 import {BalancesService} from './balances.service';
@@ -613,7 +613,7 @@ export class OrderformComponent implements OnInit {
         if(Number(origOrder.partialMinimum) > 0) {
           params = {
             ...params,
-            amount: this.minAmountToPrice(origOrder.takerSize, amount, origOrder.makerSize).toFixed(6)
+            amount: minAmountToPrice(origOrder.takerSize, amount, origOrder.makerSize).toFixed(6)
           };
         }
       }
@@ -633,7 +633,7 @@ export class OrderformComponent implements OnInit {
         if(isPartialOrder) { // good
           params = {
             ...params,
-            minimumSize: this.minAmountToPrice(amount, minimumAmount, totalPrice).toFixed(6),
+            minimumSize: minAmountToPrice(amount, minimumAmount, totalPrice).toFixed(6),
             repost,
           };
         }
@@ -658,13 +658,13 @@ export class OrderformComponent implements OnInit {
     }
   }
 
-  minAmountToPrice(amount, minAmount, totalPrice) {
-    // (minAmount * totalPrice) / amount
-    amount = bignumber(amount);
-    minAmount = bignumber(minAmount);
-    totalPrice = bignumber(totalPrice);
-    return math.divide(math.multiply(minAmount, totalPrice), amount).toNumber();
-  }
+  // minAmountToPrice(amount, minAmount, totalPrice) {
+  //   // (minAmount * totalPrice) / amount
+  //   amount = bignumber(amount);
+  //   minAmount = bignumber(minAmount);
+  //   totalPrice = bignumber(totalPrice);
+  //   return math.divide(math.multiply(minAmount, totalPrice), amount).toNumber();
+  // }
 
   onTabChange() {
     this.model.orderType = this.partialOrderType;
