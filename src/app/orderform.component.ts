@@ -706,4 +706,21 @@ export class OrderformComponent implements OnInit {
     });
   }
 
+  getMinTooltipTitle(type) {
+    if(this.model && this.model.id) { // taking order
+      if(type === 'buy') {
+        return this.Localize.text('This is the minimum that you can buy from this order', 'orderform');
+      } else if(type === 'sell') {
+        return this.Localize.text('This is the minimum that you can sell from this order', 'orderform');
+      }
+    } else { // making order
+      if(type === 'buy') {
+        return this.Localize.text('This is the minimum that a user can sell from your full order amount (defaults to 10%)', 'orderform');
+      } else if(type === 'sell') {
+        return this.Localize.text('This is the minimum that a user can buy from your full order amount (defaults to 10%)', 'orderform');
+      }
+    }
+    return '';
+  }
+
 }

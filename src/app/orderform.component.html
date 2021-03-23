@@ -80,8 +80,8 @@
 
       <div class="input-group row" [style.display]="'flex'">
         <label class="col-4 col-form-label order-form-label" for="total_calc">
-          <span *ngIf="type === 'buy'"><Localize context="orderform" key="Min buy qty"></Localize></span>
-          <span *ngIf="type === 'sell'"><Localize context="orderform" key="Min sell qty"></Localize></span>
+          <span *ngIf="type === 'buy'"><Localize context="orderform" key="Min buy qty"></Localize><i class="material-icons tooltip-icon" [title]="getMinTooltipTitle(type)">help</i></span>
+          <span *ngIf="type === 'sell'"><Localize context="orderform" key="Min sell qty"></Localize><i class="material-icons tooltip-icon" [title]="getMinTooltipTitle(type)">help</i></span>
         </label>
         <div class="col-8">
           <input #minAmountInput

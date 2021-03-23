@@ -10,6 +10,7 @@ import { shouldHidePricing } from './util';
 import {OrderbookViewService} from './orderbook.view.service';
 import { OrderbookViews } from './enums';
 import {Localize} from './localize/localize.component';
+import {BigTooltipService} from './big-tooltip.service';
 
 @Component({
   selector: 'app-mainview',
@@ -49,7 +50,8 @@ export class MainviewComponent implements OnInit {
     private orderbookService: OrderbookService,
     private pricingService: PricingService,
     private orderbookViewService: OrderbookViewService,
-    private zone: NgZone
+    private zone: NgZone,
+    private bigTooltipService: BigTooltipService,
   ) {
     this.decimalOptions = [
       {value: '8', viewValue: Localize.text('8 decimals', 'mainview')},
@@ -69,6 +71,9 @@ export class MainviewComponent implements OnInit {
     });
     this.appService.marketPairChanges.subscribe((symbols) => {
       this.symbols = symbols;
+    });
+    this.bigTooltipService.bigTooltip().subscribe(({ tooltip, show }) => {
+      this.showHideTooltip(tooltip, show);
     });
   }
 

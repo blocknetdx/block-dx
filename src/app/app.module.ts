@@ -68,6 +68,7 @@ import {Localize} from './localize/localize.component';
 import {LocalizeDecimalSeparatorPipe} from './localize/localize-decimal-separator.pipe';
 import {SliderInputComponent} from './slider-input/slider-input.component';
 import {OrderformService} from './orderform.service';
+import {BigTooltipService} from './big-tooltip.service';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -141,6 +142,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     OrderbookViewService,
     GeneralSettingsService,
     OrderformService,
+    BigTooltipService,
     {
       provide: PERFECT_SCROLLBAR_CONFIG,
       useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
