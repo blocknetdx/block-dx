@@ -1,6 +1,7 @@
 build_linux:
   stage: build
   image: electronuserland/builder:latest
+  timeout: 30m
   script:
     - |
       echo GIT_BRANCH="$CI_COMMIT_REF_NAME" > electron-builder.env
