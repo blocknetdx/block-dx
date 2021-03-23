@@ -288,7 +288,14 @@ export class OrderformComponent implements OnInit {
 
   amountChanged(e) {
     e.preventDefault();
-    // this.model.id = '';
+    if(
+      this.model.id &&
+      this.model.orderType === this.exactOrderType &&
+      this.model.amount === this.model.minAmount
+    ) {
+      this.model.id = '';
+      this.model.orderType = this.partialOrderType;
+    }
     this.amountPercent = 0;
     let amount;
     if(e.type === 'paste') {
@@ -331,7 +338,8 @@ export class OrderformComponent implements OnInit {
 
   minAmountChanged(e) {
     e.preventDefault();
-    this.model.id = '';
+    if(this.model.id)
+      return;
     this.amountPercent = 0;
     let amount;
     if(e.type === 'paste') {
@@ -353,6 +361,8 @@ export class OrderformComponent implements OnInit {
 
   priceChanged(e) {
     e.preventDefault();
+    if(this.model.id)
+      return;
     const decimalSeparator = Localize.decimalSeparator();
     const type = this.tabView.activeIndex === 0 ? 'buy' : 'sell';
     this.model.id = '';
@@ -393,6 +403,8 @@ export class OrderformComponent implements OnInit {
 
   secondPriceChanged(e) {
     e.preventDefault();
+    if(this.model.id)
+      return;
     const decimalSeparator = Localize.decimalSeparator();
     const type = this.tabView.activeIndex === 0 ? 'buy' : 'sell';
     this.model.id = '';
