@@ -1,6 +1,6 @@
 /* global swal, Localize */
 
-const { ipcRenderer, remote } = require('electron');
+const { ipcRenderer } = require('electron');
 const fs = require('fs-extra-promise');
 const { RouterView } = require('../../modules/router');
 const route = require('../constants/routes');
@@ -114,11 +114,11 @@ class SelectSetupType extends RouterView {
     };
     $('.js-blocknetWalletLink').on('click', e => {
       e.preventDefault();
-      remote.shell.openExternal('https://github.com/blocknetdx/blocknet/releases/latest');
+      ipcRenderer.send('openExternal', 'https://github.com/blocknetdx/blocknet/releases/latest');
     });
     $('.js-compatibleWalletsLink').on('click', e => {
       e.preventDefault();
-      remote.shell.openExternal('https://docs.blocknet.co/blockdx/listings/#listed-digital-assets');
+      ipcRenderer.send('openExternal', 'https://docs.blocknet.co/blockdx/listings/#listed-digital-assets');
     });
     $('#js-automaticCredentials').on('click', e => toggleCredentialGeneration(e, true));
     $('#js-manualCredentials').on('click', e => toggleCredentialGeneration(e, false));

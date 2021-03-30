@@ -80,3 +80,8 @@ export const minAmountToPrice = (amount: string|number, minAmount: string|number
   totalPrice = bignumber(totalPrice);
   return math.divide(math.multiply(minAmount, totalPrice), amount).toNumber();
 };
+
+export const openExternal = url => {
+  const { ipcRenderer } = window.electron;
+  ipcRenderer.send('openExternal', url);
+};

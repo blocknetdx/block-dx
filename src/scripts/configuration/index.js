@@ -90,7 +90,7 @@ $(document).ready(() => {
     const isFirstRun = ipcRenderer.sendSync('isFirstRun');
     state.set('isFirstRun', isFirstRun);
 
-    state.set('configurationType', isFirstRun ? configurationTypes.FRESH_SETUP : configurationTypes.ADD_NEW_WALLETS);
+    state.set('configurationType', isFirstRun ? configurationTypes.FRESH_SETUP : configurationTypes.LITEWALLET_RPC_SETUP);
 
     const router = new Router({
       $target: $('#js-main'),

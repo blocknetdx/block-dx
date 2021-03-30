@@ -2,7 +2,7 @@
 
 const fs = require('fs-extra-promise');
 const { Set } = require('immutable');
-const { remote } = require('electron');
+const { ipcRenderer } = require('electron');
 const { RouterView } = require('../../modules/router');
 const route = require('../constants/routes');
 const configurationTypes= require('../constants/configuration-types');
@@ -302,10 +302,9 @@ class SelectWalletVersions extends RouterView {
       }
     });
 
-    const { openExternal } = remote.shell;
     $('.js-supportedAssetsLink').on('click', e => {
       e.preventDefault();
-      openExternal('https://docs.blocknet.co/blockdx/listings');
+      ipcRenderer.send('openExternal', 'https://docs.blocknet.co/blockdx/listings');
     });
     tippy($('.js-tippyTrigger')[0], {
       interactive: true,

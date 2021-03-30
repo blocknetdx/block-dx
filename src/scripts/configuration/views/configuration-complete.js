@@ -1,6 +1,6 @@
 /* global Localize */
 
-const { ipcRenderer, remote } = require('electron');
+const { ipcRenderer } = require('electron');
 const { RouterView } = require('../../modules/router');
 const configurationTypes = require('../constants/configuration-types');
 
@@ -69,7 +69,7 @@ class ConfigurationComplete extends RouterView {
     const updatingWallets = configurationType === configurationTypes.UPDATE_WALLETS;
     $('.js-blocknetWalletLink').on('click', e => {
       e.preventDefault();
-      remote.shell.openExternal('https://github.com/blocknetdx/blocknet/releases/latest');
+      ipcRenderer.send('openExternal', 'https://github.com/blocknetdx/blocknet/releases/latest');
     });
     $('#js-backBtn').on('click', e => {
       e.preventDefault();

@@ -6,7 +6,7 @@ const renderBlocknet = ({ Localize }) => {
           <div class="section-header-text">${Localize.text('Block DX is powered by the Blocknet Protocol', 'informationWindowBlocknet')}</div>
         </div>
         <p>
-    ${Localize.text('In addition to the information below, you can learn more about Blocknet <a href="#" class="text-link js-externalLink" data-link="https://docs.blocknet.co/">here</a>.', 'informationWindowBlocknet')}
+    ${Localize.text('In addition to the information below, you can learn more about Blocknet <a class="text-link js-externalLink" href="https://docs.blocknet.co/">here</a>.', 'informationWindowBlocknet')}
   </p>
 </div>
 
@@ -20,9 +20,9 @@ const renderBlocknet = ({ Localize }) => {
   <p>
     ${Localize.text('Subscribe to the following email lists for the latest features, updates, and news!', 'informationWindowBlocknet')}
     <ul>
-      <li><a href="#" class="text-link js-externalLink" data-link="https://blocknet.us16.list-manage.com/subscribe?u=5d0a376e982034a2ddd6edb98&id=6ae2c503df">${Localize.text('General Newsletter', 'informationWindowBlocknet')}</a></li>
-      <li><a href="#" class="text-link js-externalLink" data-link="https://blocknet.us16.list-manage.com/subscribe?u=5d0a376e982034a2ddd6edb98&id=d8349ac0b0">${Localize.text('Service Node Newsletter', 'informationWindowBlocknet')}</a></li>
-      <li><a href="#" class="text-link js-externalLink" data-link="https://blocknet.us16.list-manage.com/subscribe?u=5d0a376e982034a2ddd6edb98&id=e5efe39ee5">${Localize.text('Developer Newsletter', 'informationWindowBlocknet')}</a></li>
+      <li><a class="text-link js-externalLink" href="https://blocknet.us16.list-manage.com/subscribe?u=5d0a376e982034a2ddd6edb98&id=6ae2c503df">${Localize.text('General Newsletter', 'informationWindowBlocknet')}</a></li>
+      <li><a class="text-link js-externalLink" href="https://blocknet.us16.list-manage.com/subscribe?u=5d0a376e982034a2ddd6edb98&id=d8349ac0b0">${Localize.text('Service Node Newsletter', 'informationWindowBlocknet')}</a></li>
+      <li><a class="text-link js-externalLink" href="https://blocknet.us16.list-manage.com/subscribe?u=5d0a376e982034a2ddd6edb98&id=e5efe39ee5">${Localize.text('Developer Newsletter', 'informationWindowBlocknet')}</a></li>
     </ul>
   </p>
 </div>
@@ -32,7 +32,7 @@ const renderBlocknet = ({ Localize }) => {
     <div class="section-header-text">${Localize.text('Technical Overview', 'informationWindowBlocknet')}</div><div class="section-header-line"></div>
   </div>
   <p>
-    ${Localize.text('Blocknet is a Proof-of-Stake (PoS) blockchain with a utility token called <a href="#" class="text-link js-externalLink" data-link="https://docs.blocknet.co/blockchain/introduction">BLOCK</a>. Unlike other currency-focused blockchains, Blocknet is a service-based blockchain comprised of 3 main components:', 'informationWindowBlocknet')}
+    ${Localize.text('Blocknet is a Proof-of-Stake (PoS) blockchain with a utility token called <a class="text-link js-externalLink" href="https://docs.blocknet.co/blockchain/introduction">BLOCK</a>. Unlike other currency-focused blockchains, Blocknet is a service-based blockchain comprised of 3 main components:', 'informationWindowBlocknet')}
   </p>
   <p>
     <ul>
@@ -85,7 +85,7 @@ const renderBlocknet = ({ Localize }) => {
     <div class="section-header-text">${Localize.text('Tokenomics', 'informationWindowBlocknet')}</div><div class="section-header-line"></div>
   </div>
   <p>
-    ${Localize.text('<a href="#" class="text-link js-externalLink" data-link="https://docs.blocknet.co/blockchain/introduction">BLOCK</a> is the utility token that powers the Blocknet. Fees are paid in BLOCK when using the network and 100% of those fees are distributed to Service Nodes for supporting the network and infrastructure. Normal transaction fees on the network are also paid in BLOCK, but those fees are burned. If seeking to acquire BLOCK, <a href="#" class="text-link js-externalLink" data-link="https://docs.blocknet.co/project/exchanges">there are various options available</a>.', 'informationWindowBlocknet')}
+    ${Localize.text('<a class="text-link js-externalLink" href="https://docs.blocknet.co/blockchain/introduction">BLOCK</a> is the utility token that powers the Blocknet. Fees are paid in BLOCK when using the network and 100% of those fees are distributed to Service Nodes for supporting the network and infrastructure. Normal transaction fees on the network are also paid in BLOCK, but those fees are burned. If seeking to acquire BLOCK, <a class="text-link js-externalLink" href="https://docs.blocknet.co/project/exchanges">there are various options available</a>.', 'informationWindowBlocknet')}
   </p>
   <p>
     ${Localize.text('Blocknet involves multiple economic models with respect to the use of the BLOCK token:', 'informationWindowBlocknet')}
