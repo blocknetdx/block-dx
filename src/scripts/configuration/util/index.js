@@ -119,7 +119,8 @@ class XBridgeConf {
       [
         '[Main]',
         `ExchangeWallets=${[...this._data.keys()].join(',')}`,
-        'FullLog=true'
+        'FullLog=true',
+        'ShowAllOrders=true'
       ].join('\n'),
       '\n',
       ...[...this._data.entries()]

@@ -860,7 +860,8 @@ const getShowAllOrdersFromXbridgeConf = () => {
         return false;
       }
     } else { // if it wasn't found in xbridge conf
-      return false;
+      saveShowAllOrders(true);
+      return true;
     }
   } else { // If xbridge conf wasn't found
     return null;
