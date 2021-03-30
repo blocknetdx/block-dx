@@ -74,7 +74,7 @@ ipcMain.on('getAppVersion', e => {
 let appWindow, serverLocation, sn, keyPair, storage, user, password, port, info, pricingSource, pricingUnit, apiKeys,
   pricingFrequency, enablePricing, sendPricingMultipliers, clearPricingInterval, setPricingInterval,
   sendMarketPricingEnabled, metaPath, availableUpdate, tradeHistory, myOrders, showWallet, tosWindow, releaseNotesWindow,
-  latestBlocknetDir, latestConfName;
+  latestBlocknetDir, latestConfName, refreshBalances;
 let updateError = false;
 
 // Handle explicit quit
@@ -1497,7 +1497,7 @@ const openAppWindow = () => {
   const sendBalancesInterval = new RecursiveInterval();
   sendBalancesInterval.set(sendBalances, 12000);
 
-  ipcMain.on('refreshBalances', async function() {
+  refreshBalances = async function() {
     try {
       await loadXBridgeConf();
       await sendNetworkTokens();
@@ -1506,6 +1506,9 @@ const openAppWindow = () => {
     } catch(err) {
       handleError(err);
     }
+  };
+  ipcMain.on('refreshBalances', () => {
+    refreshBalances();
   });
 
   sendPricingMultipliers = async function() {
@@ -2115,6 +2118,13 @@ ipcMain.on(ipcMainListeners.OPEN_REFUND_NOTIFICATION, async function(e, { title,
     checkForUpdates();
 
     openAppWindow();
+
+    setTimeout(() => {
+      // This accounts for if the user opened the Blocknet wallet before XLite.
+      // It forces the Blocknet wallet to reload the xbridge conf and upate
+      // balances after the app window has opened.
+      refreshBalances();
+    }, 1000);
 
   } catch(err) {
     handleError(err);
