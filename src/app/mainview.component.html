@@ -176,34 +176,6 @@
       </table>
     </app-big-tooltip>
 
-    <div class="sidebar col-lg">
-      <div class="trade_table row">
-
-          <bn-card class="trade_table__cell balances col-lg-12" [class.alternate-pricing]="pricingEnabled && !shouldHidePricing(symbols)" [allowFullscreen]="false" [showRefreshBalances]="true">
-            <bn-card-title>
-              <span><Localize context="mainview" key="Balances"></Localize>
-                <i class="material-icons tooltip-icon" (mouseenter)="showHideTooltip('showBalancesTooltip', true)" (mouseleave)="showHideTooltip('showBalancesTooltip', false)">help</i>
-              </span>
-            </bn-card-title>
-            <bn-card-body>
-              <app-balances></app-balances>
-            </bn-card-body>
-          </bn-card>
-
-          <bn-card class="trade_table__cell orderform col-lg-12" [class.alternate-pricing]="pricingEnabled && !shouldHidePricing(symbols)" [allowFullscreen]="false">
-            <bn-card-title>
-              <span><Localize context="mainview" key="Order Form"></Localize>
-                <i class="material-icons tooltip-icon" (mouseenter)="showHideTooltip('showOrderFormTooltip', true)" (mouseleave)="showHideTooltip('showOrderFormTooltip', false)">help</i>
-              </span>
-            </bn-card-title>
-            <bn-card-body>
-              <app-orderform></app-orderform>
-            </bn-card-body>
-          </bn-card>
-
-      </div>
-    </div>
-
     <div class="content col-lg">
       <div class="trade_table row">
 
@@ -293,7 +265,37 @@
       </div>
 
     </div>
+
+    <div class="sidebar col-lg">
+      <div class="trade_table row">
+
+        <bn-card class="trade_table__cell balances col-lg-12" [class.alternate-pricing]="pricingEnabled && !shouldHidePricing(symbols)" [allowFullscreen]="false" [showRefreshBalances]="true">
+          <bn-card-title>
+              <span><Localize context="mainview" key="Balances"></Localize>
+                <i class="material-icons tooltip-icon" (mouseenter)="showHideTooltip('showBalancesTooltip', true)" (mouseleave)="showHideTooltip('showBalancesTooltip', false)">help</i>
+              </span>
+          </bn-card-title>
+          <bn-card-body>
+            <app-balances></app-balances>
+          </bn-card-body>
+        </bn-card>
+
+        <bn-card class="trade_table__cell orderform col-lg-12" [class.alternate-pricing]="pricingEnabled && !shouldHidePricing(symbols)" [allowFullscreen]="false" [showClearForm]="true">
+          <bn-card-title>
+              <span><Localize context="mainview" key="Order Form"></Localize>
+                <i class="material-icons tooltip-icon" (mouseenter)="showHideTooltip('showOrderFormTooltip', true)" (mouseleave)="showHideTooltip('showOrderFormTooltip', false)">help</i>
+              </span>
+          </bn-card-title>
+          <bn-card-body>
+            <app-orderform></app-orderform>
+          </bn-card-body>
+        </bn-card>
+
+      </div>
+    </div>
+
   </div>
+
   <!-- End Desktop -->
 
   <!-- Mobile and Tablet -->

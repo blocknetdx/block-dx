@@ -1,4 +1,11 @@
 import { Localize } from './localize/localize.component';
+import * as math from 'mathjs';
+
+math.config({
+  number: 'BigNumber',
+  precision: 64
+});
+const { bignumber } = math;
 
 export function naturalSort(arr:any[], key:any):any[] {
   let a, b, a1, b1, rx = /(\d+)|(\D+)/g, rd=/\d+/;
@@ -38,7 +45,8 @@ export function debounce(func, wait, immediate?:boolean) {
 export const briefTimeout = (timeout = 0) => new Promise(resolve => setTimeout(resolve, timeout));
 
 export const shouldHidePricing = (symbols: String[]): boolean => {
-  return symbols.includes('BTC');
+  // return symbols.includes('BTC');
+  return false;
 };
 
 export const alert = message => {
@@ -63,4 +71,12 @@ export const confirm = message => {
     ]
   });
   return res;
+};
+
+export const minAmountToPrice = (amount: string|number, minAmount: string|number, totalPrice: string|number) => {
+  // (minAmount * totalPrice) / amount
+  amount = bignumber(amount);
+  minAmount = bignumber(minAmount);
+  totalPrice = bignumber(totalPrice);
+  return math.divide(math.multiply(minAmount, totalPrice), amount).toNumber();
 };

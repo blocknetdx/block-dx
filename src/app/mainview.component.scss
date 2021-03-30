@@ -71,28 +71,29 @@
       }
     }
 
-    $orderform-regular-height: 456px;
+    $orderform-regular-height: 528px;
+    $balances-min-height: 130px;
 
     &.balances {
       @include screen(lg) {
-        min-height: 130px;
+        min-height: $balances-min-height;
         max-height: calc(100vh - #{$orderform-regular-height} - 137px - 106px + 48px + 48px + 40px);
       }
       @media(max-height: 700px) {
-        min-height: 130px;
-        max-height: 130px;
-        height: 130px;
+        min-height: $balances-min-height;
+        max-height: $balances-min-height;
+        height: $balances-min-height;
       }
     }
     &.balances.alternate-pricing {
       @include screen(lg) {
-        min-height: 130px;
-        max-height: calc(100vh - #{$orderform-regular-height} - 137px - 106px + 40px + 48px);
+        min-height: $balances-min-height;
+        max-height: calc(100vh - #{$orderform-regular-height} - 137px - 106px + 40px + 48px + 8px);
       }
       @media(max-height: 700px) {
-        min-height: 130px;
-        max-height: 130px;
-        height: 130px;
+        min-height: $balances-min-height;
+        max-height: $balances-min-height;
+        height: $balances-min-height;
       }
     }
     &.orderform {
@@ -100,7 +101,7 @@
         min-height: $orderform-regular-height;
         max-height: $orderform-regular-height;
       }
-      @media(max-height: 700px) {
+      @media(max-height: 850px) {
         max-height: calc(100vh - 236px);
         min-height: calc(100vh - 236px);
         height: calc(100vh - 236px);
@@ -108,10 +109,10 @@
     }
     &.orderform.alternate-pricing {
       @include screen(lg) {
-        min-height: $orderform-regular-height + 48px;
-        max-height: $orderform-regular-height + 48px;
+        min-height: $orderform-regular-height + 40px;
+        max-height: $orderform-regular-height + 40px;
       }
-      @media(max-height: 700px) {
+      @media(max-height: 850px) {
         max-height: calc(100vh - 236px);
         min-height: calc(100vh - 236px);
         height: calc(100vh - 236px);
@@ -120,12 +121,6 @@
   }
 }
 
-.tooltip-icon {
-  color: #fff;
-  font-size: 14px;
-  opacity: 0.5;
-  cursor: help;
-}
 .clear-inactive-button {
   font-size: 11px;
   font-weight: 700;

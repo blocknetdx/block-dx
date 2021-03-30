@@ -9,7 +9,7 @@ export class NumberFormatPipe implements PipeTransform {
     return newNum.toLocaleString('en', {useGrouping: false, maximumFractionDigits: 20});
   }
 
-  transform(num: string = '0', format: string): string {
+  transform(num: string = '0', format: string, noPadding = false): string {
     num = this.toNumberString(num);
     const formatPatt = /(\d+)\.(\d+)-(\d+)/;
     if(!formatPatt.test(format))
@@ -27,13 +27,24 @@ export class NumberFormatPipe implements PipeTransform {
       }
     }
 
+    const hangingZeroesPatt = /0+$/;
+    if(hangingZeroesPatt.test(dec))
+      dec = dec.replace(hangingZeroesPatt, '');
+
     if(decMax === 0) return int;
 
-    let multiplierStr = '1';
-    for(let i = 0; i < decMax; i++) {
-      multiplierStr += '0';
+    if(noPadding && decLen <= decMax) {
+      while(dec.length < decMin) {
+        dec += '0';
+      }
+      return int + '.' + dec;
+    } else {
+      let multiplierStr = '1';
+      for(let i = 0; i < decMax; i++) {
+        multiplierStr += '0';
+      }
+      const multiplier = Number(multiplierStr);
+      return (Math.round(multiplier * Number(int + '.' + dec)) / multiplier).toFixed(decMax);
     }
-    const multiplier = Number(multiplierStr);
-    return (Math.round(multiplier * Number(int + '.' + dec)) / multiplier).toFixed(decMax);
   }
 }

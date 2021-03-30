@@ -7,6 +7,7 @@ import { briefTimeout } from '../util';
 
 import { CardToolbarDirective } from './card-toolbar.directive';
 import {Localize} from '../localize/localize.component';
+import {OrderformService} from '../orderform.service';
 
 @Component({
   selector: 'bn-card',
@@ -24,6 +25,9 @@ import {Localize} from '../localize/localize.component';
            (click)="refreshBalances()">
           <i class="material-icons">refresh</i>
         </a>
+        <a class="fullscreen clear-form-button" *ngIf="showClearForm"
+           title="{{Localize.text('Clear form', 'orderform')}}"
+           (click)="onClearForm()">{{Localize.text('Clear form', 'orderform')}}</a>
         <a class="fullscreen" *ngIf="allowFullscreen"
           (click)="goFullscreen()">
           <i *ngIf="!isFullscreen" class="material-icons">zoom_out_map</i>
@@ -41,6 +45,7 @@ export class CardComponent implements OnInit {
   @Input() cardTitleClass: string;
   @Input() allowFullscreen: boolean = true;
   @Input() showRefreshBalances = false;
+  @Input() showClearForm = false;
 
   public Localize = Localize;
 
@@ -54,7 +59,8 @@ export class CardComponent implements OnInit {
   public isFullscreen: boolean;
 
   constructor(
-    private zone: NgZone
+    private zone: NgZone,
+    private orderformService: OrderformService,
   ) { }
 
   ngOnInit() {
@@ -121,6 +127,10 @@ export class CardComponent implements OnInit {
     this.zone.run(() => {
       this.showBody = true;
     });
+  }
+
+  onClearForm() {
+    this.orderformService.getResetOrderForm().next();
   }
 
 }

@@ -8,6 +8,7 @@ import 'rxjs/add/operator/map';
 import { Order } from './order';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {logger} from './modules/logger';
+import {minAmountToPrice} from './util';
 
 math.config({
   number: 'BigNumber',
@@ -77,11 +78,15 @@ export class OrderbookService {
         //   orderBook.bids.push([getRandom(1, 4), getRandom(1, 4), `bid${i}`]);
         // }
 
+        let rawOrderDetailsMap = new Map();
+
         orderBook = Object.assign({}, orderBook, {
           asks: orderBook.asks.map(a => {
+            rawOrderDetailsMap = rawOrderDetailsMap.set(a.orderId, a);
             return [a.price, a.size, a.orderId, a.total];
           }),
           bids: orderBook.bids.map(a => {
+            rawOrderDetailsMap = rawOrderDetailsMap.set(a.orderId, a);
             return [a.price, a.size, a.orderId, a.total];
           }),
         });
@@ -104,7 +109,13 @@ export class OrderbookService {
           ));
           // set the type
           ask.splice(-1, 0, 'ask');
-          // [ price, size, order ID, size / total size, type, total ]
+
+          // add partial order data
+          const order = rawOrderDetailsMap.get(ask[2]);
+          ask.push(order.orderType === 'partial');
+          ask.push(order.partialMinimum);
+
+          // [ price, size, order ID, size / total size, type, total, isPartial, partialMinimum ]
         }
 
         const bids = p.bids;
@@ -123,7 +134,13 @@ export class OrderbookService {
           ));
           // set the type
           bid.splice(-1, 0, 'bid');
-          // [ price, size, order ID, size / total size, type, total ]
+
+          // add partial order data
+          const order = rawOrderDetailsMap.get(bid[2]);
+          bid.push(order.orderType === 'partial');
+          bid.push(minAmountToPrice(order.total, order.partialMinimum, order.size));
+
+          // [ price, size, order ID, size / total size, type, total, isPartial, partialMinimum ]
         }
 
         this.orderbookObservable.next(p);

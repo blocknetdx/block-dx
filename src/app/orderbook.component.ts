@@ -108,6 +108,11 @@ export class OrderbookComponent implements OnInit, OnDestroy {
     }
   }
 
+  public getMinSize(order) {
+    const isPartial = order[6];
+    return isPartial ? order[7] : order[1];
+  }
+
   private setView(view, scroll = false) {
     switch(view) {
       case OrderbookViews.SELLS:
