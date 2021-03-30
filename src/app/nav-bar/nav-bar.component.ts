@@ -133,11 +133,8 @@ export class NavBarComponent implements OnInit {
       case 'resources':
         openExternal('https://docs.blocknet.co/');
         break;
-      case 'community':
-        openExternal('https://discord.gg/2e6s7H8');
-        break;
       case 'discord':
-        openExternal('https://discord.gg/2e6s7H8');
+        openExternal('https://discord.gg/mZ6pTneMx3');
         break;
     }
     this.toggleNav();
