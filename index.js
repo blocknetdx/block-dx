@@ -1860,16 +1860,30 @@ ipcMain.on('generateNewAddress', async function(e, token) {
 
 const generateNewAddresses = async function() {
   try {
-    const selectedWallets = storage.getItem('selectedWallets');
     const addresses = {};
-    const manifest = getManifest()
-      .reduce((map, w) => map.set(w.ver_id, w.ticker), new Map());
-    for(const versionId of selectedWallets) {
+    const split = getSplitXBridgeConf();
+    let selectedWallets;
+    if(split.length > 0) { // If a valid xbridge conf was found
+      const idx = split.findIndex(l => /^ExchangeWallets=/.test(l));
+      if(idx > -1) { // if it has been found in xbridge conf
+        const splitValue = split[idx].split('=');
+        if(splitValue.length > 1) {
+          selectedWallets = splitValue[1]
+            .trim()
+            .split(',')
+            .map(s => s.trim());
+        }
+      } else { // if it wasn't found in xbridge conf
+        selectedWallets = [];
+      }
+    } else { // If xbridge conf wasn't found
+      selectedWallets = [];
+    }
+    for(const token of _.uniq(selectedWallets)) {
       try {
-        const token = manifest.get(versionId);
         const address = await sn.dxGetNewTokenAddress(token);
-        if(address) addresses[token] = address;
-      } catch(err) {
+        if (address) addresses[token] = address;
+      } catch (err) {
         // silently handle errors
         handleError(err);
       }
@@ -2079,8 +2093,14 @@ ipcMain.on(ipcMainListeners.OPEN_REFUND_NOTIFICATION, async function(e, { title,
     }
 
     // Autogenerate new addresses
-    if(autoGenerateAddressesAvailable() && storage.getItem('autofillAddresses')) {
-      await generateNewAddresses();
+    if(autoGenerateAddressesAvailable()) {
+      let autoGenerateAddresses = storage.getItem('autofillAddresses');
+      if(!_.isBoolean(autoGenerateAddresses)) {
+        autoGenerateAddresses = true;
+        storage.setItem('autofillAddresses', autoGenerateAddresses, true);
+      }
+      if(autoGenerateAddresses)
+        await generateNewAddresses();
     }
 
     const localhost = 'localhost';
