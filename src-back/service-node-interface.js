@@ -398,27 +398,39 @@ class ServiceNodeInterface {
   async _queueRequest({ id = '', method, params = [] }) {
     let status, body, res;
     try {
-        res = await request
+      logger.info(`_queueRequest ${method}`);
+      res = await request
         .post(this._endpoint)
         .auth(this._user, this._password)
         .send(JSON.stringify({
-            id,
-            method,
-            params
-          }));
-        status = res.status || '';
-        body = res.body;
-      if (_.isUndefined(body))
+          id,
+          method,
+          params
+        }));
+      status = res.status || '';
+      logger.info(`_queueRequest ${method} returned with HTTP status code ${status}`);
+      body = res.body;
+      if (_.isUndefined(body)) {
+        logger.error(`RPC ${method} returned with undefined body`);
         throw new Error();
+      }
     } catch(err) {
 
-      // ToDo this is for debugging only remove before merging in
-      console.log('status', err.status);
+      logger.error(`${method} request error\n${err.message}\n${err.stack}`);
 
-      throw new Error(`Unable to connect to the Blocknet wallet.\n\nMake sure your Blocknet wallet is open, synced, and unlocked.`);
+      if(!_.isUndefined(err.status)) {
+        const errorMessage = `${method} request failed with http status code ${err.status}: ${err.message}.`;
+        logger.error(errorMessage);
+        throw new Error(errorMessage);
+      } else {
+        throw new Error('Unable to connect to the Blocknet wallet.\n\nMake sure your Blocknet wallet is open, synced, and unlocked.');
+      }
     }
     if(body.result.error) {
       const { code = 1025, name = '', error = '' } = body.result;
+
+      logger.error(`Error ${code}: ${name}\n\n${error}`);
+
       if (ErrorMsg(name, code)) {
         throw new Error(`${ErrorMsg(name, code)}\n\nAPI:\t\t${name}\nCode:\t${code}\n\n${error}`);
       } else {
@@ -533,14 +545,16 @@ class ServiceNodeInterface {
    * @returns {Promise<OrderObject>}
    */
   async dxTakeOrder(id, sendAddress, receiveAddress, amount) {
+    const params = [
+      id,
+      sendAddress,
+      receiveAddress,
+    ];
+    if(amount)
+      params.push(amount);
     const { error, result } = await this._makeServiceNodeRequest({
       method: 'dxTakeOrder',
-      params: [
-        id,
-        sendAddress,
-        receiveAddress,
-        amount
-      ]
+      params
     });
     if(error) throw new Error(error);
     return Order(result);
