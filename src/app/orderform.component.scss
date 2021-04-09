@@ -19,9 +19,15 @@ form {
   overflow: hidden;
 }
 
-.order-form-input:read-only {
-  opacity: .5;
+.order-form-input {
+  &:read-only {
+    opacity: .5;
+  }
+  &.invalid {
+    color: #ff4311;
+  }
 }
+
 .order-form-total-input {
   opacity: .5;
 }

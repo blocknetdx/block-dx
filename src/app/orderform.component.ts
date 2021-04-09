@@ -91,6 +91,9 @@ export class OrderformComponent implements OnInit {
   public exactOrderType = 'exact';
   public partialOrderType = 'partial';
 
+  public invalidAmount = false;
+  public invalidMinAmount = false;
+
   shouldHidePricing = shouldHidePricing;
 
   constructor(
@@ -329,6 +332,8 @@ export class OrderformComponent implements OnInit {
     if(this.model.orderType === this.partialOrderType) {
       const newMinAmount = this.generateMinAmountFromAmount(amount);
       this.model.minAmount = this.formatNumber(String(newMinAmount), 'BTC');
+      this.invalidAmount = false;
+      this.invalidMinAmount = false;
     }
   }
 
@@ -463,7 +468,7 @@ export class OrderformComponent implements OnInit {
     });
   }
 
-  onNumberInputBlur(e, field) {
+  onNumberInputBlur(e, field, type) {
     let { value } = e.target;
     value = delocalize(value);
     const emptyOrZero = (s => /^0*\.?0*$/.test(s) || /^\s*$/.test(s));
@@ -472,6 +477,44 @@ export class OrderformComponent implements OnInit {
     } else {
       this.model[field] = this.formatNumber(value, field === 'amount' ? this.symbols[0] : this.symbols[1]);
     }
+    if(field === 'amount' || field === 'minAmount') {
+      this.validate(field, type);
+    }
+  }
+
+  async validate(selectedField, type) {
+    let origOrder;
+    if(this.model.id)
+      origOrder = await window.electron.ipcRenderer.invoke('getOrder', this.model.id);
+    this.zone.run(() => {
+      const { amount: amountStr, minAmount: minAmountStr } = this.model;
+      const amount = Number(amountStr || '0');
+      const minAmount = Number(minAmountStr || '0');
+      if(this.model.orderType === this.partialOrderType) { // making order
+        const minMin = math.divide(math.bignumber(amountStr), math.bignumber('10')).toNumber();
+        if(selectedField === 'minAmount') {
+          if(minAmount < minMin || minAmount > amount) {
+            this.invalidMinAmount = true;
+          } else {
+            this.invalidAmount = false;
+            this.invalidMinAmount = false;
+          }
+        }
+      } else if(origOrder && this.model.orderType === this.exactOrderType) { // taking order
+        const origAmountStr = type === 'buy' ? origOrder.makerSize : origOrder.takerSize;
+        const origAmount = Number(origAmountStr);
+        if(selectedField === 'amount') {
+          if(amount < minAmount) {
+            this.invalidAmount = true;
+          } else if(amount > origAmount) {
+            this.invalidAmount = true;
+          } else {
+            this.invalidAmount = false;
+            this.invalidMinAmount = false;
+          }
+        }
+      }
+    });
   }
 
   upperCheck(num: string) {
@@ -500,6 +543,8 @@ export class OrderformComponent implements OnInit {
   }
 
   resetModel(retainPrice = false) {
+    this.invalidAmount = false;
+    this.invalidMinAmount = false;
     this.model = {
       id: '',
       amount: '',

@@ -457,8 +457,8 @@ class ServiceNodeInterface {
     });
 
     // ToDo this is for debugging only remove before merging in
-    if(method === 'dxMakeOrder' || method === 'dxMakePartialOrder')
-      console.log(JSON.stringify({method, params }, null, '  '));
+    // if(method === 'dxMakeOrder' || method === 'dxMakePartialOrder')
+    //   console.log(JSON.stringify({method, params }, null, '  '));
 
     this._requests_in_progress.set(key, { id, method, params, p, presolve, preject });
     this._requests_in_progress_queue.push(key);
