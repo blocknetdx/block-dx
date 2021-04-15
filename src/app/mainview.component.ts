@@ -30,6 +30,10 @@ export class MainviewComponent implements OnInit {
 
   public showBalancesTooltip = false;
   public showOrderFormTooltip = false;
+  public showOrderFormTakeBuyMinimumTooltip = false;
+  public showOrderFormTakeSellMinimumTooltip = false;
+  public showOrderFormMakeBuyMinimumTooltip = false;
+  public showOrderFormMakeSellMinimumTooltip = false;
   public showOrderBookTooltip = false;
   public showActiveInactiveOrderTooltip2 = false;
   public showActiveInactiveOrderTooltip = false;
@@ -41,6 +45,10 @@ export class MainviewComponent implements OnInit {
   tooltipDelay = 200;
   showBalancesTooltipTimeout = null;
   showOrderFormTooltipTimeout = null;
+  showOrderFormTakeBuyMinimumTooltipTimeout = null;
+  showOrderFormTakeSellMinimumTooltipTimeout = null;
+  showOrderFormMakeBuyMinimumTooltipTimeout = null;
+  showOrderFormMakeSellMinimumTooltipTimeout = null;
   showOrderBookTooltipTimeout = null;
   showActiveInactiveOrderTooltipTimeout = null;
 
