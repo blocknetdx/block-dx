@@ -57,17 +57,25 @@ export class OpenordersService {
 
             const side = order.maker === symbols[0] && order.taker === symbols[1] ? 'sell' : 'buy';
 
-            let size, total, maker, taker;
+            let size, total, maker, taker, partialMinimum;
             if(side === 'sell') {
               maker = order.taker;
               taker = order.maker;
               size = order.makerSize;
               total = order.takerSize;
+              partialMinimum = order.partialMinimum;
             } else {
               maker = order.maker;
               taker = order.taker;
               size = order.takerSize;
               total = order.makerSize;
+              partialMinimum = math.multiply(
+                bignumber(order.takerSize),
+                math.divide(
+                  bignumber(order.partialMinimum),
+                  bignumber(order.makerSize),
+                )
+              ).toString();
             }
             const price = math.divide(bignumber(total), bignumber(size));
 
@@ -75,7 +83,7 @@ export class OpenordersService {
               id: order.id,
               maker,
               taker,
-              partialMinimum: order.partialMinimum,
+              partialMinimum,
               price,
               size,
               total,
