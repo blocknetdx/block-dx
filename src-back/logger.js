@@ -26,7 +26,7 @@ class Logger {
           maxFiles: 5,
           tailable: true
         }),
-        new transports.Console()
+        // new transports.Console()
       ]
     });
     ipcMain.on('LOGGER_INFO', (e, str) => {

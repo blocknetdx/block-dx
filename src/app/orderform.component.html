@@ -66,11 +66,12 @@
         </label>
         <div class="col-8">
           <input #amountInput
+                 [class.invalid]="invalidAmount"
                  (keyup)="amountChanged($event)"
                  (paste)="amountChanged($event)"
-                 (blur)="onNumberInputBlur($event, 'amount')"
+                 (blur)="onNumberInputBlur($event, 'amount', type)"
                  [value]="model.amount | localizeDecimalSeparator"
-                 class="form-control" name="amount" id="amount"
+                 class="form-control order-form-input" name="amount" id="amount"
                  type="text" pattern="\d+" inputmode="numeric"
                  placeholder="{{formatNumberSymbol0 | localizeDecimalSeparator}}"
                  tabindex="0" />
@@ -85,6 +86,7 @@
         </label>
         <div class="col-8">
           <input #minAmountInput
+                 [class.invalid]="invalidMinAmount"
                  class="form-control order-form-input"
                  name="total" type="text"
                  step="0.000001" pattern="\d+" inputmode="numeric"
@@ -92,7 +94,7 @@
                  [value]="model.minAmount | localizeDecimalSeparator"
                  (keyup)="minAmountChanged($event)"
                  (paste)="minAmountChanged($event)"
-                 (blur)="onNumberInputBlur($event, 'minAmount')"
+                 (blur)="onNumberInputBlur($event, 'minAmount', type)"
                  [readOnly]="model.orderType === exactOrderType" />
           <span class="input-group-addon">{{symbols[0]}}</span>
         </div>
@@ -217,7 +219,7 @@
           *ngIf="type == 'buy'"
           type="submit"
           class="order-form-button order-form-buy-button"
-          [disabled]="disableSubmit">
+          [disabled]="disableSubmit || invalidAmount || invalidMinAmount">
           <i class="material-icons">add</i>
           {{model.id ? Localize.text('Accept Order', 'orderform') : Localize.text('Place Buy Order', 'orderform')}}
         </button>
@@ -226,7 +228,7 @@
           *ngIf="type == 'sell'"
           type="submit"
           class="order-form-button order-form-sell-button"
-          [disabled]="disableSubmit">
+          [disabled]="disableSubmit || invalidAmount || invalidMinAmount">
           <i class="material-icons">remove</i>
           {{model.id ? Localize.text('Accept Order', 'orderform') : Localize.text('Place Sell Order', 'orderform')}}
         </button>
