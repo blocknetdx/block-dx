@@ -18,6 +18,26 @@
         <li><strong><Localize context="mainview" key="Place orders using BTC pricing."></Localize></strong><br><Localize context="mainview" key="You can place orders based off BTC pricing, which is more familiar. To enable this capability, from the sidebar menu select General Settings."></Localize></li>
       </ul>
     </app-big-tooltip>
+    <app-big-tooltip title="{{Localize.text('Order Form', 'mainview')}}" [show]="showOrderFormTakeBuyMinimumTooltip">
+      <ul>
+        <li><Localize context="mainview" key="This is the minimum that you can buy from this order"></Localize></li>
+      </ul>
+    </app-big-tooltip>
+    <app-big-tooltip title="{{Localize.text('Order Form', 'mainview')}}" [show]="showOrderFormTakeSellMinimumTooltip">
+      <ul>
+        <li><Localize context="mainview" key="This is the minimum that you can sell from this order"></Localize></li>
+      </ul>
+    </app-big-tooltip>
+    <app-big-tooltip title="{{Localize.text('Order Form', 'mainview')}}" [show]="showOrderFormMakeBuyMinimumTooltip">
+      <ul>
+        <li><Localize context="mainview" key="This is the minimum that a user can sell from your full order amount (defaults to 10%)"></Localize></li>
+      </ul>
+    </app-big-tooltip>
+    <app-big-tooltip title="{{Localize.text('Order Form', 'mainview')}}" [show]="showOrderFormMakeSellMinimumTooltip">
+      <ul>
+        <li><Localize context="mainview" key="This is the minimum that a user can buy from your full order amount (defaults to 10%)"></Localize></li>
+      </ul>
+    </app-big-tooltip>
     <app-big-tooltip title="{{Localize.text('Order Book', 'mainview')}}" [show]="showOrderBookTooltip">
       <ul>
         <!-- <li><strong>Block DX uses "Exact" orders.</strong><br>At the moment Block DX only supports "Exact" orders, meaning that an order must be taken for the full amount. Multiple orders also cannot be combined and taken as a single order with this order type. Market and Limit orders will be supported in a future release.</li> -->

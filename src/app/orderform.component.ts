@@ -20,6 +20,7 @@ import {logger} from './modules/logger';
 import {BalancesService} from './balances.service';
 import {Balance} from './balance';
 import {OrderformService} from './orderform.service';
+import {BigTooltipService} from './big-tooltip.service';
 
 const delocalize = (numStr = '') => {
   const decimalSeparator = Localize.decimalSeparator();
@@ -106,6 +107,7 @@ export class OrderformComponent implements OnInit {
     private balancesService: BalancesService,
     private zone: NgZone,
     private orderformService: OrderformService,
+    private bigTooltipService: BigTooltipService,
   ) {
     this.onSliderChange = this.onSliderChange.bind(this);
   }
@@ -751,21 +753,33 @@ export class OrderformComponent implements OnInit {
     });
   }
 
-  getMinTooltipTitle(type) {
+  getMinTooltipName(type) {
     if(this.model && this.model.id) { // taking order
       if(type === 'buy') {
-        return this.Localize.text('This is the minimum that you can buy from this order', 'orderform');
+        return 'showOrderFormTakeBuyMinimumTooltip';
       } else if(type === 'sell') {
-        return this.Localize.text('This is the minimum that you can sell from this order', 'orderform');
+        return 'showOrderFormTakeSellMinimumTooltip';
       }
     } else { // making order
       if(type === 'buy') {
-        return this.Localize.text('This is the minimum that a user can sell from your full order amount (defaults to 10%)', 'orderform');
+        return 'showOrderFormMakeBuyMinimumTooltip';
       } else if(type === 'sell') {
-        return this.Localize.text('This is the minimum that a user can buy from your full order amount (defaults to 10%)', 'orderform');
+        return 'showOrderFormMakeSellMinimumTooltip';
       }
     }
     return '';
+  }
+
+  onMinQtyTooltipMouseOver(type) {
+    const tooltip = this.getMinTooltipName(type);
+    if(tooltip)
+      this.bigTooltipService.bigTooltip().next({tooltip, show: true});
+  }
+
+  onMinQtyTooltipMouseOut(type) {
+    const tooltip = this.getMinTooltipName(type);
+    if(tooltip)
+      this.bigTooltipService.bigTooltip().next({tooltip, show: false});
   }
 
 }
