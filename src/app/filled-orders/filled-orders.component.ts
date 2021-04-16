@@ -31,6 +31,7 @@ export class FilledOrdersComponent extends BaseComponent implements OnInit {
   public pricingEnabled = true;
   public pricingAvailable = true;
   public longestTokenLength: number;
+  public numberFormatStr = '1.2-6';
 
   private _hashPadToken = {};
   public get hashPadToken(): object { return this._hashPadToken; }
