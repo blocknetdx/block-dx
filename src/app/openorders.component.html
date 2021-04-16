@@ -75,7 +75,7 @@
   <app-table-column [prop]="'price'" [classList]="'col'">
     <ng-template columnHeader><Localize context="openorders" key="Total"></Localize></ng-template>
     <ng-template let-row="row" columnCell>
-      <span class="bn-number open-order-table-font no-highlight" [title]="row.displayTotal + ' ' + row.maker" [innerHTML]="row.displayTotal | blockCurrency:symbols[1]:'6' | localizeDecimalSeparator"></span>
+      <span class="bn-number open-order-table-font no-highlight" [title]="row.displayTotal + ' ' + row.maker" [innerHTML]="row.displayTotal | numberFormat:numberFormatStr:true | localizeDecimalSeparator"></span>
     </ng-template>
   </app-table-column>
 
