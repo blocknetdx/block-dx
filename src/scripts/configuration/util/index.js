@@ -210,8 +210,9 @@ const addToXBridgeConf = (wallets, blockDir) => {
   let split = bridgeConf
     .replace(/\r/g, '')
     .split(/\n/);
-  const walletsIdx = split.findIndex(s => /^ExchangeWallets\s*=/.test(s));
-  const existingWalletList = new Set(split[walletsIdx].trim().split(','));
+  const exchangeWalletsPatt = /^ExchangeWallets\s*=(.*)/;
+  const walletsIdx = split.findIndex(s => exchangeWalletsPatt.test(s));
+  const existingWalletList = new Set(split[walletsIdx].match(exchangeWalletsPatt)[1].trim().split(',').map(s => s.trim()).filter(s => s));
   const newWalletList = new Set([...data.keys(), ...existingWalletList]);
   newWalletList.delete(''); // Remove empty
   split[walletsIdx] = `ExchangeWallets=${[...newWalletList.values()].join(',')}`;
