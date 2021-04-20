@@ -70,10 +70,10 @@ export class OpenordersService {
               size = order.takerSize;
               total = order.makerSize;
               partialMinimum = math.multiply(
-                bignumber(order.takerSize),
+                bignumber(order.takerSize * 1000000),
                 math.divide(
-                  bignumber(order.partialMinimum),
-                  bignumber(order.makerSize),
+                  bignumber(order.partialMinimum * 1000000),
+                  bignumber(order.makerSize * 1000000),
                 )
               ).toString();
             }
