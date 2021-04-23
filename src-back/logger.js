@@ -17,7 +17,7 @@ class Logger {
     this._logger = createLogger({
       format: format.combine(
         format.timestamp(),
-        format.json()
+        format.simple()
       ),
       transports: [
         new transports.File({

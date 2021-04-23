@@ -399,6 +399,11 @@ class ServiceNodeInterface {
     let status, body, res;
     try {
       logger.info(`_queueRequest ${method}`);
+      logger.info(JSON.stringify({
+        id,
+        method,
+        params
+      }));
       res = await request
         .post(this._endpoint)
         .auth(this._user, this._password)
