@@ -392,7 +392,7 @@ export class OrderformComponent implements OnInit {
       e.target.value = relocalize(price);
     }
     const numeric = new Set(['0','1','2','3','4','5','6','7','8','9','.','Decimal','Backspace', decimalSeparator]);
-    if (!numeric.has(e.key)) return; // do not calculate price if not a numeric key
+    if (e.key && !numeric.has(e.key)) return; // do not calculate price if not a numeric key
     if(!price) {
       this.model.totalPrice = '';
       this.model.secondPrice = '';
@@ -434,7 +434,7 @@ export class OrderformComponent implements OnInit {
       e.target.value = relocalize(secondPrice);
     }
     const numeric = new Set(['0','1','2','3','4','5','6','7','8','9','.','Decimal','Backspace', decimalSeparator]);
-    if (!numeric.has(e.key)) return; // do not calculate price if not a numeric key
+    if (e.key && !numeric.has(e.key)) return; // do not calculate price if not a numeric key
     if(!secondPrice) {
       this.model.totalPrice = '';
       this.model.price = '';
