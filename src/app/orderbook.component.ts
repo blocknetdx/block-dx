@@ -328,7 +328,7 @@ export class OrderbookComponent implements OnInit, OnDestroy {
     menuTemplate.push({
       label: Localize.text('View Details', 'orderbook'),
       click: () => {
-        ipcRenderer.send('openOrderDetailsWindow', orderId);
+        ipcRenderer.send('openOrderDetailsWindow', orderId, ownOrder);
       }
     });
     menuTemplate.push({

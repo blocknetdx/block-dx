@@ -138,12 +138,28 @@
       border-radius: 5px;
     }
 
+    .delete-order-button {
+      background-color: #e08573;
+      color: #2b3c53;
+      float: right;
+      margin-left:0;
+      margin-right:0;
+      margin-top: -5px;
+      margin-bottom:0;
+      padding:10px;
+      font-weight: bold;
+    }
+    .delete-order-button:hover {
+      background-color: #e08573;
+      opacity: .9;
+    }
+
   </style>
 
 </head>
 <body>
 <div style="width:100%; padding: 20px 0 20px 0; text-align:center;"><img style="max-width:300px;" src="assets/logo_full.svg" alt="Blocknet Logo"></div>
-<h3 id="js-orderDetailsHeader">ORDER DETAILS</h3>
+<h3><span id="js-orderDetailsHeader">ORDER DETAILS</span><button type="button" id="js-deleteOrderButton" class="delete-order-button" style="display:none;">Delete Order</button></h3>
   <div class="container">
 
     <div id="js-detailsContainer" class="tos-container"></div>
