@@ -572,18 +572,19 @@ export class OrderformComponent implements OnInit {
   async onOrderSubmit(id = '', amount = '', totalPrice = '', type = '') {
 
     let { makerAddress = '', takerAddress = '' } = this.model;
-    const { orderType, repost = false } = this.model;
+    const { repost = false } = this.model;
 
-    const orderformOrder = id ? false : true;
+    const orderformOrder = !id;
 
-    let isPartialOrder, minimumAmount;
+    let isPartialOrder = this.model.amount !== this.model.minAmount;
+
+    let minimumAmount;
 
     if(orderformOrder) {
       id = this.model.id || id;
       amount = this.model.amount || amount;
       totalPrice = this.model.totalPrice || totalPrice;
       minimumAmount = this.model.minAmount || '0';
-      isPartialOrder = orderType === this.partialOrderType;
     } else {
       isPartialOrder = false;
       minimumAmount = '0';
@@ -592,8 +593,6 @@ export class OrderformComponent implements OnInit {
     if(!amount) {
       alert(Localize.text('Oops! You must enter an amount.', 'orderform'));
       return;
-    } else if(isPartialOrder && !minimumAmount) {
-      // ToDo minimum amount validation
     } else if(!totalPrice) {
       alert(Localize.text('Oops! You must enter a price.', 'orderform'));
       return;
@@ -619,7 +618,7 @@ export class OrderformComponent implements OnInit {
     }
 
     const { ipcRenderer } = window.electron;
-    logger.info(`Submit ${type} order\n${JSON.stringify(this.model, null, '  ')}`);
+    logger.info(`Submit ${type} order\n${JSON.stringify({...this.model, orderType: isPartialOrder ? this.partialOrderType : this.exactOrderType}, null, '  ')}`);
     makerAddress = makerAddress.trim();
     takerAddress = takerAddress.trim();
     amount = amount.trim();
