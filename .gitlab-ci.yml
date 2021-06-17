@@ -34,7 +34,7 @@ build_win:
 
 build_mac:
   stage: build
-  image: blocknetdx/devbuilds:blockdx-gitlab-mac
+  image: rburgett/blocknetdx-devbuilds:blockdx-gitlab-mac
   script:
     - |
       pwd
