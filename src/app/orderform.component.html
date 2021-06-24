@@ -79,7 +79,7 @@
         </div>
       </div>
 
-      <div class="input-group row" [style.display]="'flex'">
+      <div class="input-group row" [style.display]="'none'">
         <label class="col-4 col-form-label order-form-label" for="total_calc">
           <span *ngIf="type === 'buy'"><Localize context="orderform" key="Min buy qty"></Localize><i class="material-icons tooltip-icon" (mouseover)="onMinQtyTooltipMouseOver(type)" (mouseout)="onMinQtyTooltipMouseOut(type)">help</i></span>
           <span *ngIf="type === 'sell'"><Localize context="orderform" key="Min sell qty"></Localize><i class="material-icons tooltip-icon" (mouseover)="onMinQtyTooltipMouseOver(type)" (mouseout)="onMinQtyTooltipMouseOut(type)">help</i></span>
@@ -100,10 +100,10 @@
         </div>
       </div>
 
-      <app-slider-input *ngIf="model.orderType === partialOrderType" [minAmount]=".1 * toNumber(model.amount)"
-                        [maxAmount]="toNumber(model.amount)"
-                        [value]="toNumber(model.minAmount)"
-                        [onChange]="this.onSliderChange"></app-slider-input>
+<!--      <app-slider-input *ngIf="model.orderType === partialOrderType" [minAmount]=".1 * toNumber(model.amount)"-->
+<!--                        [maxAmount]="toNumber(model.amount)"-->
+<!--                        [value]="toNumber(model.minAmount)"-->
+<!--                        [onChange]="this.onSliderChange"></app-slider-input>-->
 
 <!--      <div class="input-group row" *ngIf="selectedOrderType == 'limit'">-->
 <!--        <label class="col-4 col-form-label" for="limit"><Localize context="orderform" key="Limit Price"></Localize></label>-->
@@ -235,7 +235,7 @@
 
       </div>
 
-      <div class="order-form-repost-order-label">
+      <div class="order-form-repost-order-label" [style.display]="'none'">
         <a href="#" [class.disabled]="this.model.orderType === exactOrderType" (click)="toggleAutomaticallyRepostOrder($event)"><Localize context="orderform" key="Automatically repost order"></Localize> <i [class.fa-square]="!this.model.repost || this.model.orderType === exactOrderType" [class.fa-check-square]="this.model.orderType === partialOrderType && this.model.repost" class="far"></i></a>
       </div>
 

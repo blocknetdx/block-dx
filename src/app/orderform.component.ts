@@ -590,6 +590,13 @@ export class OrderformComponent implements OnInit {
       minimumAmount = '0';
     }
 
+    /**
+     * TEMPORARY TO FORCE ALL ORDERS TO BE EXACT ORDERS
+     * THIS MUST BE REMOVE IN ORDER FOR PARTIAL ORDERS
+     * TO POST
+     */
+    isPartialOrder = false;
+
     if(!amount) {
       alert(Localize.text('Oops! You must enter an amount.', 'orderform'));
       return;
