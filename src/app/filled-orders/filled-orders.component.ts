@@ -167,7 +167,7 @@ export class FilledOrdersComponent extends BaseComponent implements OnInit {
     menuTemplate.push({
       label: Localize.text('View Details', 'filledOrders'),
       click: () => {
-        ipcRenderer.send('openMyOrderDetailsWindow', order.id);
+        ipcRenderer.send('openMyOrderDetailsWindow', order.id, true);
       }
     });
 

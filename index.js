@@ -318,7 +318,7 @@ ipcMain.on('openOrderDetailsWindow', async function(e, orderId, showDeleteButton
   }
   openOrderDetailsWindow(details, showDeleteButton);
 });
-ipcMain.on('openMyOrderDetailsWindow', async function(e, orderId) {
+ipcMain.on('openMyOrderDetailsWindow', async function(e, orderId, hideDeleteOrderBtn = false) {
   const order = myOrders.find(o => o.id === orderId) || {};
   const details = [
     [Localize.text('ID', 'orderDetailsWindow'), order.id],
@@ -335,7 +335,7 @@ ipcMain.on('openMyOrderDetailsWindow', async function(e, orderId) {
   if(order.orderType === 'partial') {
     details.splice(3, 0, [Localize.text('Maker Minimum Size', 'orderDetailsWindow'), order.partialMinimum]);
   }
-  openOrderDetailsWindow(details, true);
+  openOrderDetailsWindow(details, hideDeleteOrderBtn !== true);
 });
 ipcMain.on('openOrderHistoryDetailsWindow', async function(e, orderId) {
   const order = tradeHistory.find(o => o.id === orderId) || {};
