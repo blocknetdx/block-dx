@@ -213,7 +213,8 @@ export class OpenordersComponent extends BaseComponent implements OnInit {
   }
 
   onRowClick(order) {
-    window.electron.ipcRenderer.send('openMyOrderDetailsWindow', order.id);
+    if(order)
+      window.electron.ipcRenderer.send('openMyOrderDetailsWindow', order.id);
   }
 
   // getStatusDotColor(status) {

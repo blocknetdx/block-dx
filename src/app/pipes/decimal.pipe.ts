@@ -44,7 +44,9 @@ export class NumberFormatPipe implements PipeTransform {
         multiplierStr += '0';
       }
       const multiplier = Number(multiplierStr);
-      return (Math.round(multiplier * Number(int + '.' + dec)) / multiplier).toFixed(decMax);
+      return (Math
+        .floor(multiplier * Number(int + '.' + dec)) / multiplier)
+        .toFixed(decMax);
     }
   }
 }
