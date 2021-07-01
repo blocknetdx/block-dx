@@ -1048,8 +1048,6 @@ const openAppWindow = () => {
     // }
   });
 
-  appWindow.toggleDevTools();
-
   const initialBounds = storage.getItem('bounds');
   if(initialBounds) {
     try {

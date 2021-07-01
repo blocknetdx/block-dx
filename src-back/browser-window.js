@@ -30,8 +30,7 @@ class BrowserWindow {
     this.windowId = this._window.id;
     this.isMainWindow = isMainWindow;
 
-    //if(toggleDevTools && isDev) browserWindow.toggleDevTools();
-    if(toggleDevTools) browserWindow.toggleDevTools();
+    if(toggleDevTools && isDev) browserWindow.toggleDevTools();
 
     if (!isMainWindow) browserWindow.setMenu(null);
 
