@@ -203,9 +203,9 @@
         <span (click)="generateNewAddress(symbols[1])">{{Localize.text('Generate New {token} Address', 'orderform', {token: symbols[1]})}}</span>
       </div>
 
-<!--      <span [class.button-spacer]="model.orderType === exactOrderType" [class.button-spacer-lg]="model.orderType === exactOrderType"></span>-->
+      <span [class.button-spacer]="model.orderType === exactOrderType" [class.button-spacer-lg]="model.orderType === exactOrderType"></span>
 
-      <!--      <div [style.height]="model.orderType === exactOrderType && !pricingEnabled ? '8px' : 0"></div>-->
+      <div [style.height]="model.orderType === exactOrderType && !pricingEnabled ? '8px' : 0"></div>
 
       <div class="input-group row">
 
