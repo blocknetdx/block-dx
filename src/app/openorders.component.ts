@@ -32,6 +32,7 @@ export class OpenordersComponent extends BaseComponent implements OnInit {
   public pricingEnabled = true;
   public pricingAvailable = true;
   public longestTokenLength: number;
+  public numberFormatStr = '1.2-6';
 
   private _hashPadToken = {};
   public get hashPadToken(): object { return this._hashPadToken; }
@@ -149,7 +150,11 @@ export class OpenordersComponent extends BaseComponent implements OnInit {
       });
   }
 
-  cancelOrder(order) {
+  cancelOrder(e, order) {
+    if(e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     const { electron } = window;
     order.canceled = true;
     order['row_class'] = 'canceled';
@@ -179,7 +184,7 @@ export class OpenordersComponent extends BaseComponent implements OnInit {
         label: Localize.text('Cancel Order', 'openorders'),
         click: () => {
           const confirmed = confirm(Localize.text('Are you sure that you want to cancel this order?', 'openorders'));
-          if(confirmed) this.cancelOrder(order);
+          if(confirmed) this.cancelOrder(null, order);
         }
       });
     }
@@ -205,6 +210,11 @@ export class OpenordersComponent extends BaseComponent implements OnInit {
 
     const menu = Menu.buildFromTemplate(menuTemplate);
     menu.popup({x: clientX, y: clientY});
+  }
+
+  onRowClick(order) {
+    if(order)
+      window.electron.ipcRenderer.send('openMyOrderDetailsWindow', order.id);
   }
 
   // getStatusDotColor(status) {

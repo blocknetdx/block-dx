@@ -4,7 +4,7 @@ const renderFees = ({ Localize }) => {
 
       <div class="section intro">
         <p class="no-header">
-          ${Localize.text('Using Block DX is cheaper than using centralized exchanges, especially since there are no withdrawal fees. Below is Block DX’s fee structure. For the most up-to-date information on fees, <a href="#" class="text-link js-externalLink" data-link="https://docs.blocknet.co/blockdx/fees/">click here</a>.', 'informationWindowFees')}
+          ${Localize.text('Using Block DX is cheaper than using centralized exchanges, especially since there are no withdrawal fees. Below is Block DX’s fee structure. For the most up-to-date information on fees, <a class="text-link js-externalLink" href="https://docs.blocknet.co/blockdx/fees/">click here</a>.', 'informationWindowFees')}
         </p>
       </div>
 
@@ -24,7 +24,7 @@ const renderFees = ({ Localize }) => {
   <p>
     ${Localize.text('When accepting an order on Block DX, a static fee of 0.015 BLOCK is charged at the time the order is taken. This fee is charged even if a trade is canceled or fails and is meant to discourage malicious behavior on the network.', 'informationWindowFees')}
   </p>
-  <p>  
+  <p>
     ${Localize.text('In addition to the 0.015 BLOCK fee, there is also the network fee of the asset being sold. This is the same type of fee you would incur if sending this asset to another party.', 'informationWindowFees')}
   </p>
 </div>

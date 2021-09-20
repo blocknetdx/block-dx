@@ -4,7 +4,7 @@ import { Directive, Input, ContentChild, TemplateRef, ElementRef } from '@angula
   selector: 'bn-tab'
 })
 export class TabDirective {
-  @ContentChild('content', {read: TemplateRef})
+  @ContentChild('content', {read: TemplateRef, static: false})
   content: TemplateRef<any>;
 
   @Input() public label: string;

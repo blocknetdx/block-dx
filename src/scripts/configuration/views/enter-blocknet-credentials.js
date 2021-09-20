@@ -1,6 +1,6 @@
 /* global swal, Localize */
 
-const { ipcRenderer, remote } = require('electron');
+const { ipcRenderer } = require('electron');
 const { RouterView } = require('../../modules/router');
 const route = require('../constants/routes');
 const configurationTypes= require('../constants/configuration-types');
@@ -177,7 +177,7 @@ class EnterBlocknetCredentials extends RouterView {
 
     $('.js-blocknetWalletLink').on('click', e => {
       e.preventDefault();
-      remote.shell.openExternal('https://github.com/blocknetdx/blocknet/releases/latest');
+      ipcRenderer.send('openExternal', 'https://github.com/blocknetdx/blocknet/releases/latest');
     });
 
   }

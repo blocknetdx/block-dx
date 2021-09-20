@@ -5,7 +5,7 @@ const { RouterView } = require('../../modules/router');
 const route = require('../constants/routes');
 const configurationTypes = require('../constants/configuration-types');
 const titles = require('../modules/titles');
-const { saveConfs, addConfs, updateConfs } = require('../util');
+const { saveConfs, addConfs, handleError, updateConfs } = require('../util');
 const sidebar = require('../snippets/sidebar');
 
 class Finish extends RouterView {
@@ -238,7 +238,7 @@ class Finish extends RouterView {
         }
         router.goTo(route.CONFIGURATION_COMPLETE);
       } catch(err) {
-        console.error(err);
+        handleError(err);
       }
     });
   }

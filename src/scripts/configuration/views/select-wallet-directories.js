@@ -8,7 +8,7 @@ const { RouterView } = require('../../modules/router');
 const route = require('../constants/routes');
 const configurationTypes = require('../constants/configuration-types');
 const titles = require('../modules/titles');
-const { removeNonWordCharacters } = require('../util');
+const { handleError, removeNonWordCharacters } = require('../util');
 const sidebar = require('../snippets/sidebar');
 
 const { platform } = process;
@@ -45,7 +45,6 @@ class SelectWalletDirectories extends RouterView {
           }
           return w;
         } catch(err) {
-          // console.error(err);
           w = w.set({
             directory: '',
             error: true
@@ -172,7 +171,7 @@ class SelectWalletDirectories extends RouterView {
         const stats = fs.statSync(dirname);
         return stats.isDirectory();
       } catch(err) {
-        console.error(err);
+        handleError(err);
         return false;
       }
     };

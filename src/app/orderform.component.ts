@@ -1,6 +1,7 @@
 import { Component, Input, ViewChild, OnInit, NgZone } from '@angular/core';
 import * as math from 'mathjs';
 import { PerfectScrollbarComponent, PerfectScrollbarDirective } from 'ngx-perfect-scrollbar';
+import isBoolean from 'lodash/isBoolean';
 
 import { AppService } from './app.service';
 import { Currentprice } from './currentprice';
@@ -13,8 +14,13 @@ import { LocalizeDecimalSeparatorPipe } from './localize/localize-decimal-separa
 import { PricingService } from './pricing.service';
 import { Pricing } from './pricing';
 import {ConfigurationOverlayService} from './configuration.overlay.service';
-import {alert, shouldHidePricing} from './util';
+import {alert, minAmountToPrice, shouldHidePricing} from './util';
 import {Localize} from './localize/localize.component';
+import {logger} from './modules/logger';
+import {BalancesService} from './balances.service';
+import {Balance} from './balance';
+import {OrderformService} from './orderform.service';
+import {BigTooltipService} from './big-tooltip.service';
 
 const delocalize = (numStr = '') => {
   const decimalSeparator = Localize.decimalSeparator();
@@ -32,29 +38,40 @@ math.config({
 
 const { bignumber } = math;
 
+const orderTypes = {
+  PARTIAL: 'PARTIAL',
+  EXACT: 'EXACT',
+};
+
 @Component({
   selector: 'app-orderform',
   templateUrl: './orderform.component.html',
   styleUrls: ['./orderform.component.scss']
 })
 export class OrderformComponent implements OnInit {
-  @ViewChild('tabView') public tabView: TabViewComponent;
-  @ViewChild('typeSelect') public typeSelect: SelectComponent;
+  @ViewChild('tabView', {static: false}) public tabView: TabViewComponent;
+  @ViewChild('typeSelect', {static: false}) public typeSelect: SelectComponent;
 
-  @ViewChild('scrollbar')
+  @ViewChild('scrollbar', {static: false})
 
+  public amountPercent: number;
+  private balances:Balance[] = [];
   public scrollbar: PerfectScrollbarDirective;
   public symbols:string[] = [];
   public currentPrice: Currentprice;
   public totalPrice = 0;
-  public orderTypes: any[];
-  public selectedOrderType: any;
   public model: any;
   public addresses: {};
   public disableSubmit = false;
 
   public amountPopperText: string;
   public amountPopperShow = false;
+  public minAmountPopperText: string;
+  public minAmountPopperShow = false;
+  public pricePopperText: string;
+  public pricePopperShow = false;
+  public secondPricePopperText: string;
+  public secondPricePopperShow = false;
 
   public totalPopperText: string;
   public totalPopperShow = false;
@@ -72,6 +89,12 @@ export class OrderformComponent implements OnInit {
   public showConfigurationOverlay = false;
   public autoGenerateAddressesAvailable = true;
 
+  public exactOrderType = 'exact';
+  public partialOrderType = 'partial';
+
+  public invalidAmount = false;
+  public invalidMinAmount = false;
+
   shouldHidePricing = shouldHidePricing;
 
   constructor(
@@ -81,13 +104,24 @@ export class OrderformComponent implements OnInit {
     private orderbookService: OrderbookService,
     private pricingService: PricingService,
     private configurationOverlayService: ConfigurationOverlayService,
-    private zone: NgZone
-  ) { }
+    private balancesService: BalancesService,
+    private zone: NgZone,
+    private orderformService: OrderformService,
+    private bigTooltipService: BigTooltipService,
+  ) {
+    this.onSliderChange = this.onSliderChange.bind(this);
+  }
 
   public Localize = Localize;
 
   ngOnInit() {
-    this.model = {};
+
+    this.amountPercent = 0;
+
+    this.model = {
+      orderType: this.partialOrderType,
+      repost: true,
+    };
 
     const { ipcRenderer } = window.electron;
 
@@ -122,6 +156,7 @@ export class OrderformComponent implements OnInit {
     this.orderbookService.requestedOrder
       .subscribe((order) => {
         this.zone.run(() => {
+          // console.log('order', order);
           const tabIndex = order[4] === 'ask' ? 0 : 1;
           this.tabView.activeTab = this.tabView.tabs[tabIndex];
           this.resetModel();
@@ -131,9 +166,12 @@ export class OrderformComponent implements OnInit {
             amount: this.formatNumber(String(order[1]), this.symbols[0]),
             totalPrice: this.formatNumber(order[5], this.symbols[1]),
             price: this.formatNumber(String(order[0]), this.symbols[1]),
-            secondPrice
+            secondPrice,
+            orderType: this.exactOrderType,
+            minAmount: Number(order[7]) ? this.formatNumber(String(order[7]), this.symbols[0]) : this.formatNumber(String(order[1]), this.symbols[0]),
             // totalPrice: this.formatNumber(String(order[0] * order[1]), this.symbols[1])
           });
+          this.amountPercent = 0;
         });
       });
 
@@ -149,17 +187,46 @@ export class OrderformComponent implements OnInit {
       });
     });
 
-    this.orderTypes = [
-      { value: 'exact', viewValue: 'Exact Order'}
-    ];
+    this.balancesService.getBalances().subscribe(balances => {
+      this.balances = balances;
+    });
 
-    this.configurationOverlayService.showConfigurationOverlay()
-      .subscribe(([show]) => {
-        this.zone.run(() => {
-          this.showConfigurationOverlay = show;
-        });
-      });
+    this.orderformService.getResetOrderForm().subscribe(() => {
+      this.resetModel(false);
+    });
 
+  }
+
+  selectOrderType(orderType) {
+    this.model.orderType = orderType;
+  }
+
+  toggleAutomaticallyRepostOrder(e) {
+    e.preventDefault();
+    if(this.model.orderType === this.partialOrderType) {
+      this.model.repost = this.model.repost ? false : true;
+    }
+  }
+
+  async setAmountPercent(value) {
+    const balance = this.balances.find(b => b.coin === this.symbols[0]);
+    if(!balance) return 0;
+    this.model.id = '';
+    this.amountPercent = value;
+    const newAmount = math.multiply(bignumber(value / 100), bignumber(Number(balance.amount)));
+    const preppedAmount = this.fixAmount(newAmount.toString());
+    this.model.amount = this.formatNumber(preppedAmount, 'BTC');
+    const { price = '' } = this.model;
+    if(price) {
+      const newTotalPrice = String(math.multiply(bignumber(Number(preppedAmount)), bignumber(price)));
+      this.model.totalPrice = this.formatNumber(String(newTotalPrice), 'BTC');
+    } else {
+      this.model.totalPrice = '';
+    }
+    if(this.model.orderType === this.partialOrderType) {
+      const newMinAmount = this.generateMinAmountFromAmount(Number(preppedAmount));
+      this.model.minAmount = this.formatNumber(String(newMinAmount), 'BTC');
+    }
   }
 
   updatePricingAvailable(enabled: boolean) {
@@ -200,6 +267,10 @@ export class OrderformComponent implements OnInit {
         showProp = 'amountPopperShow';
         textProp = 'amountPopperText';
         break;
+      case 'minAmount':
+        showProp = 'minAmountPopperShow';
+        textProp = 'minAmountPopperText';
+        break;
       case 'price':
         showProp = 'pricePopperShow';
         textProp = 'pricePopperText';
@@ -222,7 +293,15 @@ export class OrderformComponent implements OnInit {
 
   amountChanged(e) {
     e.preventDefault();
-    this.model.id = '';
+    if(
+      this.model.id &&
+      this.model.orderType === this.exactOrderType &&
+      this.model.amount === this.model.minAmount
+    ) {
+      this.model.id = '';
+      this.model.orderType = this.partialOrderType;
+    }
+    this.amountPercent = 0;
     let amount;
     if(e.type === 'paste') {
       amount = window.electron.clipboard.readText();
@@ -252,10 +331,45 @@ export class OrderformComponent implements OnInit {
     } else {
       this.model.totalPrice = '';
     }
+    if(this.model.orderType === this.partialOrderType) {
+      const newMinAmount = this.generateMinAmountFromAmount(amount);
+      this.model.minAmount = this.formatNumber(String(newMinAmount), 'BTC');
+      this.invalidAmount = false;
+      this.invalidMinAmount = false;
+    }
+  }
+
+  generateMinAmountFromAmount(amount = 0) {
+    return math.multiply(bignumber(amount), bignumber(.1));
+  }
+
+  minAmountChanged(e) {
+    e.preventDefault();
+    if(this.model.id)
+      return;
+    this.amountPercent = 0;
+    let amount;
+    if(e.type === 'paste') {
+      amount = window.electron.clipboard.readText();
+    } else {
+      amount = e.target.value;
+    }
+    amount = delocalize(amount);
+    amount = amount === '.' ? '0.' : amount;
+    const [ valid, skipPopper = false ] = this.validAmount(amount);
+    if(!valid) {
+      const fixed = this.fixAmount(amount);
+      if(!skipPopper) this.showPopper('minAmount', Localize.text('You can only specify amounts with at most 6 decimal places.', 'orderform'), 5000);
+      e.target.value = relocalize(fixed);
+    } else if(e.type === 'paste') {
+      e.target.value = relocalize(amount);
+    }
   }
 
   priceChanged(e) {
     e.preventDefault();
+    if(this.model.id)
+      return;
     const decimalSeparator = Localize.decimalSeparator();
     const type = this.tabView.activeIndex === 0 ? 'buy' : 'sell';
     this.model.id = '';
@@ -278,7 +392,7 @@ export class OrderformComponent implements OnInit {
       e.target.value = relocalize(price);
     }
     const numeric = new Set(['0','1','2','3','4','5','6','7','8','9','.','Decimal','Backspace', decimalSeparator]);
-    if (!numeric.has(e.key)) return; // do not calculate price if not a numeric key
+    if (e.key && !numeric.has(e.key)) return; // do not calculate price if not a numeric key
     if(!price) {
       this.model.totalPrice = '';
       this.model.secondPrice = '';
@@ -296,6 +410,8 @@ export class OrderformComponent implements OnInit {
 
   secondPriceChanged(e) {
     e.preventDefault();
+    if(this.model.id)
+      return;
     const decimalSeparator = Localize.decimalSeparator();
     const type = this.tabView.activeIndex === 0 ? 'buy' : 'sell';
     this.model.id = '';
@@ -318,7 +434,7 @@ export class OrderformComponent implements OnInit {
       e.target.value = relocalize(secondPrice);
     }
     const numeric = new Set(['0','1','2','3','4','5','6','7','8','9','.','Decimal','Backspace', decimalSeparator]);
-    if (!numeric.has(e.key)) return; // do not calculate price if not a numeric key
+    if (e.key && !numeric.has(e.key)) return; // do not calculate price if not a numeric key
     if(!secondPrice) {
       this.model.totalPrice = '';
       this.model.price = '';
@@ -354,7 +470,7 @@ export class OrderformComponent implements OnInit {
     });
   }
 
-  onNumberInputBlur(e, field) {
+  onNumberInputBlur(e, field, type) {
     let { value } = e.target;
     value = delocalize(value);
     const emptyOrZero = (s => /^0*\.?0*$/.test(s) || /^\s*$/.test(s));
@@ -363,6 +479,44 @@ export class OrderformComponent implements OnInit {
     } else {
       this.model[field] = this.formatNumber(value, field === 'amount' ? this.symbols[0] : this.symbols[1]);
     }
+    if(field === 'amount' || field === 'minAmount') {
+      this.validate(field, type);
+    }
+  }
+
+  async validate(selectedField, type) {
+    let origOrder;
+    if(this.model.id)
+      origOrder = await window.electron.ipcRenderer.invoke('getOrder', this.model.id);
+    this.zone.run(() => {
+      const { amount: amountStr, minAmount: minAmountStr } = this.model;
+      const amount = Number(amountStr || '0');
+      const minAmount = Number(minAmountStr || '0');
+      if(this.model.orderType === this.partialOrderType) { // making order
+        const minMin = math.divide(math.bignumber(amountStr), math.bignumber('10')).toNumber();
+        if(selectedField === 'minAmount') {
+          if(minAmount < minMin || minAmount > amount) {
+            this.invalidMinAmount = true;
+          } else {
+            this.invalidAmount = false;
+            this.invalidMinAmount = false;
+          }
+        }
+      } else if(origOrder && this.model.orderType === this.exactOrderType) { // taking order
+        const origAmountStr = type === 'buy' ? origOrder.makerSize : origOrder.takerSize;
+        const origAmount = Number(origAmountStr);
+        if(selectedField === 'amount') {
+          if(amount < minAmount) {
+            this.invalidAmount = true;
+          } else if(amount > origAmount) {
+            this.invalidAmount = true;
+          } else {
+            this.invalidAmount = false;
+            this.invalidMinAmount = false;
+          }
+        }
+      }
+    });
   }
 
   upperCheck(num: string) {
@@ -391,6 +545,8 @@ export class OrderformComponent implements OnInit {
   }
 
   resetModel(retainPrice = false) {
+    this.invalidAmount = false;
+    this.invalidMinAmount = false;
     this.model = {
       id: '',
       amount: '',
@@ -398,10 +554,14 @@ export class OrderformComponent implements OnInit {
       secondPrice: retainPrice ? this.model.secondPrice : '',
       totalPrice: '',
       makerAddress: this.addresses[this.symbols[0]] || '',
-      takerAddress: this.addresses[this.symbols[1]] || ''
+      takerAddress: this.addresses[this.symbols[1]] || '',
+      minAmount: '',
+      orderType: this.partialOrderType,
+      repost: isBoolean(this.model.respost) ? this.model.repost : true,
     };
     this.formatNumberSymbol0 = this.formatNumber('0', this.symbols[0]);
     this.formatNumberSymbol1 = this.formatNumber('0', this.symbols[1]);
+    this.amountPercent = 0;
   }
 
   validateNumber(numStr = '') {
@@ -409,17 +569,33 @@ export class OrderformComponent implements OnInit {
     return /\d+/.test(numStr) && /^\d*\.?\d*$/.test(numStr) && Number(numStr) > 0;
   }
 
-  onOrderSubmit(id = '', amount = '', totalPrice = '', type = '') {
+  async onOrderSubmit(id = '', amount = '', totalPrice = '', type = '') {
 
     let { makerAddress = '', takerAddress = '' } = this.model;
+    const { repost = false } = this.model;
 
-    const orderformOrder = id ? false : true;
+    const orderformOrder = !id;
+
+    let isPartialOrder = this.model.amount !== this.model.minAmount;
+
+    let minimumAmount;
 
     if(orderformOrder) {
       id = this.model.id || id;
       amount = this.model.amount || amount;
       totalPrice = this.model.totalPrice || totalPrice;
+      minimumAmount = this.model.minAmount || '0';
+    } else {
+      isPartialOrder = false;
+      minimumAmount = '0';
     }
+
+    /**
+     * TEMPORARY TO FORCE ALL ORDERS TO BE EXACT ORDERS
+     * THIS MUST BE REMOVE IN ORDER FOR PARTIAL ORDERS
+     * TO POST
+     */
+    isPartialOrder = false;
 
     if(!amount) {
       alert(Localize.text('Oops! You must enter an amount.', 'orderform'));
@@ -449,11 +625,12 @@ export class OrderformComponent implements OnInit {
     }
 
     const { ipcRenderer } = window.electron;
-    console.log('Submit order', type, this.model);
+    logger.info(`Submit ${type} order\n${JSON.stringify({...this.model, orderType: isPartialOrder ? this.partialOrderType : this.exactOrderType}, null, '  ')}`);
     makerAddress = makerAddress.trim();
     takerAddress = takerAddress.trim();
     amount = amount.trim();
     totalPrice = totalPrice.trim();
+    minimumAmount = minimumAmount.trim();
 
     if(
       !makerAddress ||
@@ -461,7 +638,8 @@ export class OrderformComponent implements OnInit {
       !amount ||
       !this.validateNumber(amount) ||
       !totalPrice ||
-      !this.validateNumber(totalPrice)
+      !this.validateNumber(totalPrice) ||
+      (isPartialOrder && !this.validateNumber(minimumAmount))
     ) return;
 
     this.updateStoredAddresses(makerAddress, takerAddress);
@@ -477,46 +655,86 @@ export class OrderformComponent implements OnInit {
     });
 
     if(id) { // take order
+      const origOrder = await ipcRenderer.invoke('getOrder', id);
+      let params;
       if(type === 'buy') {
-        ipcRenderer.send('takeOrder', {
+        params = {
           id,
           sendAddress: takerAddress,
           receiveAddress: makerAddress
-        });
+        };
+        if(Number(origOrder.partialMinimum) > 0) {
+          params = {
+            ...params,
+            amount
+          };
+        }
       } else if(type === 'sell') {
-        ipcRenderer.send('takeOrder', {
+        params = {
           id,
           sendAddress: makerAddress,
           receiveAddress: takerAddress
-        });
+        };
+        if(Number(origOrder.partialMinimum) > 0) {
+          params = {
+            ...params,
+            amount: minAmountToPrice(origOrder.takerSize, amount, origOrder.makerSize).toFixed(6)
+          };
+        }
       }
+      ipcRenderer.send('takeOrder', params);
     } else { // make order
+      const endpoint = isPartialOrder ? 'makePartialOrder' : 'makeOrder';
+      let params;
       if(type === 'buy') {
-        ipcRenderer.send('makeOrder', {
+        params = {
           maker: this.symbols[1],
           makerSize: totalPrice,
           makerAddress: takerAddress,
           taker: this.symbols[0],
           takerSize: amount,
           takerAddress: makerAddress,
-          type: 'exact'
-        });
+        };
+        if(isPartialOrder) { // good
+          params = {
+            ...params,
+            minimumSize: minAmountToPrice(amount, minimumAmount, totalPrice).toFixed(6),
+            repost,
+          };
+        }
       } else if(type === 'sell') {
-        ipcRenderer.send('makeOrder', {
+        params = {
           maker: this.symbols[0],
           makerSize: amount,
           makerAddress: makerAddress,
           taker: this.symbols[1],
           takerSize: totalPrice,
           takerAddress: takerAddress,
-          type: 'exact'
-        });
+        };
+        if(isPartialOrder) {
+          params = {
+            ...params,
+            minimumSize: this.model.minAmount,
+            repost,
+          };
+        }
       }
+      ipcRenderer.send(endpoint, params);
     }
   }
 
+  // minAmountToPrice(amount, minAmount, totalPrice) {
+  //   // (minAmount * totalPrice) / amount
+  //   amount = bignumber(amount);
+  //   minAmount = bignumber(minAmount);
+  //   totalPrice = bignumber(totalPrice);
+  //   return math.divide(math.multiply(minAmount, totalPrice), amount).toNumber();
+  // }
+
   onTabChange() {
+    this.model.orderType = this.partialOrderType;
     this.model.id = '';
+    this.amountPercent = 0;
   }
 
   openConfigurationWindow() {
@@ -526,4 +744,48 @@ export class OrderformComponent implements OnInit {
   generateNewAddress(token) {
     window.electron.ipcRenderer.send('generateNewAddress', token);
   }
+
+  toNumber(numStr) {
+    if(!numStr) {
+      return 0;
+    } else {
+      return Number(numStr);
+    }
+  }
+
+  onSliderChange(newMinAmount) {
+    this.zone.run(() => {
+      this.model.minAmount = this.formatNumber(String(newMinAmount), 'BTC');
+    });
+  }
+
+  getMinTooltipName(type) {
+    if(this.model && this.model.id) { // taking order
+      if(type === 'buy') {
+        return 'showOrderFormTakeBuyMinimumTooltip';
+      } else if(type === 'sell') {
+        return 'showOrderFormTakeSellMinimumTooltip';
+      }
+    } else { // making order
+      if(type === 'buy') {
+        return 'showOrderFormMakeBuyMinimumTooltip';
+      } else if(type === 'sell') {
+        return 'showOrderFormMakeSellMinimumTooltip';
+      }
+    }
+    return '';
+  }
+
+  onMinQtyTooltipMouseOver(type) {
+    const tooltip = this.getMinTooltipName(type);
+    if(tooltip)
+      this.bigTooltipService.bigTooltip().next({tooltip, show: true});
+  }
+
+  onMinQtyTooltipMouseOut(type) {
+    const tooltip = this.getMinTooltipName(type);
+    if(tooltip)
+      this.bigTooltipService.bigTooltip().next({tooltip, show: false});
+  }
+
 }

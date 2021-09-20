@@ -23,11 +23,18 @@ const ipcMainListeners = {
   CLOSE_MESSAGE_BOX: 'CLOSE_MESSAGE_BOX'
 };
 
+const pricingSources = {
+  CLOUD_CHAINS: 'CLOUD_CHAINS',
+  CRYPTO_COMPARE: 'CRYPTO_COMPARE',
+  COIN_MARKET_CAP: 'COIN_MARKET_CAP',
+};
+
 module.exports = {
   blocknetDir4,
   blocknetDir3,
   X_BRIDGE_CONF_NAME,
   BLOCKNET_CONF_NAME4,
   BLOCKNET_CONF_NAME3,
-  ipcMainListeners
+  ipcMainListeners,
+  pricingSources,
 };

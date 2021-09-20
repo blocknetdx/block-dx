@@ -13,6 +13,7 @@ const { bignumber } = math;
 import 'rxjs/add/operator/toPromise';
 
 import { Trade } from './trade';
+import {logger} from './modules/logger';
 
 declare var electron: any;
 
@@ -57,7 +58,6 @@ export class TradehistoryService {
       //   }
       //   this.tradeHistoryObservable.next(p);
       // } catch(err) {
-      //   console.error(err);
       // }
 
       electron.ipcRenderer.on('tradeHistory', (e, tradeHistory, keyPair) => {
@@ -101,7 +101,7 @@ export class TradehistoryService {
   }
 
   private handleError(error: any): Promise<any> {
-    console.error('An error occurred', error); // for demo purposes only
+    logger.error(error.message + '\n' + error.stack);
     return Promise.reject(error.message || error);
   }
 }

@@ -24,9 +24,6 @@ $(document).ready(() => {
 
   window.addEventListener('resize', setContainerHeight);
 
-  const {ipcRenderer} = require('electron');
-  const { shell } = require('electron').remote;
-
   // Get and display release notes text
   const $notesContainer = $('#js-notesContainer');
   const notes = ipcRenderer.sendSync('getReleaseNotes');
@@ -52,7 +49,7 @@ $(document).ready(() => {
   $('a').on('click', e => {
     e.preventDefault();
     const href = $(e.currentTarget).attr('href');
-    if(href && href !== '#') shell.openExternal(href);
+    if(href && href !== '#') ipcRenderer.send('openExternal', href);
   });
 
   // Attach close window click event

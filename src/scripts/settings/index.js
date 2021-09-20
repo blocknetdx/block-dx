@@ -9,9 +9,10 @@ const renderOrderBookSettings = require('./modules/order-book');
 const renderOrderFormSettings = require('./modules/order-form');
 const renderLocalization = require('./modules/localization');
 const renderLayout = require('./modules/layout');
+const constants = require('../../../src-back/constants');
 
 const handleError = err => {
-  console.error(err);
+  ipcRenderer.send('LOGGER_ERROR', err.message + '\n' + err.stack);
   alert(err);
 };
 
@@ -27,9 +28,6 @@ const state = {
 
   set(key, val) {
     this._data.set(key, val);
-    // console.log('state', [...this._data.entries()]
-    //   .reduce((obj, [ k, v ]) => Object.assign(obj, {[k]: v}), {})
-    // );
   },
 
   get(key) {
@@ -70,8 +68,9 @@ state.set('pricingUnits', [
   'BTC'
 ]);
 state.set('pricingSources', [
-  {id: 'CRYPTO_COMPARE', text: 'CryptoCompare', apiKeyNeeded: false},
-  {id: 'COIN_MARKET_CAP', text: 'CoinMarketCap', apiKeyNeeded: true}
+  {id: constants.pricingSources.CLOUD_CHAINS, text: 'CloudChains', apiKeyNeeded: false},
+  {id: constants.pricingSources.CRYPTO_COMPARE, text: 'CryptoCompare', apiKeyNeeded: false},
+  {id: constants.pricingSources.COIN_MARKET_CAP, text: 'CoinMarketCap', apiKeyNeeded: true}
 ]);
 
 const saveSettings = () => {
@@ -307,7 +306,6 @@ $(document).ready(() => {
           } else {
             if ( pricingSourceObj.apiKeyNeeded && $('#js-apiKeyInput').val().trim() == '') {
               // api key needed, keep disabled
-              // console.log('make disabled');
               $('#js-apiKeyInput').val('');
               apiKeyError(true);
               state.set('pricingEnabled', false);
@@ -316,7 +314,6 @@ $(document).ready(() => {
               $colorBar.addClass('color-bar-right');
               $colorBar.removeClass('color-bar-left');
             } else {
-              // console.log('make enabled');
               apiKeyError(false);
               state.set('pricingEnabled', true);
               $toggle1.addClass('active');
@@ -365,7 +362,6 @@ $(document).ready(() => {
         .on('change', e => {
           e.preventDefault();
           const { value } = e.target;
-          // console.log('value', value);
           const preppedValue = Number(value) * 1000;
           state.set('pricingFrequency', preppedValue);
           saveSettings();
@@ -402,9 +398,7 @@ $(document).ready(() => {
               .on('click', ee => {
                 ee.preventDefault();
                 const value = $(ee.currentTarget).attr('data-showWallet');
-                // console.log('value', value, typeof value);
                 const newShowWallet = value === 'true' ? true : false;
-                // console.log('newShowWallet', newShowWallet);
                 $($target.find('div')[0]).text(newShowWallet ? yesText : noText);
                 state.set('showWallet', newShowWallet);
                 saveSettings();

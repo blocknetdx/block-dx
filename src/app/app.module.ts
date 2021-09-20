@@ -1,6 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { LayoutModule } from '@angular/cdk/layout';
@@ -67,6 +66,9 @@ import {OrderbookViewService} from './orderbook.view.service';
 import { GeneralSettingsService } from './general-settings.service';
 import {Localize} from './localize/localize.component';
 import {LocalizeDecimalSeparatorPipe} from './localize/localize-decimal-separator.pipe';
+import {SliderInputComponent} from './slider-input/slider-input.component';
+import {OrderformService} from './orderform.service';
+import {BigTooltipService} from './big-tooltip.service';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -111,12 +113,12 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     PopperComponent,
     BigTooltipComponent,
     Localize,
-    LocalizeDecimalSeparatorPipe
+    LocalizeDecimalSeparatorPipe,
+    SliderInputComponent,
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
-    HttpModule,
     BrowserAnimationsModule,
     FormsModule,
     LayoutModule,
@@ -139,6 +141,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ConfigurationOverlayService,
     OrderbookViewService,
     GeneralSettingsService,
+    OrderformService,
+    BigTooltipService,
     {
       provide: PERFECT_SCROLLBAR_CONFIG,
       useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG

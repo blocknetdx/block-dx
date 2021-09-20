@@ -1,0 +1,23 @@
+<div class="slider-input-container"
+     [style.cursor]="dragging ? 'grab' : 'default'">
+  <div class="slider-input-bar-container"
+       [style.cursor]="dragging ? 'grab' : 'pointer'"
+       (mousedown)="onBarMouseDown($event)">
+    <div class="slider-input-bar" #sliderBar></div>
+    <div class="slider-input-bar-highlight" [style.width]="percent + '%'"></div>
+    <div class="slider-input-marker active" style="left: 0"></div>
+    <div class="slider-input-marker" [class.active]="percent >= 25" style="left: 25%"></div>
+    <div class="slider-input-marker" [class.active]="percent >= 50" style="left: 50%"></div>
+    <div class="slider-input-marker" [class.active]="percent >= 75" style="left: 75%"></div>
+    <div class="slider-input-marker" [class.active]="percent >= 100" style="left: 100%"></div>
+    <div class="slider-input-handle"
+         [style.cursor]="dragging ? 'grab' : 'pointer'"
+         [style.left]="percent + '%'">
+      <div class="slider-input-handle-inner"></div>
+    </div>
+  </div>
+  <div class="slider-input-min-max-container">
+    <span [innerHTML]="minAmount | blockCurrency:'BTC':6 | localizeDecimalSeparator"></span>
+    <span [innerHTML]="maxAmount | blockCurrency:'BTC':6 | localizeDecimalSeparator"></span>
+  </div>
+</div>

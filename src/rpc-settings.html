@@ -194,8 +194,7 @@
 
       $('.js-blocknetWalletLink').on('click', e => {
         e.preventDefault();
-        const { openExternal } = window.electron.remote.shell;
-        openExternal('https://github.com/blocknetdx/blocknet/releases/latest');
+        ipcRenderer.send('openExternal', 'https://github.com/blocknetdx/blocknet/releases/latest');
       });
 
       $('form').on('submit', e => {

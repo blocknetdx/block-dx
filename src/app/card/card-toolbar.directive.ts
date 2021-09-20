@@ -5,7 +5,7 @@ import { Directive, ContentChild, TemplateRef } from '@angular/core';
 })
 export class CardToolbarDirective {
 
-  @ContentChild('toolbar', {read: TemplateRef})
+  @ContentChild('toolbar', {read: TemplateRef, static: false})
   public template: TemplateRef<any>;
 
   constructor() { }

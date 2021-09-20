@@ -23,9 +23,9 @@ import { renderSwitch } from '../modules/render-switch';
   animations: [fadeInOut]
 })
 export class PairSelectorComponent implements OnInit, AfterViewInit {
-  @ViewChild('pairTable') public pairTable: TableComponent;
-  @ViewChild('submit') public submit: ElementRef;
-  @ViewChild('pairForm') public pairForm: NgForm;
+  @ViewChild('pairTable', {static: false}) public pairTable: TableComponent;
+  @ViewChild('submit', {static: false}) public submit: ElementRef;
+  @ViewChild('pairForm', {static: false}) public pairForm: NgForm;
   @ViewChildren('input') public inputs: QueryList<ElementRef>;
 
   @Output()

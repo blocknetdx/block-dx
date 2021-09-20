@@ -14,6 +14,7 @@ const { bignumber } = math;
 
 import { Openorder } from './openorder';
 import * as OrderStates from '../orderstates';
+import {logger} from './modules/logger';
 
 @Injectable()
 export class OpenordersService {
@@ -56,17 +57,25 @@ export class OpenordersService {
 
             const side = order.maker === symbols[0] && order.taker === symbols[1] ? 'sell' : 'buy';
 
-            let size, total, maker, taker;
+            let size, total, maker, taker, partialMinimum;
             if(side === 'sell') {
               maker = order.taker;
               taker = order.maker;
               size = order.makerSize;
               total = order.takerSize;
+              partialMinimum = order.partialMinimum;
             } else {
               maker = order.maker;
               taker = order.taker;
               size = order.takerSize;
               total = order.makerSize;
+              partialMinimum = math.multiply(
+                bignumber(order.takerSize),
+                math.divide(
+                  bignumber(order.partialMinimum * 1000000),
+                  bignumber(order.makerSize * 1000000),
+                )
+              ).toString();
             }
             const price = math.divide(bignumber(total), bignumber(size));
 
@@ -74,13 +83,14 @@ export class OpenordersService {
               id: order.id,
               maker,
               taker,
+              partialMinimum,
               price,
               size,
               total,
               product_id: '',
               side,
               stp: '',
-              type: order.type,
+              type: order.orderType,
               time_in_force: '',
               post_only: '',
               created_at: order.createdAt,
@@ -94,7 +104,6 @@ export class OpenordersService {
           })
           .sort((a, b) => b.created_at.localeCompare(a.created_at));
 
-        // console.log('myOrders', newOrders);
         this.ordersObservable.next(newOrders);
       });
       window.electron.ipcRenderer.send('getMyOrders');
@@ -103,7 +112,7 @@ export class OpenordersService {
   }
 
   private handleError(error: any): Promise<any> {
-    console.error('An error occurred', error); // for demo purposes only
+    logger.error(error.message + '\n' + error.stack);
     return Promise.reject(error.message || error);
   }
 }

@@ -15,10 +15,10 @@ export class TableColumnDirective {
   active: boolean;
   desc = true;
 
-  @ContentChild(TableColumnHeaderDirective, {read: TemplateRef})
+  @ContentChild(TableColumnHeaderDirective, {read: TemplateRef, static: false})
   headerTemplate: TemplateRef<any>;
 
-  @ContentChild(TableColumnCellDirective, {read: TemplateRef})
+  @ContentChild(TableColumnCellDirective, {read: TemplateRef, static: false})
   cellTemplate: TemplateRef<any>;
 
 }

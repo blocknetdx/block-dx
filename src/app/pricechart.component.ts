@@ -14,7 +14,7 @@ declare var Datafeeds;
   styleUrls: ['./pricechart.component.scss']
 })
 export class PricechartComponent implements AfterViewInit, OnDestroy {
-  @ViewChild('container')
+  @ViewChild('container', {static: false})
   public container: ElementRef;
   public granularity = 2; // 1: minute, 2: 15 minutes, 3: 30 minutes
   public model = { 1: [], 2: [], 3: [] };

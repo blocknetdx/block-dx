@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Headers, Http } from '@angular/http';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
 import * as moment from 'moment';
@@ -7,6 +6,7 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/debounceTime';
 import { AppService } from './app.service';
 import { Currentprice } from './currentprice';
+import {logger} from './modules/logger';
 
 @Injectable()
 export class CurrentpriceService {
@@ -17,7 +17,7 @@ export class CurrentpriceService {
   public orderHistoryBy1Hour: BehaviorSubject<Currentprice[]>;
   private _onPair: BehaviorSubject<any>;
 
-  constructor(private http: Http, private appService: AppService) {
+  constructor(private appService: AppService) {
     this.currentprice = this.getCurrentprice();
     window.electron.ipcRenderer.on('currentPrice', (e, order) => {
       this.currentprice.next(Currentprice.fromObject(order));
@@ -203,7 +203,7 @@ export class CurrentpriceService {
   }
 
   private handleError(error: any): Promise<any> {
-    console.error('An error occurred', error); // for demo purposes only
+    logger.error(error.message + '\n' + error.stack);
     return Promise.reject(error.message || error);
   }
 }

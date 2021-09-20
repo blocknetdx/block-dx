@@ -1,6 +1,6 @@
 /* global Localize */
 
-const { ipcRenderer, remote } = require('electron');
+const { ipcRenderer } = require('electron');
 const { RouterView } = require('../../modules/router');
 const route = require('../constants/routes');
 const sidebar = require('../snippets/sidebar');
@@ -9,7 +9,8 @@ const titles = require('../modules/titles');
 const fs = require('fs-extra-promise');
 const path = require('path');
 const { Set } = require('immutable');
-const { putConfs } = require('../util');
+const { handleError, putConfs } = require('../util');
+const request = require('superagent');
 
 class SelectWallets extends RouterView {
 
@@ -22,7 +23,6 @@ class SelectWallets extends RouterView {
     if(configurationType === configurationTypes.LITEWALLET_RPC_SETUP) {
       const cloudChainsDir = state.get('litewalletConfigDirectory');
       const settingsDir = path.join(cloudChainsDir, 'settings');
-      console.log(settingsDir);
       const configFilePatt = /^config-(.+)\.json$/i;
       const wallets = state.get('wallets');
       const walletsMap = new Map(wallets.map(w => [w.abbr, w]));
@@ -50,7 +50,6 @@ class SelectWallets extends RouterView {
       state.set('availableLitewallets', litewallets);
       state.set('selectedLitewallets', Set(litewallets.map(w => w.abbr)));
       // state.set('selectedLitewallets', Set(litewallets.filter(w => w.abbr !== 'BLOCK').map(w => w.abbr)));
-      console.log(JSON.stringify(litewallets, null, '  '));
     }
   }
 
@@ -258,7 +257,7 @@ class SelectWallets extends RouterView {
       }
     });
 
-    $('#js-continueBtn').on('click', e => {
+    $('#js-continueBtn').on('click', async function(e) {
       e.preventDefault();
       const configurationType = state.get('configurationType');
       if(configurationType === configurationTypes.LITEWALLET_RPC_SETUP) {
@@ -267,8 +266,11 @@ class SelectWallets extends RouterView {
         const walletsToSave = availableLitewallets
           .filter(w => selectedLitewallets.has(w.abbr));
         for(const litewallet of walletsToSave) {
-          const { filePath, rpcPort } = litewallet;
-          let { rpcUsername, rpcPassword } = litewallet;
+          const { filePath } = litewallet;
+          const config = fs.readJsonSync(filePath);
+          const rpcPort = config.rpcPort || litewallet.rpcPort;
+          let rpcUsername = config.rpcUsername || litewallet.rpcUsername;
+          let rpcPassword = config.rpcPassword || litewallet.rpcPassword;
           if(!rpcUsername || !rpcPassword) {
             const { username, password } = litewallet.wallet.generateCredentials();
             rpcUsername = username;
@@ -277,11 +279,11 @@ class SelectWallets extends RouterView {
           litewallet.rpcUsername = rpcUsername;
           litewallet.rpcPassword = rpcPassword;
           litewallet.rpcPort = rpcPort;
-          const config = fs.readJsonSync(filePath);
           const newConfig = Object.assign({}, config, {
             rpcUsername,
             rpcPassword,
-            rpcEnabled: true
+            rpcEnabled: true,
+            rpcPort
           });
           fs.writeJsonSync(filePath, newConfig);
         }
@@ -295,6 +297,51 @@ class SelectWallets extends RouterView {
         putConfs(preppedWallets, block.directory, true);
         const cloudChainsDir = state.get('litewalletConfigDirectory');
         ipcRenderer.send('saveLitewalletConfigDirectory', cloudChainsDir);
+        let ccUpdated;
+        try {
+          const ccConfig = fs.readJsonSync(path.join(cloudChainsDir, 'settings', 'config-master.json'));
+          if(ccConfig.rpcPort && ccConfig.rpcUsername && ccConfig.rpcPassword) {
+            const walletErrors = [];
+            const allReqs = [];
+            let walletCount = 0;
+            for(const { abbr } of walletsToSave) {
+              walletCount++;
+              allReqs.push({token: abbr, req: request
+                .post(`http://127.0.0.1:${ccConfig.rpcPort}`)
+                .timeout(5000)
+                .auth(ccConfig.rpcUsername, ccConfig.rpcPassword)
+                .send(JSON.stringify({
+                  method: 'reloadconfig',
+                  params: [
+                    abbr
+                  ]
+                }))});
+            }
+            // Wait for all requests to complete
+            await new Promise(resolve => {
+              const done = () => {
+                walletCount--;
+                if (walletCount <= 0)
+                  resolve();
+              };
+              for (const {token, req} of allReqs)
+                req.then(() => done()).catch(e2 => {
+                  walletErrors.push(`failed to reload litewallet config for ${token}: ${e2}`);
+                  done();
+                });
+            });
+            for (const emsg of walletErrors)
+              handleError(new Error(emsg));
+            ccUpdated = walletErrors.length < walletsToSave.length; // if no wallets updated then notify user
+          } else {
+            ccUpdated = false;
+          }
+        } catch(err) {
+          handleError(err);
+          ccUpdated = false;
+        }
+        if(!ccUpdated)
+          alert(Localize.text('Block DX cannot connect to XLite wallet. Please start or restart XLite to continue using Block DX.', 'configurationWindowWallets'));
         ipcRenderer.send('loadXBridgeConf');
         setTimeout(() => {
           ipcRenderer.send('restart');
@@ -311,7 +358,7 @@ class SelectWallets extends RouterView {
 
     $('.js-blocknetWalletLink').on('click', e => {
       e.preventDefault();
-      remote.shell.openExternal('https://github.com/blocknetdx/blocknet/releases/latest');
+      ipcRenderer.send('openExternal', 'https://github.com/blocknetdx/blocknet/releases/latest');
     });
 
   }

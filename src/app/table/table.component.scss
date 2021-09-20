@@ -7,6 +7,10 @@
   text-align: right;
   height: 100%;
 
+  &-left {
+    text-align: left;
+  }
+
   &__header, &__row {
     display: flex;
     flex-wrap: wrap;

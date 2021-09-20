@@ -30,35 +30,31 @@ class ConfigurationMenu extends RouterView {
 
     const items = [
       {
-        title: Localize.text('Add New Wallet(s)','configurationWindowMenu'),
-        text: Localize.text('Use this to configure new wallets for trading. Newly added wallets will need to be restarted before trading.','configurationWindowMenu'),
+        title: Localize.text('XLite Setup', 'configurationWindowMenu'),
+        text: Localize.text('Use this to configure <a class="text-link" href="https://xlitewallet.com" id="js-xliteLink">XLite</a> with BlockDX.', 'configurationWindowMenu'),
+        value: configurationTypes.LITEWALLET_RPC_SETUP
+      },
+      {
+        title: Localize.text('Add New Local Wallet(s)','configurationWindowMenu'),
+        text: Localize.text('Use this to configure new local wallets for trading. Newly added wallets will need to be restarted before trading.','configurationWindowMenu'),
         value: configurationTypes.ADD_NEW_WALLETS
       },
       {
-        title: Localize.text('Update Wallet(s)','configurationWindowMenu'),
-        text: Localize.text('Use this to reconfigure existing wallet(s). Updated wallets will need to be restarted before trading.','configurationWindowMenu'),
+        title: Localize.text('Update Local Wallet(s)','configurationWindowMenu'),
+        text: Localize.text('Use this to reconfigure existing local wallet(s). Updated wallets will need to be restarted before trading.','configurationWindowMenu'),
         value: configurationTypes.UPDATE_WALLETS
       },
       {
         title: Localize.text('Fresh Setup','configurationWindowMenu'),
-        text: Localize.text('Use this to reconfigure all your wallets. This will require all wallets to be restarted before trading, which will cancel any open and in-progress orders.','configurationWindowMenu'),
+        text: Localize.text('Use this to reconfigure all your local wallets. This will require all local wallets to be restarted before trading and will cancel any open and in-progress orders from these wallets.','configurationWindowMenu'),
         value: configurationTypes.FRESH_SETUP
       },
       {
         title: Localize.text('Update Blocknet RPC Settings','configurationWindowMenu'),
-        text: Localize.text('Use this to update the RPC credentials, port, and IP for the Blocknet wallet. This will require the Blocknet wallet to be restarted, which will cancel any open and in-progress orders.','configurationWindowMenu'),
+        text: Localize.text('Use this to update the RPC credentials, port, and IP for the Blocknet Core wallet. This will require the Blocknet Core wallet to be restarted, which will cancel any open and in-progress orders from these wallets.','configurationWindowMenu'),
         value: configurationTypes.UPDATE_RPC_SETTINGS
-      }
+      },
     ];
-
-    const enableLitewalletConfig = state.get('enableLitewalletConfig');
-    if (enableLitewalletConfig === true) {
-      items.push({
-        title: Localize.text('Litewallet Setup', 'configurationWindowMenu'),
-        text: Localize.text('Use this to configure the CloudChains litewallet.', 'configurationWindowMenu'),
-        value: configurationTypes.LITEWALLET_RPC_SETUP
-      });
-    }
 
     const options = items.map(i => {
       return `
@@ -80,7 +76,7 @@ class ConfigurationMenu extends RouterView {
             <div class="flex-container">
               <div class="col2-no-margin">
 
-                <p style="${styles.p}">${Localize.text('We detected you have previously configured your wallets. Please select which of the following you would like to do:','configurationWindowMenu')}</p>
+                <p style="${styles.p}">${Localize.text('Please select which of the following you would like to do:','configurationWindowMenu')}</p>
 
                 <div class="main-area" style="${styles.mainArea}">
 
@@ -103,6 +99,12 @@ class ConfigurationMenu extends RouterView {
   onMount(state, router) {
     const { $ } = this;
 
+    $('#js-xliteLink').on('click', e => {
+      e.preventDefault();
+      e.stopPropagation();
+      const href = $(e.currentTarget).attr('href');
+      ipcRenderer.send('openExternal', href);
+    });
     $('#js-backBtn').on('click', e => {
       e.preventDefault();
       ipcRenderer.send('configurationWindowCancel');
@@ -129,7 +131,6 @@ class ConfigurationMenu extends RouterView {
               directory = await getDefaultLitewalletConfigDirectory();
               state.set('litewalletConfigDirectory', directory);
             }
-            console.log(directory);
             const dirExists = await fs.existsAsync(directory);
             const settingsDirExists = await fs.existsAsync(path.join(directory, 'settings'));
             if(dirExists && settingsDirExists) {

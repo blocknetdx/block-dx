@@ -119,7 +119,8 @@ class XBridgeConf {
       [
         '[Main]',
         `ExchangeWallets=${[...this._data.keys()].join(',')}`,
-        'FullLog=true'
+        'FullLog=true',
+        'ShowAllOrders=true'
       ].join('\n'),
       '\n',
       ...[...this._data.entries()]
@@ -209,8 +210,12 @@ const addToXBridgeConf = (wallets, blockDir) => {
   let split = bridgeConf
     .replace(/\r/g, '')
     .split(/\n/);
-  const walletsIdx = split.findIndex(s => /^ExchangeWallets=/.test(s));
-  split[walletsIdx] = split[walletsIdx].trim() + ',' + [...data.keys()].join(',');
+  const exchangeWalletsPatt = /^ExchangeWallets\s*=(.*)/;
+  const walletsIdx = split.findIndex(s => exchangeWalletsPatt.test(s));
+  const existingWalletList = new Set(split[walletsIdx].match(exchangeWalletsPatt)[1].trim().split(',').map(s => s.trim()).filter(s => s));
+  const newWalletList = new Set([...data.keys(), ...existingWalletList]);
+  newWalletList.delete(''); // Remove empty
+  split[walletsIdx] = `ExchangeWallets=${[...newWalletList.values()].join(',')}`;
   for(const [ abbr, walletData ] of [...data.entries()]) {
     split = [
       ...split,
@@ -251,16 +256,14 @@ const putToXBridgeConf = (wallets, blockDir) => {
   let split = bridgeConf
     .replace(/\r/g, '')
     .split(/\n/);
-  const walletsIdx = split.findIndex(s => /^ExchangeWallets=/.test(s));
-  const walletMatches = split[walletsIdx].match(/=(.+)$/);
-  const exchangeWallets = walletMatches[1]
+  const walletsIdx = split.findIndex(s => /^ExchangeWallets\s*=/.test(s));
+  const walletsRaw = split[walletsIdx].match(/=(.*)$/); // e.g. BLOCK,BTC,LTC or empty
+  const walletList = !walletsRaw || walletsRaw.length <= 1 ? [] : walletsRaw[1]
     .split(',')
     .map(str => str.trim());
-  for(const { abbr } of wallets) {
-    if(!exchangeWallets.includes(abbr)) {
-      split[walletsIdx] = split[walletsIdx].trim() + ',' + abbr;
-    }
-  }
+  const newWalletList = new Set([...walletList, ...(wallets.map(w => w.abbr))]);
+  newWalletList.delete(''); // Remove empty
+  split[walletsIdx] = `ExchangeWallets=${[...newWalletList.values()].join(',')}`;
   for(const [ abbr, walletData ] of [...data.entries()]) {
     const startIndex = split.findIndex(s => s.trim() === `[${abbr}]`);
     const alreadyInConf = startIndex > -1;
@@ -296,6 +299,51 @@ const putToXBridgeConf = (wallets, blockDir) => {
   fs.writeFileSync(confPath, joined, 'utf8');
 };
 
+/**
+ * Adds rpcworkqueue= configuration option to the blocknet.conf. If the current
+ * value is under the target it is replaced with the specified minimum value.
+ * If the target is over the minimum, the value remains unchanged. If the value
+ * is missing, the minimum is used.
+ * @param blockDir {string}
+ * @param rpcWorkQueueMinimum {number} Default 128
+ * @param rpcXBridgeTimeout {number} Default 15
+ */
+const putBlockConf = (blockDir, rpcWorkQueueMinimum=128, rpcXBridgeTimeout=15) => {
+  const blockConf = path.join(blockDir, 'blocknet.conf');
+  let data = fs.readFileSync(blockConf, 'utf8');
+  let split = data
+    .replace(/\r/g, '')
+    .split(/\n/);
+  const rpcQueueIdx = split.findIndex(s => /^rpcworkqueue\s*=/.test(s));
+  if (rpcQueueIdx >= 0) {
+    const rpcWQ = split[rpcQueueIdx].match(/=\s*(.*)$/);
+    if (!rpcWQ || rpcWQ.length <= 1)
+      split[rpcQueueIdx] = `rpcworkqueue=${rpcWorkQueueMinimum}`;
+    else { // if entry already has value
+      const n = parseInt(rpcWQ[1].trim(), 10);
+      if (isNaN(n) || n < rpcWorkQueueMinimum)
+        split[rpcQueueIdx] = `rpcworkqueue=${rpcWorkQueueMinimum}`;
+      else
+        split[rpcQueueIdx] = 'rpcworkqueue=' + n;
+    }
+  } else {
+    // add to front to avoid [test] sections
+    split.splice(0, 0, `rpcworkqueue=${rpcWorkQueueMinimum}`);
+  }
+  const xbridgeTimeoutIdx = split.findIndex(s => /^rpcxbridgetimeout\s*=/.test(s));
+  if (xbridgeTimeoutIdx >= 0) {
+    const rpcWQ = split[xbridgeTimeoutIdx].match(/=\s*(.*)$/);
+    if (!rpcWQ || rpcWQ.length <= 1)
+      split[xbridgeTimeoutIdx] = `rpcxbridgetimeout=${rpcXBridgeTimeout}`;
+  } else {
+    // add to front to avoid [test] sections
+    split.splice(0, 0, `rpcxbridgetimeout=${rpcXBridgeTimeout}`);
+  }
+  // Serialize
+  data = split.join('\n');
+  fs.writeFileSync(blockConf, data, 'utf8');
+};
+
 module.exports.putConfs = (wallets, blockDir, isLitewallets = false) => {
   const confs = new Map();
   if(!isLitewallets) {
@@ -305,6 +353,7 @@ module.exports.putConfs = (wallets, blockDir, isLitewallets = false) => {
     }
   }
   putToXBridgeConf(wallets, blockDir);
+  putBlockConf(blockDir);
   return confs;
 };
 
@@ -342,4 +391,5 @@ module.exports.getDefaultLitewalletConfigDirectory = () => {
 
 module.exports.handleError = err => {
   console.error(err);
+  ipcRenderer.send('LOGGER_ERROR', err.message + '\n' + err.stack);
 };
