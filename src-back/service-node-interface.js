@@ -527,7 +527,7 @@ class ServiceNodeInterface {
         takerSize,
         takerAddress,
         minimumSize,
-        repost ? 'true' : 'false',
+        repost,
       ]
     });
     if(error) throw new Error(error);
