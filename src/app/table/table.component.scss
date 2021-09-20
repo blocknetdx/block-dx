@@ -115,7 +115,7 @@
     cursor: default;
   }
 
-  /deep/ {
+  ::v-deep {
     .ps-content {
       padding: 5px 0;
     }
@@ -160,7 +160,7 @@
 
   &__cell {
     cursor: inherit;
-    /deep/ .material-icons {
+    ::v-deep .material-icons {
       font-size: 1.2em;
       vertical-align: text-bottom;
     }
