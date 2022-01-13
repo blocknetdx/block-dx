@@ -1,201 +1,61 @@
 {
-  "name": "BLOCK-DX",
-  "version": "1.9.2",
-  "license": "MIT",
-  "author": "Blocknet <contact@blocknet.co>",
-  "homepage": "https://github.com/blocknetdx/block-dx",
-  "repository": "https://github.com/blocknetdx/block-dx.git",
-  "description": "BLOCK DX",
-  "contributors": [
-    {
-      "name": "Corey Roach",
-      "email": "caroach@gmail.com"
-    },
-    {
-      "name": "Ryan Burgett",
-      "email": "ryan@burgettweb.net"
-    }
-  ],
-  "scripts": {
-    "start-app": "./node_modules/.bin/electron .",
-    "ng": "ng",
-    "start": "ng serve --host 0.0.0.0",
-    "build": "ng build",
-    "test": "ng test",
-    "data-tests": "mocha test",
-    "lint": "ng lint",
-    "e2e": "ng e2e",
-    "build-native": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --production && cd .. && electron-builder --dir",
-    "build-native-win": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --no-audit --production && cd .. && electron-builder --dir --x64 --win nsis zip --publish never",
-    "build-native-mac": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --no-audit --production && cd .. && electron-builder --dir --x64 --mac zip --publish never",
-    "build-native-linux": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --no-audit --production && cd .. && npm run build-native-linux-x64 && npm run build-native-linux-arm7",
-    "build-native-linux-x64": "electron-builder --dir --x64 --linux appImage deb tar.gz --publish never",
-    "build-native-linux-arm7": "electron-builder --dir --armv7l --linux appImage --publish never",
-    "publish-native-win": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --no-audit --production && cd .. && electron-builder --win --publish always",
-    "publish-native-mac": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --no-audit --production && cd .. && electron-builder --publish always",
-    "publish-native-linux": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --no-audit --production && cd .. && electron-builder --publish always",
-    "pack-native": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --production && cd .. && electron-builder",
-    "publish-native": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --production && cd .. && electron-builder --publish always",
-    "generate-docs": "jsdoc src-back/service-node-interface.js -d docs",
-    "compile-sweetalert-css": "node ./sweetalert-scss/compile.js",
-    "update-electron-builder-image": "docker rmi electronuserland/builder:latest && docker pull electronuserland/builder:latest",
-    "update-electron-builder-wine-image": "docker rmi electronuserland/builder:wine && docker pull electronuserland/builder:wine"
-  },
+  "name": "block-dx-remake",
+  "version": "0.1.0",
   "private": true,
+  "main": "index.js",
+  "homepage": "./",
   "dependencies": {
-    "@angular/animations": "^11.0.0",
-    "@angular/cdk": "^11.0.0",
-    "@angular/common": "^11.0.0",
-    "@angular/compiler": "^11.0.0",
-    "@angular/core": "^11.0.0",
-    "@angular/forms": "^11.0.0",
-    "@angular/material": "^11.0.0",
-    "@angular/platform-browser": "^11.0.0",
-    "@angular/platform-browser-dynamic": "^11.0.0",
-    "@angular/router": "^11.0.0",
-    "bootstrap": "4.3.1",
-    "core-js": "3.8.2",
-    "electron-context-menu": "0.16.0",
-    "electron-is-dev": "1.1.0",
-    "electron-serve": "0.4.1",
-    "electron-updater": "4.3.5",
-    "font-awesome": "4.7.0",
-    "fs-extra-promise": "1.0.1",
-    "immutable": "3.8.2",
-    "intl": "1.2.5",
-    "jquery": "3.5.1",
-    "lodash": "^4.17.21",
-    "markdown-it": "9.1.0",
-    "mathjs": "5.10.3",
-    "moment": "2.24.0",
-    "ngx-perfect-scrollbar": "10.0.0",
-    "performance-now": "2.1.0",
-    "popper.js": "1.15.0",
-    "rxjs": "6.6.3",
-    "rxjs-compat": "6.6.3",
-    "superagent": "5.1.0",
-    "sweetalert": "2.1.2",
-    "uuid": "3.3.2",
-    "web-animations-js": "2.3.1",
-    "winston": "3.3.3",
-    "zone.js": "0.10.3"
+    "@testing-library/jest-dom": "^5.16.1",
+    "@testing-library/react": "^12.1.2",
+    "@testing-library/user-event": "^13.5.0",
+    "cross-env": "^7.0.3",
+    "electron-context-menu": "^3.1.1",
+    "electron-is-dev": "^2.0.0",
+    "electron-serve": "^1.1.0",
+    "electron-updater": "^4.6.1",
+    "fs-extra-promise": "^1.0.1",
+    "markdown-it": "^12.3.0",
+    "mathjs": "^10.0.2",
+    "moment": "^2.29.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-scripts": "5.0.0",
+    "superagent": "^6.1.0",
+    "web-vitals": "^2.1.2",
+    "winston": "^3.3.3"
+  },
+  "scripts": {
+    "react-start": "react-scripts start",
+    "react-build": "react-scripts build",
+    "react-test": "react-scripts test --env=jsdom",
+    "react-eject": "react-scripts eject",
+    "electron-build": "electron-builder",
+    "release": "yarn react-build && electron-builder --publish=always",
+    "build": "yarn react-build && yarn electron-build",
+    "start": "concurrently \"cross-env BROWSER=none yarn react-start\" \"wait-on http://localhost:3000 && electron .\""
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "0.1100.5",
-    "@angular/cli": "^11.0.0",
-    "@angular/compiler-cli": "^11.0.0",
-    "@angular/language-service": "^11.0.0",
-    "@types/jasmine": "^2.8.17",
-    "@types/jasminewd2": "^2.0.8",
-    "@types/jquery": "^3.5.5",
-    "@types/node": "^8.10.66",
-    "codelyzer": "6.0.1",
-    "electron": "^11.1.1",
-    "electron-builder": "~22.10.0",
-    "eslint": "4.19.1",
-    "jasmine-core": "3.6.0",
-    "jasmine-spec-reporter": "4.2.1",
-    "jsdoc": "^3.6.7",
-    "karma": "^6.3.4",
-    "karma-chrome-launcher": "2.2.0",
-    "karma-cli": "2.0.0",
-    "karma-coverage-istanbul-reporter": "2.0.5",
-    "karma-jasmine": "2.0.1",
-    "karma-jasmine-html-reporter": "1.4.2",
-    "mocha": "8.2.0",
-    "node-sass": "4.13.1",
-    "protractor": "7.0.0",
-    "rmrf-promise": "1.1.0",
-    "should": "13.2.3",
-    "string.prototype.matchall": "4.0.3",
-    "ts-node": "3.3.0",
-    "tslint": "5.17.0",
-    "typescript": "4.0.5"
-  },
-  "main": "index.js",
-  "build": {
-    "electronVersion": "11.1.1",
-    "appId": "co.blocknet.blockdx",
-    "productName": "BLOCK DX",
-    "artifactName": "${name}-${version}-${os}.${ext}",
-    "copyright": "Copyright © 2018-2021 Blocknet",
-    "directories": {
-      "app": "temp",
-      "output": "dist-native"
-    },
-    "win": {
-      "artifactName": "${name}-${version}-${os}-${arch}.${ext}",
-      "verifyUpdateCodeSignature": false,
-      "target": [
-        {
-          "target": "zip",
-          "arch": [
-            "x64",
-            "ia32"
-          ]
-        },
-        {
-          "target": "nsis",
-          "arch": [
-            "x64",
-            "ia32"
-          ]
-        }
-      ],
-      "icon": "./src/assets/favicon_block.ico",
-      "publish": {
-        "provider": "github",
-        "releaseType": "draft"
-      }
-    },
-    "mac": {
-      "target": [
-        "dmg",
-        "zip"
-      ],
-      "category": "public.app-category.utilities",
-      "icon": "./src/assets/favicon_block.icns",
-      "gatekeeperAssess": false,
-      "publish": {
-        "provider": "github",
-        "releaseType": "draft"
-      }
-    },
-    "linux": {
-      "artifactName": "${name}-${version}-${os}-${arch}.${ext}",
-      "target": [
-        {
-          "target": "appImage",
-          "arch": [
-            "x64",
-            "armv7l"
-          ]
-        },
-        {
-          "target": "deb",
-          "arch": [
-            "x64"
-          ]
-        },
-        {
-          "target": "tar.gz",
-          "arch": [
-            "x64"
-          ]
-        }
-      ],
-      "icon": "./src/assets/linux_icons/",
-      "synopsis": "Copyright © 2018-2021 Blocknet",
-      "description": "Copyright © 2018-2021 Blocknet",
-      "category": "Utility",
-      "desktop": {
-        "Name": "BLOCK DX",
-        "StartupWMClass": "block-dx"
-      },
-      "publish": {
-        "provider": "github",
-        "releaseType": "draft"
-      }
-    }
+    "concurrently": "^7.0.0",
+    "electron": "^16.0.6",
+    "electron-builder": "^22.14.5",
+    "wait-on": "^6.0.0"
   }
 }

@@ -1,12 +1,9 @@
 const request = require('superagent');
-const math = require('mathjs');
+const { create, all } = require('mathjs');
+const math = create(all);
+math.config({ number: 'BigNumber' });
 const { pricingSources } = require('./constants');
 const { logger } = require('./logger');
-
-math.config({
-  number: 'BigNumber',
-  precision: 64
-});
 
 class PricingInterface {
 
