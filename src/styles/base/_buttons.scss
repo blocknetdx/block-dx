@@ -5,14 +5,14 @@ a, button {
 button, .btn, [class^="btn-"], [class*=" btn-"] {
   border: none;
 	background-color: $bn-blue-light1;
-  font-family: $open-sans;
-  font-size: 12px;
-  font-weight: bold;
+  font-family: $ibm-sans;
+  font-size: 14px;
+  font-weight: 400;
   line-height: 40px;
   color: white;
   text-transform: uppercase;
   padding: 0 15px;
-  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
+  // box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
   transition: background-color 0.3s ease;
 
   .material-icons {

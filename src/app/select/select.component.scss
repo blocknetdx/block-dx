@@ -38,7 +38,7 @@ bn-select {
 }
 
 .placeholder, .selected-value {
-  font: 12px/40px $open-sans;
+  font: 12px/40px $ibm-sans;
 }
 
 .placeholder {
@@ -56,7 +56,7 @@ bn-select {
   box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
 
   &__item {
-    font: 12px/24px $open-sans;
+    font: 12px/24px $ibm-sans;
     padding: 0 16px;
     display: block;
     &:hover {

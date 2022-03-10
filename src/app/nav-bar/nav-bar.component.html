@@ -1,21 +1,18 @@
 <nav class="navbar">
   <div class="navbar-bar" [class.menu-active]="pairSelectorActiveState">
     <a class="navbar-brand" [routerLink]="['/trading']">
-      <img src="assets/icon.svg" [alt]="Localize.text('Blocknet Logo', 'navbar')">
+      <img src="assets/logo-full.svg" [alt]="Localize.text('Blocknet Logo', 'navbar')">
     </a>
 
-    <app-pair-selector (onActiveStatus)="pairSelectorActiveState = $event"></app-pair-selector>
+    <!-- <app-pair-selector (onActiveStatus)="pairSelectorActiveState = $event"></app-pair-selector> -->
 
-    <div (click)="toggleNav()" class="navbar-collapse__overlay" [class.active]="navCollapsed"></div>
+    <!-- <div (click)="toggleNav()" class="navbar-collapse__overlay" [class.active]="navCollapsed"></div>
     <div class="collapse navbar-collapse" [class.active]="navCollapsed">
       <a (click)="toggleNav()" class="close"><i class="material-icons">close</i></a>
       <ul>
         <li><Localize context="navbar" key="Settings"></Localize></li>
-        <!--<li><a href="#">My Balances</a></li>-->
-        <!--<li><a href="#">Setup Wallet</a></li>-->
         <li><a href="#" (click)="openGeneralSettings($event)"><Localize context="navbar" key="General Settings"></Localize></a></li>
         <li><a href="#" (click)="openConfigurationWizard($event)"><Localize context="navbar" key="Add & Update Wallets"></Localize></a></li>
-        <!-- <li><a href="#" (click)="openSettings($event)">RPC Settings</a></li> -->
         <li><a href="#" (click)="checkForUpdates($event)"><Localize context="navbar" key="Check for Updates"></Localize></a></li>
       </ul>
       <ul>
@@ -39,32 +36,32 @@
         <li class="app-version"></li>
         <li class="app-version">v{{appVersion}} | <Localize context="navbar" key="Powered by Blocknet"></Localize></li>
       </ul>
-    </div>
-    <a (click)="toggleNav()" class="navbar-toggler">
-      <!-- <i class="left material-icons">menu</i> -->
+    </div> -->
+    <!-- <a (click)="toggleNav()" class="navbar-toggler">
+      <i class="left material-icons">menu</i>
       {{Localize.text('Menu', 'navbar').toUpperCase()}}
-    </a>
+    </a> -->
   </div>
 
   <div class="navbar-pricing" *ngIf="currentPrice">
 
     <div class="navbar-pricing__cell">
+      <div class="navbar-pricing__lower"><Localize context="navbar" key="Last trade price"></Localize></div>
       <div class="navbar-pricing__upper">
         <span class="d-none d-sm-inline" [innerHTML]="currentPrice.last | blockCurrency:symbols[1]:'8' | localizeDecimalSeparator"></span><span class="d-none d-sm-inline"> {{symbols[1]}}</span>
       </div>
-      <div class="navbar-pricing__lower"><Localize context="navbar" key="Last trade price"></Localize></div>
     </div>
 
     <div class="navbar-pricing__cell twentyfourprice--">
+      <div class="navbar-pricing__lower"><Localize context="navbar" key="24 hour price"></Localize></div>
       <div class="navbar-pricing__upper price_{{currentPrice.priceStatus}}">
         {{currentPrice.priceDiff | percent:'1.2-2' | localizeDecimalSeparator}}
       </div>
-      <div class="navbar-pricing__lower"><Localize context="navbar" key="24 hour price"></Localize></div>
     </div>
 
     <div class="navbar-pricing__cell twentyfourvol--">
-      <div class="navbar-pricing__upper">{{currentPrice._volume < 1 ? (currentPrice.volume | numberFormat : "1.8-8" | localizeDecimalSeparator) : (currentPrice.volume | numberFormat : "1.0-0")}}<span class="d-none d-sm-inline"> {{symbols[0]}}</span></div>
       <div class="navbar-pricing__lower"><Localize context="context" key="24 hour volume"></Localize></div>
+      <div class="navbar-pricing__upper">{{currentPrice._volume < 1 ? (currentPrice.volume | numberFormat : "1.8-8" | localizeDecimalSeparator) : (currentPrice.volume | numberFormat : "1.0-0")}}<span class="d-none d-sm-inline"> {{symbols[0]}}</span></div>
     </div>
   </div>
 

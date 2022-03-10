@@ -12,6 +12,7 @@
   left: 0;
   right: 0;
   z-index: 9991;
+  margin-bottom: 5px;
   background: $bn-blue1;
 }
 
@@ -109,7 +110,7 @@ app-pair-selector {
   top: 0;
   bottom: 0;
   width: 100%;
-  font-family: $open-sans;
+  font-family: $ibm-sans;
   font-size: 14px;
   line-height: 19px;
   background-color: $bn-blue-light4;

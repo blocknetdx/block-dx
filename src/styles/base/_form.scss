@@ -29,7 +29,7 @@ form {
   }
 
   .col-form-label {
-    font: 12px/40px $open-sans;
+    font: 12px/40px $ibm-sans;
     margin: 0;
     padding-left: 12px;
     white-space: nowrap;
@@ -37,7 +37,7 @@ form {
   }
 
   &-addon {
-    font: 12px/40px $open-sans;
+    font: 12px/40px $ibm-sans;
     position: absolute;
     right: 8px;
     color: $bn-blue-light3;
@@ -64,9 +64,10 @@ input {
 
 input[type="text"], input[type="number"] {
   border: none;
+  border-radius: 4px;
   padding: 13px 40px 13px 16px;
   background: none;
-  font: 12px/14px $roboto-mono;
+  font: 12px/14px $ibm-mono;
   color: white;
   &::placeholder {
     color: white;

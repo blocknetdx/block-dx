@@ -165,7 +165,7 @@ form {
         right: 0;
         top: 0;
         opacity: 0.4;
-        font-family: $open-sans;
+        font-family: $ibm-sans;
       }
     }
     & > div:nth-child(2) {
@@ -289,11 +289,11 @@ hr {
 }
 
 input {
-  font-family: $open-sans;
+  font-family: $ibm-sans;
 }
 
 .currency-cell, .coin-cell {
-  font-family: $open-sans;
+  font-family: $ibm-sans;
 }
 
 .coin-cell {

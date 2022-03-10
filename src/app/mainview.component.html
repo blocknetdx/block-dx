@@ -48,9 +48,9 @@
         <li><strong><Localize context="mainview" key="White dots indicate the order is yours."></Localize></strong><br><Localize context="mainview" key="Some orders may have a white dot to the left of them. This indicates it's an order you created."></Localize></li>
       </ul>
     </app-big-tooltip>
-    <app-big-tooltip title="{{Localize.text('Active/Inactive Orders', 'mainview')}}" [show]="showActiveInactiveOrderTooltip" (mouseenter)="activeInactiveOrderTooltip2(true)" (mouseleave)="activeInactiveOrderTooltip2(false)">
+    <app-big-tooltip title="{{Localize.text('Active/Order History', 'mainview')}}" [show]="showActiveInactiveOrderTooltip" (mouseenter)="activeInactiveOrderTooltip2(true)" (mouseleave)="activeInactiveOrderTooltip2(false)">
       <ul >
-        <li><strong><Localize context="mainview" key="Clear Inactive Button"></Localize></strong><br><Localize context="mainview" key="The Clear Inactive button on the Inactive Orders tab removes canceled orders."></Localize></li>
+        <li><strong><Localize context="mainview" key="Clear Inactive Button"></Localize></strong><br><Localize context="mainview" key="The Clear Inactive button on the Order History tab removes canceled orders."></Localize></li>
         <li><strong><Localize context="mainview" key="Refunding failed trades"></Localize></strong><br><Localize context="mainview" key="For failed in-progress trades, the funds will be automatically returned in 30 minutes for the taker and 2 hours for the maker."></Localize></li>
       </ul>
       <table>
@@ -209,9 +209,14 @@
               <app-depth></app-depth>
             </ng-template>
           </bn-tab>
+          <!-- <bn-tab label="{{Localize.text('Both', 'mainview')}}">
+            <ng-template #content>
+              <app-depth></app-depth>
+            </ng-template>
+          </bn-tab> -->
         </app-bn-tab-view>
 
-        <bn-card class="trade_table__cell col-lg-4" >
+        <!-- <bn-card class="trade_table__cell col-lg-4" >
           <bn-card-toolbar>
             <ng-template #toolbar>
               <div class="order-book-view-wrapper">
@@ -247,7 +252,7 @@
           <bn-card-body>
             <app-orderbook></app-orderbook>
           </bn-card-body>
-        </bn-card>
+        </bn-card> -->
 
         <app-bn-tab-view class="trade_table__cell card orders col-lg-8">
           <bn-tab label="{{Localize.text('Active Orders', 'mainview')}}">
@@ -255,7 +260,7 @@
               <app-openorders></app-openorders>
             </ng-template>
           </bn-tab>
-          <bn-tab label="{{Localize.text('Inactive Orders', 'mainview')}}">
+          <bn-tab label="{{Localize.text('Order History', 'mainview')}}">
             <ng-template #content>
               <bn-filled-orders></bn-filled-orders>
             </ng-template>
@@ -274,12 +279,13 @@
           </bn-tab>
         </app-bn-tab-view>
 
-        <bn-card class="trade_table__cell history col-lg-4">
+        <!-- let's remove trade history from the main view -->
+        <!-- <bn-card class="trade_table__cell history col-lg-4">
           <bn-card-title>{{Localize.text('Trade History', 'mainview')}}</bn-card-title>
           <bn-card-body>
             <app-tradehistory></app-tradehistory>
           </bn-card-body>
-        </bn-card>
+        </bn-card> -->
 
       </div>
 
@@ -338,6 +344,11 @@
               <app-depth></app-depth>
             </ng-template>
           </bn-tab>
+          <!-- <bn-tab label="{{Localize.text('Both', 'mainview')}}">
+            <ng-template #content>
+              <app-depth></app-depth>
+            </ng-template>
+          </bn-tab> -->
         </app-bn-tab-view>
       </div>
 
@@ -348,7 +359,7 @@
               <app-openorders></app-openorders>
             </ng-template>
           </bn-tab>
-          <bn-tab label="{{Localize.text('Inactive Orders', 'mainview')}}">
+          <bn-tab label="{{Localize.text('Order History', 'mainview')}}">
             <ng-template #content>
               <bn-filled-orders></bn-filled-orders>
             </ng-template>

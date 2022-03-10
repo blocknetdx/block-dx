@@ -17,7 +17,7 @@
   }
 
   &__header {
-    font-family: $open-sans;
+    font-family: $ibm-sans;
     background: $bn-blue2;
     box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
     padding: 13px;
@@ -68,7 +68,7 @@
   }
 
   &__body {
-    font-family: $roboto-mono;
+    font-family: $ibm-mono;
     padding: 0;
     height: calc(100% - 42px);
     overflow: hidden;
@@ -80,7 +80,7 @@
   }
 
   &__body_no_padding {
-    font-family: $roboto-mono;
+    font-family: $ibm-mono;
     padding: 0;
     overflow: hidden;
     -webkit-overflow-scrolling: touch;
@@ -103,7 +103,7 @@
   }
 
   &__body_no_header {
-    font-family: $roboto-mono;
+    font-family: $ibm-mono;
     padding: 0;
     overflow: hidden;
     -webkit-overflow-scrolling: touch;
@@ -131,7 +131,7 @@
     padding: 5px 13px;
     text-align: left;
     text-transform: uppercase;
-    font-family: $open-sans;
+    font-family: $ibm-sans;
     font-weight: bold;
     opacity: 0.4;
     cursor: default;

@@ -16,7 +16,7 @@
   &__header {
     div {
       display: inline-block;
-      font-family: $open-sans;
+      font-family: $ibm-sans;
       background: $bn-blue2;
       box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
       font-weight: 400;
@@ -46,7 +46,7 @@
     }
 
     div {
-      font-family: $roboto-mono;
+      font-family: $ibm-mono;
       text-align: right;
       position: relative;
       min-height: 20px;

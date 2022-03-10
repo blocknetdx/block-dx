@@ -560,7 +560,7 @@ body.swal2-no-backdrop .swal2-shown {
     border-radius: 0;
     background: transparent;
     color: #243b55;
-    font-family: "Open Sans", sans-serif;
+    font-family: 'IBM Plex Sans', sans-serif;
     font-size: 2.5em;
     line-height: 1.2;
     cursor: pointer;
