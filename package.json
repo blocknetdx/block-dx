@@ -65,7 +65,7 @@
     "intl": "1.2.5",
     "jquery": "3.5.1",
     "lodash": "^4.17.21",
-    "markdown-it": "9.1.0",
+    "markdown-it": "12.3.2",
     "mathjs": "5.10.3",
     "moment": "2.24.0",
     "ngx-perfect-scrollbar": "10.0.0",
