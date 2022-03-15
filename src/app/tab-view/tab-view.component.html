@@ -13,7 +13,6 @@
       </span>
       {{tab.label}}
     </a>
-    <span [class.notransition]="!allowTransition" [ngStyle]="calculateBar()" class="bar"></span>
 </div>
 <div class="tab-view__body">
   <ng-container *ngFor="let tab of tabs; let i = index">

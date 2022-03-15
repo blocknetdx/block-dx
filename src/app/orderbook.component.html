@@ -1,6 +1,6 @@
 <div class="orderbook-container">
 
-  <div class="orderbook-table-outer-container-top" [style.display]="showBuyOrders ? 'none' : 'block'">
+  <div class="orderbook-table-outer-container-left" [style.display]="showBuyOrders ? 'none' : 'block'">
 
 
     <div *ngIf="sections[0].rows.length === 0 && showLoading && !showConfigurationOverlay" class="no-open-orders-message-top"><Localize context="orderbook" key="Loading sell orders..."></Localize></div>
@@ -87,7 +87,7 @@
   </div>
 
   <div class="orderbook-divider">
-    <span class="spread-container spread"><Localize context="orderbook" key="Spread"></Localize></span>
+    <!-- <span class="spread-container spread"><Localize context="orderbook" key="Spread"></Localize></span>
     <span class="spread-container" *ngIf="pricingAvailable && pricingEnabled && !shouldHidePricing(symbols)">
       <span *ngIf="showSpread && pricingAvailable" [title]="pricingSpread | blockCurrency:symbols[1]:8: true | localizeDecimalSeparator" [innerHtml]="pricingSpread | blockCurrency:symbols[1]:priceDecimal | localizeDecimalSeparator"></span>
       <span *ngIf="showSpread && !pricingAvailable"><Localize context="orderbook" key="N/A"></Localize></span>
@@ -98,10 +98,10 @@
       <span *ngIf="showSpread" [innerHtml]="spread | blockCurrency:symbols[1]:priceDecimal | localizeDecimalSeparator"></span>
       <span *ngIf="!showSpread" [innerHtml]="'0' | blockCurrency:symbols[1]:priceDecimal | localizeDecimalSeparator"></span>
     </span>
-    <span class="spread-container"></span>
+    <span class="spread-container"></span> -->
   </div>
 
-  <div class="orderbook-table-outer-container-bottom" [style.display]="showSellOrders ? 'none' : 'block'" [style.height]="showBuyOrders ? 'calc(100% - 22px)' : 'calc(50% - 22px)'">
+  <div class="orderbook-table-outer-container-right" [style.display]="showSellOrders ? 'none' : 'block'" [style.height]="showBuyOrders ? 'calc(100% - 22px)' : 'calc(50% - 22px)'">
 
     <div *ngIf="sections[1].rows.length === 0 && showLoading && !showConfigurationOverlay" class="no-open-orders-message-bottom"><Localize context="orderbook" key="Loading buy orders..."></Localize></div>
     <div *ngIf="sections[1].rows.length === 0 && (!showLoading || showConfigurationOverlay)" class="no-open-orders-message-bottom"><Localize context="orderbook" key="No buy orders."></Localize></div>

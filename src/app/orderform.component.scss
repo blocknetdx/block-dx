@@ -44,11 +44,17 @@ $submit-button-text-color: #213c54;
 .order-form-buy-button {
   color: $submit-button-text-color;
   background-color: #4BF5C6;
+  font-weight: 600;
+  font-size: 14px;
+  border-radius: 4px;
 }
 
 .order-form-sell-button {
   color: $submit-button-text-color;
   background-color: #FB7F70;
+  font-weight: 600;
+  font-size: 14px;
+  border-radius: 4px;
 }
 
 .button-spacer {
@@ -60,8 +66,8 @@ $submit-button-text-color: #213c54;
 }
 
 .order-form-form {
-  padding-left: 12px;
-  padding-right: 12px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .order-form-configuration-message-overlay {
@@ -273,6 +279,6 @@ $radio-blue: #549def;
 //  border-width: 2px;
 //}
 
-.order-form-label {
-  font-size: 11px;
-}
+// .order-form-label {
+//   font-size: 11px;
+// }

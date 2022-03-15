@@ -12,7 +12,7 @@
   justify-content: space-evenly;
   background: $bn-blue2;
   position: relative;
-  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
+  // box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
   z-index: 9;
 }
 
@@ -20,12 +20,16 @@ a.tab {
   display: inline-block;
   width: 100%;
   text-align: center;
-  padding: 12px 0;
+  border-radius: 4px;
+  padding: 10px 15px;
   transition: color 0.26s ease;
-  font: 12px/16px $ibm-sans;
+  font: 13px/20px $ibm-sans;
+  border:1px solid;
+  height:35px;
+  border-color: rgba(0,0,0,0.0);
 
   @include screen(lg) {
-    padding: 2px 0 6px;
+    // padding: 2px 0 6px;
   }
 
   &:hover {
@@ -33,22 +37,22 @@ a.tab {
   }
 
   &.active {
-    font-weight: bold;
-    color: $bn-blue-light3;
+    color: $bn-green;
     pointer-events: none;
   }
 }
 
-.bar {
-  display: inline-block;
-  background: $bn-blue-light3;
-  // width: 50%;
-  height: 2px;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  transition: left 0.26s ease-in-out, width 0.26s ease-in-out, background 0.26s ease-in-out;
-}
+
+// .bar {
+//   display: inline-block;
+//   background: $bn-blue-light3;
+//   // width: 50%;
+//   height: 2px;
+//   position: absolute;
+//   bottom: 0;
+//   left: 0;
+//   transition: left 0.26s ease-in-out, width 0.26s ease-in-out, background 0.26s ease-in-out;
+// }
 
 .tab-view__body {
   overflow-y: auto;
@@ -79,16 +83,20 @@ a.tab {
 
   .tabs {
     display: block;
-    padding: 0 17px;
-    box-shadow: none;
+    padding: 4px 15px;
+    box-shadow: 0 1px 0 0 #000204;
     position: relative;
+    height:35px;
   }
 
   .tab {
     width: auto;
+    font-weight: 500;
+    font-size: 13px;
     text-transform: uppercase;
-    padding: 11px 0;
-    line-height: 18px;
+    padding: 0;
+    line-height: 20px;
+    border:none !important;
 
     & + .tab {
       margin-left: 30px;
@@ -97,16 +105,13 @@ a.tab {
       &:not(.hidden-left-line)::before {
         content: '|';
         position: absolute;
-        left: -1.5em;
+        left: -15px;
         color: white;
         font-weight: normal;
         margin-top: -1px;
+        opacity: 0.6;
       }
     }
-  }
-
-  .bar {
-    bottom: 7px;
   }
 
   .tab-view__body {
@@ -118,3 +123,51 @@ a.tab {
     cursor: default;
   }
 }
+
+
+// Order form tabs 
+
+// .ordertabs {
+//   width: 100%;
+//   display: flex;
+//   justify-content: space-evenly;
+//   background: $bn-blue2;
+//   position: relative;
+//   z-index: 9;
+//   font-weight: 600;
+// }
+
+// .ordertabs > a.tab {
+//   display: inline-block;
+//   width: 100%;
+//   color: #FFF;
+//   opacity: 0.8;
+//   transition: opacity 0.3s;
+//   text-align: center;
+//   border-radius: 4px;
+//   padding: 7px 15px;
+//   transition: color 0.26s ease;
+//   font: 13px/20px $ibm-sans;
+//   border:1px solid;
+//   height:35px;
+//   border-color: rgba(0,0,0,0.0);
+//   transition: all ease-in 0.2 secs;
+//   font-weight: 500;
+
+
+//   &:hover {
+//     color: #fff;
+//     opacity: 1;
+//     transition: opacity 0.3s
+//   }
+//   &.active {
+//     color: $bn-green;
+//     border-color: $bn-green;
+//     pointer-events: none;
+//   }
+//   &.active:nth-child(2) {
+//     color: $bn-red;
+//     border-color: $bn-red;
+//     pointer-events: none;
+//   }
+// }

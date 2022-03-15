@@ -13,20 +13,22 @@
   right: 0;
   z-index: 9991;
   margin-bottom: 5px;
-  background: $bn-blue1;
+  background: $bn-blue2;
+  max-height: 60px;
 }
 
 .navbar-bar {
-  padding: 12px 16px;
+  padding: 15px 20px;
   position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.24);
+  max-height: 60px;
+  // border-bottom: 1px solid rgba(255, 255, 255, 0.24);
 
   @include screen(lg) {
     justify-content: flex-start;
-    padding: 18px 40px;
+    padding: 15px 20px;
     border-bottom: none;
   }
 
@@ -45,7 +47,7 @@
     height: 25px;
 
     @include screen(lg) {
-      height: 60px;
+      height: 55px;
     }
   }
 }
@@ -181,18 +183,18 @@ app-pair-selector {
 }
 
 .navbar-pricing {
-  padding: 8px;
+  padding: 15px;
   display: flex;
   justify-content: space-between;
-  min-height: 58px;
+  // min-height: 58px;
 
   @include screen(lg) {
     min-height: unset;
-    height: 90px;
+    height: 55px;
     padding: 0;
     position: absolute;
     top: 0;
-    left: 315px;
+    left: 345px;
   }
 
   &__cell {

@@ -194,131 +194,106 @@
         </tr>
       </table>
     </app-big-tooltip>
+    <div class="col-lg-12">
+      <div class="row">
+        <!-- left nav -->
+        <div class="leftnav col-lg">
+        </div>
+        <!-- charts and tabs nav -->
+        <div class="main">
+          <div class="trade_table row">
 
-    <div class="content col-lg">
-      <div class="trade_table row">
+          
+            <app-bn-tab-view class="trade_table__cell card col-lg-12 charts-tab-view">
+              <bn-tab label="{{Localize.text('Price Chart', 'mainview')}}">
+                <ng-template #content>
+                  <app-pricechart></app-pricechart>
+                </ng-template>
+              </bn-tab>
+              <bn-tab label="{{Localize.text('Depth Chart', 'mainview')}}">
+                <ng-template #content>
+                  <app-depth></app-depth>
+                </ng-template>
+              </bn-tab>
+            </app-bn-tab-view>
 
-        <app-bn-tab-view class="trade_table__cell card col-lg-8 charts-tab-view">
-          <bn-tab label="{{Localize.text('Price Chart', 'mainview')}}">
-            <ng-template #content>
-              <app-pricechart></app-pricechart>
-            </ng-template>
-          </bn-tab>
-          <bn-tab label="{{Localize.text('Depth Chart', 'mainview')}}">
-            <ng-template #content>
-              <app-depth></app-depth>
-            </ng-template>
-          </bn-tab>
-          <!-- <bn-tab label="{{Localize.text('Both', 'mainview')}}">
-            <ng-template #content>
-              <app-depth></app-depth>
-            </ng-template>
-          </bn-tab> -->
-        </app-bn-tab-view>
+        
 
-        <!-- <bn-card class="trade_table__cell col-lg-4" >
-          <bn-card-toolbar>
-            <ng-template #toolbar>
-              <div class="order-book-view-wrapper">
-                <div class="showbuyorsell view-all-orders" [class.active]="viewAllOrders" title="{{Localize.text('Show buy & sell orders', 'mainview')}}" (click)="updateView(OrderbookViews.ALL)">
-                  <div class="sell"></div>
-                  <div></div>
-                  <div></div>
-                  <div></div>
-                  <div class="buy"></div>
-                </div>
-                <div class="showbuyorsell view-sell-orders" [class.active]="viewSellOrders" title="{{Localize.text('Show only sell orders', 'mainview')}}" (click)="updateView(OrderbookViews.SELLS)">
-                  <div class="sell"></div>
-                  <div></div>
-                  <div></div>
-                  <div></div>
-                  <div></div>
-                </div>
-                <div class="showbuyorsell view-buy-orders" [class.active]="viewBuyOrders" title="{{Localize.text('Show only buy orders', 'mainview')}}" (click)="updateView(OrderbookViews.BUYS)">
-                  <div></div>
-                  <div></div>
-                  <div></div>
-                  <div></div>
-                  <div class="buy"></div>
-                </div>
-              </div>
-            </ng-template>
-          </bn-card-toolbar>
-          <bn-card-title>
-            <span><Localize context="mainview" key="Order Book"></Localize>
-              <i class="material-icons tooltip-icon" (mouseenter)="showHideTooltip('showOrderBookTooltip', true)" (mouseleave)="showHideTooltip('showOrderBookTooltip', false)">help</i>
-            </span>
-          </bn-card-title>
-          <bn-card-body>
-            <app-orderbook></app-orderbook>
-          </bn-card-body>
-        </bn-card> -->
+            <app-bn-tab-view class="trade_table__cell card orders col-lg-12">
+              <bn-tab label="{{Localize.text('Order Book', 'mainview')}}">
+                <ng-template #content>
+                  <app-orderbook #orderbook></app-orderbook>
+                </ng-template>
+              </bn-tab>
+              <bn-tab label="{{Localize.text('My Active Orders', 'mainview')}}">
+                <ng-template #content>
+                  <app-openorders></app-openorders>
+                </ng-template>
+              </bn-tab>
+              <bn-tab label="{{Localize.text('My Order History', 'mainview')}}">
+                <ng-template #content>
+                  <bn-filled-orders></bn-filled-orders>
+                </ng-template>
+              </bn-tab>
+              <bn-tab label="{{Localize.text('Trade History', 'mainview')}}">
+                <ng-template #content>
+                    <app-tradehistory></app-tradehistory>
+                </ng-template>
+              </bn-tab>
 
-        <app-bn-tab-view class="trade_table__cell card orders col-lg-8">
-          <bn-tab label="{{Localize.text('Active Orders', 'mainview')}}">
-            <ng-template #content>
-              <app-openorders></app-openorders>
-            </ng-template>
-          </bn-tab>
-          <bn-tab label="{{Localize.text('Order History', 'mainview')}}">
-            <ng-template #content>
-              <bn-filled-orders></bn-filled-orders>
-            </ng-template>
-          </bn-tab>
-          <bn-tab label="" contentInHeader="true">
-            <ng-template #content>
-              <i class="material-icons tooltip-icon" (mouseenter)="activeInactiveOrderTooltip1(true)" (mouseleave)="activeInactiveOrderTooltip1(false)">help</i>
-            </ng-template>
-          </bn-tab>
-          <bn-tab label="" contentInHeader="true" float="right" hideLine="true" showOnIndex="1">
-            <ng-template #content>
-              <button type="button" class="clear-inactive-button" (click)="clearInactiveOrders($event)">
-                <Localize context="mainview" key="Clear Inactive"></Localize>
-              </button>
-            </ng-template>
-          </bn-tab>
-        </app-bn-tab-view>
+              <!--<bn-card class="trade_table__cell history col-lg-4">
+              <bn-card-title>{{Localize.text('Trade History', 'mainview')}}</bn-card-title>
+              <bn-card-body>
+                <app-tradehistory></app-tradehistory>
+              </bn-card-body>-->
 
-        <!-- let's remove trade history from the main view -->
-        <!-- <bn-card class="trade_table__cell history col-lg-4">
-          <bn-card-title>{{Localize.text('Trade History', 'mainview')}}</bn-card-title>
-          <bn-card-body>
-            <app-tradehistory></app-tradehistory>
-          </bn-card-body>
-        </bn-card> -->
+              <!-- <bn-tab label="" contentInHeader="true">
+                <ng-template #content>
+                  <i class="material-icons tooltip-icon" (mouseenter)="activeInactiveOrderTooltip1(true)" (mouseleave)="activeInactiveOrderTooltip1(false)">help</i>
+                </ng-template>
+              </bn-tab> -->
+              <bn-tab label="" contentInHeader="true" float="right" hideLine="true" showOnIndex="1">
+                <ng-template #content>
+                  <button type="button" class="clear-inactive-button" (click)="clearInactiveOrders($event)">
+                    <Localize context="mainview" key="Clear Inactive"></Localize>
+                  </button>
+                </ng-template>
+              </bn-tab>
+            </app-bn-tab-view>
+          </div>
 
-      </div>
+        </div>
+        <!-- order form -->
+        <div class="sidebar col-lg">
+          <!-- <div class="trade_table row"> -->
+          <div class="row">
 
-    </div>
+            <!-- <bn-card class="trade_table__cell balances col-lg-12" [class.alternate-pricing]="pricingEnabled && !shouldHidePricing(symbols)" [allowFullscreen]="false" [showRefreshBalances]="true">
+              <bn-card-title>
+                  <span><Localize context="mainview" key="Balances"></Localize>
+                    <i class="material-icons tooltip-icon" (mouseenter)="showHideTooltip('showBalancesTooltip', true)" (mouseleave)="showHideTooltip('showBalancesTooltip', false)">help</i>
+                  </span>
+              </bn-card-title>
+              <bn-card-body>
+                <app-balances></app-balances>
+              </bn-card-body>
+            </bn-card> -->
 
-    <div class="sidebar col-lg">
-      <div class="trade_table row">
+            <bn-card class="trade_table__cell orderform col-lg-12" [class.alternate-pricing]="pricingEnabled && !shouldHidePricing(symbols)" [allowFullscreen]="false" [showClearForm]="true">
+              <bn-card-title>
+                  <span><Localize context="mainview" key="Order Form"></Localize>
+                    <!-- <i class="material-icons tooltip-icon" (mouseenter)="showHideTooltip('showOrderFormTooltip', true)" (mouseleave)="showHideTooltip('showOrderFormTooltip', false)">help</i> -->
+                  </span>
+              </bn-card-title>
+              <bn-card-body>
+                <app-orderform></app-orderform>
+              </bn-card-body>
+            </bn-card>
 
-        <bn-card class="trade_table__cell balances col-lg-12" [class.alternate-pricing]="pricingEnabled && !shouldHidePricing(symbols)" [allowFullscreen]="false" [showRefreshBalances]="true">
-          <bn-card-title>
-              <span><Localize context="mainview" key="Balances"></Localize>
-                <i class="material-icons tooltip-icon" (mouseenter)="showHideTooltip('showBalancesTooltip', true)" (mouseleave)="showHideTooltip('showBalancesTooltip', false)">help</i>
-              </span>
-          </bn-card-title>
-          <bn-card-body>
-            <app-balances></app-balances>
-          </bn-card-body>
-        </bn-card>
-
-        <bn-card class="trade_table__cell orderform col-lg-12" [class.alternate-pricing]="pricingEnabled && !shouldHidePricing(symbols)" [allowFullscreen]="false" [showClearForm]="true">
-          <bn-card-title>
-              <span><Localize context="mainview" key="Order Form"></Localize>
-                <i class="material-icons tooltip-icon" (mouseenter)="showHideTooltip('showOrderFormTooltip', true)" (mouseleave)="showHideTooltip('showOrderFormTooltip', false)">help</i>
-              </span>
-          </bn-card-title>
-          <bn-card-body>
-            <app-orderform></app-orderform>
-          </bn-card-body>
-        </bn-card>
-
+          </div>
+        </div>
       </div>
     </div>
-
   </div>
 
   <!-- End Desktop -->
@@ -344,11 +319,6 @@
               <app-depth></app-depth>
             </ng-template>
           </bn-tab>
-          <!-- <bn-tab label="{{Localize.text('Both', 'mainview')}}">
-            <ng-template #content>
-              <app-depth></app-depth>
-            </ng-template>
-          </bn-tab> -->
         </app-bn-tab-view>
       </div>
 
@@ -357,6 +327,11 @@
           <bn-tab label="{{Localize.text('Active Orders', 'mainview')}}">
             <ng-template #content>
               <app-openorders></app-openorders>
+            </ng-template>
+          </bn-tab>
+          <bn-tab label="{{Localize.text('Order History', 'mainview')}}">
+            <ng-template #content>
+              <bn-filled-orders></bn-filled-orders>
             </ng-template>
           </bn-tab>
           <bn-tab label="{{Localize.text('Order History', 'mainview')}}">

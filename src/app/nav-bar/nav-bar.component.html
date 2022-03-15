@@ -1,12 +1,12 @@
 <nav class="navbar">
   <div class="navbar-bar" [class.menu-active]="pairSelectorActiveState">
     <a class="navbar-brand" [routerLink]="['/trading']">
-      <img src="assets/logo-full.svg" [alt]="Localize.text('Blocknet Logo', 'navbar')">
+      <img src="/src/assets/logo_full.png" [alt]="Localize.text('Blocknet Logo', 'navbar')">
     </a>
 
-    <!-- <app-pair-selector (onActiveStatus)="pairSelectorActiveState = $event"></app-pair-selector> -->
+    <app-pair-selector (onActiveStatus)="pairSelectorActiveState = $event"></app-pair-selector>
 
-    <!-- <div (click)="toggleNav()" class="navbar-collapse__overlay" [class.active]="navCollapsed"></div>
+    <div (click)="toggleNav()" class="navbar-collapse__overlay" [class.active]="navCollapsed"></div>
     <div class="collapse navbar-collapse" [class.active]="navCollapsed">
       <a (click)="toggleNav()" class="close"><i class="material-icons">close</i></a>
       <ul>
@@ -36,7 +36,7 @@
         <li class="app-version"></li>
         <li class="app-version">v{{appVersion}} | <Localize context="navbar" key="Powered by Blocknet"></Localize></li>
       </ul>
-    </div> -->
+    </div>
     <!-- <a (click)="toggleNav()" class="navbar-toggler">
       <i class="left material-icons">menu</i>
       {{Localize.text('Menu', 'navbar').toUpperCase()}}

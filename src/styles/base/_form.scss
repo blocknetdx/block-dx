@@ -14,6 +14,8 @@ form {
 .input-group {
   position: relative;
   background-color: $bn-blue-light4;
+  border-radius: 4px;
+  min-height: 44px;
 
   input {
     width: 100%;
@@ -29,28 +31,30 @@ form {
   }
 
   .col-form-label {
-    font: 12px/40px $ibm-sans;
+    font: 13px/44px $ibm-sans;
     margin: 0;
-    padding-left: 12px;
+    padding-left: 10px;
+    font-weight: 500;
     white-space: nowrap;
-  	background-color: rgba(255,255,255,0.06);
   }
 
   &-addon {
-    font: 12px/40px $ibm-sans;
+    font: 13px/44px $ibm-sans;
     position: absolute;
-    right: 8px;
+    right: 10px;
+    font-weight: 500;
     color: $bn-blue-light3;
-    top: 0;
+    top: 1px;
   }
 
   & + .input-group {
-    margin-top: 8px;
+    margin-top: 10px;
   }
 }
 
 button[type="submit"] {
   width: 100%;
+  height:50px;
 }
 
 input {
@@ -65,9 +69,12 @@ input {
 input[type="text"], input[type="number"] {
   border: none;
   border-radius: 4px;
-  padding: 13px 40px 13px 16px;
+  padding: 0px 60px 0px;
   background: none;
-  font: 12px/14px $ibm-mono;
+  font: 12px/44px $ibm-mono;
+  text-align: right;
+  position: relative;
+  top:1px;
   color: white;
   &::placeholder {
     color: white;

@@ -4,16 +4,16 @@
 
 .container-fluid {
   position: absolute;
-  top: 108px;
-  bottom: 40px;
+  top: 65px;
+  bottom: 20px;
   left: 0;
   right: 0;
   overflow: hidden;
   padding: 0;
   @include screen(lg) {
-    padding: 0 4px;
+    padding: 0 5px;
     bottom: 0;
-    top: 90px;
+    top: 65px;
   }
 
   & > .row {
@@ -21,26 +21,49 @@
   }
 }
 
+.leftnav {
+  background: $bn-blue2;
+  width: 100%;
+  padding:15px;
+  margin-right: 5px;
+  height: calc(100%-5px);
+  @include screen(lg) {
+    max-width: 50px;
+    min-width: 50px;
+    }
+  @include screen(xl) {
+    max-width: 50px;
+    min-width: 50px;
+  }
+}
+
+.main {
+  background: $bn-blue2;
+  max-width: calc(100% - 415px);
+  padding:0px;
+  height: 100%;
+  @include screen(lg) {
+    max-width: calc(100% - 415px);
+    }
+  @include screen(xl) {
+    max-width: calc(100% - 415px);
+  }
+}
+
 .sidebar {
   width: 100%;
   height: 100%;
   @include screen(lg) {
-    max-width: 300px;
-    /deep/ {
-      //.bn-card {
-      //  height: auto;
-      //}
-      //.bn-card__body {
-      //  position: relative;
-      //  top: auto;
-      //  bottom: auto;
-      //}
-    }
+    max-width: 360px;
+    min-width: 360px;
   }
   @include screen(xl) {
-    max-width: 320px;
+    max-width: 360px;
+    min-width: 360px;
   }
 }
+
+
 
 .content, .mobile-content {
   height: 100%;
@@ -59,64 +82,69 @@
   &__cell {
     overflow-x: hidden;
     height: 100%;
+    background: #0a0f15;
 
     @include screen(lg) {
-      margin-bottom: 8px;
       height: 60vh;
     }
 
-    &.orders, &.history {
-      @include screen(lg) {
-        height: calc(40vh - 106px);
-      }
-    }
+    // &.orders, &.history {
+    //   @include screen(lg) {
+    //     height: calc(40vh - 106px);
+    //   }
+    // }
 
-    $orderform-regular-height: 406px;
+    //$orderform-regular-height: 406px;
 
-    &.balances {
-      @include screen(lg) {
-        min-height: 130px;
-        max-height: calc(100vh - #{$orderform-regular-height} - 137px - 106px + 48px + 48px + 40px);
-      }
-      @media(max-height: 700px) {
-        min-height: 130px;
-        max-height: 130px;
-        height: 130px;
-      }
-    }
-    &.balances.alternate-pricing {
-      @include screen(lg) {
-        min-height: 130px;
-        max-height: calc(100vh - #{$orderform-regular-height} - 137px - 106px + 40px + 48px);
-      }
-      @media(max-height: 700px) {
-        min-height: 130px;
-        max-height: 130px;
-        height: 130px;
-      }
-    }
-    &.orderform {
-      @include screen(lg) {
-        min-height: $orderform-regular-height;
-        max-height: $orderform-regular-height;
-      }
-      @media(max-height: 700px) {
-        max-height: calc(100vh - 236px);
-        min-height: calc(100vh - 236px);
-        height: calc(100vh - 236px);
-      }
-    }
-    &.orderform.alternate-pricing {
-      @include screen(lg) {
-        min-height: $orderform-regular-height + 48px;
-        max-height: $orderform-regular-height + 48px;
-      }
-      @media(max-height: 700px) {
-        max-height: calc(100vh - 236px);
-        min-height: calc(100vh - 236px);
-        height: calc(100vh - 236px);
-      }
-    }
+    // &.balances {
+    //   @include screen(lg) {
+    //     min-height: 130px;
+    //     max-height: calc(100vh - #{$orderform-regular-height} - 137px - 106px + 48px + 48px + 40px);
+    //   }
+    //   @media(max-height: 700px) {
+    //     min-height: 130px;
+    //     max-height: 130px;
+    //     height: 130px;
+    //   }
+    // }
+    // &.balances.alternate-pricing {
+    //   @include screen(lg) {
+    //     min-height: 130px;
+    //     max-height: calc(100vh - #{$orderform-regular-height} - 137px - 106px + 40px + 48px);
+    //   }
+    //   @media(max-height: 700px) {
+    //     min-height: 130px;
+    //     max-height: 130px;
+    //     height: 130px;
+    //   }
+    // }
+    // &.orderform {
+    //   @include screen(lg) {
+    //     min-height: $orderform-regular-height;
+    //     max-height: $orderform-regular-height;
+    //     max-height: calc(100vh - 236px);
+    //     min-height: calc(80vh - 5px);
+    //     height: calc(100vh - 236px);
+    //     height: calc(80vh - 5px)
+    //   }
+    //   @media(max-height: 700px) {
+    //     max-height: calc(100vh - 236px);
+    //     min-height: calc(80vh - 5px);
+    //     height: calc(100vh - 236px);
+    //     height: calc(80vh - 5px)
+    //   }
+    // }
+    // &.orderform.alternate-pricing {
+    //   @include screen(lg) {
+    //     min-height: $orderform-regular-height + 48px;
+    //     max-height: $orderform-regular-height + 48px;
+    //   }
+    //   @media(max-height: 700px) {
+    //     max-height: calc(100vh - 236px);
+    //     min-height: calc(100vh - 236px);
+    //     height: calc(100vh - 236px);
+    //   }
+    // }
   }
 }
 
@@ -171,5 +199,5 @@
 }
 
 .charts-tab-view {
-  padding-top: 6px;
+  // padding-top: 6px;
 }
