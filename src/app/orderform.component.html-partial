@@ -23,6 +23,42 @@
   <perfect-scrollbar #orderformscrollbar>
     <form class="order-form-form" (ngSubmit)="onOrderSubmit()" #orderForm="ngForm" id="market_order">
 
+
+      <span class="button-spacer"></span>
+
+<!--      <div class="select-order-type-label"><Localize context="orderform" key="Select order type"></Localize></div>-->
+
+<!--      <div class="order-type-select-container">-->
+<!--        <div class="order-form-type-select-box" [class.active]="this.model.orderType === partialOrderType" (click)="selectOrderType(partialOrderType)">-->
+<!--          <div class="order-form-select-type-radio order-form-select-type-radio-left">-->
+<!--            <div class="radio-interior"></div>-->
+<!--          </div>-->
+<!--          <Localize context="orderform" key="Partial Order"></Localize>-->
+<!--        </div>-->
+<!--        <div class="order-form-type-select-box order-form-select-type-radio-right" [class.active]="this.model.orderType === exactOrderType" (click)="selectOrderType(exactOrderType)">-->
+<!--          <div class="order-form-select-type-radio order-form-select-type-radio-right">-->
+<!--            <div class="radio-interior"></div>-->
+<!--          </div>-->
+<!--          <Localize context="orderform" key="Exact Order"></Localize>-->
+<!--        </div>-->
+<!--      </div>-->
+
+<!--      <span class="button-spacer"></span>-->
+
+<!--      <span class="button-spacer"></span>-->
+
+      <!--<div class="input-group row">-->
+      <!--<label class="col-4 col-form-label">Type</label>-->
+      <!--<div class="col-8">-->
+      <!--<bn-select [options]="orderTypes" #typeSelect-->
+      <!--[initialSelectedIndex]="0"-->
+      <!--(onSelectChange)="selectedOrderType = $event"-->
+      <!--placeholder="Choose a type"></bn-select>-->
+      <!--</div>-->
+      <!--</div>-->
+      <!--<span class="spacer"></span>-->
+
+
       <div class="input-group row">
         <label class="col-4 col-form-label order-form-label" for="amount">
           <span *ngIf="type === 'buy'"><Localize context="orderform" key="Quantity to buy"></Localize></span>
@@ -42,23 +78,6 @@
           <span class="input-group-addon">{{symbols[0]}}</span>
         </div>
       </div>
-
-      <div class="order-type-select-container">
-        <div class="order-form-type-select-box" [class.active]="this.model.orderType === partialOrderType" (click)="selectOrderType(partialOrderType)">
-          <div class="order-form-select-type-radio order-form-select-type-radio-left">
-            <div class="radio-interior"></div>
-          </div>
-          <Localize context="orderform" key="Partial Order"></Localize>
-        </div>
-        <div class="order-form-type-select-box order-form-select-type-radio-right" [class.active]="this.model.orderType === exactOrderType" (click)="selectOrderType(exactOrderType)">
-          <div class="order-form-select-type-radio order-form-select-type-radio-right">
-            <div class="radio-interior"></div>
-          </div>
-          <Localize context="orderform" key="Exact Order"></Localize>
-        </div>
-      </div>
- 
-      <span class="button-spacer"></span>
 
       <div class="input-group row" [style.display]="'flex'">
         <label class="col-4 col-form-label order-form-label" for="total_calc">
@@ -85,8 +104,6 @@
                        [maxAmount]="toNumber(model.amount)"
                        [value]="toNumber(model.minAmount)"
                        [onChange]="this.onSliderChange"></app-slider-input>
-
-      <span class="button-spacer"></span>
 
 <!--      <div class="input-group row" *ngIf="selectedOrderType == 'limit'">-->
 <!--        <label class="col-4 col-form-label" for="limit"><Localize context="orderform" key="Limit Price"></Localize></label>-->

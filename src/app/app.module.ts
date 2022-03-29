@@ -35,6 +35,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { BreakpointService } from './breakpoint.service';
 import { CurrentpriceService } from './currentprice.service';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
+import { LeftNavBarComponent } from './left-nav-bar/left-nav-bar.component';
 import { BottomNavComponent } from './bottom-nav/bottom-nav.component';
 import { NavButtonComponent } from './nav-button/nav-button.component';
 import { IsBreakpointDirective } from './is-breakpoint.directive';
@@ -44,6 +45,7 @@ import { TableColumnDirective } from './table/table-column.directive';
 import { TableColumnHeaderDirective } from './table/table-column-header.directive';
 import { TableColumnCellDirective } from './table/table-column-cell.directive';
 import { PairSelectorComponent } from './pair-selector/pair-selector.component';
+import { PairSelectorNewComponent } from './pair-selector-new/pair-selector-new.component';
 import { CryptocurrencyService } from './cryptocurrency.service';
 import { SelectComponent } from './select/select.component';
 import { OrderbookService } from './orderbook.service';
@@ -96,6 +98,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     TableColumnHeaderDirective,
     TableColumnCellDirective,
     PairSelectorComponent,
+    PairSelectorNewComponent,
     SelectComponent,
     TimeAgoPipe,
     CardComponent,

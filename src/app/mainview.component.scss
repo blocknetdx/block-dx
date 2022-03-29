@@ -27,6 +27,9 @@
   padding:15px;
   margin-right: 5px;
   height: calc(100%-5px);
+  display: flex;
+  flex-direction: column;
+
   @include screen(lg) {
     max-width: 50px;
     min-width: 50px;
