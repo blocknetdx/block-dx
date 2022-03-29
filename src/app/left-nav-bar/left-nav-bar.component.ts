@@ -12,7 +12,7 @@ import {alert, openExternal} from '../util';
   styleUrls: ['./left-nav-bar.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class NavBarComponent implements OnInit {
+export class LeftNavBarComponent implements OnInit {
 
   public symbols: string[];
   public currentPrice: Currentprice;
