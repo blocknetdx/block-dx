@@ -67,7 +67,7 @@
     "lodash": "^4.17.21",
     "markdown-it": "9.1.0",
     "mathjs": "5.10.3",
-    "moment": "2.24.0",
+    "moment": "2.29.2",
     "ngx-perfect-scrollbar": "10.0.0",
     "performance-now": "2.1.0",
     "popper.js": "1.15.0",
