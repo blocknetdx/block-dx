@@ -24,7 +24,6 @@ const ipcMainListeners = {
 };
 
 const pricingSources = {
-  CLOUD_CHAINS: 'CLOUD_CHAINS',
   CRYPTO_COMPARE: 'CRYPTO_COMPARE',
   COIN_MARKET_CAP: 'COIN_MARKET_CAP',
 };

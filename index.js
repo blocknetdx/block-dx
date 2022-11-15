@@ -1977,7 +1977,7 @@ ipcMain.on('openExternal', (e, url) => {
 
     pricingSource = storage.getItem('pricingSource');
     if(!pricingSource) {
-      pricingSource = pricingSources.CLOUD_CHAINS;
+      pricingSource = pricingSources.CRYPTO_COMPARE;
       storage.setItem('pricingSource', pricingSource);
     }
     apiKeys = storage.getItem('apiKeys');
