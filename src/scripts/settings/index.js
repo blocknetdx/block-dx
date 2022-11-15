@@ -68,7 +68,6 @@ state.set('pricingUnits', [
   'BTC'
 ]);
 state.set('pricingSources', [
-  {id: constants.pricingSources.CLOUD_CHAINS, text: 'CloudChains', apiKeyNeeded: false},
   {id: constants.pricingSources.CRYPTO_COMPARE, text: 'CryptoCompare', apiKeyNeeded: false},
   {id: constants.pricingSources.COIN_MARKET_CAP, text: 'CoinMarketCap', apiKeyNeeded: true}
 ]);

@@ -21,26 +21,7 @@ class PricingInterface {
       try {
         const apiKey = this._apiKey;
         switch(this._source) {
-          case pricingSources.CLOUD_CHAINS: {
-            const endpoint = `https://chainapi-cc.core.cloudchainsinc.com/api/prices_full?from_currencies=${coins[0]}&to_currencies=${base}`;
-            const { body, statusCode } = await request
-              .get(endpoint)
-              .set('accept', 'application/json');
-            if(statusCode !== 200) {
-              logger.error(`Call to ${endpoint} failed with status code ${statusCode}`);
-              resolve([]);
-            } else if(!body.RAW || !body.RAW || !body.RAW[coins[0]] || !body.RAW[coins[0]][base]) {
-              logger.error(`Pricing data for ${coins[0]}-${base} not found in data returned from ${endpoint}`);
-              resolve([]);
-            } else {
-              resolve([{
-                coin: coins[0],
-                base,
-                multiplier: body.RAW[coins[0]][base].PRICE
-              }]);
-            }
-            break;
-          } case pricingSources.COIN_MARKET_CAP: {
+          case pricingSources.COIN_MARKET_CAP: {
             const { body } = await request
               .get(`https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=${coins[0]}&convert=${base}`)
               .set('X-CMC_PRO_API_KEY', apiKey);
