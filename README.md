@@ -3,9 +3,9 @@
 [Download Block DX](https://github.com/blocknetdx/block-dx/releases/latest) |
 -------------|
 
-BLOCK DX is a decentralized exchange dApp built on top of the [Blocknet Protocol](https://api.blocknet.org). This repository is maintained by the Blocknet Core Team. We encourage the community to create dApps on top of Blocknet. Please connect with our community on [Discord](https://discord.gg/mZ6pTneMx3). More information about Blocknet can be found on the [Blocknet website](https://blocknet.co) and [documentation portal](https://docs.blocknet.co).
+BLOCK DX is a decentralized exchange dApp built on top of the [Blocknet Protocol](https://api.blocknet.org). This repository is maintained by the Blocknet Core Team. We encourage the community to create dApps on top of Blocknet. Please connect with our community on [Discord](https://discord.gg/mZ6pTneMx3). More information about Blocknet can be found on the [Blocknet website](https://blocknet.org) and [documentation portal](https://docs.blocknet.org).
 
-[Website](https://blockdx.net) | [API](https://api.blocknet.org) | [Documentation](https://docs.blocknet.co) | [Discord](https://discord.gg/mZ6pTneMx3)
+[Website](https://blockdx.net) | [API](https://api.blocknet.org) | [Documentation](https://docs.blocknet.org) | [Discord](https://discord.gg/mZ6pTneMx3)
 -------------|-------------|-------------|-------------
 
 # Dev Instructions
