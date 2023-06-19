@@ -1158,7 +1158,7 @@ const openAppWindow = () => {
     return orders;
   };
 
-  const calculateBackupTotal = (price, size) => math.round(math.multiply(math.bignumber(price), math.bignumber(size)), 6).toNumber().toFixed(8);
+  const calculateBackupTotal = (price, size) => math.round(math.multiply(math.bignumber(price), math.bignumber(size)), 8).toNumber().toFixed(8);
 
   const sendOrderBook = async function(force) {
     if (isTokenPairValid(keyPair)) {
