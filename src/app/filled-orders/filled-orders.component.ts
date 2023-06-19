@@ -128,7 +128,7 @@ export class FilledOrdersComponent extends BaseComponent implements OnInit {
   }
 
   calculatePairPrice(total, size) {
-    return math.divide(bignumber(total), bignumber(size)).toFixed(6);
+    return math.divide(bignumber(total), bignumber(size)).toFixed(8);
   }
 
   getStatusDotColor(status) {

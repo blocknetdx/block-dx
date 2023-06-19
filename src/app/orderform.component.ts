@@ -678,7 +678,7 @@ export class OrderformComponent implements OnInit {
         if(Number(origOrder.partialMinimum) > 0) {
           params = {
             ...params,
-            amount: minAmountToPrice(origOrder.takerSize, amount, origOrder.makerSize).toFixed(6)
+            amount: minAmountToPrice(origOrder.takerSize, amount, origOrder.makerSize).toFixed(8)
           };
         }
       }
@@ -698,7 +698,7 @@ export class OrderformComponent implements OnInit {
         if(isPartialOrder) { // good
           params = {
             ...params,
-            minimumSize: minAmountToPrice(amount, minimumAmount, totalPrice).toFixed(6),
+            minimumSize: minAmountToPrice(amount, minimumAmount, totalPrice).toFixed(8),
             repost,
           };
         }
