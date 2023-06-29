@@ -81,7 +81,7 @@ export class OrderformComponent implements OnInit {
 
   // number limits for order amount and total in order form
   private upperLimit = 9;
-  private precisionLimit = 6;
+  private precisionLimit = 8;
 
   public pricing: Pricing;
   public pricingEnabled = true;
