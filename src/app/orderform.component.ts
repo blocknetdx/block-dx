@@ -315,7 +315,7 @@ export class OrderformComponent implements OnInit {
     let fixed;
     if(!valid) {
       fixed = this.fixAmount(amount);
-      if(!skipPopper) this.showPopper('amount', Localize.text('You can only specify amounts with at most 6 decimal places.', 'orderform'), 5000);
+      if(!skipPopper) this.showPopper('amount', Localize.text('You can only specify amounts with at most 8 decimal places.', 'orderform'), 5000);
       e.target.value = relocalize(fixed);
     } else if(e.type === 'paste') {
       e.target.value = relocalize(amount);
@@ -359,7 +359,7 @@ export class OrderformComponent implements OnInit {
     const [ valid, skipPopper = false ] = this.validAmount(amount);
     if(!valid) {
       const fixed = this.fixAmount(amount);
-      if(!skipPopper) this.showPopper('minAmount', Localize.text('You can only specify amounts with at most 6 decimal places.', 'orderform'), 5000);
+      if(!skipPopper) this.showPopper('minAmount', Localize.text('You can only specify amounts with at most 8.', 'orderform'), 5000);
       e.target.value = relocalize(fixed);
     } else if(e.type === 'paste') {
       e.target.value = relocalize(amount);
@@ -386,7 +386,7 @@ export class OrderformComponent implements OnInit {
     let fixed;
     if(!valid) {
       fixed = this.fixAmount(price);
-      if(!skipPopper) this.showPopper('price', Localize.text('You can only specify amounts with at most 6 decimal places.', 'orderform'), 5000);
+      if(!skipPopper) this.showPopper('price', Localize.text('You can only specify amounts with at most 8 decimal places.', 'orderform'), 5000);
       e.target.value = relocalize(fixed);
     } else if(e.type === 'paste') {
       e.target.value = relocalize(price);
@@ -428,7 +428,7 @@ export class OrderformComponent implements OnInit {
     let fixed;
     if(!valid) {
       fixed = this.fixAmount(secondPrice);
-      if(!skipPopper) this.showPopper('secondPrice', Localize.text('You can only specify amounts with at most 6 decimal places.', 'orderform'), 5000);
+      if(!skipPopper) this.showPopper('secondPrice', Localize.text('You can only specify amounts with at most 8 decimal places.', 'orderform'), 5000);
       e.target.value = relocalize(fixed);
     } else if(e.type === 'paste') {
       e.target.value = relocalize(secondPrice);

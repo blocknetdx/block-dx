@@ -1124,9 +1124,9 @@
       "note": ""
     }
   },
-  "You can only specify amounts with at most 6 decimal places.": {
+  "You can only specify amounts with at most 8 decimal places.": {
     "orderform": {
-      "val": "You can only specify amounts with at most 6 decimal places.",
+      "val": "You can only specify amounts with at most 8 decimal places.",
       "note": ""
     }
   },
