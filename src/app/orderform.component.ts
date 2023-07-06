@@ -595,7 +595,7 @@ export class OrderformComponent implements OnInit {
      * THIS MUST BE REMOVE IN ORDER FOR PARTIAL ORDERS
      * TO POST
      */
-    isPartialOrder = false;
+    // isPartialOrder = false;
 
     if(!amount) {
       alert(Localize.text('Oops! You must enter an amount.', 'orderform'));

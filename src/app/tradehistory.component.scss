@@ -1,8 +1,8 @@
 app-table {
-  /deep/ .bn-table__row {
+  ::v-deep .bn-table__row {
     position: relative;
   }
-  /deep/ .bn-table__cell {
+  ::v-deep .bn-table__cell {
     position: static;
     span {
       position: relative;

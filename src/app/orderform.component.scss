@@ -4,7 +4,7 @@
 bn-tab-view {
   height: 100%;
 
-  & /deep/ {
+  & ::v-deep {
     .tab-view__body {
       padding: 16px 8px;
       @include screen(md) {

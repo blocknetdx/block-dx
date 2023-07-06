@@ -71,8 +71,8 @@ export class OrderbookService {
       window.electron.ipcRenderer.on('orderBook', (e, orderBook) => {
 
         // Temporary filter to only show exact orders
-        orderBook.asks = orderBook.asks.filter(o => o.orderType === 'exact');
-        orderBook.bids = orderBook.bids.filter(o => o.orderType === 'exact');
+        // orderBook.asks = orderBook.asks.filter(o => o.orderType === 'exact');
+        // orderBook.bids = orderBook.bids.filter(o => o.orderType === 'exact');
 
         // Test Data Generator
         // const getRandom = (min, max) => Math.random() * (max - min) + min;

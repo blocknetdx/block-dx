@@ -26,7 +26,7 @@
   height: 100%;
   @include screen(lg) {
     max-width: 300px;
-    /deep/ {
+    ::v-deep {
       //.bn-card {
       //  height: auto;
       //}
@@ -71,7 +71,7 @@
       }
     }
 
-    $orderform-regular-height: 406px;
+    $orderform-regular-height: 528px;
 
     &.balances {
       @include screen(lg) {
