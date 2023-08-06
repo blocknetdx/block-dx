@@ -1,6 +1,8 @@
 build_linux:
   stage: build
-  image: electronuserland/builder:latest
+  # image: electronuserland/builder:latest
+  # image sha256:6e775ff04e58753528ab9fd97d30c204769a0be83fd70f77976a257052203420
+  image: electronuserland/builder@sha256:9cfae60a63e04335ca9de37da094e305e38925999576c6dc8f0d09821d271760 
   timeout: 30m
   script:
     - |
@@ -18,7 +20,9 @@ build_linux:
 
 build_win:
   stage: build
-  image: electronuserland/builder:wine
+  # image: electronuserland/builder:wine
+  # image sha256:f134220d2788625df6c54164dc67ffad04e1a964a60b1fff176485c142056f88
+  image: electronuserland/builder@sha256:8dd62ce3f32421abbb275d6b721f7ce4377c8442d703c0309cf423a4123997e0
   script:
     - |
       echo GIT_BRANCH="$CI_COMMIT_REF_NAME" > electron-builder.env
