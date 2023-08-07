@@ -1,0 +1,77 @@
+name: build-all
+
+on:
+  push:
+    branches:
+      - master
+      - dev
+  pull_request:
+    branches:
+      - master
+      - dev
+
+jobs:
+  build_linux:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+        if: github.event.pull_request.draft == false
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 12
+
+      - run: echo GIT_BRANCH="${{ github.ref_name }}" > electron-builder.env
+      - run: npm install --no-audit
+      - run: npm run build-native-linux
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: artifacts-linux
+          path: |
+            dist-native/*.tar.gz
+            dist-native/*.AppImage
+            dist-native/*.deb
+
+  build_mac:
+    runs-on: macos-11
+    steps:
+      - uses: actions/checkout@v3
+        if: github.event.pull_request.draft == false
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 12
+
+      - run: echo GIT_BRANCH="${{ github.ref_name }}" > electron-builder.env
+      - run: npm install --no-audit
+      - run: npm run build-native-mac
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: artifacts-mac
+          path: |
+            dist-native/*.dmg
+            dist-native/*.dmg.blockmap
+            dist-native/*.zip
+
+  build_win:
+    runs-on: windows-2019
+    steps:
+      - uses: actions/checkout@v3
+        if: github.event.pull_request.draft == false
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 12
+
+      - run: echo GIT_BRANCH="${{ github.ref_name }}" > electron-builder.env
+      - run: npm install --no-audit
+      - run: npm run build-native-win
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: artifacts-win
+          path: |
+            dist-native/*.exe
+            dist-native/*.exe.blockmap
+            dist-native/*.zip

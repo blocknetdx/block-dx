@@ -27,7 +27,7 @@
     "e2e": "ng e2e",
     "build-native": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --production && cd .. && electron-builder --dir",
     "build-native-win": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --no-audit --production && cd .. && electron-builder --dir --x64 --win nsis zip --publish never",
-    "build-native-mac": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --no-audit --production && cd .. && electron-builder --dir --x64 --mac zip --publish never",
+    "build-native-mac": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --no-audit --production && cd .. && electron-builder --dir --x64 --mac dmg zip --publish never",
     "build-native-linux": "npm run build && node ./native-build-scripts/01-copy-files.js && cd temp && npm install --no-audit --production && cd .. && npm run build-native-linux-x64 && npm run build-native-linux-arm7",
     "build-native-linux-x64": "electron-builder --dir --x64 --linux appImage deb tar.gz --publish never",
     "build-native-linux-arm7": "electron-builder --dir --armv7l --linux appImage --publish never",
