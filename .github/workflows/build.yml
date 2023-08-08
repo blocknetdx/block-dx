@@ -5,10 +5,16 @@ on:
     branches:
       - master
       - dev
+    tags:
+      - "v**"
   pull_request:
     branches:
       - master
       - dev
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   build_linux:
@@ -29,6 +35,17 @@ jobs:
         with:
           name: artifacts-linux
           path: |
+            dist-native/*.tar.gz
+            dist-native/*.AppImage
+            dist-native/*.deb
+
+      - uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/v')
+        with:
+          name: Block DX ${{ github.ref_name}}
+          prerelease: true
+          generate_release_notes: true
+          files: |
             dist-native/*.tar.gz
             dist-native/*.AppImage
             dist-native/*.deb
@@ -55,6 +72,17 @@ jobs:
             dist-native/*.dmg.blockmap
             dist-native/*.zip
 
+      - uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/v')
+        with:
+          name: Block DX ${{ github.ref_name}}
+          prerelease: true
+          generate_release_notes: true
+          files: |
+            dist-native/*.dmg
+            dist-native/*.dmg.blockmap
+            dist-native/*.zip
+
   build_win:
     runs-on: windows-2019
     steps:
@@ -72,6 +100,17 @@ jobs:
         with:
           name: artifacts-win
           path: |
+            dist-native/*.exe
+            dist-native/*.exe.blockmap
+            dist-native/*.zip
+
+      - uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/v')
+        with:
+          name: Block DX ${{ github.ref_name}}
+          prerelease: true
+          generate_release_notes: true
+          files: |
             dist-native/*.exe
             dist-native/*.exe.blockmap
             dist-native/*.zip
