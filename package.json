@@ -69,7 +69,7 @@
     "mathjs": "5.10.3",
     "moment": "2.24.0",
     "ngx-perfect-scrollbar": "10.0.0",
-    "nodegit": "^0.27.0",
+    "nodegit": "^0.26.5",
     "performance-now": "2.1.0",
     "popper.js": "1.15.0",
     "rxjs": "6.6.3",
