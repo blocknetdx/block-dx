@@ -87,40 +87,76 @@ ipcMain.on('quitResetFirstRun', () => {
 ipcMain.on('getPlatform', e => e.returnValue = process.platform);
 
 // mod to get latest manifest from git repo >>
-const NodeGit = require('nodegit');
+const axios = require('axios');
+const AdmZip = require('adm-zip');
+
 const userDataPath = app.getPath('userData');
 const configurationFilesDirectory = path.join(userDataPath, 'blockchain-configuration-files');
-const repoURL = 'https://github.com/blocknetdx/blockchain-configuration-files.git';
+const zipURL = 'https://github.com/blocknetdx/blockchain-configuration-files/archive/refs/heads/master.zip';
 
-const refreshManifest = async () => {
+const downloadAndExtract = async (url, destinationFolder) => {
   try {
-    // Check if the directory exists
-    const directoryExists = fs.existsSync(configurationFilesDirectory);
+    console.log('Downloading ZIP file...');
+    // Download the ZIP file
+    const response = await axios.get(url, {
+      responseType: 'arraybuffer',
+    });
 
-    if (directoryExists) {
-      // If the directory exists, perform a Git pull
-      const repository = await NodeGit.Repository.open(configurationFilesDirectory);
-      await repository.fetchAll();
+    // Save the ZIP file
+    console.log('Saving ZIP file...');
+    const zipPath = path.join(userDataPath, 'manifest.zip');
+    fs.writeFileSync(zipPath, response.data);
 
-      const remote = await repository.getRemote('origin');
-      await remote.disconnect();
-      await remote.connect(NodeGit.Enums.DIRECTION.FETCH);
-      await remote.download();
+  
 
-      console.log('Repository "blockchain-configuration-files" updated successfully.');
-    } else {
-      // If the directory doesn't exist, perform a Git clone
-      await NodeGit.Clone(repoURL, configurationFilesDirectory);
-
-      console.log('Repository "blockchain-configuration-files" cloned successfully.');
+    // Check if the destination folder exists, and delete it if it does
+    console.log('Checking destination folder...');
+    if (fs.existsSync(destinationFolder)) {
+      console.log('Destination folder exists. Deleting...');
+      fs.rmdirSync(destinationFolder, { recursive: true });
+      console.log('Destination folder deleted successfully.');
     }
+
+    // Extract the ZIP contents into a temporary folder
+    console.log('Extracting ZIP contents into a temporary folder...');
+    const tempFolder = path.join(userDataPath, 'temp-extract-folder');
+
+    // Check if the tmp tempFolder exists, and delete it if it does
+    console.log('Checking tempFolder folder...');
+    if (fs.existsSync(tempFolder)) {
+     console.log('tempFolder folder exists. Deleting...');
+     fs.rmdirSync(tempFolder, { recursive: true });
+     console.log('tempFolder folder deleted successfully.');
+    }
+
+    fs.ensureDirSync(tempFolder);
+
+    const zip = new AdmZip(zipPath);
+    zip.extractAllTo(tempFolder, true);
+
+    // Find the "blockchain-configuration-files-master" folder and move its contents to the destination folder
+    console.log('Moving contents to the destination folder...');
+    const masterFolder = path.join(tempFolder, 'blockchain-configuration-files-master');
+    if (fs.existsSync(masterFolder)) {
+      const entries = fs.readdirSync(masterFolder);
+      entries.forEach((entry) => {
+        const sourcePath = path.join(masterFolder, entry);
+        const destPath = path.join(destinationFolder, entry);
+        fs.moveSync(sourcePath, destPath);
+      });
+    }
+
+    // Clean up the temporary ZIP file and folder
+    console.log('Cleaning up temporary files...');
+    fs.unlinkSync(zipPath);
+    fs.removeSync(tempFolder);
+
+    console.log('ZIP file downloaded and extracted successfully.');
   } catch (error) {
-    // Handle any errors that may occur
-    console.error('Error with blockchain-configuration-files update:', error);
+    console.error('Error downloading and extracting ZIP file:', error);
   }
 };
-
-refreshManifest();
+downloadAndExtract(zipURL, configurationFilesDirectory)
 // mod to get latest manifest from git repo <<
 
 const getManifest = () => {
