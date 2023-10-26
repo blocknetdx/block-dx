@@ -28,7 +28,6 @@ jobs:
           node-version: lts/erbium
 
       - run: echo GIT_BRANCH="${{ github.ref_name }}" > electron-builder.env
-      - run: npm cache clean --force 
       - run: npm install --no-audit
       - run: npm run build-native-linux
 
