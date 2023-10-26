@@ -86,7 +86,42 @@ ipcMain.on('quitResetFirstRun', () => {
 
 ipcMain.on('getPlatform', e => e.returnValue = process.platform);
 
-const configurationFilesDirectory = path.join(__dirname, 'blockchain-configuration-files');
+// mod to get latest manifest from git repo >>
+const NodeGit = require('nodegit');
+const userDataPath = app.getPath('userData');
+const configurationFilesDirectory = path.join(userDataPath, 'blockchain-configuration-files');
+const repoURL = 'https://github.com/blocknetdx/blockchain-configuration-files.git';
+
+const refreshManifest = async () => {
+  try {
+    // Check if the directory exists
+    const directoryExists = fs.existsSync(configurationFilesDirectory);
+
+    if (directoryExists) {
+      // If the directory exists, perform a Git pull
+      const repository = await NodeGit.Repository.open(configurationFilesDirectory);
+      await repository.fetchAll();
+
+      const remote = await repository.getRemote('origin');
+      await remote.disconnect();
+      await remote.connect(NodeGit.Enums.DIRECTION.FETCH);
+      await remote.download();
+
+      console.log('Repository "blockchain-configuration-files" updated successfully.');
+    } else {
+      // If the directory doesn't exist, perform a Git clone
+      await NodeGit.Clone(repoURL, configurationFilesDirectory);
+
+      console.log('Repository "blockchain-configuration-files" cloned successfully.');
+    }
+  } catch (error) {
+    // Handle any errors that may occur
+    console.error('Error with blockchain-configuration-files update:', error);
+  }
+};
+
+refreshManifest();
+// mod to get latest manifest from git repo <<
 
 const getManifest = () => {
   let manifest = storage.getItem('manifest');
