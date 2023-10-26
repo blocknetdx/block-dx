@@ -120,17 +120,14 @@ const downloadAndExtract = async (url, destinationFolder) => {
     // Extract the ZIP contents into a temporary folder
     console.log('Extracting ZIP contents into a temporary folder...');
     const tempFolder = path.join(userDataPath, 'temp-extract-folder');
-
-    // Check if the tmp tempFolder exists, and delete it if it does
+      // Check if the tmp tempFolder exists, and delete it if it does
     console.log('Checking tempFolder folder...');
     if (fs.existsSync(tempFolder)) {
      console.log('tempFolder folder exists. Deleting...');
      fs.rmdirSync(tempFolder, { recursive: true });
      console.log('tempFolder folder deleted successfully.');
     }
-
     fs.ensureDirSync(tempFolder);
-
     const zip = new AdmZip(zipPath);
     zip.extractAllTo(tempFolder, true);
 
