@@ -87,7 +87,7 @@ ipcMain.on('quitResetFirstRun', () => {
 ipcMain.on('getPlatform', e => e.returnValue = process.platform);
 
 // mod to get latest manifest from git repo >>
-const simpleGit = require('simple-git');
+const NodeGit = require('nodegit');
 const userDataPath = app.getPath('userData');
 const configurationFilesDirectory = path.join(userDataPath, 'blockchain-configuration-files');
 const repoURL = 'https://github.com/blocknetdx/blockchain-configuration-files.git';
@@ -96,18 +96,22 @@ const refreshManifest = async () => {
   try {
     // Check if the directory exists
     const directoryExists = fs.existsSync(configurationFilesDirectory);
-    if (!directoryExists) {
-      // If the directory doesn't exist, create it
-      await fs.promises.mkdir(configurationFilesDirectory, { recursive: true });
-    }
-    const git = simpleGit(configurationFilesDirectory);
 
-    // Perform a Git pull or clone
     if (directoryExists) {
-      await git.pull();
+      // If the directory exists, perform a Git pull
+      const repository = await NodeGit.Repository.open(configurationFilesDirectory);
+      await repository.fetchAll();
+
+      const remote = await repository.getRemote('origin');
+      await remote.disconnect();
+      await remote.connect(NodeGit.Enums.DIRECTION.FETCH);
+      await remote.download();
+
       console.log('Repository "blockchain-configuration-files" updated successfully.');
     } else {
-      await git.clone(repoURL, configurationFilesDirectory);
+      // If the directory doesn't exist, perform a Git clone
+      await NodeGit.Clone(repoURL, configurationFilesDirectory);
+
       console.log('Repository "blockchain-configuration-files" cloned successfully.');
     }
   } catch (error) {
