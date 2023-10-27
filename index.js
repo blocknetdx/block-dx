@@ -96,43 +96,32 @@ const zipURL = 'https://github.com/blocknetdx/blockchain-configuration-files/arc
 
 const downloadAndExtract = async (url, destinationFolder) => {
   try {
-    console.log('Downloading ZIP file...');
+    console.log('Updating "blockchain-configuration-files"');
     // Download the ZIP file
     const response = await axios.get(url, {
       responseType: 'arraybuffer',
     });
 
     // Save the ZIP file
-    console.log('Saving ZIP file...');
     const zipPath = path.join(userDataPath, 'manifest.zip');
-    fs.writeFileSync(zipPath, response.data);
-
-  
+    fs.writeFileSync(zipPath, response.data); 
 
     // Check if the destination folder exists, and delete it if it does
-    console.log('Checking destination folder...');
     if (fs.existsSync(destinationFolder)) {
-      console.log('Destination folder exists. Deleting...');
       fs.rmdirSync(destinationFolder, { recursive: true });
-      console.log('Destination folder deleted successfully.');
     }
 
     // Extract the ZIP contents into a temporary folder
-    console.log('Extracting ZIP contents into a temporary folder...');
     const tempFolder = path.join(userDataPath, 'temp-extract-folder');
       // Check if the tmp tempFolder exists, and delete it if it does
-    console.log('Checking tempFolder folder...');
     if (fs.existsSync(tempFolder)) {
-     console.log('tempFolder folder exists. Deleting...');
      fs.rmdirSync(tempFolder, { recursive: true });
-     console.log('tempFolder folder deleted successfully.');
     }
     fs.ensureDirSync(tempFolder);
     const zip = new AdmZip(zipPath);
     zip.extractAllTo(tempFolder, true);
 
     // Find the "blockchain-configuration-files-master" folder and move its contents to the destination folder
-    console.log('Moving contents to the destination folder...');
     const masterFolder = path.join(tempFolder, 'blockchain-configuration-files-master');
     if (fs.existsSync(masterFolder)) {
       const entries = fs.readdirSync(masterFolder);
@@ -144,13 +133,12 @@ const downloadAndExtract = async (url, destinationFolder) => {
     }
 
     // Clean up the temporary ZIP file and folder
-    console.log('Cleaning up temporary files...');
     fs.unlinkSync(zipPath);
     fs.removeSync(tempFolder);
 
-    console.log('ZIP file downloaded and extracted successfully.');
+    console.log('"blockchain-configuration-files" updated successfully.');
   } catch (error) {
-    console.error('Error downloading and extracting ZIP file:', error);
+    console.error('Error updating "blockchain-configuration-files":', error);
   }
 };
 downloadAndExtract(zipURL, configurationFilesDirectory)
