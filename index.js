@@ -123,14 +123,19 @@ const downloadAndExtract = async (url, destinationFolder) => {
 
     // Find the "blockchain-configuration-files-master" folder and move its contents to the destination folder
     const masterFolder = path.join(tempFolder, 'blockchain-configuration-files-master');
+    const foldersToIgnore = ["autobuild", "manifests", "tools"];
     if (fs.existsSync(masterFolder)) {
       const entries = fs.readdirSync(masterFolder);
       entries.forEach((entry) => {
-        const sourcePath = path.join(masterFolder, entry);
-        const destPath = path.join(destinationFolder, entry);
-        fs.moveSync(sourcePath, destPath);
+        // Check if the entry is one of the folders to ignore
+        if (!foldersToIgnore.includes(entry)) {
+          const sourcePath = path.join(masterFolder, entry);
+          const destPath = path.join(destinationFolder, entry);
+          fs.moveSync(sourcePath, destPath);
+        }
       });
     }
+
 
     // Clean up the temporary ZIP file and folder
     fs.unlinkSync(zipPath);
