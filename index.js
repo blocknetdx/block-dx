@@ -86,7 +86,68 @@ ipcMain.on('quitResetFirstRun', () => {
 
 ipcMain.on('getPlatform', e => e.returnValue = process.platform);
 
-const configurationFilesDirectory = path.join(__dirname, 'blockchain-configuration-files');
+// mod to get latest manifest from git repo >>
+const axios = require('axios');
+const AdmZip = require('adm-zip');
+
+const userDataPath = app.getPath('userData');
+const configurationFilesDirectory = path.join(userDataPath, 'blockchain-configuration-files');
+const zipURL = 'https://github.com/blocknetdx/blockchain-configuration-files/archive/refs/heads/master.zip';
+
+const downloadAndExtract = async (url, destinationFolder) => {
+  try {
+    console.log('Updating "blockchain-configuration-files"');
+    // Download the ZIP file
+    const response = await axios.get(url, {
+      responseType: 'arraybuffer',
+    });
+
+    // Save the ZIP file
+    const zipPath = path.join(userDataPath, 'manifest.zip');
+    fs.writeFileSync(zipPath, response.data); 
+
+    // Check if the destination folder exists, and delete it if it does
+    if (fs.existsSync(destinationFolder)) {
+      fs.rmdirSync(destinationFolder, { recursive: true });
+    }
+
+    // Extract the ZIP contents into a temporary folder
+    const tempFolder = path.join(userDataPath, 'temp-extract-folder');
+      // Check if the tmp tempFolder exists, and delete it if it does
+    if (fs.existsSync(tempFolder)) {
+     fs.rmdirSync(tempFolder, { recursive: true });
+    }
+    fs.ensureDirSync(tempFolder);
+    const zip = new AdmZip(zipPath);
+    zip.extractAllTo(tempFolder, true);
+
+    // Find the "blockchain-configuration-files-master" folder and move its contents to the destination folder
+    const masterFolder = path.join(tempFolder, 'blockchain-configuration-files-master');
+    const foldersToIgnore = ["autobuild", "manifests", "tools"];
+    if (fs.existsSync(masterFolder)) {
+      const entries = fs.readdirSync(masterFolder);
+      entries.forEach((entry) => {
+        // Check if the entry is one of the folders to ignore
+        if (!foldersToIgnore.includes(entry)) {
+          const sourcePath = path.join(masterFolder, entry);
+          const destPath = path.join(destinationFolder, entry);
+          fs.moveSync(sourcePath, destPath);
+        }
+      });
+    }
+
+
+    // Clean up the temporary ZIP file and folder
+    fs.unlinkSync(zipPath);
+    fs.removeSync(tempFolder);
+
+    console.log('"blockchain-configuration-files" updated successfully.');
+  } catch (error) {
+    console.error('Error updating "blockchain-configuration-files":', error);
+  }
+};
+downloadAndExtract(zipURL, configurationFilesDirectory)
+// mod to get latest manifest from git repo <<
 
 const getManifest = () => {
   let manifest = storage.getItem('manifest');

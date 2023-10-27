@@ -1,6 +1,6 @@
 {
   "name": "BLOCK-DX",
-  "version": "1.9.3",
+  "version": "1.9.4",
   "license": "MIT",
   "author": "Blocknet <contact@blocknet.co>",
   "homepage": "https://github.com/blocknetdx/block-dx",
@@ -53,6 +53,8 @@
     "@angular/platform-browser": "^11.0.0",
     "@angular/platform-browser-dynamic": "^11.0.0",
     "@angular/router": "^11.0.0",
+    "adm-zip": "^0.5.10",
+    "axios": "^1.5.1",
     "bootstrap": "4.3.1",
     "core-js": "3.8.2",
     "electron-context-menu": "0.16.0",
