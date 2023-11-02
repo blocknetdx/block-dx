@@ -1,17 +1,12 @@
-import { OnDestroy } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
+import { OnDestroy, Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
 
+@Injectable()
 export abstract class BaseComponent implements OnDestroy {
-  protected $destroy: Subject<boolean>;
+  protected $destroy: Subject<boolean> = new Subject<boolean>();
 
-  constructor() {
-    this.$destroy = new Subject();
-  }
-
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.$destroy.next(true);
-    this.$destroy.unsubscribe();
-    this.$destroy = null;
+    this.$destroy.complete();
   }
-
 }
