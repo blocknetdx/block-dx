@@ -1,5 +1,4 @@
 import { Component, Input, ViewChild, OnInit, NgZone } from '@angular/core';
-import * as math from 'mathjs';
 import { PerfectScrollbarComponent, PerfectScrollbarDirective } from 'ngx-perfect-scrollbar';
 import isBoolean from 'lodash/isBoolean';
 
@@ -21,6 +20,7 @@ import {BalancesService} from './balances.service';
 import {Balance} from './balance';
 import {OrderformService} from './orderform.service';
 import {BigTooltipService} from './big-tooltip.service';
+import { create, all} from 'mathjs';
 
 const delocalize = (numStr = '') => {
   const decimalSeparator = Localize.decimalSeparator();
@@ -30,6 +30,8 @@ const relocalize = (numStr = '') => {
   const decimalSeparator = Localize.decimalSeparator();
   return numStr.replace('.', decimalSeparator);
 };
+
+const math = create(all);
 
 math.config({
   number: 'BigNumber',

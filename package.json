@@ -69,7 +69,7 @@
     "jquery": "3.5.1",
     "lodash": "^4.17.21",
     "markdown-it": "9.1.0",
-    "mathjs": "5.10.3",
+    "mathjs": "^7.0.0",
     "moment": "^2.29.4",
     "ngx-perfect-scrollbar": "10.1.1",
     "performance-now": "2.1.0",

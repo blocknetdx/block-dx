@@ -1,12 +1,13 @@
 import { Component, OnInit, Input, NgZone } from '@angular/core';
-import * as math from 'mathjs';
-
+import { create, all} from 'mathjs';
 import { AppService } from './app.service';
 import { Trade } from './trade';
 import { TradehistoryService } from './tradehistory.service';
 import { PricingService } from './pricing.service';
 import { Pricing } from './pricing';
 import {Localize} from './localize/localize.component';
+
+const math = create(all);
 
 math.config({
   number: 'BigNumber',

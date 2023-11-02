@@ -1,5 +1,12 @@
-import * as math from 'mathjs';
 import * as moment from 'moment';
+import { create, all} from 'mathjs';
+
+const math = create(all);
+
+math.config({
+  number: 'BigNumber',
+  precision: 64
+});
 
 export class Trade {
   public time: string;

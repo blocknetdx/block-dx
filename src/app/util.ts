@@ -1,5 +1,7 @@
 import { Localize } from './localize/localize.component';
-import * as math from 'mathjs';
+import { create, all} from 'mathjs'
+
+const math = create(all);
 
 math.config({
   number: 'BigNumber',

@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit, OnChanges, NgZone, Input, ElementRef, ViewChild, OnDestroy } from '@angular/core';
 
-import * as math from 'mathjs';
+
 import * as _ from 'lodash';
 
 import { AppService } from './app.service';
@@ -9,6 +9,9 @@ import { Currentprice } from './currentprice';
 import { CurrentpriceService } from './currentprice.service';
 import {NumberFormatPipe} from './pipes/decimal.pipe';
 import {Localize} from './localize/localize.component';
+import { create, all} from 'mathjs';
+
+const math = create(all);
 
 math.config({
   number: 'BigNumber',

@@ -1,6 +1,4 @@
 import { Component, OnInit, NgZone } from '@angular/core';
-import * as math from 'mathjs';
-
 import { BaseComponent } from '../base.component';
 import { AppService } from '../app.service';
 import { Openorder } from '../openorder';
@@ -9,6 +7,11 @@ import { PricingService } from '../pricing.service';
 import { Pricing } from '../pricing';
 import * as OrderStates from '../../orderstates';
 import {Localize} from '../localize/localize.component';
+
+
+import { create, all} from 'mathjs';
+
+const math = create(all);
 
 math.config({
   number: 'BigNumber',
