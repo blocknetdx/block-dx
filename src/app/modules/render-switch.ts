@@ -1,4 +1,4 @@
-import uuid from 'uuid';
+import { v5 as uuid } from 'uuid';
 
 // In order to make this feature extensible, we allow for different types of events (e.g. REGULAR or MULTITHREADED, etc.)
 // The shared event key identifies the type of call being made as the render switch and main switch communicate. In most
@@ -12,7 +12,7 @@ class RenderSwitch {
 
   async send(key, params, multiThread = false) {
     const { ipcRenderer } = window.electron;
-    const id = uuid.v4();
+    const id = uuid();
     const data = await new Promise((resolve, reject) => {
       ipcRenderer.once(id, (e, err, res) => {
         if(err) {
