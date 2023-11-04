@@ -1881,10 +1881,6 @@ ipcMain.on('getLocaleData', e => {
 });
 
 const checkForUpdates = async function() {
-  //disable updates check
-  updateError = false;
-  return;
-  //disable updates check
   try {
     await new Promise(resolve => setTimeout(resolve, 3000));
     if(!isDev) {
