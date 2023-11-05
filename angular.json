@@ -51,7 +51,14 @@
             ],
             "allowedCommonJsDependencies": [
               "mathjs",
-              "rxjs"
+              "rxjs",
+              "typed-function",
+              "seed-random",
+              "javascript-natural-sort",
+              "complex.js",
+              "tiny-emitter",
+              "escape-latex",
+              "lodash/isBoolean"
             ]
           },
           "configurations": {
@@ -67,7 +74,6 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
@@ -176,11 +182,10 @@
       }
     }
   },
-  "defaultProject": "blocknet",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "bn",
-      "styleext": "scss"
+      "style": "scss"
     },
     "@schematics/angular:directive": {
       "prefix": "bn"
