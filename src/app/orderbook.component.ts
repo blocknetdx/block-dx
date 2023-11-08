@@ -1,6 +1,5 @@
 import {Component, NgZone, OnInit, OnDestroy, Input, ViewChild} from '@angular/core';
 import 'rxjs/add/operator/map';
-import * as math from 'mathjs';
 
 import { OrderbookService } from './orderbook.service';
 import { OpenordersService } from './openorders.service';
@@ -15,6 +14,9 @@ import {alert, confirm, shouldHidePricing} from './util';
 import {OrderbookViewService} from './orderbook.view.service';
 import { OrderbookViews } from './enums';
 import {Localize} from './localize/localize.component';
+import { create, all} from 'mathjs';
+
+const math = create(all);
 
 math.config({
   number: 'BigNumber',

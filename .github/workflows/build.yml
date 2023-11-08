@@ -25,7 +25,7 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-          node-version: lts/erbium
+          node-version: lts/hydrogen
 
       - run: echo GIT_BRANCH="${{ github.ref_name }}" > electron-builder.env
       - run: npm install --no-audit
@@ -58,7 +58,7 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-          node-version: 12
+          node-version: lts/hydrogen
 
       - run: echo GIT_BRANCH="${{ github.ref_name }}" > electron-builder.env
       - run: npm install --no-audit
@@ -91,7 +91,7 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-          node-version: 12
+          node-version: lts/hydrogen
 
       - run: echo GIT_BRANCH="${{ github.ref_name }}" > electron-builder.env
       - run: npm install --no-audit

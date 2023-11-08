@@ -69,7 +69,7 @@
   }
   @if $style == text {
     //do nothing
-  } @elseif $style == header {
+  } @else if $style == header {
     @include weight(med);
   } @else {
     @include weight($style);

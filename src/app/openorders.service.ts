@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import * as math from 'mathjs';
+import { create, all} from 'mathjs';
 
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
+
+const math = create(all);
 
 math.config({
   number: 'BigNumber',
