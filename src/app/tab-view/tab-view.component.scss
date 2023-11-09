@@ -60,7 +60,7 @@ a.tab {
     height: calc(100% - 30px);
   }
 
-  ::v-deep {
+  ::ng-deep {
     .ps-content {
       padding: 5px 0;
     }
