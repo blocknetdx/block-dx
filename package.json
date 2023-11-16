@@ -115,7 +115,7 @@
   },
   "main": "index.js",
   "build": {
-    "electronVersion": "13.6.9",
+    "electronVersion": "12.2.3",
     "appId": "co.blocknet.blockdx",
     "productName": "BLOCK DX",
     "artifactName": "${name}-${version}-${os}.${ext}",
