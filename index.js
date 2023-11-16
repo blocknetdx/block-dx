@@ -118,13 +118,14 @@ async function downloadAndExtract(url, destinationFolder) {
   if (await fs.existsAsync(destinationFolder)) { // Use fs.existsAsync
     await removeDirectory(destinationFolder);
   }
+
+  const tempFolder = path.join(userDataPath, 'temp-extract-folder');
   // Check if the tmp tempFolder exists, and delete it if it does
   if (await fs.existsAsync(tempFolder)) { // Use fs.existsAsync
     await removeDirectory(tempFolder);
   }
 
   // Extract the ZIP contents into a temporary folder
-  const tempFolder = path.join(userDataPath, 'temp-extract-folder');
   await fs.ensureDirAsync(tempFolder); // Use fs.ensureDirAsync
   const zip = new AdmZip(zipPath);
   zip.extractAllTo(tempFolder, true);
