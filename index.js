@@ -92,12 +92,13 @@ ipcMain.on('getPlatform', e => e.returnValue = process.platform);
 
 // mod to get latest manifest from git repo >>
 const userDataPath = app.getPath('userData');
-const configurationFilesDirectory = path.join(userDataPath, 'blockchain-configuration-files');
+const configurationFilesDirectory = path.join(userDataPath, 'Local Storage', 'blockchain-configuration-files');
 const zipURL = 'https://github.com/blocknetdx/blockchain-configuration-files/archive/refs/heads/master.zip';
 
 async function removeDirectory(directory) {
   try {
-    await fs.removeAsync(directory); // Use fs.removeAsync
+    await fs.removeAsync(directory);
+    console.log(`Directory ${directory} removed successfully.`);
   } catch (error) {
     console.error(`Error deleting directory ${directory}:`, error);
   }
@@ -107,34 +108,43 @@ async function downloadAndExtract(url, destinationFolder) {
   const axios = require('axios');
   const AdmZip = require('adm-zip');
 
+  console.log(`Downloading from ${url}`);
+
   // Download the ZIP file
   const response = await axios.get(url, { responseType: 'arraybuffer' });
+  console.log('ZIP file downloaded successfully.');
 
   // Save the ZIP file
-  const zipPath = path.join(userDataPath, 'manifest.zip');
-  await fs.outputFileAsync(zipPath, response.data); // Use fs.outputFileAsync
+  const zipPath = path.join(userDataPath, 'Local Storage', 'manifest.zip');
+  await fs.outputFileAsync(zipPath, response.data);
+  console.log(`ZIP file saved to ${zipPath}`);
 
   // Check if the destination folder exists, and delete it if it does
-  if (await fs.existsAsync(destinationFolder)) { // Use fs.existsAsync
+  if (await fs.existsAsync(destinationFolder)) {
     await removeDirectory(destinationFolder);
+    console.log(`Destination folder ${destinationFolder} exists and removed.`);
   }
 
-  const tempFolder = path.join(userDataPath, 'temp-extract-folder');
-  // Check if the tmp tempFolder exists, and delete it if it does
-  if (await fs.existsAsync(tempFolder)) { // Use fs.existsAsync
+  // Check if the temporary folder exists, and delete it if it does
+  const tempFolder = path.join(userDataPath, 'Local Storage', 'temp-extract-folder');
+  if (await fs.existsAsync(tempFolder)) {
     await removeDirectory(tempFolder);
+    console.log(`Temporary folder ${tempFolder} exists and removed.`);
   }
 
   // Extract the ZIP contents into a temporary folder
-  await fs.ensureDirAsync(tempFolder); // Use fs.ensureDirAsync
+  await fs.ensureDirAsync(tempFolder);
+  console.log(`Ensured existence of temporary folder ${tempFolder}.`);
+  
   const zip = new AdmZip(zipPath);
   zip.extractAllTo(tempFolder, true);
+  console.log(`ZIP contents extracted to ${tempFolder}.`);
 
   // Find the "blockchain-configuration-files-master" folder and move its contents to the destination folder
   const masterFolder = path.join(tempFolder, 'blockchain-configuration-files-master');
   const foldersToIgnore = ["autobuild", "manifests", "tools"];
 
-  if (await fs.existsAsync(masterFolder)) { // Use fs.existsAsync
+  if (await fs.existsAsync(masterFolder)) {
     const entries = await fs.readdirAsync(masterFolder);
 
     for (const entry of entries) {
@@ -142,14 +152,18 @@ async function downloadAndExtract(url, destinationFolder) {
       if (!foldersToIgnore.includes(entry)) {
         const sourcePath = path.join(masterFolder, entry);
         const destPath = path.join(destinationFolder, entry);
-        await fs.moveAsync(sourcePath, destPath); // Use fs.moveAsync
+        await fs.moveAsync(sourcePath, destPath);
+        console.log(`Moved ${entry} to ${destinationFolder}.`);
       }
     }
   }
 
   // Clean up the temporary ZIP file and folder
-  await fs.unlinkAsync(zipPath); // Use fs.unlinkAsync
+  await fs.unlinkAsync(zipPath);
+  console.log(`Temporary ZIP file ${zipPath} removed.`);
+  
   await removeDirectory(tempFolder);
+  console.log(`Temporary folder ${tempFolder} removed.`);
 }
 
 (async () => {
