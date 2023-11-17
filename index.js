@@ -12,7 +12,6 @@ const ConfController = require('./src-back/conf-controller');
 const _ = require('lodash');
 //const math = require('mathjs');
 const { create, all } = require('mathjs');
-
 const MarkdownIt = require('markdown-it');
 const { Localize } = require('./src-back/localize');
 const { blocknetDir4, blocknetDir3, BLOCKNET_CONF_NAME4, BLOCKNET_CONF_NAME3, ipcMainListeners, pricingSources } = require('./src-back/constants');
@@ -60,84 +59,6 @@ const { app, BrowserWindow: ElectronBrowserWindow, Menu, ipcMain } = electron;
 autoUpdater.autoDownload = false;
 autoUpdater.autoInstallOnAppQuit = true;
 
-// mod to get latest manifest from git repo >>
-const userDataPath = app.getPath('userData');
-const configurationFilesDirectory = path.join(userDataPath, 'Local Storage', 'blockchain-configuration-files');
-const zipURL = 'https://github.com/blocknetdx/blockchain-configuration-files/archive/refs/heads/master.zip';
-
-function removeDirectory(directory) {
-  try {
-    fs.removeSync(directory);
-    console.log(`Directory ${directory} removed successfully.`);
-  } catch (error) {
-    console.error(`Error deleting directory ${directory}:`, error);
-  }
-}
-
-function downloadAndExtract(url, destinationFolder) {
-  const axios = require('axios');
-  const AdmZip = require('adm-zip');
-
-  console.error('Update "blockchain-configuration-files"');
-
-  console.log(`Downloading from ${url}`);
-
-  axios.get(url, { responseType: 'arraybuffer' })
-    .then((response) => {
-      console.log('ZIP file downloaded successfully.');
-
-      const zipPath = path.join(userDataPath, 'Local Storage', 'manifest.zip');
-      fs.outputFileSync(zipPath, response.data);
-      console.log(`ZIP file saved to ${zipPath}`);
-
-      if (fs.existsSync(destinationFolder)) {
-        removeDirectory(destinationFolder);
-        console.log(`Destination folder ${destinationFolder} exists and removed.`);
-      }
-
-      const tempFolder = path.join(userDataPath, 'Local Storage', 'temp-extract-folder');
-      if (fs.existsSync(tempFolder)) {
-        removeDirectory(tempFolder);
-        console.log(`Temporary folder ${tempFolder} exists and removed.`);
-      }
-
-      fs.ensureDirSync(tempFolder);
-      console.log(`Ensured existence of temporary folder ${tempFolder}.`);
-
-      const zip = new AdmZip(zipPath);
-      zip.extractAllTo(tempFolder, true);
-      console.log(`ZIP contents extracted to ${tempFolder}.`);
-
-      const masterFolder = path.join(tempFolder, 'blockchain-configuration-files-master');
-      const foldersToIgnore = ["autobuild", "manifests", "tools"];
-
-      if (fs.existsSync(masterFolder)) {
-        const entries = fs.readdirSync(masterFolder);
-
-        for (const entry of entries) {
-          if (!foldersToIgnore.includes(entry)) {
-            const sourcePath = path.join(masterFolder, entry);
-            const destPath = path.join(destinationFolder, entry);
-            fs.moveSync(sourcePath, destPath);
-            console.log(`Moved ${entry} to ${destinationFolder}.`);
-          }
-        }
-      }
-
-      fs.unlinkSync(zipPath);
-      console.log(`Temporary ZIP file ${zipPath} removed.`);
-
-      removeDirectory(tempFolder);
-      console.log(`Temporary folder ${tempFolder} removed.`);
-
-      console.error('Updated "blockchain-configuration-files" successfully');
-    })
-    .catch((error) => {
-      console.error('Error updating "blockchain-configuration-files":', error);
-    });
-}
-downloadAndExtract(zipURL, configurationFilesDirectory)
-
 // Properly close the application
 app.on('window-all-closed', () => {
   app.quit();
@@ -167,6 +88,8 @@ ipcMain.on('quitResetFirstRun', () => {
 });
 
 ipcMain.on('getPlatform', e => e.returnValue = process.platform);
+
+const configurationFilesDirectory = path.join(__dirname, 'blockchain-configuration-files');
 
 const getManifest = () => {
   let manifest = storage.getItem('manifest');
