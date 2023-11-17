@@ -12,7 +12,6 @@ const ConfController = require('./src-back/conf-controller');
 const _ = require('lodash');
 //const math = require('mathjs');
 const { create, all } = require('mathjs');
-
 const MarkdownIt = require('markdown-it');
 const { Localize } = require('./src-back/localize');
 const { blocknetDir4, blocknetDir3, BLOCKNET_CONF_NAME4, BLOCKNET_CONF_NAME3, ipcMainListeners, pricingSources } = require('./src-back/constants');
@@ -22,6 +21,7 @@ const { openUnverifiedAssetWindow } = require('./src-back/windows/unverified-ass
 const { openMessageBox } = require('./src-back/windows/message-box');
 const { logger } = require('./src-back/logger');
 const { RecursiveInterval } = require('./src-back/recursive-interval');
+const { app, BrowserWindow: ElectronBrowserWindow, Menu, ipcMain } = electron;
 
 const versionDirectories = [
   blocknetDir4,
@@ -55,7 +55,9 @@ math.config({
 
 const md = new MarkdownIt();
 
-const { app, BrowserWindow: ElectronBrowserWindow, Menu, ipcMain } = electron;
+if(process.platform === 'linux') {
+  app.commandLine.appendSwitch('--in-process-gpu');
+}
 
 autoUpdater.autoDownload = false;
 autoUpdater.autoInstallOnAppQuit = true;
@@ -90,80 +92,7 @@ ipcMain.on('quitResetFirstRun', () => {
 
 ipcMain.on('getPlatform', e => e.returnValue = process.platform);
 
-// mod to get latest manifest from git repo >>
-const userDataPath = app.getPath('userData');
-const configurationFilesDirectory = path.join(userDataPath, 'blockchain-configuration-files');
-const zipURL = 'https://github.com/blocknetdx/blockchain-configuration-files/archive/refs/heads/master.zip';
-
-const downloadAndExtract = async (url, destinationFolder) => {
-  const axios = require('axios');
-  const AdmZip = require('adm-zip');
-  
-  async function removeDirectory(directory) {
-    const fsPromises = require('fs/promises')
-    try {
-      await fsPromises.rm(directory, { recursive: true });
-    } catch (error) {
-      console.error(`Error deleting directory ${directory}:`, error);
-    }
-  }
-  // Download the ZIP file
-  const response = await axios.get(url, {
-    responseType: 'arraybuffer',
-  });
-
-  // Save the ZIP file
-  const zipPath = path.join(userDataPath, 'manifest.zip');
-  fs.writeFileSync(zipPath, response.data); 
-
-  // Check if the destination folder exists, and delete it if it does
-  if (fs.existsSync(destinationFolder)) {
-    await removeDirectory(destinationFolder);
-  }
-
-  // Extract the ZIP contents into a temporary folder
-  const tempFolder = path.join(userDataPath, 'temp-extract-folder');
-    // Check if the tmp tempFolder exists, and delete it if it does
-  if (fs.existsSync(tempFolder)) {
-    await removeDirectory(tempFolder);
-  }
-  fs.ensureDirSync(tempFolder);
-  const zip = new AdmZip(zipPath);
-  zip.extractAllTo(tempFolder, true);
-
-  // Find the "blockchain-configuration-files-master" folder and move its contents to the destination folder
-  const masterFolder = path.join(tempFolder, 'blockchain-configuration-files-master');
-  const foldersToIgnore = ["autobuild", "manifests", "tools"];
-  if (fs.existsSync(masterFolder)) {
-    const entries = fs.readdirSync(masterFolder);
-    entries.forEach((entry) => {
-      // Check if the entry is one of the folders to ignore
-      if (!foldersToIgnore.includes(entry)) {
-        const sourcePath = path.join(masterFolder, entry);
-        const destPath = path.join(destinationFolder, entry);
-        fs.moveSync(sourcePath, destPath);
-      }
-    });
-  }
-
-  // Clean up the temporary ZIP file and folder
-  fs.unlinkSync(zipPath);
-  fs.removeSync(tempFolder);
-  }
-(async () => {
-  try {
-    console.log('Updating "blockchain-configuration-files"');
-
-    await downloadAndExtract(zipURL, configurationFilesDirectory);
-
-    console.log('"blockchain-configuration-files" updated successfully.');
-    
-    // Proceed with the next code lines here.
-  } catch (error) {
-    console.error('Error updating "blockchain-configuration-files":', error);
-  }
-})();
-// mod to get latest manifest from git repo <<
+const configurationFilesDirectory = path.join(__dirname, 'blockchain-configuration-files');
 
 const getManifest = () => {
   let manifest = storage.getItem('manifest');
@@ -2088,9 +2017,12 @@ ipcMain.on('openExternal', (e, url) => {
     }
 
     // Flag used to disable the conf updater, default to false
-    const disableUpdater = storage.getItem('confUpdaterDisabled');
-    if (_.isNull(disableUpdater) || _.isUndefined(disableUpdater))
-      storage.setItem('confUpdaterDisabled', false);
+    // const disableUpdater = storage.getItem('confUpdaterDisabled');
+    // if (_.isNull(disableUpdater) || _.isUndefined(disableUpdater))
+    //   storage.setItem('confUpdaterDisabled', false);
+    
+    // disable old updater
+    storage.setItem('confUpdaterDisabled', true);
 
     if(!storage.getItem('tos')) {
       await onReady;
