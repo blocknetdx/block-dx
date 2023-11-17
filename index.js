@@ -21,6 +21,7 @@ const { openUnverifiedAssetWindow } = require('./src-back/windows/unverified-ass
 const { openMessageBox } = require('./src-back/windows/message-box');
 const { logger } = require('./src-back/logger');
 const { RecursiveInterval } = require('./src-back/recursive-interval');
+const { app, BrowserWindow: ElectronBrowserWindow, Menu, ipcMain } = electron;
 
 const versionDirectories = [
   blocknetDir4,
@@ -54,7 +55,9 @@ math.config({
 
 const md = new MarkdownIt();
 
-const { app, BrowserWindow: ElectronBrowserWindow, Menu, ipcMain } = electron;
+if(process.platform === 'linux') {
+  app.commandLine.appendSwitch('--in-process-gpu');
+}
 
 autoUpdater.autoDownload = false;
 autoUpdater.autoInstallOnAppQuit = true;
