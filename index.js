@@ -1260,7 +1260,7 @@ const openAppWindow = () => {
     } catch(err) {
       handleError(err);
     }
-  }, 15000);
+  }, );
 
   myOrders = [];
   const sendMyOrders = async function(force) {
@@ -1998,7 +1998,7 @@ ipcMain.on('openExternal', (e, url) => {
     }
     pricingFrequency = storage.getItem('pricingFrequency');
     if(!pricingFrequency) {
-      pricingFrequency = 15000;
+      pricingFrequency = 120000;
       storage.setItem('pricingFrequency', pricingFrequency);
     }
     enablePricing = storage.getItem('pricingEnabled');
