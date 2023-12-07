@@ -10,7 +10,8 @@ const { autoUpdater } = require('electron-updater');
 const PricingInterface = require('./src-back/pricing-interface');
 const ConfController = require('./src-back/conf-controller');
 const _ = require('lodash');
-const math = require('mathjs');
+//const math = require('mathjs');
+const { create, all } = require('mathjs');
 const MarkdownIt = require('markdown-it');
 const { Localize } = require('./src-back/localize');
 const { blocknetDir4, blocknetDir3, BLOCKNET_CONF_NAME4, BLOCKNET_CONF_NAME3, ipcMainListeners, pricingSources } = require('./src-back/constants');
@@ -20,6 +21,7 @@ const { openUnverifiedAssetWindow } = require('./src-back/windows/unverified-ass
 const { openMessageBox } = require('./src-back/windows/message-box');
 const { logger } = require('./src-back/logger');
 const { RecursiveInterval } = require('./src-back/recursive-interval');
+const { app, BrowserWindow: ElectronBrowserWindow, Menu, ipcMain } = electron;
 
 const versionDirectories = [
   blocknetDir4,
@@ -44,6 +46,8 @@ const fileExists = p => {
 
 const defaultLocale = 'en';
 
+
+const math = create(all);
 math.config({
   number: 'BigNumber',
   precision: 64
@@ -51,7 +55,9 @@ math.config({
 
 const md = new MarkdownIt();
 
-const { app, BrowserWindow: ElectronBrowserWindow, Menu, ipcMain } = electron;
+if(process.platform === 'linux') {
+  app.commandLine.appendSwitch('--in-process-gpu');
+}
 
 autoUpdater.autoDownload = false;
 autoUpdater.autoInstallOnAppQuit = true;
@@ -1254,7 +1260,7 @@ const openAppWindow = () => {
     } catch(err) {
       handleError(err);
     }
-  }, 15000);
+  }, );
 
   myOrders = [];
   const sendMyOrders = async function(force) {
@@ -1992,7 +1998,7 @@ ipcMain.on('openExternal', (e, url) => {
     }
     pricingFrequency = storage.getItem('pricingFrequency');
     if(!pricingFrequency) {
-      pricingFrequency = 15000;
+      pricingFrequency = 120000;
       storage.setItem('pricingFrequency', pricingFrequency);
     }
     enablePricing = storage.getItem('pricingEnabled');
@@ -2011,9 +2017,12 @@ ipcMain.on('openExternal', (e, url) => {
     }
 
     // Flag used to disable the conf updater, default to false
-    const disableUpdater = storage.getItem('confUpdaterDisabled');
-    if (_.isNull(disableUpdater) || _.isUndefined(disableUpdater))
-      storage.setItem('confUpdaterDisabled', false);
+    // const disableUpdater = storage.getItem('confUpdaterDisabled');
+    // if (_.isNull(disableUpdater) || _.isUndefined(disableUpdater))
+    //   storage.setItem('confUpdaterDisabled', false);
+    
+    // disable old updater
+    storage.setItem('confUpdaterDisabled', true);
 
     if(!storage.getItem('tos')) {
       await onReady;

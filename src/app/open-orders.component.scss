@@ -38,7 +38,7 @@ a.close {
   }
 }
 
-app-table ::v-deep {
+app-table ::ng-deep {
   .bn-table__row {
     &.canceled {
       pointer-events: none;

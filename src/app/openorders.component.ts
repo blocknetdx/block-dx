@@ -5,13 +5,15 @@ import { AppService } from './app.service';
 import { Openorder } from './openorder';
 import { OpenordersService } from './openorders.service';
 import { BreakpointService } from './breakpoint.service';
-import * as math from 'mathjs';
 import { PricingService } from './pricing.service';
 import { Pricing } from './pricing';
 import * as OrderStates from '../orderstates';
 import {confirm, shouldHidePricing} from './util';
 import {Localize} from './localize/localize.component';
 import { ipcMainListeners } from '../../src-back/constants';
+import { create, all} from 'mathjs';
+
+const math = create(all);
 
 math.config({
   number: 'BigNumber',

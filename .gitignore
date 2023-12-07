@@ -47,3 +47,5 @@ Thumbs.db
 /docs
 /docker-builds
 /package-lock.json
+.history/
+.angular/

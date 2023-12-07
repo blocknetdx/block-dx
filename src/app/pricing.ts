@@ -1,12 +1,13 @@
-import * as math from 'mathjs';
 import * as _ from 'lodash';
 import { PricingItem } from './pricing-item';
+import { create, all} from 'mathjs';
+
+const math = create(all);
 
 math.config({
   number: 'BigNumber',
   precision: 64
 });
-
 const { bignumber } = math;
 
 export class Pricing {

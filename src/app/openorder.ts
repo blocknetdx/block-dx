@@ -2,8 +2,15 @@ import * as OrderStates from '../orderstates';
 import { Pricing } from './pricing';
 
 import * as moment from 'moment';
-import * as math from 'mathjs';
+import { create, all} from 'mathjs';
 import {Localize} from './localize/localize.component';
+
+const math = create(all);
+
+math.config({
+  number: 'BigNumber',
+  precision: 64
+});
 
 export class Openorder {
   id: string;

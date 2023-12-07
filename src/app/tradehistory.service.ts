@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import * as math from 'mathjs';
+import { create, all} from 'mathjs';
+
+const math = create(all);
 
 math.config({
   number: 'BigNumber',

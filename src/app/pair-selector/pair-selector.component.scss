@@ -187,7 +187,7 @@ form {
   z-index: 9992;
 }
 
-app-table ::v-deep {
+app-table ::ng-deep {
   .bn-table {
     height: calc(100% - 98px);
     @include screen(lg) {
@@ -233,7 +233,7 @@ app-table ::v-deep {
   }
 }
 
-app-table.formValid ::v-deep {
+app-table.formValid ::ng-deep {
   .bn-table {
     height: calc(100% - 154px);
     @include screen(lg) {

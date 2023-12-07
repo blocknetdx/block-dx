@@ -2,13 +2,15 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Observer } from 'rxjs/Observer';
 import { Subject } from 'rxjs/Subject';
-import * as math from 'mathjs';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
 import { Order } from './order';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {logger} from './modules/logger';
 import {minAmountToPrice} from './util';
+import { create, all} from 'mathjs';
+
+const math = create(all);
 
 math.config({
   number: 'BigNumber',
