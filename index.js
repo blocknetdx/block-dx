@@ -1260,7 +1260,7 @@ const openAppWindow = () => {
     } catch(err) {
       handleError(err);
     }
-  }, );
+  }, 15000);
 
   myOrders = [];
   const sendMyOrders = async function(force) {
