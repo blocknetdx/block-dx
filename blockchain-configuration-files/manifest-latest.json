@@ -1317,7 +1317,7 @@
     "dir_name_win": "Litecoin",
     "repo_url": "https://github.com/litecoin-project/litecoin",
     "versions": [
-      "v0.21.2",     
+      "v0.21.2",
       "v0.21.2.1",
       "v0.21.2.2"
     ],
@@ -1725,7 +1725,7 @@
   {
     "blockchain": "PIVX",
     "ticker": "PIVX",
-    "ver_id": "pivx--v5.5.0",
+    "ver_id": "pivx--v5.6.1",
     "ver_name": "PIVX",
     "conf_name": "pivx.conf",
     "dir_name_linux": "pivx",
@@ -1733,10 +1733,10 @@
     "dir_name_win": "PIVX",
     "repo_url": "https://github.com/PIVX-Project/PIVX",
     "versions": [
-      "v5.5.0"
+      "v5.6.1"
     ],
-    "xbridge_conf": "pivx--v5.5.0.conf",
-    "wallet_conf": "pivx--v5.5.0.conf"
+    "xbridge_conf": "pivx--v5.6.1.conf",
+    "wallet_conf": "pivx--v5.6.1.conf"
   },
   {
     "blockchain": "Placeholders",
